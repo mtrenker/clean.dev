@@ -1,7 +1,9 @@
-import { Stack, StackProps, App } from "@aws-cdk/core";
+import { Stack, StackProps, App, RemovalPolicy } from "@aws-cdk/core";
 import { Table, AttributeType } from "@aws-cdk/aws-dynamodb";
 import { Function, Code, Runtime, Tracing } from "@aws-cdk/aws-lambda";
 import { Role, ServicePrincipal, ManagedPolicy } from "@aws-cdk/aws-iam";
+import { Bucket } from "@aws-cdk/aws-s3";
+import { BucketDeployment, Source } from "@aws-cdk/aws-s3-deployment";
 
 export class ProjectStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -15,14 +17,18 @@ export class ProjectStack extends Stack {
     });
 
     const projectUpdaterRole = new Role(this, "UpdaterRole", {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole")]
+      assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
+      managedPolicies: [
+        ManagedPolicy.fromAwsManagedPolicyName(
+          "service-role/AWSLambdaBasicExecutionRole"
+        )
+      ]
     });
 
     projectsTable.grantReadWriteData(projectUpdaterRole);
 
     const projectUpdaterFunction = new Function(this, "ImportFunction", {
-      code: Code.asset('./dist/cdk/lambda/projectUpdater'),
+      code: Code.asset("./dist/cdk/lambda/projectUpdater"),
       handler: "projectUpdater.handler",
       runtime: Runtime.NODEJS_12_X,
       role: projectUpdaterRole,
@@ -30,6 +36,18 @@ export class ProjectStack extends Stack {
       environment: {
         TABLE_NAME: projectsTable.tableName
       }
+    });
+
+    const cvBucket = new Bucket(this, "CVBucket", {
+      bucketName: "cv.clean.dev",
+      websiteIndexDocument: "index.html",
+      publicReadAccess: true,
+      removalPolicy: RemovalPolicy.DESTROY
+    });
+
+    new BucketDeployment(this, "CVDeployment", {
+      destinationBucket: cvBucket,
+      sources: [Source.asset("./dist/cdk/static/cv")]
     });
   }
 }

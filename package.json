@@ -23,6 +23,8 @@
     "@aws-cdk/aws-dynamodb": "^1.19.0",
     "@aws-cdk/aws-iam": "^1.19.0",
     "@aws-cdk/aws-lambda": "^1.19.0",
+    "@aws-cdk/aws-s3": "^1.19.0",
+    "@aws-cdk/aws-s3-deployment": "^1.19.0",
     "@aws-cdk/core": "^1.19.0",
     "aws-sdk": "^2.598.0",
     "core-js": "^3.6.2",
