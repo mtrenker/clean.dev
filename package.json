@@ -1,0 +1,33 @@
+{
+  "name": "clean.dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtrenker/clean.dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtrenker/clean.dev/issues"
+  },
+  "homepage": "https://github.com/mtrenker/clean.dev#readme",
+  "dependencies": {
+    "@aws-cdk/aws-dynamodb": "^1.19.0",
+    "@aws-cdk/aws-lambda": "^1.19.0",
+    "@aws-cdk/core": "^1.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.4",
+    "aws-cdk": "^1.19.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
+  }
+}
