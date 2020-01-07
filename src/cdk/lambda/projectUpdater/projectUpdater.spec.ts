@@ -24,7 +24,7 @@ const event = {
 }
 
 describe("ProjectUpdater Function", () => {
-  it("says yay", async () => {
+  it("parsed the raw data correctly", async () => {
     const parsedData = [{
       client: testData.projects[0].client,
       description: testData.projects[0].description,

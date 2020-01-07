@@ -58,7 +58,7 @@ const parseData = (rawData: PayloadData): ProjectData[] => rawData.projects.redu
       description: project.description,
       startDate: project.startDate,
       endDate: project.endDate,
-      skills: [{ name: "Foo", description: "FooScription" }],
+      skills: [],
     }
   ];
 }, [] as ProjectData[]);
