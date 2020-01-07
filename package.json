@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dist --extensions \".ts\" --ignore \"src/**/*.spec.ts\"",
-    "watch": "tsc -w",
+    "build": "babel src -d dist --extensions \".ts\" --ignore \"src/**/*.spec.ts\" --copy-files",
+    "watch": "npm run build -- -w",
     "test": "jest"
   },
   "repository": {
@@ -24,15 +24,19 @@
     "@aws-cdk/aws-iam": "^1.19.0",
     "@aws-cdk/aws-lambda": "^1.19.0",
     "@aws-cdk/core": "^1.19.0",
-    "core-js": "^3.6.2"
+    "aws-sdk": "^2.598.0",
+    "core-js": "^3.6.2",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.7.7",
     "@types/jest": "^24.0.25",
     "@types/node": "^13.1.4",
+    "@types/uuid": "^3.4.6",
     "aws-cdk": "^1.19.0",
     "jest": "^24.9.0",
     "ts-node": "^8.5.4",
