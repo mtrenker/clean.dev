@@ -96,10 +96,14 @@ export class PageAbout extends LitElement {
             </cd-service>
 
             <cd-service label="Dev(Sec)Ops">
-              Autonomy is an absolut requirement for truely agile development
-              and developers should be involved in every aspect of their
-              software, to become problem solvers and not just solution
-              implementers.
+              DevOps culture can give your company superpowers, by encouraging
+              truely cross functional teams and giving them the chance and, very
+              important, psychological safety to try things out and learn from
+              mistakes. Integrating those best practices correctly can make the
+              difference by allowing fast deployments and quickly responding to
+              the market. Round that up with making security a top priority for
+              all teams and you have a product that will stand the tesst of
+              times a bit longer.
             </cd-service>
 
             <cd-service label="Clean Code">
