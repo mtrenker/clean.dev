@@ -1,4 +1,4 @@
-import { Stack, StackProps, App, RemovalPolicy } from "@aws-cdk/core";
+import { Stack, StackProps, App, RemovalPolicy, CfnOutput } from "@aws-cdk/core";
 import { Table, AttributeType } from "@aws-cdk/aws-dynamodb";
 import { Function, Code, Runtime, Tracing } from "@aws-cdk/aws-lambda";
 import { Role, ServicePrincipal, ManagedPolicy } from "@aws-cdk/aws-iam";
@@ -45,9 +45,13 @@ export class ProjectStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY
     });
 
+    new CfnOutput(this, "BucketUrl", {
+      value: cvBucket.bucketWebsiteUrl
+    })
+
     new BucketDeployment(this, "CVDeployment", {
       destinationBucket: cvBucket,
-      sources: [Source.asset("./dist/cdk/static/cv")]
+      sources: [Source.asset("./dist/cdk/static/cd-app/dist")]
     });
   }
 }

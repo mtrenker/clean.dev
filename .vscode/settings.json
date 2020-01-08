@@ -1,0 +1,5 @@
+{
+  "html.customData": [
+    "./src/cdk/statis/cd-app/custom-elements.json"
+  ]
+}

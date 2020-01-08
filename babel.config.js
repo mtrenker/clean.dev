@@ -12,5 +12,8 @@ module.exports = {
       },
     ],
   ],
-  plugins: ["@babel/plugin-proposal-optional-chaining"]
+  plugins: ["@babel/plugin-proposal-optional-chaining"],
+  ignore: [
+    "src/cdk/static"
+  ]
 };

@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "cd-app",
+      "description": "clean.dev main app",
+      "properties": [],
+      "events": [],
+      "slots": [],
+      "cssProperties": []
+    },
+    {
+      "name": "cd-service",
+      "description": "A component to display offered services",
+      "properties": [
+        {
+          "name": "label",
+          "type": "String",
+          "desciption": "The label of the service",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}
