@@ -19,17 +19,7 @@ export class CdApp extends LitElement {
   }
 
   render() {
-    return html`
-      <header>
-        <nav>
-          <ul>
-            <li><a href="/about" @click="${this._navClick}">About</a></li>
-            <li><a href="/resume" @click="${this._navClick}">Resume</a></li>
-          </ul>
-        </nav>
-      </header>
-      ${this._renderPage(this.page)}
-    `;
+    return html`${this._renderPage(this.page)}`;
   }
 
   _renderPage(page: pages) {

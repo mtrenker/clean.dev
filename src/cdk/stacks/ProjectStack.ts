@@ -39,7 +39,7 @@ export class ProjectStack extends Stack {
     });
 
     const cvBucket = new Bucket(this, "CVBucket", {
-      bucketName: "cv.clean.dev",
+      bucketName: "clean.dev",
       websiteIndexDocument: "index.html",
       publicReadAccess: true,
       removalPolicy: RemovalPolicy.DESTROY

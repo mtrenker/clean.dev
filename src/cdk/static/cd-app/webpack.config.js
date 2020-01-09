@@ -9,7 +9,9 @@ const configs = createCompatibilityConfig({
 module.exports = configs.map(config =>
   merge(config, {
     module: {
-      rules: [{ test: /\.ts$/, loader: 'babel-loader' }],
+      rules: [{
+        test: /\.ts$/, loader: 'babel-loader'
+      }],
     },
     resolve: {
       extensions: ['.ts', '.js', '.json']
