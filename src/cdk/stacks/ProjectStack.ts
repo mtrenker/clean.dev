@@ -1,9 +1,8 @@
-import { Stack, StackProps, App, RemovalPolicy, CfnOutput } from "@aws-cdk/core";
+import { Stack, StackProps, App } from "@aws-cdk/core";
 import { Table, AttributeType } from "@aws-cdk/aws-dynamodb";
 import { Function, Code, Runtime, Tracing } from "@aws-cdk/aws-lambda";
 import { Role, ServicePrincipal, ManagedPolicy } from "@aws-cdk/aws-iam";
-import { Bucket } from "@aws-cdk/aws-s3";
-import { BucketDeployment, Source } from "@aws-cdk/aws-s3-deployment";
+import { Site } from "../constructs/site";
 
 export class ProjectStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -38,20 +37,6 @@ export class ProjectStack extends Stack {
       }
     });
 
-    const cvBucket = new Bucket(this, "CVBucket", {
-      bucketName: "clean.dev",
-      websiteIndexDocument: "index.html",
-      publicReadAccess: true,
-      removalPolicy: RemovalPolicy.DESTROY
-    });
-
-    new CfnOutput(this, "BucketUrl", {
-      value: cvBucket.bucketWebsiteUrl
-    })
-
-    new BucketDeployment(this, "CVDeployment", {
-      destinationBucket: cvBucket,
-      sources: [Source.asset("./dist/cdk/static/cd-app/dist")]
-    });
+    new Site(this, "Site");
   }
 }
