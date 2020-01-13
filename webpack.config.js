@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 const { createCompatibilityConfig } = require('@open-wc/building-webpack');
 
 const configs = createCompatibilityConfig({
-  input: path.resolve(__dirname, './index.html'),
+  input: path.resolve(__dirname, './src/index.html'),
 });
 
 module.exports = configs.map(config =>
