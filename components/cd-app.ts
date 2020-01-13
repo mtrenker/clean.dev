@@ -7,7 +7,7 @@ type pages = 'about' | 'resume'
 
 @customElement('cd-app')
 export class CdApp extends LitElement {
-  @property() page: pages = 'resume';
+  @property() page: pages = 'about';
 
   static get styles() {
     return css`
