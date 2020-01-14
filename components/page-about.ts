@@ -38,13 +38,12 @@ export class PageAbout extends LitElement {
       }
       .about h1 {
         grid-area: name;
-        font-size: 48px;
+        font-size: 40px;
         margin-bottom: 8px;
       }
       .about h2 {
         grid-area: title;
-        font-size: 24px;
-        font-style: italic;
+        font-size: 30px;
         margin-bottom: 8px;
       }
       .about p {
@@ -53,7 +52,7 @@ export class PageAbout extends LitElement {
       }
 
       .services h3 {
-        font-size: 32px;
+        font-size: 20px;
         padding-left: 20px;
         border-left: 16px double black;
       }
@@ -95,8 +94,19 @@ export class PageAbout extends LitElement {
     `;
   }
 
+  private handleClick(e) {
+    e.preventDefault();
+    const detail = {
+      pathname: e.target.pathname
+    };
+    const event = new CustomEvent("nav-click", { detail });
+
+    this.dispatchEvent(event)
+  }
+
   render() {
     return html`
+      <p>DEVMODE: <a @click="${this.handleClick}" href="/resume">Click here for the resume</a></p>
       <section class="about">
         <div class="container">
           <img src="https://s3.eu-central-1.amazonaws.com/clean.dev/images/avatar_2020-01-09_m.png" width="350" alt="Martin Trenker" />
@@ -116,7 +126,7 @@ export class PageAbout extends LitElement {
             My goal is to help my customers find relieable, resillient,
             maintainable and secure solutions to their unique requirements by
             using tools like hypothesis driven development, evolutionary
-            microservice architecture, clean code best practices and hand help
+            microservice architecture, clean code best practices and help
             them adapt those practices themselves by engaging heavily in
             mentorship and as a servant leader if appropiate
           </p>
