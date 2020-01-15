@@ -128,7 +128,7 @@ export class PageResume extends LitElement {
   render() {
     return html`
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" integrity="sha384-REHJTs1r2ErKBuJB0fCK99gCYsVjwxHrSU0N7I1zl9vZbggVJXRMsv/sLlOAGb4M" crossorigin="anonymous">
-      <p class="no-print">PREVIEW: <a @click="${this.handleClick}" href="/about">Click here to get to the landing page preview</a></p>
+      <p class="no-print">PREVIEW! Mobile Version coming soon!</p>
       <div class="page letter">
         <h1>Martin Trenker</h1>
         <h2>Cloud Native Software Engineer</h2>
