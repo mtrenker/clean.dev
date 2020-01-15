@@ -34,6 +34,8 @@ export class PageResume extends LitElement {
           margin: 0;
           box-shadow: none;
           border: none;
+          height: 99vh;
+          padding: 3rem 3rem 1rem 3rem;
         }
 
         a {
@@ -210,7 +212,7 @@ export class PageResume extends LitElement {
 
           <cd-resume-item industry="Airlines" client="IBM Deutschland GmbH" from="2017-11-01" to="2018-05-01" position="Fullstack Developer">
             <p>
-              Supporting the client developing a versatile component library for the relaunch and redesign of their landingpage.
+              Supporting the client developing a versatile component library for the redesign and relaunch of a customers website.
             </p>
           </cd-resume-item>
 
