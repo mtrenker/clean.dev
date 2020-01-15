@@ -11,6 +11,8 @@ module.exports = configs.map(config =>
     module: {
       rules: [{
         test: /\.ts$/, loader: 'babel-loader'
+      }, {
+        test: /\.png$/, loader: 'file-loader'
       }],
     },
     resolve: {

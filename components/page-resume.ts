@@ -1,6 +1,7 @@
 import { LitElement, html, customElement, css } from 'lit-element';
 
 import "./cd-resume-item";
+import avatar from '../images/avatar.png';
 @customElement('page-resume')
 export class PageResume extends LitElement {
 
@@ -138,6 +139,7 @@ export class PageResume extends LitElement {
         </address>
 
         <div class="intro">
+          <img src="${avatar}" alt="Martin Trenker" style="float: right; margin-top: 10px" width="200">
           <p>
             Software development fascinated me for as long as I can think, especially the web caught my attention early on with it’s almost unlimited possibilities.
             As a teenager, I started building websites at Internet Cafés until I got my own PC (166MHz, MMX!) and started to become more involved in developer communities through things like
