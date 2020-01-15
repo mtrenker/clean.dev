@@ -30,11 +30,11 @@ export class CdApp extends LitElement {
 
   _renderPage(page: pages) {
     switch (page) {
-      case 'resume':
-        return html`<page-resume @nav-click="${this.navClick}"></page-resume>`;
       case 'about':
-      default:
         return html`<page-about @nav-click="${this.navClick}"></page-about>`;
+      case 'resume':
+      default:
+        return html`<page-resume @nav-click="${this.navClick}"></page-resume>`;
     }
   }
 
