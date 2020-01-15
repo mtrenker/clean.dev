@@ -3,7 +3,8 @@ import { LitElement, html, property, customElement, css } from 'lit-element';
 @customElement('cd-resume-item')
 export class CdResumeItem extends LitElement {
 
-  @property() customer = 'Anonymous';
+  @property() industry = '';
+  @property() client = '';
   @property() from = '';
   @property() to = '';
   @property() position = '';
@@ -43,7 +44,7 @@ export class CdResumeItem extends LitElement {
     const dateFormatOptions = { day: '2-digit', month: '2-digit', year: '2-digit' };
     return html`
       <h4>${this.position}</h4>
-      <h5>${this.customer}</h5>
+      <h5>${this.client || this.industry}</h5>
       <time>
         ${Intl.DateTimeFormat(undefined, dateFormatOptions).format(new Date(this.from))} -
         ${Intl.DateTimeFormat(undefined, dateFormatOptions).format(new Date(this.to))}
