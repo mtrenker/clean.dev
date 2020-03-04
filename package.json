@@ -10,13 +10,18 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.4",
     "@babel/preset-typescript": "^7.8.3",
-    "@open-wc/building-webpack": "^2.12.1",
+    "@types/node": "^13.7.7",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
     "babel-loader": "^8.0.6",
-    "es-dev-server": "^1.40.1",
+    "clean-webpack-plugin": "^3.0.0",
     "file-loader": "^5.1.0",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "name": "cd-app",
   "version": "0.0.0",
@@ -24,7 +29,7 @@
   "author": "Martin Trenker <martin@pacabytes.io>",
   "license": "MIT",
   "dependencies": {
-    "lit-html": "^1.1.2",
-    "lit-element": "^2.2.1"
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   }
 }
