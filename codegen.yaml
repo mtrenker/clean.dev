@@ -1,0 +1,10 @@
+schema: https://graphql-pokemon.now.sh/
+documents: src/**/*.graphql
+generates:
+  ./src/graphql/hooks.tsx:
+    plugins:
+      - typescript
+      - typescript-react-apollo
+    config:
+      withHOC: false
+      withHooks: true

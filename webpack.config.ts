@@ -9,7 +9,7 @@ type Config = webpack.Configuration & {
 
 const config: Config = {
   mode: "development",
-  entry: "./src/index.tsx",
+  entry: "./src/app.tsx",
   module: {
     rules: [
       {
