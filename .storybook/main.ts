@@ -9,5 +9,8 @@ module.exports = {
     return storybookConfig;
   },
   stories: ['../src/**/*.stories.tsx'],
-  addons: ['@storybook/addon-knobs/register']
+  addons: [
+    '@storybook/addon-knobs/register',
+    '@storybook/addon-viewport/register'
+  ]
 };
