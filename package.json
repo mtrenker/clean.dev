@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack -p",
-    "storybook": "start-storybook --debug-webpack",
+    "storybook": "start-storybook",
     "start": "webpack-dev-server"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "@graphql-codegen/typescript-react-apollo": "^1.8.3",
     "@storybook/addon-knobs": "^5.3.14",
     "@storybook/react": "^5.3.14",
+    "@types/faker": "^4.1.10",
     "@types/html-webpack-plugin": "^3.2.2",
     "@types/node": "^12.12.7",
     "@types/react": "^16.9.11",
@@ -30,6 +31,7 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.6.0",
+    "faker": "^4.1.0",
     "html-webpack-plugin": "^3.2.0",
     "install": "^0.13.0",
     "npm": "^6.13.0",
