@@ -32,7 +32,8 @@ const config: Config = {
   },
   plugins: [new HtmlWebpackPlugin(htmlConfig), new CleanWebpackPlugin()],
   devServer: {
-    open: true
+    open: true,
+    historyApiFallback: true
   }
 };
 
