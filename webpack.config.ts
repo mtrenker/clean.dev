@@ -7,6 +7,10 @@ type Config = webpack.Configuration & {
   devServer: any;
 };
 
+const htmlConfig: HtmlWebpackPlugin.Options = {
+  title: "clean.dev"
+};
+
 const config: Config = {
   mode: "development",
   entry: "./src/app.tsx",
@@ -26,7 +30,7 @@ const config: Config = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle-[hash].js"
   },
-  plugins: [new HtmlWebpackPlugin(), new CleanWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin(htmlConfig), new CleanWebpackPlugin()],
   devServer: {
     open: true
   }
