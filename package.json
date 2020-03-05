@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "webpack -p",
+    "storybook": "start-storybook --debug-webpack",
     "start": "webpack-dev-server"
   },
   "devDependencies": {
@@ -13,11 +14,13 @@
     "@graphql-codegen/typescript": "^1.8.3",
     "@graphql-codegen/typescript-operations": "^1.8.3",
     "@graphql-codegen/typescript-react-apollo": "^1.8.3",
+    "@storybook/react": "^5.3.14",
     "@types/html-webpack-plugin": "^3.2.2",
     "@types/node": "^12.12.7",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
     "@types/webpack": "^4.39.8",
+    "@types/webpack-merge": "^4.1.5",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "babel-loader": "^8.0.6",
@@ -30,7 +33,8 @@
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.2"
   },
   "name": "cd-app",
   "version": "0.0.0",
