@@ -8,7 +8,10 @@ type Config = webpack.Configuration & {
 };
 
 const htmlConfig: HtmlWebpackPlugin.Options = {
-  title: "clean.dev"
+  title: "clean.dev",
+  meta: {
+    viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+  }
 };
 
 const config: Config = {
@@ -34,7 +37,18 @@ const config: Config = {
             }
           }
         ]
-      }
+      }, {
+        test: /\.(png|jpe?g|gif)$/i,
+        loader: 'file-loader',
+        options: {
+          name(resourcePath: string, resourceQuery: string) {
+            if (process.env.NODE_ENV === 'development') {
+              return '[path][name].[ext]';
+            }
+            return '[contenthash].[ext]';
+          },
+        },
+      },
     ]
   },
   resolve: {
