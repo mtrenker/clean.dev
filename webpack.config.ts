@@ -38,15 +38,13 @@ const config: Config = {
           }
         ]
       }, {
-        test: /\.(png|jpe?g|gif)$/i,
-        loader: 'file-loader',
+        test: /\.(png|jpg)$/i,
+        loader: 'responsive-loader',
         options: {
-          name(resourcePath: string, resourceQuery: string) {
-            if (process.env.NODE_ENV === 'development') {
-              return '[path][name].[ext]';
-            }
-            return '[contenthash].[ext]';
-          },
+          adapter: require('responsive-loader/sharp'),
+          sizes: [300, 600, 1200, 2000],
+          placeholder: true,
+          placeholderSize: 50
         },
       },
     ]

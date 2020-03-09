@@ -24,27 +24,27 @@ const itemStyle = css`
   display: grid;
 
   grid-template:
-    "position" max-content
     "client" auto
+    "position" auto
     "date" auto
     "description" auto
   ;
 
   gap: 4px;
 
-  h3 {
+  .position {
     margin: 0;
     font-size: 16px;
     grid-area: position;
   }
 
-  h4 {
+  .client {
     margin: 0;
     font-size: 16px;
     grid-area: client;
   }
 
-  time {
+  .date {
     font-size: 16px;
     grid-area: date;
   }
@@ -66,10 +66,10 @@ const itemStyle = css`
 export const ProjectItem: FC<ProjectItemProps> = ({ client, position, date, children }) => {
   return (
     <li css={itemStyle}>
-      <h3>{position}</h3>
-      <h4>{client}</h4>
-      <time>{date}</time>
-      <p>
+      <h3 className="client">{client}</h3>
+      <h4 className="position">{position}</h4>
+      <time className="date">{date}</time>
+      <p className="description">
         {children}
       </p>
     </li>

@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { css } from "@emotion/core";
 
 import { ProjectList, ProjectItem } from "../components/cv/Projects";
+import image from "../../public/images/martin.jpg";
 
 const containerCss = css`
   font-family: "Roboto";
@@ -14,12 +15,64 @@ const containerCss = css`
 
   display: grid;
 
+  grid-template:
+    "image"
+    "name"
+    "title"
+    "nav"
+    "intro"
+    "projects"
+    "skills"
+    "address"
+  ;
+
   h1 {
+    font-size: 24px;
     grid-area: name;
   }
 
   h2 {
+    font-size: 20px;
     grid-area: title;
+    margin-bottom: 16px;
+  }
+
+  section + h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  img {
+    grid-area: image;
+    margin: 0 auto;
+    border-radius: 100px;
+  }
+
+  nav {
+    grid-area: nav;
+    position: sticky;
+    top: 0;
+    height: 32px;
+    background-color: #FFF;
+    ul {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin: 0;
+      li {
+        text-align: center;
+        line-height: 32px;
+        font-size: 18px;
+        a {
+          text-decoration: none;
+        }
+      }
+    }
   }
 
   address {
@@ -27,6 +80,8 @@ const containerCss = css`
   }
 
   .intro {
+    padding-top: 16px;
+    font-size: 16px;
     grid-area: intro;
   }
 
@@ -38,6 +93,10 @@ const containerCss = css`
     grid-area: skills;
   }
 
+  .projects, .skills {
+    padding-top: 48px;
+  }
+
   @media(min-width: 768px) {
     grid-template:
       "name address"
@@ -46,6 +105,10 @@ const containerCss = css`
       "projects skills"
       / 2fr 1fr
     ;
+
+    nav {
+      display: none;
+    }
   }
 `;
 
@@ -54,14 +117,27 @@ export const CV: FC = () => {
     <div css={containerCss}>
       <h1>Martin Trenker</h1>
       <h2>Cloud Native Software Engineer</h2>
+      <img {...image} />
 
-      <address>
-        +49 (0)170/919-1337 <br />
-        trenker.martin@gmail.com <br />
-        https://clean.dev
+      <nav>
+        <ul>
+          <li><a href="#intro">Intro</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <section className="contact" id="contact">
+        <h3>Contact</h3>
+        <address>
+          +49 (0)170/919-1337 <br />
+          trenker.martin@gmail.com <br />
+          https://clean.dev
       </address>
+      </section>
 
-      <div className="intro">
+      <section className="intro" id="intro">
         <p>
           Software development fascinated me for as long as I can think, especially the web caught my
           attention early on with it’s almost unlimited possibilities. As a teenager, I started building
@@ -76,19 +152,19 @@ export const CV: FC = () => {
           get their product quickly and reliably to their customers without sacrificing maintainability or
           extensibility.
         </p>
-      </div>
+      </section>
 
-      <div className="projects">
-
+      <section className="projects" id="projects">
+        <h3>Projects</h3>
         <ProjectList>
           <ProjectItem position="Fullstack Developer" client="ProSiebenSat.1 Digital GmbH" date="01.07.2019 - 31.12.2019">
             Developing a reusable component library and implementing them with a headless CMS to reduce implemnentation efforts for the clients multi-tenant website.
           </ProjectItem>
         </ProjectList>
+      </section>
 
-      </div>
-
-      <div className="skills">
+      <section className="skills" id="skills">
+        <h3>Skills</h3>
         <h4>Technologies</h4>
         <ul>
           <li>AWS</li>
@@ -140,7 +216,7 @@ export const CV: FC = () => {
           <li>Learner</li>
           <li>Autonomous</li>
         </ul>
-      </div>
+      </section>
     </div>
   );
 };
