@@ -2,7 +2,8 @@ import React, { FC } from "react";
 import { css } from "@emotion/core";
 
 import { ProjectList, ProjectItem } from "../components/cv/Projects";
-import image from "../../public/images/martin.jpg";
+import image from "../../public/images/martin.png";
+import { useGetProjectsQuery } from "../graphql/hooks";
 
 const containerCss = css`
   font-family: "Roboto";
@@ -16,9 +17,7 @@ const containerCss = css`
   display: grid;
 
   grid-template:
-    "image"
-    "name"
-    "title"
+    "header"
     "nav"
     "intro"
     "projects"
@@ -37,8 +36,11 @@ const containerCss = css`
     margin-bottom: 16px;
   }
 
-  section + h3 {
-    text-align: center;
+  header {
+    grid-area: header;
+  }
+
+  section > h3 {
     font-size: 18px;
     margin-bottom: 16px;
   }
@@ -49,9 +51,7 @@ const containerCss = css`
   }
 
   img {
-    grid-area: image;
-    margin: 0 auto;
-    border-radius: 100px;
+    float: right;
   }
 
   nav {
@@ -97,10 +97,9 @@ const containerCss = css`
     padding-top: 48px;
   }
 
-  @media(min-width: 768px) {
+  @media(min-width: 426px) {
     grid-template:
-      "name address"
-      "title address"
+      "header address"
       "intro intro"
       "projects skills"
       / 2fr 1fr
@@ -110,14 +109,21 @@ const containerCss = css`
       display: none;
     }
   }
+  @media print {
+    section > section {
+      page-break-inside: avoid;
+    }
+  }
 `;
 
 export const CV: FC = () => {
+  const { data } = useGetProjectsQuery();
   return (
     <div css={containerCss}>
-      <h1>Martin Trenker</h1>
-      <h2>Cloud Native Software Engineer</h2>
-      <img {...image} />
+      <header>
+        <h1>Martin Trenker</h1>
+        <h2>Cloud Native Software Engineer</h2>
+      </header>
 
       <nav>
         <ul>
@@ -138,6 +144,7 @@ export const CV: FC = () => {
       </section>
 
       <section className="intro" id="intro">
+        <img {...image} width="150" height="150" />
         <p>
           Software development fascinated me for as long as I can think, especially the web caught my
           attention early on with it’s almost unlimited possibilities. As a teenager, I started building
@@ -156,66 +163,85 @@ export const CV: FC = () => {
 
       <section className="projects" id="projects">
         <h3>Projects</h3>
-        <ProjectList>
-          <ProjectItem position="Fullstack Developer" client="ProSiebenSat.1 Digital GmbH" date="01.07.2019 - 31.12.2019">
-            Developing a reusable component library and implementing them with a headless CMS to reduce implemnentation efforts for the clients multi-tenant website.
-          </ProjectItem>
-        </ProjectList>
+        {data && data.projects.reverse().map(project => (
+          <ProjectList>
+            <ProjectItem
+              position="Fullstack Developer"
+              client={project.client}
+              date={`${project.startDate} - ${project.endDate}`}
+            >
+              {project.description}
+            </ProjectItem>
+          </ProjectList>
+        ))
+        }
       </section>
 
       <section className="skills" id="skills">
         <h3>Skills</h3>
-        <h4>Technologies</h4>
-        <ul>
-          <li>AWS</li>
-          <li>HTML5/CSS3</li>
-          <li>TypeScript</li>
-          <li>Webcomponents</li>
-          <li>Node.js</li>
-          <li>Webpack</li>
-        </ul>
+        <section>
+          <h4>Technologies</h4>
+          <ul>
+            <li>AWS</li>
+            <li>HTML5/CSS3</li>
+            <li>TypeScript</li>
+            <li>Webcomponents</li>
+            <li>Node.js</li>
+            <li>Webpack</li>
+          </ul>
+        </section>
 
-        <h4>Methodologies</h4>
-        <ul>
-          <li>DevSecOps</li>
-          <li>Agile (Scrum, Kanban)</li>
-          <li>Design thinking</li>
-          <li>Safety-II</li>
-          <li>Infrastructure as code</li>
-          <li>BDD/TDD</li>
-          <li>CI/CD</li>
-          <li>OKR</li>
-        </ul>
+        <section>
+          <h4>Methodologies</h4>
+          <ul>
+            <li>DevSecOps</li>
+            <li>Agile (Scrum, Kanban)</li>
+            <li>Design thinking</li>
+            <li>Safety-II</li>
+            <li>Infrastructure as code</li>
+            <li>BDD/TDD</li>
+            <li>CI/CD</li>
+            <li>OKR</li>
+          </ul>
+        </section>
 
-        <h4>Languages</h4>
-        <li>German (native)</li>
-        <li>English (professional)</li>
+        <section>
+          <h4>Languages</h4>
+          <li>German (native)</li>
+          <li>English (professional)</li>
+        </section>
 
-        <h4>Certificates</h4>
-        <ul>
-          <li>AWS Cloud Practitioner</li>
-          <li>AWS Developer Associate</li>
-        </ul>
+        <section>
+          <h4>Certificates</h4>
+          <ul>
+            <li>AWS Cloud Practitioner</li>
+            <li>AWS Developer Associate</li>
+          </ul>
+        </section>
 
-        <h4>Libraries</h4>
-        <ul>
-          <li>React</li>
-          <li>Jest</li>
-          <li>Enzyme</li>
-          <li>AWS-SDK</li>
-          <li>AWS-CDK</li>
-          <li>lit-html/-element</li>
-          <li>Storybook</li>
-        </ul>
+        <section>
+          <h4>Libraries</h4>
+          <ul>
+            <li>React</li>
+            <li>Jest</li>
+            <li>Enzyme</li>
+            <li>AWS-SDK</li>
+            <li>AWS-CDK</li>
+            <li>lit-html/-element</li>
+            <li>Storybook</li>
+          </ul>
+        </section>
 
-        <h4>Soft Skills</h4>
-        <ul>
-          <li>Team Player</li>
-          <li>Mentor</li>
-          <li>Customer oriented</li>
-          <li>Learner</li>
-          <li>Autonomous</li>
-        </ul>
+        <section>
+          <h4>Soft Skills</h4>
+          <ul>
+            <li>Team Player</li>
+            <li>Mentor</li>
+            <li>Customer oriented</li>
+            <li>Learner</li>
+            <li>Autonomous</li>
+          </ul>
+        </section>
       </section>
     </div>
   );

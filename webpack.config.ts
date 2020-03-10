@@ -2,6 +2,7 @@ import path from "path";
 import webpack from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import DotEnv from "dotenv-webpack";
 
 type Config = webpack.Configuration & {
   devServer: any;
@@ -56,7 +57,7 @@ const config: Config = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle-[hash].js"
   },
-  plugins: [new HtmlWebpackPlugin(htmlConfig), new CleanWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin(htmlConfig), new CleanWebpackPlugin(), new DotEnv()],
   devServer: {
     open: true,
     historyApiFallback: true
