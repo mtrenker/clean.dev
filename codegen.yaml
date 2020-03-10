@@ -1,10 +1,13 @@
-schema: https://graphql-pokemon.now.sh/
-documents: src/**/*.graphql
+schema: src/graphql/schema.graphql
+documents: src/graphql/documents/**/*.graphql
 generates:
   ./src/graphql/hooks.tsx:
     plugins:
       - typescript
+      - typescript-operations
       - typescript-react-apollo
     config:
       withHOC: false
       withHooks: true
+      scalars:
+        AWSDate: Date
