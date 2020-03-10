@@ -1,0 +1,11 @@
+query getProjects {
+  projects {
+    client
+    industry
+    description
+    startDate
+    endDate
+    methodologies
+    technologies
+  }
+}
