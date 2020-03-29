@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { ApolloProvider } from "@apollo/react-hooks";
+import React, { FC } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/react-hooks';
 
-import { Frontpage } from "../pages/Frontpage";
-import { Blog } from "../pages/Blog";
-import { Contact } from "../pages/Contact";
-import { CV } from "../pages/CV";
-import { client } from "../graphql/client";
+import { Frontpage } from '../pages/Frontpage';
+import { Blog } from '../pages/Blog';
+import { Contact } from '../pages/Contact';
+import { CV } from '../pages/CV';
+import { client } from '../graphql/client';
 
 export const Root: FC = () => (
   <ApolloProvider client={client}>
@@ -18,10 +18,10 @@ export const Root: FC = () => (
         <Route path="/blog">
           <Blog />
         </Route>
-        <Route path="/contact" exact={true}>
+        <Route path="/contact" exact>
           <Contact />
         </Route>
-        <Route path="/" exact={true}>
+        <Route path="/" exact>
           <Frontpage />
         </Route>
         <Route path="/*">

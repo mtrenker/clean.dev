@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import Helmet from "react-helmet";
+import React, { FC } from 'react';
+import Helmet from 'react-helmet';
 
-import { Header } from "../components/layout/Header";
-import { Grid } from "../components/layout/Grid";
+import { Header } from '../components/layout/Header';
+import { Grid } from '../components/layout/Grid';
 
 export const Contact: FC = () => (
   <Grid>
@@ -21,4 +21,4 @@ export const Contact: FC = () => (
       Footer
     </footer>
   </Grid>
-)
+);

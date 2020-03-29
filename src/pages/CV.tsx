@@ -1,9 +1,9 @@
-import React, { FC } from "react";
-import { css } from "@emotion/core";
+import React, { FC } from 'react';
+import { css } from '@emotion/core';
 
-import { ProjectList, ProjectItem } from "../components/cv/Projects";
-import image from "../../public/images/martin.png";
-import { useGetProjectsQuery } from "../graphql/hooks";
+import { ProjectList, ProjectItem } from '../components/cv/Projects';
+import image from '../../public/images/martin.png';
+import { useGetProjectsQuery } from '../graphql/hooks';
 
 const containerCss = css`
   font-family: "Roboto";
@@ -137,10 +137,14 @@ export const CV: FC = () => {
       <section className="contact" id="contact">
         <h3>Contact</h3>
         <address>
-          +49 (0)170/919-1337 <br />
-          trenker.martin@gmail.com <br />
+          +49 (0)170/919-1337
+          {' '}
+          <br />
+          trenker.martin@gmail.com
+          {' '}
+          <br />
           https://clean.dev
-      </address>
+        </address>
       </section>
 
       <section className="intro" id="intro">
@@ -163,7 +167,7 @@ export const CV: FC = () => {
 
       <section className="projects" id="projects">
         <h3>Projects</h3>
-        {data && data.projects.reverse().map(project => (
+        {data && data.projects.reverse().map((project) => (
           <ProjectList>
             <ProjectItem
               position="Fullstack Developer"
@@ -173,8 +177,7 @@ export const CV: FC = () => {
               {project.description}
             </ProjectItem>
           </ProjectList>
-        ))
-        }
+        ))}
       </section>
 
       <section className="skills" id="skills">
