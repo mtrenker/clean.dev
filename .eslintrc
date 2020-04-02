@@ -17,7 +17,8 @@
       "error",
       {
         "devDependencies": [
-          "cdk/**/*"
+          "cdk/**/*",
+          "webpack.config.ts"
         ]
       }
     ]
