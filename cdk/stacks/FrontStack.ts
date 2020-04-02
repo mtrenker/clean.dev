@@ -2,7 +2,6 @@ import {
   Stack, StackProps, App, SecretValue,
 } from '@aws-cdk/core';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
-import { StaticSite } from '@pacabytes/cdk-static-site';
 import { HostedZone } from '@aws-cdk/aws-route53';
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
