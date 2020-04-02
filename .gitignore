@@ -4,3 +4,4 @@ dist
 data.json
 .env
 storybook-static
+cdk.context.json
