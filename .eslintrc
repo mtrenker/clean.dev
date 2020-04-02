@@ -10,5 +10,16 @@
     "plugin:@typescript-eslint/recommended",
     "airbnb",
     "airbnb/hooks"
-  ]
+  ],
+  "rules": {
+    "import/prefer-default-export": false,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "cdk/**/*"
+        ]
+      }
+    ]
+  }
 }
