@@ -21,10 +21,12 @@ phases:
 artifacts:
   secondary-artifacts:
     site:
+      name: site-artifact
       base-directory: dist
       files:
         - "**/*"
     storybook:
+      name: storybook-artifact
       base-directory: storybook-static
       files:
         - "**/*"
