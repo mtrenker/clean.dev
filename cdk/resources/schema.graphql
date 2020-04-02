@@ -1,0 +1,58 @@
+# input UserInput {
+#   first_name: String!
+#   last_name: String!
+#   email: String!
+# }
+
+# input ProjectInput {
+#   name: String!
+#   description: String
+#   approval_contact: UserInput
+# }
+
+# input TrackingInput {
+#   project_id: String!
+#   description: String
+#   start_time: AWSDateTime!
+#   end_time: AWSDateTime!
+# }
+
+type Project {
+  id: ID!
+  client: String!
+  industry: String!
+  description: String!
+  startDate: AWSDate!
+  endDate: AWSDate!
+  methodologies: [String!]!
+  technologies: [String!]!
+  # approval_contact: User!
+}
+
+# type User {
+#   first_name: String!
+#   last_name: String!
+#   email: String!
+# }
+
+# type Tracking {
+#   id: ID!
+#   project: Project!
+#   description: String!
+#   start_time: AWSDateTime!
+#   end_time: AWSDateTime!
+# }
+
+type Query {
+  projects: [Project!]!
+  # @aws_auth(cognito_groups: ["Admins"])
+  # trackings: [Tracking!]!
+  # @aws_auth(cognito_groups: ["Admins"])
+}
+
+type Mutation {
+  # saveProject(input: ProjectInput!): Project!
+  # @aws_auth(cognito_groups: ["Admins"])
+  # track(input: TrackingInput!): Tracking!
+  # @aws_auth(cognito_groups: ["Admins"])
+}
