@@ -3,7 +3,6 @@ import { App } from '@aws-cdk/core';
 import { FrontStack } from './stacks/FrontStack';
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
-import { TrackStack } from './stacks/TrackStack';
 import { CmsStack } from './stacks/CmsStack';
 
 const app = new App();
