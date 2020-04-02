@@ -3,3 +3,4 @@ cdk.out
 dist
 data.json
 .env
+storybook-static
