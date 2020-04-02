@@ -4,6 +4,7 @@ import {
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import { StaticSite } from '@pacabytes/cdk-static-site';
 import { HostedZone } from '@aws-cdk/aws-route53';
+import { GitHubBuild } from '../constructs/GitHubBuild';
 
 export class FrontStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
@@ -11,18 +12,27 @@ export class FrontStack extends Stack {
 
     const certificate = Certificate.fromCertificateArn(this, 'Certificate', this.node.tryGetContext('front-certificate')) as Certificate;
 
-    new StaticSite(this, 'CleanDevFront', {
-      pipelineConfig: {
-        branch: 'master',
-        owner: 'mtrenker',
-        repo: 'clean.dev',
-        oauthToken: SecretValue.secretsManager('clean/github'),
-      },
-      cloudFrontConfig: {
-        alias: 'clean.dev',
-        certificate,
-        zone: HostedZone.fromLookup(this, 'HostedZone', { domainName: 'clean.dev' }),
-      },
+    const build = new GitHubBuild(this, 'Build', {
+      oauthToken: SecretValue.secretsManager('clean/github'),
+      branch: 'master',
+      owner: 'mtrenker',
+      repo: 'clean.dev',
     });
   }
+
+  // old() {
+  //   new StaticSite(this, 'CleanDevFront', {
+  //     pipelineConfig: {
+  //       branch: 'master',
+  //       owner: 'mtrenker',
+  //       repo: 'clean.dev',
+  //       oauthToken: SecretValue.secretsManager('clean/github'),
+  //     },
+  //     cloudFrontConfig: {
+  //       alias: 'clean.dev',
+  //       certificate,
+  //       zone: HostedZone.fromLookup(this, 'HostedZone', { domainName: 'clean.dev' }),
+  //     },
+  //   });
+  // }
 }
