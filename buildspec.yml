@@ -6,17 +6,25 @@ phases:
       nodejs: 12
   pre_build:
     commands:
-      - echo Installing source NPM dependencies...
+      - echo Installing NPM dependencies...
       - npm install
   build:
     commands:
       - echo Build started on `date`
-      - echo Compiling the Node.js code
+      - echo Building Storybook...
+      - npm run build-storybook
+      - echo Building Site...
       - npm run build
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
-  files:
-    - dist/*
-  discard-paths: yes
+  secondary-artifacts:
+    site:
+      base-directory: dist
+      files:
+        - "**/*"
+    storybook:
+      base-directory: storybook-static
+      files:
+        - "**/*"
