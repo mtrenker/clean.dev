@@ -12,6 +12,9 @@
     "airbnb/hooks"
   ],
   "rules": {
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "no-new": 0,
     "import/prefer-default-export": 0,
     "import/no-extraneous-dependencies": [
       "error",
