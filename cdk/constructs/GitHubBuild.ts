@@ -12,6 +12,10 @@ interface GitHubBuildProps {
 }
 
 export class GitHubBuild extends Construct {
+  public readonly siteBucket: Bucket;
+
+  public readonly storybookBucket: Bucket;
+
   constructor(scope: Construct, id: string, props: GitHubBuildProps) {
     super(scope, id);
 
@@ -29,6 +33,7 @@ export class GitHubBuild extends Construct {
       websiteErrorDocument: 'index.html',
       removalPolicy: RemovalPolicy.DESTROY,
     });
+    this.siteBucket = siteBucket;
 
     const storybookBucket = new Bucket(this, 'Storybook', {
       bucketName: 'sb.clean.dev',
@@ -37,6 +42,7 @@ export class GitHubBuild extends Construct {
       websiteErrorDocument: 'index.html',
       removalPolicy: RemovalPolicy.DESTROY,
     });
+    this.storybookBucket = storybookBucket;
 
     const sourceOutput = new Artifact();
     const siteOutput = new Artifact('siteArtifact');
