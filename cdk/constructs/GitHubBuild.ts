@@ -39,8 +39,8 @@ export class GitHubBuild extends Construct {
     });
 
     const sourceOutput = new Artifact();
-    const siteOutput = new Artifact();
-    const storybookOutput = new Artifact();
+    const siteOutput = new Artifact('siteArtifact');
+    const storybookOutput = new Artifact('storybookArtifact');
 
     const sourceAction = new GitHubSourceAction({
       actionName: 'source',
