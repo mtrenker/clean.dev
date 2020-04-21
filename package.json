@@ -41,6 +41,7 @@
     "@storybook/addon-knobs": "^5.3.18",
     "@storybook/addon-viewport": "^5.3.18",
     "@storybook/react": "^5.3.18",
+    "@types/aws-lambda": "^8.10.48",
     "@types/dotenv-webpack": "^1.7.0",
     "@types/faker": "^4.1.11",
     "@types/html-webpack-plugin": "^3.2.2",
