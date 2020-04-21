@@ -47,6 +47,25 @@ export class ApiStack extends Stack {
 
     const queryDataSource = this.graphQLApi.addDynamoDbDataSource('DataSource', 'QueryDataSource', this.table);
     ApiStack.addCvResolver(queryDataSource);
+    ApiStack.addPageResolver(queryDataSource);
+  }
+
+  static addPageResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'page',
+      typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+              "id" : { "S" : "page-$ctx.args.input.slug" },
+              "sort_key" : { "S" : "page-$ctx.args.input.slug" }
+          }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result)'),
+    });
   }
 
   static addCvResolver(queryDataSource: DynamoDbDataSource): void {

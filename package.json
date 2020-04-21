@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "webpack -p",
+    "build:cdk": "tsc -b",
     "generate": "graphql-codegen",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -c .storybook -o storybook-static",
@@ -94,6 +95,7 @@
     "@emotion/core": "^10.0.28",
     "apollo-boost": "^0.4.7",
     "graphql": "^15.0.0",
+    "i18next": "^19.4.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",

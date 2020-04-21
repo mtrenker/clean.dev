@@ -17,6 +17,16 @@
 #   end_time: AWSDateTime!
 # }
 
+input PageInput {
+  slug: String!
+}
+
+type Page {
+  slug: String!
+  title: String!
+  content: AWSJSON
+}
+
 type Project {
   id: ID!
   client: String!
@@ -45,14 +55,15 @@ type Project {
 
 type Query {
   projects: [Project!]!
+  page(input: PageInput!): Page
   # @aws_auth(cognito_groups: ["Admins"])
   # trackings: [Tracking!]!
   # @aws_auth(cognito_groups: ["Admins"])
 }
 
-type Mutation {
+# type Mutation {
   # saveProject(input: ProjectInput!): Project!
   # @aws_auth(cognito_groups: ["Admins"])
   # track(input: TrackingInput!): Tracking!
   # @aws_auth(cognito_groups: ["Admins"])
-}
+# }

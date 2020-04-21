@@ -1,5 +1,12 @@
 {
+  "references": [
+    {
+      "path": "cdk/resources/lambda/cms-content"
+    }
+  ],
   "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true,
     "jsx": "react",
     "rootDir": "/",
     "outDir": "dist",
@@ -28,6 +35,7 @@
     "strictPropertyInitialization": false
   },
   "exclude": [
+    "node_modules",
     "src/**/*.spec.ts",
     "cdk.out"
   ]

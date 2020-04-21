@@ -5,3 +5,4 @@ data.json
 .env
 storybook-static
 cdk.context.json
+tsconfig.tsbuildinfo
