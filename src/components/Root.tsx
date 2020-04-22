@@ -12,20 +12,8 @@ export const Root: FC = () => (
   <ApolloProvider client={client}>
     <Router>
       <Switch>
-        <Route path="/cv">
-          <CV />
-        </Route>
-        <Route path="/blog">
-          <Blog />
-        </Route>
-        <Route path="/contact" exact>
-          <Contact />
-        </Route>
-        <Route path="/" exact>
+        <Route path="/">
           <Frontpage />
-        </Route>
-        <Route path="/*">
-          <p>Not found</p>
         </Route>
       </Switch>
     </Router>
