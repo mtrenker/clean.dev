@@ -1,4 +1,4 @@
-schema: src/graphql/schema.graphql
+schema: cdk/resources/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
   ./src/graphql/hooks.tsx:
@@ -11,3 +11,4 @@ generates:
       withHooks: true
       scalars:
         AWSDate: Date
+        AWSJSON: "{ [key: string]: any }"

@@ -1,0 +1,7 @@
+query getPage($input: PageInput!) {
+  page(input: $input) {
+    slug
+    title
+    content
+  }
+}

@@ -1,3 +1,6 @@
+scalar AWSJSON
+scalar AWSDate
+
 # input UserInput {
 #   first_name: String!
 #   last_name: String!
