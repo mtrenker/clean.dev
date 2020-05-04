@@ -11,4 +11,5 @@ generates:
       withHooks: true
       scalars:
         AWSDate: Date
+        AWSDateTime: Date
         AWSJSON: "{ [key: string]: any }"

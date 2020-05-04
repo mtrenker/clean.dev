@@ -1,0 +1,5 @@
+mutation track($input: TrackingInput!) {
+  track(input: $input) {
+    id
+  }
+}

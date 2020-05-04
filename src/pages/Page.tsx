@@ -4,7 +4,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 import { useGetPageQuery } from '../graphql/hooks';
 
-export const Frontpage: FC = () => {
+export const Page: FC = () => {
   const { pathname } = useLocation();
   const { data } = useGetPageQuery({ variables: { input: { slug: pathname } } });
   if (!data) return <p>Loading</p>;

@@ -1,5 +1,6 @@
 scalar AWSJSON
 scalar AWSDate
+scalar AWSDateTime
 
 # input UserInput {
 #   first_name: String!
@@ -13,12 +14,12 @@ scalar AWSDate
 #   approval_contact: UserInput
 # }
 
-# input TrackingInput {
-#   project_id: String!
-#   description: String
-#   start_time: AWSDateTime!
-#   end_time: AWSDateTime!
-# }
+input TrackingInput {
+  project_id: String!
+  description: String
+  start_time: AWSDateTime!
+  end_time: AWSDateTime!
+}
 
 input PageInput {
   slug: String!
@@ -48,13 +49,13 @@ type Project {
 #   email: String!
 # }
 
-# type Tracking {
-#   id: ID!
-#   project: Project!
-#   description: String!
-#   start_time: AWSDateTime!
-#   end_time: AWSDateTime!
-# }
+type Tracking {
+  id: ID!
+  project: Project!
+  description: String!
+  start_time: AWSDateTime!
+  end_time: AWSDateTime!
+}
 
 type Query {
   projects: [Project!]!
@@ -64,9 +65,9 @@ type Query {
   # @aws_auth(cognito_groups: ["Admins"])
 }
 
-# type Mutation {
+type Mutation {
   # saveProject(input: ProjectInput!): Project!
   # @aws_auth(cognito_groups: ["Admins"])
-  # track(input: TrackingInput!): Tracking!
-  # @aws_auth(cognito_groups: ["Admins"])
-# }
+  track(input: TrackingInput!): Tracking!
+  @aws_auth(cognito_groups: ["Admins"])
+}

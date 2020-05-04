@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as React from 'react';
 import * as ApolloReactCommon from '@apollo/react-common';
+import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
@@ -14,9 +14,18 @@ export type Scalars = {
   Float: number;
   AWSJSON: { [key: string]: any };
   AWSDate: Date;
+  AWSDateTime: Date;
 };
 
 
+
+
+export type TrackingInput = {
+  project_id: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  start_time: Scalars['AWSDateTime'];
+  end_time: Scalars['AWSDateTime'];
+};
 
 export type PageInput = {
   slug: Scalars['String'];
@@ -41,6 +50,15 @@ export type Project = {
   technologies: Array<Scalars['String']>;
 };
 
+export type Tracking = {
+   __typename?: 'Tracking';
+  id: Scalars['ID'];
+  project: Project;
+  description: Scalars['String'];
+  start_time: Scalars['AWSDateTime'];
+  end_time: Scalars['AWSDateTime'];
+};
+
 export type Query = {
    __typename?: 'Query';
   projects: Array<Project>;
@@ -51,6 +69,29 @@ export type Query = {
 export type QueryPageArgs = {
   input: PageInput;
 };
+
+export type Mutation = {
+   __typename?: 'Mutation';
+  track: Tracking;
+};
+
+
+export type MutationTrackArgs = {
+  input: TrackingInput;
+};
+
+export type TrackMutationVariables = {
+  input: TrackingInput;
+};
+
+
+export type TrackMutation = (
+  { __typename?: 'Mutation' }
+  & { track: (
+    { __typename?: 'Tracking' }
+    & Pick<Tracking, 'id'>
+  ) }
+);
 
 export type GetPageQueryVariables = {
   input: PageInput;
@@ -77,6 +118,44 @@ export type GetProjectsQuery = (
 );
 
 
+export const TrackDocument = gql`
+    mutation track($input: TrackingInput!) {
+  track(input: $input) {
+    id
+  }
+}
+    `;
+export type TrackMutationFn = ApolloReactCommon.MutationFunction<TrackMutation, TrackMutationVariables>;
+export type TrackComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<TrackMutation, TrackMutationVariables>, 'mutation'>;
+
+    export const TrackComponent = (props: TrackComponentProps) => (
+      <ApolloReactComponents.Mutation<TrackMutation, TrackMutationVariables> mutation={TrackDocument} {...props} />
+    );
+    
+
+/**
+ * __useTrackMutation__
+ *
+ * To run a mutation, you first call `useTrackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trackMutation, { data, loading, error }] = useTrackMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTrackMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<TrackMutation, TrackMutationVariables>) {
+        return ApolloReactHooks.useMutation<TrackMutation, TrackMutationVariables>(TrackDocument, baseOptions);
+      }
+export type TrackMutationHookResult = ReturnType<typeof useTrackMutation>;
+export type TrackMutationResult = ApolloReactCommon.MutationResult<TrackMutation>;
+export type TrackMutationOptions = ApolloReactCommon.BaseMutationOptions<TrackMutation, TrackMutationVariables>;
 export const GetPageDocument = gql`
     query getPage($input: PageInput!) {
   page(input: $input) {
