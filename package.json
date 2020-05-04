@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack -p",
-    "build:cdk": "tsc -b",
+    "build:lambda": "tsc -b",
     "generate": "graphql-codegen",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -c .storybook -o storybook-static",

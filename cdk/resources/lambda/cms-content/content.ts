@@ -1,6 +1,14 @@
 import { DynamoDB } from 'aws-sdk';
 import { SNSHandler } from 'aws-lambda';
 
+interface CmsPage {
+  fields: {
+    title: string;
+    slug: string;
+    content: string;
+  };
+}
+
 const TABLE_NAME = process.env.TABLE_NAME ?? '';
 const REGION = process.env.REGION ?? '';
 
@@ -8,13 +16,7 @@ const client = new DynamoDB.DocumentClient({
   region: REGION,
 });
 
-export const handler: SNSHandler = async (event) => {
-  const { Message } = event.Records[0].Sns;
-
-  const content = JSON.parse(Buffer.from(Message, 'base64').toString());
-
-  const id = `page-${content.fields.slug['en-US']}`;
-
+async function saveToDynamoDb(id: string, content: any): Promise<void> {
   await client.update({
     TableName: TABLE_NAME,
     Key: {
@@ -34,4 +36,15 @@ export const handler: SNSHandler = async (event) => {
       ':slug': content.fields.slug['en-US'],
     },
   }).promise();
+}
+
+
+export const handler: SNSHandler = async (event) => {
+  const { Message } = event.Records[0].Sns;
+
+  const content = JSON.parse(Buffer.from(Message, 'base64').toString());
+
+  const id = `page-${content.fields.slug['en-US']}`;
+
+  await saveToDynamoDb(id, content);
 };

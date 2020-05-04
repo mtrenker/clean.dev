@@ -1,7 +1,6 @@
-import React, { FC } from "react";
-import { css } from "@emotion/core";
-import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
+import React, { FC } from 'react';
+import { css } from '@emotion/core';
+import { Link } from 'react-router-dom';
 
 const navBarCss = css`
   background-color: red;
