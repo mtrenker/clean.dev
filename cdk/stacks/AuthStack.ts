@@ -1,6 +1,6 @@
 import { Stack, App, StackProps } from '@aws-cdk/core';
 import {
-  UserPool, IUserPool,
+  UserPool, IUserPool, OAuthScope,
 } from '@aws-cdk/aws-cognito';
 
 export class AuthStack extends Stack {
@@ -13,6 +13,21 @@ export class AuthStack extends Stack {
       autoVerify: {
         email: true,
         phone: false,
+      },
+    });
+    userPool.addClient('app-client', {
+      oAuth: {
+        flows: {
+          authorizationCodeGrant: true,
+        },
+        scopes: [OAuthScope.OPENID],
+        callbackUrls: ['https://clean.dev'],
+      },
+    });
+
+    userPool.addDomain('app-domain', {
+      cognitoDomain: {
+        domainPrefix: 'clean-dev',
       },
     });
 
