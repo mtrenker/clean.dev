@@ -91,10 +91,10 @@
   "dependencies": {
     "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
-    "@auth0/auth0-spa-js": "^1.8.0",
     "@contentful/rich-text-react-renderer": "^13.4.0",
     "@emotion/core": "^10.0.28",
     "apollo-boost": "^0.4.7",
+    "aws-amplify": "^3.0.10",
     "aws-sdk": "^2.669.0",
     "graphql": "^15.0.0",
     "i18next": "^19.4.4",
