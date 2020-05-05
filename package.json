@@ -57,7 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "aws-cdk": "^1.33.1",
-    "aws-sdk": "^2.659.0",
+    "aws-sdk": "^2.669.0",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.6.5",
