@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import API, { Auth } from 'aws-amplify';
+import API from 'aws-amplify';
+
+export interface User {
+  firstName: string;
+  lastName: string;
+}
 
 API.configure({
   aws_cognito_region: process.env.AWS_REGION,
@@ -7,14 +12,26 @@ API.configure({
   aws_user_pools_web_client_id: process.env.COGNITO_CLIENT_ID,
 });
 
-export async function SignIn(username: string, password: string): Promise<void> {
+export async function signIn(username: string, password: string): Promise<void> {
   try {
-    const user = await Auth.signIn({
+    const user = await API.Auth.signIn({
       username,
       password,
     });
     console.log(user);
   } catch (error) {
     console.log('error signing in', error);
+  }
+}
+
+export async function getUser(): Promise<User | null> {
+  try {
+    const user = await API.Auth.currentAuthenticatedUser();
+    return user;
+  } catch (error) {
+    console.log('catch');
+    return null;
+  } finally {
+    console.log('finally');
   }
 }

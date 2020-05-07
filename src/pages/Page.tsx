@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-import { SignIn } from '../lib/auth';
 import { useGetPageQuery } from '../graphql/hooks';
 
 export const Page: FC = () => {
@@ -14,7 +13,6 @@ export const Page: FC = () => {
   return (
     <div>
       {content}
-      <button onClick={() => SignIn('username', 'password')}>Login</button>
       <Link to="/blog/test-page">Test</Link>
     </div>
   );
