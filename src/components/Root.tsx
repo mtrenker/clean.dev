@@ -18,7 +18,7 @@ export const Root: FC = () => {
       }
     };
     fetchUser();
-  }, []);
+  }, [user]);
 
   const userContext: UserContextProps = {
     setUser,

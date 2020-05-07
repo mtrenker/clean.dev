@@ -52,7 +52,7 @@ const config: Config = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.mjs', '.js', '.json'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

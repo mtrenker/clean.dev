@@ -4,7 +4,7 @@ import { User } from '../lib/auth';
 
 export interface UserContextProps {
   user?: User;
-  setUser: Dispatch<SetStateAction<User | undefined>>;
+  setUser: (user: User) => Dispatch<SetStateAction<User | undefined>> | undefined;
 }
 
 export const UserContext = React.createContext<UserContextProps>({

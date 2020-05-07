@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGetPageQuery } from '../graphql/hooks';
+import { Login } from '../components/Auth/Login';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
@@ -12,6 +13,7 @@ export const Page: FC = () => {
   const content = documentToReactComponents(JSON.parse(document));
   return (
     <div>
+      <Login />
       {content}
       <Link to="/blog/test-page">Test</Link>
     </div>
