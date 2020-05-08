@@ -14,13 +14,18 @@ const defaultProps = {
   },
 };
 
-new FrontStack(app, 'CleanFront', defaultProps);
-
 const authStack = new AuthStack(app, 'CleanAuth', defaultProps);
 
 const apiStack = new ApiStack(app, 'CleanApi', {
   ...defaultProps,
   userPool: authStack.userPool,
+});
+
+new FrontStack(app, 'CleanFront', {
+  ...defaultProps,
+  userPool: authStack.userPool,
+  userPoolClient: authStack.userPoolClient,
+  graphqlApi: apiStack.graphQLApi,
 });
 
 new CmsStack(app, 'CleanCMS', {

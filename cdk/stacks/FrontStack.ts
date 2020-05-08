@@ -6,21 +6,38 @@ import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
+import { GraphQLApi } from '@aws-cdk/aws-appsync';
 import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
 
+import { IUserPool, IUserPoolClient } from '@aws-cdk/aws-cognito';
+import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
+interface FrontStackProps extends StackProps {
+  userPool: IUserPool;
+  userPoolClient: IUserPoolClient;
+  graphqlApi: GraphQLApi;
+}
+
 export class FrontStack extends Stack {
-  constructor(scope: App, id: string, props: StackProps) {
+  constructor(scope: App, id: string, props: FrontStackProps) {
     super(scope, id, props);
+
+    const { userPool, userPoolClient, graphqlApi } = props;
 
     const certificate = Certificate.fromCertificateArn(this, 'Certificate', this.node.tryGetContext('front-certificate')) as Certificate;
 
+    const plaintext = BuildEnvironmentVariableType.PLAINTEXT;
     const build = new GitHubBuild(this, 'Build', {
       oauthToken: SecretValue.secretsManager('clean/github'),
       branch: 'master',
       owner: 'mtrenker',
       repo: 'clean.dev',
+      environment: {
+        COGNITO_POOL_ID: { value: userPool.userPoolId, type: plaintext },
+        COGNITO_CLIENT_ID: { value: userPoolClient.userPoolClientId, type: plaintext },
+        GRAPHQL_ENDPOINT: { value: graphqlApi.graphQlUrl, type: plaintext },
+      },
     });
 
     const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate, {

@@ -1,10 +1,12 @@
 import { Stack, App, StackProps } from '@aws-cdk/core';
 import {
-  UserPool, IUserPool, OAuthScope,
+  UserPool, IUserPool, OAuthScope, IUserPoolClient,
 } from '@aws-cdk/aws-cognito';
 
 export class AuthStack extends Stack {
   public readonly userPool: IUserPool;
+
+  public readonly userPoolClient: IUserPoolClient;
 
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -15,7 +17,8 @@ export class AuthStack extends Stack {
         phone: false,
       },
     });
-    userPool.addClient('app-client', {
+
+    this.userPoolClient = userPool.addClient('app-client', {
       oAuth: {
         flows: {
           authorizationCodeGrant: true,
