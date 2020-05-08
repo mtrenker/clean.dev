@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import API, { Auth } from 'aws-amplify';
+import Amplify from '@aws-amplify/core';
+import Auth from '@aws-amplify/auth';
 
 export interface User {
   username: string;
 }
 
-API.configure({
+Amplify.configure({
   aws_cognito_region: process.env.AWS_REGION,
   aws_user_pools_id: process.env.COGNITO_POOL_ID,
   aws_user_pools_web_client_id: process.env.COGNITO_CLIENT_ID,

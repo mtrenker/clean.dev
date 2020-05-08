@@ -1,7 +1,7 @@
 import { Construct, SecretValue, RemovalPolicy } from '@aws-cdk/core';
 import { GitHubSourceAction, CodeBuildAction, S3DeployAction } from '@aws-cdk/aws-codepipeline-actions';
 import { Artifact, Pipeline } from '@aws-cdk/aws-codepipeline';
-import { PipelineProject } from '@aws-cdk/aws-codebuild';
+import { PipelineProject, BuildEnvironmentVariable } from '@aws-cdk/aws-codebuild';
 import { Bucket } from '@aws-cdk/aws-s3';
 
 interface GitHubBuildProps {
@@ -9,6 +9,9 @@ interface GitHubBuildProps {
   repo: string;
   branch: string;
   oauthToken: SecretValue;
+  environment: {
+    [name: string]: BuildEnvironmentVariable;
+  };
 }
 
 export class GitHubBuild extends Construct {
@@ -20,7 +23,7 @@ export class GitHubBuild extends Construct {
     super(scope, id);
 
     const {
-      branch, oauthToken, owner, repo,
+      branch, oauthToken, owner, repo, environment,
     } = props;
 
     const pipeline = new Pipeline(this, 'Pipeline');
@@ -67,6 +70,7 @@ export class GitHubBuild extends Construct {
       input: sourceOutput,
       project,
       outputs: [siteOutput, storybookOutput],
+      environmentVariables: environment,
     });
 
     pipeline.addStage({
