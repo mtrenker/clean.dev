@@ -59,7 +59,11 @@ const config: Config = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle-[hash].js',
   },
-  plugins: [new HtmlWebpackPlugin(htmlConfig), new CleanWebpackPlugin(), new DotEnv()],
+  plugins: [
+    new HtmlWebpackPlugin(htmlConfig),
+    new CleanWebpackPlugin(),
+    new DotEnv({ systemvars: true }),
+  ],
   devServer: {
     open: true,
     historyApiFallback: true,
