@@ -26,6 +26,7 @@ new FrontStack(app, 'CleanFront', {
   userPool: authStack.userPool,
   userPoolClient: authStack.userPoolClient,
   graphqlApi: apiStack.graphQLApi,
+  apiKey: apiStack.apiKey,
 });
 
 new CmsStack(app, 'CleanCMS', {

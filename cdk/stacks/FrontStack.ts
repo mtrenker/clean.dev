@@ -6,24 +6,27 @@ import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
-import { GraphQLApi } from '@aws-cdk/aws-appsync';
+import { GraphQLApi, CfnApiKey } from '@aws-cdk/aws-appsync';
 import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
-
 import { IUserPool, IUserPoolClient } from '@aws-cdk/aws-cognito';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
+
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
 interface FrontStackProps extends StackProps {
   userPool: IUserPool;
   userPoolClient: IUserPoolClient;
   graphqlApi: GraphQLApi;
+  apiKey: CfnApiKey;
 }
 
 export class FrontStack extends Stack {
   constructor(scope: App, id: string, props: FrontStackProps) {
     super(scope, id, props);
 
-    const { userPool, userPoolClient, graphqlApi } = props;
+    const {
+      userPool, userPoolClient, graphqlApi, apiKey,
+    } = props;
 
     const certificate = Certificate.fromCertificateArn(this, 'Certificate', this.node.tryGetContext('front-certificate')) as Certificate;
 
@@ -37,6 +40,7 @@ export class FrontStack extends Stack {
         COGNITO_POOL_ID: { value: userPool.userPoolId, type: plaintext },
         COGNITO_CLIENT_ID: { value: userPoolClient.userPoolClientId, type: plaintext },
         GRAPHQL_ENDPOINT: { value: graphqlApi.graphQlUrl, type: plaintext },
+        GRAPHQL_API_TOKEN: { value: apiKey.attrApiKey, type: plaintext },
       },
     });
 
