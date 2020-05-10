@@ -11,8 +11,7 @@ import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloud
 import { IUserPool, IUserPoolClient } from '@aws-cdk/aws-cognito';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
-import { IUserPool, IUserPoolClient } from '@aws-cdk/aws-cognito';
-import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
+
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
 interface FrontStackProps extends StackProps {
@@ -53,6 +52,12 @@ export class FrontStack extends Stack {
     const zone = HostedZone.fromLookup(this, 'HostedZone', { domainName: 'clean.dev' });
 
     const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Distribution', {
+      errorConfigurations: [{
+        errorCode: 404,
+        responseCode: 200,
+        errorCachingMinTtl: 0,
+        responsePagePath: '/index.html',
+      }],
       originConfigs: [{
         s3OriginSource: {
           s3BucketSource: build.siteBucket,
