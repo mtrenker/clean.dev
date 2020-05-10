@@ -31,7 +31,7 @@ async function saveToDynamoDb(id: string, content: any): Promise<void> {
       '#content': 'content',
     },
     ExpressionAttributeValues: {
-      ':content': content.fields.content['en-US'],
+      ':content': JSON.stringify(content.fields.content['en-US']),
       ':title': content.fields.title['en-US'],
       ':slug': content.fields.slug['en-US'],
     },

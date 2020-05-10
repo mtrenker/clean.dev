@@ -9,18 +9,15 @@ type MutatorFunction = React.Dispatch<React.SetStateAction<Date>>
 export const TimeTracker: FC = () => {
   const [mutate] = useTrackMutation();
 
-  const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState('08:00');
-  const [endDate, setEndDate] = useState(new Date());
-  const [endtTime, setEndtTime] = useState('16:00');
 
   const onClick = (): void => {
     mutate({
       variables: {
         input: {
           project_id: 'project-123',
-          start_time: startTime,
-          end_time: endtTime,
+          start_time: new Date(startTime),
+          end_time: new Date(startTime),
         },
       },
     });
@@ -32,13 +29,12 @@ export const TimeTracker: FC = () => {
     <div>
       <fieldset>
         <legend>From:</legend>
-        <input type="date" onChange={onChange(setStartDate)} value={startDate.toString()} />
-        <input type="time" onChange={onChange(setStartTime)} value={startTime} />
+        <input type="time" value={startTime} />
       </fieldset>
 
       <fieldset>
         <legend>QuickSelect</legend>
-        <button>8h</button>
+        <button type="submit">8h</button>
       </fieldset>
 
       <fieldset>
