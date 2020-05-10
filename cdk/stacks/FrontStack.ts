@@ -57,6 +57,11 @@ export class FrontStack extends Stack {
         responseCode: 200,
         errorCachingMinTtl: 0,
         responsePagePath: '/index.html',
+      }, {
+        errorCode: 403,
+        responseCode: 200,
+        errorCachingMinTtl: 0,
+        responsePagePath: '/index.html',
       }],
       originConfigs: [{
         s3OriginSource: {
