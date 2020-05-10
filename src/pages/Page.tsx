@@ -9,8 +9,9 @@ export const Page: FC = () => {
   const { pathname } = useLocation();
   const { data } = useGetPageQuery({ variables: { input: { slug: pathname } } });
   if (!data) return <p>Loading</p>;
-  const document = data?.page?.content as any;
-  const content = documentToReactComponents(JSON.parse(document));
+  const document = data?.page?.content;
+
+  const content = documentToReactComponents(JSON.parse(JSON.parse(document)));
   return (
     <div>
       <Login />

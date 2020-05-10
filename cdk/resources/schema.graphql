@@ -28,7 +28,7 @@ input PageInput {
 type Page {
   slug: String!
   title: String!
-  content: AWSJSON
+  content: String!
 }
 
 type Project {

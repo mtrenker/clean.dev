@@ -35,7 +35,7 @@ export type Page = {
    __typename?: 'Page';
   slug: Scalars['String'];
   title: Scalars['String'];
-  content?: Maybe<Scalars['AWSJSON']>;
+  content: Scalars['String'];
 };
 
 export type Project = {
