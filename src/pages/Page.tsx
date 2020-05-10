@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGetPageQuery } from '../graphql/hooks';
-import { Login } from '../components/Auth/Login';
+import { Login } from '../components/auth/Login';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
