@@ -2,6 +2,8 @@
   "references": [
     {
       "path": "cdk/resources/lambda/cms-content"
+    },{
+      "path": "cdk/resources/lambda/cms-webhook"
     }
   ],
   "compilerOptions": {
@@ -36,7 +38,7 @@
   },
   "exclude": [
     "node_modules",
-    "src/**/*.spec.ts",
+    "src/**/*",
     "cdk.out"
   ]
 }
