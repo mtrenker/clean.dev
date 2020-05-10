@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import { css, SerializedStyles } from '@emotion/core';
 import { Link } from 'react-router-dom';
 
-const navBarCss = css`
-  background-color: red;
+import { Theme } from '../../themes/default';
+
+const navBarCss = (theme: Theme): SerializedStyles => css`
+  background-color: ${theme.colors.primary} ;
 `;
 
-export const Header: FC = ({ children }) => (
+export const Header: FC = () => (
   <header>
     <h1>clean.dev</h1>
     <nav css={navBarCss}>
@@ -18,6 +20,5 @@ export const Header: FC = ({ children }) => (
         <li><Link to="/huh">404</Link></li>
       </ul>
     </nav>
-    {children}
   </header>
 );
