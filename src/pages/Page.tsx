@@ -15,7 +15,6 @@ export const Page: FC = () => {
     <div>
       <Login />
       {content}
-      <Link to="/blog/test-page">Test</Link>
     </div>
   );
 };
