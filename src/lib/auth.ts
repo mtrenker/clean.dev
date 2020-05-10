@@ -1,23 +1,32 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import API, { Auth } from 'aws-amplify';
+import { Auth, CognitoUser } from '@aws-amplify/auth';
+
+export const configure = (): void => {
+  Auth.configure({
+    region: process.env.AWS_REGION,
+    userPoolId: process.env.COGNITO_POOL_ID,
+    userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
+    mandatorySignIn: false,
+  });
+};
 
 export interface User {
   username: string;
+  jwtToken: string;
 }
-
-API.configure({
-  aws_cognito_region: process.env.AWS_REGION,
-  aws_user_pools_id: process.env.COGNITO_POOL_ID,
-  aws_user_pools_web_client_id: process.env.COGNITO_CLIENT_ID,
-});
 
 export async function signIn(username: string, password: string): Promise<User | null> {
   try {
-    const user = await Auth.signIn({
+    const cognitoUser: CognitoUser = await Auth.signIn({
       username,
       password,
     });
-    console.log(user);
+    const session = await Auth.currentSession();
+
+    const user: User = {
+      username: cognitoUser.getUsername(),
+      jwtToken: session.getAccessToken().getJwtToken(),
+    };
+
     return user;
   } catch (error) {
     console.log('error signing in', error);
@@ -33,4 +42,18 @@ export async function getUser(): Promise<User | null> {
     console.log(error);
     return null;
   }
+}
+
+export async function getJwtToken(): Promise<string | null> {
+  try {
+    const session = await Auth.currentSession();
+    return session.getAccessToken().getJwtToken();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function signOut(): Promise<void> {
+  Auth.signOut();
 }
