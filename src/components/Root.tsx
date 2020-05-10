@@ -1,32 +1,31 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Page } from '../pages/Page';
 import { client } from '../graphql/client';
-import { UserContext, UserContextProps } from '../context/UserContext';
-import { getUser, User } from '../lib/auth';
+import { getUser, User, configure } from '../lib/auth';
+import { UserContext } from '../context/UserContext';
+
 
 export const Root: FC = () => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    configure();
     const fetchUser = async (): Promise<void> => {
-      const currentUser = await getUser();
-      if (currentUser) {
-        setUser(currentUser);
-      }
+      const fetchedUser = await getUser();
+      setUser(fetchedUser);
     };
-    fetchUser();
+
+    if (!user) {
+      fetchUser();
+    }
   }, [user]);
 
-  const userContext: UserContextProps = {
-    setUser,
-    user,
-  };
   return (
-    <ApolloProvider client={client}>
-      <UserContext.Provider value={userContext}>
+    <UserContext.Provider value={{ user, setUser }}>
+      <ApolloProvider client={client({ user })}>
         <Router>
           <Switch>
             <Route path="/">
@@ -34,7 +33,7 @@ export const Root: FC = () => {
             </Route>
           </Switch>
         </Router>
-      </UserContext.Provider>
-    </ApolloProvider>
+      </ApolloProvider>
+    </UserContext.Provider>
   );
 };

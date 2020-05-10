@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, RemovalPolicy,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction,
+  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey,
 } from '@aws-cdk/aws-appsync';
 import { IUserPool } from '@aws-cdk/aws-cognito';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
@@ -15,6 +15,8 @@ export class ApiStack extends Stack {
   public readonly graphQLApi: GraphQLApi;
 
   public readonly table: Table;
+
+  public readonly apiKey: CfnApiKey;
 
   constructor(scope: App, id: string, props: ApiStackProps) {
     super(scope, id, props);
@@ -43,6 +45,10 @@ export class ApiStack extends Stack {
           defaultAction: UserPoolDefaultAction.ALLOW,
         },
       },
+    });
+
+    this.apiKey = new CfnApiKey(this, 'ApiKey', {
+      apiId: this.graphQLApi.apiId,
     });
 
     const queryDataSource = this.graphQLApi.addDynamoDbDataSource('DataSource', 'QueryDataSource', this.table);

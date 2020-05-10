@@ -1,35 +1,41 @@
 import React, { FC, useContext, useRef } from 'react';
 
+import { signIn, signOut } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
-import { signIn } from '../../lib/auth';
 
 export const Login: FC = () => {
   const { user, setUser } = useContext(UserContext);
+
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const login = async (): Promise<void> => {
-    const signedInUser = await signIn(usernameRef.current?.value ?? '', passwordRef.current?.value ?? '');
-    console.log('LOGGING IN ', signedInUser);
 
-    setUser(signedInUser!);
+  const login = async (): Promise<void> => {
+    const loggedInUser = await signIn(
+      usernameRef.current?.value ?? '',
+      passwordRef.current?.value ?? '',
+    );
+    setUser(loggedInUser);
   };
-  if (!user) {
+
+  const logout = async (): Promise<void> => {
+    await signOut();
+    setUser(null);
+  };
+
+
+  if (user) {
     return (
-      <div>
-        <input type="text" ref={usernameRef} />
-        <input type="password" ref={passwordRef} />
-        <button type="submit" onClick={(): Promise<void> => login()}>login</button>
-      </div>
+      <p>
+        {user.username}
+        <button type="submit" onClick={logout}>Logout</button>
+      </p>
     );
   }
   return (
     <div>
-      {user
-        && (
-          <span>
-            {`Hi ${user.username}`}
-          </span>
-        )}
+      <input type="text" ref={usernameRef} />
+      <input type="password" ref={passwordRef} />
+      <button type="submit" onClick={login}>Login</button>
     </div>
   );
 };
