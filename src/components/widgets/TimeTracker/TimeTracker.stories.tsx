@@ -6,11 +6,8 @@ import { client } from '../../../graphql/client';
 
 export default { title: 'TimeTracker' };
 
-export const normal = () => {
-  const foo = 'bar';
-  return (
-    <ApolloProvider client={client}>
-      <TimeTracker />
-    </ApolloProvider>
-  );
-};
+export const normal = () => (
+  <ApolloProvider client={client({ user })}>
+    <TimeTracker />
+  </ApolloProvider>
+);

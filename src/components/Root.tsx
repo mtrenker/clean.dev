@@ -9,6 +9,7 @@ import { getUser, User, configure } from '../lib/auth';
 import { UserContext } from '../context/UserContext';
 import { GlobalStyle } from './layout/GlobalStyle';
 import { theme } from '../themes/default';
+import { Track } from '../pages/Track';
 
 
 export const Root: FC = () => {
@@ -21,7 +22,7 @@ export const Root: FC = () => {
       setUser(fetchedUser);
     };
 
-    if (!user) {
+    if (!user?.username) {
       fetchUser();
     }
   }, [user]);
@@ -33,6 +34,9 @@ export const Root: FC = () => {
           <GlobalStyle />
           <Router>
             <Switch>
+              <Route path="/track" exact>
+                <Track />
+              </Route>
               <Route path="/">
                 <Page />
               </Route>

@@ -11,7 +11,7 @@ export const Page: FC = () => {
   if (!data) return <p>Loading</p>;
   const document = data?.page?.content;
 
-  const content = documentToReactComponents(JSON.parse(JSON.parse(document)));
+  const content = documentToReactComponents(JSON.parse(document));
   return (
     <div>
       <Login />
