@@ -1,6 +1,6 @@
 import { Stack, App, StackProps } from '@aws-cdk/core';
 import {
-  UserPool, IUserPool, OAuthScope, IUserPoolClient,
+  UserPool, IUserPool, OAuthScope, IUserPoolClient, CfnUserPoolGroup,
 } from '@aws-cdk/aws-cognito';
 
 export class AuthStack extends Stack {
@@ -32,6 +32,11 @@ export class AuthStack extends Stack {
       cognitoDomain: {
         domainPrefix: 'clean-dev',
       },
+    });
+
+    new CfnUserPoolGroup(this, 'AdminGroup', {
+      userPoolId: userPool.userPoolId,
+      groupName: 'Admins',
     });
 
     this.userPool = userPool;
