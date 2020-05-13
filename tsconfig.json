@@ -4,6 +4,8 @@
       "path": "cdk/resources/lambda/cms-content"
     },{
       "path": "cdk/resources/lambda/cms-webhook"
+    },{
+      "path": "cdk/resources/lambda/track-mutation"
     }
   ],
   "compilerOptions": {
