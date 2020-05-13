@@ -25,7 +25,7 @@ input PageInput {
   slug: String!
 }
 
-type Page {
+type Page @aws_api_key {
   slug: String!
   title: String!
   content: String!
@@ -49,7 +49,7 @@ type Project {
 #   email: String!
 # }
 
-type Tracking {
+type Tracking @aws_api_key {
   id: ID!
   project: Project!
   description: String!
@@ -59,15 +59,18 @@ type Tracking {
 
 type Query {
   projects: [Project!]!
+  @aws_api_key
   page(input: PageInput!): Page
+  @aws_api_key
+
   # @aws_auth(cognito_groups: ["Admins"])
   # trackings: [Tracking!]!
   # @aws_auth(cognito_groups: ["Admins"])
 }
 
-type Mutation {
+type Mutation @aws_api_key {
   # saveProject(input: ProjectInput!): Project!
   # @aws_auth(cognito_groups: ["Admins"])
   track(input: TrackingInput!): Tracking!
-  @aws_auth(cognito_groups: ["Admins"])
+  @aws_cognito_user_pools(cognito_groups: ["Admins"])
 }

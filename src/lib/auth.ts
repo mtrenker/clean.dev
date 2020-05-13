@@ -36,8 +36,13 @@ export async function signIn(username: string, password: string): Promise<User |
 
 export async function getUser(): Promise<User | null> {
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    return user;
+    const user = await Auth.currentAuthenticatedUser() as CognitoUser;
+    const session = user.getSignInUserSession();
+
+    return {
+      username: user.getUsername(),
+      jwtToken: session.getAccessToken().getJwtToken(),
+    };
   } catch (error) {
     console.log(error);
     return null;

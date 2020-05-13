@@ -6,6 +6,8 @@ import {
 } from '@aws-cdk/aws-appsync';
 import { IUserPool } from '@aws-cdk/aws-cognito';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
+import { Function, Code, Runtime } from '@aws-cdk/aws-lambda';
+import { Role, ManagedPolicy, ServicePrincipal } from '@aws-cdk/aws-iam';
 
 interface ApiStackProps extends StackProps {
   userPool: IUserPool;
@@ -44,6 +46,9 @@ export class ApiStack extends Stack {
           userPool,
           defaultAction: UserPoolDefaultAction.ALLOW,
         },
+        additionalAuthorizationModes: [{
+          apiKeyDesc: 'Public API Key',
+        }],
       },
     });
 
@@ -54,6 +59,10 @@ export class ApiStack extends Stack {
     const queryDataSource = this.graphQLApi.addDynamoDbDataSource('DataSource', 'QueryDataSource', this.table);
     ApiStack.addCvResolver(queryDataSource);
     ApiStack.addPageResolver(queryDataSource);
+
+    const trackFunction = this.trackFunction();
+    this.table.grantReadWriteData(trackFunction);
+    this.trackResolver(trackFunction);
   }
 
   static addPageResolver(queryDataSource: DynamoDbDataSource): void {
@@ -89,6 +98,37 @@ export class ApiStack extends Stack {
       }
     `),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.projects)'),
+    });
+  }
+
+  private trackFunction(): Function {
+    const TrackMutationRole = new Role(this, 'TrackMutationRoke', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [
+        ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+      ],
+    });
+    return new Function(this, 'TrackFunction', {
+      code: Code.fromAsset('cdk/resources/lambda/track-mutation'),
+      handler: 'mutation.handler',
+      runtime: Runtime.NODEJS_12_X,
+      role: TrackMutationRole,
+      environment: {
+        TABLE_NAME: this.table.tableName,
+      },
+    });
+  }
+
+  private trackResolver(trackFunction: Function): void {
+    const trackSource = this.graphQLApi.addLambdaDataSource(
+      'TrackSource',
+      'TrackSOurce', trackFunction,
+    );
+    trackSource.createResolver({
+      fieldName: 'track',
+      typeName: 'Mutation',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
     });
   }
 }

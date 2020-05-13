@@ -1,5 +1,7 @@
-import { DynamoDB } from "aws-sdk";
-import nanoid from "nanoid";
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
+import { DynamoDB } from 'aws-sdk';
+import nanoid from 'nanoid';
 
 interface EventProps<TInput> {
   arguments: {
@@ -7,9 +9,9 @@ interface EventProps<TInput> {
   };
   identity: IdentityProps;
   info: {
-    fieldName: 'saveProject',
-    parentTypeName: string,
-  }
+    fieldName: 'track';
+    parentTypeName: string;
+  };
 }
 
 interface IdentityProps {
@@ -26,19 +28,42 @@ interface ProjectInput {
     first_name: string;
     last_name: string;
     email: string;
-  }
+  };
+}
+
+interface TrackInput {
+  id?: string;
+  start_time: string;
+  end_time: string;
+  description: string;
 }
 
 const documentClient = new DynamoDB.DocumentClient();
 
-export const handler = async (event: EventProps<ProjectInput>, context: any) => {
-  const { arguments: { input }, identity, info } = event;
+async function track(input: TrackInput) {
+  const id = `track-${nanoid()}`;
 
-  switch (info.fieldName) {
-    case 'saveProject':
-      return await createProject(input, identity);
+  const trackItem = {
+    id,
+    sort_key: id,
+    start_time: input.start_time,
+    end_time: input.end_time,
+    description: input.description,
+  };
+
+  try {
+    await documentClient.put({
+      TableName: process.env.TABLE_NAME ?? '',
+      Item: trackItem,
+    }).promise();
+
+    return trackItem;
+  } catch (error) {
+    console.error(error);
+
+    return error;
   }
-};
+}
 
 async function createProject(input: ProjectInput, identity: IdentityProps) {
   const id = `project-${nanoid()}`;
@@ -59,22 +84,22 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
   const userProject = {
     id: `user-${identity.username}`,
     sort_key: id,
-    name: input.name
-  }
+    name: input.name,
+  };
 
   try {
     await documentClient.batchWrite({
       RequestItems: {
         [process.env.TABLE_NAME!]: [{
           PutRequest: {
-            Item: project
-          }
+            Item: project,
+          },
         }, {
           PutRequest: {
-            Item: userProject
-          }
-        }]
-      }
+            Item: userProject,
+          },
+        }],
+      },
     }).promise();
 
     return project;
@@ -84,3 +109,13 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
     return error;
   }
 }
+
+export const handler = async (event: EventProps<TrackInput>, context: any) => {
+  const { arguments: { input }, info } = event;
+
+  switch (info.fieldName) {
+    case 'track':
+      return track(input);
+    default:
+  }
+};
