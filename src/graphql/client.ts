@@ -8,11 +8,13 @@ interface ClientOptions {
 export const client = (options: ClientOptions): ApolloClient<undefined> => {
   const { user } = options;
   const headers: { 'x-api-key'?: string; authorization?: string } = {
-    'x-api-key': process.env.GRAPHQL_API_TOKEN,
+
   };
 
   if (user) {
-    headers.authorization = `Bearer ${user.jwtToken}`;
+    headers.authorization = user.jwtToken;
+  } else {
+    headers['x-api-key'] = process.env.GRAPHQL_API_TOKEN;
   }
 
   return new ApolloClient({
