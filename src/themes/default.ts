@@ -1,11 +1,12 @@
 export interface Theme {
   colors: {
-    primary: string;
+    [color: string]: string;
   };
 }
 
 export const theme = {
   colors: {
     primary: 'hotpink',
+    background: '#FFFFFF',
   },
 };
