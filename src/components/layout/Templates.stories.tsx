@@ -9,7 +9,7 @@ export default { title: 'Design | Templates' };
 export const landingPage: FC = () => (
   <>
     <Header>
-      <h2 />
+      <h2>Subtitle</h2>
     </Header>
     <Container>
       {lorem.paragraphs(5).split('\n').map((text) => <p>{text}</p>)}
