@@ -22,6 +22,7 @@
       "error",
       {
         "devDependencies": [
+          "src/**/*.stories.tsx",
           "cdk/**/*",
           "webpack.config.ts"
         ]
