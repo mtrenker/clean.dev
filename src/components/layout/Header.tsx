@@ -76,10 +76,6 @@ export const Header: FC = ({ children }) => {
           <nav css={nav}>
             <ul>
               <li><a href="/">Home</a></li>
-              <li><a href="/blog">About</a></li>
-              <li><a href="/blog">Blog</a></li>
-              <li><a href="/blog">Projects</a></li>
-              <li><a href="/blog">Contact</a></li>
             </ul>
           </nav>
         </Container>
