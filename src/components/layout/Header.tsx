@@ -1,63 +1,100 @@
 import React, { FC } from 'react';
-import { css, SerializedStyles } from '@emotion/core';
+import { css } from '@emotion/core';
 
 import { Container, container } from './Container';
+import { breakPoints } from '../../themes/default';
 
-const header = (): SerializedStyles => css`
-  background-color: #f6f6f6;
-  display: grid;
-  grid-template:
-    "topbar topbar" 50px
-    "infobar infobar" 200px
-    / 1fr 1fr;
-`;
+export const Header: FC = ({ children }) => {
+  const header = css`
+    @media (min-width: ${breakPoints.mobile}) {
+      display: grid;
+      grid-template:
+        "topbar topbar" 50px
+        "infobar infobar" max-content
+        / 1fr 1fr;
+      background-color: #F9F9F9;
+      margin-bottom: 48px;
+    }
+  `;
 
-const topbar = (): SerializedStyles => css`
-  background-color: white ;
-  box-shadow: 0 2px 5px rgba(0,0,0, .1);
-  grid-area: topbar;
+  const topbar = css`
+    background-color: white ;
+    box-shadow: 0 2px 5px rgba(0,0,0, .1);
+    grid-area: topbar;
 
-  .css-${container.name} {
-    display: flex;
-  }
-`;
+    .css-${container.name} {
+      display: flex;
+    }
+  `;
 
-const infobar = css`
-  grid-area: infobar;
-  .css-${container.name} {
-    display: flex;
-    justify-content: space-between;
-  }
-`;
+  const infobar = css`
+    grid-area: infobar;
+    .css-${container.name} {
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  `;
 
-const logo = (): SerializedStyles => css`
-  flex: 1;
-`;
+  const logo = css`
+    flex: 1;
+    font-weight: bold;
+    span {
+      font-weight: lighter;
+      font-family: consolas;
+    }
+  `;
 
-const nav = (): SerializedStyles => css`
-  flex: 1;
-  li {
-    display: inline-block;
-  }
-`;
+  const nav = css`
+    &::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background-color: hotpink;
+    }
+    display: none;
+    @media (min-width: ${breakPoints.mobile}) {
+      display: block;
+      flex: 1;
+      ul {
+        display: flex;
+        justify-content: space-between;
+        li {
+          display: block;
+          a {
+            text-decoration: none;
+            color: #000;
+          }
+        }
+      }
+    }
+  `;
 
-export const Header: FC = ({ children }) => (
-  <header css={header}>
-    <div css={topbar}>
-      <Container>
-        <h1 css={logo}>clean.dev</h1>
-        <nav css={nav}>
-          <ul>
-            <li><a href="/">Start</a></li>
-            <li><a href="/blog">Blog</a></li>
-          </ul>
-        </nav>
-      </Container>
-    </div>
-    <div css={infobar}>
-      <Container>
-        {children}
-      </Container>
-    </div>
-  </header>
-);
+  return (
+    <header css={header}>
+      <div css={topbar}>
+        <Container>
+          <h1 css={logo}>
+            clean
+            <span>dev</span>
+          </h1>
+          <nav css={nav}>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/blog">About</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/blog">Projects</a></li>
+              <li><a href="/blog">Contact</a></li>
+            </ul>
+          </nav>
+        </Container>
+      </div>
+      <div css={infobar}>
+        <Container>
+          {children}
+        </Container>
+      </div>
+    </header>
+  );
+};
