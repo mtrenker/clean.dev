@@ -19,7 +19,7 @@ export const Header: FC = ({ children }) => {
 
   const topbar = css`
     background-color: white ;
-    box-shadow: 0 2px 5px rgba(0,0,0, .1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
     grid-area: topbar;
 
     .css-${container.name} {
@@ -47,12 +47,6 @@ export const Header: FC = ({ children }) => {
   `;
 
   const nav = css`
-    &::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      background-color: hotpink;
-    }
     display: none;
     @media (min-width: ${breakPoints.mobile}) {
       display: block;
