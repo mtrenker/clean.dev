@@ -40,7 +40,7 @@ interface TrackInput {
 const documentClient = new DynamoDB.DocumentClient();
 
 async function track(input: TrackInput) {
-  const id = `track-${nanoid()}`;
+  const id = `tracking-${nanoid()}`;
 
   const {
     projectId, startTime, endTime, description,

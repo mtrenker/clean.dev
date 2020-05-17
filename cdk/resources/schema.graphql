@@ -65,7 +65,7 @@ type Tracking @aws_api_key @aws_cognito_user_pools {
 ###   approval_contact: UserInput
 ### }
 input TrackingInput {
-  id: ID!
+  id: ID
 	projectId: String!
 	description: String
 	startTime: AWSDateTime!
