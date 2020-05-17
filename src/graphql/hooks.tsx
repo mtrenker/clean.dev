@@ -12,23 +12,22 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  AWSJSON: { [key: string]: any };
   AWSDate: Date;
   AWSDateTime: Date;
+  AWSJSON: { [key: string]: any };
 };
 
 
 
 
-export type TrackingInput = {
-  project_id: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  start_time: Scalars['AWSDateTime'];
-  end_time: Scalars['AWSDateTime'];
+export type Mutation = {
+   __typename?: 'Mutation';
+  track: Tracking;
 };
 
-export type PageInput = {
-  slug: Scalars['String'];
+
+export type MutationTrackArgs = {
+  input: TrackingInput;
 };
 
 export type Page = {
@@ -36,6 +35,10 @@ export type Page = {
   slug: Scalars['String'];
   title: Scalars['String'];
   content: Scalars['String'];
+};
+
+export type PageInput = {
+  slug: Scalars['String'];
 };
 
 export type Project = {
@@ -50,19 +53,11 @@ export type Project = {
   technologies: Array<Scalars['String']>;
 };
 
-export type Tracking = {
-   __typename?: 'Tracking';
-  id: Scalars['ID'];
-  project: Project;
-  description: Scalars['String'];
-  start_time: Scalars['AWSDateTime'];
-  end_time: Scalars['AWSDateTime'];
-};
-
 export type Query = {
    __typename?: 'Query';
   projects: Array<Project>;
   page?: Maybe<Page>;
+  trackings?: Maybe<Array<Maybe<Tracking>>>;
 };
 
 
@@ -70,14 +65,30 @@ export type QueryPageArgs = {
   input: PageInput;
 };
 
-export type Mutation = {
-   __typename?: 'Mutation';
-  track: Tracking;
+
+export type QueryTrackingsArgs = {
+  query?: Maybe<TrackingQuery>;
 };
 
+export type Tracking = {
+   __typename?: 'Tracking';
+  id: Scalars['ID'];
+  project: Project;
+  description: Scalars['String'];
+  startTime: Scalars['AWSDateTime'];
+  endTime: Scalars['AWSDateTime'];
+};
 
-export type MutationTrackArgs = {
-  input: TrackingInput;
+export type TrackingInput = {
+  projectId: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  startTime: Scalars['AWSDateTime'];
+  endTime: Scalars['AWSDateTime'];
+};
+
+export type TrackingQuery = {
+  from: Scalars['String'];
+  to: Scalars['String'];
 };
 
 export type TrackMutationVariables = {

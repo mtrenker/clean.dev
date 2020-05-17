@@ -35,6 +35,8 @@ type Project {
 type Query @aws_api_key @aws_cognito_user_pools {
 	projects: [Project!]!
 	page(input: PageInput!): Page
+  trackings(query: TrackingQuery): [Tracking]
+    @aws_cognito_user_pools
 }
 
 # type User {
@@ -63,8 +65,14 @@ type Tracking @aws_api_key @aws_cognito_user_pools {
 ###   approval_contact: UserInput
 ### }
 input TrackingInput {
+  id: ID!
 	projectId: String!
 	description: String
 	startTime: AWSDateTime!
 	endTime: AWSDateTime!
+}
+
+input TrackingQuery {
+  from: String!
+  to: String!
 }

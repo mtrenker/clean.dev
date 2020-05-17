@@ -59,6 +59,7 @@ export class ApiStack extends Stack {
     const queryDataSource = this.graphQLApi.addDynamoDbDataSource('DataSource', 'QueryDataSource', this.table);
     ApiStack.addCvResolver(queryDataSource);
     ApiStack.addPageResolver(queryDataSource);
+    ApiStack.addtrackingsResolver(queryDataSource);
 
     const trackFunction = this.trackFunction();
     this.table.grantReadWriteData(trackFunction);
@@ -94,6 +95,26 @@ export class ApiStack extends Stack {
           "key" : {
               "id" : { "S" : "projects-cv" },
               "sort_key" : { "S" : "projects-cv" }
+          }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.projects)'),
+    });
+  }
+
+  static addtrackingsResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'trackings',
+      typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+          "version" : "2017-02-28",
+          "operation" : "Query",
+          "query":{
+            "expression": "begins_with(sortKey, tracking-:date)",
+            "expressionValues": {
+              ":date": $util.dynamodb.toDynamoDBJson($context.arguments.query.from)
+            }
           }
       }
     `),

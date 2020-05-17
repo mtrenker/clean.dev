@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { FC, FormEvent, useState } from 'react';
+import React, {
+  FC, FormEvent, useState, useRef,
+} from 'react';
 import { css } from '@emotion/core';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,6 +29,7 @@ const form = css`
 export const TimeTracker: FC = () => {
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
+  const descriptionRef = useRef<HTMLTextAreaElement>();
   const [mutate] = useTrackMutation();
 
   const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
@@ -34,10 +37,10 @@ export const TimeTracker: FC = () => {
     mutate({
       variables: {
         input: {
-          project_id: '123',
-          start_time: startTime,
-          end_time: endTime,
-          description: 'test test',
+          projectId: '123',
+          startTime,
+          endTime,
+          description: descriptionRef.current.value,
         },
       },
     });
@@ -64,6 +67,7 @@ export const TimeTracker: FC = () => {
           dateFormat="MMMM d, yyyy h:mm aa"
           showWeekNumbers
         />
+        <textarea ref={descriptionRef} />
         <button type="submit">Save</button>
       </form>
     </div>

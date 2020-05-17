@@ -31,6 +31,7 @@ interface ProjectInput {
 
 interface TrackInput {
   id?: string;
+  projectId: string;
   startTime: string;
   endTime: string;
   description: string;
@@ -41,12 +42,18 @@ const documentClient = new DynamoDB.DocumentClient();
 async function track(input: TrackInput) {
   const id = `track-${nanoid()}`;
 
+  const {
+    projectId, startTime, endTime, description,
+  } = input;
+  const startDate = new Date(startTime);
+  const sortKey = `tracking-${projectId}-${startDate.toISOString()}`;
+
   const trackItem = {
     id,
-    sortKey: id,
-    startTime: input.startTime,
-    endTime: input.endTime,
-    description: input.description,
+    sortKey,
+    startTime,
+    endTime,
+    description,
   };
 
   try {
