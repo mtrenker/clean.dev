@@ -29,7 +29,7 @@ new FrontStack(app, 'CleanFront', {
   apiKey: apiStack.apiKey,
 });
 
-new CmsStack(app, 'CleanCMS', {
+new CmsStack(app, 'CleanCms', {
   ...defaultProps,
   dataTable: apiStack.table,
 });

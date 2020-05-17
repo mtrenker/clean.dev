@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-/* eslint-disable camelcase */
 import { DynamoDB } from 'aws-sdk';
 import nanoid from 'nanoid';
 
@@ -23,18 +21,18 @@ interface ProjectInput {
   id?: string;
   name: string;
   description: string;
-  approval_contact: {
+  approvalContact: {
     id?: string;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
 }
 
 interface TrackInput {
   id?: string;
-  start_time: string;
-  end_time: string;
+  startTime: string;
+  endTime: string;
   description: string;
 }
 
@@ -45,9 +43,9 @@ async function track(input: TrackInput) {
 
   const trackItem = {
     id,
-    sort_key: id,
-    start_time: input.start_time,
-    end_time: input.end_time,
+    sortKey: id,
+    startTime: input.startTime,
+    endTime: input.endTime,
     description: input.description,
   };
 
@@ -70,20 +68,20 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
 
   const project = {
     id,
-    sort_key: id,
+    sortKey: id,
     name: input.name,
     description: input.description,
-    approval_contact: {
-      id: input.approval_contact.id ?? null,
-      first_name: input.approval_contact.first_name,
-      last_name: input.approval_contact.last_name,
-      email: input.approval_contact.email,
+    approvalContact: {
+      id: input.approvalContact.id ?? null,
+      firstName: input.approvalContact.firstName,
+      lastName: input.approvalContact.lastName,
+      email: input.approvalContact.email,
     },
   };
 
   const userProject = {
     id: `user-${identity.username}`,
-    sort_key: id,
+    sortKey: id,
     name: input.name,
   };
 

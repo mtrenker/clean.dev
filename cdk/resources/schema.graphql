@@ -8,7 +8,7 @@ type Mutation {
 	# saveProject(input: ProjectInput!): Project!
 	### @aws_auth(cognito_groups: ["Admins"])
 	track(input: TrackingInput!): Tracking!
-		@aws_cognito_user_pools(cognito_groups: ["Admins"])
+  @aws_cognito_user_pools(cognito_groups: ["Admins"])
 }
 
 type Page @aws_api_key @aws_cognito_user_pools {
@@ -48,8 +48,8 @@ type Tracking @aws_api_key @aws_cognito_user_pools {
     @aws_cognito_user_pools
 	description: String!
     @aws_cognito_user_pools
-	start_time: AWSDateTime!
-	end_time: AWSDateTime!
+	startTime: AWSDateTime!
+	endTime: AWSDateTime!
 }
 
 # input UserInput {
@@ -63,8 +63,8 @@ type Tracking @aws_api_key @aws_cognito_user_pools {
 ###   approval_contact: UserInput
 ### }
 input TrackingInput {
-	project_id: String!
+	projectId: String!
 	description: String
-	start_time: AWSDateTime!
-	end_time: AWSDateTime!
+	startTime: AWSDateTime!
+	endTime: AWSDateTime!
 }

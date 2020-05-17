@@ -31,7 +31,7 @@ export class ApiStack extends Stack {
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: 'sort_key',
+        name: 'sortKey',
         type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
@@ -102,7 +102,7 @@ export class ApiStack extends Stack {
   }
 
   private trackFunction(): Function {
-    const TrackMutationRole = new Role(this, 'TrackMutationRoke', {
+    const TrackMutationRole = new Role(this, 'TrackMutationRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),

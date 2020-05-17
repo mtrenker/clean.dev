@@ -21,8 +21,7 @@ async function saveToDynamoDb(id: string, content: any): Promise<void> {
     TableName: TABLE_NAME,
     Key: {
       id,
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      sort_key: id,
+      sortKey: id,
     },
     UpdateExpression: 'set #title= :title, #content = :content, #slug = :slug',
     ExpressionAttributeNames: {
