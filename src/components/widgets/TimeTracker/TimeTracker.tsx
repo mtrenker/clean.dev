@@ -1,10 +1,32 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { FC, FormEvent } from 'react';
+import React, { FC, FormEvent, useState } from 'react';
+import { css } from '@emotion/core';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+
 import { useTrackMutation } from '../../../graphql/hooks';
 
-type MutatorFunction = React.Dispatch<React.SetStateAction<Date>>
+
+const datepicker = css`
+  display: grid;
+  grid-template:
+    "overview form" auto
+    / 3fr 1fr;
+`;
+
+const overview = css`
+  grid-area: overview;
+`;
+
+const form = css`
+  grid-area: form;
+`;
+
 
 export const TimeTracker: FC = () => {
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
   const [mutate] = useTrackMutation();
 
   const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
@@ -13,8 +35,8 @@ export const TimeTracker: FC = () => {
       variables: {
         input: {
           project_id: '123',
-          start_time: new Date(),
-          end_time: new Date(),
+          start_time: startTime,
+          end_time: endTime,
           description: 'test test',
         },
       },
@@ -23,23 +45,27 @@ export const TimeTracker: FC = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <fieldset>
-        <legend>From:</legend>
-        <input type="time" value="test" />
-      </fieldset>
-
-      <fieldset>
-        <legend>QuickSelect</legend>
-        <button type="submit">8h</button>
-      </fieldset>
-
-      <fieldset>
-        <legend>To:</legend>
-        <input type="date" value="1983-12-15" />
-        <input type="time" value="21:31" />
-      </fieldset>
-      <button type="submit">Save</button>
-    </form>
+    <div css={datepicker}>
+      <div css={overview}>
+        <p>{startTime.toString()}</p>
+      </div>
+      <form onSubmit={onSubmit} css={form}>
+        <DatePicker
+          selected={startTime}
+          showTimeSelect
+          onChange={setStartTime}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          showWeekNumbers
+        />
+        <DatePicker
+          selected={endTime}
+          showTimeSelect
+          onChange={setEndTime}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          showWeekNumbers
+        />
+        <button type="submit">Save</button>
+      </form>
+    </div>
   );
 };
