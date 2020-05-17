@@ -1,7 +1,13 @@
 import React, { FC, useContext, useRef } from 'react';
+import { css } from '@emotion/core';
 
 import { signIn, signOut } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
+
+const input = css`
+  border: 1px solid #CCC;
+  margin-left: 8px;
+`;
 
 export const Login: FC = () => {
   const { user, setUser } = useContext(UserContext);
@@ -27,15 +33,15 @@ export const Login: FC = () => {
     return (
       <p>
         {user.username}
-        <button type="submit" onClick={logout}>Logout</button>
+        <button css={input} type="submit" onClick={logout}>Logout</button>
       </p>
     );
   }
   return (
     <div>
-      <input type="text" ref={usernameRef} />
-      <input type="password" ref={passwordRef} />
-      <button type="submit" onClick={login}>Login</button>
+      <input css={input} type="text" ref={usernameRef} />
+      <input css={input} type="password" ref={passwordRef} />
+      <button css={input} type="submit" onClick={login}>Login</button>
     </div>
   );
 };

@@ -6,8 +6,8 @@ import { Header } from './Header';
 import { Container } from './Container';
 import { Footer } from './Footer';
 import { Heading } from '../typography/Heading';
-import { Breadcrumbs } from './Breadcrumbs';
 import { Text } from '../typography/Text';
+import { Login } from '../auth/Login';
 
 export default { title: 'Design | Templates' };
 
@@ -17,9 +17,7 @@ export const landingPage: FC = () => {
     <>
       <Header>
         <Heading as="h4">Landing Page</Heading>
-        <div>
-          <Breadcrumbs />
-        </div>
+        <Login />
       </Header>
       <Container>
         <Heading as="h4">Welcome</Heading>
