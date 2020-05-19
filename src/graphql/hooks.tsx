@@ -80,6 +80,7 @@ export type Tracking = {
 };
 
 export type TrackingInput = {
+  id?: Maybe<Scalars['ID']>;
   projectId: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   startTime: Scalars['AWSDateTime'];
@@ -87,8 +88,8 @@ export type TrackingInput = {
 };
 
 export type TrackingQuery = {
+  project?: Maybe<Scalars['String']>;
   from: Scalars['String'];
-  to: Scalars['String'];
 };
 
 export type TrackMutationVariables = {

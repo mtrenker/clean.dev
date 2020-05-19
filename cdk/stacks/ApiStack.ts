@@ -75,8 +75,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "id" : { "S" : "page-$ctx.args.input.slug" },
-              "sort_key" : { "S" : "page-$ctx.args.input.slug" }
+              "id" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug"),
+              "sortKey" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug")
           }
       }
     `),
@@ -94,7 +94,7 @@ export class ApiStack extends Stack {
           "operation" : "GetItem",
           "key" : {
               "id" : { "S" : "projects-cv" },
-              "sort_key" : { "S" : "projects-cv" }
+              "sortKey" : { "S" : "projects-cv" }
           }
       }
     `),
@@ -106,18 +106,7 @@ export class ApiStack extends Stack {
     queryDataSource.createResolver({
       fieldName: 'trackings',
       typeName: 'Query',
-      requestMappingTemplate: MappingTemplate.fromString(`
-      {
-          "version" : "2017-02-28",
-          "operation" : "Query",
-          "query":{
-            "expression": "begins_with(sortKey, tracking-:date)",
-            "expressionValues": {
-              ":date": $util.dynamodb.toDynamoDBJson($context.arguments.query.from)
-            }
-          }
-      }
-    `),
+      requestMappingTemplate: MappingTemplate.fromFile('cdk/resources/vtl/trackingQuery.vtl'),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.projects)'),
     });
   }

@@ -1,20 +1,11 @@
 import { DynamoDB } from 'aws-sdk';
-import nanoid from 'nanoid';
 
-interface EventProps<TInput> {
-  arguments: {
-    input: TInput;
-  };
-  identity: IdentityProps;
-  info: {
-    fieldName: 'track';
-    parentTypeName: string;
-  };
-}
+import nanoid from 'nanoid';
+import { Handler } from 'aws-lambda';
 
 interface IdentityProps {
   username: string;
-  groups: string[];
+  sub: string;
 }
 
 interface ProjectInput {
@@ -29,7 +20,7 @@ interface ProjectInput {
   };
 }
 
-interface TrackInput {
+interface TrackingInput {
   id?: string;
   projectId: string;
   startTime: string;
@@ -37,18 +28,26 @@ interface TrackInput {
   description: string;
 }
 
+interface TrackItem {
+  id: string;
+  sortKey: string;
+  startTime: string;
+  endTime: string;
+  description: string;
+}
+
 const documentClient = new DynamoDB.DocumentClient();
 
-async function track(input: TrackInput) {
-  const id = `tracking-${nanoid()}`;
+async function track(input: TrackingInput, identity?: IdentityProps): Promise<TrackItem> {
+  const id = `${identity?.sub}-tracking`;
 
   const {
     projectId, startTime, endTime, description,
   } = input;
   const startDate = new Date(startTime);
-  const sortKey = `tracking-${projectId}-${startDate.toISOString()}`;
+  const sortKey = `tracking-${startDate.toISOString()}-${projectId}`;
 
-  const trackItem = {
+  const trackItem: TrackItem = {
     id,
     sortKey,
     startTime,
@@ -115,12 +114,27 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
   }
 }
 
-export const handler = async (event: EventProps<TrackInput>, context: any) => {
+interface TrackingEvent {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    input: TrackingInput;
+  };
+  identity: {
+    sub: string;
+    username: string;
+  };
+}
+
+export const handler: Handler<TrackingEvent> = async (event) => {
   const { arguments: { input }, info } = event;
 
   switch (info.fieldName) {
-    case 'track':
-      return track(input);
+    case 'track': {
+      return track(input, event.identity);
+    }
     default:
+      return 'not implemented';
   }
 };

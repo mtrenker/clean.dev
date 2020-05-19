@@ -73,6 +73,6 @@ input TrackingInput {
 }
 
 input TrackingQuery {
+  project: String
   from: String!
-  to: String!
 }
