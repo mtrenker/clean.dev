@@ -1,19 +1,33 @@
+#set($pkVal     = {"S": "${ctx.identity.sub}-tracking"})
+#set($prefixVal = {"S": "tracking-"})
+
+#set($from    = $util.defaultIfNullOrEmpty($ctx.args.query.from, ""))
+#set($to      = $util.defaultIfNullOrEmpty($ctx.args.query.to, ""))
+#set($project = $util.defaultIfNullOrEmpty($ctx.args.query.project, ""))
+
+#set($expressionValues = {})
+$util.qr($expressionValues.put(':pk', $pkVal))
+
+#if($from.isEmpty() or $project.isEmpty())
+  #set($expression = "id = :pk and begins_with(sortKey, :prefix)")
+  $util.qr($expressionValues.put(':prefix', $prefixVal))
+#elseif ($project.isEmpty())
+  #set($fromVal = {"S": $from})
+  #set($expression = "id = :pk and begins_with(sortKey, :from)")
+  $util.qr($expressionValues.put(':from', $fromVal))
+#else
+  #set($fromVal = {"S": "tracking-${from}-${project}"})
+  #set($toVal = {"S": "tracking-${to}-${project}"})
+  #set($expression = "id = :pk and (sortKey between :from and :to)")
+  $util.qr($expressionValues.put(':from', $fromVal))
+  $util.qr($expressionValues.put(':to', $toVal))
+#end
+
 {
   "version" : "2017-02-28",
   "operation" : "Query",
-  #set($pk = "${$context.identity.cognitoIdentityId}-tracking")
-  #if($context.arguments.query.from.isEmpty())
-    #set($prefix = "tracking-")
-  #elseif ($context.arguments.query.project.isEmpty())
-    #set($prefix = "tracking-${$context.arguments.query.from}")
-  #else
-    #set($prefix = "tracking-${$context.arguments.query.from}-${$context.arguments.query.project}")
-  #end
   "query":{
-    "expression": "id = :id AND begins_with(sortKey, :prefix)",
-    "expressionValues": {
-      ":id": $util.dynamodb.toDynamoDBJson($pk),
-      ":prefix": $util.dynamodb.toDynamoDBJson($prefix)
-    }
+    "expression": "$expression",
+    "expressionValues": $util.toJson($expressionValues)
   },
 }
