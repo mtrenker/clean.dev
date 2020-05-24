@@ -73,7 +73,6 @@ input TrackingInput {
 }
 
 input TrackingQuery {
-  project: String
-  from: AWSDateTime!
-  to: AWSDateTime!
+  project: String!
+  date: String!
 }

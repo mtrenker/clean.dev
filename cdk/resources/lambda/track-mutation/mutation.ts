@@ -1,7 +1,6 @@
-import { DynamoDB } from 'aws-sdk';
-
-import nanoid from 'nanoid';
+import { DynamoDB, EventBridge } from 'aws-sdk';
 import { Handler } from 'aws-lambda';
+import nanoid from 'nanoid';
 
 interface IdentityProps {
   username: string;
@@ -39,13 +38,14 @@ interface TrackItem {
 const documentClient = new DynamoDB.DocumentClient();
 
 async function track(input: TrackingInput, identity?: IdentityProps): Promise<TrackItem> {
-  const id = `${identity?.sub}-tracking`;
+  const eventBridge = new EventBridge();
+  const id = `user-${identity?.sub}`;
 
   const {
     projectId, startTime, endTime, description,
   } = input;
   const startDate = new Date(startTime);
-  const sortKey = `tracking-${startDate.toISOString()}-${projectId}`;
+  const sortKey = `tracking-${projectId}-${startDate.toISOString()}`;
 
   const trackItem: TrackItem = {
     id,
@@ -60,6 +60,22 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
       TableName: process.env.TABLE_NAME ?? '',
       Item: trackItem,
     }).promise();
+
+    const eventDetail = {
+      identity,
+      input,
+      trackItem,
+    };
+
+    await eventBridge.putEvents({
+      Entries: [{
+        EventBusName: process.env.EVENT_BUS_NAME,
+        DetailType: 'Tracking Added',
+        Detail: JSON.stringify(eventDetail),
+        Source: 'clean.api.mutation.track',
+      }],
+    }).promise();
+
 
     return trackItem;
   } catch (error) {

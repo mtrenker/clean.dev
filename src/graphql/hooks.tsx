@@ -21,7 +21,7 @@ export type Scalars = {
 
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   track: Tracking;
 };
 
@@ -31,7 +31,7 @@ export type MutationTrackArgs = {
 };
 
 export type Page = {
-   __typename?: 'Page';
+  __typename?: 'Page';
   slug: Scalars['String'];
   title: Scalars['String'];
   content: Scalars['String'];
@@ -42,7 +42,7 @@ export type PageInput = {
 };
 
 export type Project = {
-   __typename?: 'Project';
+  __typename?: 'Project';
   id: Scalars['ID'];
   client: Scalars['String'];
   industry: Scalars['String'];
@@ -54,7 +54,7 @@ export type Project = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   projects: Array<Project>;
   page?: Maybe<Page>;
   trackings?: Maybe<Array<Maybe<Tracking>>>;
@@ -71,7 +71,7 @@ export type QueryTrackingsArgs = {
 };
 
 export type Tracking = {
-   __typename?: 'Tracking';
+  __typename?: 'Tracking';
   id: Scalars['ID'];
   project: Project;
   description: Scalars['String'];
@@ -88,8 +88,8 @@ export type TrackingInput = {
 };
 
 export type TrackingQuery = {
-  project?: Maybe<Scalars['String']>;
-  from: Scalars['String'];
+  project: Scalars['String'];
+  date: Scalars['AWSDateTime'];
 };
 
 export type TrackMutationVariables = {

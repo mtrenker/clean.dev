@@ -22,7 +22,7 @@ const authStack = new AuthStack(app, 'CleanAuth', defaultProps);
 const apiStack = new ApiStack(app, 'CleanApi', {
   ...defaultProps,
   userPool: authStack.userPool,
-  eventBridgeDestination: biStack.eventBridgeDestination,
+  eventBus: biStack.eventBus,
 });
 
 new FrontStack(app, 'CleanFront', {

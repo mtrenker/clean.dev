@@ -57,17 +57,19 @@ this would mean *20 days* x *4 trackings* = **80** read ops compared to one `PK 
 
 ## Data Flow
 
-To ensure a predictable and durable data storage, we use a few AWS services, including:
+To ensure a predictable and durable data storage, we use a few AWS services,
+including:
 
-* AppSync: As the API Gateway for queries and mutations, using either [vtl resolvers](../cdk/resources/vtl/trackingQuery.vtl)
-or [lambda functions](../cdk/resources/lambda/tracking-mutation/mutation.ts)
-* Lambda: More complex operations like storing data will be handled by lambdas that publish success and error cases to an SNS topic
-* SNS / SQS: The pub/sub approach is a durable way of communicating between micro services - no direct communication between services!
-* S3: Everything that happens in our application should be stored in S3 in a way that allows us to reconstruct the whole
-application state and as a data lake
-
-```
-User adds tracking -> Appsync mutation -> Lambda (validation) ...
--> onSuccess -> SNS (globalIngest) -> SQS () -> ? -> S3 bucket (application/tracking/)
--> onFailure -> SNS (globalError)  -> SQS (error)    -> ? -> S3 bucket (errors/tracking/)
-```
+* AppSync: As the API Gateway for queries and mutations, using either
+  [vtl resolvers](../cdk/resources/vtl/trackingQuery.vtl)
+  or [lambda functions](../cdk/resources/lambda/tracking-mutation/mutation.ts)
+* Lambda: Operations that change the state of the application will be handled by
+  lambdas that validate and persit the data in the Table. After that, an Event
+  will be published to the EventBus.
+* EventBridge: Central eventbus that carries all application state transitions
+  for everyone to pub/sub with EventPatterns that allow for example to include
+  `clean.api.*` but not `clean.analytics.*` to process them further
+  (like passing them to Firehose)
+* Firehose: DeliveryStream that stores all matching Events into S3 for further
+  refining (Glue).
+* S3: Storage for all Events, sorted by Date and refined for better BI.

@@ -7,12 +7,14 @@ import {
 import { IUserPool } from '@aws-cdk/aws-cognito';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
 import { Function, Code, Runtime } from '@aws-cdk/aws-lambda';
-import { Role, ManagedPolicy, ServicePrincipal } from '@aws-cdk/aws-iam';
-import { EventBridgeDestination } from '@aws-cdk/aws-lambda-destinations';
+import {
+  Role, ManagedPolicy, ServicePrincipal, PolicyDocument, PolicyStatement, Effect,
+} from '@aws-cdk/aws-iam';
+import { EventBus } from '@aws-cdk/aws-events';
 
 interface ApiStackProps extends StackProps {
   userPool: IUserPool;
-  eventBridgeDestination: EventBridgeDestination;
+  eventBus: EventBus;
 }
 
 export class ApiStack extends Stack {
@@ -25,7 +27,7 @@ export class ApiStack extends Stack {
   constructor(scope: App, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const { eventBridgeDestination, userPool } = props;
+    const { eventBus, userPool } = props;
 
     this.table = new Table(this, 'CleanTable', {
       partitionKey: {
@@ -63,7 +65,7 @@ export class ApiStack extends Stack {
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
 
-    const trackFunction = this.trackFunction(eventBridgeDestination);
+    const trackFunction = this.trackFunction(eventBus);
 
     this.table.grantReadWriteData(trackFunction);
     this.trackResolver(trackFunction);
@@ -115,22 +117,29 @@ export class ApiStack extends Stack {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private trackFunction(eventBridgeDestination: EventBridgeDestination): Function {
-    const TrackMutationRole = new Role(this, 'TrackMutationRole', {
+  private trackFunction(eventBus: EventBus): Function {
+    const trackMutationRole = new Role(this, 'TrackMutationRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
     });
+
+    trackMutationRole.addToPolicy(new PolicyStatement({
+      resources: [eventBus.eventBusArn],
+      actions: ['events:PutEvents'],
+      effect: Effect.ALLOW,
+    }));
+
+
     return new Function(this, 'TrackFunction', {
       code: Code.fromAsset('cdk/resources/lambda/track-mutation'),
       handler: 'mutation.handler',
       runtime: Runtime.NODEJS_12_X,
-      role: TrackMutationRole,
-      onSuccess: eventBridgeDestination,
-      onFailure: eventBridgeDestination,
+      role: trackMutationRole,
       environment: {
         TABLE_NAME: this.table.tableName,
+        EVENT_BUS_NAME: eventBus.eventBusName,
       },
     });
   }
