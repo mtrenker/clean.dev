@@ -4,6 +4,7 @@ import { FrontStack } from './stacks/FrontStack';
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
 import { CmsStack } from './stacks/CmsStack';
+import { BIStack } from './stacks/BIStack';
 
 const app = new App();
 
@@ -14,11 +15,14 @@ const defaultProps = {
   },
 };
 
+const biStack = new BIStack(app, 'CleanBI', defaultProps);
+
 const authStack = new AuthStack(app, 'CleanAuth', defaultProps);
 
 const apiStack = new ApiStack(app, 'CleanApi', {
   ...defaultProps,
   userPool: authStack.userPool,
+  eventBridgeDestination: biStack.eventBridgeDestination,
 });
 
 new FrontStack(app, 'CleanFront', {
