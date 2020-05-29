@@ -1,24 +1,34 @@
 import { Stack, App, StackProps } from '@aws-cdk/core';
 import {
-  UserPool, IUserPool, OAuthScope, IUserPoolClient, CfnUserPoolGroup,
+  UserPool, OAuthScope, CfnUserPoolGroup, CfnUserPoolUser,
 } from '@aws-cdk/aws-cognito';
+import { StringParameter } from '@aws-cdk/aws-ssm';
 
 export class AuthStack extends Stack {
-  public readonly userPool: IUserPool;
-
-  public readonly userPoolClient: IUserPoolClient;
-
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const userPool = new UserPool(this, 'UserPool', {
+      userPoolName: 'cleanDevUserPool',
+      signInAliases: {
+        email: true,
+        phone: false,
+        username: false,
+        preferredUsername: false,
+      },
+      passwordPolicy: {
+        requireSymbols: false,
+        requireUppercase: false,
+        requireDigits: false,
+      },
       autoVerify: {
         email: true,
         phone: false,
       },
     });
 
-    this.userPoolClient = userPool.addClient('app-client', {
+    const userPoolClient = userPool.addClient('Client', {
+      userPoolClientName: 'cleanDevUserPoolClient',
       oAuth: {
         flows: {
           authorizationCodeGrant: true,
@@ -28,9 +38,9 @@ export class AuthStack extends Stack {
       },
     });
 
-    userPool.addDomain('app-domain', {
+    userPool.addDomain('Domain', {
       cognitoDomain: {
-        domainPrefix: 'clean-dev',
+        domainPrefix: 'clean-auth',
       },
     });
 
@@ -39,6 +49,20 @@ export class AuthStack extends Stack {
       groupName: 'Admins',
     });
 
-    this.userPool = userPool;
+    new CfnUserPoolUser(this, 'AdminUser', {
+      userPoolId: userPool.userPoolId,
+      username: 'martin@pacabytes.io',
+    });
+
+
+    new StringParameter(this, 'UserPoolIdParam', {
+      stringValue: userPool.userPoolId,
+      parameterName: 'cleanDevUserPoolId',
+    });
+
+    new StringParameter(this, 'ClientIdParam', {
+      stringValue: userPoolClient.userPoolClientId,
+      parameterName: 'cleanDevUserPooClientlId',
+    });
   }
 }
