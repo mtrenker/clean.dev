@@ -89,7 +89,7 @@ export type TrackingInput = {
 
 export type TrackingQuery = {
   project: Scalars['String'];
-  date: Scalars['AWSDateTime'];
+  date: Scalars['String'];
 };
 
 export type TrackMutationVariables = {
@@ -127,6 +127,19 @@ export type GetProjectsQuery = (
     { __typename?: 'Project' }
     & Pick<Project, 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
   )> }
+);
+
+export type GetTrackingsQueryVariables = {
+  query?: Maybe<TrackingQuery>;
+};
+
+
+export type GetTrackingsQuery = (
+  { __typename?: 'Query' }
+  & { trackings?: Maybe<Array<Maybe<(
+    { __typename?: 'Tracking' }
+    & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
+  )>>> }
 );
 
 
@@ -253,3 +266,45 @@ export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export const GetTrackingsDocument = gql`
+    query getTrackings($query: TrackingQuery) {
+  trackings(query: $query) {
+    id
+    description
+    startTime
+    endTime
+  }
+}
+    `;
+export type GetTrackingsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingsQuery, GetTrackingsQueryVariables>, 'query'>;
+
+    export const GetTrackingsComponent = (props: GetTrackingsComponentProps) => (
+      <ApolloReactComponents.Query<GetTrackingsQuery, GetTrackingsQueryVariables> query={GetTrackingsDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetTrackingsQuery__
+ *
+ * To run a query within a React component, call `useGetTrackingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTrackingsQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useGetTrackingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+      }
+export function useGetTrackingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+        }
+export type GetTrackingsQueryHookResult = ReturnType<typeof useGetTrackingsQuery>;
+export type GetTrackingsLazyQueryHookResult = ReturnType<typeof useGetTrackingsLazyQuery>;
+export type GetTrackingsQueryResult = ApolloReactCommon.QueryResult<GetTrackingsQuery, GetTrackingsQueryVariables>;

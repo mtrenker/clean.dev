@@ -1,0 +1,8 @@
+query getTrackings($query: TrackingQuery) {
+  trackings(query: $query) {
+    id
+    description
+    startTime
+    endTime
+  }
+}

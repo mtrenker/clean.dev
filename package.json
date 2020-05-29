@@ -105,6 +105,7 @@
     "@emotion/core": "^10.0.28",
     "apollo-boost": "^0.4.9",
     "aws-sdk": "^2.683.0",
+    "date-fns": "^2.14.0",
     "emotion-theming": "^10.0.27",
     "graphql": "^15.0.0",
     "i18next": "^19.4.4",

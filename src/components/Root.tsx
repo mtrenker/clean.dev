@@ -10,6 +10,7 @@ import { UserContext } from '../context/UserContext';
 import { GlobalStyle } from './layout/GlobalStyle';
 import { theme } from '../themes/default';
 import { Track } from '../pages/Track';
+import { TimeSheet } from '../pages/TimeSheet';
 
 
 export const Root: FC = () => {
@@ -25,7 +26,7 @@ export const Root: FC = () => {
     if (!user?.username) {
       fetchUser();
     }
-  }, [user]);
+  }, [user?.username]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -36,6 +37,9 @@ export const Root: FC = () => {
             <Switch>
               <Route path="/track" exact>
                 <Track />
+              </Route>
+              <Route path="/timesheet">
+                <TimeSheet />
               </Route>
               <Route path="/">
                 <Page />

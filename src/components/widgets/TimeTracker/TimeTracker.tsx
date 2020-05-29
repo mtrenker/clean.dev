@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React, {
   FC, FormEvent, useState, useRef,
 } from 'react';
@@ -7,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-import { useTrackMutation } from '../../../graphql/hooks';
+import { useTrackMutation, useGetTrackingsQuery } from '../../../graphql/hooks';
 
 
 const datepicker = css`
@@ -32,6 +31,15 @@ export const TimeTracker: FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>();
   const [mutate] = useTrackMutation();
 
+  const { data, loading } = useGetTrackingsQuery({
+    variables: {
+      query: {
+        date: '2020-05',
+        project: '123',
+      },
+    },
+  });
+
   const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     mutate({
@@ -50,7 +58,13 @@ export const TimeTracker: FC = () => {
   return (
     <div css={datepicker}>
       <div css={overview}>
-        <p>{startTime.toString()}</p>
+        {data?.trackings?.map((tracking) => (
+          <div>
+            {tracking.startTime}
+            <br />
+            {tracking.endTime}
+          </div>
+        ))}
       </div>
       <form onSubmit={onSubmit} css={form}>
         <DatePicker
