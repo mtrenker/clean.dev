@@ -1,49 +1,27 @@
-import {
-  Stack, App, StackProps, RemovalPolicy,
-} from '@aws-cdk/core';
+import { Stack, App, StackProps } from '@aws-cdk/core';
 import {
   GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey,
 } from '@aws-cdk/aws-appsync';
-import { IUserPool } from '@aws-cdk/aws-cognito';
-import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
+import { UserPool } from '@aws-cdk/aws-cognito';
+import { Table, ITable } from '@aws-cdk/aws-dynamodb';
 import { Function, Code, Runtime } from '@aws-cdk/aws-lambda';
 import {
-  Role, ManagedPolicy, ServicePrincipal, PolicyDocument, PolicyStatement, Effect,
+  Role, ManagedPolicy, ServicePrincipal, PolicyStatement, Effect,
 } from '@aws-cdk/aws-iam';
-import { EventBus } from '@aws-cdk/aws-events';
-
-interface ApiStackProps extends StackProps {
-  userPool: IUserPool;
-  eventBus: EventBus;
-}
+import { StringParameter } from '@aws-cdk/aws-ssm';
 
 export class ApiStack extends Stack {
-  public readonly graphQLApi: GraphQLApi;
-
-  public readonly table: Table;
-
-  public readonly apiKey: CfnApiKey;
-
-  constructor(scope: App, id: string, props: ApiStackProps) {
+  constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const { eventBus, userPool } = props;
+    const inventoryName = StringParameter.fromStringParameterName(this, 'TableName', 'cleanDevInventoryName');
+    const table = Table.fromTableName(this, 'Table', inventoryName.stringValue);
 
-    this.table = new Table(this, 'CleanTable', {
-      partitionKey: {
-        name: 'pk',
-        type: AttributeType.STRING,
-      },
-      sortKey: {
-        name: 'id',
-        type: AttributeType.STRING,
-      },
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.RETAIN,
-    });
+    const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'cleanDevUserPoolId');
+    const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
-    this.graphQLApi = new GraphQLApi(this, 'GraphQL', {
-      name: 'clean-api',
+    const api = new GraphQLApi(this, 'GraphQLApi', {
+      name: 'prod.api.clean.dev',
       schemaDefinitionFile: 'cdk/resources/schema.graphql',
       authorizationConfig: {
         defaultAuthorization: {
@@ -56,19 +34,29 @@ export class ApiStack extends Stack {
       },
     });
 
-    this.apiKey = new CfnApiKey(this, 'ApiKey', {
-      apiId: this.graphQLApi.apiId,
+    const apiKey = new CfnApiKey(this, 'ApiKey', {
+      apiId: api.apiId,
     });
 
-    const queryDataSource = this.graphQLApi.addDynamoDbDataSource('DataSource', 'QueryDataSource', this.table);
-    ApiStack.addCvResolver(queryDataSource);
+    const eventBusName = StringParameter.fromStringParameterName(this, 'EventBusName', 'cleanDevEventBusName').stringValue;
+    const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table as Table);
+    const trackFunction = this.trackFunction(table, eventBusName);
+
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
+    ApiStack.trackResolver(api, trackFunction);
 
-    const trackFunction = this.trackFunction(eventBus);
+    table.grantReadWriteData(trackFunction);
 
-    this.table.grantReadWriteData(trackFunction);
-    this.trackResolver(trackFunction);
+    new StringParameter(this, 'DevApiKeyParam', {
+      stringValue: apiKey.attrApiKey,
+      parameterName: 'cleanDevApiKey',
+    });
+
+    new StringParameter(this, 'ApiUrlParam', {
+      stringValue: api.graphQlUrl,
+      parameterName: 'cleanDevApiUrl',
+    });
   }
 
   static addPageResolver(queryDataSource: DynamoDbDataSource): void {
@@ -89,24 +77,6 @@ export class ApiStack extends Stack {
     });
   }
 
-  static addCvResolver(queryDataSource: DynamoDbDataSource): void {
-    queryDataSource.createResolver({
-      fieldName: 'projects',
-      typeName: 'Query',
-      requestMappingTemplate: MappingTemplate.fromString(`
-      {
-          "version" : "2017-02-28",
-          "operation" : "GetItem",
-          "key" : {
-              "pk" : { "S" : "projects-cv" },
-              "id" : { "S" : "projects-cv" }
-          }
-      }
-    `),
-      responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.projects)'),
-    });
-  }
-
   static addTrackingsResolver(queryDataSource: DynamoDbDataSource): void {
     queryDataSource.createResolver({
       fieldName: 'trackings',
@@ -122,7 +92,7 @@ export class ApiStack extends Stack {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private trackFunction(eventBus: EventBus): Function {
+  private trackFunction(table: ITable, eventBusName: string): Function {
     const trackMutationRole = new Role(this, 'TrackMutationRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
@@ -130,12 +100,13 @@ export class ApiStack extends Stack {
       ],
     });
 
+    const eventBusArn = StringParameter.fromStringParameterName(this, 'EventBusArn', 'cleanDevEventBusArn');
+
     trackMutationRole.addToPolicy(new PolicyStatement({
-      resources: [eventBus.eventBusArn],
+      resources: [eventBusArn.stringValue],
       actions: ['events:PutEvents'],
       effect: Effect.ALLOW,
     }));
-
 
     return new Function(this, 'TrackFunction', {
       code: Code.fromAsset('cdk/resources/lambda/track-mutation'),
@@ -143,15 +114,15 @@ export class ApiStack extends Stack {
       runtime: Runtime.NODEJS_12_X,
       role: trackMutationRole,
       environment: {
-        TABLE_NAME: this.table.tableName,
-        EVENT_BUS_NAME: eventBus.eventBusName,
+        TABLE_NAME: table.tableName,
+        EVENT_BUS_NAME: eventBusName,
       },
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private trackResolver(trackFunction: Function): void {
-    const trackSource = this.graphQLApi.addLambdaDataSource(
+  static trackResolver(api: GraphQLApi, trackFunction: Function): void {
+    const trackSource = api.addLambdaDataSource(
       'TrackSource',
       'TrackSOurce', trackFunction,
     );
