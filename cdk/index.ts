@@ -16,34 +16,30 @@ const defaultProps = {
   },
 };
 
-const certStack = new CertStack(app, 'CleanCert', {
+new CertStack(app, 'CleanCert', {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: 'us-east-1',
   },
 });
 
-const biStack = new BIStack(app, 'CleanBI', defaultProps);
+new BIStack(app, 'CleanBI', defaultProps);
 
-const authStack = new AuthStack(app, 'CleanAuth', defaultProps);
+new AuthStack(app, 'CleanAuth', defaultProps);
 
-const apiStack = new ApiStack(app, 'CleanApi', {
-  ...defaultProps,
-  userPool: authStack.userPool,
-  eventBus: biStack.eventBus,
-});
+new ApiStack(app, 'CleanApi', defaultProps);
 
-new FrontStack(app, 'CleanFront', {
-  ...defaultProps,
-  userPool: authStack.userPool,
-  userPoolClient: authStack.userPoolClient,
-  graphqlApi: apiStack.graphQLApi,
-  apiKey: apiStack.apiKey,
-});
+// new FrontStack(app, 'CleanFront', {
+//   ...defaultProps,
+//   userPool: authStack.userPool,
+//   userPoolClient: authStack.userPoolClient,
+//   graphqlApi: apiStack.graphQLApi,
+//   apiKey: apiStack.apiKey,
+// });
 
-new CmsStack(app, 'CleanCms', {
-  ...defaultProps,
-  dataTable: apiStack.table,
-});
+// new CmsStack(app, 'CleanCms', {
+//   ...defaultProps,
+//   dataTable: apiStack.table,
+// });
 
 app.synth();
