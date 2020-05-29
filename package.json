@@ -101,6 +101,7 @@
     "@aws-cdk/aws-events-targets": "^1.41.0",
     "@aws-cdk/aws-kinesisfirehose": "^1.41.0",
     "@aws-cdk/aws-lambda-destinations": "^1.41.0",
+    "@aws-cdk/aws-ssm": "^1.42.0",
     "@contentful/rich-text-react-renderer": "^13.4.0",
     "@emotion/core": "^10.0.28",
     "apollo-boost": "^0.4.9",
