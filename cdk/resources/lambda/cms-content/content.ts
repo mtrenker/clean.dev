@@ -20,8 +20,8 @@ async function saveToDynamoDb(id: string, content: any): Promise<void> {
   await client.update({
     TableName: TABLE_NAME,
     Key: {
-      id,
-      sortKey: id,
+      pk: id,
+      sk: id,
     },
     UpdateExpression: 'set #title= :title, #content = :content, #slug = :slug',
     ExpressionAttributeNames: {

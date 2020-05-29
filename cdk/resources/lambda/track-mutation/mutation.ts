@@ -28,8 +28,8 @@ interface TrackingInput {
 }
 
 interface TrackItem {
-  id: string;
-  sortKey: string;
+  pk: string;
+  sk: string;
   startTime: string;
   endTime: string;
   description: string;
@@ -45,11 +45,11 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
     projectId, startTime, endTime, description,
   } = input;
   const startDate = new Date(startTime);
-  const sortKey = `tracking-${projectId}-${startDate.toISOString()}`;
+  const sk = `tracking-${projectId}-${startDate.toISOString()}`;
 
   const trackItem: TrackItem = {
-    id,
-    sortKey,
+    pk: id,
+    sk,
     startTime,
     endTime,
     description,
@@ -89,8 +89,8 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
   const id = `project-${nanoid()}`;
 
   const project = {
-    id,
-    sortKey: id,
+    pk: id,
+    sk: id,
     name: input.name,
     description: input.description,
     approvalContact: {
@@ -102,8 +102,8 @@ async function createProject(input: ProjectInput, identity: IdentityProps) {
   };
 
   const userProject = {
-    id: `user-${identity.username}`,
-    sortKey: id,
+    pk: `user-${identity.username}`,
+    sk: id,
     name: input.name,
   };
 

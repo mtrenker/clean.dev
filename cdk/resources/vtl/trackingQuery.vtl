@@ -1,4 +1,4 @@
-#set($pkVal     = {"S": "${ctx.identity.sub}-tracking"})
+#set($pkVal     = {"S": "user-${ctx.identity.sub}"})
 #set($prefixVal = {"S": "tracking-"})
 
 #set($date      = $util.defaultIfNullOrEmpty($ctx.args.query.date, ""))
@@ -8,8 +8,8 @@
 $util.qr($expressionValues.put(':pk', $pkVal))
 
 #set($prefixVal = {"S": "tracking-${project}-${date}"})
-#set($expression = "id = :pk and begins_with(sortKey, :prefix)")
-$util.qr($expressionValues.put(':prefix', $prefixVal))
+#set($expression = "pk = :pk and begins_with(sk, :sk)")
+$util.qr($expressionValues.put(':sk', $prefixVal))
 
 {
   "version" : "2017-02-28",

@@ -31,11 +31,11 @@ export class ApiStack extends Stack {
 
     this.table = new Table(this, 'CleanTable', {
       partitionKey: {
-        name: 'id',
+        name: 'pk',
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: 'sortKey',
+        name: 'id',
         type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
@@ -80,8 +80,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "id" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug"),
-              "sortKey" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug")
+              "pk" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug"),
+              "id" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug")
           }
       }
     `),
@@ -98,8 +98,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "id" : { "S" : "projects-cv" },
-              "sortKey" : { "S" : "projects-cv" }
+              "pk" : { "S" : "projects-cv" },
+              "id" : { "S" : "projects-cv" }
           }
       }
     `),
@@ -112,7 +112,12 @@ export class ApiStack extends Stack {
       fieldName: 'trackings',
       typeName: 'Query',
       requestMappingTemplate: MappingTemplate.fromFile('cdk/resources/vtl/trackingQuery.vtl'),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        {
+          "items": $util.toJson($ctx.result.items),
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+        }
+      `),
     });
   }
 
