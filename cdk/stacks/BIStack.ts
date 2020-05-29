@@ -58,6 +58,11 @@ export class BIStack extends Stack {
       parameterName: 'cleanDevEventBusName',
     });
 
+    new StringParameter(this, 'cleanDevEventBusArn', {
+      stringValue: eventBus.eventBusArn,
+      parameterName: 'cleanDevEventBusArn',
+    });
+
     new StringParameter(this, 'cleanDevInventoryName', {
       stringValue: inventory.tableName,
       parameterName: 'cleanDevInventoryName',
