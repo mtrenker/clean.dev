@@ -1,6 +1,18 @@
 import { DynamoDB, EventBridge } from 'aws-sdk';
 import { Handler } from 'aws-lambda';
-import nanoid from 'nanoid';
+
+interface TrackingEvent {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    input: TrackingInput;
+  };
+  identity: {
+    sub: string;
+    username: string;
+  };
+}
 
 interface IdentityProps {
   username: string;
@@ -80,67 +92,8 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
     return trackItem;
   } catch (error) {
     console.error(error);
-
     return error;
   }
-}
-
-async function createProject(input: ProjectInput, identity: IdentityProps) {
-  const id = `project-${nanoid()}`;
-
-  const project = {
-    pk: id,
-    sk: id,
-    name: input.name,
-    description: input.description,
-    approvalContact: {
-      id: input.approvalContact.id ?? null,
-      firstName: input.approvalContact.firstName,
-      lastName: input.approvalContact.lastName,
-      email: input.approvalContact.email,
-    },
-  };
-
-  const userProject = {
-    pk: `user-${identity.username}`,
-    sk: id,
-    name: input.name,
-  };
-
-  try {
-    await documentClient.batchWrite({
-      RequestItems: {
-        [process.env.TABLE_NAME!]: [{
-          PutRequest: {
-            Item: project,
-          },
-        }, {
-          PutRequest: {
-            Item: userProject,
-          },
-        }],
-      },
-    }).promise();
-
-    return project;
-  } catch (error) {
-    console.error(error);
-
-    return error;
-  }
-}
-
-interface TrackingEvent {
-  info: {
-    fieldName: string;
-  };
-  arguments: {
-    input: TrackingInput;
-  };
-  identity: {
-    sub: string;
-    username: string;
-  };
 }
 
 export const handler: Handler<TrackingEvent> = async (event) => {
