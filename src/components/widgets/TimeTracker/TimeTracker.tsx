@@ -31,7 +31,7 @@ export const TimeTracker: FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>();
   const [mutate] = useTrackMutation();
 
-  const { data, loading } = useGetTrackingsQuery({
+  const { data } = useGetTrackingsQuery({
     variables: {
       query: {
         date: '2020-05',

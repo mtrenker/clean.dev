@@ -1,4 +1,6 @@
-import { Stack, App, StackProps } from '@aws-cdk/core';
+import {
+  Stack, App, StackProps, CfnOutput,
+} from '@aws-cdk/core';
 import {
   UserPool, OAuthScope, CfnUserPoolGroup, CfnUserPoolUser,
 } from '@aws-cdk/aws-cognito';
@@ -54,15 +56,14 @@ export class AuthStack extends Stack {
       username: 'martin@pacabytes.io',
     });
 
-
-    new StringParameter(this, 'UserPoolIdParam', {
-      stringValue: userPool.userPoolId,
-      parameterName: 'cleanDevUserPoolId',
+    new CfnOutput(this, 'UserPoolId', {
+      value: userPool.userPoolId,
+      exportName: 'userPoolId',
     });
 
-    new StringParameter(this, 'ClientIdParam', {
-      stringValue: userPoolClient.userPoolClientId,
-      parameterName: 'cleanDevUserPooClientlId',
+    new CfnOutput(this, 'UserPoolClientId', {
+      value: userPoolClient.userPoolClientId,
+      exportName: 'userPoolClientId',
     });
   }
 }

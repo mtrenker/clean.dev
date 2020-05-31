@@ -1,9 +1,7 @@
 import { App } from '@aws-cdk/core';
 
-import { FrontStack } from './stacks/FrontStack';
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
-import { CmsStack } from './stacks/CmsStack';
 import { BIStack } from './stacks/BIStack';
 import { CertStack } from './stacks/CertStack';
 
