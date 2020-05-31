@@ -1,12 +1,11 @@
 import {
-  Stack, App, StackProps, RemovalPolicy,
+  Stack, App, StackProps, RemovalPolicy, CfnParameter, CfnOutput,
 } from '@aws-cdk/core';
 import { EventBus } from '@aws-cdk/aws-events';
 import { CfnDeliveryStream } from '@aws-cdk/aws-kinesisfirehose';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { Role, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
-import { StringParameter } from '@aws-cdk/aws-ssm';
 
 export class BIStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -53,19 +52,19 @@ export class BIStack extends Stack {
       tableName: 'prod.inventory.clean.dev',
     });
 
-    new StringParameter(this, 'cleanDevEventBusName', {
-      stringValue: eventBus.eventBusName,
-      parameterName: 'cleanDevEventBusName',
+    new CfnOutput(this, 'EventBusArn', {
+      value: eventBus.eventBusArn,
+      exportName: 'eventBusArn',
     });
 
-    new StringParameter(this, 'cleanDevEventBusArn', {
-      stringValue: eventBus.eventBusArn,
-      parameterName: 'cleanDevEventBusArn',
+    new CfnOutput(this, 'EventBusName', {
+      value: eventBus.eventBusName,
+      exportName: 'eventBusName',
     });
 
-    new StringParameter(this, 'cleanDevInventoryName', {
-      stringValue: inventory.tableName,
-      parameterName: 'cleanDevInventoryName',
+    new CfnOutput(this, 'InventoryTablename', {
+      value: inventory.tableName,
+      exportName: 'inventoryTableName',
     });
   }
 }

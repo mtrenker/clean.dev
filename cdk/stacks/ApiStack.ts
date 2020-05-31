@@ -1,4 +1,6 @@
-import { Stack, App, StackProps } from '@aws-cdk/core';
+import {
+  Stack, App, StackProps, CfnOutput, Fn,
+} from '@aws-cdk/core';
 import {
   GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey,
 } from '@aws-cdk/aws-appsync';
@@ -14,8 +16,8 @@ export class ApiStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const inventoryName = StringParameter.fromStringParameterName(this, 'TableName', 'cleanDevInventoryName');
-    const table = Table.fromTableName(this, 'Table', inventoryName.stringValue);
+    const inventoryName = Fn.importValue('inventoryTableName');
+    const table = Table.fromTableName(this, 'Table', inventoryName);
 
     const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'cleanDevUserPoolId');
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
@@ -38,7 +40,7 @@ export class ApiStack extends Stack {
       apiId: api.apiId,
     });
 
-    const eventBusName = StringParameter.fromStringParameterName(this, 'EventBusName', 'cleanDevEventBusName').stringValue;
+    const eventBusName = Fn.importValue('eventBusName');
     const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table as Table);
     const trackFunction = this.trackFunction(table, eventBusName);
 
@@ -53,9 +55,13 @@ export class ApiStack extends Stack {
       parameterName: 'cleanDevApiKey',
     });
 
-    new StringParameter(this, 'ApiUrlParam', {
-      stringValue: api.graphQlUrl,
-      parameterName: 'cleanDevApiUrl',
+    new CfnOutput(this, 'ApiKey', {
+      value: apiKey.attrApiKey,
+      exportName: 'apiKey',
+    });
+
+    new CfnOutput(this, 'ApiUrl', {
+      value: api.graphQlUrl,
     });
   }
 
