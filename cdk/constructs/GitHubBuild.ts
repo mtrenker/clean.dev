@@ -3,6 +3,9 @@ import { GitHubSourceAction, CodeBuildAction, S3DeployAction } from '@aws-cdk/aw
 import { Artifact, Pipeline } from '@aws-cdk/aws-codepipeline';
 import { PipelineProject, BuildEnvironmentVariable } from '@aws-cdk/aws-codebuild';
 import { Bucket } from '@aws-cdk/aws-s3';
+import {
+  Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect,
+} from '@aws-cdk/aws-iam';
 
 interface GitHubBuildProps {
   owner: string;
@@ -26,8 +29,26 @@ export class GitHubBuild extends Construct {
       branch, oauthToken, owner, repo, environment,
     } = props;
 
+    const projectRole = new Role(this, 'PipelineRole', {
+      assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),
+      inlinePolicies: {
+        readParams: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              actions: ['ssm:GetParameters', 'ssm:GetParameter'],
+              resources: ['*'],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+      },
+    });
+
     const pipeline = new Pipeline(this, 'Pipeline');
-    const project = new PipelineProject(this, 'Project');
+
+    const project = new PipelineProject(this, 'Project', {
+      role: projectRole,
+    });
 
     const siteBucket = new Bucket(this, 'Site', {
       bucketName: 'clean.dev',
