@@ -40,10 +40,7 @@ async function saveToDynamoDb(id: string, content: any): Promise<void> {
 
 export const handler: SNSHandler = async (event) => {
   const { Message } = event.Records[0].Sns;
-
   const content = JSON.parse(Buffer.from(Message, 'base64').toString());
-
   const id = `page-${content.fields.slug['en-US']}`;
-
   await saveToDynamoDb(id, content);
 };

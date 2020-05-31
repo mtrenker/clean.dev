@@ -31,6 +31,6 @@ new ApiStack(app, 'CleanApi', defaultProps);
 
 new FrontStack(app, 'CleanFront', defaultProps);
 
-new CmsStack(app, 'CleanCms', defaultProps);
+new CmsStack(app, 'CleanCMS', defaultProps);
 
 app.synth();
