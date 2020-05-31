@@ -16,10 +16,12 @@ export class ApiStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
+    const eventBusArn = Fn.importValue('eventBusArn');
     const inventoryName = Fn.importValue('inventoryTableName');
-    const table = Table.fromTableName(this, 'Table', inventoryName);
-
+    const eventBusName = Fn.importValue('eventBusName');
     const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'cleanDevUserPoolId');
+
+    const table = Table.fromTableName(this, 'Table', inventoryName) as Table;
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
     const api = new GraphQLApi(this, 'GraphQLApi', {
@@ -40,9 +42,8 @@ export class ApiStack extends Stack {
       apiId: api.apiId,
     });
 
-    const eventBusName = Fn.importValue('eventBusName');
-    const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table as Table);
-    const trackFunction = this.trackFunction(table, eventBusName);
+    const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table);
+    const trackFunction = this.trackFunction(table, eventBusArn, eventBusName);
 
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
@@ -50,17 +51,22 @@ export class ApiStack extends Stack {
 
     table.grantReadWriteData(trackFunction);
 
-    new StringParameter(this, 'DevApiKeyParam', {
+    new StringParameter(this, 'ApiKeyParam', {
       stringValue: apiKey.attrApiKey,
       parameterName: 'cleanDevApiKey',
     });
 
-    new CfnOutput(this, 'ApiKey', {
+    new StringParameter(this, 'GraphQlUrlParam', {
+      stringValue: api.graphQlUrl,
+      parameterName: 'cleanDevApiUrl',
+    });
+
+    new CfnOutput(this, 'ApiKeyOutput', {
       value: apiKey.attrApiKey,
       exportName: 'apiKey',
     });
 
-    new CfnOutput(this, 'ApiUrl', {
+    new CfnOutput(this, 'ApiUrlOutput', {
       value: api.graphQlUrl,
     });
   }
@@ -98,7 +104,7 @@ export class ApiStack extends Stack {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private trackFunction(table: ITable, eventBusName: string): Function {
+  private trackFunction(table: ITable, eventBusArn: string, eventBusName: string): Function {
     const trackMutationRole = new Role(this, 'TrackMutationRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
@@ -106,10 +112,8 @@ export class ApiStack extends Stack {
       ],
     });
 
-    const eventBusArn = StringParameter.fromStringParameterName(this, 'EventBusArn', 'cleanDevEventBusArn');
-
     trackMutationRole.addToPolicy(new PolicyStatement({
-      resources: [eventBusArn.stringValue],
+      resources: [eventBusArn],
       actions: ['events:PutEvents'],
       effect: Effect.ALLOW,
     }));

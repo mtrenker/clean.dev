@@ -1,5 +1,5 @@
 import {
-  Stack, App, StackProps,
+  Stack, App, StackProps, Fn,
 } from '@aws-cdk/core';
 import { Table } from '@aws-cdk/aws-dynamodb';
 import { CfnApi } from '@aws-cdk/aws-apigatewayv2';
@@ -8,14 +8,12 @@ import { Topic } from '@aws-cdk/aws-sns';
 import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { LambdaSubscription } from '@aws-cdk/aws-sns-subscriptions';
 
-interface CmsStackProps extends StackProps {
-  dataTable: Table;
-}
 export class CmsStack extends Stack {
-  constructor(scope: App, id: string, props: CmsStackProps) {
+  constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const { dataTable } = props;
+    const inventoryName = Fn.importValue('inventoryTableName');
+    const table = Table.fromTableName(this, 'Table', inventoryName) as Table;
 
     const contentfulTopic = new Topic(this, 'ContentfulTopic');
 
@@ -59,12 +57,12 @@ export class CmsStack extends Stack {
       handler: 'content.handler',
       role: webhookRole,
       environment: {
-        TABLE_NAME: dataTable.tableName,
+        TABLE_NAME: table.tableName,
         REGION: this.region,
       },
     });
 
-    dataTable.grantWriteData(contentFunction);
+    table.grantWriteData(contentFunction);
 
     contentfulTopic.addSubscription(new LambdaSubscription(contentFunction));
   }

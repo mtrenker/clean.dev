@@ -4,6 +4,8 @@ import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
 import { BIStack } from './stacks/BIStack';
 import { CertStack } from './stacks/CertStack';
+import { FrontStack } from './stacks/FrontStack';
+import { CmsStack } from './stacks/CmsStack';
 
 const app = new App();
 
@@ -27,17 +29,8 @@ new AuthStack(app, 'CleanAuth', defaultProps);
 
 new ApiStack(app, 'CleanApi', defaultProps);
 
-// new FrontStack(app, 'CleanFront', {
-//   ...defaultProps,
-//   userPool: authStack.userPool,
-//   userPoolClient: authStack.userPoolClient,
-//   graphqlApi: apiStack.graphQLApi,
-//   apiKey: apiStack.apiKey,
-// });
+new FrontStack(app, 'CleanFront', defaultProps);
 
-// new CmsStack(app, 'CleanCms', {
-//   ...defaultProps,
-//   dataTable: apiStack.table,
-// });
+new CmsStack(app, 'CleanCms', defaultProps);
 
 app.synth();

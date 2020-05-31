@@ -56,6 +56,16 @@ export class AuthStack extends Stack {
       username: 'martin@pacabytes.io',
     });
 
+    new StringParameter(this, 'UserPoolIdParam', {
+      stringValue: userPool.userPoolId,
+      parameterName: 'cleanDevUserPoolId',
+    });
+
+    new StringParameter(this, 'UserPoolClientIdParam', {
+      stringValue: userPoolClient.userPoolClientId,
+      parameterName: 'cleanDevUserPoolClientId',
+    });
+
     new CfnOutput(this, 'UserPoolId', {
       value: userPool.userPoolId,
       exportName: 'userPoolId',

@@ -1,5 +1,5 @@
 import {
-  Stack, App, StackProps, RemovalPolicy, CfnParameter, CfnOutput,
+  Stack, App, StackProps, RemovalPolicy, CfnOutput,
 } from '@aws-cdk/core';
 import { EventBus } from '@aws-cdk/aws-events';
 import { CfnDeliveryStream } from '@aws-cdk/aws-kinesisfirehose';

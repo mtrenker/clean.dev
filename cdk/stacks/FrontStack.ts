@@ -6,42 +6,32 @@ import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
-import { GraphQLApi, CfnApiKey } from '@aws-cdk/aws-appsync';
 import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
-import { IUserPool, IUserPoolClient } from '@aws-cdk/aws-cognito';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
 
+import { StringParameter } from '@aws-cdk/aws-ssm';
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
-interface FrontStackProps extends StackProps {
-  userPool: IUserPool;
-  userPoolClient: IUserPoolClient;
-  graphqlApi: GraphQLApi;
-  apiKey: CfnApiKey;
-}
-
 export class FrontStack extends Stack {
-  constructor(scope: App, id: string, props: FrontStackProps) {
+  constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const {
-      userPool, userPoolClient, graphqlApi, apiKey,
-    } = props;
+    const certificateArn = StringParameter.fromStringParameterName(this, 'CertificateArn', 'cleanDevCert');
 
-    const certificate = Certificate.fromCertificateArn(this, 'Certificate', this.node.tryGetContext('front-certificate')) as Certificate;
+    const certificate = Certificate.fromCertificateArn(this, 'Certificate', certificateArn.stringValue) as Certificate;
 
-    const plaintext = BuildEnvironmentVariableType.PLAINTEXT;
+    const param = BuildEnvironmentVariableType.PARAMETER_STORE;
     const build = new GitHubBuild(this, 'Build', {
       oauthToken: SecretValue.secretsManager('clean/github'),
       branch: 'master',
       owner: 'mtrenker',
       repo: 'clean.dev',
       environment: {
-        COGNITO_POOL_ID: { value: userPool.userPoolId, type: plaintext },
-        COGNITO_CLIENT_ID: { value: userPoolClient.userPoolClientId, type: plaintext },
-        GRAPHQL_ENDPOINT: { value: graphqlApi.graphQlUrl, type: plaintext },
-        GRAPHQL_API_TOKEN: { value: apiKey.attrApiKey, type: plaintext },
+        COGNITO_POOL_ID: { value: 'cleanDevUserPoolId', type: param },
+        COGNITO_CLIENT_ID: { value: 'cleanDevUserPoolClientId', type: param },
+        GRAPHQL_ENDPOINT: { value: 'cleanDevApiUrl', type: param },
+        GRAPHQL_API_TOKEN: { value: 'cleanDevApiKey', type: param },
       },
     });
 
