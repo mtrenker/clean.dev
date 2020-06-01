@@ -8,7 +8,7 @@
 $util.qr($expressionValues.put(':pk', $pkVal))
 
 #set($prefixVal = {"S": "tracking-${project}-${date}"})
-#set($expression = "pk = :pk and begins_with(sk, :sk)")
+#set($expression = "pk = :pk and begins_with(id, :sk)")
 $util.qr($expressionValues.put(':sk', $prefixVal))
 
 {

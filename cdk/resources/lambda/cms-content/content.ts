@@ -21,7 +21,7 @@ async function saveToDynamoDb(id: string, content: any): Promise<void> {
     TableName: TABLE_NAME,
     Key: {
       pk: id,
-      sk: id,
+      id,
     },
     UpdateExpression: 'set #title= :title, #content = :content, #slug = :slug',
     ExpressionAttributeNames: {

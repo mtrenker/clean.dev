@@ -14,7 +14,7 @@ Most of the times, this will be a user id.
 
 `user-1234` means entity `user` with ID `1234`.
 
-| PK        | SK                                     | Data...                           | *Note*                     |
+| pk        | id                                     | Data...                           | *Note*                     |
 |-----------|----------------------------------------|-----------------------------------|----------------------------|
 | user_1234 | tracking_1234_2020-05-23T08:00:00.000Z | {startTime, endTime, description} | individual tracking object |
 
@@ -25,19 +25,19 @@ Given the table design above, here are some access patterns:
 <dl>
   <dt>Query all tracking documents for project <em>1234</em></dt>
   <dd>
-    Query: <code>PK = "user_1234" and begins_with(SK, "tracking_1234")</code>
+    Query: <code>pk = "user_1234" and begins_with(id, "tracking_1234")</code>
   </dd>
   <dt>Query all tracking documents for project <em>1234</em> in <em>2020</em></dt>
   <dd>
-    Query: <code>PK = "user_1234" and begins_with(SK, "tracking_1234_2020")</code>
+    Query: <code>pk = "user_1234" and begins_with(id, "tracking_1234_2020")</code>
   </dd>
   <dt>Query all tracking documents for project <em>1234</em> for <em>May 2020</em></dt>
   <dd>
-    Query: <code>PK = "user_1234" and begins_with(SK, "tracking_1234_2020_05")</code>
+    Query: <code>pk = "user_1234" and begins_with(id, "tracking_1234_2020_05")</code>
   </dd>
   <dt>Query all tracking documents for project <em>1234</em> for <em>May 23rd 2020</em></dt>
   <dd>
-    Query: <code>PK = "user_1234" and begins_with(SK, "tracking_1234_2020_05_23")</code>
+    Query: <code>pk = "user_1234" and begins_with(id, "tracking_1234_2020_05_23")</code>
   </dd>
 </dl>
 
@@ -45,7 +45,7 @@ Given the table design above, here are some access patterns:
 
 In certain cases it makes sens to accumulate common access patterns into separate projections, for example:
 
-| PK        | SK                                     | Data...                                  | *Note*                                 |
+| pk        | id                                     | Data...                                  | *Note*                                 |
 |-----------|----------------------------------------|------------------------------------------|----------------------------------------|
 | user_1234 | tracking_1234_2020-05-23T08:00:00.000Z | {startTime, endTime, description}        | individual tracking object             |
 | user_1234 | tracking_1234_2020-05-23               | [{startTime, endTime, description}, ...] | all tracking entries for may 23rd 2020 |
@@ -53,7 +53,7 @@ In certain cases it makes sens to accumulate common access patterns into separat
 | user_1234 | tracking_1234_2020                     | [{startTime, endTime, description}, ...] | all tracking entries for 2020          |
 
 Let's say we have 4 tracking records per day and 20 days per month, if we want to print a report of all trackings for a month,
-this would mean *20 days* x *4 trackings* = **80** read ops compared to one `PK = "user-1234" and begins_with(SK, "tracking-1234-2020-05")`
+this would mean *20 days* x *4 trackings* = **80** read ops compared to one `pk = "user-1234" and begins_with(id, "tracking-1234-2020-05")`
 
 ## Data Flow
 

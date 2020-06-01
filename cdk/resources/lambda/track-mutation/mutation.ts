@@ -41,7 +41,7 @@ interface TrackingInput {
 
 interface TrackItem {
   pk: string;
-  sk: string;
+  id: string;
   startTime: string;
   endTime: string;
   description: string;
@@ -61,7 +61,7 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
 
   const trackItem: TrackItem = {
     pk: id,
-    sk,
+    id: sk,
     startTime,
     endTime,
     description,
