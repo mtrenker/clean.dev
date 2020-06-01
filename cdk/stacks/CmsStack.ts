@@ -7,6 +7,7 @@ import { Function, Code, Runtime } from '@aws-cdk/aws-lambda';
 import { Topic } from '@aws-cdk/aws-sns';
 import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { LambdaSubscription } from '@aws-cdk/aws-sns-subscriptions';
+import { StringParameter } from '@aws-cdk/aws-ssm';
 
 export class CmsStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
@@ -59,6 +60,8 @@ export class CmsStack extends Stack {
       environment: {
         TABLE_NAME: table.tableName,
         REGION: this.region,
+        CONTENTFUL_SPACE_ID: StringParameter.fromStringParameterName(this, 'ContentfulSpaceId', 'cleanDevContentfulSpaceId').stringValue,
+        CONTENTFUL_API_KEY: StringParameter.fromStringParameterName(this, 'ContentfulApiKey', 'cleanDevContentfulApiToken').stringValue,
       },
     });
 
