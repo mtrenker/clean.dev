@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput,
 } from '@aws-cdk/core';
 import {
-  UserPool, OAuthScope, CfnUserPoolGroup, CfnUserPoolUser,
+  UserPool, OAuthScope, CfnUserPoolGroup, CfnUserPoolUser, UserPoolClientIdentityProvider,
 } from '@aws-cdk/aws-cognito';
 import { StringParameter } from '@aws-cdk/aws-ssm';
 
@@ -38,6 +38,7 @@ export class AuthStack extends Stack {
         scopes: [OAuthScope.OPENID],
         callbackUrls: ['https://clean.dev'],
       },
+      supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
 
     userPool.addDomain('Domain', {
