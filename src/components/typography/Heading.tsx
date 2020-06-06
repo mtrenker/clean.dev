@@ -14,11 +14,11 @@ const pageTitle = css`
 `;
 
 const sizes = {
-  h1: '6vw',
-  h2: '5vw',
-  h3: '4vw',
-  h4: '3vw',
-  h5: '2vw',
+  h1: '3vw',
+  h2: '3vw',
+  h3: '2vw',
+  h4: '2vw',
+  h5: '1vw',
   h6: '1vw',
 };
 

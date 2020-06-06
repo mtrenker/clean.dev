@@ -3,6 +3,7 @@ import { css } from '@emotion/core';
 
 import { Container, container } from './Container';
 import { breakPoints } from '../../themes/default';
+import { Login } from '../auth/Login';
 
 export const Header: FC = ({ children }) => {
   const header = css`
@@ -12,7 +13,7 @@ export const Header: FC = ({ children }) => {
         "topbar topbar" 50px
         "infobar infobar" max-content
         / 1fr 1fr;
-      background-color: #F9F9F9;
+      background-color: #F5F5F5;
       margin-bottom: 48px;
     }
   `;
@@ -24,6 +25,7 @@ export const Header: FC = ({ children }) => {
 
     .css-${container.name} {
       display: flex;
+      align-items: center;
     }
   `;
 
@@ -78,13 +80,16 @@ export const Header: FC = ({ children }) => {
               <li><a href="/">Home</a></li>
             </ul>
           </nav>
+          <Login />
         </Container>
       </div>
+      { children && (
       <div css={infobar}>
         <Container>
           {children}
         </Container>
       </div>
+      )}
     </header>
   );
 };

@@ -7,7 +7,6 @@ import { Container } from './Container';
 import { Footer } from './Footer';
 import { Heading } from '../typography/Heading';
 import { Text } from '../typography/Text';
-import { Login } from '../auth/Login';
 
 export default { title: 'Design | Templates' };
 
@@ -15,12 +14,9 @@ export const landingPage: FC = () => {
   const paragraphCount = number('Paragraphs', 5);
   return (
     <>
-      <Header>
-        <Heading as="h4">Landing Page</Heading>
-        <Login />
-      </Header>
+      <Header />
       <Container>
-        <Heading as="h4">Welcome</Heading>
+        <Heading as="h2">Welcome</Heading>
         {lorem.paragraphs(paragraphCount).split('\n').map((paragraph) => <Text>{paragraph}</Text>)}
       </Container>
       <Footer />
