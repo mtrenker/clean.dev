@@ -3,11 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGetPageQuery } from '../graphql/hooks';
-import { Login } from '../components/auth/Login';
 import { Header } from '../components/layout/Header';
-import { Heading } from '../components/typography/Heading';
 import { Container } from '../components/layout/Container';
 import { Footer } from '../components/layout/Footer';
+import { mapWidgets } from '../lib/contentful';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
@@ -15,13 +14,12 @@ export const Page: FC = () => {
   if (!data) return <p>Loading</p>;
   const document = data?.page?.content;
 
-  const content = documentToReactComponents(JSON.parse(document));
+  const content = documentToReactComponents(JSON.parse(document), {
+    renderNode: mapWidgets(),
+  });
   return (
     <>
-      <Header>
-        <Heading as="h4" type="page-title">{data.page.title}</Heading>
-        <Login />
-      </Header>
+      <Header />
       <Container>
         {content}
       </Container>
