@@ -6,6 +6,9 @@ import {
 import { css } from '@emotion/core';
 import { useGetTrackingsQuery } from '../graphql/hooks';
 
+const reduceTrackings = (subtotal, tracking) => subtotal + tracking.hours;
+const reduceDays = (total, day) => total + day.trackings.reduce(reduceTrackings, 0);
+
 export const TimeSheet: FC = () => {
   const { data } = useGetTrackingsQuery({
     variables: {
@@ -195,7 +198,7 @@ export const TimeSheet: FC = () => {
               Gesamt
             </td>
             <td>
-              {days.reduce((total, day) => total + day.trackings.reduce((subtotal, tracking) => subtotal + tracking.hours, 0), 0)}
+              {days.reduce(reduceDays, 0)}
             </td>
           </tr>
         </tfoot>
