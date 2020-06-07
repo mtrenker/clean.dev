@@ -1,6 +1,6 @@
 import React, { FC, useRef, useContext } from 'react';
-import { UserContext } from '../../../../context/UserContext';
-import { changePassword } from '../../../../lib/auth';
+import { UserContext } from '../../../context/UserContext';
+import { changePassword } from '../../../lib/auth';
 
 export const ChangePassword: FC = () => {
   const { refreshUser } = useContext(UserContext);
