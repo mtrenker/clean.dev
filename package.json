@@ -136,6 +136,6 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint '*/**/*.{ts,tsx}' --quiet --cache --fix"
+    "*.{ts,tsx}": "npm run lint --"
   }
 }
