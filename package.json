@@ -75,6 +75,7 @@
     "faker": "^4.1.0",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
     "install": "^0.13.0",
     "jest": "^26.0.1",
     "npm": "^6.14.5",
@@ -127,5 +128,10 @@
     "react-i18next": "^11.5.0",
     "react-router-dom": "^5.2.0",
     "typeface-roboto": "0.0.75"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
