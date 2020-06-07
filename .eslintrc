@@ -26,6 +26,7 @@
       "error",
       {
         "devDependencies": [
+          "battlecry/**/*",
           "src/**/*.stories.tsx",
           "cdk/**/*",
           "webpack.config.ts"
