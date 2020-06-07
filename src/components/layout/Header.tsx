@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
 
+import { Link } from 'react-router-dom';
 import { Container, container } from './Container';
 import { breakPoints } from '../../themes/default';
 import { Login } from '../auth/Login';
@@ -77,7 +78,7 @@ export const Header: FC = ({ children }) => {
           </h1>
           <nav css={nav}>
             <ul>
-              <li><a href="/">Home</a></li>
+              <li><Link to="/">Home</Link></li>
             </ul>
           </nav>
           <Login />

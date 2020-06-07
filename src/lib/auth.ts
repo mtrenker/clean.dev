@@ -1,64 +1,68 @@
 import { Auth, CognitoUser } from '@aws-amplify/auth';
 
-export const configure = (): void => {
-  Auth.configure({
-    region: process.env.AWS_REGION,
-    userPoolId: process.env.COGNITO_POOL_ID,
-    userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
-    mandatorySignIn: false,
-  });
-};
+Auth.configure({
+  region: process.env.AWS_REGION,
+  userPoolId: process.env.COGNITO_POOL_ID,
+  userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
+  mandatorySignIn: false,
+});
 
-export interface User {
-  username: string;
-  jwtToken: string;
+type UserChallanges = 'NEW_PASSWORD_REQUIRED'
+
+export interface AuthenticatedUser extends CognitoUser {
+  challengeName?: UserChallanges,
+  attributes?: {
+    email: string;
+  }
 }
 
-export async function signIn(username: string, password: string): Promise<User | null> {
+export interface CleanUser {
+  username: string;
+}
+
+export async function signIn(username: string, password: string): Promise<AuthenticatedUser> {
   try {
-    const cognitoUser: CognitoUser = await Auth.signIn({
+    return Auth.signIn({
       username,
       password,
     });
-    const session = await Auth.currentSession();
-
-    const user: User = {
-      username: cognitoUser.getUsername(),
-      jwtToken: session.getAccessToken().getJwtToken(),
-    };
-
-    return user;
   } catch (error) {
-    console.log('error signing in', error);
     return null;
   }
 }
 
-export async function getUser(): Promise<User | null> {
+export async function getUser(): Promise<AuthenticatedUser> {
   try {
-    const user = await Auth.currentAuthenticatedUser() as CognitoUser;
-    const session = user.getSignInUserSession();
-
-    return {
-      username: user.getUsername(),
-      jwtToken: session.getAccessToken().getJwtToken(),
-    };
+    return await Auth.currentAuthenticatedUser();
   } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
-
-export async function getJwtToken(): Promise<string | null> {
-  try {
-    const session = await Auth.currentSession();
-    return session.getAccessToken().getJwtToken();
-  } catch (error) {
-    console.log(error);
     return null;
   }
 }
 
 export async function signOut(): Promise<void> {
   Auth.signOut();
+}
+
+export function getCleanUser(cognitoUser: AuthenticatedUser): CleanUser {
+  return {
+    username: cognitoUser.attributes.email,
+  };
+}
+
+export async function changePassword(
+  username: string,
+  oldPassword: string,
+  newPassword: string,
+): Promise<boolean> {
+  try {
+    const oldUser = await signIn(username, oldPassword);
+    if (oldUser.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      await Auth.completeNewPassword(oldUser, newPassword, {});
+      return true;
+    }
+    await Auth.changePassword(oldUser, oldPassword, newPassword);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }

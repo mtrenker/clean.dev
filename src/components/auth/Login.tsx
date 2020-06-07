@@ -1,7 +1,8 @@
-import React, { FC, useContext, useRef } from 'react';
+import React, { FC, useRef, useContext } from 'react';
 import { css } from '@emotion/core';
+import { useHistory } from 'react-router-dom';
 
-import { signIn, signOut } from '../../lib/auth';
+import { signIn, signOut, getCleanUser } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
 
 const input = css`
@@ -11,16 +12,25 @@ const input = css`
 
 export const Login: FC = () => {
   const { user, setUser } = useContext(UserContext);
+  const history = useHistory();
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const login = async (): Promise<void> => {
-    const loggedInUser = await signIn(
+    const authenticatedUser = await signIn(
       usernameRef.current?.value ?? '',
       passwordRef.current?.value ?? '',
     );
-    setUser(loggedInUser);
+    if (authenticatedUser) {
+      switch (authenticatedUser.challengeName) {
+        case 'NEW_PASSWORD_REQUIRED':
+          history.push('/change-password');
+          break;
+        default:
+          setUser(getCleanUser(authenticatedUser));
+      }
+    }
   };
 
   const logout = async (): Promise<void> => {
@@ -32,7 +42,7 @@ export const Login: FC = () => {
   if (user) {
     return (
       <p>
-        {user.username}
+        <span>{`Hi, ${user.username}`}</span>
         <button css={input} type="submit" onClick={logout}>Logout</button>
       </p>
     );

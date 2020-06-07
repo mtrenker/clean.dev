@@ -8,19 +8,17 @@ import Auth from '@aws-amplify/auth';
 
 const authLink = setContext(() => new Promise((resolve) => {
   Auth.currentSession().then((session) => {
-    if (session) {
-      resolve({
-        headers: {
-          authorization: session.getAccessToken().getJwtToken(),
-        },
-      });
-    } else {
-      resolve({
-        headers: {
-          'x-api-key': process.env.GRAPHQL_API_TOKEN,
-        },
-      });
-    }
+    resolve({
+      headers: {
+        authorization: session.getAccessToken().getJwtToken(),
+      },
+    });
+  }).catch(() => {
+    resolve({
+      headers: {
+        'x-api-key': process.env.GRAPHQL_API_TOKEN,
+      },
+    });
   });
 }));
 

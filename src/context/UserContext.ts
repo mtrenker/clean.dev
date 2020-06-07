@@ -1,13 +1,15 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
-import { User } from '../lib/auth';
+import { CleanUser } from '../lib/auth';
 
 export interface UserContextProps {
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
+  user: CleanUser | null;
+  setUser: Dispatch<SetStateAction<CleanUser | null>>;
+  refreshUser: () => void;
 }
 
 export const UserContext = React.createContext<UserContextProps>({
   user: null,
   setUser: () => null,
+  refreshUser: () => null,
 });
