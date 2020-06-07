@@ -9,14 +9,12 @@ export const handler = async (event: any) => {
   });
 
   try {
-    const result = await sns.publish({
+    await sns.publish({
       TopicArn: TOPIC_ARN,
       Message: event.body,
     }).promise();
-    console.log('SUCCESS:', result.$response);
     return 'ok';
   } catch (error) {
-    console.error('ERROR: ', error);
     return 'error';
   }
 };
