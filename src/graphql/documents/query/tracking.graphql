@@ -1,6 +1,9 @@
 query getTrackings($query: TrackingQuery) {
   trackings(query: $query) {
     id
+    project {
+      id
+    }
     description
     startTime
     endTime

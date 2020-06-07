@@ -75,7 +75,7 @@ export type QueryTrackingsArgs = {
 export type Tracking = {
   __typename?: 'Tracking';
   id: Scalars['ID'];
-  project: Project;
+  project?: Maybe<Project>;
   description: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
   endTime: Scalars['AWSDateTime'];
@@ -141,6 +141,10 @@ export type GetTrackingsQuery = (
   & { trackings?: Maybe<Array<Maybe<(
     { __typename?: 'Tracking' }
     & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
+    & { project?: Maybe<(
+      { __typename?: 'Project' }
+      & Pick<Project, 'id'>
+    )> }
   )>>> }
 );
 
@@ -272,6 +276,9 @@ export const GetTrackingsDocument = gql`
     query getTrackings($query: TrackingQuery) {
   trackings(query: $query) {
     id
+    project {
+      id
+    }
     description
     startTime
     endTime

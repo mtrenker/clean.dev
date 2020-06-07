@@ -46,7 +46,7 @@ type Query @aws_api_key @aws_cognito_user_pools {
 ### }
 type Tracking @aws_api_key @aws_cognito_user_pools {
 	id: ID!
-	project: Project!
+	project: Project
     @aws_cognito_user_pools
 	description: String!
     @aws_cognito_user_pools

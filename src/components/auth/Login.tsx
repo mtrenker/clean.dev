@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 import { signIn, signOut, getCleanUser } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
+import { LoadingSpinner } from '../layout/LoadingSpinner';
 
 const input = css`
   border: 1px solid #CCC;
@@ -58,6 +59,7 @@ export const Login: FC = () => {
   }
   return (
     <div css={{ position: 'relative' }}>
+      { loading && <LoadingSpinner />}
       <input disabled={loading} css={input} type="text" ref={usernameRef} />
       <input disabled={loading} css={input} type="password" ref={passwordRef} />
       <button disabled={loading} css={input} type="submit" onClick={login}>Login</button>
