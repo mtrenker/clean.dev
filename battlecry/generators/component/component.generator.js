@@ -15,7 +15,10 @@ export default class ComponentGenerator extends Generator {
   };
 
   generate() {
-    const { name, type = 'layout' } = this.args;
+    const { name } = this.args;
+    const { type = 'layout' } = this.options;
+
+
     this.templates().forEach((file) => file.saveAs(`src/components/${type}/`, name));
   }
 }

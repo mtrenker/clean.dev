@@ -1,12 +1,15 @@
 import webpack from "webpack";
+import merge from "webpack-merge";
 
 import appConfig from "../webpack.config";
 
 module.exports = {
   webpackFinal: (storybookConfig: webpack.Configuration): webpack.Configuration => {
-    storybookConfig.module!.rules.push(...appConfig.module!.rules);
-    storybookConfig.resolve!.extensions!.push(".tsx", ".ts")
-    return storybookConfig;
+
+    return merge(storybookConfig, {
+      module: appConfig.module,
+      resolve: appConfig.resolve
+    });
   },
   stories: ['../src/**/*.stories.tsx'],
   addons: [
