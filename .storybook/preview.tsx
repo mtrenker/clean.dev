@@ -22,8 +22,7 @@ const withTheme = (storyFn) => (
 const Centered: FC = ({ children }) => (
   <div css={{
     display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh',
-  }}
-  >
+  }}>
     {children}
   </div>
 );

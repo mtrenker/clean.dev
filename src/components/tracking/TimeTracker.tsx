@@ -18,12 +18,12 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
   const formCss = css`
     display: grid;
     grid-template:
-      "labelFrom labelTo" max-content
-      "datePickerFrom datePickerTo" max-content
-      "description description" max-content
-      "submitButton submitButton" max-content
-      "popper popper" max-content
-      / 1fr 1fr
+      "labelFrom labelTo quickSelect" max-content
+      "datePickerFrom datePickerTo quickSelect" max-content
+      "description description quickSelect" max-content
+      "submitButton submitButton quickSelect" max-content
+      "popper popper quickSelect" max-content
+      / 1fr 1fr 1fr
     ;
     gap: 10px;
     position: absolute;
@@ -35,11 +35,38 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
     .datePickerTo {
       grid-area: datePickerTo;
     }
+
+    .quickSelect {
+      grid-area: quickSelect;
+
+      button {
+        display: block;
+      }
+    }
   `;
 
   const onSubmitProxy = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(e);
+  };
+
+  const quickSelect = (e: MouseEvent<HTMLButtonElement>) => {
+    switch (e.currentTarget.value) {
+      case 'today-8-16': {
+        const quickStartTime = new Date();
+        quickStartTime.setHours(8);
+        quickStartTime.setMinutes(0);
+        quickStartTime.setSeconds(0);
+        setStartTime(quickStartTime);
+
+        const quickEndTime = new Date(quickStartTime);
+        quickEndTime.setHours(16);
+        setEndTime(quickEndTime);
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   const dateFormat = 'MMMM d, yyyy h:mm aa';
@@ -68,6 +95,12 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
         />
       </div>
       <textarea css={{ gridArea: 'description' }} ref={descriptionRef} />
+      <div className="quickSelect">
+        <fieldset>
+          <legend>Quickselect</legend>
+          <button value="today-8-16" type="button" onClick={quickSelect}>Today 8-16</button>
+        </fieldset>
+      </div>
       <button css={{ gridArea: 'submitButton' }} type="submit">Save</button>
     </form>
   );
