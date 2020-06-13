@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface TimeTrackerProps {
-  onSubmit: (e: MouseEvent<HTMLFormElement>) => void;
+  onSubmit: (e: MouseEvent<HTMLFormElement>, startTime: Date, endTime: Date, description: string) => void;
 }
 
 export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
@@ -26,7 +26,6 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       / 1fr 1fr 1fr
     ;
     gap: 10px;
-    position: absolute;
 
     .datePickerFrom {
       grid-area: datePickerFrom;
@@ -40,6 +39,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       grid-area: quickSelect;
 
       button {
+        font-size: smaller;
         display: block;
       }
     }
@@ -47,7 +47,11 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
 
   const onSubmitProxy = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(e);
+    if (!startTime || !endTime) {
+      throw new Error(`startTime and endTime must be valid dates. ${startTime} and ${endTime} given.`);
+    }
+    const description = descriptionRef.current?.value ?? '';
+    onSubmit(e, startTime, endTime, description);
   };
 
   const quickSelect = (e: MouseEvent<HTMLButtonElement>) => {

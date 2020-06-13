@@ -6,15 +6,13 @@ import { ThemeProvider } from 'emotion-theming';
 import { Page } from '../pages/Page';
 import { GlobalStyle } from './layout/GlobalStyle';
 import { theme } from '../themes/default';
-import { Track } from '../pages/Track';
-import { TimeSheet } from '../pages/TimeSheet';
 import { client } from '../lib/graphql';
 import { UserContext } from '../context/UserContext';
 import { CleanUser, getUser, getCleanUser } from '../lib/auth';
 
 
 export const Root: FC = () => {
-  const [user, setUser] = useState<CleanUser>(null);
+  const [user, setUser] = useState<CleanUser|null>(null);
 
   const refreshUser = async () => {
     const authenticatedUser = await getUser();
@@ -34,12 +32,6 @@ export const Root: FC = () => {
           <GlobalStyle />
           <Router>
             <Switch>
-              <Route path="/track" exact>
-                <Track />
-              </Route>
-              <Route path="/timesheet">
-                <TimeSheet />
-              </Route>
               <Route path="/">
                 <Page />
               </Route>
