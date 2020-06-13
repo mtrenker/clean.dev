@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import { addDecorator } from "@storybook/react"
 import StoryRouter from 'storybook-react-router';
 import { ThemeProvider, } from "emotion-theming";
@@ -18,4 +19,20 @@ const withTheme = (storyFn) => (
   </ThemeProvider>
 )
 
+const Centered: FC = ({ children }) => (
+  <div css={{
+    display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh',
+  }}
+  >
+    {children}
+  </div>
+);
+
+const centered = (storyFn) => (
+  <Centered>
+    {storyFn()}
+  </Centered>
+)
+
 addDecorator(withTheme);
+addDecorator(centered);

@@ -1,55 +1,74 @@
 import React, {
-  FC, FormEvent, useState, useRef,
+  FC, useState, useRef, MouseEvent,
 } from 'react';
 import { css } from '@emotion/core';
 import DatePicker from 'react-datepicker';
 
-require('react-datepicker/dist/react-datepicker.css');
+import 'react-datepicker/dist/react-datepicker.css';
 
+interface TimeTrackerProps {
+  onSubmit: (e: MouseEvent<HTMLFormElement>) => void;
+}
 
-const datepicker = css`
-  display: grid;
-  grid-template:
-    "overview form" auto
-    / 3fr 1fr;
-`;
+export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
+  const [startTime, setStartTime] = useState<Date|null>(new Date());
+  const [endTime, setEndTime] = useState<Date|null>(new Date());
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
-const form = css`
-  grid-area: form;
-`;
+  const formCss = css`
+    display: grid;
+    grid-template:
+      "labelFrom labelTo" max-content
+      "datePickerFrom datePickerTo" max-content
+      "description description" max-content
+      "submitButton submitButton" max-content
+      "popper popper" max-content
+      / 1fr 1fr
+    ;
+    gap: 10px;
+    position: absolute;
 
+    .datePickerFrom {
+      grid-area: datePickerFrom;
+    }
 
-export const TimeTracker: FC = () => {
-  const [startTime, setStartTime] = useState<Date>(new Date());
-  const [endTime, setEndTime] = useState<Date>(new Date());
-  const descriptionRef = useRef<HTMLTextAreaElement>();
+    .datePickerTo {
+      grid-area: datePickerTo;
+    }
+  `;
 
-
-  const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const onSubmitProxy = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target);
+    onSubmit(e);
   };
 
+  const dateFormat = 'MMMM d, yyyy h:mm aa';
+
   return (
-    <div css={datepicker}>
-      <form onSubmit={onSubmit} css={form}>
+    <form onSubmit={onSubmitProxy} css={formCss}>
+      <label css={{ gridArea: 'labelFrom' }} htmlFor="from">From:</label>
+      <div className="datePickerFrom">
         <DatePicker
+          id="from"
           selected={startTime}
           showTimeSelect
           onChange={setStartTime}
-          dateFormat="MMMM d, yyyy h:mm aa"
+          dateFormat={dateFormat}
           showWeekNumbers
         />
+      </div>
+      <label css={{ gridArea: 'labelTo' }} htmlFor="to">To:</label>
+      <div className="datePickerTo">
         <DatePicker
           selected={endTime}
           showTimeSelect
           onChange={setEndTime}
-          dateFormat="MMMM d, yyyy h:mm aa"
+          dateFormat={dateFormat}
           showWeekNumbers
         />
-        <textarea ref={descriptionRef} />
-        <button type="submit">Save</button>
-      </form>
-    </div>
+      </div>
+      <textarea css={{ gridArea: 'description' }} ref={descriptionRef} />
+      <button css={{ gridArea: 'submitButton' }} type="submit">Save</button>
+    </form>
   );
 };
