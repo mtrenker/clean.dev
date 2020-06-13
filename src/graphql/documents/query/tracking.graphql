@@ -1,11 +1,10 @@
-query getTrackings($query: TrackingQuery) {
+query getTrackingOverview($query: TrackingQuery) {
   trackings(query: $query) {
-    id
-    project {
+    items {
       id
+      description
+      startTime
+      endTime
     }
-    description
-    startTime
-    endTime
   }
 }

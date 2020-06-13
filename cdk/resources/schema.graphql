@@ -35,8 +35,13 @@ type Project {
 type Query @aws_api_key @aws_cognito_user_pools {
 	projects: [Project!]!
 	page(input: PageInput!): Page
-  trackings(query: TrackingQuery): [Tracking]
+  trackings(query: TrackingQuery): Trackings!
     @aws_cognito_user_pools
+}
+
+type Trackings {
+  items: [Tracking!]!
+  nextToken: String
 }
 
 # type User {
