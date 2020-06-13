@@ -32,6 +32,9 @@ export class ApiStack extends Stack {
           userPool,
           defaultAction: UserPoolDefaultAction.ALLOW,
         },
+        additionalAuthorizationModes: [{
+          apiKeyDesc: 'web client key',
+        }],
       },
     });
 
