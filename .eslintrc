@@ -26,6 +26,7 @@
       "error",
       {
         "devDependencies": [
+          "battlecry/**/*",
           "src/**/*.stories.tsx",
           "cdk/**/*",
           "webpack.config.ts"
@@ -39,6 +40,14 @@
           ".tsx"
         ]
       }
-    ]
+    ],
+    "max-len": [
+      "error", {
+        "code": 120
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": [2, {
+      "controlComponents": ["DatePicker"]
+    }]
   }
 }

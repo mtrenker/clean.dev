@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "no-underscore-dangle": "off",
+    "react/jsx-pascal-case": "off"
+  },
+}
