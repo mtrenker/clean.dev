@@ -73,7 +73,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
     }
   };
 
-  const dateFormat = 'MMMM d, yyyy h:mm aa';
+  const dateFormat = 'dd.MM.yyyy HH:mm';
 
   return (
     <form onSubmit={onSubmitProxy} css={formCss}>
