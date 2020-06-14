@@ -4,7 +4,7 @@ import {
   getDaysInMonth, differenceInHours, isSunday, isSaturday, format,
 } from 'date-fns';
 import { css } from '@emotion/core';
-import { useGetTrackingsQuery, Tracking } from '../graphql/hooks';
+import { useGetTrackingOverviewQuery, Tracking } from '../graphql/hooks';
 
 interface TrackingWithHours extends Tracking {
   hours: number;
@@ -20,7 +20,7 @@ const reduceTrackings = (subtotal: number, tracking: TrackingWithHours) => subto
 const reduceDays = (total: number, day: Day) => total + day.trackings.reduce(reduceTrackings, 0);
 
 export const TimeSheet: FC = () => {
-  const { data } = useGetTrackingsQuery({
+  const { data } = useGetTrackingOverviewQuery({
     variables: {
       query: { date: '2020', project: '123' },
     },
@@ -37,24 +37,20 @@ export const TimeSheet: FC = () => {
     };
   });
 
-  // eslint-disable-next-line no-unused-expressions
-  data.trackings?.forEach((tracking) => {
+  data.trackings.items.forEach((tracking) => {
     const {
       __typename, id, description, startTime, endTime,
-    } = tracking!;
+    } = tracking;
     const trackingWithHours: TrackingWithHours = {
       __typename,
       id,
       description,
       startTime,
       endTime,
-      hours: differenceInHours(new Date(tracking!.endTime), new Date(tracking!.startTime)),
+      hours: differenceInHours(new Date(tracking.endTime), new Date(tracking.startTime)),
     };
-    days[new Date(tracking!.startTime).getDate() - 1].trackings.push(trackingWithHours);
+    days[new Date(tracking.startTime).getDate() - 1].trackings.push(trackingWithHours);
   });
-
-  console.log(days);
-
 
   const pageStyle = css`
     display: grid;
