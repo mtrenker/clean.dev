@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 /** All built-in and custom scalars, mapped to their actual values */
@@ -100,9 +101,9 @@ export type TrackingQuery = {
   date: Scalars['String'];
 };
 
-export type TrackMutationVariables = {
+export type TrackMutationVariables = Exact<{
   input: TrackingInput;
-};
+}>;
 
 
 export type TrackMutation = (
@@ -113,9 +114,9 @@ export type TrackMutation = (
   ) }
 );
 
-export type GetPageQueryVariables = {
+export type GetPageQueryVariables = Exact<{
   input: PageInput;
-};
+}>;
 
 
 export type GetPageQuery = (
@@ -126,7 +127,7 @@ export type GetPageQuery = (
   )> }
 );
 
-export type GetProjectsQueryVariables = {};
+export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProjectsQuery = (
@@ -137,9 +138,9 @@ export type GetProjectsQuery = (
   )> }
 );
 
-export type GetTrackingOverviewQueryVariables = {
+export type GetTrackingOverviewQueryVariables = Exact<{
   query?: Maybe<TrackingQuery>;
-};
+}>;
 
 
 export type GetTrackingOverviewQuery = (
