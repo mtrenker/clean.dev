@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useState } from 'react';
 import { css } from '@emotion/core';
 import { format } from 'date-fns';
 
@@ -9,6 +9,7 @@ import {
   GetTrackingOverviewQueryVariables,
   GetTrackingOverviewDocument,
   GetTrackingOverviewQuery,
+  Tracking,
 } from '../../../graphql/hooks';
 
 const timeTrackingCss = css`
@@ -24,10 +25,14 @@ const timeTrackingCss = css`
     tbody > tr:nth-of-type(even) {
       background: #ccc;
     }
+    tbody tr.active {
+      background-color: hotpink;
+    }
   }
 `;
 
 export const TimeTracking: FC = () => {
+  const [trackingToEdit, setTrackingToEdit] = useState<Tracking | undefined>(undefined);
   const queryVariables: GetTrackingOverviewQueryVariables = {
     query: {
       date: '2020',
@@ -37,7 +42,16 @@ export const TimeTracking: FC = () => {
   const { data, error } = useGetTrackingOverviewQuery({ variables: queryVariables });
   const [mutate, result] = useTrackMutation();
 
-  const onSubmit = (e: MouseEvent<HTMLFormElement>, startTime: Date, endTime: Date, description: string) => {
+  const onCancelEdit = () => {
+    setTrackingToEdit(undefined);
+  };
+
+  const onEditClick = (tracking: Tracking) => (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setTrackingToEdit(tracking);
+  };
+
+  const onSubmit = (e: MouseEvent<HTMLFormElement>, startTime: string, endTime: string, description: string) => {
     const variables = {
       input: {
         projectId: '123',
@@ -96,23 +110,28 @@ export const TimeTracking: FC = () => {
             <tr>
               <th>Description</th>
               <th>Start Time</th>
-              <th colSpan={2}>End Time</th>
+              <th>End Time</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {data && data.trackings?.items?.map((tracking) => (
-              <tr key={tracking.id}>
+              <tr key={tracking.id} className={tracking.id === trackingToEdit?.id ? 'active' : ''}>
                 <td>{tracking.description}</td>
                 <td>{format(new Date(tracking.startTime), 'dd.MM.yyyy HH:mm')}</td>
                 <td>{format(new Date(tracking.endTime), 'dd.MM.yyyy HH:mm')}</td>
-                <td>X E</td>
+                <td>
+                  <button type="button" onClick={onEditClick(tracking)}>
+                    Edit
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
           <tfoot />
         </table>
       </div>
-      <TimeTracker onSubmit={onSubmit} />
+      <TimeTracker onCancelEdit={onCancelEdit} onSubmit={onSubmit} tracking={trackingToEdit} />
     </div>
   );
 };

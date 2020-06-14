@@ -1,19 +1,33 @@
 import React, {
-  FC, useState, useRef, MouseEvent,
+  FC, useState, useRef, MouseEvent, useEffect,
 } from 'react';
 import { css } from '@emotion/core';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { Tracking } from '../../graphql/hooks';
 
 interface TimeTrackerProps {
-  onSubmit: (e: MouseEvent<HTMLFormElement>, startTime: Date, endTime: Date, description: string) => void;
+  tracking?: Tracking,
+  onSubmit: (e: MouseEvent<HTMLFormElement>, startTime: string, endTime: string, description: string) => void;
+  onCancelEdit?: () => void;
 }
 
-export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
+export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, tracking }) => {
+  const isEdit = !!tracking;
   const [startTime, setStartTime] = useState<Date|null>(new Date());
   const [endTime, setEndTime] = useState<Date|null>(new Date());
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (tracking) {
+      setStartTime(new Date(tracking.startTime));
+      setEndTime(new Date(tracking.endTime));
+      if (descriptionRef.current) {
+        descriptionRef.current.value = tracking.description;
+      }
+    }
+  }, [tracking]);
 
   const formCss = css`
     display: grid;
@@ -21,7 +35,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       "labelFrom labelTo quickSelect" max-content
       "datePickerFrom datePickerTo quickSelect" max-content
       "description description quickSelect" max-content
-      "submitButton submitButton quickSelect" max-content
+      "actionButtons actionButtons quickSelect" max-content
       "popper popper quickSelect" max-content
       / 1fr 1fr 1fr
     ;
@@ -43,7 +57,21 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
         display: block;
       }
     }
+
+    .actionButtons {
+      grid-area: actionButtons;
+      display: flex;
+      button {
+        flex: 1;
+      }
+    }
   `;
+
+  const setDescription = (description: string) => {
+    if (descriptionRef.current) {
+      descriptionRef.current.value = description;
+    }
+  };
 
   const onSubmitProxy = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +79,17 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       throw new Error(`startTime and endTime must be valid dates. ${startTime} and ${endTime} given.`);
     }
     const description = descriptionRef.current?.value ?? '';
-    onSubmit(e, startTime, endTime, description);
+    onSubmit(e, startTime.toISOString(), endTime.toISOString(), description);
+  };
+
+  const onCancelEditProxy = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStartTime(new Date());
+    setEndTime(new Date());
+    setDescription('');
+    if (onCancelEdit) {
+      onCancelEdit();
+    }
   };
 
   const quickSelect = (e: MouseEvent<HTMLButtonElement>) => {
@@ -67,6 +105,9 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
         const quickEndTime = new Date(quickStartTime);
         quickEndTime.setHours(16);
         setEndTime(quickEndTime);
+        if (descriptionRef.current) {
+          descriptionRef.current.value = '';
+        }
         break;
       }
       default:
@@ -82,6 +123,8 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       <div className="datePickerFrom">
         <DatePicker
           id="from"
+          required
+          disabled={isEdit}
           selected={startTime}
           showTimeSelect
           onChange={setStartTime}
@@ -92,6 +135,8 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
       <label css={{ gridArea: 'labelTo' }} htmlFor="to">To:</label>
       <div className="datePickerTo">
         <DatePicker
+          id="to"
+          required
           selected={endTime}
           showTimeSelect
           onChange={setEndTime}
@@ -99,14 +144,17 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
           showWeekNumbers
         />
       </div>
-      <textarea css={{ gridArea: 'description' }} ref={descriptionRef} />
+      <textarea required css={{ gridArea: 'description' }} ref={descriptionRef} />
       <div className="quickSelect">
         <fieldset>
           <legend>Quickselect</legend>
-          <button value="today-8-16" type="button" onClick={quickSelect}>Today 8-16</button>
+          <button disabled={isEdit} value="today-8-16" type="button" onClick={quickSelect}>Today 8-16</button>
         </fieldset>
       </div>
-      <button css={{ gridArea: 'submitButton' }} type="submit">Save</button>
+      <div className="actionButtons">
+        {isEdit && <button type="button" onClick={onCancelEditProxy}>Cancel</button>}
+        <button type="submit">Save</button>
+      </div>
     </form>
   );
 };

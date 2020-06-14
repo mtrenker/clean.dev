@@ -15,8 +15,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  AWSDate: Date;
-  AWSDateTime: Date;
+  AWSDate: string;
+  AWSDateTime: string;
   AWSJSON: { [key: string]: any };
 };
 
