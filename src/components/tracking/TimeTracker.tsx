@@ -61,6 +61,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit }) => {
         quickStartTime.setHours(8);
         quickStartTime.setMinutes(0);
         quickStartTime.setSeconds(0);
+        quickStartTime.setMilliseconds(0);
         setStartTime(quickStartTime);
 
         const quickEndTime = new Date(quickStartTime);
