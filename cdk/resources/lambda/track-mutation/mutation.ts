@@ -79,7 +79,7 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
       trackItem,
     };
 
-    await eventBridge.putEvents({
+    const result = await eventBridge.putEvents({
       Entries: [{
         EventBusName: process.env.EVENT_BUS_NAME,
         DetailType: 'Tracking Added',
@@ -87,6 +87,7 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
         Source: 'clean.api.mutation.track',
       }],
     }).promise();
+    console.log('RESULT!!!!!!!', result);
 
 
     return trackItem;
