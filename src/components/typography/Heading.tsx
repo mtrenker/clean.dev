@@ -31,7 +31,7 @@ export const Heading: FC<HeadingProps> = ({ children, as = 'h1', type }) => {
     font-size: calc(1.5rem + ${sizes[as]});
   `;
   const HeadingElement = as;
-  const typeCss = types[type];
+  const typeCss = types[type || 'page-title'];
   return (
     <HeadingElement css={[heading, fontSize, typeCss]}>{children}</HeadingElement>
   );

@@ -20,7 +20,7 @@ export interface CleanUser {
   username: string;
 }
 
-export async function signIn(username: string, password: string): Promise<AuthenticatedUser> {
+export async function signIn(username: string, password: string): Promise<AuthenticatedUser|null> {
   try {
     return Auth.signIn({
       username,
@@ -31,7 +31,7 @@ export async function signIn(username: string, password: string): Promise<Authen
   }
 }
 
-export async function getUser(): Promise<AuthenticatedUser> {
+export async function getUser(): Promise<AuthenticatedUser|null> {
   try {
     return await Auth.currentAuthenticatedUser();
   } catch (error) {
@@ -45,7 +45,7 @@ export async function signOut(): Promise<void> {
 
 export function getCleanUser(cognitoUser: AuthenticatedUser): CleanUser {
   return {
-    username: cognitoUser.attributes.email,
+    username: cognitoUser.attributes?.email ?? '',
   };
 }
 
@@ -56,7 +56,7 @@ export async function changePassword(
 ): Promise<boolean> {
   try {
     const oldUser = await signIn(username, oldPassword);
-    if (oldUser.challengeName === 'NEW_PASSWORD_REQUIRED') {
+    if (oldUser?.challengeName === 'NEW_PASSWORD_REQUIRED') {
       await Auth.completeNewPassword(oldUser, newPassword, {});
       return true;
     }
