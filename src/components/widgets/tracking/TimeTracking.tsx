@@ -67,7 +67,12 @@ export const TimeTracking: FC = () => {
               variables: queryVariables,
             });
             if (queryResult) {
-              queryResult.trackings.items.push(track);
+              const existingIndex = queryResult.trackings.items.findIndex((tracking) => tracking.id === track.id);
+              if (existingIndex === -1) {
+                queryResult.trackings.items.push(track);
+              } else {
+                queryResult.trackings.items[existingIndex] = track;
+              }
               proxy.writeQuery<GetTrackingOverviewQuery>({
                 query: GetTrackingOverviewDocument,
                 data: queryResult,
@@ -91,7 +96,7 @@ export const TimeTracking: FC = () => {
             <tr>
               <th>Description</th>
               <th>Start Time</th>
-              <th>End Time</th>
+              <th colSpan={2}>End Time</th>
             </tr>
           </thead>
           <tbody>
@@ -100,6 +105,7 @@ export const TimeTracking: FC = () => {
                 <td>{tracking.description}</td>
                 <td>{format(new Date(tracking.startTime), 'dd.MM.yyyy HH:mm')}</td>
                 <td>{format(new Date(tracking.endTime), 'dd.MM.yyyy HH:mm')}</td>
+                <td>X E</td>
               </tr>
             ))}
           </tbody>
