@@ -51,17 +51,17 @@ const documentClient = new DynamoDB.DocumentClient();
 
 async function track(input: TrackingInput, identity?: IdentityProps): Promise<TrackItem> {
   const eventBridge = new EventBridge();
-  const id = `user-${identity?.sub}`;
+  const pk = `user-${identity?.sub}`;
 
   const {
     projectId, startTime, endTime, description,
   } = input;
   const startDate = new Date(startTime);
-  const sk = `tracking-${projectId}-${startDate.toISOString()}`;
+  const id = `tracking-${projectId}-${startDate.toISOString()}`;
 
   const trackItem: TrackItem = {
-    pk: id,
-    id: sk,
+    pk,
+    id,
     startTime,
     endTime,
     description,
@@ -79,7 +79,7 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
       trackItem,
     };
 
-    await eventBridge.putEvents({
+    const result = await eventBridge.putEvents({
       Entries: [{
         EventBusName: process.env.EVENT_BUS_NAME,
         DetailType: 'Tracking Added',
@@ -87,6 +87,7 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
         Source: 'clean.api.mutation.track',
       }],
     }).promise();
+    console.log('RESULT!!!!!!!', result);
 
 
     return trackItem;

@@ -10,9 +10,9 @@ import { mapWidgets } from '../lib/contentful';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
-  const { data } = useGetPageQuery({ variables: { input: { slug: pathname } } });
+  const { data, error } = useGetPageQuery({ variables: { input: { slug: pathname } } });
   if (!data) return <p>Loading</p>;
-  const document = data?.page?.content;
+  const document = data?.page?.content ?? '';
 
   const content = documentToReactComponents(JSON.parse(document), {
     renderNode: mapWidgets(),
@@ -21,6 +21,7 @@ export const Page: FC = () => {
     <>
       <Header />
       <Container>
+        {error && <p>{error.message}</p>}
         {content}
       </Container>
       <Footer />

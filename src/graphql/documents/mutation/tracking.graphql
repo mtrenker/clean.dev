@@ -1,5 +1,8 @@
 mutation track($input: TrackingInput!) {
   track(input: $input) {
     id
+    startTime
+    endTime
+    description
   }
 }

@@ -14,12 +14,14 @@ export const landingPage: FC = () => {
   const paragraphCount = number('Paragraphs', 5);
   return (
     <>
-      <Header />
-      <Container>
-        <Heading as="h2">Welcome</Heading>
-        {lorem.paragraphs(paragraphCount).split('\n').map((paragraph) => <Text>{paragraph}</Text>)}
-      </Container>
-      <Footer />
+      <div>
+        <Header />
+        <Container>
+          <Heading as="h2">Welcome</Heading>
+          {lorem.paragraphs(paragraphCount).split('\n').map((paragraph) => <Text>{paragraph}</Text>)}
+        </Container>
+        <Footer />
+      </div>
     </>
   );
 };

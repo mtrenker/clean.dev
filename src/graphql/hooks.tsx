@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 /** All built-in and custom scalars, mapped to their actual values */
@@ -14,8 +15,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  AWSDate: Date;
-  AWSDateTime: Date;
+  AWSDate: string;
+  AWSDateTime: string;
   AWSJSON: { [key: string]: any };
 };
 
@@ -59,7 +60,7 @@ export type Query = {
   __typename?: 'Query';
   projects: Array<Project>;
   page?: Maybe<Page>;
-  trackings?: Maybe<Array<Maybe<Tracking>>>;
+  trackings: Trackings;
 };
 
 
@@ -72,10 +73,16 @@ export type QueryTrackingsArgs = {
   query?: Maybe<TrackingQuery>;
 };
 
+export type Trackings = {
+  __typename?: 'Trackings';
+  items: Array<Tracking>;
+  nextToken?: Maybe<Scalars['String']>;
+};
+
 export type Tracking = {
   __typename?: 'Tracking';
   id: Scalars['ID'];
-  project: Project;
+  project?: Maybe<Project>;
   description: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
   endTime: Scalars['AWSDateTime'];
@@ -94,22 +101,22 @@ export type TrackingQuery = {
   date: Scalars['String'];
 };
 
-export type TrackMutationVariables = {
+export type TrackMutationVariables = Exact<{
   input: TrackingInput;
-};
+}>;
 
 
 export type TrackMutation = (
   { __typename?: 'Mutation' }
   & { track: (
     { __typename?: 'Tracking' }
-    & Pick<Tracking, 'id'>
+    & Pick<Tracking, 'id' | 'startTime' | 'endTime' | 'description'>
   ) }
 );
 
-export type GetPageQueryVariables = {
+export type GetPageQueryVariables = Exact<{
   input: PageInput;
-};
+}>;
 
 
 export type GetPageQuery = (
@@ -120,7 +127,7 @@ export type GetPageQuery = (
   )> }
 );
 
-export type GetProjectsQueryVariables = {};
+export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProjectsQuery = (
@@ -131,17 +138,20 @@ export type GetProjectsQuery = (
   )> }
 );
 
-export type GetTrackingsQueryVariables = {
+export type GetTrackingOverviewQueryVariables = Exact<{
   query?: Maybe<TrackingQuery>;
-};
+}>;
 
 
-export type GetTrackingsQuery = (
+export type GetTrackingOverviewQuery = (
   { __typename?: 'Query' }
-  & { trackings?: Maybe<Array<Maybe<(
-    { __typename?: 'Tracking' }
-    & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
-  )>>> }
+  & { trackings: (
+    { __typename?: 'Trackings' }
+    & { items: Array<(
+      { __typename?: 'Tracking' }
+      & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
+    )> }
+  ) }
 );
 
 
@@ -149,6 +159,9 @@ export const TrackDocument = gql`
     mutation track($input: TrackingInput!) {
   track(input: $input) {
     id
+    startTime
+    endTime
+    description
   }
 }
     `;
@@ -268,45 +281,47 @@ export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
-export const GetTrackingsDocument = gql`
-    query getTrackings($query: TrackingQuery) {
+export const GetTrackingOverviewDocument = gql`
+    query getTrackingOverview($query: TrackingQuery) {
   trackings(query: $query) {
-    id
-    description
-    startTime
-    endTime
+    items {
+      id
+      description
+      startTime
+      endTime
+    }
   }
 }
     `;
-export type GetTrackingsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingsQuery, GetTrackingsQueryVariables>, 'query'>;
+export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>, 'query'>;
 
-    export const GetTrackingsComponent = (props: GetTrackingsComponentProps) => (
-      <ApolloReactComponents.Query<GetTrackingsQuery, GetTrackingsQueryVariables> query={GetTrackingsDocument} {...props} />
+    export const GetTrackingOverviewComponent = (props: GetTrackingOverviewComponentProps) => (
+      <ApolloReactComponents.Query<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables> query={GetTrackingOverviewDocument} {...props} />
     );
     
 
 /**
- * __useGetTrackingsQuery__
+ * __useGetTrackingOverviewQuery__
  *
- * To run a query within a React component, call `useGetTrackingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTrackingOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrackingOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTrackingsQuery({
+ * const { data, loading, error } = useGetTrackingOverviewQuery({
  *   variables: {
  *      query: // value for 'query'
  *   },
  * });
  */
-export function useGetTrackingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+export function useGetTrackingOverviewQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
       }
-export function useGetTrackingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+export function useGetTrackingOverviewLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
         }
-export type GetTrackingsQueryHookResult = ReturnType<typeof useGetTrackingsQuery>;
-export type GetTrackingsLazyQueryHookResult = ReturnType<typeof useGetTrackingsLazyQuery>;
-export type GetTrackingsQueryResult = ApolloReactCommon.QueryResult<GetTrackingsQuery, GetTrackingsQueryVariables>;
+export type GetTrackingOverviewQueryHookResult = ReturnType<typeof useGetTrackingOverviewQuery>;
+export type GetTrackingOverviewLazyQueryHookResult = ReturnType<typeof useGetTrackingOverviewLazyQuery>;
+export type GetTrackingOverviewQueryResult = ApolloReactCommon.QueryResult<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>;

@@ -11,9 +11,9 @@ export const ChangePassword: FC = () => {
   const onChangePasswordClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await changePassword(
-      usernameInput.current.value,
-      oldPasswordInput.current.value,
-      newPasswordInput.current.value,
+      usernameInput.current?.value ?? '',
+      oldPasswordInput.current?.value ?? '',
+      newPasswordInput.current?.value ?? '',
     );
     refreshUser();
   };
