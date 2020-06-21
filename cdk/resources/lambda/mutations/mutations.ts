@@ -89,7 +89,6 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
     }).promise();
     console.log('RESULT!!!!!!!', result);
 
-
     return trackItem;
   } catch (error) {
     console.error(error);
@@ -97,13 +96,19 @@ async function track(input: TrackingInput, identity?: IdentityProps): Promise<Tr
   }
 }
 
+async function addProject(input: TrackingInput, identity: IdentityProps): Promise<boolean> {
+  console.log(input, identity);
+  return true;
+}
+
 export const handler: Handler<TrackingEvent> = async (event) => {
   const { arguments: { input }, info } = event;
 
   switch (info.fieldName) {
-    case 'track': {
+    case 'track':
       return track(input, event.identity);
-    }
+    case 'addProject':
+      return addProject(input, event.identity);
     default:
       return 'not implemented';
   }

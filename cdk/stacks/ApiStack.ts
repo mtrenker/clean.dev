@@ -151,9 +151,9 @@ export class ApiStack extends Stack {
       effect: Effect.ALLOW,
     }));
 
-    return new Function(this, 'TrackFunction', {
-      code: Code.fromAsset('cdk/resources/lambda/track-mutation'),
-      handler: 'mutation.handler',
+    return new Function(this, 'Mutations', {
+      code: Code.fromAsset('cdk/resources/lambda/mutations'),
+      handler: 'mutations.handler',
       runtime: Runtime.NODEJS_12_X,
       role: trackMutationRole,
       environment: {
