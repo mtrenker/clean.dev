@@ -4,11 +4,15 @@ scalar AWSDateTime
 
 scalar AWSJSON
 
+type Query {
+	page(input: PageInput!): Page
+  @aws_api_key
+	projects: ProjectConnection!
+  trackings(query: TrackingQuery): TrackingConnection!
+}
+
 type Mutation {
-	# saveProject(input: ProjectInput!): Project!
-	### @aws_auth(cognito_groups: ["Admins"])
 	track(input: TrackingInput!): Tracking!
-  @aws_cognito_user_pools(cognito_groups: ["Admins"])
 }
 
 type Page @aws_api_key @aws_cognito_user_pools {
@@ -17,8 +21,9 @@ type Page @aws_api_key @aws_cognito_user_pools {
 	content: String!
 }
 
-input PageInput {
-	slug: String!
+type ProjectConnection {
+  items: [Project!]!
+  nextToken: String
 }
 
 type Project {
@@ -32,43 +37,25 @@ type Project {
 	technologies: [String!]!
 }
 
-type Query @aws_api_key @aws_cognito_user_pools {
-	projects: [Project!]!
-	page(input: PageInput!): Page
-  trackings(query: TrackingQuery): Trackings!
-    @aws_cognito_user_pools
-}
-
-type Trackings {
+type TrackingConnection {
   items: [Tracking!]!
   nextToken: String
 }
 
-# type User {
-###   first_name: String!
-###   last_name: String!
-###   email: String!
-### }
-type Tracking @aws_api_key @aws_cognito_user_pools {
+type Tracking {
 	id: ID!
 	project: Project
-    @aws_cognito_user_pools
 	description: String!
-    @aws_cognito_user_pools
 	startTime: AWSDateTime!
 	endTime: AWSDateTime!
 }
 
-# input UserInput {
-###   first_name: String!
-###   last_name: String!
-###   email: String!
-### }
-### input ProjectInput {
-###   name: String!
-###   description: String
-###   approval_contact: UserInput
-### }
+# INPUTS
+
+input PageInput {
+	slug: String!
+}
+
 input TrackingInput {
   id: ID
 	projectId: String!

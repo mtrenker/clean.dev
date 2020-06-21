@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType,
+  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType, KeyCondition,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table, ITable } from '@aws-cdk/aws-dynamodb';
@@ -49,6 +49,7 @@ export class ApiStack extends Stack {
     const trackFunction = this.trackFunction(table, eventBusArn, eventBusName);
 
     ApiStack.addPageResolver(queryDataSource);
+    ApiStack.addProjectsResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
     ApiStack.trackResolver(api, trackFunction);
 
@@ -89,6 +90,21 @@ export class ApiStack extends Stack {
       }
     `),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result)'),
+    });
+  }
+
+  static addProjectsResolver(queryDataSource: DynamoDbDataSource): void {
+    const keyCondition = KeyCondition.beginsWith('id', "project-")
+    queryDataSource.createResolver({
+      fieldName: 'projects',
+      typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.dynamoDbQuery(keyCondition),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        {
+          "items": $util.toJson($ctx.result.items),
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+        }
+      `),
     });
   }
 
