@@ -1,4 +1,6 @@
-import { Stack, App, StackProps } from '@aws-cdk/core';
+import {
+  Stack, App, StackProps, CfnOutput,
+} from '@aws-cdk/core';
 import { DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import { HostedZone } from '@aws-cdk/aws-route53';
 
@@ -8,17 +10,18 @@ export class CertStack extends Stack {
 
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
       domainName: 'clean.dev',
-      privateZone: false,
     });
 
-    new DnsValidatedCertificate(this, 'CleanDevCert', {
+    const certificate = new DnsValidatedCertificate(this, 'CleanDevCert', {
       domainName: 'clean.dev',
+      subjectAlternativeNames: ['*.clean.dev'],
       hostedZone,
+      region: 'us-east-1',
     });
 
-    new DnsValidatedCertificate(this, 'CleanDevAuthCert', {
-      domainName: 'auth.clean.dev',
-      hostedZone,
+    new CfnOutput(this, 'CertificateArn', {
+      value: certificate.certificateArn,
+      exportName: 'CertificateArn',
     });
   }
 }

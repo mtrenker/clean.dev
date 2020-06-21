@@ -20,11 +20,11 @@ phases:
       - echo Build completed on `date`
 artifacts:
   secondary-artifacts:
-    siteArtifact:
+    site:
       base-directory: dist
       files:
         - "**/*"
-    storybookArtifact:
+    storybook:
       base-directory: storybook-static
       files:
         - "**/*"

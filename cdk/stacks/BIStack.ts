@@ -19,6 +19,7 @@ export class BIStack extends Stack {
 
     const eventBucket = new Bucket(this, 'EventBucket', {
       bucketName: 'prod.events.clean.dev',
+      removalPolicy: RemovalPolicy.RETAIN,
     });
 
     const firehoseRole = new Role(this, 'FirehoseRole', {

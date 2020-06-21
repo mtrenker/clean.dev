@@ -55,7 +55,7 @@ export class GitHubBuild extends Construct {
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.RETAIN,
     });
     this.siteBucket = siteBucket;
 
@@ -68,9 +68,9 @@ export class GitHubBuild extends Construct {
     });
     this.storybookBucket = storybookBucket;
 
-    const sourceOutput = new Artifact();
-    const siteOutput = new Artifact('siteArtifact');
-    const storybookOutput = new Artifact('storybookArtifact');
+    const sourceOutput = new Artifact('source');
+    const siteOutput = new Artifact('site');
+    const storybookOutput = new Artifact('storybook');
 
     const sourceAction = new GitHubSourceAction({
       actionName: 'source',

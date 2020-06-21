@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput,
 } from '@aws-cdk/core';
 import {
-  UserPool, OAuthScope, CfnUserPoolGroup, CfnUserPoolUser, UserPoolClientIdentityProvider,
+  UserPool, OAuthScope, CfnUserPoolGroup, UserPoolClientIdentityProvider,
 } from '@aws-cdk/aws-cognito';
 import { StringParameter } from '@aws-cdk/aws-ssm';
 
@@ -41,20 +41,34 @@ export class AuthStack extends Stack {
       supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
 
+    // commented out comment is waiting for https://github.com/aws/aws-cdk/pull/8622
+    // currently, the UserPoolDomainTarget has problems with duplicate node ids
+
     userPool.addDomain('Domain', {
+      // customDomain: {
+      //   certificate: Certificate.fromCertificateArn(this, 'Cert', Fn.importValue('CertificateArn')),
+      //   domainName: 'auth.clean.dev',
+      // },
       cognitoDomain: {
         domainPrefix: 'clean-auth',
       },
     });
 
+    // const hostedZone = HostedZone.fromLookup(this, 'Zone', {
+    //   domainName: 'clean.dev',
+    // });
+
+    // const recordProps: ARecordProps | AaaaRecordProps = {
+    //   target: RecordTarget.fromAlias(new UserPoolDomainTarget(domain)),
+    //   zone: hostedZone,
+    // };
+
+    // new ARecord(this, 'ARecord', recordProps);
+    // new AaaaRecord(this, 'AaaaRecord', recordProps);
+
     new CfnUserPoolGroup(this, 'AdminGroup', {
       userPoolId: userPool.userPoolId,
       groupName: 'Admins',
-    });
-
-    new CfnUserPoolUser(this, 'AdminUser', {
-      userPoolId: userPool.userPoolId,
-      username: 'martin@pacabytes.io',
     });
 
     new StringParameter(this, 'UserPoolIdParam', {

@@ -3,9 +3,9 @@ import { App } from '@aws-cdk/core';
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
 import { BIStack } from './stacks/BIStack';
-import { CertStack } from './stacks/CertStack';
 import { FrontStack } from './stacks/FrontStack';
 import { CmsStack } from './stacks/CmsStack';
+import { CertStack } from './stacks/CertStack';
 
 const app = new App();
 
@@ -16,21 +16,16 @@ const defaultProps = {
   },
 };
 
-new CertStack(app, 'CleanCert', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: 'us-east-1',
-  },
-});
+new CertStack(app, 'Cert', defaultProps);
 
-new BIStack(app, 'CleanBI', defaultProps);
+new AuthStack(app, 'Auth', defaultProps);
 
-new AuthStack(app, 'CleanAuth', defaultProps);
+new BIStack(app, 'Bi', defaultProps);
 
-new ApiStack(app, 'CleanApi', defaultProps);
+new ApiStack(app, 'Api', defaultProps);
 
-new FrontStack(app, 'CleanFront', defaultProps);
+new FrontStack(app, 'Frontend', defaultProps);
 
-new CmsStack(app, 'CleanCMS', defaultProps);
+new CmsStack(app, 'Cms', defaultProps);
 
 app.synth();

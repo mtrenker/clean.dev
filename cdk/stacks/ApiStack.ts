@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey,
+  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table, ITable } from '@aws-cdk/aws-dynamodb';
@@ -29,11 +29,14 @@ export class ApiStack extends Stack {
       schemaDefinitionFile: 'cdk/resources/schema.graphql',
       authorizationConfig: {
         defaultAuthorization: {
-          userPool,
-          defaultAction: UserPoolDefaultAction.ALLOW,
+          authorizationType: AuthorizationType.USER_POOL,
+          userPoolConfig: {
+            userPool,
+            defaultAction: UserPoolDefaultAction.ALLOW,
+          },
         },
         additionalAuthorizationModes: [{
-          apiKeyDesc: 'web client key',
+          authorizationType: AuthorizationType.API_KEY,
         }],
       },
     });

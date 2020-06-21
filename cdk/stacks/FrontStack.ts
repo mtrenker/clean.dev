@@ -1,5 +1,5 @@
 import {
-  Stack, StackProps, App, SecretValue, CfnOutput,
+  Stack, StackProps, App, SecretValue, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import {
@@ -9,17 +9,17 @@ import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
 import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
-
-import { StringParameter } from '@aws-cdk/aws-ssm';
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
 export class FrontStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const certificateArn = StringParameter.fromStringParameterName(this, 'CertificateArn', 'cleanDevCert');
+    const hostedZone = HostedZone.fromLookup(this, 'Zone', {
+      domainName: 'clean.dev',
+    });
 
-    const certificate = Certificate.fromCertificateArn(this, 'Certificate', certificateArn.stringValue) as Certificate;
+    const certificate = Certificate.fromCertificateArn(this, 'Cert', Fn.importValue('CertificateArn'));
 
     const param = BuildEnvironmentVariableType.PARAMETER_STORE;
     const build = new GitHubBuild(this, 'Build', {
@@ -36,12 +36,10 @@ export class FrontStack extends Stack {
     });
 
     const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate, {
-      aliases: ['clean.dev'],
+      aliases: ['clean.dev', '*.clean.dev'],
     });
 
-    const zone = HostedZone.fromLookup(this, 'HostedZone', { domainName: 'clean.dev' });
-
-    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Distribution', {
+    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Dist', {
       errorConfigurations: [{
         errorCode: 404,
         responseCode: 200,
@@ -66,18 +64,22 @@ export class FrontStack extends Stack {
 
     const recordProps: ARecordProps | AaaaRecordProps = {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cloudFrontDistribution)),
-      zone,
+      zone: hostedZone,
     };
 
-    new ARecord(this, 'CloudFrontARecord', recordProps);
-    new AaaaRecord(this, 'CloudFrontAaaaRecord', recordProps);
+    new ARecord(this, 'ARecord', recordProps);
+    new AaaaRecord(this, 'AaaaRecord', recordProps);
 
-    new CfnOutput(this, 'SiteURL', {
+    new CfnOutput(this, 'SiteUrl', {
       value: cloudFrontDistribution.domainName,
     });
 
-    new CfnOutput(this, 'StorybookURL', {
+    new CfnOutput(this, 'StorybookUrl', {
       value: build.storybookBucket.bucketWebsiteUrl,
+    });
+
+    new CfnOutput(this, 'CertificateArn', {
+      value: certificate.certificateArn,
     });
   }
 }
