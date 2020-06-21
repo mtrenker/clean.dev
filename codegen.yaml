@@ -1,10 +1,19 @@
 schema: cdk/resources/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
-  ./src/graphql/hooks.tsx:
+  ./globals.d.ts:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
+    config:
+      scalars:
+        AWSDate: string
+        AWSDateTime: string
+        AWSJSON: "{ [key: string]: any }"
+
+  ./src/graphql/hooks.tsx:
+    plugins:
+      - add: '/* eslint-disable */'
       - typescript-operations
       - typescript-react-apollo
     config:
