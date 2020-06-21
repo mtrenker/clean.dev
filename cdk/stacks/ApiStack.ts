@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType, KeyCondition,
+  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType, KeyCondition, FieldLogLevel,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table, ITable } from '@aws-cdk/aws-dynamodb';
@@ -26,6 +26,9 @@ export class ApiStack extends Stack {
 
     const api = new GraphQLApi(this, 'GraphQLApi', {
       name: 'prod.api.clean.dev',
+      logConfig: {
+        fieldLogLevel: FieldLogLevel.ALL
+      },
       schemaDefinitionFile: 'cdk/resources/schema.graphql',
       authorizationConfig: {
         defaultAuthorization: {
@@ -94,11 +97,23 @@ export class ApiStack extends Stack {
   }
 
   static addProjectsResolver(queryDataSource: DynamoDbDataSource): void {
-    const keyCondition = KeyCondition.beginsWith('id', "project-")
+    // const keyCondition = KeyCondition.beginsWith('id', 'project')
     queryDataSource.createResolver({
       fieldName: 'projects',
       typeName: 'Query',
-      requestMappingTemplate: MappingTemplate.dynamoDbQuery(keyCondition),
+      requestMappingTemplate: MappingTemplate.fromString(`
+        {
+          "version" : "2017-02-28",
+          "operation" : "Query",
+          "query":{
+            "expression": "pk = :user AND begins_with(id, :id)",
+            "expressionValues": {
+              ":id": $util.dynamodb.toDynamoDBJson("project-"),
+              ":user": $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
+            }
+          },
+        }
+      `),
       responseMappingTemplate: MappingTemplate.fromString(`
         {
           "items": $util.toJson($ctx.result.items),
