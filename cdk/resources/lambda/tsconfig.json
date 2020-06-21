@@ -1,0 +1,13 @@
+{
+  "references": [{
+    "path": "cms-content"
+  },{
+    "path": "cms-webhook"
+  },{
+    "path": "track-mutation"
+  }],
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false
+  }
+}
