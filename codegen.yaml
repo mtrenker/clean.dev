@@ -1,7 +1,7 @@
 schema: cdk/resources/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
-  ./globals.d.ts:
+  ./cdk/resources/lambda/mutations/graphql.d.ts:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
