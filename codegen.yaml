@@ -1,7 +1,7 @@
 schema: cdk/resources/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
-  ./cdk/resources/lambda/mutations/graphql.d.ts:
+  ./cdk/resources/lambda/mutations/graphql.ts:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
@@ -14,6 +14,7 @@ generates:
   ./src/graphql/hooks.tsx:
     plugins:
       - add: '/* eslint-disable */'
+      - typescript
       - typescript-operations
       - typescript-react-apollo
     config:

@@ -11,9 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.679.0",
-    "nanoid": "^2.1.11"
-  },
-  "devDependencies": {
-    "@types/nanoid": "^2.1.0"
+    "nanoid": "^3.1.10"
   }
 }

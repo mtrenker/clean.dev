@@ -1,11 +1,14 @@
 query getProjects {
   projects {
-    client
-    industry
-    description
-    startDate
-    endDate
-    methodologies
-    technologies
+    items {
+      client
+      industry
+      description
+      startDate
+      endDate
+      methodologies
+      technologies
+    }
+    nextToken
   }
 }

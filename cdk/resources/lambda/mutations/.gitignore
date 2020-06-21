@@ -1,3 +1,5 @@
 node_modules
-mutation.d.ts
-mutation.js
+mutations.d.ts
+mutations.js
+graphql.d.ts
+graphql.js

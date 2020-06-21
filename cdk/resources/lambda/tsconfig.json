@@ -4,7 +4,7 @@
   },{
     "path": "cms-webhook"
   },{
-    "path": "track-mutation"
+    "path": "mutations"
   }],
   "compilerOptions": {
     "composite": true,

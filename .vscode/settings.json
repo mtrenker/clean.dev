@@ -1,11 +1,11 @@
 {
   "files.exclude": {
     "**/*.tsbuildinfo": true,
-    "**/*.js": {
-      "when": "$(basename).ts"
-    },
-    "**/*.d.ts": {
-      "when": "$(basename).ts"
-    }
+    // "**/*.js": {
+    //   "when": "$(basename).ts"
+    // },
+    // "**/*.d.ts": {
+    //   "when": "$(basename).ts"
+    // }
   }
 }

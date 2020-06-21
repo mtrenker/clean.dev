@@ -13,6 +13,7 @@ type Query {
 
 type Mutation {
 	track(input: TrackingInput!): Tracking!
+  addProject(input: ProjectInput!): Project!
 }
 
 type Page @aws_api_key @aws_cognito_user_pools {
@@ -32,7 +33,7 @@ type Project {
 	industry: String!
 	description: String!
 	startDate: AWSDate!
-	endDate: AWSDate!
+	endDate: AWSDate
 	methodologies: [String!]!
 	technologies: [String!]!
 }
@@ -62,6 +63,17 @@ input TrackingInput {
 	description: String
 	startTime: AWSDateTime!
 	endTime: AWSDateTime!
+}
+
+input ProjectInput {
+  id: ID
+	client: String!
+	industry: String!
+	description: String!
+	startDate: AWSDate!
+	endDate: AWSDate
+	methodologies: [String!]!
+	technologies: [String!]!
 }
 
 input TrackingQuery {

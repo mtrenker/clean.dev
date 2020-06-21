@@ -1,5 +1,5 @@
 {
   "compilerOptions": {
-    "composite": true,
-  }
+    "composite": true
+  },
 }

@@ -98,7 +98,10 @@ export class BIStack extends Stack {
       description: 'Delivery stream for BI',
       eventBusName: eventBus.eventBusName,
       eventPattern: {
-        source: ['clean.api.mutation.track'],
+        source: [
+          'tracking',
+          'projects',
+        ],
       },
       targets: [{
         id: 'CatchAll',

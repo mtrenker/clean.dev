@@ -49,14 +49,28 @@ export class ApiStack extends Stack {
     });
 
     const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table);
-    const trackFunction = this.trackFunction(table, eventBusArn, eventBusName);
+    const mutationsFunction = this.mutationsFunction(table, eventBusArn, eventBusName);
+
+    const mutationsSource = api.addLambdaDataSource('TrackSource', 'TrackSOurce', mutationsFunction);
 
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addProjectsResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
-    ApiStack.trackResolver(api, trackFunction);
 
-    table.grantReadWriteData(trackFunction);
+    mutationsSource.createResolver({
+      fieldName: 'track',
+      typeName: 'Mutation',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    });
+    mutationsSource.createResolver({
+      fieldName: 'addProject',
+      typeName: 'Mutation',
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    });
+
+    table.grantReadWriteData(mutationsFunction);
 
     new StringParameter(this, 'ApiKeyParam', {
       stringValue: apiKey.attrApiKey,
@@ -137,15 +151,15 @@ export class ApiStack extends Stack {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private trackFunction(table: ITable, eventBusArn: string, eventBusName: string): Function {
-    const trackMutationRole = new Role(this, 'TrackMutationRole', {
+  private mutationsFunction(table: ITable, eventBusArn: string, eventBusName: string): Function {
+    const mutationsRole = new Role(this, 'MutationsRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
     });
 
-    trackMutationRole.addToPolicy(new PolicyStatement({
+    mutationsRole.addToPolicy(new PolicyStatement({
       resources: [eventBusArn],
       actions: ['events:PutEvents'],
       effect: Effect.ALLOW,
@@ -155,25 +169,11 @@ export class ApiStack extends Stack {
       code: Code.fromAsset('cdk/resources/lambda/mutations'),
       handler: 'mutations.handler',
       runtime: Runtime.NODEJS_12_X,
-      role: trackMutationRole,
+      role: mutationsRole,
       environment: {
         TABLE_NAME: table.tableName,
         EVENT_BUS_NAME: eventBusName,
       },
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  static trackResolver(api: GraphQLApi, trackFunction: Function): void {
-    const trackSource = api.addLambdaDataSource(
-      'TrackSource',
-      'TrackSOurce', trackFunction,
-    );
-    trackSource.createResolver({
-      fieldName: 'track',
-      typeName: 'Mutation',
-      requestMappingTemplate: MappingTemplate.lambdaRequest(),
-      responseMappingTemplate: MappingTemplate.lambdaResult(),
     });
   }
 }
