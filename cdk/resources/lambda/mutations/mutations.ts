@@ -10,14 +10,34 @@ interface MutationEvent {
   info: {
     fieldName: string;
   };
-  arguments: {
-    input: TrackingInput | ProjectInput;
-  };
   identity: {
     sub: string;
     username: string;
   };
+  arguments: {
+    input: TrackingInput | ProjectInput
+  }
 }
+
+interface TrackEvent extends MutationEvent {
+  info: {
+    fieldName: 'track'
+  };
+  arguments: {
+    input: TrackingInput;
+  };
+}
+
+interface AddProjectEvent extends MutationEvent {
+  info: {
+    fieldName: 'addProject'
+  };
+  arguments: {
+    input: ProjectInput;
+  };
+}
+
+type EventType = AddProjectEvent | TrackEvent;
 
 interface DynamoDBItem {
   pk: string;
@@ -36,7 +56,7 @@ interface ProjectItem extends DynamoDBItem {
   technologies: string[];
   methodologies: string[];
   startDate: string;
-  endDate: string;
+  endDate?: string|null;
   description: string;
 }
 
@@ -48,14 +68,14 @@ interface IdentityProps {
 const documentClient = new DynamoDB.DocumentClient();
 const eventBridge = new EventBridge();
 
-async function track(event: MutationEvent): Promise<Tracking> {
+async function track(event: TrackEvent): Promise<Tracking> {
   const { identity, arguments: { input } } = event;
 
   const pk = `user-${identity?.sub}`;
 
   const {
     projectId, startTime, endTime, description,
-  } = input as TrackingInput;
+  } = input;
   const startDate = new Date(startTime);
   const id = `tracking-${projectId}-${startDate.toISOString()}`;
 
@@ -94,7 +114,7 @@ async function track(event: MutationEvent): Promise<Tracking> {
   }
 }
 
-async function addProject(event: MutationEvent): Promise<Project> {
+async function addProject(event: AddProjectEvent): Promise<Project> {
   const { identity, arguments: { input } } = event;
   const pk = `user-${identity?.sub}`;
   const projectId = nanoid(6);
@@ -107,7 +127,7 @@ async function addProject(event: MutationEvent): Promise<Project> {
     description,
     startDate,
     endDate,
-  } = input as ProjectInput;
+  } = input;
   const id = `project-${projectId}`;
 
   const projectItem: ProjectItem = {
@@ -149,14 +169,14 @@ async function addProject(event: MutationEvent): Promise<Project> {
   }
 }
 
-export const handler: Handler<MutationEvent> = async (event) => {
+export const handler: Handler<EventType> = async (event) => {
   const { info } = event;
 
   switch (info.fieldName) {
     case 'track':
-      return track(event);
+      return track(event as TrackEvent);
     case 'addProject':
-      return addProject(event);
+      return addProject(event as AddProjectEvent);
     default:
       return 'not implemented';
   }

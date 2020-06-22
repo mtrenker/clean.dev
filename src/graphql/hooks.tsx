@@ -103,7 +103,7 @@ export type PageInput = {
 export type TrackingInput = {
   id?: Maybe<Scalars['ID']>;
   projectId: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
   endTime: Scalars['AWSDateTime'];
 };

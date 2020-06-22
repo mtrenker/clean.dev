@@ -60,7 +60,7 @@ input PageInput {
 input TrackingInput {
   id: ID
 	projectId: String!
-	description: String
+	description: String!
 	startTime: AWSDateTime!
 	endTime: AWSDateTime!
 }
