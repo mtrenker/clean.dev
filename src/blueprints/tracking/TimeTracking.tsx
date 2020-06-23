@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useState } from 'react';
 import { css } from '@emotion/core';
 import { format } from 'date-fns';
 
-import { TimeTracker } from '../../tracking/TimeTracker';
+import { TimeTracker } from '../../components/tracking/TimeTracker';
 import {
   useGetTrackingOverviewQuery,
   useTrackMutation,
@@ -10,7 +10,7 @@ import {
   GetTrackingOverviewDocument,
   GetTrackingOverviewQuery,
   Tracking,
-} from '../../../graphql/hooks';
+} from '../../graphql/hooks';
 
 const timeTrackingCss = css`
   display: grid;

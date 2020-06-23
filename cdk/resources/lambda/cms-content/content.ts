@@ -3,7 +3,6 @@ import { SNSHandler } from 'aws-lambda';
 import { BLOCKS } from '@contentful/rich-text-types';
 import { createClient } from 'contentful';
 
-
 interface CmsNode {
   nodeType: string;
   data: {
@@ -18,9 +17,11 @@ interface CmsNode {
   content: CmsNode[]
 }
 
-interface WidgetEntry {
+interface Component {
   name: string;
-  type: string;
+}
+interface Blueprint {
+  name: string;
 }
 
 interface Localized<T> {
@@ -76,8 +77,8 @@ export const handler: SNSHandler = async (event) => {
 
   const promises = page.fields.content['en-US'].content.map(async (node, index) => {
     if (node.nodeType === BLOCKS.EMBEDDED_ENTRY) {
-      const entry = await contentfulClient.getEntry<WidgetEntry>(node.data.target?.sys.id ?? 'no-id');
-      page.fields.content['en-US'].content[index] = { nodeType: entry.fields.type, data: {}, content: [] };
+      const entry = await contentfulClient.getEntry<Component|Blueprint>(node.data.target?.sys.id ?? 'no-id');
+      page.fields.content['en-US'].content[index] = { nodeType: entry.fields.name, data: {}, content: [] };
     }
   });
 
