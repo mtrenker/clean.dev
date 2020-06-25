@@ -124,6 +124,19 @@ export type TrackingQuery = {
   date: Scalars['String'];
 };
 
+export type AddProjectMutationVariables = Exact<{
+  input: ProjectInput;
+}>;
+
+
+export type AddProjectMutation = (
+  { __typename?: 'Mutation' }
+  & { addProject: (
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
+  ) }
+);
+
 export type TrackMutationVariables = Exact<{
   input: TrackingInput;
 }>;
@@ -182,6 +195,51 @@ export type GetTrackingOverviewQuery = (
 );
 
 
+export const AddProjectDocument = gql`
+    mutation addProject($input: ProjectInput!) {
+  addProject(input: $input) {
+    id
+    client
+    industry
+    description
+    startDate
+    endDate
+    methodologies
+    technologies
+  }
+}
+    `;
+export type AddProjectMutationFn = ApolloReactCommon.MutationFunction<AddProjectMutation, AddProjectMutationVariables>;
+export type AddProjectComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddProjectMutation, AddProjectMutationVariables>, 'mutation'>;
+
+    export const AddProjectComponent = (props: AddProjectComponentProps) => (
+      <ApolloReactComponents.Mutation<AddProjectMutation, AddProjectMutationVariables> mutation={AddProjectDocument} {...props} />
+    );
+    
+
+/**
+ * __useAddProjectMutation__
+ *
+ * To run a mutation, you first call `useAddProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addProjectMutation, { data, loading, error }] = useAddProjectMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddProjectMutation, AddProjectMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, baseOptions);
+      }
+export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutation>;
+export type AddProjectMutationResult = ApolloReactCommon.MutationResult<AddProjectMutation>;
+export type AddProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
 export const TrackDocument = gql`
     mutation track($input: TrackingInput!) {
   track(input: $input) {

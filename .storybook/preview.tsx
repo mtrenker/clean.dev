@@ -1,13 +1,15 @@
 import React, { FC } from "react";
-import { addDecorator } from "@storybook/react"
+import { css } from "@emotion/core";
 import StoryRouter from 'storybook-react-router';
+import { addDecorator } from "@storybook/react"
 import { ThemeProvider, } from "emotion-theming";
 import { withActions } from "@storybook/addon-actions"
 import { withKnobs } from "@storybook/addon-knobs"
+import { ApolloProvider } from "@apollo/react-hooks";
 
 import { theme } from "../src/themes/default"
-import { GlobalStyle } from "../src/components/layout/GlobalStyle"
-import { css } from "@emotion/core";
+import { GlobalStyle } from "../src/components/layout/GlobalStyle";
+import { mockClient} from "../src/lib/graphql";
 
 addDecorator(StoryRouter());
 addDecorator(withActions());
@@ -31,9 +33,17 @@ const centeredCss = css`
   }
 `;
 
+const borderCss = css`
+border: 1px solid #000000;
+padding: 10px;
+background: #ffffff;
+`;
+
 const Centered: FC = ({ children }) => (
   <div css={centeredCss}>
+    <div css={borderCss}>
     {children}
+    </div>
   </div>
 );
 
@@ -43,5 +53,12 @@ const centered = (storyFn) => (
   </Centered>
 )
 
+const withApolloMockClient = (storyFn) => (
+  <ApolloProvider client={mockClient}>
+    {storyFn()}
+  </ApolloProvider>
+)
+
 addDecorator(withTheme);
 addDecorator(centered);
+addDecorator(withApolloMockClient)
