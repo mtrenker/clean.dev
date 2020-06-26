@@ -1,12 +1,23 @@
 import React, { FC, HTMLProps } from 'react';
+import { css } from '@emotion/core';
 
-export const Input: FC<HTMLProps<HTMLInputElement>> = ({
-  id, name, value, ref,
+interface InputProps extends HTMLProps<HTMLInputElement> {
+  inputRef?: any
+}
+
+const inputCss = css`
+  width: 100%;
+`;
+
+export const Input: FC<InputProps> = ({
+  id, name, value, inputRef, placeholder,
 }) => (
   <input
+    css={inputCss}
     id={id}
     name={name}
     value={value}
-    ref={ref}
+    ref={inputRef}
+    placeholder={placeholder}
   />
 );

@@ -2,10 +2,14 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import { useForm } from 'react-hook-form';
 
-import { Input } from '../../components/form/Input';
-import { DatePicker } from '../../components/form/DatePicker';
-import { useAddProjectMutation } from '../../graphql/hooks';
-import { ProjectInput } from '../../../cdk/resources/lambda/mutations/graphql';
+import { Input } from '../form/Input';
+import { DatePicker } from '../form/DatePicker';
+import { ProjectInput } from '../../graphql/hooks';
+import { TextArea } from '../form/TextArea';
+
+interface ProjectFormProps {
+  onSubmit: (values: ProjectInput) => void
+}
 
 const formCss = css`
   display: grid;
@@ -14,6 +18,10 @@ const formCss = css`
     "description description description description" auto
     "methodologies methodologies technologies technologies" auto
   ;
+
+  label span {
+    display: none;
+  }
 
   .client {
     grid-area: client;
@@ -38,57 +46,38 @@ const formCss = css`
   }
 `;
 
-export const ProjectForm: FC = () => {
-  const [mutate] = useAddProjectMutation();
+export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
   const { register, handleSubmit, setValue } = useForm<ProjectInput>();
-
-  const onSubmit = (input: ProjectInput) => {
-    console.log(input);
-    mutate({
-      variables: {
-        input: {
-          id: '',
-          client: '',
-          description: '',
-          industry: '',
-          methodologies: [''],
-          technologies: [''],
-          startDate: '',
-          endDate: '',
-        },
-      },
-    });
-  };
 
   return (
     <form action="#" onSubmit={handleSubmit(onSubmit)} css={formCss}>
       <label className="client" htmlFor="client">
         <span>Client Name</span>
-        <Input name="client" id="client" ref={register} />
+        <Input name="client" placeholder="Client" id="client" inputRef={register} />
       </label>
       <label className="industry" htmlFor="industry">
-        <span>Client Name</span>
-        <Input name="industry" id="industry" ref={register} />
+        <span>Industry</span>
+        <Input name="industry" placeholder="Industry" id="industry" inputRef={register} />
       </label>
       <label className="startDate" htmlFor="startDate">
         <span>Start Date</span>
-        <DatePicker onChange={(date) => setValue('startDate', date?.toISOString() ?? '')} />
+        <DatePicker placeholderText="From" onChange={(date) => setValue('startDate', date?.toISOString() ?? '')} />
       </label>
       <label className="endDate" htmlFor="endDate">
         <span>End Date</span>
-        <DatePicker onChange={(date) => setValue('endDate', date?.toISOString())} />
+        <DatePicker placeholderText="To" onChange={(date) => setValue('endDate', date?.toISOString())} />
       </label>
       <label className="description" htmlFor="description">
         <span>Description</span>
-        <textarea name="description" id="description" ref={register} />
+        <TextArea name="description" placeholder="Description" id="description" inputRef={register} />
       </label>
       <label className="methodologies" htmlFor="methodologies">
         <span>methodologies</span>
-        <textarea ref={register} />
+        <TextArea name="methodologies" placeholder="Methodologies" inputRef={register} />
       </label>
       <label className="technologies" htmlFor="technologies">
         <span>Technologies</span>
-        <textarea ref={register} />
+        <TextArea name="technologies" placeholder="Technologies" inputRef={register} />
       </label>
       <button type="submit">Submit</button>
     </form>
