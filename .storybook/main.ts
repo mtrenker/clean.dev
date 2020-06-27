@@ -14,17 +14,6 @@ module.exports = {
             test: /\.tsx?$/,
             exclude: [path.resolve(__dirname, 'node_modules')],
             loader: 'babel-loader',
-          },{
-            test: /\.mdx?$/,
-            exclude: [path.resolve(__dirname, 'node_modules')],
-            use: [
-              {
-                loader: 'react-docgen-typescript-loader',
-                options: {
-                  tsconfigPath: path.resolve(__dirname, "../tsconfig.json")
-                }
-              }
-            ]
           }, {
             test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
             use: [
@@ -57,6 +46,7 @@ module.exports = {
     '@storybook/addon-actions/register',
     '@storybook/addon-knobs/register',
     '@storybook/addon-viewport/register',
+    '@storybook/addon-a11y/register',
     '@storybook/addon-docs',
     {
       name: '@storybook/addon-storysource',
