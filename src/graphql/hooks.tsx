@@ -173,7 +173,7 @@ export type GetProjectsQuery = (
     & Pick<ProjectConnection, 'nextToken'>
     & { items: Array<(
       { __typename?: 'Project' }
-      & Pick<Project, 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
+      & Pick<Project, 'id' | 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
     )> }
   ) }
 );
@@ -326,6 +326,7 @@ export const GetProjectsDocument = gql`
     query getProjects {
   projects {
     items {
+      id
       client
       industry
       description

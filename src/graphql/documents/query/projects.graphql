@@ -1,6 +1,7 @@
 query getProjects {
   projects {
     items {
+      id
       client
       industry
       description

@@ -2,14 +2,14 @@ import React, { FC, MouseEvent, useState } from 'react';
 import { css } from '@emotion/core';
 import { format } from 'date-fns';
 
-import { TimeTracker } from '../../components/tracking/TimeTracker';
+import { TimeTracker, TimeTrackerProjects } from '../../components/tracking/TimeTracker';
 import {
   useGetTrackingOverviewQuery,
   useTrackMutation,
-  GetTrackingOverviewQueryVariables,
   GetTrackingOverviewDocument,
   GetTrackingOverviewQuery,
   Tracking,
+  useGetProjectsQuery,
 } from '../../graphql/hooks';
 
 const timeTrackingCss = css`
@@ -33,13 +33,22 @@ const timeTrackingCss = css`
 
 export const TimeTracking: FC = () => {
   const [trackingToEdit, setTrackingToEdit] = useState<Tracking | undefined>(undefined);
-  const queryVariables: GetTrackingOverviewQueryVariables = {
-    query: {
-      date: '2020',
-      project: '123', // consistent fake id until project data handling is implemented
+  const { data: projectData } = useGetProjectsQuery();
+  const projects = projectData?.projects.items.reduce((prev, cur) => {
+    prev.push({
+      id: cur.id,
+      client: cur.client,
+    });
+    return prev;
+  }, [] as TimeTrackerProjects[]) ?? [];
+  const { data: trackingData, error } = useGetTrackingOverviewQuery({
+    variables: {
+      query: {
+        date: '2020',
+        project: projectData?.projects.items[0].id ?? '',
+      },
     },
-  };
-  const { data, error } = useGetTrackingOverviewQuery({ variables: queryVariables });
+  });
   const [mutate, result] = useTrackMutation();
 
   const onCancelEdit = () => {
@@ -51,10 +60,16 @@ export const TimeTracking: FC = () => {
     setTrackingToEdit(tracking);
   };
 
-  const onSubmit = (e: MouseEvent<HTMLFormElement>, startTime: string, endTime: string, description: string) => {
+  const onSubmit = (
+    e: MouseEvent<HTMLFormElement>,
+    projectId: string,
+    startTime: string,
+    endTime: string,
+    description: string,
+  ) => {
     const variables = {
       input: {
-        projectId: '123',
+        projectId,
         startTime,
         endTime,
         description,
@@ -78,7 +93,7 @@ export const TimeTracking: FC = () => {
           try {
             const queryResult = proxy.readQuery<GetTrackingOverviewQuery>({
               query: GetTrackingOverviewDocument,
-              variables: queryVariables,
+              variables,
             });
             if (queryResult) {
               const existingIndex = queryResult.trackings.items.findIndex((tracking) => tracking.id === track.id);
@@ -115,7 +130,7 @@ export const TimeTracking: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {data && data.trackings?.items?.map((tracking) => (
+            {trackingData && trackingData.trackings?.items?.map((tracking) => (
               <tr key={tracking.id} className={tracking.id === trackingToEdit?.id ? 'active' : ''}>
                 <td>{tracking.description}</td>
                 <td>{format(new Date(tracking.startTime), 'dd.MM.yyyy HH:mm')}</td>
@@ -131,7 +146,7 @@ export const TimeTracking: FC = () => {
           <tfoot />
         </table>
       </div>
-      <TimeTracker onCancelEdit={onCancelEdit} onSubmit={onSubmit} tracking={trackingToEdit} />
+      <TimeTracker projects={projects} onCancelEdit={onCancelEdit} onSubmit={onSubmit} tracking={trackingToEdit} />
     </div>
   );
 };

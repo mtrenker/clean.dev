@@ -122,7 +122,7 @@ export class ApiStack extends Stack {
             "expression": "pk = :user AND begins_with(id, :id)",
             "expressionValues": {
               ":id": $util.dynamodb.toDynamoDBJson("project-"),
-              ":user": $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
+              ":user": $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub")
             }
           },
         }

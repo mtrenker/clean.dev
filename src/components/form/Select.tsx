@@ -1,3 +1,9 @@
 import React, { HTMLProps, FC } from 'react';
 
-export const Select: FC<HTMLProps<HTMLSelectElement>> = ({ children }) => (<select>{children}</select>);
+interface SelectProps extends HTMLProps<HTMLSelectElement> {
+  inputRef?: any
+}
+
+export const Select: FC<SelectProps> = ({ inputRef, children }) => (
+  <select ref={inputRef}>{children}</select>
+);

@@ -6,18 +6,35 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { Tracking } from '../../graphql/hooks';
+import { Select } from '../form/Select';
+import { Option } from '../form/Option';
 
-interface TimeTrackerProps {
+export interface TimeTrackerProjects {
+  id: string;
+  client: string;
+}
+
+export interface TimeTrackerProps {
   tracking?: Tracking,
-  onSubmit: (e: MouseEvent<HTMLFormElement>, startTime: string, endTime: string, description: string) => void;
+  projects: TimeTrackerProjects[];
+  onSubmit: (
+    e: MouseEvent<HTMLFormElement>,
+    client: string,
+    startTime: string,
+    endTime: string,
+    description: string
+  ) => void;
   onCancelEdit?: () => void;
 }
 
-export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, tracking }) => {
+export const TimeTracker: FC<TimeTrackerProps> = ({
+  onSubmit, onCancelEdit, tracking, projects,
+}) => {
   const isEdit = !!tracking;
   const [startTime, setStartTime] = useState<Date|null>(new Date());
   const [endTime, setEndTime] = useState<Date|null>(new Date());
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const projectRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     if (tracking) {
@@ -32,6 +49,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, trac
   const formCss = css`
     display: grid;
     grid-template:
+      "project project project" max-content
       "labelFrom labelTo quickSelect" max-content
       "datePickerFrom datePickerTo quickSelect" max-content
       "description description quickSelect" max-content
@@ -40,6 +58,10 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, trac
       / 1fr 1fr 1fr
     ;
     gap: 10px;
+
+    .project {
+      grid-area: project;
+    }
 
     .datePickerFrom {
       grid-area: datePickerFrom;
@@ -78,8 +100,9 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, trac
     if (!startTime || !endTime) {
       throw new Error(`startTime and endTime must be valid dates. ${startTime} and ${endTime} given.`);
     }
+    const projectId = projectRef.current?.value ?? '';
     const description = descriptionRef.current?.value ?? '';
-    onSubmit(e, startTime.toISOString(), endTime.toISOString(), description);
+    onSubmit(e, projectId, startTime.toISOString(), endTime.toISOString(), description);
   };
 
   const onCancelEditProxy = (e: MouseEvent<HTMLButtonElement>) => {
@@ -119,6 +142,14 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, onCancelEdit, trac
 
   return (
     <form onSubmit={onSubmitProxy} css={formCss}>
+      <label css={{ gridArea: 'labelFrom' }} htmlFor="from">From:</label>
+      <div className="project">
+        <Select inputRef={projectRef}>
+          {projects.map((project) => (
+            <Option key={project.id} value={project.id}>{project.client}</Option>
+          ))}
+        </Select>
+      </div>
       <label css={{ gridArea: 'labelFrom' }} htmlFor="from">From:</label>
       <div className="datePickerFrom">
         <DatePicker
