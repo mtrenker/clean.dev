@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
 import { Input } from '../form/Input';
 import { DatePicker } from '../form/DatePicker';
@@ -47,7 +47,7 @@ const formCss = css`
 `;
 
 export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
-  const { register, handleSubmit, setValue } = useForm<ProjectInput>();
+  const { register, handleSubmit, control } = useForm<ProjectInput>();
 
   return (
     <form action="#" onSubmit={handleSubmit(onSubmit)} css={formCss}>
@@ -61,11 +61,27 @@ export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
       </label>
       <label className="startDate" htmlFor="startDate">
         <span>Start Date</span>
-        <DatePicker placeholderText="From" onChange={(date) => setValue('startDate', date?.toISOString() ?? '')} />
+        <Controller
+          name="startDate"
+          as={DatePicker}
+          control={control}
+          placeholderText="From"
+          onChange={([selected]) => selected}
+          defaultValue={new Date()}
+          valueName="selected"
+        />
       </label>
       <label className="endDate" htmlFor="endDate">
         <span>End Date</span>
-        <DatePicker placeholderText="To" onChange={(date) => setValue('endDate', date?.toISOString())} />
+        <Controller
+          name="endDate"
+          as={DatePicker}
+          control={control}
+          placeholderText="From"
+          onChange={([selected]) => selected}
+          defaultValue={new Date()}
+          valueName="selected"
+        />
       </label>
       <label className="description" htmlFor="description">
         <span>Description</span>

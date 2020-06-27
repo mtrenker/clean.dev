@@ -5,21 +5,21 @@ scalar AWSDateTime
 scalar AWSJSON
 
 type Query {
-	page(input: PageInput!): Page
+  page(input: PageInput!): Page
   @aws_api_key @aws_cognito_user_pools
-	projects: ProjectConnection!
+  projects: ProjectConnection!
   trackings(query: TrackingQuery): TrackingConnection!
 }
 
 type Mutation {
-	track(input: TrackingInput!): Tracking!
+  track(input: TrackingInput!): Tracking!
   addProject(input: ProjectInput!): Project!
 }
 
 type Page @aws_api_key @aws_cognito_user_pools {
-	slug: String!
-	title: String!
-	content: String!
+  slug: String!
+  title: String!
+  content: String!
 }
 
 type ProjectConnection {
@@ -28,14 +28,14 @@ type ProjectConnection {
 }
 
 type Project {
-	id: ID!
-	client: String!
-	industry: String!
-	description: String!
-	startDate: AWSDate!
-	endDate: AWSDate
-	methodologies: [String!]!
-	technologies: [String!]!
+  id: ID!
+  client: String!
+  industry: String!
+  description: String!
+  startDate: AWSDate!
+  endDate: AWSDate
+  methodologies: [String!]!
+  technologies: [String!]!
 }
 
 type TrackingConnection {
@@ -44,36 +44,36 @@ type TrackingConnection {
 }
 
 type Tracking {
-	id: ID!
-	project: Project
-	description: String!
-	startTime: AWSDateTime!
-	endTime: AWSDateTime!
+  id: ID!
+  project: Project
+  description: String!
+  startTime: AWSDateTime!
+  endTime: AWSDateTime!
 }
 
 # INPUTS
 
 input PageInput {
-	slug: String!
+  slug: String!
 }
 
 input TrackingInput {
   id: ID
-	projectId: String!
-	description: String!
-	startTime: AWSDateTime!
-	endTime: AWSDateTime!
+  projectId: String!
+  description: String!
+  startTime: AWSDateTime!
+  endTime: AWSDateTime!
 }
 
 input ProjectInput {
   id: ID
-	client: String!
-	industry: String!
-	description: String!
-	startDate: AWSDate!
-	endDate: AWSDate
-	methodologies: [String!]!
-	technologies: [String!]!
+  client: String!
+  industry: String!
+  description: String!
+  startDate: AWSDate!
+  endDate: AWSDate
+  methodologies: [String!]!
+  technologies: [String!]!
 }
 
 input TrackingQuery {
