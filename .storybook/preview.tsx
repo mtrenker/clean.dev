@@ -39,20 +39,6 @@ padding: 10px;
 background: #ffffff;
 `;
 
-const Centered: FC = ({ children }) => (
-  <div css={centeredCss}>
-    <div css={borderCss}>
-    {children}
-    </div>
-  </div>
-);
-
-const centered = (storyFn) => (
-  <Centered>
-    {storyFn()}
-  </Centered>
-)
-
 const withApolloMockClient = (storyFn) => (
   <ApolloProvider client={mockClient}>
     {storyFn()}
@@ -60,5 +46,4 @@ const withApolloMockClient = (storyFn) => (
 )
 
 addDecorator(withTheme);
-addDecorator(centered);
 addDecorator(withApolloMockClient)
