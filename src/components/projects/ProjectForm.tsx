@@ -66,7 +66,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
           as={DatePicker}
           control={control}
           placeholderText="From"
-          onChange={([selected]) => selected}
+          onChange={([selected]: Date[]) => selected}
           defaultValue={new Date()}
           valueName="selected"
         />
