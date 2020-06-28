@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useState } from 'react';
 import { css } from '@emotion/core';
 import { format } from 'date-fns';
 
-import { TimeTracker, TimeTrackerProjects } from '../../components/tracking/TimeTracker';
+import { TimeTracker, TimeTrackerProjects } from '../TimeTracker';
 import {
   useTrackMutation,
   Tracking,

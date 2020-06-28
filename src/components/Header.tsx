@@ -3,8 +3,8 @@ import { css } from '@emotion/core';
 
 import { Link } from 'react-router-dom';
 import { Container, container } from './Container';
-import { breakPoints } from '../../themes/default';
-import { Login } from '../auth/Login';
+import { breakPoints } from '../themes/default';
+import { Login } from './Login';
 
 export const Header: FC = ({ children }) => {
   const header = css`

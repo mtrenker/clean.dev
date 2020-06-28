@@ -140,19 +140,19 @@ export const TimeSheet: FC = () => {
       <div css={headerStyle}>
         <h1>TimeSheet</h1>
         <address>
-          Martin Trenker
+          Max Mustermann
           <br />
-          Philipp-Loewenfeld-Str. 63
+          Muster Straße 22
           <br />
-          80339 München
+          12345 Musterhausen
         </address>
       </div>
       <div>
-        Kunde: Interhyp AG
+        Kunde: Muster Kunde
         <br />
         {`Monat: ${format(new Date(), 'MM.u')}`}
         <br />
-        Ort: München
+        Ort: Musterhausen
       </div>
       <table css={tableStyle}>
         <thead>
@@ -217,16 +217,16 @@ export const TimeSheet: FC = () => {
       </table>
       <div css={signatureStyles}>
         <div className="date">
-          München, den
+          Musterhausen, den
         </div>
         <div className="signature">
-          Martin Trenker
+          Max Mustermann
           <br />
           (Auftragnehmer)
         </div>
         <br />
         <div className="date">
-          München, den
+          Musterhausen, den
         </div>
         <div className="signature">
           <br />

@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGetPageQuery } from '../graphql/hooks';
-import { Header } from '../components/layout/Header';
-import { Container } from '../components/layout/Container';
-import { Footer } from '../components/layout/Footer';
+import { Header } from '../components/Header';
+import { Container } from '../components/Container';
+import { Footer } from '../components/Footer';
 import { mapWidgets } from '../lib/contentful';
 
 export const Page: FC = () => {

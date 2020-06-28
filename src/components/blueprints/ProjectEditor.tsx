@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { formatISO } from 'date-fns';
 
-import { ProjectForm } from '../../components/projects/ProjectForm';
+import { ProjectForm } from '../ProjectForm';
 import { ProjectInput } from '../../../cdk/resources/lambda/mutations/graphql';
 import { useAddProjectMutation } from '../../graphql/hooks';
 

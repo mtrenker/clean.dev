@@ -4,9 +4,9 @@ import React, {
 import { css } from '@emotion/core';
 import { useHistory } from 'react-router-dom';
 
-import { signIn, signOut, getCleanUser } from '../../lib/auth';
-import { UserContext } from '../../context/UserContext';
-import { LoadingSpinner } from '../layout/LoadingSpinner';
+import { signIn, signOut, getCleanUser } from '../lib/auth';
+import { UserContext } from '../context/UserContext';
+import { LoadingSpinner } from './LoadingSpinner';
 
 const input = css`
   border: 1px solid #CCC;
@@ -47,7 +47,6 @@ export const Login: FC = () => {
     await signOut();
     setUser(null);
   };
-
 
   if (user) {
     return (

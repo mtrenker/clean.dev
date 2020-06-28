@@ -4,12 +4,11 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { ThemeProvider } from 'emotion-theming';
 
 import { Page } from '../pages/Page';
-import { GlobalStyle } from './layout/GlobalStyle';
+import { GlobalStyle } from './GlobalStyle';
 import { theme } from '../themes/default';
 import { client } from '../lib/graphql';
 import { UserContext } from '../context/UserContext';
 import { CleanUser, getUser, getCleanUser } from '../lib/auth';
-
 
 export const Root: FC = () => {
   const [user, setUser] = useState<CleanUser|null>(null);

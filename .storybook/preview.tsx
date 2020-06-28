@@ -8,7 +8,7 @@ import { withKnobs } from "@storybook/addon-knobs"
 import { ApolloProvider } from "@apollo/react-hooks";
 
 import { theme } from "../src/themes/default"
-import { GlobalStyle } from "../src/components/layout/GlobalStyle";
+import { GlobalStyle } from "../src/components/GlobalStyle";
 import { mockClient} from "../src/lib/graphql";
 
 addDecorator(StoryRouter());
