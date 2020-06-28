@@ -8,7 +8,7 @@ import { ProjectInput } from '../../graphql/hooks';
 import { TextArea } from '../form/TextArea';
 
 interface ProjectFormProps {
-  onSubmit: (values: ProjectInput) => void
+  onSubmit: (values: ProjectInput) => void;
 }
 
 const formCss = css`

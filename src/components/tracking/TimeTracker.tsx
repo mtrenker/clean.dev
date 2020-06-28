@@ -1,5 +1,5 @@
 import React, {
-  FC, useState, useRef, MouseEvent, useEffect,
+  FC, useState, useRef, MouseEvent, useEffect, FormEvent,
 } from 'react';
 import { css } from '@emotion/core';
 import DatePicker from 'react-datepicker';
@@ -17,6 +17,7 @@ export interface TimeTrackerProjects {
 export interface TimeTrackerProps {
   tracking?: Tracking,
   projects: TimeTrackerProjects[];
+  onChangeProject: (projectId: string) => void;
   onSubmit: (
     e: MouseEvent<HTMLFormElement>,
     client: string,
@@ -28,7 +29,7 @@ export interface TimeTrackerProps {
 }
 
 export const TimeTracker: FC<TimeTrackerProps> = ({
-  onSubmit, onCancelEdit, tracking, projects,
+  onSubmit, onCancelEdit, tracking, projects, onChangeProject,
 }) => {
   const isEdit = !!tracking;
   const [startTime, setStartTime] = useState<Date|null>(new Date());
@@ -95,6 +96,11 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
     }
   };
 
+  const onChangeProjectProxy = (e: FormEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    onChangeProject(e.currentTarget.value);
+  };
+
   const onSubmitProxy = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!startTime || !endTime) {
@@ -144,7 +150,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
     <form onSubmit={onSubmitProxy} css={formCss}>
       <label css={{ gridArea: 'labelFrom' }} htmlFor="from">From:</label>
       <div className="project">
-        <Select inputRef={projectRef}>
+        <Select onChange={onChangeProjectProxy} inputRef={projectRef}>
           {projects.map((project) => (
             <Option key={project.id} value={project.id}>{project.client}</Option>
           ))}

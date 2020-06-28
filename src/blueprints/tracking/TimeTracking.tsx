@@ -4,12 +4,10 @@ import { format } from 'date-fns';
 
 import { TimeTracker, TimeTrackerProjects } from '../../components/tracking/TimeTracker';
 import {
-  useGetTrackingOverviewQuery,
   useTrackMutation,
-  GetTrackingOverviewDocument,
-  GetTrackingOverviewQuery,
   Tracking,
   useGetProjectsQuery,
+  useGetTrackingOverviewLazyQuery,
 } from '../../graphql/hooks';
 
 const timeTrackingCss = css`
@@ -33,7 +31,26 @@ const timeTrackingCss = css`
 
 export const TimeTracking: FC = () => {
   const [trackingToEdit, setTrackingToEdit] = useState<Tracking | undefined>(undefined);
-  const { data: projectData } = useGetProjectsQuery();
+
+  const [trackingQuery, { data: trackingData, refetch: refetchTrackings }] = useGetTrackingOverviewLazyQuery();
+  const trackings = trackingData?.trackings.items ?? [];
+
+  const getTrackings = (project: string): void => {
+    trackingQuery({
+      variables: {
+        query: {
+          date: '2020',
+          project,
+        },
+      },
+    });
+  };
+
+  const { data: projectData } = useGetProjectsQuery({
+    onCompleted: (data) => {
+      getTrackings(data.projects.items[0].id);
+    },
+  });
   const projects = projectData?.projects.items.reduce((prev, cur) => {
     prev.push({
       id: cur.id,
@@ -41,15 +58,8 @@ export const TimeTracking: FC = () => {
     });
     return prev;
   }, [] as TimeTrackerProjects[]) ?? [];
-  const { data: trackingData, error } = useGetTrackingOverviewQuery({
-    variables: {
-      query: {
-        date: '2020',
-        project: projectData?.projects.items[0].id ?? '',
-      },
-    },
-  });
-  const [mutate, result] = useTrackMutation();
+
+  const [mutate] = useTrackMutation();
 
   const onCancelEdit = () => {
     setTrackingToEdit(undefined);
@@ -77,46 +87,12 @@ export const TimeTracking: FC = () => {
     };
     mutate({
       variables,
-      optimisticResponse: {
-        __typename: 'Mutation',
-        track: {
-          __typename: 'Tracking',
-          id: 'fake-id',
-          startTime,
-          endTime,
-          description: 'Pending...',
-        },
-      },
-      update: (proxy, mutationResult) => {
-        const track = mutationResult.data?.track;
-        if (track) {
-          try {
-            const queryResult = proxy.readQuery<GetTrackingOverviewQuery>({
-              query: GetTrackingOverviewDocument,
-              variables,
-            });
-            if (queryResult) {
-              const existingIndex = queryResult.trackings.items.findIndex((tracking) => tracking.id === track.id);
-              if (existingIndex === -1) {
-                queryResult.trackings.items.push(track);
-              } else {
-                queryResult.trackings.items[existingIndex] = track;
-              }
-              proxy.writeQuery<GetTrackingOverviewQuery>({
-                query: GetTrackingOverviewDocument,
-                data: queryResult,
-              });
-            }
-          } catch (updateError) {
-            console.error(updateError);
-          }
-        }
+      update: () => {
+        refetchTrackings();
       },
     });
+    onCancelEdit();
   };
-  if (error || result.error) {
-    return <p>Error</p>;
-  }
   return (
     <div css={timeTrackingCss}>
       <div>
@@ -130,7 +106,7 @@ export const TimeTracking: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {trackingData && trackingData.trackings?.items?.map((tracking) => (
+            {trackings.map((tracking) => (
               <tr key={tracking.id} className={tracking.id === trackingToEdit?.id ? 'active' : ''}>
                 <td>{tracking.description}</td>
                 <td>{format(new Date(tracking.startTime), 'dd.MM.yyyy HH:mm')}</td>
@@ -146,7 +122,13 @@ export const TimeTracking: FC = () => {
           <tfoot />
         </table>
       </div>
-      <TimeTracker projects={projects} onCancelEdit={onCancelEdit} onSubmit={onSubmit} tracking={trackingToEdit} />
+      <TimeTracker
+        projects={projects}
+        onChangeProject={getTrackings}
+        onCancelEdit={onCancelEdit}
+        onSubmit={onSubmit}
+        tracking={trackingToEdit}
+      />
     </div>
   );
 };
