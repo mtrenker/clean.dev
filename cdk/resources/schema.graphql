@@ -5,8 +5,7 @@ scalar AWSDateTime
 scalar AWSJSON
 
 type Query {
-  page(input: PageInput!): Page
-  @aws_api_key @aws_cognito_user_pools
+  page(input: PageInput!): Page @aws_api_key @aws_cognito_user_pools
   projects: ProjectConnection!
   trackings(query: TrackingQuery): TrackingConnection!
 }

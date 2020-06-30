@@ -1,4 +1,9 @@
 {
+  "name": "clean.dev",
+  "version": "0.0.0",
+  "description": "clean.dev",
+  "author": "Martin Trenker <martin@pacabytes.io>",
+  "license": "MIT",
   "scripts": {
     "build": "webpack -p",
     "build:lambda": "tsc -b",
@@ -100,11 +105,6 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   },
-  "name": "cd-app",
-  "version": "0.0.0",
-  "description": "clean.dev web application",
-  "author": "Martin Trenker <martin@pacabytes.io>",
-  "license": "MIT",
   "dependencies": {
     "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
