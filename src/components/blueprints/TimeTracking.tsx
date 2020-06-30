@@ -108,7 +108,7 @@ export const TimeTracking: FC = () => {
           <tbody>
             {trackings.map((tracking) => (
               <tr key={tracking.id} className={tracking.id === trackingToEdit?.id ? 'active' : ''}>
-                <td>{tracking.description}</td>
+                <td css={{ whiteSpace: 'pre' }}>{tracking.description}</td>
                 <td>{format(new Date(tracking.startTime), 'dd.MM.yyyy HH:mm')}</td>
                 <td>{format(new Date(tracking.endTime), 'dd.MM.yyyy HH:mm')}</td>
                 <td>
