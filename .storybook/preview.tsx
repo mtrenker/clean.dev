@@ -7,7 +7,7 @@ import { withActions } from "@storybook/addon-actions"
 import { withKnobs } from "@storybook/addon-knobs"
 import { ApolloProvider } from "@apollo/react-hooks";
 
-import { theme } from "../src/themes/default"
+// import { theme } from "../src/themes/default"
 import { GlobalStyle } from "../src/components/GlobalStyle";
 import { mockClient} from "../src/lib/graphql";
 
@@ -15,12 +15,12 @@ addDecorator(StoryRouter());
 addDecorator(withActions());
 addDecorator(withKnobs());
 
-const withTheme = (storyFn) => (
-  <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    {storyFn()}
-  </ThemeProvider>
-)
+// const withTheme = (storyFn) => (
+//   <ThemeProvider theme={theme}>
+//     <GlobalStyle />
+//     {storyFn()}
+//   </ThemeProvider>
+// )
 
 const centeredCss = css`
   display: flex;
@@ -45,5 +45,5 @@ const withApolloMockClient = (storyFn) => (
   </ApolloProvider>
 )
 
-addDecorator(withTheme);
+// addDecorator(withTheme);
 addDecorator(withApolloMockClient)

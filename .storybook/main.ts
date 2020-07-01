@@ -9,11 +9,5 @@ module.exports = {
     '@storybook/addon-viewport/register',
     '@storybook/addon-a11y/register',
     '@storybook/addon-docs',
-    {
-      name: '@storybook/addon-storysource',
-      options: {
-        parser: "typescript",
-      }
-    }
   ]
 };
