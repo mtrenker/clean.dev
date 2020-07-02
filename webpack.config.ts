@@ -49,6 +49,9 @@ const config: Config = {
           placeholder: true,
           placeholderSize: 50,
         },
+      }, {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
       },
     ],
   },
