@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-import { SC } from '../../types';
 import { Table, Row, Cell } from './Table';
 
 export default { title: 'Components/Table', component: Table, subcomponents: { Row, Cell } };
 
-export const Example: SC = () => (
+export const Example: FC = () => (
   <>
     <Table>
       <tbody>
