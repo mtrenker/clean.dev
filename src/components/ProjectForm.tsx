@@ -49,6 +49,13 @@ const formCss = css`
 export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
   const { register, handleSubmit, control } = useForm<ProjectInput>();
 
+  const renderDatePicker = (value: Date) => () => (
+    <DatePicker
+      onChange={(selected) => selected}
+      selected={value}
+    />
+  );
+
   return (
     <form action="#" onSubmit={handleSubmit(onSubmit)} css={formCss}>
       <label className="client" htmlFor="client">
@@ -63,24 +70,16 @@ export const ProjectForm: FC<ProjectFormProps> = ({ onSubmit }) => {
         <span>Start Date</span>
         <Controller
           name="startDate"
-          as={DatePicker}
           control={control}
-          placeholderText="From"
-          onChange={([selected]: Date[]) => selected}
-          defaultValue={new Date()}
-          valueName="selected"
+          render={renderDatePicker(new Date())}
         />
       </label>
       <label className="endDate" htmlFor="endDate">
         <span>End Date</span>
         <Controller
           name="endDate"
-          as={DatePicker}
           control={control}
-          placeholderText="From"
-          onChange={([selected]) => selected}
-          defaultValue={new Date()}
-          valueName="selected"
+          render={renderDatePicker(new Date())}
         />
       </label>
       <label className="description" htmlFor="description">
