@@ -1,0 +1,12 @@
+query blog($input: BlogInput!) {
+  blog(input: $input) {
+    id
+    title
+    slug
+    intro
+    content
+    author {
+      name
+    }
+  }
+}

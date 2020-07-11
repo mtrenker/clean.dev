@@ -56,6 +56,7 @@ export class ApiStack extends Stack {
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addProjectsResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
+    ApiStack.addBlogResolver(queryDataSource);
 
     mutationsSource.createResolver({
       fieldName: 'track',
@@ -103,6 +104,24 @@ export class ApiStack extends Stack {
           "key" : {
               "pk" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug"),
               "id" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug")
+          }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result)'),
+    });
+  }
+
+  static addBlogResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'blog',
+      typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+              "pk" : $util.dynamodb.toDynamoDBJson("post-$ctx.args.input.post"),
+              "id" : $util.dynamodb.toDynamoDBJson("post-$ctx.args.input.post")
           }
       }
     `),

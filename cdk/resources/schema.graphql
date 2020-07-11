@@ -6,6 +6,7 @@ scalar AWSJSON
 
 type Query {
   page(input: PageInput!): Page @aws_api_key @aws_cognito_user_pools
+  blog(input: BlogInput!): Blog @aws_api_key @aws_cognito_user_pools
   projects: ProjectConnection!
   trackings(query: TrackingQuery): TrackingConnection!
 }
@@ -50,10 +51,33 @@ type Tracking {
   endTime: AWSDateTime!
 }
 
+type BlogConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Blog!]!
+  nextToken: String
+}
+
+type Blog @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  title: String!
+  slug: String!
+  intro: String!
+  content: String!
+  author: Author!
+}
+
+type Author @aws_api_key @aws_cognito_user_pools {
+  name: String!
+}
+
+
 # INPUTS
 
 input PageInput {
   slug: String!
+}
+
+input BlogInput {
+  post: String!
 }
 
 input TrackingInput {
