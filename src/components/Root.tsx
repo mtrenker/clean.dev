@@ -7,6 +7,7 @@ import { GlobalStyle } from './GlobalStyle';
 import { client } from '../lib/graphql';
 import { UserContext } from '../context/UserContext';
 import { CleanUser, getUser, getCleanUser } from '../lib/auth';
+import { Blog } from '../pages/Blog';
 
 export const Root: FC = () => {
   const [user, setUser] = useState<CleanUser|null>(null);
@@ -28,6 +29,9 @@ export const Root: FC = () => {
         <GlobalStyle />
         <Router>
           <Switch>
+            <Route path="/blog/:title">
+              <Blog />
+            </Route>
             <Route path="/">
               <Page />
             </Route>
