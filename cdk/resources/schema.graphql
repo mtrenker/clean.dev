@@ -65,6 +65,15 @@ type Blog @aws_api_key @aws_cognito_user_pools {
   author: Author!
 }
 
+type Image @aws_api_key @aws_cognito_user_pools {
+  title: String!;
+  description: String;
+  width: Int!;
+  height: Int!;
+  size: Int!;
+  url: String!;
+}
+
 type Author @aws_api_key @aws_cognito_user_pools {
   name: String!
 }
