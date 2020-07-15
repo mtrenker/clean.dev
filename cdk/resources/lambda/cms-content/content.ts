@@ -123,8 +123,8 @@ function mapAsset(asset: Asset): Image {
   return {
     title,
     description,
-    height: file.details.image.height,
-    width: file.details.image.width,
+    height: file.details.image?.height ?? 0,
+    width: file.details.image?.width ?? 0,
     size: file.details.size,
     url: file.url,
   };

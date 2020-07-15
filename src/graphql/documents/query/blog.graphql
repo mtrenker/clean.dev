@@ -3,10 +3,19 @@ query blog($input: BlogInput!) {
     id
     title
     slug
+    heroImage {
+      url
+      width
+      height
+      description
+    }
     intro
     content
     author {
       name
+      avatar {
+        url
+      }
     }
   }
 }

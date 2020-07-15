@@ -107,14 +107,26 @@ export type Blog = {
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
+  author: Author;
+  heroImage?: Maybe<Image>;
   intro: Scalars['String'];
   content: Scalars['String'];
-  author: Author;
+};
+
+export type Image = {
+  __typename?: 'Image';
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+  size: Scalars['Int'];
+  url: Scalars['String'];
 };
 
 export type Author = {
   __typename?: 'Author';
   name: Scalars['String'];
+  avatar?: Maybe<Image>;
 };
 
 export type PageInput = {

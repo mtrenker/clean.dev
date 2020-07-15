@@ -113,14 +113,26 @@ export type Blog = {
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
+  author: Author;
+  heroImage?: Maybe<Image>;
   intro: Scalars['String'];
   content: Scalars['String'];
-  author: Author;
+};
+
+export type Image = {
+  __typename?: 'Image';
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+  size: Scalars['Int'];
+  url: Scalars['String'];
 };
 
 export type Author = {
   __typename?: 'Author';
   name: Scalars['String'];
+  avatar?: Maybe<Image>;
 };
 
 export type PageInput = {
@@ -191,9 +203,16 @@ export type BlogQuery = (
   & { blog?: Maybe<(
     { __typename?: 'Blog' }
     & Pick<Blog, 'id' | 'title' | 'slug' | 'intro' | 'content'>
-    & { author: (
+    & { heroImage?: Maybe<(
+      { __typename?: 'Image' }
+      & Pick<Image, 'url' | 'width' | 'height' | 'description'>
+    )>, author: (
       { __typename?: 'Author' }
       & Pick<Author, 'name'>
+      & { avatar?: Maybe<(
+        { __typename?: 'Image' }
+        & Pick<Image, 'url'>
+      )> }
     ) }
   )> }
 );
@@ -335,10 +354,19 @@ export const BlogDocument = gql`
     id
     title
     slug
+    heroImage {
+      url
+      width
+      height
+      description
+    }
     intro
     content
     author {
       name
+      avatar {
+        url
+      }
     }
   }
 }
