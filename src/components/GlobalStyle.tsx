@@ -86,6 +86,9 @@ const globalStyles = css`
       scroll-behavior: auto !important;
     }
   }
+  a {
+    text-decoration: none;
+  }
 `;
 
 export const GlobalStyle: FC = () => (

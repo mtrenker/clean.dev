@@ -7,16 +7,16 @@ export const container = css`
   @media (min-width: ${breakPoints.mobile}) {
     margin: 0 auto;
     padding: 0;
-    width: 546px;
+    max-width: 546px;
   }
   @media (min-width: ${breakPoints.tablet}) {
-    width: 738px;
+    max-width: 738px;
   }
   @media (min-width: ${breakPoints.desktop}) {
-    width: 962px;
+    max-width: 962px;
   }
   @media (min-width: ${breakPoints.large}) {
-    width: 1170px;
+    max-width: 1170px;
   }
 `;
 

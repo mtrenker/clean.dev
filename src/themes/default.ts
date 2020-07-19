@@ -85,4 +85,4 @@ export const breakPoints = {
   large: '1200px',
 };
 
-// export const theme = {};
+export const theme = {};
