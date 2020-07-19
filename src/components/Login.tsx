@@ -8,9 +8,14 @@ import { signIn, signOut, getCleanUser } from '../lib/auth';
 import { UserContext } from '../context/UserContext';
 import { LoadingSpinner } from './LoadingSpinner';
 
-const input = css`
+const inputCss = css`
   border: 1px solid #CCC;
   margin-left: 8px;
+  width: 10rem;
+`;
+
+const buttonCss = css`
+  border: 1px solid #CCC;
 `;
 
 export const Login: FC = () => {
@@ -52,16 +57,16 @@ export const Login: FC = () => {
     return (
       <p>
         <span>{`Hi, ${user.username}`}</span>
-        <button css={input} type="submit" onClick={logout}>Logout</button>
+        <button css={buttonCss} type="submit" onClick={logout}>Logout</button>
       </p>
     );
   }
   return (
     <div css={{ position: 'relative' }}>
       { loading && <LoadingSpinner />}
-      <input disabled={loading} css={input} type="text" ref={usernameRef} />
-      <input disabled={loading} css={input} type="password" ref={passwordRef} />
-      <button disabled={loading} css={input} type="submit" onClick={login}>Login</button>
+      <input disabled={loading} css={inputCss} type="text" ref={usernameRef} />
+      <input disabled={loading} css={inputCss} type="password" ref={passwordRef} />
+      <button disabled={loading} css={buttonCss} type="submit" onClick={login}>Login</button>
     </div>
   );
 };

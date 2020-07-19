@@ -4,10 +4,14 @@ import { css } from '@emotion/core';
 import { Link } from 'react-router-dom';
 import { Container, container } from './Container';
 import { breakPoints } from '../themes/default';
-import { Login } from './Login';
+import { Icon } from './Icon';
+
+const onMenuClick = (e: React.MouseEvent<SVGElement>) => {
+  console.log(e);
+};
 
 export const Header: FC = ({ children }) => {
-  const header = css`
+  const headerCss = css`
     @media (min-width: ${breakPoints.mobile}) {
       display: grid;
       grid-template:
@@ -18,7 +22,7 @@ export const Header: FC = ({ children }) => {
     }
   `;
 
-  const topbar = css`
+  const topbarCss = css`
     background-color: white ;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
     grid-area: topbar;
@@ -29,7 +33,7 @@ export const Header: FC = ({ children }) => {
     }
   `;
 
-  const infobar = css`
+  const infobarCss = css`
     grid-area: infobar;
     .css-${container.name} {
       height: 100%;
@@ -39,7 +43,7 @@ export const Header: FC = ({ children }) => {
     }
   `;
 
-  const logo = css`
+  const logoCss = css`
     flex: 1;
     font-weight: bold;
     span {
@@ -48,9 +52,8 @@ export const Header: FC = ({ children }) => {
     }
   `;
 
-  const nav = css`
-    display: none;
-    @media (min-width: ${breakPoints.mobile}) {
+  const navCss = css`
+    @media (max-width: ${breakPoints.mobile}) {
       display: block;
       flex: 1;
       ul {
@@ -68,23 +71,26 @@ export const Header: FC = ({ children }) => {
   `;
 
   return (
-    <header css={header}>
-      <div css={topbar}>
+    <header css={headerCss}>
+      <div css={topbarCss}>
         <Container>
-          <h1 css={logo}>
+          <h1 css={logoCss}>
             clean
             <span>dev</span>
           </h1>
-          <nav css={nav}>
+          <nav css={navCss}>
+            <Icon icon="bars" onClick={onMenuClick} />
             <ul>
               <li><Link to="/">Home</Link></li>
-              <li><Login /></li>
+              <li><Link to="/blog">Blog</Link></li>
+              <li><Link to="/blog">Blog</Link></li>
+              <li><Link to="/blog">Blog</Link></li>
             </ul>
           </nav>
         </Container>
       </div>
       { children && (
-      <div css={infobar}>
+      <div css={infobarCss}>
         <Container>
           {children}
         </Container>
