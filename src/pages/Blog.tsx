@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { css } from '@emotion/core';
 
 import { useBlogQuery } from '../graphql/hooks';
 import { Header } from '../components/Header';
 import { Container } from '../components/Container';
 import { Footer } from '../components/Footer';
 import { mapWidgets } from '../lib/contentful';
-import { Heading } from '../components/Heading';
+import { HeroImage } from '../components/HeroImage';
 
 export const Blog: FC = () => {
   const { title } = useParams();
@@ -21,27 +20,14 @@ export const Blog: FC = () => {
     renderNode: mapWidgets(),
   });
 
-  const heroCss = css`
-    height: 650px;
-    color: #FFFFFF;
-    img {
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-    }
-  `;
-
   return (
     <>
       <Header />
-      <div css={heroCss}>
-        <Container>
-          <Heading>Hello World</Heading>
-          <Heading as="h2">Something smart to say</Heading>
-        </Container>
-      </div>
+      <HeroImage url={data.blog?.heroImage?.url ?? ''} alt={data.blog?.heroImage?.description ?? ''} />
       <Container>
-        {content}
+        <article>
+          {content}
+        </article>
       </Container>
       <Footer />
     </>

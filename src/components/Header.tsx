@@ -11,11 +11,10 @@ export const Header: FC = ({ children }) => {
     @media (min-width: ${breakPoints.mobile}) {
       display: grid;
       grid-template:
-        "topbar topbar" 50px
+        "topbar topbar" auto
         "infobar infobar" max-content
         / 1fr 1fr;
       background-color: #F5F5F5;
-      margin-bottom: 48px;
     }
   `;
 
@@ -79,9 +78,9 @@ export const Header: FC = ({ children }) => {
           <nav css={nav}>
             <ul>
               <li><Link to="/">Home</Link></li>
+              <li><Login /></li>
             </ul>
           </nav>
-          <Login />
         </Container>
       </div>
       { children && (
