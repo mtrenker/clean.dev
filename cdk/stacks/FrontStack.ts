@@ -24,7 +24,7 @@ export class FrontStack extends Stack {
     const param = BuildEnvironmentVariableType.PARAMETER_STORE;
     const build = new GitHubBuild(this, 'Build', {
       oauthToken: SecretValue.secretsManager('clean/github'),
-      branch: 'master',
+      branch: 'main',
       owner: 'mtrenker',
       repo: 'clean.dev',
       environment: {
