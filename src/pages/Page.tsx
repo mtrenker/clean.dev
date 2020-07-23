@@ -10,7 +10,8 @@ import { mapWidgets } from '../lib/contentful';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
-  const { data, error } = useGetPageQuery({ variables: { input: { slug: pathname } } });
+  const page = pathname.split('/')[1];
+  const { data, error } = useGetPageQuery({ variables: { input: { slug: page } } });
   if (!data) return <p>Loading</p>;
   const document = data?.page?.content ?? '';
 
