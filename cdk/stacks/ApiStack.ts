@@ -2,7 +2,14 @@ import {
   Stack, App, StackProps, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi, DynamoDbDataSource, MappingTemplate, UserPoolDefaultAction, CfnApiKey, AuthorizationType, FieldLogLevel,
+  GraphQLApi,
+  DynamoDbDataSource,
+  NoneDataSource,
+  MappingTemplate,
+  UserPoolDefaultAction,
+  CfnApiKey,
+  AuthorizationType,
+  FieldLogLevel,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table, ITable } from '@aws-cdk/aws-dynamodb';
@@ -49,6 +56,7 @@ export class ApiStack extends Stack {
     });
 
     const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table);
+    const noneDataSource = api.addNoneDataSource('None', 'NoneDataSource');
     const mutationsFunction = this.mutationsFunction(table, eventBusArn, eventBusName);
 
     const mutationsSource = api.addLambdaDataSource('TrackSource', 'TrackSOurce', mutationsFunction);
@@ -56,7 +64,8 @@ export class ApiStack extends Stack {
     ApiStack.addPageResolver(queryDataSource);
     ApiStack.addProjectsResolver(queryDataSource);
     ApiStack.addTrackingsResolver(queryDataSource);
-    ApiStack.addBlogResolver(queryDataSource);
+    ApiStack.addBlogResolver(noneDataSource);
+    ApiStack.addBlogPostResolver(queryDataSource);
 
     mutationsSource.createResolver({
       fieldName: 'track',
@@ -111,10 +120,24 @@ export class ApiStack extends Stack {
     });
   }
 
-  static addBlogResolver(queryDataSource: DynamoDbDataSource): void {
-    queryDataSource.createResolver({
+  static addBlogResolver(dataSource: NoneDataSource): void {
+    dataSource.createResolver({
       fieldName: 'blog',
       typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.fromString(JSON.stringify({
+        version: '2017-02-28',
+        payload: {
+          post: {},
+        },
+      })),
+      responseMappingTemplate: MappingTemplate.fromString('$utils.toJson($context.result)'),
+    });
+  }
+
+  static addBlogPostResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'post',
+      typeName: 'Blog',
       requestMappingTemplate: MappingTemplate.fromString(`
       {
           "version" : "2017-02-28",
