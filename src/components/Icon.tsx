@@ -7,7 +7,7 @@ import Times from '@fortawesome/fontawesome-free/svgs/solid/times.svg';
 
 export interface IconProps {
   icon: 'github' | 'clock' | 'times' | 'bars';
-  onClick: (e: React.MouseEvent<SVGElement>) => void;
+  onClick?: (e: React.MouseEvent<SVGElement>) => void;
 }
 
 const iconCss = css`
