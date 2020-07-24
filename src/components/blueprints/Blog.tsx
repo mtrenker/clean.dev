@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import { BlogPost } from '../BlogPost';
+import { Post } from '../Blog/Post';
+import { Overview } from '../Blog/Overview';
 
 export const Blog: FC = () => (
   <Switch>
     <Route exact path="/blog">
-      Landing Page :)
+      <Overview />
     </Route>
     <Route exact path="/blog/:title">
-      <BlogPost />
+      <Post />
     </Route>
   </Switch>
 );

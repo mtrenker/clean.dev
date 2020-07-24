@@ -2,11 +2,10 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-import { useBlogQuery } from '../graphql/hooks';
-import { Container } from '../components/Container';
-import { mapWidgets } from '../lib/contentful';
+import { useBlogQuery } from '../../graphql/hooks';
+import { mapWidgets } from '../../lib/contentful';
 
-export const BlogPost: FC = () => {
+export const Post: FC = () => {
   const { title } = useParams();
 
   const { data } = useBlogQuery({ variables: { input: { post: title } } });
@@ -18,10 +17,8 @@ export const BlogPost: FC = () => {
   });
 
   return (
-    <Container>
-      <article>
-        {content}
-      </article>
-    </Container>
+    <article>
+      {content}
+    </article>
   );
 };

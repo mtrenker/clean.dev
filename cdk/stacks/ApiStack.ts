@@ -102,8 +102,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "pk" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug"),
-              "id" : $util.dynamodb.toDynamoDBJson("page-$ctx.args.input.slug")
+              "pk" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.input.slug"),
+              "id" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.input.slug")
           }
       }
     `),
