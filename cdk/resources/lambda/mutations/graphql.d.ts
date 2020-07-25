@@ -20,7 +20,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   page?: Maybe<Page>;
-  blog?: Maybe<Blog>;
+  blog: Blog;
   projects: ProjectConnection;
   trackings: TrackingConnection;
 };
@@ -28,11 +28,6 @@ export type Query = {
 
 export type QueryPageArgs = {
   input: PageInput;
-};
-
-
-export type QueryBlogArgs = {
-  input: BlogInput;
 };
 
 
@@ -96,14 +91,24 @@ export type Tracking = {
   endTime: Scalars['AWSDateTime'];
 };
 
-export type BlogConnection = {
-  __typename?: 'BlogConnection';
-  items: Array<Blog>;
+export type Blog = {
+  __typename?: 'Blog';
+  post: BlogPost;
+};
+
+
+export type BlogPostArgs = {
+  input: BlogPostQuery;
+};
+
+export type BlogPostConnection = {
+  __typename?: 'BlogPostConnection';
+  items: Array<BlogPost>;
   nextToken?: Maybe<Scalars['String']>;
 };
 
-export type Blog = {
-  __typename?: 'Blog';
+export type BlogPost = {
+  __typename?: 'BlogPost';
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
@@ -133,7 +138,7 @@ export type PageInput = {
   slug: Scalars['String'];
 };
 
-export type BlogInput = {
+export type BlogPostQuery = {
   post: Scalars['String'];
 };
 

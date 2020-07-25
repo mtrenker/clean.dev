@@ -10,7 +10,7 @@ export const Post: FC = () => {
 
   const { data } = useBlogQuery({ variables: { input: { post: title } } });
   if (!data) return <p>Loading</p>;
-  const document = data?.blog?.content ?? '';
+  const document = data?.blog?.post.content ?? '';
 
   const content = documentToReactComponents(JSON.parse(document), {
     renderNode: mapWidgets(),

@@ -26,7 +26,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   page?: Maybe<Page>;
-  blog?: Maybe<Blog>;
+  blog: Blog;
   projects: ProjectConnection;
   trackings: TrackingConnection;
 };
@@ -34,11 +34,6 @@ export type Query = {
 
 export type QueryPageArgs = {
   input: PageInput;
-};
-
-
-export type QueryBlogArgs = {
-  input: BlogInput;
 };
 
 
@@ -102,14 +97,24 @@ export type Tracking = {
   endTime: Scalars['AWSDateTime'];
 };
 
-export type BlogConnection = {
-  __typename?: 'BlogConnection';
-  items: Array<Blog>;
+export type Blog = {
+  __typename?: 'Blog';
+  post: BlogPost;
+};
+
+
+export type BlogPostArgs = {
+  input: BlogPostQuery;
+};
+
+export type BlogPostConnection = {
+  __typename?: 'BlogPostConnection';
+  items: Array<BlogPost>;
   nextToken?: Maybe<Scalars['String']>;
 };
 
-export type Blog = {
-  __typename?: 'Blog';
+export type BlogPost = {
+  __typename?: 'BlogPost';
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
@@ -139,7 +144,7 @@ export type PageInput = {
   slug: Scalars['String'];
 };
 
-export type BlogInput = {
+export type BlogPostQuery = {
   post: Scalars['String'];
 };
 
@@ -194,27 +199,30 @@ export type TrackMutation = (
 );
 
 export type BlogQueryVariables = Exact<{
-  input: BlogInput;
+  input: BlogPostQuery;
 }>;
 
 
 export type BlogQuery = (
   { __typename?: 'Query' }
-  & { blog?: Maybe<(
+  & { blog: (
     { __typename?: 'Blog' }
-    & Pick<Blog, 'id' | 'title' | 'slug' | 'intro' | 'content'>
-    & { heroImage?: Maybe<(
-      { __typename?: 'Image' }
-      & Pick<Image, 'url' | 'width' | 'height' | 'description'>
-    )>, author: (
-      { __typename?: 'Author' }
-      & Pick<Author, 'name'>
-      & { avatar?: Maybe<(
+    & { post: (
+      { __typename?: 'BlogPost' }
+      & Pick<BlogPost, 'id' | 'title' | 'slug' | 'intro' | 'content'>
+      & { heroImage?: Maybe<(
         { __typename?: 'Image' }
-        & Pick<Image, 'url'>
-      )> }
+        & Pick<Image, 'url' | 'width' | 'height' | 'description'>
+      )>, author: (
+        { __typename?: 'Author' }
+        & Pick<Author, 'name'>
+        & { avatar?: Maybe<(
+          { __typename?: 'Image' }
+          & Pick<Image, 'url'>
+        )> }
+      ) }
     ) }
-  )> }
+  ) }
 );
 
 export type GetPageQueryVariables = Exact<{
@@ -349,23 +357,25 @@ export type TrackMutationHookResult = ReturnType<typeof useTrackMutation>;
 export type TrackMutationResult = ApolloReactCommon.MutationResult<TrackMutation>;
 export type TrackMutationOptions = ApolloReactCommon.BaseMutationOptions<TrackMutation, TrackMutationVariables>;
 export const BlogDocument = gql`
-    query blog($input: BlogInput!) {
-  blog(input: $input) {
-    id
-    title
-    slug
-    heroImage {
-      url
-      width
-      height
-      description
-    }
-    intro
-    content
-    author {
-      name
-      avatar {
+    query blog($input: BlogPostQuery!) {
+  blog {
+    post(input: $input) {
+      id
+      title
+      slug
+      heroImage {
         url
+        width
+        height
+        description
+      }
+      intro
+      content
+      author {
+        name
+        avatar {
+          url
+        }
       }
     }
   }

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import { Post } from '../Blog/Post';
-import { Overview } from '../Blog/Overview';
+import { Post } from '../blog/Post';
+import { Overview } from '../blog/Overview';
 
 export const Blog: FC = () => (
   <Switch>
