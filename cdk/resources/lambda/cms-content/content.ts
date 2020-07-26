@@ -53,6 +53,7 @@ type Page = Body<'page', PageFields>
 
 interface PostFields {
   title: Localized<string>;
+  publishDate: Localized<string>;
   slug: Localized<string>;
   author: Localized<CmsLink>;
   heroImage: Localized<CmsLink>;
@@ -159,6 +160,33 @@ async function resolveContentfulNodes(node: CmsNode): Promise<CmsNode> {
   };
 }
 
+async function updateBlogList(blogId: string, title: string, intro: CmsNode, author: Author) {
+  try {
+    return client.update({
+      Key: {
+        pk: 'blog-list',
+        id: 'blog-list',
+      },
+      TableName: TABLE_NAME,
+      UpdateExpression: 'SET #blogPosts.#blogId = :post',
+      ExpressionAttributeNames: {
+        '#blogPosts': 'blogPosts',
+        '#blogId': blogId,
+      },
+      ExpressionAttributeValues: {
+        ':post': {
+          title,
+          intro,
+          author,
+        },
+      },
+    }).promise();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export const handler: SNSHandler = async (event) => {
   const lang = 'en-US';
   const { Message } = event.Records[0].Sns;
@@ -167,8 +195,10 @@ export const handler: SNSHandler = async (event) => {
   switch (body.sys.contentType.sys.id) {
     case 'post': {
       const post = body.fields as PostFields;
-      const pk = `post-${post.slug[lang]}`;
+      const pk = `blog-${post.slug[lang]}`;
       const id = pk;
+      const blogId = body.sys.id;
+      const title = post.title[lang];
       const intro = await resolveContentfulNodes(post.intro[lang]);
       const content = await resolveContentfulNodes(post.content[lang]);
       const author = await resolveLink(post.author[lang]);
@@ -182,6 +212,7 @@ export const handler: SNSHandler = async (event) => {
         content: JSON.stringify(content),
       };
       await putDocument(pk, id, postDocument);
+      await updateBlogList(blogId, title, intro, author);
       break;
     }
     case 'page': {

@@ -52,11 +52,11 @@ type Tracking {
 
 type Blog @aws_api_key @aws_cognito_user_pools {
   post(input: BlogPostQuery!): BlogPost!
+  list: BlogPostConnection!
 }
 
 type BlogPostConnection @aws_api_key @aws_cognito_user_pools {
   items: [BlogPost!]!
-  nextToken: String
 }
 
 type BlogPost @aws_api_key @aws_cognito_user_pools {
