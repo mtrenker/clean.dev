@@ -66,6 +66,7 @@ export class ApiStack extends Stack {
     ApiStack.addTrackingsResolver(queryDataSource);
     ApiStack.addBlogResolver(noneDataSource);
     ApiStack.addBlogPostResolver(queryDataSource);
+    ApiStack.addBlogListResolver(queryDataSource);
 
     mutationsSource.createResolver({
       fieldName: 'track',
@@ -143,12 +144,34 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "pk" : $util.dynamodb.toDynamoDBJson("post-$ctx.args.input.post"),
-              "id" : $util.dynamodb.toDynamoDBJson("post-$ctx.args.input.post")
+              "pk" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.input.post"),
+              "id" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.input.post")
           }
       }
     `),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result)'),
+    });
+  }
+
+  static addBlogListResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'list',
+      typeName: 'Blog',
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+              "pk" : $util.dynamodb.toDynamoDBJson("blog-list"),
+              "id" : $util.dynamodb.toDynamoDBJson("blog-list")
+          }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        {
+          "items": $util.toJson($ctx.result.blogPosts)
+        }
+      `),
     });
   }
 
