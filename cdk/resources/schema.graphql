@@ -63,6 +63,7 @@ type BlogPost @aws_api_key @aws_cognito_user_pools {
   id: ID!
   title: String!
   slug: String!
+  publishDate: AWSDateTime!
   author: Author!
   heroImage: Image
   intro: String!

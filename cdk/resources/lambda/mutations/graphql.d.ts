@@ -94,6 +94,7 @@ export type Tracking = {
 export type Blog = {
   __typename?: 'Blog';
   post: BlogPost;
+  list: BlogPostConnection;
 };
 
 
@@ -104,7 +105,6 @@ export type BlogPostArgs = {
 export type BlogPostConnection = {
   __typename?: 'BlogPostConnection';
   items: Array<BlogPost>;
-  nextToken?: Maybe<Scalars['String']>;
 };
 
 export type BlogPost = {
@@ -112,6 +112,7 @@ export type BlogPost = {
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
+  publishDate: Scalars['AWSDateTime'];
   author: Author;
   heroImage?: Maybe<Image>;
   intro: Scalars['String'];

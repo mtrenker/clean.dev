@@ -1,4 +1,31 @@
-query blog($input: BlogPostQuery!) {
+query getBlogList {
+  blog {
+    list {
+      items {
+        id
+        publishDate
+        slug
+        title
+        heroImage {
+          url
+          width
+          height
+          description
+        }
+        intro
+        author {
+          name
+          avatar {
+            url
+          }
+        }
+      }
+    }
+  }
+}
+
+
+query getBlogPost($input: BlogPostQuery!) {
   blog {
     post(input: $input) {
       id

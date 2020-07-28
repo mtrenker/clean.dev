@@ -239,6 +239,7 @@ export const handler: SNSHandler = async (event) => {
       const postDocument = {
         title,
         slug,
+        publishDate,
         author,
         heroImage: mapAsset(heroAsset),
         intro: JSON.stringify(intro),
