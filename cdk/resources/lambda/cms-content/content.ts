@@ -164,6 +164,7 @@ async function updateBlogList(
   id: string,
   slug: string,
   title: string,
+  heroAsset: Asset,
   publishDate: string,
   intro: CmsNode,
   author: Author,
@@ -173,6 +174,7 @@ async function updateBlogList(
     slug,
     publishDate,
     title,
+    heroImage: mapAsset(heroAsset),
     intro: JSON.stringify(intro),
     author,
   };
@@ -246,7 +248,7 @@ export const handler: SNSHandler = async (event) => {
         content: JSON.stringify(content),
       };
       await putDocument(pk, id, postDocument);
-      await updateBlogList(blogId, slug, title, publishDate, intro, author);
+      await updateBlogList(blogId, slug, title, heroAsset, publishDate, intro, author);
       break;
     }
     case 'page': {
