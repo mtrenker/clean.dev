@@ -1,20 +1,49 @@
-query blog($input: BlogInput!) {
-  blog(input: $input) {
-    id
-    title
-    slug
-    heroImage {
-      url
-      width
-      height
-      description
+query getBlogList {
+  blog {
+    list {
+      items {
+        id
+        publishDate
+        slug
+        title
+        heroImage {
+          url
+          width
+          height
+          description
+        }
+        intro
+        author {
+          name
+          avatar {
+            url
+          }
+        }
+      }
     }
-    intro
-    content
-    author {
-      name
-      avatar {
+  }
+}
+
+
+query getBlogPost($input: BlogPostQuery!) {
+  blog {
+    post(input: $input) {
+      id
+      title
+      slug
+      heroImage {
         url
+        width
+        height
+        description
+      }
+      intro
+      content
+      author {
+        name
+        avatar {
+          url
+        }
       }
     }
   }

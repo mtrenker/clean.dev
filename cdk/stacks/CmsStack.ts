@@ -52,6 +52,16 @@ export class CmsStack extends Stack {
       credentialsArn: apiRole.roleArn,
     });
 
+    const CONTENTFUL_SPACE_ID = StringParameter.fromStringParameterName(
+      this,
+      'ContentfulSpaceId',
+      'cleanDevContentfulSpaceId',
+    ).stringValue;
+    const CONTENTFUL_API_KEY = StringParameter.fromStringParameterName(
+      this,
+      'ContentfulApiKey',
+      'cleanDevContentfulApiToken',
+    ).stringValue;
     const contentFunction = new Function(this, 'ContentFunction', {
       code: Code.fromAsset('cdk/resources/lambda/cms-content'),
       runtime: Runtime.NODEJS_12_X,
@@ -60,12 +70,12 @@ export class CmsStack extends Stack {
       environment: {
         TABLE_NAME: table.tableName,
         REGION: this.region,
-        CONTENTFUL_SPACE_ID: StringParameter.fromStringParameterName(this, 'ContentfulSpaceId', 'cleanDevContentfulSpaceId').stringValue,
-        CONTENTFUL_API_KEY: StringParameter.fromStringParameterName(this, 'ContentfulApiKey', 'cleanDevContentfulApiToken').stringValue,
+        CONTENTFUL_SPACE_ID,
+        CONTENTFUL_API_KEY,
       },
     });
 
-    table.grantWriteData(contentFunction);
+    table.grantReadWriteData(contentFunction);
 
     contentfulTopic.addSubscription(new LambdaSubscription(contentFunction));
   }

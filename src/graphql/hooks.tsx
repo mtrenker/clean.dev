@@ -26,7 +26,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   page?: Maybe<Page>;
-  blog?: Maybe<Blog>;
+  blog: Blog;
   projects: ProjectConnection;
   trackings: TrackingConnection;
 };
@@ -34,11 +34,6 @@ export type Query = {
 
 export type QueryPageArgs = {
   input: PageInput;
-};
-
-
-export type QueryBlogArgs = {
-  input: BlogInput;
 };
 
 
@@ -102,17 +97,28 @@ export type Tracking = {
   endTime: Scalars['AWSDateTime'];
 };
 
-export type BlogConnection = {
-  __typename?: 'BlogConnection';
-  items: Array<Blog>;
-  nextToken?: Maybe<Scalars['String']>;
-};
-
 export type Blog = {
   __typename?: 'Blog';
+  post: BlogPost;
+  list: BlogPostConnection;
+};
+
+
+export type BlogPostArgs = {
+  input: BlogPostQuery;
+};
+
+export type BlogPostConnection = {
+  __typename?: 'BlogPostConnection';
+  items: Array<BlogPost>;
+};
+
+export type BlogPost = {
+  __typename?: 'BlogPost';
   id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
+  publishDate: Scalars['AWSDateTime'];
   author: Author;
   heroImage?: Maybe<Image>;
   intro: Scalars['String'];
@@ -139,7 +145,7 @@ export type PageInput = {
   slug: Scalars['String'];
 };
 
-export type BlogInput = {
+export type BlogPostQuery = {
   post: Scalars['String'];
 };
 
@@ -193,28 +199,59 @@ export type TrackMutation = (
   ) }
 );
 
-export type BlogQueryVariables = Exact<{
-  input: BlogInput;
+export type GetBlogListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBlogListQuery = (
+  { __typename?: 'Query' }
+  & { blog: (
+    { __typename?: 'Blog' }
+    & { list: (
+      { __typename?: 'BlogPostConnection' }
+      & { items: Array<(
+        { __typename?: 'BlogPost' }
+        & Pick<BlogPost, 'id' | 'publishDate' | 'slug' | 'title' | 'intro'>
+        & { heroImage?: Maybe<(
+          { __typename?: 'Image' }
+          & Pick<Image, 'url' | 'width' | 'height' | 'description'>
+        )>, author: (
+          { __typename?: 'Author' }
+          & Pick<Author, 'name'>
+          & { avatar?: Maybe<(
+            { __typename?: 'Image' }
+            & Pick<Image, 'url'>
+          )> }
+        ) }
+      )> }
+    ) }
+  ) }
+);
+
+export type GetBlogPostQueryVariables = Exact<{
+  input: BlogPostQuery;
 }>;
 
 
-export type BlogQuery = (
+export type GetBlogPostQuery = (
   { __typename?: 'Query' }
-  & { blog?: Maybe<(
+  & { blog: (
     { __typename?: 'Blog' }
-    & Pick<Blog, 'id' | 'title' | 'slug' | 'intro' | 'content'>
-    & { heroImage?: Maybe<(
-      { __typename?: 'Image' }
-      & Pick<Image, 'url' | 'width' | 'height' | 'description'>
-    )>, author: (
-      { __typename?: 'Author' }
-      & Pick<Author, 'name'>
-      & { avatar?: Maybe<(
+    & { post: (
+      { __typename?: 'BlogPost' }
+      & Pick<BlogPost, 'id' | 'title' | 'slug' | 'intro' | 'content'>
+      & { heroImage?: Maybe<(
         { __typename?: 'Image' }
-        & Pick<Image, 'url'>
-      )> }
+        & Pick<Image, 'url' | 'width' | 'height' | 'description'>
+      )>, author: (
+        { __typename?: 'Author' }
+        & Pick<Author, 'name'>
+        & { avatar?: Maybe<(
+          { __typename?: 'Image' }
+          & Pick<Image, 'url'>
+        )> }
+      ) }
     ) }
-  )> }
+  ) }
 );
 
 export type GetPageQueryVariables = Exact<{
@@ -348,61 +385,121 @@ export function useTrackMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type TrackMutationHookResult = ReturnType<typeof useTrackMutation>;
 export type TrackMutationResult = ApolloReactCommon.MutationResult<TrackMutation>;
 export type TrackMutationOptions = ApolloReactCommon.BaseMutationOptions<TrackMutation, TrackMutationVariables>;
-export const BlogDocument = gql`
-    query blog($input: BlogInput!) {
-  blog(input: $input) {
-    id
-    title
-    slug
-    heroImage {
-      url
-      width
-      height
-      description
-    }
-    intro
-    content
-    author {
-      name
-      avatar {
-        url
+export const GetBlogListDocument = gql`
+    query getBlogList {
+  blog {
+    list {
+      items {
+        id
+        publishDate
+        slug
+        title
+        heroImage {
+          url
+          width
+          height
+          description
+        }
+        intro
+        author {
+          name
+          avatar {
+            url
+          }
+        }
       }
     }
   }
 }
     `;
-export type BlogComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<BlogQuery, BlogQueryVariables>, 'query'> & ({ variables: BlogQueryVariables; skip?: boolean; } | { skip: boolean; });
+export type GetBlogListComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetBlogListQuery, GetBlogListQueryVariables>, 'query'>;
 
-    export const BlogComponent = (props: BlogComponentProps) => (
-      <ApolloReactComponents.Query<BlogQuery, BlogQueryVariables> query={BlogDocument} {...props} />
+    export const GetBlogListComponent = (props: GetBlogListComponentProps) => (
+      <ApolloReactComponents.Query<GetBlogListQuery, GetBlogListQueryVariables> query={GetBlogListDocument} {...props} />
     );
     
 
 /**
- * __useBlogQuery__
+ * __useGetBlogListQuery__
  *
- * To run a query within a React component, call `useBlogQuery` and pass it any options that fit your needs.
- * When your component renders, `useBlogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBlogListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useBlogQuery({
+ * const { data, loading, error } = useGetBlogListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBlogListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
+      }
+export function useGetBlogListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
+        }
+export type GetBlogListQueryHookResult = ReturnType<typeof useGetBlogListQuery>;
+export type GetBlogListLazyQueryHookResult = ReturnType<typeof useGetBlogListLazyQuery>;
+export type GetBlogListQueryResult = ApolloReactCommon.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
+export const GetBlogPostDocument = gql`
+    query getBlogPost($input: BlogPostQuery!) {
+  blog {
+    post(input: $input) {
+      id
+      title
+      slug
+      heroImage {
+        url
+        width
+        height
+        description
+      }
+      intro
+      content
+      author {
+        name
+        avatar {
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+export type GetBlogPostComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetBlogPostQuery, GetBlogPostQueryVariables>, 'query'> & ({ variables: GetBlogPostQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetBlogPostComponent = (props: GetBlogPostComponentProps) => (
+      <ApolloReactComponents.Query<GetBlogPostQuery, GetBlogPostQueryVariables> query={GetBlogPostDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetBlogPostQuery__
+ *
+ * To run a query within a React component, call `useGetBlogPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlogPostQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useBlogQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BlogQuery, BlogQueryVariables>) {
-        return ApolloReactHooks.useQuery<BlogQuery, BlogQueryVariables>(BlogDocument, baseOptions);
+export function useGetBlogPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
       }
-export function useBlogLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BlogQuery, BlogQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<BlogQuery, BlogQueryVariables>(BlogDocument, baseOptions);
+export function useGetBlogPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
         }
-export type BlogQueryHookResult = ReturnType<typeof useBlogQuery>;
-export type BlogLazyQueryHookResult = ReturnType<typeof useBlogLazyQuery>;
-export type BlogQueryResult = ApolloReactCommon.QueryResult<BlogQuery, BlogQueryVariables>;
+export type GetBlogPostQueryHookResult = ReturnType<typeof useGetBlogPostQuery>;
+export type GetBlogPostLazyQueryHookResult = ReturnType<typeof useGetBlogPostLazyQuery>;
+export type GetBlogPostQueryResult = ApolloReactCommon.QueryResult<GetBlogPostQuery, GetBlogPostQueryVariables>;
 export const GetPageDocument = gql`
     query getPage($input: PageInput!) {
   page(input: $input) {

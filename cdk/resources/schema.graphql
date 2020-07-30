@@ -1,12 +1,10 @@
 scalar AWSDate
-
 scalar AWSDateTime
-
 scalar AWSJSON
 
 type Query {
   page(input: PageInput!): Page @aws_api_key @aws_cognito_user_pools
-  blog(input: BlogInput!): Blog @aws_api_key @aws_cognito_user_pools
+  blog: Blog! @aws_api_key @aws_cognito_user_pools
   projects: ProjectConnection!
   trackings(query: TrackingQuery): TrackingConnection!
 }
@@ -51,15 +49,21 @@ type Tracking {
   endTime: AWSDateTime!
 }
 
-type BlogConnection @aws_api_key @aws_cognito_user_pools {
-  items: [Blog!]!
-  nextToken: String
-}
 
 type Blog @aws_api_key @aws_cognito_user_pools {
+  post(input: BlogPostQuery!): BlogPost!
+  list: BlogPostConnection!
+}
+
+type BlogPostConnection @aws_api_key @aws_cognito_user_pools {
+  items: [BlogPost!]!
+}
+
+type BlogPost @aws_api_key @aws_cognito_user_pools {
   id: ID!
   title: String!
   slug: String!
+  publishDate: AWSDateTime!
   author: Author!
   heroImage: Image
   intro: String!
@@ -87,7 +91,7 @@ input PageInput {
   slug: String!
 }
 
-input BlogInput {
+input BlogPostQuery {
   post: String!
 }
 

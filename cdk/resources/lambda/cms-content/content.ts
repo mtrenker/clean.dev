@@ -53,6 +53,7 @@ type Page = Body<'page', PageFields>
 
 interface PostFields {
   title: Localized<string>;
+  publishDate: Localized<string>;
   slug: Localized<string>;
   author: Localized<CmsLink>;
   heroImage: Localized<CmsLink>;
@@ -159,6 +160,66 @@ async function resolveContentfulNodes(node: CmsNode): Promise<CmsNode> {
   };
 }
 
+async function updateBlogList(
+  id: string,
+  slug: string,
+  title: string,
+  heroAsset: Asset,
+  publishDate: string,
+  intro: CmsNode,
+  author: Author,
+): Promise<void> {
+  const blogPost = {
+    id,
+    slug,
+    publishDate,
+    title,
+    heroImage: mapAsset(heroAsset),
+    intro: JSON.stringify(intro),
+    author,
+  };
+  try {
+    const key = {
+      pk: 'blog-list',
+      id: 'blog-list',
+    };
+    const blogList = await client.get({
+      TableName: TABLE_NAME,
+      Key: key,
+    }).promise();
+    if (!blogList.Item) {
+      await client.put({
+        TableName: TABLE_NAME,
+        Item: {
+          ...key,
+          blogPosts: [blogPost],
+        },
+      }).promise();
+    } else {
+      const item = blogList.Item;
+      const { blogPosts } = <{blogPosts: {id: string; publishDate: string;}[]}>item;
+      const filteredBlogPosts = blogPosts.filter((post) => post.id !== blogPost.id);
+      filteredBlogPosts.push(blogPost);
+      const sortedBlogPosts = filteredBlogPosts.sort(
+        (postA, postB) => new Date(postB.publishDate).getTime() - new Date(postA.publishDate).getTime(),
+      );
+      await client.update({
+        Key: key,
+        TableName: TABLE_NAME,
+        UpdateExpression: 'SET #blogPosts = :blogPosts',
+        ExpressionAttributeNames: {
+          '#blogPosts': 'blogPosts',
+        },
+        ExpressionAttributeValues: {
+          ':blogPosts': sortedBlogPosts,
+        },
+      }).promise();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const handler: SNSHandler = async (event) => {
   const lang = 'en-US';
   const { Message } = event.Records[0].Sns;
@@ -167,21 +228,27 @@ export const handler: SNSHandler = async (event) => {
   switch (body.sys.contentType.sys.id) {
     case 'post': {
       const post = body.fields as PostFields;
-      const pk = `post-${post.slug[lang]}`;
+      const pk = `blog-${post.slug[lang]}`;
       const id = pk;
+      const blogId = body.sys.id;
+      const slug = post.slug[lang];
+      const title = post.title[lang];
+      const publishDate = post.publishDate[lang];
       const intro = await resolveContentfulNodes(post.intro[lang]);
       const content = await resolveContentfulNodes(post.content[lang]);
       const author = await resolveLink(post.author[lang]);
       const heroAsset = await resolveAsset(post.heroImage[lang]);
       const postDocument = {
-        title: post.title[lang],
-        slug: post.slug[lang],
+        title,
+        slug,
+        publishDate,
         author,
         heroImage: mapAsset(heroAsset),
         intro: JSON.stringify(intro),
         content: JSON.stringify(content),
       };
       await putDocument(pk, id, postDocument);
+      await updateBlogList(blogId, slug, title, heroAsset, publishDate, intro, author);
       break;
     }
     case 'page': {
