@@ -5,18 +5,19 @@ import { Link } from 'react-router-dom';
 
 import { useGetBlogListQuery } from '../../graphql/hooks';
 import { mapWidgets } from '../../lib/contentful';
-import { HeroImage } from '../HeroImage';
 
 const overviewCss = css`
+  padding-top: 25px;
   display: flex;
   gap: 16px;
 `;
 
 const cardCss = css`
   flex: 1;
+  padding: .5rem;
   border-radius: 4px;
-  border: 1px solid black;
-  box-shadow: 4px 4px rgba(0, 0, 0, .6);
+  border: 1px solid rgba(0, 0, 0, .4);
+  box-shadow: 4px -4px rgba(0, 0, 0, .1);
 `;
 
 export const Overview: FC = () => {
@@ -32,7 +33,6 @@ export const Overview: FC = () => {
           <div css={cardCss}>
             <Link to={`blog/${post.slug}`}>
               <h2>{post.title}</h2>
-              <HeroImage url={post.heroImage?.url} alt={post.heroImage?.description ?? ''} />
               {intro}
             </Link>
           </div>
