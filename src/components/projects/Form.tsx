@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import { useForm, Controller } from 'react-hook-form';
 
-import { Input } from './Input';
-import { DatePicker } from './DatePicker';
-import { ProjectInput } from '../graphql/hooks';
-import { TextArea } from './TextArea';
+import { Input } from '../Input';
+import { DatePicker } from '../DatePicker';
+import { ProjectInput } from '../../graphql/hooks';
+import { TextArea } from '../TextArea';
 
 interface ProjectFormProps {
   onSubmit: (values: ProjectInput) => void;

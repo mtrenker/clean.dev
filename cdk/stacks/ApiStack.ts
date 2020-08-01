@@ -62,8 +62,12 @@ export class ApiStack extends Stack {
     const mutationsSource = api.addLambdaDataSource('TrackSource', 'TrackSOurce', mutationsFunction);
 
     ApiStack.addPageResolver(queryDataSource);
+
     ApiStack.addProjectsResolver(queryDataSource);
+    ApiStack.addProjectResolver(queryDataSource);
+
     ApiStack.addTrackingsResolver(queryDataSource);
+
     ApiStack.addBlogResolver(noneDataSource);
     ApiStack.addBlogPostResolver(queryDataSource);
     ApiStack.addBlogListResolver(queryDataSource);
@@ -198,6 +202,24 @@ export class ApiStack extends Stack {
           "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
         }
       `),
+    });
+  }
+
+  static addProjectResolver(queryDataSource: DynamoDbDataSource): void {
+    queryDataSource.createResolver({
+      fieldName: 'project',
+      typeName: 'Query',
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+              "pk" : $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub"),
+              "id" : $util.dynamodb.toDynamoDBJson("$ctx.args.query.project")
+          }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result)'),
     });
   }
 

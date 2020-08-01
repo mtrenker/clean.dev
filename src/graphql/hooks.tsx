@@ -28,12 +28,18 @@ export type Query = {
   page?: Maybe<Page>;
   blog: Blog;
   projects: ProjectConnection;
+  project: Project;
   trackings: TrackingConnection;
 };
 
 
 export type QueryPageArgs = {
   input: PageInput;
+};
+
+
+export type QueryProjectArgs = {
+  query?: Maybe<ProjectQuery>;
 };
 
 
@@ -173,6 +179,10 @@ export type TrackingQuery = {
   date: Scalars['String'];
 };
 
+export type ProjectQuery = {
+  project: Scalars['String'];
+};
+
 export type AddProjectMutationVariables = Exact<{
   input: ProjectInput;
 }>;
@@ -267,6 +277,11 @@ export type GetPageQuery = (
   )> }
 );
 
+export type ProjectPartsFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
+);
+
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -277,8 +292,21 @@ export type GetProjectsQuery = (
     & Pick<ProjectConnection, 'nextToken'>
     & { items: Array<(
       { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
+      & ProjectPartsFragment
     )> }
+  ) }
+);
+
+export type GetProjectQueryVariables = Exact<{
+  query: ProjectQuery;
+}>;
+
+
+export type GetProjectQuery = (
+  { __typename?: 'Query' }
+  & { project: (
+    { __typename?: 'Project' }
+    & ProjectPartsFragment
   ) }
 );
 
@@ -298,7 +326,18 @@ export type GetTrackingOverviewQuery = (
   ) }
 );
 
-
+export const ProjectPartsFragmentDoc = gql`
+    fragment ProjectParts on Project {
+  id
+  client
+  industry
+  description
+  startDate
+  endDate
+  methodologies
+  technologies
+}
+    `;
 export const AddProjectDocument = gql`
     mutation addProject($input: ProjectInput!) {
   addProject(input: $input) {
@@ -545,19 +584,12 @@ export const GetProjectsDocument = gql`
     query getProjects {
   projects {
     items {
-      id
-      client
-      industry
-      description
-      startDate
-      endDate
-      methodologies
-      technologies
+      ...ProjectParts
     }
     nextToken
   }
 }
-    `;
+    ${ProjectPartsFragmentDoc}`;
 export type GetProjectsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetProjectsQuery, GetProjectsQueryVariables>, 'query'>;
 
     export const GetProjectsComponent = (props: GetProjectsComponentProps) => (
@@ -589,6 +621,45 @@ export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export const GetProjectDocument = gql`
+    query getProject($query: ProjectQuery!) {
+  project(query: $query) {
+    ...ProjectParts
+  }
+}
+    ${ProjectPartsFragmentDoc}`;
+export type GetProjectComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetProjectQuery, GetProjectQueryVariables>, 'query'> & ({ variables: GetProjectQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetProjectComponent = (props: GetProjectComponentProps) => (
+      <ApolloReactComponents.Query<GetProjectQuery, GetProjectQueryVariables> query={GetProjectDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetProjectQuery__
+ *
+ * To run a query within a React component, call `useGetProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useGetProjectQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+      }
+export function useGetProjectLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+        }
+export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
+export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
+export type GetProjectQueryResult = ApolloReactCommon.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetTrackingOverviewDocument = gql`
     query getTrackingOverview($query: TrackingQuery) {
   trackings(query: $query) {
