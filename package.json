@@ -111,6 +111,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.1.1",
+    "@apollo/react-components": "^4.0.0",
+    "@apollo/react-hooks": "^4.0.0",
     "@aws-amplify/auth": "^3.3.3",
     "@aws-amplify/cache": "^3.1.21",
     "@aws-amplify/core": "^3.4.4",
