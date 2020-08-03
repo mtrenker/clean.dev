@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import {
   getDaysInMonth, differenceInHours, isSunday, isSaturday, format,
 } from 'date-fns';
+import { de } from 'date-fns/locale';
 import { css } from '@emotion/core';
 
 import { useGetTrackingOverviewQuery, useGetProjectQuery, Tracking } from '../../graphql/hooks';
@@ -17,6 +18,18 @@ interface Day {
   date: Date;
   trackings: TrackingWithHours[]
 }
+
+const sender = {
+  name: 'Max Musterman',
+  address: 'Musterstr. 123',
+  zip: 12345,
+  city: 'Musterhausen',
+};
+
+const customer = {
+  name: 'Max Mustermann',
+  city: 'Musterhausen',
+};
 
 const reduceTrackings = (subtotal: number, tracking: TrackingWithHours) => subtotal + tracking.hours;
 const reduceDays = (total: number, day: Day) => total + day.trackings.reduce(reduceTrackings, 0);
@@ -62,9 +75,11 @@ export const TimeSheet: FC = () => {
   });
 
   const pageStyle = css`
+    @page {
+      margin: 1.5rem;
+    }
     display: grid;
-    height: 100vh;
-    padding: 2rem;
+    min-height: 100vh;
   `;
 
   const tableStyle = css`
@@ -103,6 +118,11 @@ export const TimeSheet: FC = () => {
   `;
 
   const headerStyle = css`
+    @media print {
+      h1 {
+        font-size: 26px;
+      }
+    }
     display: flex;
     h1, address {
       flex: 1;
@@ -144,23 +164,31 @@ export const TimeSheet: FC = () => {
     }
   `;
 
+  const datePickerStyle = css`
+    @media print {
+      display: none;
+    }
+  `;
+
   return (
     <div>
-      <DatePicker
-        selected={month}
-        onChange={(newDate) => setMonth(newDate!)}
-        dateFormat="MM/yyyy"
-        showMonthYearPicker
-      />
       <div css={pageStyle}>
+        <div css={datePickerStyle}>
+          <DatePicker
+            selected={month}
+            onChange={(newDate) => setMonth(newDate!)}
+            dateFormat="MM/yyyy"
+            showMonthYearPicker
+          />
+        </div>
         <div css={headerStyle}>
-          <h1>TimeSheet</h1>
+          <h1>{`${sender.name} ${format(month, 'MMM, u', { locale: de })}`}</h1>
           <address>
-            Max Mustermann
+            {sender.name}
             <br />
-            Muster Straße 22
+            {sender.address}
             <br />
-            12345 Musterhausen
+            {`${sender.zip} ${sender.city}`}
           </address>
         </div>
         <div>
@@ -168,9 +196,9 @@ export const TimeSheet: FC = () => {
           {' '}
           {project.client}
           <br />
-          {`Monat: ${format(new Date(), 'MM.u')}`}
+          {`Monat: ${format(month, 'MM.u')}`}
           <br />
-          Ort: Musterhausen
+          {`Ort: ${sender.city}`}
         </div>
         <table css={tableStyle}>
           <thead>
@@ -235,20 +263,17 @@ export const TimeSheet: FC = () => {
         </table>
         <div css={signatureStyles}>
           <div className="date">
-            Musterhausen, den
+            {`${sender.city}, den`}
           </div>
           <div className="signature">
-            Max Mustermann
-            <br />
-            (Auftragnehmer)
+            {`${sender.name} (Auftragnehmer)`}
           </div>
           <br />
           <div className="date">
-            Musterhausen, den
+            {`${customer.city}, den`}
           </div>
           <div className="signature">
-            <br />
-            (Auftraggeber)
+            {`${customer.name} (Auftraggeber)`}
           </div>
         </div>
         <div css={disclaimerStyle}>

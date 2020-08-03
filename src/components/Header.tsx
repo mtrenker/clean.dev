@@ -31,6 +31,9 @@ const slideOut = keyframes`
 `;
 
 const headerCss = css`
+  @media print {
+    display: none;
+  }
   @media (min-width: ${breakPoints.mobile}) {
     display: grid;
     position: relative;
