@@ -7,6 +7,7 @@ import { Header } from '../components/Header';
 import { Container } from '../components/Container';
 import { Footer } from '../components/Footer';
 import { mapWidgets } from '../lib/contentful';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
@@ -23,7 +24,9 @@ export const Page: FC = () => {
       <Header />
       <Container>
         {error && <p>{error.message}</p>}
-        {content}
+        <ErrorBoundary>
+          {content}
+        </ErrorBoundary>
       </Container>
       <Footer />
     </>
