@@ -10,13 +10,12 @@ const inputCss = css`
 `;
 
 export const Input: FC<InputProps> = ({
-  id, name, value, register, placeholder,
+  id, name, register, placeholder,
 }) => (
   <input
     css={inputCss}
     id={id}
     name={name}
-    value={value}
     ref={register}
     placeholder={placeholder}
   />

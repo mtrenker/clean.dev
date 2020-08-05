@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import { useForm, Controller } from 'react-hook-form';
 
@@ -7,6 +7,12 @@ import { Input } from '../Input';
 import { DatePicker } from '../DatePicker';
 import { ProjectInput, useAddProjectMutation, useGetProjectQuery } from '../../graphql/hooks';
 import { TextArea } from '../TextArea';
+
+interface RenderProps {
+  onChange: (...event: any[]) => void;
+  onBlur: () => void;
+  value: string;
+}
 
 const formCss = css`
   display: grid;
@@ -45,9 +51,8 @@ const formCss = css`
 
 export const ProjectForm: FC = () => {
   const {
-    register, handleSubmit, setValue, control,
+    register, handleSubmit, control, setValue,
   } = useForm<ProjectInput>();
-
   const { projectId } = useParams();
 
   const [updateProject] = useAddProjectMutation();
@@ -55,6 +60,16 @@ export const ProjectForm: FC = () => {
   const { data } = useGetProjectQuery({
     variables: {
       query: { project: projectId },
+    },
+    onCompleted: ({ project }) => {
+      setValue('client', project.client);
+      setValue('industry', project.industry);
+      setValue('startDate', project.startDate);
+      setValue('endDate', project.endDate);
+      setValue('description', project.description);
+      setValue('methodologies', project.methodologies.join(', '));
+      setValue('technologies', project.technologies.join(', '));
+      // WEITERMACHEN! :)
     },
   });
 
@@ -69,19 +84,11 @@ export const ProjectForm: FC = () => {
     });
   };
 
-  const renderDatePicker = (value: Date) => () => (
-    <DatePicker
-      onChange={(selected) => selected}
-      selected={value}
-    />
+  const renderDatePicker = ({ onBlur, onChange, value }: RenderProps) => (
+    <DatePicker onBlur={onBlur} onChange={(date) => onChange(date)} selected={value ? new Date(value) : new Date()} />
   );
 
   const project = data?.project;
-
-  useEffect(() => {
-    setValue('client', project?.client || '');
-    setValue('startDate', project?.startDate || '');
-  }, [setValue, project]);
 
   if (!project) {
     return <p>Loading</p>;
@@ -102,7 +109,7 @@ export const ProjectForm: FC = () => {
         <Controller
           name="startDate"
           control={control}
-          render={renderDatePicker(new Date(project.startDate || ''))}
+          render={renderDatePicker}
         />
       </label>
       <label className="endDate" htmlFor="endDate">
@@ -110,7 +117,7 @@ export const ProjectForm: FC = () => {
         <Controller
           name="endDate"
           control={control}
-          render={renderDatePicker(new Date(project.endDate || ''))}
+          render={renderDatePicker}
         />
       </label>
       <label className="description" htmlFor="description">
@@ -120,7 +127,6 @@ export const ProjectForm: FC = () => {
           placeholder="Description"
           id="description"
           register={register}
-          value={project.description}
         />
       </label>
       <label className="methodologies" htmlFor="methodologies">
@@ -129,7 +135,6 @@ export const ProjectForm: FC = () => {
           name="methodologies"
           placeholder="Methodologies"
           register={register}
-          value={project.methodologies.join(' ')}
         />
       </label>
       <label className="technologies" htmlFor="technologies">
@@ -138,7 +143,6 @@ export const ProjectForm: FC = () => {
           name="technologies"
           placeholder="Technologies"
           register={register}
-          value={project.technologies.join(' ')}
         />
       </label>
       <button type="submit">Submit</button>
