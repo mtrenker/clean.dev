@@ -1,9 +1,7 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import { onError } from 'apollo-link-error';
-import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
+import {
+  ApolloClient, InMemoryCache, HttpLink, from,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import Auth from '@aws-amplify/auth';
 import gql from 'graphql-tag';
 
@@ -23,16 +21,8 @@ const authLink = setContext(() => new Promise((resolve) => {
   });
 }));
 
-const link = ApolloLink.from([
+const link = from([
   authLink,
-  onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, locations, path }) => console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ));
-    }
-    if (networkError) console.log(`[Network error]: ${networkError}`);
-  }),
   new HttpLink({
     uri: process.env.GRAPHQL_ENDPOINT ?? '',
     credentials: 'same-origin',

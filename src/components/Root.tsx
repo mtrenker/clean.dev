@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 
 import { Page } from '../pages/Page';
 import { GlobalStyle } from './GlobalStyle';

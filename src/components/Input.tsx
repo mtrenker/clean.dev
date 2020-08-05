@@ -2,7 +2,7 @@ import React, { FC, HTMLProps } from 'react';
 import { css } from '@emotion/core';
 
 interface InputProps extends HTMLProps<HTMLInputElement> {
-  inputRef?: any
+  register?: any;
 }
 
 const inputCss = css`
@@ -10,14 +10,14 @@ const inputCss = css`
 `;
 
 export const Input: FC<InputProps> = ({
-  id, name, value, inputRef, placeholder,
+  id, name, value, register, placeholder,
 }) => (
   <input
     css={inputCss}
     id={id}
     name={name}
     value={value}
-    ref={inputRef}
+    ref={register}
     placeholder={placeholder}
   />
 );

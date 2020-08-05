@@ -128,7 +128,7 @@ async function addProject(event: AddProjectEvent): Promise<Project> {
     startDate,
     endDate,
   } = input;
-  const id = `project-${projectId}`;
+  const id = input.id || `project-${projectId}`;
 
   const projectItem: ProjectItem = {
     pk,
@@ -154,10 +154,12 @@ async function addProject(event: AddProjectEvent): Promise<Project> {
       projectItem,
     };
 
+    const detailType = input.id ? 'Project Updated' : 'Project Added';
+
     await eventBridge.putEvents({
       Entries: [{
         EventBusName: process.env.EVENT_BUS_NAME,
-        DetailType: 'Project Added',
+        DetailType: detailType,
         Detail: JSON.stringify(eventDetail),
         Source: 'projects',
       }],
