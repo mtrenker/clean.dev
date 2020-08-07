@@ -1,6 +1,8 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {
+  FC, useState, useEffect, StrictMode,
+} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 
 import { Page } from '../pages/Page';
 import { GlobalStyle } from './GlobalStyle';
@@ -25,14 +27,16 @@ export const Root: FC = () => {
   return (
     <UserContext.Provider value={{ user, setUser, refreshUser }}>
       <ApolloProvider client={client}>
-        <GlobalStyle />
-        <Router>
-          <Switch>
-            <Route path="/">
-              <Page />
-            </Route>
-          </Switch>
-        </Router>
+        <StrictMode>
+          <GlobalStyle />
+          <Router>
+            <Switch>
+              <Route path="/">
+                <Page />
+              </Route>
+            </Switch>
+          </Router>
+        </StrictMode>
       </ApolloProvider>
     </UserContext.Provider>
   );

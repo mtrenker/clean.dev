@@ -1,15 +1,25 @@
+fragment ProjectParts on Project {
+  id
+  client
+  industry
+  description
+  startDate
+  endDate
+  methodologies
+  technologies
+}
+
 query getProjects {
   projects {
     items {
-      id
-      client
-      industry
-      description
-      startDate
-      endDate
-      methodologies
-      technologies
+      ...ProjectParts
     }
     nextToken
+  }
+}
+
+query getProject($query: ProjectQuery!) {
+  project(query: $query) {
+    ...ProjectParts
   }
 }

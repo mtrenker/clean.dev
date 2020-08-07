@@ -6,6 +6,9 @@ import { breakPoints } from '../themes/default';
 
 export const Footer: FC = () => {
   const footer = css`
+    @media print {
+      display: none;
+    }
     a {
       color: #000;
       text-decoration: none;

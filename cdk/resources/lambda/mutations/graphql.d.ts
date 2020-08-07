@@ -22,12 +22,18 @@ export type Query = {
   page?: Maybe<Page>;
   blog: Blog;
   projects: ProjectConnection;
+  project: Project;
   trackings: TrackingConnection;
 };
 
 
 export type QueryPageArgs = {
   input: PageInput;
+};
+
+
+export type QueryProjectArgs = {
+  query?: Maybe<ProjectQuery>;
 };
 
 
@@ -165,4 +171,8 @@ export type ProjectInput = {
 export type TrackingQuery = {
   project: Scalars['String'];
   date: Scalars['String'];
+};
+
+export type ProjectQuery = {
+  project: Scalars['String'];
 };

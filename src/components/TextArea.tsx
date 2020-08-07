@@ -2,7 +2,7 @@ import React, { FC, HTMLProps } from 'react';
 import { css } from '@emotion/core';
 
 interface TextAreaProps extends HTMLProps<HTMLTextAreaElement> {
-  inputRef?: any;
+  register?: any;
 }
 
 const textAreaCss = css`
@@ -10,13 +10,13 @@ const textAreaCss = css`
 `;
 
 export const TextArea: FC<TextAreaProps> = ({
-  id, name, value, inputRef, placeholder,
+  id, name, value, register, placeholder,
 }) => (
   <textarea
     css={textAreaCss}
     placeholder={placeholder}
     name={name}
-    ref={inputRef}
+    ref={register}
     id={id}
     value={value}
   />

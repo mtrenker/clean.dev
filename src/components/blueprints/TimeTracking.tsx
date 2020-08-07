@@ -88,7 +88,7 @@ export const TimeTracking: FC = () => {
     mutate({
       variables,
       update: () => {
-        refetchTrackings();
+        refetchTrackings?.();
       },
     });
     onCancelEdit();

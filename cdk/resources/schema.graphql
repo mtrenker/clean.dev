@@ -6,6 +6,7 @@ type Query {
   page(input: PageInput!): Page @aws_api_key @aws_cognito_user_pools
   blog: Blog! @aws_api_key @aws_cognito_user_pools
   projects: ProjectConnection!
+  project(query: ProjectQuery): Project!
   trackings(query: TrackingQuery): TrackingConnection!
 }
 
@@ -117,4 +118,8 @@ input ProjectInput {
 input TrackingQuery {
   project: String!
   date: String!
+}
+
+input ProjectQuery {
+  project: String!
 }
