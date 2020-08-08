@@ -3,11 +3,11 @@ import { useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGetPageQuery } from '../graphql/hooks';
-import { Header } from '../components/Header';
-import { Container } from '../components/Container';
-import { Footer } from '../components/Footer';
+import { Header } from './Header';
+import { Container } from './Container';
+import { Footer } from './Footer';
 import { mapWidgets } from '../lib/contentful';
-import { ErrorBoundary } from '../components/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
