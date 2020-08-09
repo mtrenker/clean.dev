@@ -1,12 +1,8 @@
 /* eslint-disable */
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as React from 'react';
-import * as ApolloReactComponents from '@apollo/react-components';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+const gql = Apollo.gql;
 
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -379,13 +375,7 @@ export const AddProjectDocument = gql`
   }
 }
     `;
-export type AddProjectMutationFn = ApolloReactCommon.MutationFunction<AddProjectMutation, AddProjectMutationVariables>;
-export type AddProjectComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddProjectMutation, AddProjectMutationVariables>, 'mutation'>;
-
-    export const AddProjectComponent = (props: AddProjectComponentProps) => (
-      <ApolloReactComponents.Mutation<AddProjectMutation, AddProjectMutationVariables> mutation={AddProjectDocument} {...props} />
-    );
-    
+export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, AddProjectMutationVariables>;
 
 /**
  * __useAddProjectMutation__
@@ -404,12 +394,12 @@ export type AddProjectComponentProps = Omit<ApolloReactComponents.MutationCompon
  *   },
  * });
  */
-export function useAddProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddProjectMutation, AddProjectMutationVariables>) {
-        return ApolloReactHooks.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, baseOptions);
+export function useAddProjectMutation(baseOptions?: Apollo.MutationHookOptions<AddProjectMutation, AddProjectMutationVariables>) {
+        return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, baseOptions);
       }
 export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutation>;
-export type AddProjectMutationResult = ApolloReactCommon.MutationResult<AddProjectMutation>;
-export type AddProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
+export type AddProjectMutationResult = Apollo.MutationResult<AddProjectMutation>;
+export type AddProjectMutationOptions = Apollo.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
 export const TrackDocument = gql`
     mutation track($trackingInput: TrackingInput!) {
   track(trackingInput: $trackingInput) {
@@ -420,13 +410,7 @@ export const TrackDocument = gql`
   }
 }
     `;
-export type TrackMutationFn = ApolloReactCommon.MutationFunction<TrackMutation, TrackMutationVariables>;
-export type TrackComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<TrackMutation, TrackMutationVariables>, 'mutation'>;
-
-    export const TrackComponent = (props: TrackComponentProps) => (
-      <ApolloReactComponents.Mutation<TrackMutation, TrackMutationVariables> mutation={TrackDocument} {...props} />
-    );
-    
+export type TrackMutationFn = Apollo.MutationFunction<TrackMutation, TrackMutationVariables>;
 
 /**
  * __useTrackMutation__
@@ -445,12 +429,12 @@ export type TrackComponentProps = Omit<ApolloReactComponents.MutationComponentOp
  *   },
  * });
  */
-export function useTrackMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<TrackMutation, TrackMutationVariables>) {
-        return ApolloReactHooks.useMutation<TrackMutation, TrackMutationVariables>(TrackDocument, baseOptions);
+export function useTrackMutation(baseOptions?: Apollo.MutationHookOptions<TrackMutation, TrackMutationVariables>) {
+        return Apollo.useMutation<TrackMutation, TrackMutationVariables>(TrackDocument, baseOptions);
       }
 export type TrackMutationHookResult = ReturnType<typeof useTrackMutation>;
-export type TrackMutationResult = ApolloReactCommon.MutationResult<TrackMutation>;
-export type TrackMutationOptions = ApolloReactCommon.BaseMutationOptions<TrackMutation, TrackMutationVariables>;
+export type TrackMutationResult = Apollo.MutationResult<TrackMutation>;
+export type TrackMutationOptions = Apollo.BaseMutationOptions<TrackMutation, TrackMutationVariables>;
 export const GetBlogListDocument = gql`
     query getBlogList {
   blog {
@@ -478,12 +462,6 @@ export const GetBlogListDocument = gql`
   }
 }
     `;
-export type GetBlogListComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetBlogListQuery, GetBlogListQueryVariables>, 'query'>;
-
-    export const GetBlogListComponent = (props: GetBlogListComponentProps) => (
-      <ApolloReactComponents.Query<GetBlogListQuery, GetBlogListQueryVariables> query={GetBlogListDocument} {...props} />
-    );
-    
 
 /**
  * __useGetBlogListQuery__
@@ -500,15 +478,15 @@ export type GetBlogListComponentProps = Omit<ApolloReactComponents.QueryComponen
  *   },
  * });
  */
-export function useGetBlogListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
+export function useGetBlogListQuery(baseOptions?: Apollo.QueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
+        return Apollo.useQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
       }
-export function useGetBlogListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
+export function useGetBlogListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>) {
+          return Apollo.useLazyQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, baseOptions);
         }
 export type GetBlogListQueryHookResult = ReturnType<typeof useGetBlogListQuery>;
 export type GetBlogListLazyQueryHookResult = ReturnType<typeof useGetBlogListLazyQuery>;
-export type GetBlogListQueryResult = ApolloReactCommon.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
+export type GetBlogListQueryResult = Apollo.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
 export const GetBlogPostDocument = gql`
     query getBlogPost($blogPostQuery: BlogPostQuery!) {
   blog {
@@ -534,12 +512,6 @@ export const GetBlogPostDocument = gql`
   }
 }
     `;
-export type GetBlogPostComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetBlogPostQuery, GetBlogPostQueryVariables>, 'query'> & ({ variables: GetBlogPostQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const GetBlogPostComponent = (props: GetBlogPostComponentProps) => (
-      <ApolloReactComponents.Query<GetBlogPostQuery, GetBlogPostQueryVariables> query={GetBlogPostDocument} {...props} />
-    );
-    
 
 /**
  * __useGetBlogPostQuery__
@@ -557,15 +529,15 @@ export type GetBlogPostComponentProps = Omit<ApolloReactComponents.QueryComponen
  *   },
  * });
  */
-export function useGetBlogPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
+export function useGetBlogPostQuery(baseOptions?: Apollo.QueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
+        return Apollo.useQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
       }
-export function useGetBlogPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
+export function useGetBlogPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogPostQuery, GetBlogPostQueryVariables>) {
+          return Apollo.useLazyQuery<GetBlogPostQuery, GetBlogPostQueryVariables>(GetBlogPostDocument, baseOptions);
         }
 export type GetBlogPostQueryHookResult = ReturnType<typeof useGetBlogPostQuery>;
 export type GetBlogPostLazyQueryHookResult = ReturnType<typeof useGetBlogPostLazyQuery>;
-export type GetBlogPostQueryResult = ApolloReactCommon.QueryResult<GetBlogPostQuery, GetBlogPostQueryVariables>;
+export type GetBlogPostQueryResult = Apollo.QueryResult<GetBlogPostQuery, GetBlogPostQueryVariables>;
 export const GetPageDocument = gql`
     query getPage($pageQuery: PageQuery!) {
   page(pageQuery: $pageQuery) {
@@ -575,12 +547,6 @@ export const GetPageDocument = gql`
   }
 }
     `;
-export type GetPageComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetPageQuery, GetPageQueryVariables>, 'query'> & ({ variables: GetPageQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const GetPageComponent = (props: GetPageComponentProps) => (
-      <ApolloReactComponents.Query<GetPageQuery, GetPageQueryVariables> query={GetPageDocument} {...props} />
-    );
-    
 
 /**
  * __useGetPageQuery__
@@ -598,15 +564,15 @@ export type GetPageComponentProps = Omit<ApolloReactComponents.QueryComponentOpt
  *   },
  * });
  */
-export function useGetPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPageQuery, GetPageQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetPageQuery, GetPageQueryVariables>(GetPageDocument, baseOptions);
+export function useGetPageQuery(baseOptions?: Apollo.QueryHookOptions<GetPageQuery, GetPageQueryVariables>) {
+        return Apollo.useQuery<GetPageQuery, GetPageQueryVariables>(GetPageDocument, baseOptions);
       }
-export function useGetPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPageQuery, GetPageQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetPageQuery, GetPageQueryVariables>(GetPageDocument, baseOptions);
+export function useGetPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPageQuery, GetPageQueryVariables>) {
+          return Apollo.useLazyQuery<GetPageQuery, GetPageQueryVariables>(GetPageDocument, baseOptions);
         }
 export type GetPageQueryHookResult = ReturnType<typeof useGetPageQuery>;
 export type GetPageLazyQueryHookResult = ReturnType<typeof useGetPageLazyQuery>;
-export type GetPageQueryResult = ApolloReactCommon.QueryResult<GetPageQuery, GetPageQueryVariables>;
+export type GetPageQueryResult = Apollo.QueryResult<GetPageQuery, GetPageQueryVariables>;
 export const GetProjectsDocument = gql`
     query getProjects {
   projects {
@@ -617,12 +583,6 @@ export const GetProjectsDocument = gql`
   }
 }
     ${ProjectPartsFragmentDoc}`;
-export type GetProjectsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetProjectsQuery, GetProjectsQueryVariables>, 'query'>;
-
-    export const GetProjectsComponent = (props: GetProjectsComponentProps) => (
-      <ApolloReactComponents.Query<GetProjectsQuery, GetProjectsQueryVariables> query={GetProjectsDocument} {...props} />
-    );
-    
 
 /**
  * __useGetProjectsQuery__
@@ -639,15 +599,15 @@ export type GetProjectsComponentProps = Omit<ApolloReactComponents.QueryComponen
  *   },
  * });
  */
-export function useGetProjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
+export function useGetProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+        return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
       }
-export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
+export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
         }
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
-export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
 export const GetProjectDocument = gql`
     query getProject($projectQuery: ProjectQuery!, $trackingQuery: TrackingQuery!) {
   project(projectQuery: $projectQuery) {
@@ -661,12 +621,6 @@ export const GetProjectDocument = gql`
 }
     ${ProjectPartsFragmentDoc}
 ${TrackingPartsFragmentDoc}`;
-export type GetProjectComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetProjectQuery, GetProjectQueryVariables>, 'query'> & ({ variables: GetProjectQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const GetProjectComponent = (props: GetProjectComponentProps) => (
-      <ApolloReactComponents.Query<GetProjectQuery, GetProjectQueryVariables> query={GetProjectDocument} {...props} />
-    );
-    
 
 /**
  * __useGetProjectQuery__
@@ -685,15 +639,15 @@ export type GetProjectComponentProps = Omit<ApolloReactComponents.QueryComponent
  *   },
  * });
  */
-export function useGetProjectQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+export function useGetProjectQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
       }
-export function useGetProjectLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
         }
 export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
-export type GetProjectQueryResult = ApolloReactCommon.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
+export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetTrackingOverviewDocument = gql`
     query getTrackingOverview($trackingQuery: TrackingQuery!) {
   trackings(trackingQuery: $trackingQuery) {
@@ -703,12 +657,6 @@ export const GetTrackingOverviewDocument = gql`
   }
 }
     ${TrackingPartsFragmentDoc}`;
-export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>, 'query'> & ({ variables: GetTrackingOverviewQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const GetTrackingOverviewComponent = (props: GetTrackingOverviewComponentProps) => (
-      <ApolloReactComponents.Query<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables> query={GetTrackingOverviewDocument} {...props} />
-    );
-    
 
 /**
  * __useGetTrackingOverviewQuery__
@@ -726,12 +674,12 @@ export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.Query
  *   },
  * });
  */
-export function useGetTrackingOverviewQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
+export function useGetTrackingOverviewQuery(baseOptions?: Apollo.QueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
+        return Apollo.useQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
       }
-export function useGetTrackingOverviewLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
+export function useGetTrackingOverviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>) {
+          return Apollo.useLazyQuery<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>(GetTrackingOverviewDocument, baseOptions);
         }
 export type GetTrackingOverviewQueryHookResult = ReturnType<typeof useGetTrackingOverviewQuery>;
 export type GetTrackingOverviewLazyQueryHookResult = ReturnType<typeof useGetTrackingOverviewLazyQuery>;
-export type GetTrackingOverviewQueryResult = ApolloReactCommon.QueryResult<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>;
+export type GetTrackingOverviewQueryResult = Apollo.QueryResult<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>;
