@@ -70,7 +70,8 @@ export const ProjectForm: FC = () => {
 
   const { data } = useGetProjectQuery({
     variables: {
-      query: { project: projectId },
+      projectQuery: { project: projectId },
+      trackingQuery: { date: format(new Date(), 'u-MM') },
     },
     onCompleted: ({ project }) => {
       setValue('client', project.client);
@@ -90,7 +91,7 @@ export const ProjectForm: FC = () => {
   }: FormInput) => {
     updateProject({
       variables: {
-        input: {
+        projectInput: {
           id: projectId,
           client,
           description,

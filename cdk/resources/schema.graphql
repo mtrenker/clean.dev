@@ -3,16 +3,16 @@ scalar AWSDateTime
 scalar AWSJSON
 
 type Query {
-  page(input: PageInput!): Page @aws_api_key @aws_cognito_user_pools
+  page(pageQuery: PageQuery!): Page @aws_api_key @aws_cognito_user_pools
   blog: Blog! @aws_api_key @aws_cognito_user_pools
   projects: ProjectConnection!
-  project(query: ProjectQuery): Project!
-  trackings(query: TrackingQuery!): TrackingConnection!
+  project(projectQuery: ProjectQuery!): Project!
+  trackings(trackingQuery: TrackingQuery!): TrackingConnection!
 }
 
 type Mutation {
-  track(input: TrackingInput!): Tracking!
-  addProject(input: ProjectInput!): Project!
+  track(trackingInput: TrackingInput!): Tracking!
+  addProject(projectInput: ProjectInput!): Project!
 }
 
 type Page @aws_api_key @aws_cognito_user_pools {
@@ -35,7 +35,7 @@ type Project {
   endDate: AWSDate
   methodologies: [String!]!
   technologies: [String!]!
-  trackings(query: TrackingQuery!): TrackingConnection!
+  trackings(trackingQuery: TrackingQuery!): TrackingConnection!
 }
 
 type TrackingConnection {
@@ -51,9 +51,8 @@ type Tracking {
   endTime: AWSDateTime!
 }
 
-
 type Blog @aws_api_key @aws_cognito_user_pools {
-  post(input: BlogPostQuery!): BlogPost!
+  post(blogPostQuery: BlogPostQuery!): BlogPost!
   list: BlogPostConnection!
 }
 
@@ -86,10 +85,9 @@ type Author @aws_api_key @aws_cognito_user_pools {
   avatar: Image
 }
 
-
 # INPUTS
 
-input PageInput {
+input PageQuery {
   slug: String!
 }
 

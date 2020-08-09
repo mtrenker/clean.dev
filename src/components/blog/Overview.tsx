@@ -31,7 +31,7 @@ export const Overview: FC = () => {
         });
         return (
           <div css={cardCss}>
-            <Link to={`blog/${post.slug}`}>
+            <Link to={`/blog/${post.slug}`}>
               <h2>{post.title}</h2>
               {intro}
             </Link>

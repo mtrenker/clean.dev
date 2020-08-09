@@ -1,10 +1,14 @@
-query getTrackingOverview($query: TrackingQuery!) {
-  trackings(query: $query) {
+fragment TrackingParts on Tracking {
+  id
+  description
+  startTime
+  endTime
+}
+
+query getTrackingOverview($trackingQuery: TrackingQuery!) {
+  trackings(trackingQuery: $trackingQuery) {
     items {
-      id
-      description
-      startTime
-      endTime
+      ...TrackingParts
     }
   }
 }

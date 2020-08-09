@@ -116,8 +116,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "pk" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.input.slug"),
-              "id" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.input.slug")
+              "pk" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.pageQuery.slug"),
+              "id" : $util.dynamodb.toDynamoDBJson("page-/$ctx.args.pageQuery.slug")
           }
       }
     `),
@@ -135,7 +135,7 @@ export class ApiStack extends Stack {
           post: {},
         },
       })),
-      responseMappingTemplate: MappingTemplate.fromString('$utils.toJson($context.result)'),
+      responseMappingTemplate: MappingTemplate.fromString('$utils.toJson($ctx.result)'),
     });
   }
 
@@ -148,8 +148,8 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "pk" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.input.post"),
-              "id" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.input.post")
+              "pk" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.blogPostQuery.post"),
+              "id" : $util.dynamodb.toDynamoDBJson("blog-$ctx.args.blogPostQuery.post")
           }
       }
     `),
@@ -199,7 +199,7 @@ export class ApiStack extends Stack {
       responseMappingTemplate: MappingTemplate.fromString(`
         {
           "items": $util.toJson($ctx.result.items),
-          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
         }
       `),
     });
@@ -215,7 +215,7 @@ export class ApiStack extends Stack {
           "operation" : "GetItem",
           "key" : {
               "pk" : $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub"),
-              "id" : $util.dynamodb.toDynamoDBJson("$ctx.args.query.project")
+              "id" : $util.dynamodb.toDynamoDBJson("$ctx.args.projectQuery.project")
           }
       }
     `),
@@ -231,7 +231,7 @@ export class ApiStack extends Stack {
       responseMappingTemplate: MappingTemplate.fromString(`
         {
           "items": $util.toJson($ctx.result.items),
-          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
         }
       `),
     });
@@ -243,7 +243,7 @@ export class ApiStack extends Stack {
       responseMappingTemplate: MappingTemplate.fromString(`
         {
           "items": $util.toJson($ctx.result.items),
-          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
         }
       `),
     });

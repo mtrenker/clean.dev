@@ -1,5 +1,5 @@
-query getPage($input: PageInput!) {
-  page(input: $input) {
+query getPage($pageQuery: PageQuery!) {
+  page(pageQuery: $pageQuery) {
     slug
     title
     content

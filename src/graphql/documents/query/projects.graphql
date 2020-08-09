@@ -18,8 +18,13 @@ query getProjects {
   }
 }
 
-query getProject($query: ProjectQuery!) {
-  project(query: $query) {
+query getProject($projectQuery: ProjectQuery!, $trackingQuery: TrackingQuery!) {
+  project(projectQuery: $projectQuery) {
     ...ProjectParts
+    trackings(trackingQuery: $trackingQuery) {
+      items {
+        ...TrackingParts
+      }
+    }
   }
 }

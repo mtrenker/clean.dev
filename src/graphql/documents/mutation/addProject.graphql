@@ -1,5 +1,5 @@
-mutation addProject($input: ProjectInput!) {
-  addProject(input: $input) {
+mutation addProject($projectInput: ProjectInput!) {
+  addProject(projectInput: $projectInput) {
     id
     client
     industry

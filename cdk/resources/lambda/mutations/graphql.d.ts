@@ -28,17 +28,17 @@ export type Query = {
 
 
 export type QueryPageArgs = {
-  input: PageInput;
+  pageQuery: PageQuery;
 };
 
 
 export type QueryProjectArgs = {
-  query?: Maybe<ProjectQuery>;
+  projectQuery: ProjectQuery;
 };
 
 
 export type QueryTrackingsArgs = {
-  query: TrackingQuery;
+  trackingQuery: TrackingQuery;
 };
 
 export type Mutation = {
@@ -49,12 +49,12 @@ export type Mutation = {
 
 
 export type MutationTrackArgs = {
-  input: TrackingInput;
+  trackingInput: TrackingInput;
 };
 
 
 export type MutationAddProjectArgs = {
-  input: ProjectInput;
+  projectInput: ProjectInput;
 };
 
 export type Page = {
@@ -85,7 +85,7 @@ export type Project = {
 
 
 export type ProjectTrackingsArgs = {
-  query: TrackingQuery;
+  trackingQuery: TrackingQuery;
 };
 
 export type TrackingConnection = {
@@ -111,7 +111,7 @@ export type Blog = {
 
 
 export type BlogPostArgs = {
-  input: BlogPostQuery;
+  blogPostQuery: BlogPostQuery;
 };
 
 export type BlogPostConnection = {
@@ -147,7 +147,7 @@ export type Author = {
   avatar?: Maybe<Image>;
 };
 
-export type PageInput = {
+export type PageQuery = {
   slug: Scalars['String'];
 };
 

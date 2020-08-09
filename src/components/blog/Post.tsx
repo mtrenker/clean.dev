@@ -8,7 +8,7 @@ import { mapWidgets } from '../../lib/contentful';
 export const Post: FC = () => {
   const { title } = useParams();
 
-  const { data } = useGetBlogPostQuery({ variables: { input: { post: title } } });
+  const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: title } } });
   if (!data) return <p>Loading</p>;
   const document = data?.blog?.post.content ?? '';
 

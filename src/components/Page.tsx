@@ -12,7 +12,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 export const Page: FC = () => {
   const { pathname } = useLocation();
   const page = pathname.split('/')[1];
-  const { data, error } = useGetPageQuery({ variables: { input: { slug: page } } });
+  const { data, error } = useGetPageQuery({ variables: { pageQuery: { slug: page } } });
   if (!data) return <p>Loading</p>;
   const document = data?.page?.content ?? '';
 

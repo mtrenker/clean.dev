@@ -34,17 +34,17 @@ export type Query = {
 
 
 export type QueryPageArgs = {
-  input: PageInput;
+  pageQuery: PageQuery;
 };
 
 
 export type QueryProjectArgs = {
-  query?: Maybe<ProjectQuery>;
+  projectQuery: ProjectQuery;
 };
 
 
 export type QueryTrackingsArgs = {
-  query: TrackingQuery;
+  trackingQuery: TrackingQuery;
 };
 
 export type Mutation = {
@@ -55,12 +55,12 @@ export type Mutation = {
 
 
 export type MutationTrackArgs = {
-  input: TrackingInput;
+  trackingInput: TrackingInput;
 };
 
 
 export type MutationAddProjectArgs = {
-  input: ProjectInput;
+  projectInput: ProjectInput;
 };
 
 export type Page = {
@@ -91,7 +91,7 @@ export type Project = {
 
 
 export type ProjectTrackingsArgs = {
-  query: TrackingQuery;
+  trackingQuery: TrackingQuery;
 };
 
 export type TrackingConnection = {
@@ -117,7 +117,7 @@ export type Blog = {
 
 
 export type BlogPostArgs = {
-  input: BlogPostQuery;
+  blogPostQuery: BlogPostQuery;
 };
 
 export type BlogPostConnection = {
@@ -153,7 +153,7 @@ export type Author = {
   avatar?: Maybe<Image>;
 };
 
-export type PageInput = {
+export type PageQuery = {
   slug: Scalars['String'];
 };
 
@@ -190,7 +190,7 @@ export type ProjectQuery = {
 };
 
 export type AddProjectMutationVariables = Exact<{
-  input: ProjectInput;
+  projectInput: ProjectInput;
 }>;
 
 
@@ -203,7 +203,7 @@ export type AddProjectMutation = (
 );
 
 export type TrackMutationVariables = Exact<{
-  input: TrackingInput;
+  trackingInput: TrackingInput;
 }>;
 
 
@@ -244,7 +244,7 @@ export type GetBlogListQuery = (
 );
 
 export type GetBlogPostQueryVariables = Exact<{
-  input: BlogPostQuery;
+  blogPostQuery: BlogPostQuery;
 }>;
 
 
@@ -271,7 +271,7 @@ export type GetBlogPostQuery = (
 );
 
 export type GetPageQueryVariables = Exact<{
-  input: PageInput;
+  pageQuery: PageQuery;
 }>;
 
 
@@ -304,7 +304,8 @@ export type GetProjectsQuery = (
 );
 
 export type GetProjectQueryVariables = Exact<{
-  query: ProjectQuery;
+  projectQuery: ProjectQuery;
+  trackingQuery: TrackingQuery;
 }>;
 
 
@@ -312,12 +313,24 @@ export type GetProjectQuery = (
   { __typename?: 'Query' }
   & { project: (
     { __typename?: 'Project' }
+    & { trackings: (
+      { __typename?: 'TrackingConnection' }
+      & { items: Array<(
+        { __typename?: 'Tracking' }
+        & TrackingPartsFragment
+      )> }
+    ) }
     & ProjectPartsFragment
   ) }
 );
 
+export type TrackingPartsFragment = (
+  { __typename?: 'Tracking' }
+  & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
+);
+
 export type GetTrackingOverviewQueryVariables = Exact<{
-  query: TrackingQuery;
+  trackingQuery: TrackingQuery;
 }>;
 
 
@@ -327,7 +340,7 @@ export type GetTrackingOverviewQuery = (
     { __typename?: 'TrackingConnection' }
     & { items: Array<(
       { __typename?: 'Tracking' }
-      & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
+      & TrackingPartsFragment
     )> }
   ) }
 );
@@ -344,9 +357,17 @@ export const ProjectPartsFragmentDoc = gql`
   technologies
 }
     `;
+export const TrackingPartsFragmentDoc = gql`
+    fragment TrackingParts on Tracking {
+  id
+  description
+  startTime
+  endTime
+}
+    `;
 export const AddProjectDocument = gql`
-    mutation addProject($input: ProjectInput!) {
-  addProject(input: $input) {
+    mutation addProject($projectInput: ProjectInput!) {
+  addProject(projectInput: $projectInput) {
     id
     client
     industry
@@ -379,7 +400,7 @@ export type AddProjectComponentProps = Omit<ApolloReactComponents.MutationCompon
  * @example
  * const [addProjectMutation, { data, loading, error }] = useAddProjectMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      projectInput: // value for 'projectInput'
  *   },
  * });
  */
@@ -390,8 +411,8 @@ export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutati
 export type AddProjectMutationResult = ApolloReactCommon.MutationResult<AddProjectMutation>;
 export type AddProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
 export const TrackDocument = gql`
-    mutation track($input: TrackingInput!) {
-  track(input: $input) {
+    mutation track($trackingInput: TrackingInput!) {
+  track(trackingInput: $trackingInput) {
     id
     startTime
     endTime
@@ -420,7 +441,7 @@ export type TrackComponentProps = Omit<ApolloReactComponents.MutationComponentOp
  * @example
  * const [trackMutation, { data, loading, error }] = useTrackMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      trackingInput: // value for 'trackingInput'
  *   },
  * });
  */
@@ -489,9 +510,9 @@ export type GetBlogListQueryHookResult = ReturnType<typeof useGetBlogListQuery>;
 export type GetBlogListLazyQueryHookResult = ReturnType<typeof useGetBlogListLazyQuery>;
 export type GetBlogListQueryResult = ApolloReactCommon.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
 export const GetBlogPostDocument = gql`
-    query getBlogPost($input: BlogPostQuery!) {
+    query getBlogPost($blogPostQuery: BlogPostQuery!) {
   blog {
-    post(input: $input) {
+    post(blogPostQuery: $blogPostQuery) {
       id
       title
       slug
@@ -532,7 +553,7 @@ export type GetBlogPostComponentProps = Omit<ApolloReactComponents.QueryComponen
  * @example
  * const { data, loading, error } = useGetBlogPostQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      blogPostQuery: // value for 'blogPostQuery'
  *   },
  * });
  */
@@ -546,8 +567,8 @@ export type GetBlogPostQueryHookResult = ReturnType<typeof useGetBlogPostQuery>;
 export type GetBlogPostLazyQueryHookResult = ReturnType<typeof useGetBlogPostLazyQuery>;
 export type GetBlogPostQueryResult = ApolloReactCommon.QueryResult<GetBlogPostQuery, GetBlogPostQueryVariables>;
 export const GetPageDocument = gql`
-    query getPage($input: PageInput!) {
-  page(input: $input) {
+    query getPage($pageQuery: PageQuery!) {
+  page(pageQuery: $pageQuery) {
     slug
     title
     content
@@ -573,7 +594,7 @@ export type GetPageComponentProps = Omit<ApolloReactComponents.QueryComponentOpt
  * @example
  * const { data, loading, error } = useGetPageQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      pageQuery: // value for 'pageQuery'
  *   },
  * });
  */
@@ -628,12 +649,18 @@ export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
 export const GetProjectDocument = gql`
-    query getProject($query: ProjectQuery!) {
-  project(query: $query) {
+    query getProject($projectQuery: ProjectQuery!, $trackingQuery: TrackingQuery!) {
+  project(projectQuery: $projectQuery) {
     ...ProjectParts
+    trackings(trackingQuery: $trackingQuery) {
+      items {
+        ...TrackingParts
+      }
+    }
   }
 }
-    ${ProjectPartsFragmentDoc}`;
+    ${ProjectPartsFragmentDoc}
+${TrackingPartsFragmentDoc}`;
 export type GetProjectComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetProjectQuery, GetProjectQueryVariables>, 'query'> & ({ variables: GetProjectQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const GetProjectComponent = (props: GetProjectComponentProps) => (
@@ -653,7 +680,8 @@ export type GetProjectComponentProps = Omit<ApolloReactComponents.QueryComponent
  * @example
  * const { data, loading, error } = useGetProjectQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      projectQuery: // value for 'projectQuery'
+ *      trackingQuery: // value for 'trackingQuery'
  *   },
  * });
  */
@@ -667,17 +695,14 @@ export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
 export type GetProjectQueryResult = ApolloReactCommon.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetTrackingOverviewDocument = gql`
-    query getTrackingOverview($query: TrackingQuery!) {
-  trackings(query: $query) {
+    query getTrackingOverview($trackingQuery: TrackingQuery!) {
+  trackings(trackingQuery: $trackingQuery) {
     items {
-      id
-      description
-      startTime
-      endTime
+      ...TrackingParts
     }
   }
 }
-    `;
+    ${TrackingPartsFragmentDoc}`;
 export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>, 'query'> & ({ variables: GetTrackingOverviewQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const GetTrackingOverviewComponent = (props: GetTrackingOverviewComponentProps) => (
@@ -697,7 +722,7 @@ export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.Query
  * @example
  * const { data, loading, error } = useGetTrackingOverviewQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      trackingQuery: // value for 'trackingQuery'
  *   },
  * });
  */

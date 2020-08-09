@@ -25,9 +25,9 @@ query getBlogList {
 }
 
 
-query getBlogPost($input: BlogPostQuery!) {
+query getBlogPost($blogPostQuery: BlogPostQuery!) {
   blog {
-    post(input: $input) {
+    post(blogPostQuery: $blogPostQuery) {
       id
       title
       slug

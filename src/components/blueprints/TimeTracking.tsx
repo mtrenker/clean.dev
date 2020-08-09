@@ -38,7 +38,7 @@ export const TimeTracking: FC = () => {
   const getTrackings = (project: string): void => {
     trackingQuery({
       variables: {
-        query: {
+        trackingQuery: {
           date: '2020',
           project,
         },
@@ -77,16 +77,15 @@ export const TimeTracking: FC = () => {
     endTime: string,
     description: string,
   ) => {
-    const variables = {
-      input: {
-        projectId,
-        startTime,
-        endTime,
-        description,
-      },
-    };
     mutate({
-      variables,
+      variables: {
+        trackingInput: {
+          projectId,
+          startTime,
+          endTime,
+          description,
+        },
+      },
       update: () => {
         refetchTrackings?.();
       },

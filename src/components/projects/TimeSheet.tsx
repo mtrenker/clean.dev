@@ -6,7 +6,7 @@ import {
 import { de } from 'date-fns/locale';
 import { css } from '@emotion/core';
 
-import { useGetTrackingOverviewQuery, useGetProjectQuery, Tracking } from '../../graphql/hooks';
+import { useGetProjectQuery, Tracking } from '../../graphql/hooks';
 import { DatePicker } from '../DatePicker';
 
 interface TrackingWithHours extends Tracking {
@@ -39,16 +39,12 @@ export const TimeSheet: FC = () => {
   const { projectId } = useParams();
   const { data: projectData } = useGetProjectQuery({
     variables: {
-      query: { project: projectId },
-    },
-  });
-  const { data: trackingData } = useGetTrackingOverviewQuery({
-    variables: {
-      query: { date: format(month, 'u-MM'), project: projectId },
+      projectQuery: { project: projectId },
+      trackingQuery: { date: format(month, 'u-MM') },
     },
   });
 
-  if (!trackingData || !projectData) return <p>Loading Sheet</p>;
+  if (!projectData) return <p>Loading Sheet</p>;
   const { project } = projectData;
   const days = [...new Array(getDaysInMonth(month))].map((_, day): Day => {
     month.setDate(day + 1);
@@ -59,7 +55,7 @@ export const TimeSheet: FC = () => {
     };
   });
 
-  trackingData.trackings.items.forEach((tracking) => {
+  project.trackings.items.forEach((tracking) => {
     const {
       __typename, id, description, startTime, endTime,
     } = tracking;
