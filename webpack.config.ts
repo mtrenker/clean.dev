@@ -40,16 +40,6 @@ const config: Config = {
           },
         ],
       }, {
-        test: /\.(png|jpg)$/i,
-        loader: 'responsive-loader',
-        options: {
-          // eslint-disable-next-line global-require
-          adapter: require('responsive-loader/sharp'),
-          sizes: [300, 600, 1200, 2000],
-          placeholder: true,
-          placeholderSize: 50,
-        },
-      }, {
         test: /\.svg$/,
         use: ['@svgr/webpack'],
       },
