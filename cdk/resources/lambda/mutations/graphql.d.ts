@@ -38,7 +38,7 @@ export type QueryProjectArgs = {
 
 
 export type QueryTrackingsArgs = {
-  query?: Maybe<TrackingQuery>;
+  query: TrackingQuery;
 };
 
 export type Mutation = {
@@ -80,6 +80,12 @@ export type Project = {
   endDate?: Maybe<Scalars['AWSDate']>;
   methodologies: Array<Scalars['String']>;
   technologies: Array<Scalars['String']>;
+  trackings: TrackingConnection;
+};
+
+
+export type ProjectTrackingsArgs = {
+  query: TrackingQuery;
 };
 
 export type TrackingConnection = {
@@ -169,7 +175,7 @@ export type ProjectInput = {
 };
 
 export type TrackingQuery = {
-  project: Scalars['String'];
+  project?: Maybe<Scalars['String']>;
   date: Scalars['String'];
 };
 

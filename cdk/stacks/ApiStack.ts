@@ -235,6 +235,18 @@ export class ApiStack extends Stack {
         }
       `),
     });
+
+    queryDataSource.createResolver({
+      fieldName: 'trackings',
+      typeName: 'Project',
+      requestMappingTemplate: MappingTemplate.fromFile('cdk/resources/vtl/trackingQuery.vtl'),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        {
+          "items": $util.toJson($ctx.result.items),
+          "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+        }
+      `),
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types

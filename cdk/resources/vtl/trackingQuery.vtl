@@ -2,7 +2,7 @@
 #set($prefixVal = {"S": "tracking-"})
 
 #set($date      = $util.defaultIfNullOrEmpty($ctx.args.query.date, ""))
-#set($project = $util.defaultIfNullOrEmpty($ctx.args.query.project, ""))
+#set($project = $util.defaultIfNullOrEmpty($ctx.args.query.project, $ctx.source.id))
 
 #set($expressionValues = {})
 $util.qr($expressionValues.put(':pk', $pkVal))

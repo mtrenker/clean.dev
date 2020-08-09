@@ -44,7 +44,7 @@ export type QueryProjectArgs = {
 
 
 export type QueryTrackingsArgs = {
-  query?: Maybe<TrackingQuery>;
+  query: TrackingQuery;
 };
 
 export type Mutation = {
@@ -86,6 +86,12 @@ export type Project = {
   endDate?: Maybe<Scalars['AWSDate']>;
   methodologies: Array<Scalars['String']>;
   technologies: Array<Scalars['String']>;
+  trackings: TrackingConnection;
+};
+
+
+export type ProjectTrackingsArgs = {
+  query: TrackingQuery;
 };
 
 export type TrackingConnection = {
@@ -175,7 +181,7 @@ export type ProjectInput = {
 };
 
 export type TrackingQuery = {
-  project: Scalars['String'];
+  project?: Maybe<Scalars['String']>;
   date: Scalars['String'];
 };
 
@@ -311,7 +317,7 @@ export type GetProjectQuery = (
 );
 
 export type GetTrackingOverviewQueryVariables = Exact<{
-  query?: Maybe<TrackingQuery>;
+  query: TrackingQuery;
 }>;
 
 
@@ -661,7 +667,7 @@ export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
 export type GetProjectQueryResult = ApolloReactCommon.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetTrackingOverviewDocument = gql`
-    query getTrackingOverview($query: TrackingQuery) {
+    query getTrackingOverview($query: TrackingQuery!) {
   trackings(query: $query) {
     items {
       id
@@ -672,7 +678,7 @@ export const GetTrackingOverviewDocument = gql`
   }
 }
     `;
-export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>, 'query'>;
+export type GetTrackingOverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables>, 'query'> & ({ variables: GetTrackingOverviewQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const GetTrackingOverviewComponent = (props: GetTrackingOverviewComponentProps) => (
       <ApolloReactComponents.Query<GetTrackingOverviewQuery, GetTrackingOverviewQueryVariables> query={GetTrackingOverviewDocument} {...props} />

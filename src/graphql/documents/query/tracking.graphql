@@ -1,4 +1,4 @@
-query getTrackingOverview($query: TrackingQuery) {
+query getTrackingOverview($query: TrackingQuery!) {
   trackings(query: $query) {
     items {
       id
