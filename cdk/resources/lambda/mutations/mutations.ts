@@ -7,16 +7,10 @@ import {
 } from './graphql';
 
 interface MutationEvent {
-  info: {
-    fieldName: string;
-  };
   identity: {
     sub: string;
     username: string;
   };
-  arguments: {
-    input: TrackingInput | ProjectInput
-  }
 }
 
 interface TrackEvent extends MutationEvent {
@@ -24,7 +18,7 @@ interface TrackEvent extends MutationEvent {
     fieldName: 'track'
   };
   arguments: {
-    input: TrackingInput;
+    trackingInput: TrackingInput;
   };
 }
 
@@ -33,7 +27,7 @@ interface AddProjectEvent extends MutationEvent {
     fieldName: 'addProject'
   };
   arguments: {
-    input: ProjectInput;
+    projectInput: ProjectInput;
   };
 }
 
@@ -58,24 +52,23 @@ interface ProjectItem extends DynamoDBItem {
   startDate: string;
   endDate?: string|null;
   description: string;
-}
-
-interface IdentityProps {
-  username: string;
-  sub: string;
+  trackings: {
+    items: TrackItem[];
+    nextToken: string;
+  }
 }
 
 const documentClient = new DynamoDB.DocumentClient();
 const eventBridge = new EventBridge();
 
 async function track(event: TrackEvent): Promise<Tracking> {
-  const { identity, arguments: { input } } = event;
+  const { identity, arguments: { trackingInput } } = event;
 
   const pk = `user-${identity?.sub}`;
 
   const {
     projectId, startTime, endTime, description,
-  } = input;
+  } = trackingInput;
   const startDate = new Date(startTime);
   const id = `tracking-${projectId}-${startDate.toISOString()}`;
 
@@ -95,7 +88,7 @@ async function track(event: TrackEvent): Promise<Tracking> {
 
     const eventDetail = {
       identity,
-      input,
+      trackingInput,
       trackItem,
     };
 
@@ -115,7 +108,7 @@ async function track(event: TrackEvent): Promise<Tracking> {
 }
 
 async function addProject(event: AddProjectEvent): Promise<Project> {
-  const { identity, arguments: { input } } = event;
+  const { identity, arguments: { projectInput } } = event;
   const pk = `user-${identity?.sub}`;
   const projectId = nanoid(6);
 
@@ -127,8 +120,8 @@ async function addProject(event: AddProjectEvent): Promise<Project> {
     description,
     startDate,
     endDate,
-  } = input;
-  const id = input.id || `project-${projectId}`;
+  } = projectInput;
+  const id = projectInput.id || `project-${projectId}`;
 
   const projectItem: ProjectItem = {
     pk,
@@ -140,6 +133,10 @@ async function addProject(event: AddProjectEvent): Promise<Project> {
     startDate,
     endDate,
     description,
+    trackings: {
+      items: [],
+      nextToken: '',
+    },
   };
 
   try {
@@ -150,11 +147,11 @@ async function addProject(event: AddProjectEvent): Promise<Project> {
 
     const eventDetail = {
       identity,
-      input,
+      projectInput,
       projectItem,
     };
 
-    const detailType = input.id ? 'Project Updated' : 'Project Added';
+    const detailType = projectInput.id ? 'Project Updated' : 'Project Added';
 
     await eventBridge.putEvents({
       Entries: [{
