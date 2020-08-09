@@ -95,6 +95,7 @@
     "react-docgen-typescript-loader": "^3.7.2",
     "react-is": "^16.13.1",
     "react-test-renderer": "^16.13.1",
+    "storybook-react-router": "^1.0.8",
     "style-loader": "^1.2.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7",
