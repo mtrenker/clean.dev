@@ -151,11 +151,11 @@ export const TimeSheet: FC = () => {
 
   const totalRowStyle = css`
   border-top: 1px double #000000;
-    td:first-child {
+    td:first-of-type {
       text-align: right;
       padding: 4px 15px;
     }
-    td:last-child {
+    td:last-of-type {
       padding: 4px 15px;
     }
   `;
@@ -222,24 +222,24 @@ export const TimeSheet: FC = () => {
               }
               if (isSunday(month.setDate(day.day))) {
                 return (
-                  <tr css={weekendStyle}>
+                  <tr key={day.date.toDateString()} css={weekendStyle}>
                     <td colSpan={3} />
                   </tr>
                 );
               }
               return (
-                <tr>
+                <tr key={day.date.toDateString()}>
                   <td css={dayStyle}>
                     {format(day.date, 'dd.MM.u')}
                   </td>
                   <td css={descriptionStyle}>
                     {day.trackings.map((tracking) => (
-                      <p>{tracking.description}</p>
+                      <p key={tracking.id}>{tracking.description}</p>
                     ))}
                   </td>
                   <td css={hoursStyle}>
                     {day.trackings.map((tracking) => (
-                      <p>{tracking.hours}</p>
+                      <p key={tracking.id}>{tracking.hours}</p>
                     ))}
                   </td>
                 </tr>
