@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useState } from 'react';
 import { css } from '@emotion/core';
 import { format } from 'date-fns';
 
-import { TimeTracker, TimeTrackerProjects } from '../TimeTracker';
+import { TimeTracker, TimeTrackerProjects } from '../projects/TimeTracker';
 import {
   useTrackMutation,
   Tracking,
@@ -39,7 +39,7 @@ export const TimeTracking: FC = () => {
     trackingQuery({
       variables: {
         trackingQuery: {
-          date: '2020',
+          date: format(new Date(), 'u-MM'),
           project,
         },
       },

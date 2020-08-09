@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   getDaysInMonth, differenceInHours, isSunday, isSaturday, format,
@@ -15,7 +15,7 @@ interface TrackingWithHours extends Tracking {
 
 interface Day {
   day: number;
-  date: Date;
+  month: Date;
   trackings: TrackingWithHours[]
 }
 
@@ -36,6 +36,8 @@ const reduceDays = (total: number, day: Day) => total + day.trackings.reduce(red
 
 export const TimeSheet: FC = () => {
   const [month, setMonth] = useState(new Date());
+  const [days, setDays] = useState<Day[]>([]);
+  const [withProjection, setWithProjection] = useState<boolean>(false);
   const { projectId } = useParams();
   const { data: projectData } = useGetProjectQuery({
     variables: {
@@ -44,31 +46,52 @@ export const TimeSheet: FC = () => {
     },
   });
 
-  if (!projectData) return <p>Loading Sheet</p>;
-  const { project } = projectData;
-  const days = [...new Array(getDaysInMonth(month))].map((_, day): Day => {
-    month.setDate(day + 1);
-    return {
-      day: month.getDate(),
-      date: month,
-      trackings: [],
-    };
-  });
+  useEffect(() => {
+    const daysSeed = [...new Array(getDaysInMonth(month))].map((_, day): Day => {
+      month.setDate(day + 1);
+      return {
+        day: month.getDate(),
+        month,
+        trackings: [],
+      };
+    });
+    const projectTracking = (date: Date): TrackingWithHours => ({
+      id: 'fake-id',
+      description: 'Projection',
+      startTime: format(date, 'u-MM-ddT08:00:00'),
+      endTime: format(date, 'u-MM-ddT16:00:00'),
+      hours: 8,
+    });
+    projectData?.project.trackings.items.forEach((tracking) => {
+      const {
+        __typename, id, description, startTime, endTime,
+      } = tracking;
+      const trackingWithHours: TrackingWithHours = {
+        __typename,
+        id,
+        description,
+        startTime,
+        endTime,
+        hours: differenceInHours(new Date(tracking.endTime), new Date(tracking.startTime)),
+      };
+      daysSeed[new Date(tracking.startTime).getDate() - 1].trackings.push(trackingWithHours);
+    });
+    if (withProjection && projectData?.project.trackings.items.length) {
+      daysSeed.forEach((day, idx) => {
+        if (
+          day.trackings.length === 0
+          && !isSaturday(new Date(day.month).setDate(day.day))
+          && !isSunday(new Date(day.month).setDate(day.day))) {
+          daysSeed[idx].trackings = [projectTracking(day.month)];
+        }
+      });
+    }
+    setDays(daysSeed);
+  }, [withProjection, month, projectData?.project.trackings]);
 
-  project.trackings.items.forEach((tracking) => {
-    const {
-      __typename, id, description, startTime, endTime,
-    } = tracking;
-    const trackingWithHours: TrackingWithHours = {
-      __typename,
-      id,
-      description,
-      startTime,
-      endTime,
-      hours: differenceInHours(new Date(tracking.endTime), new Date(tracking.startTime)),
-    };
-    days[new Date(tracking.startTime).getDate() - 1].trackings.push(trackingWithHours);
-  });
+  if (!projectData) return <p>Loading</p>;
+
+  const { project } = projectData;
 
   const pageStyle = css`
     @page {
@@ -176,6 +199,15 @@ export const TimeSheet: FC = () => {
             dateFormat="MM/yyyy"
             showMonthYearPicker
           />
+          <label htmlFor="projection">
+            <input
+              type="checkbox"
+              id="projection"
+              checked={withProjection}
+              onChange={() => setWithProjection(!withProjection)}
+            />
+            Enable Projection
+          </label>
         </div>
         <div css={headerStyle}>
           <h1>{`${sender.name} ${format(month, 'MMM, u', { locale: de })}`}</h1>
@@ -222,15 +254,15 @@ export const TimeSheet: FC = () => {
               }
               if (isSunday(month.setDate(day.day))) {
                 return (
-                  <tr key={day.date.toDateString()} css={weekendStyle}>
+                  <tr key={day.month.toDateString()} css={weekendStyle}>
                     <td colSpan={3} />
                   </tr>
                 );
               }
               return (
-                <tr key={day.date.toDateString()}>
+                <tr key={day.month.toDateString()}>
                   <td css={dayStyle}>
-                    {format(day.date, 'dd.MM.u')}
+                    {format(day.month, 'dd.MM.u')}
                   </td>
                   <td css={descriptionStyle}>
                     {day.trackings.map((tracking) => (

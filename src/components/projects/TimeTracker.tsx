@@ -5,9 +5,9 @@ import { css } from '@emotion/core';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { Tracking } from '../graphql/hooks';
-import { Select } from './Select';
-import { Option } from './Option';
+import { Tracking } from '../../graphql/hooks';
+import { Select } from '../Select';
+import { Option } from '../Option';
 
 export interface TimeTrackerProjects {
   id: string;
