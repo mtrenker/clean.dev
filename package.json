@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack -p",
     "build:lambda": "tsc -b",
-    "generate": "graphql-codegen",
+    "gen:hooks": "graphql-codegen",
+    "gen:component": "cry g component",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -c .storybook -o storybook-static",
     "start": "webpack-dev-server",

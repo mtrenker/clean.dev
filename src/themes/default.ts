@@ -69,12 +69,11 @@ interface Button {
 }
 
 export interface Theme {
-  button: {
-    primary: Button;
-    secondary: Button,
-  }
-  table: {
-
+  card: {
+    border: {
+      radius: number;
+      color: string;
+    }
   }
 }
 
@@ -85,4 +84,11 @@ export const breakPoints = {
   large: '1200px',
 };
 
-export const theme = {};
+export const theme: Theme = {
+  card: {
+    border: {
+      color: '#000000',
+      radius: 4,
+    },
+  },
+};
