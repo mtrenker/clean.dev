@@ -6,6 +6,7 @@ import { breakPoints } from '../themes/default';
 interface HeroImageProps {
   url?: string;
   alt?: string;
+  className?: string;
 }
 
 const imageCss = css`

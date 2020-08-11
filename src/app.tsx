@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import 'typeface-roboto';
 
-import { Page } from './components/Page';
+import { Page } from './components/layout/Page';
 import { GlobalStyle } from './components/GlobalStyle';
 import { client } from './lib/graphql';
 import { UserContext } from './context/UserContext';

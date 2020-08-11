@@ -10,10 +10,14 @@ const cardCss = ({ card }: Theme) => css`
   overflow: hidden;
 `;
 
-export const Card: FC = ({ children }) => {
+interface CardProps {
+  className?: string
+}
+
+export const Card: FC<CardProps> = ({ children, className }) => {
   const theme = useTheme<Theme>();
   return (
-    <div css={cardCss(theme)}>
+    <div css={cardCss(theme)} className={className}>
       {children}
     </div>
   );
