@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 
 import { Container, container } from './Container';
-import { breakPoints } from '../themes/default';
+import { breakPoints } from '../../themes/default';
 
 export const Footer: FC = () => {
   const footer = css`

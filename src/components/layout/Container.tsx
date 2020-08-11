@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
-import { breakPoints } from '../themes/default';
+import { breakPoints } from '../../themes/default';
 
 export const container = css`
   padding: 0 1rem;

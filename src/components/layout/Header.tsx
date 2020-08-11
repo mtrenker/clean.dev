@@ -3,8 +3,8 @@ import { css, keyframes } from '@emotion/core';
 
 import { Link } from 'react-router-dom';
 import { Container, container } from './Container';
-import { breakPoints } from '../themes/default';
-import { Icon } from './Icon';
+import { breakPoints } from '../../themes/default';
+import { Icon } from '../Icon';
 
 const slideIn = keyframes`
   from {
