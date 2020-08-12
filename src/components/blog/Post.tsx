@@ -4,21 +4,23 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 import { useGetBlogPostQuery } from '../../graphql/hooks';
 import { mapWidgets } from '../../lib/contentful';
+import { HeroImage } from '../HeroImage';
 
 export const Post: FC = () => {
   const { title } = useParams();
 
   const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: title } } });
   if (!data) return <p>Loading</p>;
-  const document = data?.blog?.post.content ?? '';
+  const { content, heroImage } = data?.blog?.post;
 
-  const content = documentToReactComponents(JSON.parse(document), {
+  const post = documentToReactComponents(JSON.parse(content), {
     renderNode: mapWidgets(),
   });
 
   return (
     <article>
-      {content}
+      <HeroImage url={heroImage?.url} />
+      {post}
     </article>
   );
 };
