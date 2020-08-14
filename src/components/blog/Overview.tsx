@@ -10,9 +10,19 @@ import { HeroImage } from '../HeroImage';
 
 const overviewCss = css`
   padding-top: 25px;
-  display: flex;
-  flex-flow: wrap;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
   gap: 16px;
+
+  aside {
+
+  }
+
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 `;
 
 const cardCss = css`
@@ -33,22 +43,29 @@ export const Overview: FC = () => {
   if (!data) return <p>Loading</p>;
   return (
     <div css={overviewCss}>
-      {data.blog.list.items.map((post) => {
-        const intro = documentToReactComponents(JSON.parse(post.intro), {
-          renderNode: mapWidgets(),
-        });
-        return (
-          <Card key={post.id} css={cardCss}>
-            <div className="image">
-              <HeroImage url={post.heroImage?.url} />
-            </div>
-            <Link to={`/blog/${post.slug}`}>
-              <h2>{post.title}</h2>
-              {intro}
-            </Link>
-          </Card>
-        );
-      })}
+      <main>
+        {data.blog.list.items.map((post) => {
+          const intro = documentToReactComponents(JSON.parse(post.intro), {
+            renderNode: mapWidgets(),
+          });
+          return (
+            <Card key={post.id} css={cardCss}>
+              <div className="image">
+                <HeroImage url={post.heroImage?.url} />
+              </div>
+              <Link to={`/blog/${post.slug}`}>
+                <h2>{post.title}</h2>
+                {intro}
+              </Link>
+            </Card>
+          );
+        })}
+      </main>
+      <aside>
+        <Card>
+          Some Search maybe
+        </Card>
+      </aside>
     </div>
   );
 };
