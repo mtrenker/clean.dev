@@ -1,16 +1,18 @@
-import React, { FC } from 'react';
-import { text } from '@storybook/addon-knobs';
+import React from 'react';
+import { Meta, Story } from '@storybook/react';
 
-import { HeroImage } from './HeroImage';
+import { HeroImage, HeroImageProps } from './HeroImage';
 
-export default { title: 'Components/HeroImage' };
+export default {
+  title: 'Components/HeroImage',
+  component: HeroImage,
+} as Meta<HeroImageProps>;
 
-// eslint-disable-next-line max-len
-const image = '//images.ctfassets.net/utnykvjk2m6k/6so6AgwyVatfBYo1KPZaLZ/240128d21da0fd59a75e216d90b35c52/mitchell-luo-z1c9juteR5c-unsplash.jpg';
+const Template: Story<HeroImageProps> = ({ url, alt }) => (
+  <HeroImage url={url} alt={alt} />
+);
 
-export const component: FC = () => {
-  const url = text('Image URL', image);
-  return (
-    <HeroImage alt="test" url={url} />
-  );
+export const heroImage = Template.bind({});
+heroImage.args = {
+  url: 'https://picsum.photos/2000/1500',
 };

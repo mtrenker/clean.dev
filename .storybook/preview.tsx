@@ -1,16 +1,20 @@
 import React, { FC } from "react";
-import StoryRouter from 'storybook-react-router';
 import { addDecorator } from "@storybook/react"
+import StoryRouter from 'storybook-react-router';
 import { ThemeProvider, } from "emotion-theming";
-import { withActions } from "@storybook/addon-actions"
-import { withKnobs } from "@storybook/addon-knobs"
 
 import { theme } from "../src/themes/default"
 import { GlobalStyle } from "../src/components/GlobalStyle";
 
-addDecorator(StoryRouter());
-addDecorator(withActions());
-addDecorator(withKnobs());
+export const parameters = {
+  options: {
+    storySort: {
+      method: '',
+      order: ["Docs", "Components"],
+      locales: '',
+    },
+  },
+};
 
 const withTheme = (storyFn) => (
   <ThemeProvider theme={theme}>
@@ -19,4 +23,5 @@ const withTheme = (storyFn) => (
   </ThemeProvider>
 )
 
+addDecorator(StoryRouter());
 addDecorator(withTheme);

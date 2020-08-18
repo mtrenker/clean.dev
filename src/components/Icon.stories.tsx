@@ -1,13 +1,23 @@
-import React, { FC } from 'react';
-import { select } from '@storybook/addon-knobs';
+import React from 'react';
+import { Meta, Story } from '@storybook/react';
 
-import { Icon } from './Icon';
+import { Icon, IconProps } from './Icon';
 
-export default { title: 'Components/Icon', component: Icon };
+export default {
+  title: 'Components/Icons',
+  component: Icon,
+  argTypes: {
+    icon: {
+      defaultValue: 'github',
+    },
+  },
+} as Meta<IconProps>;
 
-export const Example: FC = () => {
-  const icon = select('Icon', { github: 'github', times: 'times', clock: 'clock' }, 'github');
-  return (
-    <Icon icon={icon} />
-  );
+const Template: Story<IconProps> = ({ icon }) => (
+  <Icon icon={icon} />
+);
+
+export const component = Template.bind({});
+component.args = {
+  icon: 'github',
 };

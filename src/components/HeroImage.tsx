@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 
 import { breakPoints } from '../themes/default';
 
-interface HeroImageProps {
+export interface HeroImageProps {
   url?: string;
   alt?: string;
   className?: string;

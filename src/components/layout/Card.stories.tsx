@@ -14,13 +14,15 @@ export default {
   },
 } as Meta<CardProps>;
 
-export const Component: Story<CardProps> = ({ outlined }) => (
+const Template: Story<CardProps> = ({ outlined }) => (
   <Card outlined={outlined}>
     <p>{lorem.paragraph()}</p>
   </Card>
 );
 
-export const Outlined = Component.bind({});
+export const Base = Template.bind({});
+
+export const Outlined = Template.bind({});
 Outlined.args = {
   outlined: true,
 };
