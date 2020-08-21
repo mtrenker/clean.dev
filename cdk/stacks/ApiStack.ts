@@ -57,11 +57,11 @@ export class ApiStack extends Stack {
       apiId: api.apiId,
     });
 
-    const queryDataSource = api.addDynamoDbDataSource('DataSource', 'QueryDataSource', table);
-    const noneDataSource = api.addNoneDataSource('None', 'NoneDataSource');
+    const queryDataSource = api.addDynamoDbDataSource('DataSource', table);
+    const noneDataSource = api.addNoneDataSource('None');
     const mutationsFunction = this.mutationsFunction(table, eventBusArn, eventBusName);
 
-    const mutationsSource = api.addLambdaDataSource('TrackSource', 'TrackSOurce', mutationsFunction);
+    const mutationsSource = api.addLambdaDataSource('TrackSource', mutationsFunction);
 
     ApiStack.addPageResolver(queryDataSource);
 

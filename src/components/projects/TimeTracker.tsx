@@ -32,8 +32,8 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
   onSubmit, onCancelEdit, tracking, projects, onChangeProject,
 }) => {
   const isEdit = !!tracking;
-  const [startTime, setStartTime] = useState<Date|null>(new Date());
-  const [endTime, setEndTime] = useState<Date|null>(new Date());
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const projectRef = useRef<HTMLSelectElement>(null);
 
@@ -164,7 +164,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
           disabled={isEdit}
           selected={startTime}
           showTimeSelect
-          onChange={setStartTime}
+          onChange={(date: Date) => setStartTime(date)}
           dateFormat={dateFormat}
           showWeekNumbers
         />
@@ -176,7 +176,7 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
           required
           selected={endTime}
           showTimeSelect
-          onChange={setEndTime}
+          onChange={(date: Date) => setEndTime(date)}
           dateFormat={dateFormat}
           showWeekNumbers
         />

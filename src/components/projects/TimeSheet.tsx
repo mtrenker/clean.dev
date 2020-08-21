@@ -195,7 +195,7 @@ export const TimeSheet: FC = () => {
         <div css={datePickerStyle}>
           <DatePicker
             selected={month}
-            onChange={(newDate) => setMonth(newDate!)}
+            onChange={(newDate: Date) => setMonth(newDate)}
             dateFormat="MM/yyyy"
             showMonthYearPicker
           />

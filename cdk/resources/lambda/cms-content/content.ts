@@ -68,6 +68,7 @@ type EventBody = Page | Post;
 interface CmsNode {
   nodeType: string;
   data: {
+    asset?: Asset;
     target?: {
       sys: {
         id: string;
@@ -147,11 +148,18 @@ async function resolveLink(link: CmsLink): Promise<Author> {
 
 async function resolveContentfulNodes(node: CmsNode): Promise<CmsNode> {
   const promises = node.content.map(async (subNode: CmsNode) => {
-    if (subNode.nodeType === BLOCKS.EMBEDDED_ENTRY) {
-      const entry = await contentfulClient.getEntry<Blueprint>(subNode.data.target?.sys.id ?? 'no-id');
-      return { nodeType: entry.fields.name, data: {}, content: [] };
+    switch (subNode.nodeType) {
+      case BLOCKS.EMBEDDED_ASSET: {
+        const asset = await contentfulClient.getAsset(subNode.data.target?.sys.id ?? '');
+        return { ...subNode, data: { asset } };
+      }
+      case BLOCKS.EMBEDDED_ENTRY: {
+        const entry = await contentfulClient.getEntry<Blueprint>(subNode.data.target?.sys.id ?? 'no-id');
+        return { nodeType: entry.fields.name, data: {}, content: [] };
+      }
+      default:
+        return subNode;
     }
-    return new Promise<CmsNode>((resolve) => resolve(subNode));
   });
   const resolvedContent = await Promise.all(promises);
   return {
