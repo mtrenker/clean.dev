@@ -1,3 +1,5 @@
+import { css, SerializedStyles } from '@emotion/core';
+
 type Pixel = number;
 type Border = string;
 type Color = string;
@@ -69,6 +71,15 @@ interface Button {
 }
 
 export interface Theme {
+  breakPoints: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+    large: string;
+  }
+  css: {
+    containerCss: SerializedStyles
+  }
   card: {
     border: {
       radius: number;
@@ -84,7 +95,31 @@ export const breakPoints = {
   large: '1200px',
 };
 
-export const theme: Theme = {
+export const containerCss = css`
+  width: 100%;
+  @media (min-width: ${breakPoints.mobile}) {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    max-width: 546px;
+  }
+  @media (min-width: ${breakPoints.tablet}) {
+    padding: 0 1rem;
+    max-width: 738px;
+  }
+  @media (min-width: ${breakPoints.desktop}) {
+    max-width: 962px;
+  }
+  @media (min-width: ${breakPoints.large}) {
+    max-width: 1170px;
+  }
+`;
+
+export const defaultTheme: Theme = {
+  breakPoints,
+  css: {
+    containerCss,
+  },
   card: {
     border: {
       color: '#000000',

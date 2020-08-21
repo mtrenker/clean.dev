@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { css, keyframes } from '@emotion/core';
-
 import { Link } from 'react-router-dom';
-import { Container, container } from './Container';
-import { breakPoints } from '../../themes/default';
+
 import { Icon } from '../Icon';
+import { useTheme } from '../../lib/style';
+import { Theme } from '../../themes/default';
 
 const slideIn = keyframes`
   from {
@@ -30,68 +30,56 @@ const slideOut = keyframes`
   }
 `;
 
-const headerCss = css`
+const headerCss = ({ breakPoints, css: { containerCss } }: Theme) => css`
   @media print {
     display: none;
   }
   @media (min-width: ${breakPoints.mobile}) {
-    display: grid;
-    position: relative;
-    grid-template:
-      "topbar topbar" auto
-      / 1fr 1fr;
-    background-color: #F5F5F5;
+    background-color: white ;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
   }
-`;
 
-const topbarCss = css`
-  background-color: white ;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
-  grid-area: topbar;
-
-  .css-${container.name} {
+  .css-${containerCss.name} {
     display: flex;
-    align-items: center;
-  }
-`;
-
-const logoCss = css`
-  flex: 1;
-  font-weight: bold;
-  span {
-    font-weight: lighter;
-    font-family: consolas;
-  }
-`;
-
-const navCss = css`
-  ul {
-    display: none;
-  }
-  svg {
-    cursor: pointer;
-  }
-  @media (min-width: ${breakPoints.mobile}) {
-    svg {
-      display: none;
+    h1 {
+      flex: 1;
+      font-weight: bold;
+      span {
+        font-weight: lighter;
+        font-family: consolas;
+      }
     }
-    display: block;
-    flex: 1;
-    ul {
-      display: flex;
-      justify-content: space-between;
-      li {
+    nav {
+      flex: 1;
+      ul {
+        display: none;
+      }
+      svg {
+        cursor: pointer;
+      }
+      @media (min-width: ${breakPoints.mobile}) {
+        svg {
+          display: none;
+        }
         display: block;
-        a {
-          text-decoration: none;
-          color: #000;
+        flex: 1;
+        ul {
+          display: flex;
+          justify-content: space-between;
+          li {
+            display: block;
+            a {
+              text-decoration: none;
+              color: #000;
+            }
+          }
         }
       }
     }
   }
 `;
 
-const mobileNavCss = css`
+const mobileNavCss = ({ breakPoints }: Theme) => css`
   display: none;
   @media (max-width: ${breakPoints.mobile}) {
     display: block;
@@ -122,26 +110,26 @@ const mobileNavCss = css`
 `;
 
 export const Header: FC = () => {
+  const theme = useTheme();
+  const { css: { containerCss } } = theme;
   const [showMobileNav, setShowMobileNav] = useState<boolean>(false);
   const onMenuClick = (e: React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     setShowMobileNav(!showMobileNav);
   };
   return (
-    <header css={headerCss}>
-      <div css={topbarCss}>
-        <Container>
-          <h1 css={logoCss}>
-            clean
-            <span>dev</span>
-          </h1>
-          <nav css={navCss}>
-            <Icon icon="bars" onClick={onMenuClick} />
-            <ul>
-              <li><Link to="/">Home</Link></li>
-            </ul>
-          </nav>
-        </Container>
+    <header css={headerCss(theme)}>
+      <div css={containerCss}>
+        <h1>
+          clean
+          <span>dev</span>
+        </h1>
+        <nav>
+          <Icon icon="bars" onClick={onMenuClick} />
+          <ul>
+            <li><Link to="/">Home</Link></li>
+          </ul>
+        </nav>
       </div>
       <div css={mobileNavCss} className={showMobileNav ? 'show' : 'hide'}>
         <ul>

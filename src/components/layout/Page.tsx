@@ -1,15 +1,12 @@
 import React, { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { ThemeProvider } from 'emotion-theming';
 
 import { useGetPageQuery } from '../../graphql/hooks';
 import { Header } from './Header';
-import { Container } from './Container';
 import { Footer } from './Footer';
 import { mapWidgets } from '../../lib/contentful';
 import { ErrorBoundary } from './ErrorBoundary';
-import { theme } from '../../themes/default';
 
 export const Page: FC = () => {
   const { pathname } = useLocation();
@@ -22,15 +19,13 @@ export const Page: FC = () => {
     renderNode: mapWidgets(),
   });
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Header />
-      <Container>
-        {error && <p>{error.message}</p>}
-        <ErrorBoundary>
-          {content}
-        </ErrorBoundary>
-      </Container>
+      {error && <p>{error.message}</p>}
+      <ErrorBoundary>
+        {content}
+      </ErrorBoundary>
       <Footer />
-    </ThemeProvider>
+    </>
   );
 };

@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
 
-import { Container, container } from './Container';
-import { breakPoints } from '../../themes/default';
+import { useTheme } from '../../lib/style';
+import { Theme } from '../../themes/default';
 
 export const Footer: FC = () => {
-  const footer = css`
+  const theme = useTheme();
+  const footer = ({ breakPoints }: Theme) => css`
     @media print {
       display: none;
     }
@@ -23,23 +24,11 @@ export const Footer: FC = () => {
       height: 180px;
       padding: 20px;
       margin-top: 48px;
-
-      .css-${container.name} {
-        display: flex;
-        justify-content: space-between;
-        div {
-          flex: 1;
-        }
-      }
     }
   `;
   return (
-    <footer css={footer}>
-      <Container>
-        <div>
-          <h4>cleandev</h4>
-        </div>
-      </Container>
+    <footer css={footer(theme)}>
+      <h4>cleandev</h4>
     </footer>
   );
 };

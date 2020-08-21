@@ -22,8 +22,8 @@ const cardCss = ({ outlined }: Partial<CardProps>, { card }: Theme) => css`
 export const Card: FC<CardProps> = ({ children, className, outlined }) => {
   const theme = useTheme<Theme>();
   return (
-    <div css={cardCss({ outlined }, theme)} className={className}>
+    <article css={cardCss({ outlined }, theme)} className={className}>
       {children}
-    </div>
+    </article>
   );
 };

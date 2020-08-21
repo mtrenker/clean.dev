@@ -6,11 +6,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import 'typeface-roboto';
 
+import { ThemeProvider } from 'emotion-theming';
 import { Page } from './components/layout/Page';
 import { GlobalStyle } from './components/GlobalStyle';
 import { client } from './lib/graphql';
 import { UserContext } from './context/UserContext';
 import { CleanUser, getUser, getCleanUser } from './lib/auth';
+import { defaultTheme } from './themes/default';
 
 const container = document.createElement('div');
 
@@ -32,14 +34,16 @@ export const App: FC = () => {
     <UserContext.Provider value={{ user, setUser, refreshUser }}>
       <ApolloProvider client={client}>
         <StrictMode>
-          <GlobalStyle />
-          <Router>
-            <Switch>
-              <Route path="/">
-                <Page />
-              </Route>
-            </Switch>
-          </Router>
+          <ThemeProvider theme={defaultTheme}>
+            <GlobalStyle />
+            <Router>
+              <Switch>
+                <Route path="/">
+                  <Page />
+                </Route>
+              </Switch>
+            </Router>
+          </ThemeProvider>
         </StrictMode>
       </ApolloProvider>
     </UserContext.Provider>
