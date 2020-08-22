@@ -14,13 +14,21 @@ import { useTheme } from '../../lib/style';
 const overviewCss = css`
   margin-top: 20px;
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template:
+    "sidebar main" auto
+    / 1fr 4fr
+  ;
   gap: 16px;
 
-  main {
+  > main {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    grid-area: main;
+  }
+
+  > aside {
+    grid-area: sidebar;
   }
 `;
 
@@ -44,10 +52,18 @@ const cardCss = css`
       padding: 0 1em;
     }
     figure {
-      height: 150px;
+      height: 250px;
       overflow: hidden;
       img {
         margin-top: -75px;
+        height: 450px;
+        transition: height .25s ease-in, margin-top .25s ease-in;
+      }
+    }
+    :hover {
+      figure picture img {
+        margin-top: -100px;
+        height: 500px;
       }
     }
   }
@@ -58,10 +74,8 @@ const cardCss = css`
     font-size: 14px;
     margin: 0;
     padding: .5em;
-    figure, time {
-      flex: 1;
-    }
     figure {
+      flex: 2 1;
       display: flex;
       align-items: center;
       img {
@@ -77,13 +91,14 @@ const cardCss = css`
       }
     }
     time {
+      flex: 1 1;
       text-align: right;
     }
   }
 
   p {
     font-size: 15px;
-    padding: 0 1rem;
+    padding: 0 2rem;
     margin: 0 0 .75rem 0;
   }
 `;
@@ -106,9 +121,7 @@ export const Overview: FC = () => {
               <header>
                 <Link to={`/blog/${post.slug}`}>
                   <h3>{post.title}</h3>
-                  <figure>
-                    <HeroImage url={post.heroImage?.url} />
-                  </figure>
+                  <HeroImage url={post.heroImage?.url} />
                 </Link>
               </header>
               <aside>
@@ -123,11 +136,11 @@ export const Overview: FC = () => {
           );
         })}
       </main>
-      <footer>
+      <aside>
         <Card>
           Some Search maybe
         </Card>
-      </footer>
+      </aside>
     </section>
   );
 };

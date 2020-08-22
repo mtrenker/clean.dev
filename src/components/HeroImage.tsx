@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
-
-import { breakPoints } from '../themes/default';
+import { useTheme } from '../lib/style';
+import { Theme } from '../themes/default';
 
 export interface HeroImageProps {
   url?: string;
@@ -12,10 +12,9 @@ export interface HeroImageProps {
 const imageCss = css`
   background-color: #cccccc;
   object-fit: cover;
-  filter: grayscale(100%);
 `;
 
-const heroCss = css`
+const heroCss = ({ breakPoints }: Theme) => css`
   @media (max-width: ${breakPoints.mobile}) {
     height: 200px;
     overflow: hidden;
@@ -26,9 +25,11 @@ const heroCss = css`
 `;
 
 export const HeroImage: FC<HeroImageProps> = ({ url, alt }) => {
+  const theme = useTheme();
+  const { breakPoints } = theme;
   const sizes = Object.values(breakPoints).map((size) => size.substring(0, size.length - 2));
   return (
-    <section css={heroCss}>
+    <figure css={heroCss(theme)}>
       <picture>
         {/* mobile fallbacks for resolutions smaller than 360px */}
         <source srcSet={`${url}?w=360&fm=webp`} media="(max-width: 360px)" type="image/webp" />
@@ -44,6 +45,6 @@ export const HeroImage: FC<HeroImageProps> = ({ url, alt }) => {
         <source srcSet={`${url}?w=1900&fm=jpg`} media="(min-width: 1200px)" type="image/jpeg" />
         <img src={url} alt={alt} css={imageCss} height="400" width="100%" />
       </picture>
-    </section>
+    </figure>
   );
 };

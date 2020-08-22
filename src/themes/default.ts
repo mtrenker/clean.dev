@@ -111,7 +111,7 @@ export const containerCss = css`
     max-width: 962px;
   }
   @media (min-width: ${breakPoints.large}) {
-    max-width: 1170px;
+    max-width: 1200px;
   }
 `;
 
