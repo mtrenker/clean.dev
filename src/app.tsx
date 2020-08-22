@@ -8,7 +8,7 @@ import 'typeface-roboto';
 
 import { ThemeProvider } from 'emotion-theming';
 import { Page } from './components/layout/Page';
-import { GlobalStyle } from './components/GlobalStyle';
+import { GlobalStyle } from './components/layout/GlobalStyle';
 import { client } from './lib/graphql';
 import { UserContext } from './context/UserContext';
 import { CleanUser, getUser, getCleanUser } from './lib/auth';

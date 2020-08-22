@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useGetProjectsQuery } from '../../graphql/hooks';
-import { Table, Row, Cell } from '../Table';
+import { Table, Row, Cell } from '../layout/Table';
 
 export const ProjectOverview: FC = () => {
   const { data, loading } = useGetProjectsQuery();

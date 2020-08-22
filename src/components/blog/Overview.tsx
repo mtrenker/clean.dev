@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 import { formatISO, formatDistanceToNow } from 'date-fns';
 import de from 'date-fns/locale/de';
 
-import { useGetBlogListQuery } from '../../graphql/hooks';
-import { mapWidgets } from '../../lib/contentful';
 import { Card } from '../layout/Card';
-import { HeroImage } from '../HeroImage';
+import { HeroImage } from '../layout/HeroImage';
+
+import { useGetBlogListQuery } from '../../graphql/hooks';
 import { useTheme } from '../../lib/style';
+
+import { mapWidgets } from '../../lib/contentful';
 
 const overviewCss = css`
   margin-top: 20px;

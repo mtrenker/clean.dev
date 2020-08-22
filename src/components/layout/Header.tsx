@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { css, keyframes } from '@emotion/core';
 import { Link } from 'react-router-dom';
 
-import { Icon } from '../Icon';
+import { Icon } from '../typography/Icon';
 import { useTheme } from '../../lib/style';
 import { Theme } from '../../themes/default';
 

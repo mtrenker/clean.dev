@@ -4,8 +4,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
-import { Input } from '../Input';
-import { DatePicker } from '../DatePicker';
+import { Input } from '../controls/Input';
+import { DatePicker } from '../controls/DatePicker';
 import { useAddProjectMutation, useGetProjectQuery } from '../../graphql/hooks';
 import { TextArea } from '../TextArea';
 

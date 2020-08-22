@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import { ProjectOverview } from '../projects/Overview';
 import { TimeSheet } from '../projects/TimeSheet';
-import { Login } from '../Login';
+import { Login } from '../user/Login';
 import { ProjectForm } from '../projects/Form';
 
 export const Projects: FC = () => (

@@ -2,9 +2,11 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
+import { HeroImage } from '../layout/HeroImage';
+
 import { useGetBlogPostQuery } from '../../graphql/hooks';
+
 import { mapWidgets } from '../../lib/contentful';
-import { HeroImage } from '../HeroImage';
 
 export const Post: FC = () => {
   const { title } = useParams<{title: string}>();

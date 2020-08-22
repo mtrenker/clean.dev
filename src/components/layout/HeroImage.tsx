@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
-import { useTheme } from '../lib/style';
-import { Theme } from '../themes/default';
+
+import { useTheme } from '../../lib/style';
+import { Theme } from '../../themes/default';
 
 export interface HeroImageProps {
   url?: string;

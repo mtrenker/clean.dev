@@ -4,9 +4,9 @@ import React, {
 import { css } from '@emotion/core';
 import { useHistory } from 'react-router-dom';
 
-import { signIn, signOut, getCleanUser } from '../lib/auth';
-import { UserContext } from '../context/UserContext';
-import { LoadingSpinner } from './LoadingSpinner';
+import { signIn, signOut, getCleanUser } from '../../lib/auth';
+import { UserContext } from '../../context/UserContext';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 const inputCss = css`
   border: 1px solid #CCC;

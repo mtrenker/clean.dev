@@ -7,7 +7,7 @@ import { de } from 'date-fns/locale';
 import { css } from '@emotion/core';
 
 import { useGetProjectQuery, Tracking } from '../../graphql/hooks';
-import { DatePicker } from '../DatePicker';
+import { DatePicker } from '../controls/DatePicker';
 
 interface TrackingWithHours extends Tracking {
   hours: number;
