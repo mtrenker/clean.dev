@@ -7,8 +7,10 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { mapWidgets } from '../../lib/contentful';
 import { ErrorBoundary } from './ErrorBoundary';
+import { useTheme } from '../../lib/style';
 
 export const Page: FC = () => {
+  const { css: { containerCss } } = useTheme();
   const { pathname } = useLocation();
   const page = pathname.split('/')[1];
   const { data, error } = useGetPageQuery({ variables: { pageQuery: { slug: page } } });
@@ -18,12 +20,19 @@ export const Page: FC = () => {
   const content = documentToReactComponents(JSON.parse(document), {
     renderNode: mapWidgets(),
   });
+
+  const renderContent = () => {
+    if (data.page?.layout === 'container') {
+      return <div css={containerCss}>{content}</div>;
+    }
+    return content;
+  };
   return (
     <>
       <Header />
       {error && <p>{error.message}</p>}
       <ErrorBoundary>
-        {content}
+        {renderContent()}
       </ErrorBoundary>
       <Footer />
     </>

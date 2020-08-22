@@ -8,6 +8,13 @@ import { Projects } from '../components/blueprints/Projects';
 import { TimeTracking } from '../components/blueprints/TimeTracking';
 import { Blog } from '../components/blueprints/Blog';
 
+const BLUEPRINTS = {
+  PROJECTS: 'projects',
+  TIME_TRACKING: 'time-tracking',
+  BLOG: 'blog',
+  CHANGE_PASSWORD: 'change-password',
+} as const;
+
 interface AssetBlock extends Block {
   data: {
     asset: Asset
@@ -21,9 +28,9 @@ const renderAsset = (assetBlock: Block | Inline) => {
 };
 
 export const mapWidgets = (): RenderNode => ({
-  blog: () => <Blog />,
-  'change-password': () => <ChangePassword />,
-  'time-tracking': () => <TimeTracking />,
-  'project-editor': () => <Projects />,
+  [BLUEPRINTS.BLOG]: () => <Blog />,
+  [BLUEPRINTS.CHANGE_PASSWORD]: () => <ChangePassword />,
+  [BLUEPRINTS.TIME_TRACKING]: () => <TimeTracking />,
+  [BLUEPRINTS.PROJECTS]: () => <Projects />,
   [BLOCKS.EMBEDDED_ASSET]: renderAsset,
 });
