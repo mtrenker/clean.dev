@@ -1,7 +1,6 @@
 /* eslint-disable */
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -61,6 +60,7 @@ export type Page = {
   __typename?: 'Page';
   slug: Scalars['String'];
   title: Scalars['String'];
+  layout: Scalars['String'];
   content: Scalars['String'];
 };
 

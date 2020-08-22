@@ -29,7 +29,7 @@ export class ApiStack extends Stack {
     const eventBusName = Fn.importValue('eventBusName');
     const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'cleanDevUserPoolId');
 
-    const table = Table.fromTableName(this, 'Table', inventoryName) as Table;
+    const table = Table.fromTableName(this, 'Table', inventoryName);
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
     const api = new GraphQLApi(this, 'GraphQLApi', {

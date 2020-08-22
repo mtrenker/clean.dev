@@ -18,6 +18,7 @@ type Mutation {
 type Page @aws_api_key @aws_cognito_user_pools {
   slug: String!
   title: String!
+  layout: String!
   content: String!
 }
 

@@ -1,9 +1,8 @@
 /* eslint-disable */
+import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-const gql = Apollo.gql;
-
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -63,6 +62,7 @@ export type Page = {
   __typename?: 'Page';
   slug: Scalars['String'];
   title: Scalars['String'];
+  layout: Scalars['String'];
   content: Scalars['String'];
 };
 
@@ -275,7 +275,7 @@ export type GetPageQuery = (
   { __typename?: 'Query' }
   & { page?: Maybe<(
     { __typename?: 'Page' }
-    & Pick<Page, 'slug' | 'title' | 'content'>
+    & Pick<Page, 'slug' | 'title' | 'layout' | 'content'>
   )> }
 );
 
@@ -543,6 +543,7 @@ export const GetPageDocument = gql`
   page(pageQuery: $pageQuery) {
     slug
     title
+    layout
     content
   }
 }

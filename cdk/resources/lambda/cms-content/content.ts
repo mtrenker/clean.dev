@@ -46,6 +46,7 @@ interface Body<ContentId, Fields> {
 interface PageFields {
   title: Localized<string>;
   slug: Localized<string>;
+  layout: Localized<string>;
   content: Localized<CmsNode>;
 }
 
@@ -267,6 +268,7 @@ export const handler: SNSHandler = async (event) => {
       const pageDocument = {
         title: page.title[lang],
         slug: page.slug[lang],
+        layout: page.layout[lang],
         content: JSON.stringify(content),
       };
       await putDocument(pk, id, pageDocument);
