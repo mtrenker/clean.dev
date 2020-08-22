@@ -7,7 +7,7 @@ import { mapWidgets } from '../../lib/contentful';
 import { HeroImage } from '../HeroImage';
 
 export const Post: FC = () => {
-  const { title } = useParams();
+  const { title } = useParams<{title: string}>();
 
   const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: title } } });
   if (!data) return <p>Loading</p>;

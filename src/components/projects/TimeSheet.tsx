@@ -38,7 +38,7 @@ export const TimeSheet: FC = () => {
   const [month, setMonth] = useState(new Date());
   const [days, setDays] = useState<Day[]>([]);
   const [withProjection, setWithProjection] = useState<boolean>(false);
-  const { projectId } = useParams();
+  const { projectId } = useParams<{projectId: string}>();
   const { data: projectData } = useGetProjectQuery({
     variables: {
       projectQuery: { project: projectId },

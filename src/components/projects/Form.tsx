@@ -64,7 +64,7 @@ export const ProjectForm: FC = () => {
   const {
     register, handleSubmit, control, setValue,
   } = useForm<FormInput>();
-  const { projectId } = useParams();
+  const { projectId } = useParams<{projectId: string}>();
 
   const [updateProject] = useAddProjectMutation();
 
