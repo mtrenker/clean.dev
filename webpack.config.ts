@@ -59,7 +59,7 @@ const config: Config = {
     new DotEnv({ systemvars: true }),
   ],
   devServer: {
-    open: true,
+    open: 'Firefox',
     historyApiFallback: true,
   },
 };
