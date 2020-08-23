@@ -35,7 +35,7 @@ const overviewCss = css`
 `;
 
 const cardCss = css`
-  flex: 1 1 calc(50% - 16px);
+  flex: 1 1 calc(50% - 8px);
 
   header {
     position: relative;
