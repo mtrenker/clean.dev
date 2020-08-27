@@ -1,8 +1,6 @@
-import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import React, { FC, Fragment } from 'react';
 
-import { useTheme } from '../../lib/style';
-import { Theme } from '../../themes/default';
+import { css, Theme, useTheme } from '../../lib/style';
 
 export interface HeroImageProps {
   url?: string;
@@ -37,10 +35,10 @@ export const HeroImage: FC<HeroImageProps> = ({ url, alt }) => {
         <source srcSet={`${url}?w=360&fm=jpg`} media="(max-width: 360px)" type="image/jpeg" />
         {/* our breakpoints */}
         {sizes.map((size) => (
-          <>
+          <Fragment key={size}>
             <source srcSet={`${url}?w=${size}&fm=webp`} media={`(max-width: ${size}px)`} type="image/webp" />
             <source srcSet={`${url}?w=${size}&fm=jpg`} media={`(max-width: ${size}px)`} type="image/jpeg" />
-          </>
+          </Fragment>
         ))}
         {/* fallback for everything larger than 1200 and ommit webp for larger images */}
         <source srcSet={`${url}?w=1900&fm=jpg`} media="(min-width: 1200px)" type="image/jpeg" />

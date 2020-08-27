@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { Link } from 'react-router-dom';
 import { formatISO, formatDistanceToNow } from 'date-fns';
@@ -9,11 +8,12 @@ import { Card } from '../layout/Card';
 import { HeroImage } from '../layout/HeroImage';
 
 import { useGetBlogListQuery } from '../../graphql/hooks';
-import { useTheme } from '../../lib/style';
+import { css, Theme, useTheme } from '../../lib/style';
 
 import { mapWidgets } from '../../lib/contentful';
 
-const overviewCss = css`
+const overviewCss = (theme: Theme) => css`
+  ${theme.css.containerCss.styles}
   margin-top: 20px;
   display: grid;
   grid-template:
@@ -36,6 +36,7 @@ const overviewCss = css`
 
 const cardCss = css`
   flex: 1 1 calc(50% - 8px);
+  max-width: calc(50% - 8px);
 
   header {
     position: relative;
@@ -107,10 +108,10 @@ const cardCss = css`
 
 export const Overview: FC = () => {
   const { data } = useGetBlogListQuery();
-  const { css: { containerCss } } = useTheme();
+  const theme = useTheme();
   if (!data) return <p>Loading</p>;
   return (
-    <section css={[containerCss, overviewCss]}>
+    <section css={overviewCss(theme)}>
       <main>
         {data.blog.list.items.map((post) => {
           const intro = documentToReactComponents(JSON.parse(post.intro), {
