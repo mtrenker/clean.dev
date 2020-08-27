@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-import { __NaMe__ } from './__NaMe__';
+import { __NaMe__, __NaMe__Props } from './__NaMe__';
 
-export default { title: '__NaMe__' };
+export default {
+  title: '__NaMe__',
+  component: __NaMe__,
+} as Meta<__NaMe__Props>;
 
-export const baseComponent: FC = () => (
-  <>
-    <__NaMe__ />
-  </>
-);
+const Template: Story<__NaMe__Props> = () => <__NaMe__ />;
+
+export const __name__ = Template.bind({});

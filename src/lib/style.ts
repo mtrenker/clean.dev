@@ -1,7 +1,12 @@
 import { useTheme as emotionUseTheme } from 'emotion-theming';
-
+import { css } from '@emotion/core';
 import { Theme } from '../themes/default';
 
-export const useTheme = (): Theme => emotionUseTheme<Theme>();
+const useTheme = (): Theme => emotionUseTheme<Theme>();
 
-export { css } from '@emotion/core';
+export { Theme } from '../themes/default';
+
+export default {
+  useTheme,
+  css,
+};
