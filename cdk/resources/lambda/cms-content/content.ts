@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { SNSHandler } from 'aws-lambda';
 import { BLOCKS } from '@contentful/rich-text-types';
-import { createClient, Asset } from 'contentful';
+import { createClient, Asset, Entry } from 'contentful';
 
 interface Image {
   title: string;
@@ -69,6 +69,7 @@ type EventBody = Page | Post;
 interface CmsNode {
   nodeType: string;
   data: {
+    [key: string]: any;
     asset?: Asset;
     target?: {
       sys: {
@@ -84,6 +85,13 @@ interface CmsNode {
 interface Blueprint {
   name: string;
 }
+
+interface Gist {
+  title: string;
+  gist: string;
+}
+
+type ContentTypes = Blueprint | Gist
 
 interface Localized<T> {
   [language: string]: T
@@ -155,8 +163,20 @@ async function resolveContentfulNodes(node: CmsNode): Promise<CmsNode> {
         return { ...subNode, data: { asset } };
       }
       case BLOCKS.EMBEDDED_ENTRY: {
-        const entry = await contentfulClient.getEntry<Blueprint>(subNode.data.target?.sys.id ?? 'no-id');
-        return { nodeType: entry.fields.name, data: {}, content: [] };
+        const entry = await contentfulClient.getEntry<ContentTypes>(subNode.data.target?.sys.id ?? 'no-id');
+        switch (entry.sys.contentType.sys.id) {
+          case 'gist': {
+            const { fields: { gist, title } } = entry as Entry<Gist>;
+            return {
+              nodeType: 'gist', data: { title, gist }, content: [],
+            };
+          }
+          case 'blueprint':
+          default: {
+            const blueprint = entry as Entry<Blueprint>;
+            return { nodeType: blueprint.fields.name, data: {}, content: [] };
+          }
+        }
       }
       default:
         return subNode;
