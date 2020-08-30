@@ -4,8 +4,8 @@ import StoryRouter from 'storybook-react-router';
 import { ThemeProvider, } from "emotion-theming";
 import {withA11y} from "@storybook/addon-a11y"
 
-import { theme } from "../src/themes/default"
-import { GlobalStyle } from "../src/components/GlobalStyle";
+import { defaultTheme } from "../src/themes/default"
+import { GlobalStyle } from "../src/components/layout/GlobalStyle";
 
 export const parameters = {
   a11y: {
@@ -24,7 +24,7 @@ export const parameters = {
 };
 
 const withTheme = (storyFn) => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={defaultTheme}>
     <GlobalStyle />
     {storyFn()}
   </ThemeProvider>
