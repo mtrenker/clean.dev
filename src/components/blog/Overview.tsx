@@ -8,9 +8,10 @@ import { Card } from '../layout/Card';
 import { HeroImage } from '../layout/HeroImage';
 
 import { useGetBlogListQuery } from '../../graphql/hooks';
-import { css, Theme, useTheme } from '../../lib/style';
+import { css, useTheme } from '../../lib/style';
 
 import { mapWidgets } from '../../lib/contentful';
+import { Theme } from '../../themes/default';
 
 const overviewCss = (theme: Theme) => css`
   ${theme.css.containerCss.styles}

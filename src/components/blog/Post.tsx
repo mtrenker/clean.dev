@@ -7,6 +7,12 @@ import { HeroImage } from '../layout/HeroImage';
 import { useGetBlogPostQuery } from '../../graphql/hooks';
 
 import { mapWidgets } from '../../lib/contentful';
+import { css } from '../../lib/style';
+import { Theme } from '../../themes/default';
+
+const postCss = (theme: Theme) => css`
+  ${theme.css.containerCss.styles}
+`;
 
 export const Post: FC = () => {
   const { title } = useParams<{title: string}>();
@@ -20,9 +26,11 @@ export const Post: FC = () => {
   });
 
   return (
-    <article>
+    <>
       <HeroImage url={heroImage?.url} />
-      {post}
-    </article>
+      <article css={postCss}>
+        {post}
+      </article>
+    </>
   );
 };

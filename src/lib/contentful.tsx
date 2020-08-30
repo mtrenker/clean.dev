@@ -7,7 +7,7 @@ import { ChangePassword } from '../components/blueprints/ChangePassword';
 import { Projects } from '../components/blueprints/Projects';
 import { TimeTracking } from '../components/blueprints/TimeTracking';
 import { Blog } from '../components/blueprints/Blog';
-import { Gist } from '../components/Gist';
+import { Gist } from '../components/layout/Gist';
 
 const BLUEPRINTS = {
   PROJECTS: 'projects',
@@ -37,6 +37,6 @@ export const mapWidgets = (): RenderNode => ({
   [BLUEPRINTS.CHANGE_PASSWORD]: () => <ChangePassword />,
   [BLUEPRINTS.TIME_TRACKING]: () => <TimeTracking />,
   [BLUEPRINTS.PROJECTS]: () => <Projects />,
-  [COMPONENTS.GIST]: ({ data: { gist, title } }) => <Gist gist={gist} title={title} />,
+  [COMPONENTS.GIST]: ({ data: { gist, title } }) => <Gist gistId={gist} title={title} />,
   [BLOCKS.EMBEDDED_ASSET]: renderAsset,
 });
