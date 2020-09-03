@@ -9,16 +9,21 @@ export interface HeroImageProps {
   className?: string;
 }
 
-const imageCss = css`
-  background-color: #cccccc;
-  object-fit: cover;
-`;
-
 const heroCss = ({ breakPoints }: Theme) => css`
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  img {
+    background-color: #cccccc;
+    object-fit: cover;
+  }
   @media (max-width: ${breakPoints.mobile}) {
-    height: 200px;
+    height: 100vh;
     overflow: hidden;
-    .css-${imageCss.name} {
+    img {
       margin-top: -125px;
     }
   }
@@ -43,7 +48,7 @@ export const HeroImage: FC<HeroImageProps> = ({ url, alt }) => {
         ))}
         {/* fallback for everything larger than 1200 and ommit webp for larger images */}
         <source srcSet={`${url}?w=1900&fm=jpg`} media="(min-width: 1200px)" type="image/jpeg" />
-        <img src={url} alt={alt} css={imageCss} height="400" width="100%" />
+        <img src={url} alt={alt} height="100%" width="100%" />
       </picture>
     </figure>
   );

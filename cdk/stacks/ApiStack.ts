@@ -10,7 +10,7 @@ import {
   CfnApiKey,
   AuthorizationType,
   FieldLogLevel,
-  SchemaDefinition,
+  Schema,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table, ITable } from '@aws-cdk/aws-dynamodb';
@@ -37,8 +37,7 @@ export class ApiStack extends Stack {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
-      schemaDefinition: SchemaDefinition.FILE,
-      schemaDefinitionFile: 'cdk/resources/schema.graphql',
+      schema: Schema.fromAsset('cdk/resources/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: AuthorizationType.USER_POOL,

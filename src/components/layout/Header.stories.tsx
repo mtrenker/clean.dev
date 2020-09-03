@@ -1,8 +1,13 @@
 import React, { FC } from 'react';
+import { Meta } from '@storybook/react';
 
 import { Header } from './Header';
 
-export default { title: 'Components/Header' };
+export default {
+  title: 'Components/Header',
+  component: Header,
+  parameters: { layout: 'fullscreen' },
+} as Meta;
 
 export const Component: FC = () => (
   <>

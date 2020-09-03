@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { Global, css } from '@emotion/core';
 
+import 'typeface-roboto';
+
 const globalStyles = css`
   html {
     font-family: "Roboto";

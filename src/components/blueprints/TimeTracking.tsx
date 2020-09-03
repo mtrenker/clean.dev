@@ -9,6 +9,7 @@ import {
   useGetProjectsQuery,
   useGetTrackingOverviewLazyQuery,
 } from '../../graphql/hooks';
+import { DatePicker } from '../controls/DatePicker';
 
 const timeTrackingCss = css`
   display: grid;
@@ -31,6 +32,7 @@ const timeTrackingCss = css`
 
 export const TimeTracking: FC = () => {
   const [trackingToEdit, setTrackingToEdit] = useState<Tracking | undefined>(undefined);
+  const [date, setDate] = useState<Date>(new Date());
 
   const [trackingQuery, { data: trackingData, refetch: refetchTrackings }] = useGetTrackingOverviewLazyQuery();
   const trackings = trackingData?.trackings.items ?? [];
@@ -39,7 +41,7 @@ export const TimeTracking: FC = () => {
     trackingQuery({
       variables: {
         trackingQuery: {
-          date: format(new Date(), 'u-MM'),
+          date: format(date, 'u-MM'),
           project,
         },
       },
@@ -95,6 +97,18 @@ export const TimeTracking: FC = () => {
   return (
     <div css={timeTrackingCss}>
       <div>
+        <DatePicker
+          onChange={(newDate: Date) => {
+            setDate(newDate);
+            refetchTrackings?.({
+              trackingQuery: {
+                date: format(newDate, 'u-MM'),
+                project: projectData?.projects.items[0].id,
+              },
+            });
+          }}
+          selected={date}
+        />
         <table>
           <thead>
             <tr>
