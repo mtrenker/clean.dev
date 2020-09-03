@@ -14,11 +14,13 @@ export class BIStack extends Stack {
     super(scope, id, props);
 
     const eventBus = new EventBus(this, 'Bus', {
-      eventBusName: 'CleanBus',
+      eventBusName: 'mainbus',
     });
 
+    const env = this.node.tryGetContext('env');
+
     const eventBucket = new Bucket(this, 'EventBucket', {
-      bucketName: 'prod.events.clean.dev',
+      bucketName: `events.${env}.clean.dev`,
       removalPolicy: RemovalPolicy.RETAIN,
     });
 
@@ -52,7 +54,7 @@ export class BIStack extends Stack {
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.RETAIN,
-      tableName: 'prod.inventory.clean.dev',
+      tableName: `${env}.inventory`,
     });
 
     this.addListener(eventBus, deliveryStream);

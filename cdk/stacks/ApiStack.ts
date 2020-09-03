@@ -27,13 +27,13 @@ export class ApiStack extends Stack {
     const eventBusArn = Fn.importValue('eventBusArn');
     const inventoryName = Fn.importValue('inventoryTableName');
     const eventBusName = Fn.importValue('eventBusName');
-    const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'cleanDevUserPoolId');
+    const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'userPoolId');
 
     const table = Table.fromTableName(this, 'Table', inventoryName);
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
     const api = new GraphQLApi(this, 'GraphQLApi', {
-      name: 'prod.api.clean.dev',
+      name: 'api',
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
@@ -91,12 +91,12 @@ export class ApiStack extends Stack {
 
     new StringParameter(this, 'ApiKeyParam', {
       stringValue: apiKey.attrApiKey,
-      parameterName: 'cleanDevApiKey',
+      parameterName: 'apiKey',
     });
 
     new StringParameter(this, 'GraphQlUrlParam', {
       stringValue: api.graphQlUrl,
-      parameterName: 'cleanDevApiUrl',
+      parameterName: 'apiUrl',
     });
 
     new CfnOutput(this, 'ApiKeyOutput', {

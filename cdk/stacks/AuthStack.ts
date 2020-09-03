@@ -11,7 +11,7 @@ export class AuthStack extends Stack {
     super(scope, id, props);
 
     const userPool = new UserPool(this, 'UserPool', {
-      userPoolName: 'cleanDevUserPool',
+      userPoolName: 'users',
       signInAliases: {
         email: true,
         phone: false,
@@ -29,14 +29,18 @@ export class AuthStack extends Stack {
       },
     });
 
+    const env = this.node.tryGetContext('env');
+
+    const site = env === 'prod' ? 'https://clean.dev' : `https://${env}.clean.dev`;
+
     const userPoolClient = userPool.addClient('Client', {
-      userPoolClientName: 'cleanDevUserPoolClient',
+      userPoolClientName: 'userpool',
       oAuth: {
         flows: {
           authorizationCodeGrant: true,
         },
         scopes: [OAuthScope.OPENID],
-        callbackUrls: ['https://clean.dev'],
+        callbackUrls: [site],
       },
       supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
@@ -73,12 +77,12 @@ export class AuthStack extends Stack {
 
     new StringParameter(this, 'UserPoolIdParam', {
       stringValue: userPool.userPoolId,
-      parameterName: 'cleanDevUserPoolId',
+      parameterName: 'userPoolId',
     });
 
     new StringParameter(this, 'UserPoolClientIdParam', {
       stringValue: userPoolClient.userPoolClientId,
-      parameterName: 'cleanDevUserPoolClientId',
+      parameterName: 'userPoolClientId',
     });
 
     new CfnOutput(this, 'UserPoolId', {

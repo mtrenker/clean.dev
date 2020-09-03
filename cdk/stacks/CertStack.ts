@@ -8,13 +8,16 @@ export class CertStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
+    const env = this.node.tryGetContext('env');
+
+    const domainName = env === 'prod' ? 'clean.dev' : `${env}.clean.dev`;
+
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
-      domainName: 'clean.dev',
+      domainName,
     });
 
-    const certificate = new DnsValidatedCertificate(this, 'CleanDevCert', {
-      domainName: 'clean.dev',
-      subjectAlternativeNames: ['*.clean.dev'],
+    const certificate = new DnsValidatedCertificate(this, 'Cert', {
+      domainName,
       hostedZone,
       region: 'us-east-1',
     });

@@ -6,6 +6,7 @@ import { BIStack } from './stacks/BIStack';
 import { FrontStack } from './stacks/FrontStack';
 import { CmsStack } from './stacks/CmsStack';
 import { CertStack } from './stacks/CertStack';
+import { ZoneStack } from './stacks/ZoneStack';
 
 const app = new App();
 
@@ -15,6 +16,7 @@ const defaultProps = {
     region: process.env.CDK_DEFAULT_REGION,
   },
 };
+new ZoneStack(app, 'Zone', defaultProps);
 
 new CertStack(app, 'Cert', defaultProps);
 
