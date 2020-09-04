@@ -3,6 +3,29 @@ import { SNSHandler } from 'aws-lambda';
 import { BLOCKS } from '@contentful/rich-text-types';
 import { createClient, Asset, Entry } from 'contentful';
 
+interface Blueprint {
+  name: string;
+}
+
+interface Gist {
+  title: string;
+  gist: string;
+}
+
+type ContentTypes = Blueprint | Gist
+
+interface Localized<T> {
+  [language: string]: T
+}
+
+interface CmsLink {
+  sys: {
+    type: string;
+    linkType: string;
+    id: string;
+  }
+}
+
 interface Image {
   title: string;
   description: string;
@@ -43,6 +66,22 @@ interface Body<ContentId, Fields> {
   fields: Fields
 }
 
+interface CmsNode {
+  nodeType: string;
+  data: {
+    [key: string]: any;
+    asset?: Asset;
+    target?: {
+      sys: {
+        id: string;
+        type: string;
+        linkType: string;
+      }
+    }
+  };
+  content: CmsNode[]
+}
+
 interface PageFields {
   title: Localized<string>;
   slug: Localized<string>;
@@ -65,45 +104,6 @@ interface PostFields {
 type Post = Body<'post', PostFields>
 
 type EventBody = Page | Post;
-
-interface CmsNode {
-  nodeType: string;
-  data: {
-    [key: string]: any;
-    asset?: Asset;
-    target?: {
-      sys: {
-        id: string;
-        type: string;
-        linkType: string;
-      }
-    }
-  };
-  content: CmsNode[]
-}
-
-interface Blueprint {
-  name: string;
-}
-
-interface Gist {
-  title: string;
-  gist: string;
-}
-
-type ContentTypes = Blueprint | Gist
-
-interface Localized<T> {
-  [language: string]: T
-}
-
-interface CmsLink {
-  sys: {
-    type: string;
-    linkType: string;
-    id: string;
-  }
-}
 
 const TABLE_NAME = process.env.TABLE_NAME ?? '';
 const REGION = process.env.REGION ?? '';
