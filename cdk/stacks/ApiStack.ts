@@ -94,7 +94,7 @@ export class ApiStack extends Stack {
     });
 
     new StringParameter(this, 'GraphQlUrlParam', {
-      stringValue: api.graphQlUrl,
+      stringValue: api.graphqlUrl,
       parameterName: 'apiUrl',
     });
 
@@ -104,7 +104,7 @@ export class ApiStack extends Stack {
     });
 
     new CfnOutput(this, 'ApiUrlOutput', {
-      value: api.graphQlUrl,
+      value: api.graphqlUrl,
     });
   }
 
