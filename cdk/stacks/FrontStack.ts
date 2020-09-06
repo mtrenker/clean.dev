@@ -5,7 +5,7 @@ import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
-import { CloudFrontTarget, BucketWebsiteTarget } from '@aws-cdk/aws-route53-targets';
+import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
 import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
@@ -39,44 +39,35 @@ export class FrontStack extends Stack {
       },
     });
 
-    const production = env === 'prod';
-    let recordProps: ARecordProps | AaaaRecordProps;
-    if (production) {
-      const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate, {
-        aliases: ['clean.dev'],
-      });
-      const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Dist', {
-        errorConfigurations: [{
-          errorCode: 404,
-          responseCode: 200,
-          errorCachingMinTtl: 0,
-          responsePagePath: '/index.html',
-        }, {
-          errorCode: 403,
-          responseCode: 200,
-          errorCachingMinTtl: 0,
-          responsePagePath: '/index.html',
+    const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate, {
+      aliases: ['clean.dev'],
+    });
+    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Website', {
+      errorConfigurations: [{
+        errorCode: 404,
+        responseCode: 200,
+        errorCachingMinTtl: 0,
+        responsePagePath: '/index.html',
+      }, {
+        errorCode: 403,
+        responseCode: 200,
+        errorCachingMinTtl: 0,
+        responsePagePath: '/index.html',
+      }],
+      originConfigs: [{
+        s3OriginSource: {
+          s3BucketSource: build.siteBucket,
+        },
+        behaviors: [{
+          isDefaultBehavior: true,
         }],
-        originConfigs: [{
-          s3OriginSource: {
-            s3BucketSource: build.siteBucket,
-          },
-          behaviors: [{
-            isDefaultBehavior: true,
-          }],
-        }],
-        viewerCertificate,
-      });
-      recordProps = {
-        target: RecordTarget.fromAlias(new CloudFrontTarget(cloudFrontDistribution)),
-        zone: hostedZone,
-      };
-    } else {
-      recordProps = {
-        target: RecordTarget.fromAlias(new BucketWebsiteTarget(build.siteBucket)),
-        zone: hostedZone,
-      };
-    }
+      }],
+      viewerCertificate,
+    });
+    const recordProps: ARecordProps | AaaaRecordProps = {
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cloudFrontDistribution)),
+      zone: hostedZone,
+    };
 
     new ARecord(this, 'ARecord', recordProps);
     new AaaaRecord(this, 'AaaaRecord', recordProps);
