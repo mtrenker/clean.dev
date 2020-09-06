@@ -2,7 +2,7 @@ import {
   Stack, App, StackProps, CfnOutput, Fn,
 } from '@aws-cdk/core';
 import {
-  GraphQLApi,
+  GraphqlApi,
   DynamoDbDataSource,
   NoneDataSource,
   MappingTemplate,
@@ -32,7 +32,7 @@ export class ApiStack extends Stack {
     const table = Table.fromTableName(this, 'Table', inventoryName);
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
-    const api = new GraphQLApi(this, 'GraphQLApi', {
+    const api = new GraphqlApi(this, 'GraphQLApi', {
       name: 'api',
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
