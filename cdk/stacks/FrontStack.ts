@@ -42,7 +42,7 @@ export class FrontStack extends Stack {
     const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate, {
       aliases: ['clean.dev'],
     });
-    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'Website', {
+    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'CloudFront', {
       errorConfigurations: [{
         errorCode: 404,
         responseCode: 200,
