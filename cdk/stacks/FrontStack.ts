@@ -6,7 +6,8 @@ import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
-import { CloudFrontWebDistribution, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
+import { Distribution } from '@aws-cdk/aws-cloudfront';
+import { S3Origin } from '@aws-cdk/aws-cloudfront-origins';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
 import { GitHubBuild } from '../constructs/GitHubBuild';
@@ -23,8 +24,6 @@ export class FrontStack extends Stack {
       domainName,
     });
 
-    const certificate = Certificate.fromCertificateArn(this, 'Cert', Fn.importValue('CertificateArn'));
-
     const param = BuildEnvironmentVariableType.PARAMETER_STORE;
     const build = new GitHubBuild(this, 'Build', {
       oauthToken: SecretValue.secretsManager('clean/github'),
@@ -39,28 +38,22 @@ export class FrontStack extends Stack {
       },
     });
 
-    const viewerCertificate = ViewerCertificate.fromAcmCertificate(certificate);
-    const cloudFrontDistribution = new CloudFrontWebDistribution(this, 'CloudFront', {
-      errorConfigurations: [{
-        errorCode: 404,
-        responseCode: 200,
-        errorCachingMinTtl: 0,
+    const certificate = Certificate.fromCertificateArn(this, 'Cert', Fn.importValue('CertificateArn'));
+    const cloudFrontDistribution = new Distribution(this, 'CloudFront', {
+      errorResponses: [{
+        httpStatus: 404,
         responsePagePath: '/index.html',
+        responseHttpStatus: 200,
       }, {
-        errorCode: 403,
-        responseCode: 200,
-        errorCachingMinTtl: 0,
+        httpStatus: 403,
         responsePagePath: '/index.html',
+        responseHttpStatus: 200,
       }],
-      originConfigs: [{
-        s3OriginSource: {
-          s3BucketSource: build.siteBucket,
-        },
-        behaviors: [{
-          isDefaultBehavior: true,
-        }],
-      }],
-      viewerCertificate,
+      defaultBehavior: {
+        origin: new S3Origin(build.siteBucket),
+      },
+      domainNames: [domainName],
+      certificate,
     });
     const recordProps: ARecordProps | AaaaRecordProps = {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cloudFrontDistribution)),
