@@ -1,4 +1,5 @@
 import { Auth, CognitoUser } from '@aws-amplify/auth';
+import { ISignUpResult } from 'amazon-cognito-identity-js';
 
 Auth.configure({
   region: process.env.AWS_REGION,
@@ -28,6 +29,24 @@ export async function signIn(username: string, password: string): Promise<Authen
     });
   } catch (error) {
     return null;
+  }
+}
+
+export async function signUp(username: string, password: string): Promise<ISignUpResult|undefined> {
+  try {
+    const user = await Auth.signUp(username, password);
+    return user;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+}
+
+export async function confirmSignUp(username: string, code: string): Promise<void> {
+  try {
+    await Auth.confirmSignUp(username, code);
+  } catch (error) {
+    console.error(error);
   }
 }
 

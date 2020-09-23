@@ -192,7 +192,7 @@ export class ApiStack extends Stack {
             "expression": "pk = :user AND begins_with(id, :id)",
             "expressionValues": {
               ":id": $util.dynamodb.toDynamoDBJson("project-"),
-              ":user": $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub")
+              ":user": $util.dynamodb.toDynamoDBJson("User-$ctx.identity.claims['custom:user']")
             }
           },
         }
@@ -215,7 +215,7 @@ export class ApiStack extends Stack {
           "version" : "2017-02-28",
           "operation" : "GetItem",
           "key" : {
-              "pk" : $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub"),
+              "pk" : $util.dynamodb.toDynamoDBJson("User-$ctx.identity.claims['custom:user']"),
               "id" : $util.dynamodb.toDynamoDBJson("$ctx.args.projectQuery.project")
           }
       }

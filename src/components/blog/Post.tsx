@@ -15,11 +15,11 @@ const postCss = (theme: Theme) => css`
 `;
 
 export const Post: FC = () => {
-  const { title } = useParams<{title: string}>();
+  const { slug } = useParams<{slug: string}>();
 
-  const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: title } } });
+  const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: slug } } });
   if (!data) return <p>Loading</p>;
-  const { content, heroImage } = data?.blog?.post;
+  const { title, content, heroImage } = data?.blog?.post;
 
   const post = documentToReactComponents(JSON.parse(content), {
     renderNode: mapWidgets(),
@@ -29,6 +29,7 @@ export const Post: FC = () => {
     <>
       <HeroImage url={heroImage?.url} />
       <article css={postCss}>
+        <h2>{title}</h2>
         {post}
       </article>
     </>

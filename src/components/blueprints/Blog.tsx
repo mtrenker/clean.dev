@@ -9,7 +9,7 @@ export const Blog: FC = () => (
     <Route exact path="/blog">
       <Overview />
     </Route>
-    <Route exact path="/blog/:title">
+    <Route exact path="/blog/:slug">
       <Post />
     </Route>
   </Switch>

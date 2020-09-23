@@ -9,7 +9,7 @@ const authLink = setContext(() => new Promise((resolve) => {
   Auth.currentSession().then((session) => {
     resolve({
       headers: {
-        authorization: session.getAccessToken().getJwtToken(),
+        authorization: session.getIdToken().getJwtToken(),
       },
     });
   }).catch(() => {

@@ -10,6 +10,9 @@ interface MutationEvent {
   identity: {
     sub: string;
     username: string;
+    claims: {
+      'custom:user': string;
+    }
   };
 }
 
@@ -64,13 +67,13 @@ const eventBridge = new EventBridge();
 async function track(event: TrackEvent): Promise<Tracking> {
   const { identity, arguments: { trackingInput } } = event;
 
-  const pk = `user-${identity?.sub}`;
+  const pk = `User-${identity?.claims['custom:user']}`;
 
   const {
     projectId, startTime, endTime, description,
   } = trackingInput;
   const startDate = new Date(startTime);
-  const id = `tracking-${projectId}-${startDate.toISOString()}`;
+  const id = `Tracking-${projectId}-${startDate.toISOString()}`;
 
   const trackItem: TrackItem = {
     pk,

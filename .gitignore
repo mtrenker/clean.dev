@@ -6,3 +6,4 @@ data.json
 storybook-static
 cdk.context.json
 tsconfig.tsbuildinfo
+.parcel-cache

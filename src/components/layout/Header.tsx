@@ -2,20 +2,14 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 
 import { useTheme } from '../../lib/style';
-import { Theme } from '../../themes/default';
 
-const headerCss = ({ breakPoints }: Theme) => css`
+const headerCss = () => css`
   @media print {
     display: none;
   }
-  z-index: 2;
   position: relative;
-  color: white;
-  @media (min-width: ${breakPoints.mobile}) {
-    background-color: white ;
-    color: black;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
-  }
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 
   h1 {
     font-weight: bold;
@@ -30,7 +24,7 @@ export const Header: FC = () => {
   const theme = useTheme();
   const { css: { containerCss } } = theme;
   return (
-    <header css={headerCss(theme)}>
+    <header css={headerCss}>
       <div css={containerCss}>
         <h1>
           clean

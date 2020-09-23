@@ -10,18 +10,12 @@ export interface HeroImageProps {
 }
 
 const heroCss = ({ breakPoints }: Theme) => css`
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-
   img {
     background-color: #cccccc;
     object-fit: cover;
+    height: 65vh;
   }
   @media (max-width: ${breakPoints.mobile}) {
-    height: 100vh;
     overflow: hidden;
     img {
       margin-top: -125px;
