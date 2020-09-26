@@ -2,7 +2,7 @@ import { App } from '@aws-cdk/core';
 
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
-import { BIStack } from './stacks/BIStack';
+import { InventoryStack } from './stacks/InventoryStack';
 import { FrontStack } from './stacks/FrontStack';
 import { CmsStack } from './stacks/CmsStack';
 import { CertStack } from './stacks/CertStack';
@@ -22,7 +22,7 @@ new CertStack(app, 'Cert', defaultProps);
 
 new AuthStack(app, 'Auth', defaultProps);
 
-new BIStack(app, 'Bi', defaultProps);
+new InventoryStack(app, 'Inventory', defaultProps);
 
 new ApiStack(app, 'Api', defaultProps);
 

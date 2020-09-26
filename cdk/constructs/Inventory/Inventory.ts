@@ -1,6 +1,4 @@
-import {
-  Stack, App, StackProps, RemovalPolicy, CfnOutput,
-} from '@aws-cdk/core';
+import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { EventBus, CfnRule } from '@aws-cdk/aws-events';
 import { CfnDeliveryStream } from '@aws-cdk/aws-kinesisfirehose';
 import { Bucket } from '@aws-cdk/aws-s3';
@@ -9,18 +7,30 @@ import {
 } from '@aws-cdk/aws-iam';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
 
-export class BIStack extends Stack {
-  constructor(scope: App, id: string, props?: StackProps) {
-    super(scope, id, props);
+interface InventoryProps {
+  eventBucketName: string;
+  eventBusName: string;
+  tableName: string;
+}
 
-    const eventBus = new EventBus(this, 'Bus', {
-      eventBusName: 'mainbus',
+export class Inventory extends Construct {
+  public inventoryTable: Table;
+
+  public eventBus: EventBus;
+
+  public deliveryStream: CfnDeliveryStream;
+
+  constructor(scope: Construct, id: string, props: InventoryProps) {
+    super(scope, id);
+
+    const { eventBusName, eventBucketName, tableName } = props;
+
+    this.eventBus = new EventBus(this, 'EventBus', {
+      eventBusName,
     });
 
-    const env = this.node.tryGetContext('env');
-
     const eventBucket = new Bucket(this, 'EventBucket', {
-      bucketName: `events.${env}.clean.dev`,
+      bucketName: eventBucketName,
       removalPolicy: RemovalPolicy.RETAIN,
     });
 
@@ -30,7 +40,8 @@ export class BIStack extends Stack {
 
     eventBucket.grantReadWrite(firehoseRole);
 
-    const deliveryStream = new CfnDeliveryStream(this, 'EventDeliveryStream', {
+    this.deliveryStream = new CfnDeliveryStream(this, 'EventDeliveryStream', {
+      deliveryStreamName: 'EventStream',
       deliveryStreamType: 'DirectPut',
       s3DestinationConfiguration: {
         bucketArn: eventBucket.bucketArn,
@@ -43,39 +54,24 @@ export class BIStack extends Stack {
       },
     });
 
-    const inventory = new Table(this, 'Inventory', {
+    this.inventoryTable = new Table(this, 'Inventory', {
       partitionKey: {
-        name: 'pk',
+        name: 'PK',
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: 'id',
+        name: 'SK',
         type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.RETAIN,
-      tableName: `${env}.inventory`,
+      tableName,
     });
 
-    this.addListener(eventBus, deliveryStream);
-
-    new CfnOutput(this, 'EventBusArn', {
-      value: eventBus.eventBusArn,
-      exportName: 'eventBusArn',
-    });
-
-    new CfnOutput(this, 'EventBusName', {
-      value: eventBus.eventBusName,
-      exportName: 'eventBusName',
-    });
-
-    new CfnOutput(this, 'InventoryTablename', {
-      value: inventory.tableName,
-      exportName: 'inventoryTableName',
-    });
+    this.addListener(this.deliveryStream);
   }
 
-  private addListener(eventBus: EventBus, deliveryStream: CfnDeliveryStream) {
+  private addListener(deliveryStream: CfnDeliveryStream) {
     const ruleRole = new Role(this, 'RuleRole', {
       assumedBy: new ServicePrincipal('events.amazonaws.com'),
       inlinePolicies: {
@@ -97,12 +93,11 @@ export class BIStack extends Stack {
     });
 
     const rule = new CfnRule(this, 'DeliveryRule', {
-      description: 'Delivery stream for BI',
-      eventBusName: eventBus.eventBusName,
+      description: 'Delivery stream for inventory table',
+      eventBusName: this.eventBus.eventBusName,
       eventPattern: {
         source: [
-          'tracking',
-          'projects',
+          '*',
         ],
       },
       targets: [{

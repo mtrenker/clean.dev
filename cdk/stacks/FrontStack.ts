@@ -16,9 +16,7 @@ export class FrontStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const env = this.node.tryGetContext('env');
-
-    const domainName = (env === 'prod') ? 'clean.dev' : `${env}.clean.dev`;
+    const domainName = 'clean.dev';
 
     const hostedZone = HostedZone.fromLookup(this, 'Zone', {
       domainName,
@@ -63,16 +61,12 @@ export class FrontStack extends Stack {
     new ARecord(this, 'ARecord', recordProps);
     new AaaaRecord(this, 'AaaaRecord', recordProps);
 
-    new CfnOutput(this, 'StorybookUrl', {
+    new CfnOutput(this, 'Storybook', {
       value: build.storybookBucket.bucketWebsiteUrl,
     });
 
     new CfnOutput(this, 'Website', {
       value: hostedZone.zoneName,
-    });
-
-    new CfnOutput(this, 'CertificateArn', {
-      value: certificate.certificateArn,
     });
   }
 }

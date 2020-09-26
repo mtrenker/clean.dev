@@ -9,9 +9,7 @@ export class AuthStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const env = this.node.tryGetContext('env');
-
-    const domain = env === 'prod' ? 'https://clean.dev' : `https://${env}.clean.dev`;
+    const domain = 'https://clean.dev';
 
     const users = new Users(this, 'Users', {
       domain,
