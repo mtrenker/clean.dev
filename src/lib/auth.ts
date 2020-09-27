@@ -4,6 +4,7 @@ import { ISignUpResult } from 'amazon-cognito-identity-js';
 Auth.configure({
   region: process.env.AWS_REGION,
   userPoolId: process.env.COGNITO_POOL_ID,
+  identityPoolId: process.env.COGNITO_IDENTITY_POOL_ID,
   userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
   mandatorySignIn: false,
 });

@@ -1,106 +1,87 @@
 import {
-  Stack, App, StackProps, CfnOutput, Fn,
+  Stack,
+  App,
+  StackProps,
+  CfnOutput,
+  // Fn,
 } from '@aws-cdk/core';
 import {
-  GraphqlApi,
   DynamoDbDataSource,
   NoneDataSource,
   MappingTemplate,
-  UserPoolDefaultAction,
-  CfnApiKey,
-  AuthorizationType,
-  FieldLogLevel,
-  Schema,
 } from '@aws-cdk/aws-appsync';
 import { UserPool } from '@aws-cdk/aws-cognito';
-import { Table, ITable } from '@aws-cdk/aws-dynamodb';
+import {
+  // Table,
+  ITable,
+} from '@aws-cdk/aws-dynamodb';
 import { Function, Code, Runtime } from '@aws-cdk/aws-lambda';
 import {
   Role, ManagedPolicy, ServicePrincipal, PolicyStatement, Effect,
 } from '@aws-cdk/aws-iam';
 import { StringParameter } from '@aws-cdk/aws-ssm';
+import { Graphql } from '../constructs/Api/Graphql';
 
 export class ApiStack extends Stack {
   constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const eventBusArn = Fn.importValue('eventBusArn');
-    const inventoryName = Fn.importValue('inventoryTableName');
-    const eventBusName = Fn.importValue('eventBusName');
+    // const eventBusArn = Fn.importValue('eventBusArn');
+    // const inventoryName = Fn.importValue('inventoryTableName');
+    // const eventBusName = Fn.importValue('eventBusName');
     const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'userPoolId');
 
-    const table = Table.fromTableName(this, 'Table', inventoryName);
+    // const table = Table.fromTableName(this, 'Table', inventoryName);
     const userPool = UserPool.fromUserPoolId(this, 'UserPool', userPoolId.stringValue);
 
-    const api = new GraphqlApi(this, 'GraphQLApi', {
-      name: 'api',
-      logConfig: {
-        fieldLogLevel: FieldLogLevel.ALL,
-      },
-      schema: Schema.fromAsset('cdk/resources/schema.graphql'),
-      authorizationConfig: {
-        defaultAuthorization: {
-          authorizationType: AuthorizationType.USER_POOL,
-          userPoolConfig: {
-            userPool,
-            defaultAction: UserPoolDefaultAction.ALLOW,
-          },
-        },
-        additionalAuthorizationModes: [{
-          authorizationType: AuthorizationType.API_KEY,
-        }],
-      },
+    const { api } = new Graphql(this, 'Graphql', {
+      userPool,
     });
 
-    const apiKey = new CfnApiKey(this, 'ApiKey', {
-      apiId: api.apiId,
-    });
-
-    const queryDataSource = api.addDynamoDbDataSource('DataSource', table);
+    // const queryDataSource = api.addDynamoDbDataSource('DataSource', table);
     const noneDataSource = api.addNoneDataSource('None');
-    const mutationsFunction = this.mutationsFunction(table, eventBusArn, eventBusName);
+    // const mutationsFunction = this.mutationsFunction(table, eventBusArn, eventBusName);
 
-    const mutationsSource = api.addLambdaDataSource('TrackSource', mutationsFunction);
+    // const mutationsSource = api.addLambdaDataSource('TrackSource', mutationsFunction);
 
-    ApiStack.addPageResolver(queryDataSource);
+    // ApiStack.addPageResolver(queryDataSource);
 
-    ApiStack.addProjectsResolver(queryDataSource);
-    ApiStack.addProjectResolver(queryDataSource);
+    // ApiStack.addProjectsResolver(queryDataSource);
+    // ApiStack.addProjectResolver(queryDataSource);
 
-    ApiStack.addTrackingsResolver(queryDataSource);
+    // ApiStack.addTrackingsResolver(queryDataSource);
 
-    ApiStack.addBlogResolver(noneDataSource);
-    ApiStack.addBlogPostResolver(queryDataSource);
-    ApiStack.addBlogListResolver(queryDataSource);
+    // ApiStack.addBlogResolver(noneDataSource);
+    // ApiStack.addBlogPostResolver(queryDataSource);
+    // ApiStack.addBlogListResolver(queryDataSource);
 
-    mutationsSource.createResolver({
-      fieldName: 'track',
-      typeName: 'Mutation',
-      requestMappingTemplate: MappingTemplate.lambdaRequest(),
-      responseMappingTemplate: MappingTemplate.lambdaResult(),
-    });
-    mutationsSource.createResolver({
-      fieldName: 'addProject',
-      typeName: 'Mutation',
-      requestMappingTemplate: MappingTemplate.lambdaRequest(),
-      responseMappingTemplate: MappingTemplate.lambdaResult(),
-    });
+    // mutationsSource.createResolver({
+    //   fieldName: 'track',
+    //   typeName: 'Mutation',
+    //   requestMappingTemplate: MappingTemplate.lambdaRequest(),
+    //   responseMappingTemplate: MappingTemplate.lambdaResult(),
+    // });
+    // mutationsSource.createResolver({
+    //   fieldName: 'addProject',
+    //   typeName: 'Mutation',
+    //   requestMappingTemplate: MappingTemplate.lambdaRequest(),
+    //   responseMappingTemplate: MappingTemplate.lambdaResult(),
+    // });
 
-    table.grantReadWriteData(mutationsFunction);
+    // table.grantReadWriteData(mutationsFunction);
 
-    new StringParameter(this, 'ApiKeyParam', {
-      stringValue: apiKey.attrApiKey,
-      parameterName: 'apiKey',
+    noneDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'ping',
+      requestMappingTemplate: MappingTemplate.fromString(JSON.stringify({
+        version: '2017-02-28',
+      })),
+      responseMappingTemplate: MappingTemplate.fromString('$util.toJson("pong")'),
     });
 
     new StringParameter(this, 'GraphQlUrlParam', {
       stringValue: api.graphqlUrl,
       parameterName: 'apiUrl',
-    });
-
-    new CfnOutput(this, 'ApiKeyOutput', {
-      value: apiKey.attrApiKey,
-      exportName: 'apiKey',
     });
 
     new CfnOutput(this, 'ApiUrlOutput', {

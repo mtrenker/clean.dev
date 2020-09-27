@@ -20,6 +20,11 @@ export class AuthStack extends Stack {
       parameterName: 'userPoolId',
     });
 
+    new StringParameter(this, 'IdentityPoolIdParam', {
+      stringValue: users.userPoolClient.userPoolClientId,
+      parameterName: 'identityPoolId',
+    });
+
     new StringParameter(this, 'UserPoolClientIdParam', {
       stringValue: users.userPoolClient.userPoolClientId,
       parameterName: 'userPoolClientId',
