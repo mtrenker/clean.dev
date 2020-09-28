@@ -5,10 +5,11 @@ import {
   UserPool,
   UserPoolClient,
   UserPoolClientIdentityProvider,
-  CfnIdentityPool,
-  CfnIdentityPoolRoleAttachment,
 } from '@aws-cdk/aws-cognito';
-import { FederatedPrincipal, Role } from '@aws-cdk/aws-iam';
+import {
+  Role,
+  ServicePrincipal,
+} from '@aws-cdk/aws-iam';
 
 interface UserProps {
   domain: string;
@@ -17,13 +18,7 @@ interface UserProps {
 export class Users extends Construct {
   public readonly userPool: UserPool;
 
-  public readonly identityPool: CfnIdentityPool;
-
   public readonly userPoolClient: UserPoolClient;
-
-  public readonly authenticatedUserRole: Role;
-
-  public readonly unauthenticatedUserRole: Role;
 
   constructor(scope: Construct, id: string, props: UserProps) {
     super(scope, id);
@@ -58,37 +53,8 @@ export class Users extends Construct {
       supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
 
-    this.identityPool = new CfnIdentityPool(this, 'IdentityPool', {
-      identityPoolName: 'UserIdentities',
-      allowUnauthenticatedIdentities: true,
-      cognitoIdentityProviders: [{
-        clientId: this.userPoolClient.userPoolClientId,
-        providerName: this.userPool.userPoolProviderName,
-      }],
-    });
-
-    const identityPoolId = this.identityPool.ref;
-
-    this.authenticatedUserRole = new Role(this, 'AuthenticatedUserRole', {
-      assumedBy: new FederatedPrincipal('cognito-identity.amazonaws.com', {
-        StringEquals: { 'cognito-identity.amazonaws.com:aud': identityPoolId },
-        'ForAnyValue:StringLike': { 'cognito-identity.amazonaws.com:amr': 'authenticated' },
-      }, 'sts:AssumeRoleWithWebIdentity'),
-    });
-
-    this.unauthenticatedUserRole = new Role(this, 'UnauthenticatedUserRole', {
-      assumedBy: new FederatedPrincipal('cognito-identity.amazonaws.com', {
-        StringEquals: { 'cognito-identity.amazonaws.com:aud': identityPoolId },
-        'ForAnyValue:StringLike': { 'cognito-identity.amazonaws.com:amr': 'unauthenticated' },
-      }, 'sts:AssumeRoleWithWebIdentity'),
-    });
-
-    new CfnIdentityPoolRoleAttachment(this, 'IdentityPoolRoles', {
-      identityPoolId,
-      roles: {
-        unauthenticated: this.unauthenticatedUserRole.roleArn,
-        authenticated: this.authenticatedUserRole.roleArn,
-      },
+    new Role(this, 'AdminGroupRole', {
+      assumedBy: new ServicePrincipal('appsync.amazonaws.com'),
     });
 
     new CfnUserPoolGroup(this, 'AdminGroup', {

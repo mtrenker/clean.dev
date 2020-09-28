@@ -29,7 +29,7 @@ export class Graphql extends Construct {
       schema: Schema.fromAsset(join(__dirname, 'schema.graphql')),
       authorizationConfig: {
         defaultAuthorization: {
-          authorizationType: AuthorizationType.IAM,
+          authorizationType: AuthorizationType.USER_POOL,
           userPoolConfig: {
             userPool,
             defaultAction: UserPoolDefaultAction.DENY,
