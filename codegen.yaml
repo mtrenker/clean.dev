@@ -1,17 +1,6 @@
-schema: cdk/resources/schema.graphql
+schema: cdk/constructs/Api/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
-  ./cdk/resources/lambda/mutations/graphql.d.ts:
-    plugins:
-      - add:
-          content: '/* eslint-disable */'
-      - typescript
-    config:
-      scalars:
-        AWSDate: string
-        AWSDateTime: string
-        AWSJSON: "{ [key: string]: any }"
-
   ./src/graphql/hooks.tsx:
     plugins:
       - add:

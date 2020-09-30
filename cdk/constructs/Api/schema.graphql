@@ -1,3 +1,56 @@
+scalar AWSDate
+scalar AWSDateTime
+scalar AWSJSON
+
 type Query {
   ping: String!
+  me: User
+}
+
+type Mutation {
+  addProject(project: AddProjectInput!): Project!
+  addTracking(tracking: AddTrackingInput!): Tracking!
+}
+
+
+type User {
+  firstName: String!
+  lastName: String!
+  projects: ProjectConnection!
+  project(projectId: String!): Project
+}
+
+type ProjectConnection {
+  items: [Project!]!
+  nextToken: String
+}
+
+type Project {
+  id: ID!
+  name: String!
+  trackings: TrackingConnection!
+}
+
+type TrackingConnection {
+  items: [Tracking!]!
+  nextToken: String
+}
+
+type Tracking {
+  id: String!
+  project: Project!
+  startTime: AWSDateTime!
+  endTime: AWSDateTime!
+  description: String;
+}
+
+input AddProjectInput {
+  name: String!
+}
+
+input AddTrackingInput {
+  projectId: String!
+  startTime: AWSDateTime!
+  endTime: AWSDateTime!
+  description: String
 }
