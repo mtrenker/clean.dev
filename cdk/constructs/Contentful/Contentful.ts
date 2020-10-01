@@ -23,7 +23,7 @@ export class Contentful extends Construct {
       ],
     });
 
-    const webhookFunction = new NodejsFunction(this, '', {
+    const webhookFunction = new NodejsFunction(this, 'webhook', {
       role: webhookRole,
       environment: {
         TABLE_NAME: table.tableName,

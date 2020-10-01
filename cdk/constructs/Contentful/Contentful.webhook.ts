@@ -1,7 +1,6 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
 import { createClient } from 'contentful';
-import { nanoid } from 'nanoid';
 
 interface WebhookBody {
   sys: {
@@ -37,7 +36,7 @@ interface WebhookBody {
 interface CmsPage {
   title: string;
   slug: string;
-  publishDate: string;
+  content: string;
 }
 
 const TableName = process.env.TABLE_NAME ?? '';
@@ -51,7 +50,12 @@ const ddbClient = new DynamoDB.DocumentClient();
 
 export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<string> => {
   const { body } = event;
-  const parsedBody = JSON.parse(body ?? '') as WebhookBody;
+
+  if (!body) {
+    return 'no body';
+  }
+
+  const parsedBody = JSON.parse(Buffer.from(body, 'base64').toString()) as WebhookBody;
   const { id, contentType } = parsedBody.sys;
   switch (contentType.sys.id) {
     case 'page': {
@@ -64,20 +68,22 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<string> 
   }
 };
 
-const savePage = async (id: string): any => {
+const savePage = async (id: string): Promise<void> => {
   const entry = await contentfulClient.getEntry<CmsPage>(id);
-  const pageId = nanoid();
+
   const page = {
-    pk: `page-${pageId}`,
+    pk: `page-${entry.sys.id}`,
     sk: entry.fields.slug,
     title: entry.fields.title,
+    slug: entry.fields.slug,
+    content: JSON.stringify(entry.fields.content),
   };
-  ddbClient.transactWrite({
+  await ddbClient.transactWrite({
     TransactItems: [{
       Put: {
         TableName,
         Item: page,
       },
     }],
-  });
+  }).promise();
 };
