@@ -26,5 +26,17 @@ export class Inventory extends Construct {
       removalPolicy: RemovalPolicy.RETAIN,
       tableName,
     });
+
+    this.inventoryTable.addGlobalSecondaryIndex({
+      indexName: 'GSI1',
+      partitionKey: {
+        name: 'sk',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'data',
+        type: AttributeType.STRING,
+      },
+    });
   }
 }

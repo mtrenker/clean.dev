@@ -37,6 +37,7 @@ interface CmsPage {
   title: string;
   slug: string;
   content: string;
+  layout: string;
 }
 
 const TableName = process.env.TABLE_NAME ?? '';
@@ -70,13 +71,20 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<string> 
 
 const savePage = async (id: string): Promise<void> => {
   const entry = await contentfulClient.getEntry<CmsPage>(id);
+  const {
+    fields: {
+      content, slug, layout, title,
+    },
+  } = entry;
 
   const page = {
     pk: `page-${entry.sys.id}`,
-    sk: entry.fields.slug,
-    title: entry.fields.title,
-    slug: entry.fields.slug,
-    content: JSON.stringify(entry.fields.content),
+    sk: slug,
+    data: slug,
+    title,
+    slug,
+    layout,
+    content: JSON.stringify(content),
   };
   await ddbClient.transactWrite({
     TransactItems: [{

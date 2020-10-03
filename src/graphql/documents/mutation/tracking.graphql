@@ -1,5 +1,5 @@
-mutation track($trackingInput: TrackingInput!) {
-  track(trackingInput: $trackingInput) {
+mutation addTracking($trackingInput: AddTrackingInput!) {
+  addTracking(tracking: $trackingInput) {
     id
     startTime
     endTime

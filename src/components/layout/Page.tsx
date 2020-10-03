@@ -13,16 +13,16 @@ export const Page: FC = () => {
   const { css: { containerCss } } = useTheme();
   const { pathname } = useLocation();
   const page = pathname.split('/')[1];
-  const { data, error } = useGetPageQuery({ variables: { pageQuery: { slug: page } } });
+  const { data, error } = useGetPageQuery({ variables: { slug: `/${page}` } });
   if (!data) return <p>Loading</p>;
-  const document = data?.page?.content ?? '';
+  const document = data?.getPage?.content ?? '';
 
   const content = documentToReactComponents(JSON.parse(document), {
     renderNode: mapWidgets(),
   });
 
   const renderContent = () => {
-    if (data.page?.layout === 'container') {
+    if (data.getPage?.layout === 'container') {
       return <div css={containerCss}>{content}</div>;
     }
     return content;

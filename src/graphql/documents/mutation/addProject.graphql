@@ -1,12 +1,6 @@
-mutation addProject($projectInput: ProjectInput!) {
-  addProject(projectInput: $projectInput) {
+mutation addProject($projectInput: AddProjectInput!) {
+  addProject(project: $projectInput) {
     id
-    client
-    industry
-    description
-    startDate
-    endDate
-    methodologies
-    technologies
+    name
   }
 }

@@ -5,11 +5,18 @@ scalar AWSJSON
 type Query {
   ping: String!
   me: User
+  getPage(slug: String!): Page
 }
 
 type Mutation {
   addProject(project: AddProjectInput!): Project!
   addTracking(tracking: AddTrackingInput!): Tracking!
+}
+
+type Page {
+  title: String!
+  slug: String!
+  content: String!
 }
 
 
@@ -41,7 +48,7 @@ type Tracking {
   project: Project!
   startTime: AWSDateTime!
   endTime: AWSDateTime!
-  description: String;
+  description: String
 }
 
 input AddProjectInput {

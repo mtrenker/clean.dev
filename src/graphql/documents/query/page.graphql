@@ -1,8 +1,8 @@
-query getPage($pageQuery: PageQuery!) {
-  page(pageQuery: $pageQuery) {
+query getPage($slug: String!) {
+  getPage(slug: $slug) {
     slug
     title
-    layout
     content
+    layout
   }
 }

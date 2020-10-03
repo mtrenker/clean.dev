@@ -31,7 +31,7 @@ export const createMeResolver: QueryResolver = (dataSource) => dataSource.create
   fieldName: 'me',
   requestMappingTemplate: MappingTemplate.fromString(`
     {
-      "version" : "2017-02-28",
+      "version" : "2018-05-29",
       "operation" : "GetItem",
       "key" : {
           "pk" : $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
@@ -47,7 +47,7 @@ export const createUserProjectsResolver: QueryResolver = (dataSource) => dataSou
   fieldName: 'projects',
   requestMappingTemplate: MappingTemplate.fromString(`
     {
-      "version" : "2017-02-28",
+      "version" : "2018-05-29",
       "operation" : "Query",
       "query":{
         "expression": "pk = :user AND begins_with(sk, :sk)",
@@ -66,7 +66,7 @@ export const createProjectTrackingsResolver: QueryResolver = (dataSource) => dat
   fieldName: 'trackings',
   requestMappingTemplate: MappingTemplate.fromString(`
     {
-      "version" : "2017-02-28",
+      "version" : "2018-05-29",
       "operation" : "Query",
       "query":{
         "expression": "pk = :user AND begins_with(sk, :sk)",
@@ -78,6 +78,28 @@ export const createProjectTrackingsResolver: QueryResolver = (dataSource) => dat
     }
   `),
   responseMappingTemplate: MappingTemplate.fromString(connectionResult),
+});
+
+export const createPageResolver: QueryResolver = (dataSource) => dataSource.createResolver({
+  typeName: 'Query',
+  fieldName: 'getPage',
+  requestMappingTemplate: MappingTemplate.fromString(`
+    {
+      "version" : "2018-05-29",
+      "operation" : "Query",
+      "index": "GSI1",
+      "query":{
+        "expression": "sk = :slug AND #data = :slug",
+        "expressionNames": {
+          "#data": "data"
+        },
+        "expressionValues": {
+          ":slug": $util.dynamodb.toDynamoDBJson("$ctx.args.slug")
+        }
+      },
+    }
+  `),
+  responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.items[0])'),
 });
 
 /**

@@ -12,8 +12,13 @@ import {
 } from '@aws-cdk/aws-appsync';
 import { ITable } from '@aws-cdk/aws-dynamodb';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import { Effect, PolicyStatement } from '@aws-cdk/aws-iam';
 import {
-  createMeResolver, createMutationResolver, createProjectTrackingsResolver, createUserProjectsResolver,
+  createMeResolver,
+  createMutationResolver,
+  createPageResolver,
+  createProjectTrackingsResolver,
+  createUserProjectsResolver,
 } from './resolvers';
 
 interface GraphqlProps {
@@ -58,8 +63,24 @@ export class Graphql extends Construct {
         },
       },
     });
+
     this.querySource = this.api.addDynamoDbDataSource('InventoryDataSource', table);
     this.mutationSource = this.api.addLambdaDataSource('MutationDataSource', mutationFunction);
+
+    this.querySource.grantPrincipal.addToPrincipalPolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: [
+        'dynamodb:BatchGetItem',
+        'dynamodb:GetRecords',
+        'dynamodb:GetShardIterator',
+        'dynamodb:Query',
+        'dynamodb:GetItem',
+      ],
+      resources: [
+        table.tableArn,
+        `${table.tableArn}/index/GSI1`,
+      ],
+    }));
 
     // attach Query resolvers
     this.createQueryResolvers();
@@ -74,6 +95,8 @@ export class Graphql extends Construct {
     createUserProjectsResolver(this.querySource);
     // Project -> Trackings
     createProjectTrackingsResolver(this.querySource);
+    // Page
+    createPageResolver(this.querySource);
   }
 
   createMutationResolvers(): void {
