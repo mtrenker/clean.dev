@@ -51,6 +51,7 @@ export type Page = {
   title: Scalars['String'];
   slug: Scalars['String'];
   content: Scalars['String'];
+  layout: Scalars['String'];
 };
 
 export type User = {
@@ -140,7 +141,7 @@ export type GetPageQuery = (
   { __typename?: 'Query' }
   & { getPage?: Maybe<(
     { __typename?: 'Page' }
-    & Pick<Page, 'slug' | 'title' | 'content'>
+    & Pick<Page, 'slug' | 'title' | 'content' | 'layout'>
   )> }
 );
 
@@ -219,6 +220,7 @@ export const GetPageDocument = gql`
     slug
     title
     content
+    layout
   }
 }
     `;

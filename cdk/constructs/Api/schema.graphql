@@ -17,6 +17,7 @@ type Page {
   title: String!
   slug: String!
   content: String!
+  layout: String!
 }
 
 
