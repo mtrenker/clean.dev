@@ -14,6 +14,8 @@ import { ITable } from '@aws-cdk/aws-dynamodb';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { Effect, PolicyStatement } from '@aws-cdk/aws-iam';
 import {
+  createGetProjectsResolver,
+  createGetTrackingsResolver,
   createMeResolver,
   createMutationResolver,
   createPageResolver,
@@ -97,6 +99,10 @@ export class Graphql extends Construct {
     createProjectTrackingsResolver(this.querySource);
     // Page
     createPageResolver(this.querySource);
+    // Projects
+    createGetProjectsResolver(this.querySource);
+    // Trackings
+    createGetTrackingsResolver(this.querySource);
   }
 
   createMutationResolvers(): void {

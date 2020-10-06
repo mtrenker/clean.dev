@@ -6,6 +6,8 @@ type Query {
   ping: String!
   me: User
   getPage(slug: String!): Page
+  getProjects: ProjectConnection!
+  getTrackings(query: GetProjectsQuery!): TrackingConnection!
 }
 
 type Mutation {
@@ -61,4 +63,9 @@ input AddTrackingInput {
   startTime: AWSDateTime!
   endTime: AWSDateTime!
   description: String
+}
+
+input GetProjectsQuery {
+  projectId: String!
+  date: String
 }

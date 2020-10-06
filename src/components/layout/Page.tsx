@@ -17,6 +17,8 @@ export const Page: FC = () => {
   if (!data) return <p>Loading</p>;
   const document = data?.getPage?.content ?? '';
 
+  console.log(JSON.parse(document));
+
   const content = documentToReactComponents(JSON.parse(document), {
     renderNode: mapWidgets(),
   });

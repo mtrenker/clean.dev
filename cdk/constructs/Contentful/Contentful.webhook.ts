@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
 import { createClient } from 'contentful';
+import { Document } from '@contentful/rich-text-types';
 
 interface WebhookBody {
   sys: {
@@ -36,7 +37,7 @@ interface WebhookBody {
 interface CmsPage {
   title: string;
   slug: string;
-  content: string;
+  content: Document;
   layout: string;
 }
 

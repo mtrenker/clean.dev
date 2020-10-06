@@ -7,7 +7,7 @@ import de from 'date-fns/locale/de';
 import { Card } from '../layout/Card';
 import { HeroImage } from '../layout/HeroImage';
 
-import { useGetBlogListQuery } from '../../graphql/hooks';
+import { } from '../../graphql/hooks';
 import { css, useTheme } from '../../lib/style';
 
 import { mapWidgets } from '../../lib/contentful';

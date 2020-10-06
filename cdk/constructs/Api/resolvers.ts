@@ -11,13 +11,8 @@ interface MutationResolver {
 }
 
 const connectionResult = `
-  #set($items = [])
-  #foreach($item in $ctx.result.items)
-    $util.qr($item.put("id", $item.sk))
-    $util.qr($items.add($item))
-  #end
   {
-    "items": $util.toJson($items),
+    "items": $util.toJson($ctx.result.items),
     "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
   }
 `;
@@ -52,8 +47,8 @@ export const createUserProjectsResolver: QueryResolver = (dataSource) => dataSou
       "query":{
         "expression": "pk = :user AND begins_with(sk, :sk)",
         "expressionValues": {
-          ":sk": $util.dynamodb.toDynamoDBJson("project-"),
-          ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub")
+          ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
+          ":sk": $util.dynamodb.toDynamoDBJson("project-")
         }
       },
     }
@@ -71,8 +66,8 @@ export const createProjectTrackingsResolver: QueryResolver = (dataSource) => dat
       "query":{
         "expression": "pk = :user AND begins_with(sk, :sk)",
         "expressionValues": {
-          ":sk": $util.dynamodb.toDynamoDBJson("tracking#$ctx.source.sk#"),
-          ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub")
+          ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
+          ":sk": $util.dynamodb.toDynamoDBJson("tracking#$ctx.source.id#")
         }
       },
     }
@@ -100,6 +95,50 @@ export const createPageResolver: QueryResolver = (dataSource) => dataSource.crea
     }
   `),
   responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.items[0])'),
+});
+
+export const createGetProjectsResolver: QueryResolver = (dataSource) => dataSource.createResolver({
+  typeName: 'Query',
+  fieldName: 'getProjects',
+  requestMappingTemplate: MappingTemplate.fromString(`
+  {
+    "version" : "2018-05-29",
+    "operation" : "Query",
+    "query":{
+      "expression": "pk = :user AND begins_with(sk, :sk)",
+      "expressionValues": {
+        ":sk": $util.dynamodb.toDynamoDBJson("project-"),
+        ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub")
+      }
+    },
+  }
+`),
+  responseMappingTemplate: MappingTemplate.fromString(connectionResult),
+});
+
+export const createGetTrackingsResolver: QueryResolver = (dataSource) => dataSource.createResolver({
+  typeName: 'Query',
+  fieldName: 'getTrackings',
+  requestMappingTemplate: MappingTemplate.fromString(`
+    #set($date = $util.defaultIfNullOrBlank($ctx.args.query.date, ""))
+    #set($projectId = $ctx.args.query.projectId)
+    {
+      "version" : "2018-05-29",
+      "operation" : "Query",
+      "index": "GSI1",
+      "query":{
+        "expression": "sk = :user AND begins_with(#data, :query)",
+        "expressionNames": {
+          "#data": "data"
+        },
+        "expressionValues": {
+          ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
+          ":query": $util.dynamodb.toDynamoDBJson("tracking#$projectId#$date")
+        }
+      },
+    }
+  `),
+  responseMappingTemplate: MappingTemplate.fromString(connectionResult),
 });
 
 /**

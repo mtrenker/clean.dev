@@ -97,6 +97,7 @@ const addProject = async (event: AddProjectEvent): Promise<Project> => {
   const project = {
     pk,
     sk: pk,
+    id: projectId,
     name: args.name,
   };
 
@@ -129,19 +130,17 @@ const addTracking = async (event: AddTrackingEvent): Promise<Tracking> => {
   const { arguments: { tracking: args }, identity } = event;
   const trackingId = nanoid();
   const pk = `tracking-${trackingId}`;
-  const sk = `tracking#${args.projectId}#${args.startTime}`;
+  const sk = identity.sub;
+  const data = `tracking#${args.projectId}#${args.startTime}`;
 
   const tracking = {
     pk,
     sk,
+    data,
+    id: trackingId,
     startTime: args.startTime,
     endTime: args.endTime,
     description: args.description,
-  };
-
-  const userTracking = {
-    ...tracking,
-    pk: identity.sub,
   };
 
   await ddbClient.transactWrite({
@@ -149,11 +148,6 @@ const addTracking = async (event: AddTrackingEvent): Promise<Tracking> => {
       Put: {
         TableName,
         Item: tracking,
-      },
-    }, {
-      Put: {
-        TableName,
-        Item: userTracking,
       },
     }],
   }).promise();
