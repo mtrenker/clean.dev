@@ -1,0 +1,5 @@
+query getProject($projectId: String!) {
+  getProject(projectId: $projectId) {
+    ...ProjectParts
+  }
+}

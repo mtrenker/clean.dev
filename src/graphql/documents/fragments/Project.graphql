@@ -1,0 +1,10 @@
+fragment ProjectParts on Project {
+  id
+  client
+  industry
+  description
+  startDate
+  endDate
+  methodologies
+  technologies
+}

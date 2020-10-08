@@ -9,11 +9,11 @@ export const ProjectOverview: FC = () => {
   if (loading) return <p>Loading</p>;
   return (
     <div>
-      {data?.projects.items.map((project) => (
+      {data?.getProjects.items.map((project) => (
         <Table>
           <Row>
-            <Cell><Link to={`/projects/${project.id}/timesheet`}>{project.client}</Link></Cell>
-            <Cell><Link to={`/projects/${project.id}`}>{project.client}</Link></Cell>
+            <Cell><Link to={`/projects/${project.id}/timesheet`}>{project.name}</Link></Cell>
+            <Cell><Link to={`/projects/${project.id}`}>{project.name}</Link></Cell>
           </Row>
         </Table>
       ))}

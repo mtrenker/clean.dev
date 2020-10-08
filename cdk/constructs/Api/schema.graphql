@@ -7,7 +7,8 @@ type Query {
   me: User
   getPage(slug: String!): Page
   getProjects: ProjectConnection!
-  getTrackings(query: GetProjectsQuery!): TrackingConnection!
+  getProject(projectId: String!): Project
+  getTrackings(query: ProjectTrackingsQuery!): TrackingConnection!
 }
 
 type Mutation {
@@ -37,7 +38,13 @@ type ProjectConnection {
 
 type Project {
   id: ID!
-  name: String!
+  client: String!
+  industry: String!
+  description: String!
+  startDate: AWSDate!
+  endDate: AWSDate
+  methodologies: [String!]!
+  technologies: [String!]!
   trackings: TrackingConnection!
 }
 
@@ -55,7 +62,13 @@ type Tracking {
 }
 
 input AddProjectInput {
-  name: String!
+  client: String!
+  industry: String!
+  description: String!
+  startDate: AWSDate!
+  endDate: AWSDate
+  methodologies: [String!]!
+  technologies: [String!]!
 }
 
 input AddTrackingInput {
@@ -65,7 +78,7 @@ input AddTrackingInput {
   description: String
 }
 
-input GetProjectsQuery {
+input ProjectTrackingsQuery {
   projectId: String!
   date: String
 }

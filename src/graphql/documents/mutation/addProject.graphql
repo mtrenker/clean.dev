@@ -1,6 +1,5 @@
 mutation addProject($projectInput: AddProjectInput!) {
   addProject(project: $projectInput) {
-    id
-    name
+    ...ProjectParts
   }
 }

@@ -116,6 +116,22 @@ export const createGetProjectsResolver: QueryResolver = (dataSource) => dataSour
   responseMappingTemplate: MappingTemplate.fromString(connectionResult),
 });
 
+export const createGetProjectResolver: QueryResolver = (dataSource) => dataSource.createResolver({
+  typeName: 'Query',
+  fieldName: 'getProject',
+  requestMappingTemplate: MappingTemplate.fromString(`
+  {
+    "version" : "2018-05-29",
+    "operation" : "GetItem",
+    "key" : {
+      "pk" : $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
+      "sk" : $util.dynamodb.toDynamoDBJson("project-$ctx.args.projectId")
+    }
+  }
+`),
+  responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
+});
+
 export const createGetTrackingsResolver: QueryResolver = (dataSource) => dataSource.createResolver({
   typeName: 'Query',
   fieldName: 'getTrackings',

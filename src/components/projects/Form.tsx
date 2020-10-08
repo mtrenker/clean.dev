@@ -69,54 +69,51 @@ export const ProjectForm: FC = () => {
   const [updateProject] = useAddProjectMutation();
 
   const { data } = useGetProjectQuery({
-    variables: {
-      projectQuery: { project: projectId },
-      trackingQuery: { date: format(new Date(), 'u-MM') },
-    },
-    onCompleted: ({ project }) => {
-      setValue('client', project.client);
-      setValue('industry', project.industry);
-      setValue('startDate', project.startDate);
-      setValue('endDate', project.endDate ?? '');
-      setValue('description', project.description);
-      setValue('methodologies', project.methodologies.join(', '));
-      setValue('technologies', project.technologies.join(', '));
-    },
+    variables: { projectId },
+    // onCompleted: ({ project }) => {
+    //   setValue('client', project.client);
+    //   setValue('industry', project.industry);
+    //   setValue('startDate', project.startDate);
+    //   setValue('endDate', project.endDate ?? '');
+    //   setValue('description', project.description);
+    //   setValue('methodologies', project.methodologies.join(', '));
+    //   setValue('technologies', project.technologies.join(', '));
+    // },
   });
 
-  const trimWord = (word: string) => word.trimRight().trimLeft();
+  // const trimWord = (word: string) => word.trimRight().trimLeft();
 
-  const onSubmit = ({
-    client, description, industry, methodologies, technologies, startDate, endDate,
-  }: FormInput) => {
-    updateProject({
-      variables: {
-        projectInput: {
-          id: projectId,
-          client,
-          description,
-          industry,
-          methodologies: methodologies.split(',').map(trimWord),
-          technologies: technologies.split(',').map(trimWord),
-          startDate: format(new Date(startDate), 'u-MM-dd'),
-          endDate: endDate ? format(new Date(endDate), 'u-MM-dd') : '',
-        },
-      },
-    });
-  };
+  // const onSubmit = ({
+  //   client, description, industry, methodologies, technologies, startDate, endDate,
+  // }: FormInput) => {
+  //   updateProject({
+  //     variables: {
+  //       projectInput: {
+  //         id: projectId,
+  //         client,
+  //         description,
+  //         industry,
+  //         methodologies: methodologies.split(',').map(trimWord),
+  //         technologies: technologies.split(',').map(trimWord),
+  //         startDate: format(new Date(startDate), 'u-MM-dd'),
+  //         endDate: endDate ? format(new Date(endDate), 'u-MM-dd') : '',
+  //       },
+  //     },
+  //   });
+  // };
 
   const renderDatePicker = ({ onBlur, onChange, value }: RenderProps) => (
     <DatePicker onBlur={onBlur} onChange={(date) => onChange(date)} selected={value ? new Date(value) : new Date()} />
   );
 
-  const project = data?.project;
+  const project = data?.getProject;
 
   if (!project) {
     return <p>Loading</p>;
   }
 
   return (
-    <form action="#" onSubmit={handleSubmit(onSubmit)} css={formCss}>
+    <form action="#" css={formCss}>
       <label className="client" htmlFor="client">
         <span>Client Name</span>
         <Input name="client" placeholder="Client" id="client" register={register} />
