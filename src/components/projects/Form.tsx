@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import { useForm, Controller } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import { format } from 'date-fns';
+import { formatISO } from 'date-fns';
 
 import { Input } from '../controls/Input';
 import { DatePicker } from '../controls/DatePicker';
-import { useAddProjectMutation, useGetProjectQuery } from '../../graphql/hooks';
+import { useAddProjectMutation } from '../../graphql/hooks';
 import { TextArea } from '../TextArea';
 
 interface FormInput {
@@ -62,58 +61,40 @@ const formCss = css`
 
 export const ProjectForm: FC = () => {
   const {
-    register, handleSubmit, control, setValue,
+    register, handleSubmit, control,
   } = useForm<FormInput>();
-  const { projectId } = useParams<{projectId: string}>();
+  // const { projectId } = useParams<{projectId: string}>();
 
-  const [updateProject] = useAddProjectMutation();
-
-  const { data } = useGetProjectQuery({
-    variables: { projectId },
-    // onCompleted: ({ project }) => {
-    //   setValue('client', project.client);
-    //   setValue('industry', project.industry);
-    //   setValue('startDate', project.startDate);
-    //   setValue('endDate', project.endDate ?? '');
-    //   setValue('description', project.description);
-    //   setValue('methodologies', project.methodologies.join(', '));
-    //   setValue('technologies', project.technologies.join(', '));
-    // },
-  });
-
-  // const trimWord = (word: string) => word.trimRight().trimLeft();
-
-  // const onSubmit = ({
-  //   client, description, industry, methodologies, technologies, startDate, endDate,
-  // }: FormInput) => {
-  //   updateProject({
-  //     variables: {
-  //       projectInput: {
-  //         id: projectId,
-  //         client,
-  //         description,
-  //         industry,
-  //         methodologies: methodologies.split(',').map(trimWord),
-  //         technologies: technologies.split(',').map(trimWord),
-  //         startDate: format(new Date(startDate), 'u-MM-dd'),
-  //         endDate: endDate ? format(new Date(endDate), 'u-MM-dd') : '',
-  //       },
-  //     },
-  //   });
-  // };
+  const [mutate] = useAddProjectMutation();
 
   const renderDatePicker = ({ onBlur, onChange, value }: RenderProps) => (
-    <DatePicker onBlur={onBlur} onChange={(date) => onChange(date)} selected={value ? new Date(value) : new Date()} />
+    <DatePicker
+      onBlur={onBlur}
+      onChange={(date: Date) => onChange(formatISO(date, { representation: 'date' }))}
+      selected={value ? new Date(value) : new Date()}
+    />
   );
 
-  const project = data?.getProject;
-
-  if (!project) {
-    return <p>Loading</p>;
-  }
+  const onSubmit = ({
+    client, description, industry, technologies, methodologies, startDate, endDate,
+  }: FormInput) => {
+    mutate({
+      variables: {
+        project: {
+          client,
+          description,
+          industry,
+          technologies: technologies.split(', '),
+          methodologies: methodologies.split(', '),
+          startDate,
+          endDate,
+        },
+      },
+    });
+  };
 
   return (
-    <form action="#" css={formCss}>
+    <form action="#" css={formCss} onSubmit={handleSubmit(onSubmit)}>
       <label className="client" htmlFor="client">
         <span>Client Name</span>
         <Input name="client" placeholder="Client" id="client" register={register} />

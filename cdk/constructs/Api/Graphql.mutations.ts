@@ -2,6 +2,13 @@ import { DynamoDB } from 'aws-sdk';
 import { Handler } from 'aws-lambda';
 import { nanoid } from 'nanoid';
 
+interface MutationResponse {
+  code: string;
+  success: boolean;
+  message: string;
+  [response: string]: any
+}
+
 interface AppsyncResolverEvent {
   arguments: Record<string, unknown>;
   identity: {
@@ -29,21 +36,56 @@ interface AppsyncResolverEvent {
   }
 }
 
-interface AddProjectEvent extends AppsyncResolverEvent {
+interface CreateProjectEvent extends AppsyncResolverEvent {
   arguments: {
-    project: {
-      name: string;
+    input: {
+      client: string;
+      description: string;
+      industry: string;
+      technologies: string[];
+      methodologies: string[];
+      startDate: string;
+      endDate: string;
     }
   }
   info: {
-    fieldName: 'addProject';
+    fieldName: 'createProject';
+    parentTypeName: 'Mutation'
+  }
+}
+interface UpdateProjectEvent extends AppsyncResolverEvent {
+  arguments: {
+    input: {
+      projectId: string;
+      client: string;
+      description: string;
+      industry: string;
+      technologies: string[];
+      methodologies: string[];
+      startDate: string;
+      endDate: string;
+    }
+  }
+  info: {
+    fieldName: 'updateProject';
+    parentTypeName: 'Mutation'
+  }
+}
+interface DeleteProjectEvent extends AppsyncResolverEvent {
+  arguments: {
+    input: {
+      projectId: string;
+    }
+  }
+  info: {
+    fieldName: 'deleteProject';
     parentTypeName: 'Mutation'
   }
 }
 
-interface AddTrackingEvent extends AppsyncResolverEvent {
+interface CreateTrackingEvent extends AppsyncResolverEvent {
   arguments: {
-    tracking: {
+    input: {
       projectId: string;
       startTime: string;
       endTime: string;
@@ -51,45 +93,88 @@ interface AddTrackingEvent extends AppsyncResolverEvent {
     }
   }
   info: {
-    fieldName: 'addTracking';
+    fieldName: 'createTracking';
+    parentTypeName: 'Mutation'
+  }
+}
+interface UpdateTrackingEvent extends AppsyncResolverEvent {
+  arguments: {
+    input: {
+      trackingId: string;
+      projectId: string;
+      startTime: string;
+      endTime: string;
+      description: string;
+    }
+  }
+  info: {
+    fieldName: 'updateTracking';
+    parentTypeName: 'Mutation'
+  }
+}
+interface DeleteTrackingEvent extends AppsyncResolverEvent {
+  arguments: {
+    input: {
+      trackingId: string;
+    }
+  }
+  info: {
+    fieldName: 'deleteTracking';
     parentTypeName: 'Mutation'
   }
 }
 
-type MutationEventHandler = Handler<AddProjectEvent | AddTrackingEvent>
-
-interface Project {
-  id: string;
-  name: string;
-}
-
-interface Tracking {
-  id: string;
-  startTime: string;
-  endTime: string;
-  description: string;
-}
+type MutationEventHandler = Handler<
+  CreateProjectEvent |
+  UpdateProjectEvent |
+  DeleteProjectEvent |
+  CreateTrackingEvent |
+  UpdateTrackingEvent |
+  DeleteTrackingEvent
+>
 
 const ddbClient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME ?? '';
 
 export const handler: MutationEventHandler = async (event) => {
   switch (event.info.fieldName) {
-    case 'addProject': {
-      const project = await addProject(event as AddProjectEvent);
-      return project;
+    case 'createProject': {
+      const response = await createProject(event as CreateProjectEvent);
+      return response;
     }
-    case 'addTracking': {
-      const tracking = await addTracking(event as AddTrackingEvent);
-      return tracking;
+    case 'updateProject': {
+      const response = await updateProject(event as UpdateProjectEvent);
+      return response;
+    }
+    case 'deleteProject': {
+      const response = await deleteProject(event as DeleteProjectEvent);
+      return response;
+    }
+    case 'createTracking': {
+      const response = await createTracking(event as CreateTrackingEvent);
+      return response;
+    }
+    case 'updateTracking': {
+      const response = await updateTracking(event as UpdateTrackingEvent);
+      return response;
+    }
+    case 'deleteTracking': {
+      const response = await deleteTracking(event as DeleteTrackingEvent);
+      return response;
     }
     default:
       return {};
   }
 };
 
-const addProject = async (event: AddProjectEvent): Promise<Project> => {
-  const { arguments: { project: args }, identity } = event;
+const createProject = async (event: CreateProjectEvent): Promise<MutationResponse> => {
+  const {
+    arguments: {
+      input: {
+        client, description, endDate, industry, methodologies, startDate, technologies,
+      },
+    }, identity,
+  } = event;
 
   const projectId = nanoid();
   const pk = `project-${projectId}`;
@@ -98,7 +183,13 @@ const addProject = async (event: AddProjectEvent): Promise<Project> => {
     pk,
     sk: pk,
     id: projectId,
-    name: args.name,
+    client,
+    description,
+    industry,
+    technologies,
+    methodologies,
+    startDate,
+    endDate,
   };
 
   const userProject = {
@@ -121,26 +212,119 @@ const addProject = async (event: AddProjectEvent): Promise<Project> => {
   }).promise();
 
   return {
-    id: projectId,
-    name: project.name,
+    code: '200',
+    message: 'Project created',
+    success: true,
+    project,
   };
 };
 
-const addTracking = async (event: AddTrackingEvent): Promise<Tracking> => {
-  const { arguments: { tracking: args }, identity } = event;
+const updateProject = async (event: UpdateProjectEvent): Promise<MutationResponse> => {
+  const {
+    arguments: {
+      input: {
+        projectId, client, description, endDate, industry, methodologies, startDate, technologies,
+      },
+    }, identity,
+  } = event;
+
+  const pk = `project-${projectId}`;
+
+  const project = {
+    pk,
+    sk: pk,
+    id: projectId,
+    client,
+    description,
+    industry,
+    technologies,
+    methodologies,
+    startDate,
+    endDate,
+  };
+
+  const userProject = {
+    ...project,
+    pk: identity.sub,
+  };
+
+  await ddbClient.transactWrite({
+    TransactItems: [{
+      Put: {
+        TableName,
+        Item: project,
+      },
+    }, {
+      Put: {
+        TableName,
+        Item: userProject,
+      },
+    }],
+  }).promise();
+
+  return {
+    code: '200',
+    message: 'Project updated',
+    success: true,
+    project,
+  };
+};
+
+const deleteProject = async (event: DeleteProjectEvent): Promise<MutationResponse> => {
+  const {
+    arguments: {
+      input: { projectId },
+    }, identity,
+  } = event;
+
+  const pk = `project-${projectId}`;
+  const sk = pk;
+
+  await ddbClient.transactWrite({
+    TransactItems: [{
+      Delete: {
+        TableName,
+        Key: {
+          pk,
+          sk,
+        },
+      },
+    }, {
+      Delete: {
+        TableName,
+        Key: {
+          pk: identity.sub,
+          sk,
+        },
+      },
+    }],
+  }).promise();
+
+  return {
+    code: '200',
+    message: 'Project deleted',
+    success: true,
+  };
+};
+
+const createTracking = async (event: CreateTrackingEvent): Promise<MutationResponse> => {
+  const { arguments: { input }, identity } = event;
   const trackingId = nanoid();
+  const {
+    description, startTime, endTime, projectId,
+  } = input;
   const pk = `tracking-${trackingId}`;
   const sk = identity.sub;
-  const data = `tracking#${args.projectId}#${args.startTime}`;
+  const data = `tracking#${projectId}#${startTime}`;
 
   const tracking = {
     pk,
     sk,
     data,
     id: trackingId,
-    startTime: args.startTime,
-    endTime: args.endTime,
-    description: args.description,
+    startTime,
+    endTime,
+    description,
   };
 
   await ddbClient.transactWrite({
@@ -153,9 +337,69 @@ const addTracking = async (event: AddTrackingEvent): Promise<Tracking> => {
   }).promise();
 
   return {
+    code: '200',
+    message: 'Tracking added',
+    success: true,
+    tracking,
+  };
+};
+
+const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationResponse> => {
+  const { arguments: { input }, identity } = event;
+  const {
+    trackingId, description, projectId, endTime, startTime,
+  } = input;
+  const pk = `tracking-${trackingId}`;
+  const sk = identity.sub;
+  const data = `tracking#${projectId}#${startTime}`;
+
+  const tracking = {
+    pk,
+    sk,
+    data,
     id: trackingId,
-    description: tracking.description,
-    startTime: tracking.startTime,
-    endTime: tracking.endTime,
+    startTime,
+    endTime,
+    description,
+  };
+
+  await ddbClient.transactWrite({
+    TransactItems: [{
+      Put: {
+        TableName,
+        Item: tracking,
+      },
+    }],
+  }).promise();
+
+  return {
+    code: '200',
+    message: 'Tracking updated',
+    success: true,
+    tracking,
+  };
+};
+
+const deleteTracking = async (event: DeleteTrackingEvent): Promise<MutationResponse> => {
+  const { arguments: { input }, identity } = event;
+  const pk = `tracking-${input.trackingId}`;
+  const sk = identity.sub;
+
+  await ddbClient.transactWrite({
+    TransactItems: [{
+      Delete: {
+        TableName,
+        Key: {
+          pk,
+          sk,
+        },
+      },
+    }],
+  }).promise();
+
+  return {
+    code: '200',
+    message: 'Tracking deleted',
+    success: true,
   };
 };

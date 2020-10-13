@@ -142,7 +142,7 @@ export type ProjectPartsFragment = (
 );
 
 export type AddProjectMutationVariables = Exact<{
-  projectInput: AddProjectInput;
+  project: AddProjectInput;
 }>;
 
 
@@ -220,8 +220,8 @@ export const ProjectPartsFragmentDoc = gql`
 }
     `;
 export const AddProjectDocument = gql`
-    mutation addProject($projectInput: AddProjectInput!) {
-  addProject(project: $projectInput) {
+    mutation addProject($project: AddProjectInput!) {
+  addProject(project: $project) {
     ...ProjectParts
   }
 }
@@ -241,7 +241,7 @@ export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, A
  * @example
  * const [addProjectMutation, { data, loading, error }] = useAddProjectMutation({
  *   variables: {
- *      projectInput: // value for 'projectInput'
+ *      project: // value for 'project'
  *   },
  * });
  */

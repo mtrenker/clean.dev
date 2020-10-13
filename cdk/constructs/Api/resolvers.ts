@@ -12,8 +12,9 @@ interface MutationResolver {
 
 const connectionResult = `
   {
-    "items": $util.toJson($ctx.result.items),
-    "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
+    "totalCount": $util.toJson($ctx.result.scannedCount),
+    "edges": $util.toJson($ctx.result.items),
+    "cursor": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
   }
 `;
 
@@ -125,7 +126,7 @@ export const createGetProjectResolver: QueryResolver = (dataSource) => dataSourc
     "operation" : "GetItem",
     "key" : {
       "pk" : $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
-      "sk" : $util.dynamodb.toDynamoDBJson("project-$ctx.args.projectId")
+      "sk" : $util.dynamodb.toDynamoDBJson("project-$ctx.args.input.projectId")
     }
   }
 `),

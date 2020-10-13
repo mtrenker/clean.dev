@@ -109,7 +109,12 @@ export class Graphql extends Construct {
   }
 
   createMutationResolvers(): void {
-    createMutationResolver(this.mutationSource, 'addProject');
-    createMutationResolver(this.mutationSource, 'addTracking');
+    createMutationResolver(this.mutationSource, 'createProject');
+    createMutationResolver(this.mutationSource, 'updateProject');
+    createMutationResolver(this.mutationSource, 'deleteProject');
+
+    createMutationResolver(this.mutationSource, 'createTracking');
+    createMutationResolver(this.mutationSource, 'updateTracking');
+    createMutationResolver(this.mutationSource, 'deleteTracking');
   }
 }

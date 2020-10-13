@@ -1,5 +1,5 @@
-mutation addProject($projectInput: AddProjectInput!) {
-  addProject(project: $projectInput) {
+mutation addProject($project: AddProjectInput!) {
+  addProject(project: $project) {
     ...ProjectParts
   }
 }

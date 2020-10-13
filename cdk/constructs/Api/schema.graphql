@@ -7,78 +7,154 @@ type Query {
   me: User
   getPage(slug: String!): Page
   getProjects: ProjectConnection!
-  getProject(projectId: String!): Project
-  getTrackings(query: ProjectTrackingsQuery!): TrackingConnection!
+  getProject(query: GetProjectQuery): Project
+  getTrackings(query: GetTrackingsQuery!): TrackingConnection!
 }
-
 type Mutation {
-  addProject(project: AddProjectInput!): Project!
-  addTracking(tracking: AddTrackingInput!): Tracking!
+  createProject(input: CreateProjectInput!): CreateProjectResponse!
+  updateProject(input: UpdateProjectInput!): UpdateProjectResponse!
+  deleteProject(input: DeleteProjectInput!): DeleteProjectResponse!
+  createTracking(input: CreateTrackingInput!): CreateTrackingResponse!
+  updateTracking(input: UpdateTrackingInput!): UpdateTrackingResponse!
+  deleteTracking(input: DeleteTrackingInput!): DeleteTrackingResponse!
 }
+# System Types
+  interface Node {
+    id: ID!
+  }
+  interface Connection {
+    totalCount: Int!
+    edges: [Node!]!
+    cursor: String
+  }
+  interface MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+# Content Nodes
+  type Page implements Node {
+    id: ID!
+    title: String!
+    slug: String!
+    content: String!
+    layout: String!
+  }
 
-type Page {
-  title: String!
-  slug: String!
-  content: String!
-  layout: String!
-}
-
-
-type User {
-  firstName: String!
-  lastName: String!
-  projects: ProjectConnection!
-  project(projectId: String!): Project
-}
-
-type ProjectConnection {
-  items: [Project!]!
-  nextToken: String
-}
-
-type Project {
-  id: ID!
-  client: String!
-  industry: String!
-  description: String!
-  startDate: AWSDate!
-  endDate: AWSDate
-  methodologies: [String!]!
-  technologies: [String!]!
-  trackings: TrackingConnection!
-}
-
-type TrackingConnection {
-  items: [Tracking!]!
-  nextToken: String
-}
-
-type Tracking {
-  id: String!
-  project: Project!
-  startTime: AWSDateTime!
-  endTime: AWSDateTime!
-  description: String
-}
-
-input AddProjectInput {
-  client: String!
-  industry: String!
-  description: String!
-  startDate: AWSDate!
-  endDate: AWSDate
-  methodologies: [String!]!
-  technologies: [String!]!
-}
-
-input AddTrackingInput {
-  projectId: String!
-  startTime: AWSDateTime!
-  endTime: AWSDateTime!
-  description: String
-}
-
-input ProjectTrackingsQuery {
-  projectId: String!
-  date: String
-}
+  type User {
+    firstName: String!
+    lastName: String!
+    projects: ProjectConnection!
+    project(projectId: String!): Project
+  }
+  type Project implements Node {
+    id: ID!
+    client: String!
+    industry: String!
+    description: String!
+    startDate: AWSDate!
+    endDate: AWSDate
+    methodologies: [String!]!
+    technologies: [String!]!
+    trackings: TrackingConnection!
+  }
+  type Tracking implements Node {
+    id: ID!
+    project: Project!
+    startTime: AWSDateTime!
+    endTime: AWSDateTime!
+    description: String
+  }
+# Query Input
+  input  GetProjectQuery{
+    projectId: ID!
+  }
+  input GetTrackingsQuery {
+    projectId: ID!
+    date: String
+  }
+# Mutation Input
+  input CreateProjectInput {
+    client: String!
+    industry: String!
+    description: String!
+    startDate: AWSDate!
+    endDate: AWSDate
+    methodologies: [String!]!
+    technologies: [String!]!
+  }
+  input UpdateProjectInput {
+    projectId: ID!
+    client: String!
+    industry: String!
+    description: String!
+    startDate: AWSDate!
+    endDate: AWSDate
+    methodologies: [String!]!
+    technologies: [String!]!
+  }
+  input DeleteProjectInput {
+    projectId: ID!
+  }
+  input CreateTrackingInput {
+    projectId: String!
+    startTime: AWSDateTime!
+    endTime: AWSDateTime!
+    description: String
+  }
+  input UpdateTrackingInput {
+    trackingId: ID!
+    projectId: String!
+    startTime: AWSDateTime!
+    endTime: AWSDateTime!
+    description: String
+  }
+  input DeleteTrackingInput {
+    trackingId: ID!
+  }
+# Mutation Responses
+  type CreateProjectResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    project: Project!
+  }
+  type UpdateProjectResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    project: Project!
+  }
+  type DeleteProjectResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+    type CreateTrackingResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    tracking: Tracking!
+  }
+  type UpdateTrackingResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    tracking: Tracking!
+  }
+  type DeleteTrackingResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+# Connection Types
+  type ProjectConnection implements Connection {
+    totalCount: Int!
+    edges: [Project!]!
+    cursor: String
+  }
+  type TrackingConnection implements Connection {
+    totalCount: Int!
+    edges: [Tracking!]!
+    cursor: String
+  }
