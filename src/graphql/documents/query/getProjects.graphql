@@ -1,7 +1,9 @@
 query getProjects {
   getProjects {
-    items {
+    edges {
       ...ProjectParts
     }
+    cursor
+    totalCount
   }
 }

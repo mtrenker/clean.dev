@@ -1,0 +1,6 @@
+fragment TrackingParts on Tracking {
+  id
+  startTime
+  startTime
+  description
+}

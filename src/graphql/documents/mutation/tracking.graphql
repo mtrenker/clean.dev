@@ -1,8 +1,29 @@
-mutation addTracking($trackingInput: AddTrackingInput!) {
-  addTracking(tracking: $trackingInput) {
-    id
-    startTime
-    endTime
-    description
+mutation createTracking($input: CreateTrackingInput!) {
+  createTracking(input: $input) {
+    tracking {
+      ...TrackingParts
+    }
+    code
+    message
+    success
+  }
+}
+
+mutation updateTracking($input: UpdateTrackingInput!) {
+  updateTracking(input: $input) {
+    tracking {
+      ...TrackingParts
+    }
+    code
+    message
+    success
+  }
+}
+
+mutation deleteTracking($input: DeleteTrackingInput!) {
+  deleteTracking(input: $input) {
+    code
+    message
+    success
   }
 }

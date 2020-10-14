@@ -126,7 +126,7 @@ export const createGetProjectResolver: QueryResolver = (dataSource) => dataSourc
     "operation" : "GetItem",
     "key" : {
       "pk" : $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
-      "sk" : $util.dynamodb.toDynamoDBJson("project-$ctx.args.input.projectId")
+      "sk" : $util.dynamodb.toDynamoDBJson("project-$ctx.args.query.projectId")
     }
   }
 `),

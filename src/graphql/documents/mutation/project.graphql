@@ -1,0 +1,29 @@
+mutation createProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    project {
+      ...ProjectParts
+    }
+    code
+    message
+    success
+  }
+}
+
+mutation updateProject($input: UpdateProjectInput!) {
+  updateProject(input: $input) {
+    project {
+      ...ProjectParts
+    }
+    code
+    message
+    success
+  }
+}
+
+mutation deleteProject($input: DeleteProjectInput!) {
+  deleteProject(input: $input) {
+    code
+    message
+    success
+  }
+}

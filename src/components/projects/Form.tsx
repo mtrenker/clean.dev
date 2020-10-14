@@ -3,9 +3,12 @@ import { css } from '@emotion/core';
 import { useForm, Controller } from 'react-hook-form';
 import { formatISO } from 'date-fns';
 
+import { useParams } from 'react-router-dom';
 import { Input } from '../controls/Input';
 import { DatePicker } from '../controls/DatePicker';
-import { useAddProjectMutation } from '../../graphql/hooks';
+import {
+  useCreateProjectMutation, useGetProjectQuery,
+} from '../../graphql/hooks';
 import { TextArea } from '../TextArea';
 
 interface FormInput {
@@ -61,11 +64,24 @@ const formCss = css`
 
 export const ProjectForm: FC = () => {
   const {
-    register, handleSubmit, control,
+    register, handleSubmit, control, setValue,
   } = useForm<FormInput>();
-  // const { projectId } = useParams<{projectId: string}>();
+  const { projectId } = useParams<{projectId: string}>();
 
-  const [mutate] = useAddProjectMutation();
+  const [createProject] = useCreateProjectMutation();
+
+  useGetProjectQuery({
+    variables: {
+      query: {
+        projectId,
+      },
+    },
+    onCompleted: ({ getProject }) => {
+      if (getProject) {
+        setValue('client', getProject.client);
+      }
+    },
+  });
 
   const renderDatePicker = ({ onBlur, onChange, value }: RenderProps) => (
     <DatePicker
@@ -78,9 +94,9 @@ export const ProjectForm: FC = () => {
   const onSubmit = ({
     client, description, industry, technologies, methodologies, startDate, endDate,
   }: FormInput) => {
-    mutate({
+    createProject({
       variables: {
-        project: {
+        input: {
           client,
           description,
           industry,

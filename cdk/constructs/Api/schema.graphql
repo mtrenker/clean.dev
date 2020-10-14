@@ -7,8 +7,8 @@ type Query {
   me: User
   getPage(slug: String!): Page
   getProjects: ProjectConnection!
-  getProject(query: GetProjectQuery): Project
-  getTrackings(query: GetTrackingsQuery!): TrackingConnection!
+  getProject(query: ProjectQuery!): Project!
+  getTrackings(query: TrackingsQuery!): TrackingConnection!
 }
 type Mutation {
   createProject(input: CreateProjectInput!): CreateProjectResponse!
@@ -66,10 +66,10 @@ type Mutation {
     description: String
   }
 # Query Input
-  input  GetProjectQuery{
+  input  ProjectQuery{
     projectId: ID!
   }
-  input GetTrackingsQuery {
+  input TrackingsQuery {
     projectId: ID!
     date: String
   }
