@@ -1,0 +1,9 @@
+query getTrackings($query: TrackingsQuery!) {
+  getTrackings(query: $query) {
+    edges {
+      ...TrackingParts
+    }
+    cursor
+    totalCount
+  }
+}

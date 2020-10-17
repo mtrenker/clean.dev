@@ -1,6 +1,6 @@
 fragment TrackingParts on Tracking {
   id
   startTime
-  startTime
+  endTime
   description
 }

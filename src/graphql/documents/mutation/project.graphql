@@ -1,4 +1,4 @@
-mutation createProject($input: CreateProjectInput!) {
+mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     project {
       ...ProjectParts
@@ -9,8 +9,8 @@ mutation createProject($input: CreateProjectInput!) {
   }
 }
 
-mutation updateProject($input: UpdateProjectInput!) {
-  updateProject(input: $input) {
+mutation updateProject($id: ID!, $input: ProjectInput!) {
+  updateProject(id: $id, input: $input) {
     project {
       ...ProjectParts
     }
@@ -20,8 +20,8 @@ mutation updateProject($input: UpdateProjectInput!) {
   }
 }
 
-mutation deleteProject($input: DeleteProjectInput!) {
-  deleteProject(input: $input) {
+mutation deleteProject($id: ID!) {
+  deleteProject(id: $id) {
     code
     message
     success

@@ -11,12 +11,12 @@ type Query {
   getTrackings(query: TrackingsQuery!): TrackingConnection!
 }
 type Mutation {
-  createProject(input: CreateProjectInput!): CreateProjectResponse!
-  updateProject(input: UpdateProjectInput!): UpdateProjectResponse!
-  deleteProject(input: DeleteProjectInput!): DeleteProjectResponse!
-  createTracking(input: CreateTrackingInput!): CreateTrackingResponse!
-  updateTracking(input: UpdateTrackingInput!): UpdateTrackingResponse!
-  deleteTracking(input: DeleteTrackingInput!): DeleteTrackingResponse!
+  createProject(input: ProjectInput!): ProjectMutationResponse!
+  updateProject(id: ID!, input: ProjectInput!): ProjectMutationResponse!
+  deleteProject(id: ID!): ProjectMutationResponse!
+  createTracking(input: TrackingInput!): TrackingMutationResponse!
+  updateTracking(id: ID!, input: TrackingInput!): TrackingMutationResponse!
+  deleteTracking(id: ID!): TrackingMutationResponse!
 }
 # System Types
   interface Node {
@@ -74,7 +74,7 @@ type Mutation {
     date: String
   }
 # Mutation Input
-  input CreateProjectInput {
+  input ProjectInput {
     client: String!
     industry: String!
     description: String!
@@ -83,69 +83,24 @@ type Mutation {
     methodologies: [String!]!
     technologies: [String!]!
   }
-  input UpdateProjectInput {
-    projectId: ID!
-    client: String!
-    industry: String!
-    description: String!
-    startDate: AWSDate!
-    endDate: AWSDate
-    methodologies: [String!]!
-    technologies: [String!]!
-  }
-  input DeleteProjectInput {
-    projectId: ID!
-  }
-  input CreateTrackingInput {
+  input TrackingInput {
     projectId: String!
     startTime: AWSDateTime!
     endTime: AWSDateTime!
     description: String
-  }
-  input UpdateTrackingInput {
-    trackingId: ID!
-    projectId: String!
-    startTime: AWSDateTime!
-    endTime: AWSDateTime!
-    description: String
-  }
-  input DeleteTrackingInput {
-    trackingId: ID!
   }
 # Mutation Responses
-  type CreateProjectResponse implements MutationResponse {
+  type ProjectMutationResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
-    project: Project!
+    project: Project
   }
-  type UpdateProjectResponse implements MutationResponse {
+    type TrackingMutationResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
-    project: Project!
-  }
-  type DeleteProjectResponse implements MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-    type CreateTrackingResponse implements MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
-    tracking: Tracking!
-  }
-  type UpdateTrackingResponse implements MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
-    tracking: Tracking!
-  }
-  type DeleteTrackingResponse implements MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
+    tracking: Tracking
   }
 # Connection Types
   type ProjectConnection implements Connection {

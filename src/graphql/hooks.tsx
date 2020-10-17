@@ -24,7 +24,7 @@ export type Query = {
   me?: Maybe<User>;
   getPage?: Maybe<Page>;
   getProjects: ProjectConnection;
-  getProject?: Maybe<Project>;
+  getProject: Project;
   getTrackings: TrackingConnection;
 };
 
@@ -45,42 +45,44 @@ export type QueryGetTrackingsArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createProject: CreateProjectResponse;
-  updateProject: UpdateProjectResponse;
-  deleteProject: DeleteProjectResponse;
-  createTracking: CreateTrackingResponse;
-  updateTracking: UpdateTrackingResponse;
-  deleteTracking: DeleteTrackingResponse;
+  createProject: ProjectMutationResponse;
+  updateProject: ProjectMutationResponse;
+  deleteProject: ProjectMutationResponse;
+  createTracking: TrackingMutationResponse;
+  updateTracking: TrackingMutationResponse;
+  deleteTracking: TrackingMutationResponse;
 };
 
 
 export type MutationCreateProjectArgs = {
-  input: CreateProjectInput;
+  input: ProjectInput;
 };
 
 
 export type MutationUpdateProjectArgs = {
-  input: UpdateProjectInput;
+  id: Scalars['ID'];
+  input: ProjectInput;
 };
 
 
 export type MutationDeleteProjectArgs = {
-  input: DeleteProjectInput;
+  id: Scalars['ID'];
 };
 
 
 export type MutationCreateTrackingArgs = {
-  input: CreateTrackingInput;
+  input: TrackingInput;
 };
 
 
 export type MutationUpdateTrackingArgs = {
-  input: UpdateTrackingInput;
+  id: Scalars['ID'];
+  input: TrackingInput;
 };
 
 
 export type MutationDeleteTrackingArgs = {
-  input: DeleteTrackingInput;
+  id: Scalars['ID'];
 };
 
 export type Node = {
@@ -152,7 +154,7 @@ export type TrackingsQuery = {
   date?: Maybe<Scalars['String']>;
 };
 
-export type CreateProjectInput = {
+export type ProjectInput = {
   client: Scalars['String'];
   industry: Scalars['String'];
   description: Scalars['String'];
@@ -162,84 +164,27 @@ export type CreateProjectInput = {
   technologies: Array<Scalars['String']>;
 };
 
-export type UpdateProjectInput = {
-  projectId: Scalars['ID'];
-  client: Scalars['String'];
-  industry: Scalars['String'];
-  description: Scalars['String'];
-  startDate: Scalars['AWSDate'];
-  endDate?: Maybe<Scalars['AWSDate']>;
-  methodologies: Array<Scalars['String']>;
-  technologies: Array<Scalars['String']>;
-};
-
-export type DeleteProjectInput = {
-  projectId: Scalars['ID'];
-};
-
-export type CreateTrackingInput = {
+export type TrackingInput = {
   projectId: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
   endTime: Scalars['AWSDateTime'];
   description?: Maybe<Scalars['String']>;
 };
 
-export type UpdateTrackingInput = {
-  trackingId: Scalars['ID'];
-  projectId: Scalars['String'];
-  startTime: Scalars['AWSDateTime'];
-  endTime: Scalars['AWSDateTime'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type DeleteTrackingInput = {
-  trackingId: Scalars['ID'];
-};
-
-export type CreateProjectResponse = MutationResponse & {
-  __typename?: 'CreateProjectResponse';
+export type ProjectMutationResponse = MutationResponse & {
+  __typename?: 'ProjectMutationResponse';
   code: Scalars['String'];
   success: Scalars['Boolean'];
   message: Scalars['String'];
-  project: Project;
+  project?: Maybe<Project>;
 };
 
-export type UpdateProjectResponse = MutationResponse & {
-  __typename?: 'UpdateProjectResponse';
+export type TrackingMutationResponse = MutationResponse & {
+  __typename?: 'TrackingMutationResponse';
   code: Scalars['String'];
   success: Scalars['Boolean'];
   message: Scalars['String'];
-  project: Project;
-};
-
-export type DeleteProjectResponse = MutationResponse & {
-  __typename?: 'DeleteProjectResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-};
-
-export type CreateTrackingResponse = MutationResponse & {
-  __typename?: 'CreateTrackingResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-  tracking: Tracking;
-};
-
-export type UpdateTrackingResponse = MutationResponse & {
-  __typename?: 'UpdateTrackingResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-  tracking: Tracking;
-};
-
-export type DeleteTrackingResponse = MutationResponse & {
-  __typename?: 'DeleteTrackingResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
+  tracking?: Maybe<Tracking>;
 };
 
 export type ProjectConnection = Connection & {
@@ -263,100 +208,102 @@ export type ProjectPartsFragment = (
 
 export type TrackingPartsFragment = (
   { __typename?: 'Tracking' }
-  & Pick<Tracking, 'id' | 'startTime' | 'description'>
+  & Pick<Tracking, 'id' | 'startTime' | 'endTime' | 'description'>
 );
 
 export type CreateProjectMutationVariables = Exact<{
-  input: CreateProjectInput;
+  input: ProjectInput;
 }>;
 
 
 export type CreateProjectMutation = (
   { __typename?: 'Mutation' }
   & { createProject: (
-    { __typename?: 'CreateProjectResponse' }
-    & Pick<CreateProjectResponse, 'code' | 'message' | 'success'>
-    & { project: (
+    { __typename?: 'ProjectMutationResponse' }
+    & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
+    & { project?: Maybe<(
       { __typename?: 'Project' }
       & ProjectPartsFragment
-    ) }
+    )> }
   ) }
 );
 
 export type UpdateProjectMutationVariables = Exact<{
-  input: UpdateProjectInput;
+  id: Scalars['ID'];
+  input: ProjectInput;
 }>;
 
 
 export type UpdateProjectMutation = (
   { __typename?: 'Mutation' }
   & { updateProject: (
-    { __typename?: 'UpdateProjectResponse' }
-    & Pick<UpdateProjectResponse, 'code' | 'message' | 'success'>
-    & { project: (
+    { __typename?: 'ProjectMutationResponse' }
+    & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
+    & { project?: Maybe<(
       { __typename?: 'Project' }
       & ProjectPartsFragment
-    ) }
+    )> }
   ) }
 );
 
 export type DeleteProjectMutationVariables = Exact<{
-  input: DeleteProjectInput;
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteProjectMutation = (
   { __typename?: 'Mutation' }
   & { deleteProject: (
-    { __typename?: 'DeleteProjectResponse' }
-    & Pick<DeleteProjectResponse, 'code' | 'message' | 'success'>
+    { __typename?: 'ProjectMutationResponse' }
+    & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
   ) }
 );
 
 export type CreateTrackingMutationVariables = Exact<{
-  input: CreateTrackingInput;
+  input: TrackingInput;
 }>;
 
 
 export type CreateTrackingMutation = (
   { __typename?: 'Mutation' }
   & { createTracking: (
-    { __typename?: 'CreateTrackingResponse' }
-    & Pick<CreateTrackingResponse, 'code' | 'message' | 'success'>
-    & { tracking: (
+    { __typename?: 'TrackingMutationResponse' }
+    & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
+    & { tracking?: Maybe<(
       { __typename?: 'Tracking' }
       & TrackingPartsFragment
-    ) }
+    )> }
   ) }
 );
 
 export type UpdateTrackingMutationVariables = Exact<{
-  input: UpdateTrackingInput;
+  id: Scalars['ID'];
+  input: TrackingInput;
 }>;
 
 
 export type UpdateTrackingMutation = (
   { __typename?: 'Mutation' }
   & { updateTracking: (
-    { __typename?: 'UpdateTrackingResponse' }
-    & Pick<UpdateTrackingResponse, 'code' | 'message' | 'success'>
-    & { tracking: (
+    { __typename?: 'TrackingMutationResponse' }
+    & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
+    & { tracking?: Maybe<(
       { __typename?: 'Tracking' }
       & TrackingPartsFragment
-    ) }
+    )> }
   ) }
 );
 
 export type DeleteTrackingMutationVariables = Exact<{
-  input: DeleteTrackingInput;
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteTrackingMutation = (
   { __typename?: 'Mutation' }
   & { deleteTracking: (
-    { __typename?: 'DeleteTrackingResponse' }
-    & Pick<DeleteTrackingResponse, 'code' | 'message' | 'success'>
+    { __typename?: 'TrackingMutationResponse' }
+    & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
   ) }
 );
 
@@ -367,10 +314,10 @@ export type GetProjectQueryVariables = Exact<{
 
 export type GetProjectQuery = (
   { __typename?: 'Query' }
-  & { getProject?: Maybe<(
+  & { getProject: (
     { __typename?: 'Project' }
     & ProjectPartsFragment
-  )> }
+  ) }
 );
 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -401,6 +348,23 @@ export type GetPageQuery = (
   )> }
 );
 
+export type GetTrackingsQueryVariables = Exact<{
+  query: TrackingsQuery;
+}>;
+
+
+export type GetTrackingsQuery = (
+  { __typename?: 'Query' }
+  & { getTrackings: (
+    { __typename?: 'TrackingConnection' }
+    & Pick<TrackingConnection, 'cursor' | 'totalCount'>
+    & { edges: Array<(
+      { __typename?: 'Tracking' }
+      & TrackingPartsFragment
+    )> }
+  ) }
+);
+
 export const ProjectPartsFragmentDoc = gql`
     fragment ProjectParts on Project {
   id
@@ -417,12 +381,12 @@ export const TrackingPartsFragmentDoc = gql`
     fragment TrackingParts on Tracking {
   id
   startTime
-  startTime
+  endTime
   description
 }
     `;
 export const CreateProjectDocument = gql`
-    mutation createProject($input: CreateProjectInput!) {
+    mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     project {
       ...ProjectParts
@@ -459,8 +423,8 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const UpdateProjectDocument = gql`
-    mutation updateProject($input: UpdateProjectInput!) {
-  updateProject(input: $input) {
+    mutation updateProject($id: ID!, $input: ProjectInput!) {
+  updateProject(id: $id, input: $input) {
     project {
       ...ProjectParts
     }
@@ -485,6 +449,7 @@ export type UpdateProjectMutationFn = Apollo.MutationFunction<UpdateProjectMutat
  * @example
  * const [updateProjectMutation, { data, loading, error }] = useUpdateProjectMutation({
  *   variables: {
+ *      id: // value for 'id'
  *      input: // value for 'input'
  *   },
  * });
@@ -496,8 +461,8 @@ export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProject
 export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutation>;
 export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
 export const DeleteProjectDocument = gql`
-    mutation deleteProject($input: DeleteProjectInput!) {
-  deleteProject(input: $input) {
+    mutation deleteProject($id: ID!) {
+  deleteProject(id: $id) {
     code
     message
     success
@@ -519,7 +484,7 @@ export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutat
  * @example
  * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -530,7 +495,7 @@ export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProject
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
 export const CreateTrackingDocument = gql`
-    mutation createTracking($input: CreateTrackingInput!) {
+    mutation createTracking($input: TrackingInput!) {
   createTracking(input: $input) {
     tracking {
       ...TrackingParts
@@ -567,8 +532,8 @@ export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTracki
 export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
 export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
 export const UpdateTrackingDocument = gql`
-    mutation updateTracking($input: UpdateTrackingInput!) {
-  updateTracking(input: $input) {
+    mutation updateTracking($id: ID!, $input: TrackingInput!) {
+  updateTracking(id: $id, input: $input) {
     tracking {
       ...TrackingParts
     }
@@ -593,6 +558,7 @@ export type UpdateTrackingMutationFn = Apollo.MutationFunction<UpdateTrackingMut
  * @example
  * const [updateTrackingMutation, { data, loading, error }] = useUpdateTrackingMutation({
  *   variables: {
+ *      id: // value for 'id'
  *      input: // value for 'input'
  *   },
  * });
@@ -604,8 +570,8 @@ export type UpdateTrackingMutationHookResult = ReturnType<typeof useUpdateTracki
 export type UpdateTrackingMutationResult = Apollo.MutationResult<UpdateTrackingMutation>;
 export type UpdateTrackingMutationOptions = Apollo.BaseMutationOptions<UpdateTrackingMutation, UpdateTrackingMutationVariables>;
 export const DeleteTrackingDocument = gql`
-    mutation deleteTracking($input: DeleteTrackingInput!) {
-  deleteTracking(input: $input) {
+    mutation deleteTracking($id: ID!) {
+  deleteTracking(id: $id) {
     code
     message
     success
@@ -627,7 +593,7 @@ export type DeleteTrackingMutationFn = Apollo.MutationFunction<DeleteTrackingMut
  * @example
  * const [deleteTrackingMutation, { data, loading, error }] = useDeleteTrackingMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -742,3 +708,40 @@ export function useGetPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetPageQueryHookResult = ReturnType<typeof useGetPageQuery>;
 export type GetPageLazyQueryHookResult = ReturnType<typeof useGetPageLazyQuery>;
 export type GetPageQueryResult = Apollo.QueryResult<GetPageQuery, GetPageQueryVariables>;
+export const GetTrackingsDocument = gql`
+    query getTrackings($query: TrackingsQuery!) {
+  getTrackings(query: $query) {
+    edges {
+      ...TrackingParts
+    }
+    cursor
+    totalCount
+  }
+}
+    ${TrackingPartsFragmentDoc}`;
+
+/**
+ * __useGetTrackingsQuery__
+ *
+ * To run a query within a React component, call `useGetTrackingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTrackingsQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useGetTrackingsQuery(baseOptions?: Apollo.QueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+        return Apollo.useQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+      }
+export function useGetTrackingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+          return Apollo.useLazyQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, baseOptions);
+        }
+export type GetTrackingsQueryHookResult = ReturnType<typeof useGetTrackingsQuery>;
+export type GetTrackingsLazyQueryHookResult = ReturnType<typeof useGetTrackingsLazyQuery>;
+export type GetTrackingsQueryResult = Apollo.QueryResult<GetTrackingsQuery, GetTrackingsQueryVariables>;

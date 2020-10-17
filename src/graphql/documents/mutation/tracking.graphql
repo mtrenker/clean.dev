@@ -1,4 +1,4 @@
-mutation createTracking($input: CreateTrackingInput!) {
+mutation createTracking($input: TrackingInput!) {
   createTracking(input: $input) {
     tracking {
       ...TrackingParts
@@ -9,8 +9,8 @@ mutation createTracking($input: CreateTrackingInput!) {
   }
 }
 
-mutation updateTracking($input: UpdateTrackingInput!) {
-  updateTracking(input: $input) {
+mutation updateTracking($id: ID!, $input: TrackingInput!) {
+  updateTracking(id: $id, input: $input) {
     tracking {
       ...TrackingParts
     }
@@ -20,8 +20,8 @@ mutation updateTracking($input: UpdateTrackingInput!) {
   }
 }
 
-mutation deleteTracking($input: DeleteTrackingInput!) {
-  deleteTracking(input: $input) {
+mutation deleteTracking($id: ID!) {
+  deleteTracking(id: $id) {
     code
     message
     success

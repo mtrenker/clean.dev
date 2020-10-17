@@ -55,8 +55,8 @@ interface CreateProjectEvent extends AppsyncResolverEvent {
 }
 interface UpdateProjectEvent extends AppsyncResolverEvent {
   arguments: {
+    id: string;
     input: {
-      projectId: string;
       client: string;
       description: string;
       industry: string;
@@ -73,9 +73,7 @@ interface UpdateProjectEvent extends AppsyncResolverEvent {
 }
 interface DeleteProjectEvent extends AppsyncResolverEvent {
   arguments: {
-    input: {
-      projectId: string;
-    }
+    id: string;
   }
   info: {
     fieldName: 'deleteProject';
@@ -99,8 +97,8 @@ interface CreateTrackingEvent extends AppsyncResolverEvent {
 }
 interface UpdateTrackingEvent extends AppsyncResolverEvent {
   arguments: {
+    id: string;
     input: {
-      trackingId: string;
       projectId: string;
       startTime: string;
       endTime: string;
@@ -114,9 +112,7 @@ interface UpdateTrackingEvent extends AppsyncResolverEvent {
 }
 interface DeleteTrackingEvent extends AppsyncResolverEvent {
   arguments: {
-    input: {
-      trackingId: string;
-    }
+    id: string;
   }
   info: {
     fieldName: 'deleteTracking';
@@ -222,18 +218,19 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
 const updateProject = async (event: UpdateProjectEvent): Promise<MutationResponse> => {
   const {
     arguments: {
+      id,
       input: {
-        projectId, client, description, endDate, industry, methodologies, startDate, technologies,
+        client, description, endDate, industry, methodologies, startDate, technologies,
       },
     }, identity,
   } = event;
 
-  const pk = `project-${projectId}`;
+  const pk = `project-${id}`;
 
   const project = {
     pk,
     sk: pk,
-    id: projectId,
+    id,
     client,
     description,
     industry,
@@ -272,12 +269,10 @@ const updateProject = async (event: UpdateProjectEvent): Promise<MutationRespons
 
 const deleteProject = async (event: DeleteProjectEvent): Promise<MutationResponse> => {
   const {
-    arguments: {
-      input: { projectId },
-    }, identity,
+    arguments: { id }, identity,
   } = event;
 
-  const pk = `project-${projectId}`;
+  const pk = `project-${id}`;
   const sk = pk;
 
   await ddbClient.transactWrite({
@@ -345,11 +340,11 @@ const createTracking = async (event: CreateTrackingEvent): Promise<MutationRespo
 };
 
 const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationResponse> => {
-  const { arguments: { input }, identity } = event;
+  const { arguments: { id, input }, identity } = event;
   const {
-    trackingId, description, projectId, endTime, startTime,
+    description, projectId, endTime, startTime,
   } = input;
-  const pk = `tracking-${trackingId}`;
+  const pk = `tracking-${id}`;
   const sk = identity.sub;
   const data = `tracking#${projectId}#${startTime}`;
 
@@ -357,7 +352,7 @@ const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationRespo
     pk,
     sk,
     data,
-    id: trackingId,
+    id,
     startTime,
     endTime,
     description,
@@ -381,8 +376,8 @@ const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationRespo
 };
 
 const deleteTracking = async (event: DeleteTrackingEvent): Promise<MutationResponse> => {
-  const { arguments: { input }, identity } = event;
-  const pk = `tracking-${input.trackingId}`;
+  const { arguments: { id }, identity } = event;
+  const pk = `tracking-${id}`;
   const sk = identity.sub;
 
   await ddbClient.transactWrite({

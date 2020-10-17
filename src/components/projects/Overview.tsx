@@ -10,13 +10,13 @@ export const ProjectOverview: FC = () => {
   if (loading) return <p>Loading</p>;
   return (
     <div>
-      {data?.getProjects.edges.map((project) => (
+      {data?.getProjects.edges.map(({ id, client }) => (
         <Table>
           <Row>
-            <Cell><Link to={`/projects/${project.id}/timesheet`}>{project.client}</Link></Cell>
-            <Cell><Link to={`/projects/${project.id}`}>{project.client}</Link></Cell>
+            <Cell><Link to={`/projects/${id}`}>{client}</Link></Cell>
+            <Cell><Link to={`/projects/${id}/timesheet`}>Timesheet</Link></Cell>
             <Cell>
-              <button type="button" onClick={() => deleteProject({ variables: { input: { projectId: project.id } } })}>
+              <button type="button" onClick={() => deleteProject({ variables: { id } })}>
                 Delete Project
               </button>
             </Cell>
