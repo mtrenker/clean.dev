@@ -4,8 +4,6 @@ import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { Select } from '../Select';
-import { Option } from '../Option';
 
 export interface TimeTrackerProjects {
   id: string;
@@ -22,7 +20,6 @@ interface Tracking {
 
 export interface TimeTrackerProps {
   tracking?: Tracking,
-  projects: TimeTrackerProjects[];
   onChangeProject: (projectId: string) => void;
   onSubmit: (data: TrackingForm) => void;
 }
@@ -79,9 +76,7 @@ const formCss = css`
 
 const dateFormat = 'dd.MM.yyyy HH:mm';
 
-export const TimeTracker: FC<TimeTrackerProps> = ({
-  onSubmit, tracking, projects, onChangeProject,
-}) => {
+export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, tracking }) => {
   const {
     handleSubmit, register, control, setValue,
   } = useForm<TrackingForm>({ defaultValues: tracking });
@@ -95,14 +90,6 @@ export const TimeTracker: FC<TimeTrackerProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} css={formCss}>
-      <label css={{ gridArea: 'labelFrom' }} htmlFor="from">From:</label>
-      <div>
-        <Select name="projectId" inputRef={register} onChange={(e) => onChangeProject(e.currentTarget.value)}>
-          {projects.map((project) => (
-            <Option key={project.id} value={project.id}>{project.client}</Option>
-          ))}
-        </Select>
-      </div>
       <label css={{ gridArea: 'labelFrom' }} htmlFor="startTime">From:</label>
       <div className="datePickerFrom">
         <Controller

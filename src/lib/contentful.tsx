@@ -7,7 +7,7 @@ import { RenderNode } from '@contentful/rich-text-react-renderer';
 
 import { ChangePassword } from '../components/blueprints/ChangePassword';
 import { Projects } from '../components/blueprints/Projects';
-import { TimeTracking } from '../components/blueprints/TimeTracking';
+import { TimeTracking } from '../components/projects/TimeTracking';
 import { Blog } from '../components/blueprints/Blog';
 
 enum BLUEPRINTS {

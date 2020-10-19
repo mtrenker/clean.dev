@@ -6,10 +6,10 @@ import {
 import { de } from 'date-fns/locale';
 import { css } from '@emotion/core';
 
-import { useGetProjectQuery, Tracking } from '../../graphql/hooks';
+import { Tracking, useGetProjectWithTrackingsQuery } from '../../graphql/hooks';
 import { DatePicker } from '../controls/DatePicker';
 
-interface TrackingWithHours extends Tracking {
+interface TrackingWithHours extends Partial<Tracking> {
   hours: number;
 }
 
@@ -39,10 +39,9 @@ export const TimeSheet: FC = () => {
   const [days, setDays] = useState<Day[]>([]);
   const [withProjection, setWithProjection] = useState<boolean>(false);
   const { projectId } = useParams<{projectId: string}>();
-  const { data: projectData } = useGetProjectQuery({
+  const { data: projectData } = useGetProjectWithTrackingsQuery({
     variables: {
-      projectQuery: { project: projectId },
-      trackingQuery: { date: format(month, 'u-MM') },
+      query: { projectId },
     },
   });
 
@@ -62,7 +61,7 @@ export const TimeSheet: FC = () => {
       endTime: format(date, 'u-MM-ddT16:00:00'),
       hours: 8,
     });
-    projectData?.project.trackings.items.forEach((tracking) => {
+    projectData?.getProject.trackings.edges.forEach((tracking) => {
       const {
         __typename, id, description, startTime, endTime,
       } = tracking;
@@ -76,7 +75,7 @@ export const TimeSheet: FC = () => {
       };
       daysSeed[new Date(tracking.startTime).getDate() - 1].trackings.push(trackingWithHours);
     });
-    if (withProjection && projectData?.project.trackings.items.length) {
+    if (withProjection && projectData?.getProject.trackings.edges.length) {
       daysSeed.forEach((day, idx) => {
         if (
           day.trackings.length === 0
@@ -87,11 +86,11 @@ export const TimeSheet: FC = () => {
       });
     }
     setDays(daysSeed);
-  }, [withProjection, month, projectData?.project.trackings]);
+  }, [withProjection, month, projectData?.getProject.trackings.edges]);
 
   if (!projectData) return <p>Loading</p>;
 
-  const { project } = projectData;
+  const { getProject: project } = projectData;
 
   const pageStyle = css`
     @page {

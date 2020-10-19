@@ -1,9 +1,0 @@
-query getProjects {
-  getProjects {
-    edges {
-      ...ProjectParts
-    }
-    cursor
-    totalCount
-  }
-}

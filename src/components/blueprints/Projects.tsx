@@ -5,6 +5,7 @@ import { ProjectOverview } from '../projects/Overview';
 import { TimeSheet } from '../projects/TimeSheet';
 import { Login } from '../user/Login';
 import { ProjectForm } from '../projects/Form';
+import { TimeTracking } from '../projects/TimeTracking';
 
 export const Projects: FC = () => (
   <Switch>
@@ -20,6 +21,9 @@ export const Projects: FC = () => (
     </Route>
     <Route exact path="/projects/:projectId/timesheet">
       <TimeSheet />
+    </Route>
+    <Route exact path="/projects/:projectId/tracking">
+      <TimeTracking />
     </Route>
   </Switch>
 );

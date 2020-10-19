@@ -1,0 +1,29 @@
+query getProjects {
+  getProjects {
+    edges {
+      ...ProjectParts
+    }
+    cursor
+    totalCount
+  }
+}
+
+
+query getProject($query: ProjectQuery!) {
+  getProject(query: $query) {
+    ...ProjectParts
+  }
+}
+
+
+query getProjectWithTrackings($query: ProjectQuery!) {
+  getProject(query: $query) {
+    ...ProjectParts
+    trackings {
+      edges {
+        ...TrackingParts
+      }
+      totalCount
+    }
+  }
+}

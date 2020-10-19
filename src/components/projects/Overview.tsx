@@ -14,6 +14,7 @@ export const ProjectOverview: FC = () => {
         <Table>
           <Row>
             <Cell><Link to={`/projects/${id}`}>{client}</Link></Cell>
+            <Cell><Link to={`/projects/${id}/tracking`}>Tracking</Link></Cell>
             <Cell><Link to={`/projects/${id}/timesheet`}>Timesheet</Link></Cell>
             <Cell>
               <button type="button" onClick={() => deleteProject({ variables: { id } })}>
