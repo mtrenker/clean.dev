@@ -25,7 +25,6 @@ export interface TimeTrackerProps {
 }
 
 export interface TrackingForm {
-  projectId: string;
   startTime: string;
   endTime: string;
   description: string;
@@ -82,7 +81,6 @@ export const TimeTracker: FC<TimeTrackerProps> = ({ onSubmit, tracking }) => {
   } = useForm<TrackingForm>({ defaultValues: tracking });
 
   if (tracking) {
-    setValue('projectId', tracking.projectId);
     setValue('startTime', tracking.startTime);
     setValue('endTime', tracking.endTime);
     setValue('description', tracking.description);

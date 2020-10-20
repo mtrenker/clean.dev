@@ -172,13 +172,13 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
     }, identity,
   } = event;
 
-  const projectId = nanoid();
-  const pk = `project-${projectId}`;
+  const id = nanoid();
+  const pk = `project-${id}`;
 
   const project = {
     pk,
     sk: pk,
-    id: projectId,
+    id,
     client,
     description,
     industry,
@@ -304,22 +304,28 @@ const deleteProject = async (event: DeleteProjectEvent): Promise<MutationRespons
 
 const createTracking = async (event: CreateTrackingEvent): Promise<MutationResponse> => {
   const { arguments: { input }, identity } = event;
-  const trackingId = nanoid();
   const {
     description, startTime, endTime, projectId,
   } = input;
-  const pk = `tracking-${trackingId}`;
-  const sk = identity.sub;
-  const data = `tracking#${projectId}#${startTime}`;
+
+  const id = nanoid();
+  const pk = `tracking-${id}`;
+  const sk = pk;
 
   const tracking = {
     pk,
     sk,
-    data,
-    id: trackingId,
+    id,
+    projectId,
     startTime,
     endTime,
     description,
+  };
+
+  const userTracking = {
+    ...tracking,
+    pk: identity.sub,
+    sk: `tracking#${projectId}#${startTime}`,
   };
 
   await ddbClient.transactWrite({
@@ -327,6 +333,11 @@ const createTracking = async (event: CreateTrackingEvent): Promise<MutationRespo
       Put: {
         TableName,
         Item: tracking,
+      },
+    }, {
+      Put: {
+        TableName,
+        Item: userTracking,
       },
     }],
   }).promise();
@@ -345,17 +356,21 @@ const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationRespo
     description, projectId, endTime, startTime,
   } = input;
   const pk = `tracking-${id}`;
-  const sk = identity.sub;
-  const data = `tracking#${projectId}#${startTime}`;
+  const sk = pk;
 
   const tracking = {
     pk,
     sk,
-    data,
     id,
     startTime,
     endTime,
     description,
+  };
+
+  const userTracking = {
+    ...tracking,
+    pk: identity.sub,
+    sk: `tracking#${projectId}#${startTime}`,
   };
 
   await ddbClient.transactWrite({
@@ -363,6 +378,11 @@ const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationRespo
       Put: {
         TableName,
         Item: tracking,
+      },
+    }, {
+      Put: {
+        TableName,
+        Item: userTracking,
       },
     }],
   }).promise();
@@ -378,23 +398,49 @@ const updateTracking = async (event: UpdateTrackingEvent): Promise<MutationRespo
 const deleteTracking = async (event: DeleteTrackingEvent): Promise<MutationResponse> => {
   const { arguments: { id }, identity } = event;
   const pk = `tracking-${id}`;
-  const sk = identity.sub;
+  const sk = pk;
 
-  await ddbClient.transactWrite({
-    TransactItems: [{
-      Delete: {
-        TableName,
-        Key: {
-          pk,
-          sk,
-        },
-      },
-    }],
+  const tracking = await ddbClient.get({
+    TableName,
+    Key: {
+      pk,
+      sk,
+    },
   }).promise();
 
+  if (tracking.Item) {
+    const { startTime, projectId } = tracking.Item;
+
+    await ddbClient.transactWrite({
+      TransactItems: [{
+        Delete: {
+          TableName,
+          Key: {
+            pk: tracking.Item?.pk,
+            sk: tracking.Item?.sk,
+          },
+        },
+      }, {
+        Delete: {
+          TableName,
+          Key: {
+            pk: identity.sub,
+            sk: `tracking#${projectId}#${startTime}`,
+          },
+        },
+      }],
+    }).promise();
+
+    return {
+      code: '200',
+      message: 'Tracking deleted',
+      success: true,
+    };
+  }
+
   return {
-    code: '200',
-    message: 'Tracking deleted',
-    success: true,
+    code: '404',
+    message: 'Tracking not found',
+    success: false,
   };
 };

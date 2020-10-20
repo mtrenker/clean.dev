@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Input } from '../controls/Input';
 import { DatePicker } from '../controls/DatePicker';
 import {
-  useCreateProjectMutation, useGetProjectQuery,
+  useCreateProjectMutation, useGetProjectQuery, useUpdateProjectMutation,
 } from '../../graphql/hooks';
 import { TextArea } from '../TextArea';
 
@@ -69,8 +69,10 @@ export const ProjectForm: FC = () => {
   const { projectId } = useParams<{projectId: string}>();
 
   const [createProject] = useCreateProjectMutation();
+  const [updateProject] = useUpdateProjectMutation();
 
   useGetProjectQuery({
+    skip: projectId === 'new',
     variables: {
       query: {
         projectId,
@@ -79,12 +81,19 @@ export const ProjectForm: FC = () => {
     onCompleted: ({ getProject }) => {
       if (getProject) {
         setValue('client', getProject.client);
+        setValue('industry', getProject.industry);
+        setValue('description', getProject.description);
+        setValue('startDate', getProject.startDate);
+        setValue('endDate', getProject.endDate ?? new Date().toISOString());
+        setValue('methodologies', getProject.methodologies.join(', '));
+        setValue('technologies', getProject.technologies.join(', '));
       }
     },
   });
 
   const renderDatePicker = ({ onBlur, onChange, value }: RenderProps) => (
     <DatePicker
+      dateFormat="yyyy-MM-dd"
       onBlur={onBlur}
       onChange={(date: Date) => onChange(formatISO(date, { representation: 'date' }))}
       selected={value ? new Date(value) : new Date()}
@@ -94,19 +103,36 @@ export const ProjectForm: FC = () => {
   const onSubmit = ({
     client, description, industry, technologies, methodologies, startDate, endDate,
   }: FormInput) => {
-    createProject({
-      variables: {
-        input: {
-          client,
-          description,
-          industry,
-          technologies: technologies.split(', '),
-          methodologies: methodologies.split(', '),
-          startDate,
-          endDate,
+    if (projectId === 'new') {
+      createProject({
+        variables: {
+          input: {
+            client,
+            description,
+            industry,
+            technologies: technologies.split(', '),
+            methodologies: methodologies.split(', '),
+            startDate,
+            endDate,
+          },
         },
-      },
-    });
+      });
+    } else {
+      updateProject({
+        variables: {
+          id: projectId,
+          input: {
+            client,
+            description,
+            industry,
+            technologies: technologies.split(', '),
+            methodologies: methodologies.split(', '),
+            startDate,
+            endDate,
+          },
+        },
+      });
+    }
   };
 
   return (

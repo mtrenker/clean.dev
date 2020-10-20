@@ -10,6 +10,7 @@ export const ProjectOverview: FC = () => {
   if (loading) return <p>Loading</p>;
   return (
     <div>
+      <Link to="/projects/new">Create Project</Link>
       {data?.getProjects.edges.map(({ id, client }) => (
         <Table>
           <Row>

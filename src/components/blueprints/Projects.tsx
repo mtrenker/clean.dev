@@ -13,9 +13,6 @@ export const Projects: FC = () => (
       <Login />
       <ProjectOverview />
     </Route>
-    <Route exact path="/projects/new">
-      <ProjectForm />
-    </Route>
     <Route exact path="/projects/:projectId">
       <ProjectForm />
     </Route>

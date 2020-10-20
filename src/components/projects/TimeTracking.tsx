@@ -36,7 +36,9 @@ const timeTrackingCss = css`
 export const TimeTracking: FC = () => {
   const { projectId } = useParams<{projectId: string}>();
 
-  const { data: trackingData } = useGetTrackingsQuery();
+  const { data: trackingData } = useGetTrackingsQuery({
+    variables: { query: { projectId } },
+  });
   const [createTracking] = useCreateTrackingMutation();
   const [deleteTracking] = useDeleteTrackingMutation();
 
@@ -46,6 +48,7 @@ export const TimeTracking: FC = () => {
     createTracking({
       variables: {
         input: {
+          projectId,
           ...trackingForm,
         },
       },

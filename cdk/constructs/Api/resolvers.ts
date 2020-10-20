@@ -142,12 +142,8 @@ export const createGetTrackingsResolver: QueryResolver = (dataSource) => dataSou
     {
       "version" : "2018-05-29",
       "operation" : "Query",
-      "index": "GSI1",
       "query":{
-        "expression": "sk = :user AND begins_with(#data, :query)",
-        "expressionNames": {
-          "#data": "data"
-        },
+        "expression": "pk = :user AND begins_with(sk, :query)",
         "expressionValues": {
           ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
           ":query": $util.dynamodb.toDynamoDBJson("tracking#$projectId#$date")
