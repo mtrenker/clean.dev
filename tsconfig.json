@@ -1,9 +1,4 @@
 {
-  "references": [
-    {
-      "path": "cdk/resources/lambda"
-    }
-  ],
   "compilerOptions": {
     "skipLibCheck": true,
     "noEmit": true,

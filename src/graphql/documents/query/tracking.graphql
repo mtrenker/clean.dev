@@ -1,6 +1,6 @@
-query getTrackings($query: TrackingsQuery!) {
-  getTrackings(query: $query) {
-    edges {
+query getTrackings($projectId: String!, $date: String) {
+  getTrackings(projectId: $projectId, date: $date) {
+    items {
       ...TrackingParts
     }
     cursor

@@ -37,12 +37,12 @@ export const TimeTracking: FC = () => {
   const { projectId } = useParams<{projectId: string}>();
 
   const { data: trackingData } = useGetTrackingsQuery({
-    variables: { query: { projectId } },
+    variables: { projectId },
   });
   const [createTracking] = useCreateTrackingMutation();
   const [deleteTracking] = useDeleteTrackingMutation();
 
-  const trackings = trackingData?.getTrackings.edges;
+  const trackings = trackingData?.getTrackings.items;
 
   const onSubmit = (trackingForm: TrackingForm) => {
     createTracking({
@@ -56,18 +56,18 @@ export const TimeTracking: FC = () => {
         if (projectId && getTrackingsData?.createTracking.success) {
           const cache = proxy.readQuery<GetTrackingsQuery, GetTrackingsQueryVariables>({
             query: GetTrackingsDocument,
-            variables: { query: { projectId } },
+            variables: { projectId },
           });
-          const newTrackingEdge = getTrackingsData?.createTracking.tracking;
-          if (projectId && cache && newTrackingEdge) {
+          const newTrackingItem = getTrackingsData?.createTracking.tracking;
+          if (projectId && cache && newTrackingItem) {
             proxy.writeQuery<GetTrackingsQuery, GetTrackingsQueryVariables>({
               query: GetTrackingsDocument,
-              variables: { query: { projectId } },
+              variables: { projectId },
               data: {
                 ...cache,
                 getTrackings: {
                   ...cache.getTrackings,
-                  edges: [...cache.getTrackings.edges, newTrackingEdge],
+                  items: [...cache.getTrackings.items, newTrackingItem],
                 },
               },
             });
@@ -86,18 +86,18 @@ export const TimeTracking: FC = () => {
         if (projectId && deleteTrackingData?.deleteTracking.success) {
           const cache = proxy.readQuery<GetTrackingsQuery, GetTrackingsQueryVariables>({
             query: GetTrackingsDocument,
-            variables: { query: { projectId } },
+            variables: { projectId },
           });
           if (cache) {
-            const updatedEdges = cache.getTrackings.edges.filter((tracking) => tracking.id !== id);
+            const updatedItems = cache.getTrackings.items.filter((tracking) => tracking.id !== id);
             proxy.writeQuery<GetTrackingsQuery>({
               query: GetTrackingsDocument,
-              variables: { query: { projectId } },
+              variables: { projectId },
               data: {
                 ...cache,
                 getTrackings: {
                   ...cache.getTrackings,
-                  edges: updatedEdges,
+                  items: updatedItems,
                 },
               },
             });

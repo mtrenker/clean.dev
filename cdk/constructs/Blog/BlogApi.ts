@@ -25,6 +25,8 @@ export class BlogApi extends Construct {
       },
     });
 
+    api.addType(pageType);
+
     api.addQuery('getPage', new ResolvableField({
       returnType: pageType.attribute(),
       args: {

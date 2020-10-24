@@ -41,7 +41,7 @@ export const TimeSheet: FC = () => {
   const { projectId } = useParams<{projectId: string}>();
   const { data: projectData } = useGetProjectWithTrackingsQuery({
     variables: {
-      query: { projectId },
+      id: projectId,
     },
   });
 
@@ -61,7 +61,7 @@ export const TimeSheet: FC = () => {
       endTime: format(date, 'u-MM-ddT16:00:00'),
       hours: 8,
     });
-    projectData?.getProject.trackings.edges.forEach((tracking) => {
+    projectData?.getProject.trackings.items.forEach((tracking) => {
       const {
         __typename, id, description, startTime, endTime,
       } = tracking;
@@ -75,7 +75,7 @@ export const TimeSheet: FC = () => {
       };
       daysSeed[new Date(tracking.startTime).getDate() - 1].trackings.push(trackingWithHours);
     });
-    if (withProjection && projectData?.getProject.trackings.edges.length) {
+    if (withProjection && projectData?.getProject.trackings.items.length) {
       daysSeed.forEach((day, idx) => {
         if (
           day.trackings.length === 0
@@ -86,7 +86,7 @@ export const TimeSheet: FC = () => {
       });
     }
     setDays(daysSeed);
-  }, [withProjection, month, projectData?.getProject.trackings.edges]);
+  }, [withProjection, month, projectData?.getProject.trackings.items]);
 
   if (!projectData) return <p>Loading</p>;
 

@@ -28,37 +28,38 @@ interface RenderProps {
 }
 
 const formCss = css`
-  display: grid;
-  grid-template:
-    "client industry startDate endDate" auto
-    "description description description description" auto
-    "methodologies methodologies technologies technologies" auto
-  ;
+  .company-info {
+    display: grid;
+    grid-template:
+      "client industry startDate endDate" auto
+      "description description description description" auto
+      "methodologies methodologies technologies technologies" auto
+    ;
+    label span {
+      display: none;
+    }
 
-  label span {
-    display: none;
-  }
-
-  .client {
-    grid-area: client;
-  }
-  .industry {
-    grid-area: industry;
-  }
-  .startDate {
-    grid-area: startDate;
-  }
-  .endDate {
-    grid-area: endDate;
-  }
-  .description {
-    grid-area: description;
-  }
-  .methodologies {
-    grid-area: methodologies;
-  }
-  .technologies {
-    grid-area: technologies;
+    .client {
+      grid-area: client;
+    }
+    .industry {
+      grid-area: industry;
+    }
+    .startDate {
+      grid-area: startDate;
+    }
+    .endDate {
+      grid-area: endDate;
+    }
+    .description {
+      grid-area: description;
+    }
+    .methodologies {
+      grid-area: methodologies;
+    }
+    .technologies {
+      grid-area: technologies;
+    }
   }
 `;
 
@@ -74,9 +75,7 @@ export const ProjectForm: FC = () => {
   useGetProjectQuery({
     skip: projectId === 'new',
     variables: {
-      query: {
-        projectId,
-      },
+      id: projectId,
     },
     onCompleted: ({ getProject }) => {
       if (getProject) {
@@ -137,55 +136,73 @@ export const ProjectForm: FC = () => {
 
   return (
     <form action="#" css={formCss} onSubmit={handleSubmit(onSubmit)}>
-      <label className="client" htmlFor="client">
-        <span>Client Name</span>
-        <Input name="client" placeholder="Client" id="client" register={register} />
-      </label>
-      <label className="industry" htmlFor="industry">
-        <span>Industry</span>
-        <Input name="industry" placeholder="Industry" id="industry" register={register} />
-      </label>
-      <label className="startDate" htmlFor="startDate">
-        <span>Start Date</span>
-        <Controller
-          name="startDate"
-          control={control}
-          render={renderDatePicker}
-        />
-      </label>
-      <label className="endDate" htmlFor="endDate">
-        <span>End Date</span>
-        <Controller
-          name="endDate"
-          control={control}
-          render={renderDatePicker}
-        />
-      </label>
-      <label className="description" htmlFor="description">
-        <span>Description</span>
-        <TextArea
-          name="description"
-          placeholder="Description"
-          id="description"
-          register={register}
-        />
-      </label>
-      <label className="methodologies" htmlFor="methodologies">
-        <span>methodologies</span>
-        <TextArea
-          name="methodologies"
-          placeholder="Methodologies"
-          register={register}
-        />
-      </label>
-      <label className="technologies" htmlFor="technologies">
-        <span>Technologies</span>
-        <TextArea
-          name="technologies"
-          placeholder="Technologies"
-          register={register}
-        />
-      </label>
+      <fieldset className="company-info">
+        <legend>Company Info</legend>
+        <label className="client" htmlFor="client">
+          <span>Client Name</span>
+          <Input name="client" placeholder="Client" id="client" register={register} />
+        </label>
+        <label className="industry" htmlFor="industry">
+          <span>Industry</span>
+          <Input name="industry" placeholder="Industry" id="industry" register={register} />
+        </label>
+        <label className="startDate" htmlFor="startDate">
+          <span>Start Date</span>
+          <Controller
+            name="startDate"
+            control={control}
+            render={renderDatePicker}
+          />
+        </label>
+        <label className="endDate" htmlFor="endDate">
+          <span>End Date</span>
+          <Controller
+            name="endDate"
+            control={control}
+            render={renderDatePicker}
+          />
+        </label>
+        <label className="description" htmlFor="description">
+          <span>Description</span>
+          <TextArea
+            name="description"
+            placeholder="Description"
+            id="description"
+            register={register}
+          />
+        </label>
+        <label className="methodologies" htmlFor="methodologies">
+          <span>methodologies</span>
+          <TextArea
+            name="methodologies"
+            placeholder="Methodologies"
+            register={register}
+          />
+        </label>
+        <label className="technologies" htmlFor="technologies">
+          <span>Technologies</span>
+          <TextArea
+            name="technologies"
+            placeholder="Technologies"
+            register={register}
+          />
+        </label>
+      </fieldset>
+      <fieldset className="contact-info">
+        <legend>Contact</legend>
+        <label className="firstName" htmlFor="firstName">
+          <span>First Name</span>
+          <Input name="firstName" placeholder="First Name" id="firstName" register={register} />
+        </label>
+        <label className="lastName" htmlFor="lastName">
+          <span>Last Name</span>
+          <Input name="lastName" placeholder="Last Name" id="lastName" register={register} />
+        </label>
+        <label className="email" htmlFor="email">
+          <span>E-Mail</span>
+          <Input name="email" placeholder="E-Mail" id="email" register={register} />
+        </label>
+      </fieldset>
       <button type="submit">Submit</button>
     </form>
   );

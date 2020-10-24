@@ -12,19 +12,101 @@ export type Scalars = {
   Float: number;
   AWSDate: string;
   AWSDateTime: string;
-  AWSJSON: { [key: string]: any };
 };
 
 
 
+export type Contact = {
+  __typename?: 'Contact';
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createProject: ProjectMutationResponse;
+  createTracking: TrackingMutationResponse;
+  deleteProject: ProjectMutationResponse;
+  deleteTracking: TrackingMutationResponse;
+  updateProject: ProjectMutationResponse;
+  updateTracking: TrackingMutationResponse;
+};
+
+
+export type MutationCreateProjectArgs = {
+  input: ProjectInput;
+};
+
+
+export type MutationCreateTrackingArgs = {
+  input: TrackingInput;
+};
+
+
+export type MutationDeleteProjectArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteTrackingArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateProjectArgs = {
+  id: Scalars['ID'];
+  input: ProjectInput;
+};
+
+
+export type MutationUpdateTrackingArgs = {
+  id: Scalars['ID'];
+  input: TrackingInput;
+};
+
+export type Page = {
+  __typename?: 'Page';
+  content: Scalars['String'];
+  layout: Scalars['String'];
+  slug: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type Project = {
+  __typename?: 'Project';
+  client: Scalars['String'];
+  contact: Array<Contact>;
+  description: Scalars['String'];
+  endDate?: Maybe<Scalars['AWSDate']>;
+  id: Scalars['ID'];
+  industry: Scalars['String'];
+  methodologies: Array<Scalars['String']>;
+  startDate: Scalars['AWSDate'];
+  technologies: Array<Scalars['String']>;
+  trackings: TrackingConnection;
+};
+
+export type ProjectConnection = {
+  __typename?: 'ProjectConnection';
+  cursor?: Maybe<Scalars['String']>;
+  items: Array<Project>;
+  totalCount: Scalars['Int'];
+};
+
+export type ProjectMutationResponse = {
+  __typename?: 'ProjectMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  project: Project;
+  success: Scalars['Boolean'];
+};
 
 export type Query = {
   __typename?: 'Query';
-  ping: Scalars['String'];
-  me?: Maybe<User>;
   getPage?: Maybe<Page>;
-  getProjects: ProjectConnection;
   getProject: Project;
+  getProjects: ProjectConnection;
   getTrackings: TrackingConnection;
 };
 
@@ -35,170 +117,53 @@ export type QueryGetPageArgs = {
 
 
 export type QueryGetProjectArgs = {
-  query: ProjectQuery;
+  id: Scalars['ID'];
 };
 
 
 export type QueryGetTrackingsArgs = {
-  query: TrackingsQuery;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  createProject: ProjectMutationResponse;
-  updateProject: ProjectMutationResponse;
-  deleteProject: ProjectMutationResponse;
-  createTracking: TrackingMutationResponse;
-  updateTracking: TrackingMutationResponse;
-  deleteTracking: TrackingMutationResponse;
-};
-
-
-export type MutationCreateProjectArgs = {
-  input: ProjectInput;
-};
-
-
-export type MutationUpdateProjectArgs = {
-  id: Scalars['ID'];
-  input: ProjectInput;
-};
-
-
-export type MutationDeleteProjectArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationCreateTrackingArgs = {
-  input: TrackingInput;
-};
-
-
-export type MutationUpdateTrackingArgs = {
-  id: Scalars['ID'];
-  input: TrackingInput;
-};
-
-
-export type MutationDeleteTrackingArgs = {
-  id: Scalars['ID'];
-};
-
-export type Node = {
-  id: Scalars['ID'];
-};
-
-export type Connection = {
-  totalCount: Scalars['Int'];
-  edges: Array<Node>;
-  cursor?: Maybe<Scalars['String']>;
-};
-
-export type MutationResponse = {
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-};
-
-export type Page = Node & {
-  __typename?: 'Page';
-  id: Scalars['ID'];
-  title: Scalars['String'];
-  slug: Scalars['String'];
-  content: Scalars['String'];
-  layout: Scalars['String'];
-};
-
-export type User = {
-  __typename?: 'User';
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  projects: ProjectConnection;
-  project?: Maybe<Project>;
-};
-
-
-export type UserProjectArgs = {
+  date?: Maybe<Scalars['String']>;
   projectId: Scalars['String'];
 };
 
-export type Project = Node & {
-  __typename?: 'Project';
-  id: Scalars['ID'];
-  client: Scalars['String'];
-  industry: Scalars['String'];
-  description: Scalars['String'];
-  startDate: Scalars['AWSDate'];
-  endDate?: Maybe<Scalars['AWSDate']>;
-  methodologies: Array<Scalars['String']>;
-  technologies: Array<Scalars['String']>;
-  trackings: TrackingConnection;
-};
-
-export type Tracking = Node & {
+export type Tracking = {
   __typename?: 'Tracking';
-  id: Scalars['ID'];
-  project: Project;
-  startTime: Scalars['AWSDateTime'];
-  endTime: Scalars['AWSDateTime'];
   description?: Maybe<Scalars['String']>;
+  endTime: Scalars['AWSDateTime'];
+  id: Scalars['ID'];
+  startTime: Scalars['AWSDateTime'];
 };
 
-export type ProjectQuery = {
-  projectId: Scalars['ID'];
+export type TrackingConnection = {
+  __typename?: 'TrackingConnection';
+  cursor?: Maybe<Scalars['String']>;
+  items: Array<Tracking>;
+  totalCount: Scalars['Int'];
 };
 
-export type TrackingsQuery = {
-  projectId: Scalars['ID'];
-  date?: Maybe<Scalars['String']>;
+export type TrackingMutationResponse = {
+  __typename?: 'TrackingMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+  tracking: Tracking;
 };
 
 export type ProjectInput = {
   client: Scalars['String'];
-  industry: Scalars['String'];
   description: Scalars['String'];
-  startDate: Scalars['AWSDate'];
   endDate?: Maybe<Scalars['AWSDate']>;
+  industry: Scalars['String'];
   methodologies: Array<Scalars['String']>;
+  startDate: Scalars['AWSDate'];
   technologies: Array<Scalars['String']>;
 };
 
 export type TrackingInput = {
+  description?: Maybe<Scalars['String']>;
+  endTime: Scalars['AWSDateTime'];
   projectId: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
-  endTime: Scalars['AWSDateTime'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type ProjectMutationResponse = MutationResponse & {
-  __typename?: 'ProjectMutationResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-  project?: Maybe<Project>;
-};
-
-export type TrackingMutationResponse = MutationResponse & {
-  __typename?: 'TrackingMutationResponse';
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
-  message: Scalars['String'];
-  tracking?: Maybe<Tracking>;
-};
-
-export type ProjectConnection = Connection & {
-  __typename?: 'ProjectConnection';
-  totalCount: Scalars['Int'];
-  edges: Array<Project>;
-  cursor?: Maybe<Scalars['String']>;
-};
-
-export type TrackingConnection = Connection & {
-  __typename?: 'TrackingConnection';
-  totalCount: Scalars['Int'];
-  edges: Array<Tracking>;
-  cursor?: Maybe<Scalars['String']>;
 };
 
 export type ProjectPartsFragment = (
@@ -221,10 +186,10 @@ export type CreateProjectMutation = (
   & { createProject: (
     { __typename?: 'ProjectMutationResponse' }
     & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
-    & { project?: Maybe<(
+    & { project: (
       { __typename?: 'Project' }
       & ProjectPartsFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -239,10 +204,10 @@ export type UpdateProjectMutation = (
   & { updateProject: (
     { __typename?: 'ProjectMutationResponse' }
     & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
-    & { project?: Maybe<(
+    & { project: (
       { __typename?: 'Project' }
       & ProjectPartsFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -269,10 +234,10 @@ export type CreateTrackingMutation = (
   & { createTracking: (
     { __typename?: 'TrackingMutationResponse' }
     & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
-    & { tracking?: Maybe<(
+    & { tracking: (
       { __typename?: 'Tracking' }
       & TrackingPartsFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -287,10 +252,10 @@ export type UpdateTrackingMutation = (
   & { updateTracking: (
     { __typename?: 'TrackingMutationResponse' }
     & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
-    & { tracking?: Maybe<(
+    & { tracking: (
       { __typename?: 'Tracking' }
       & TrackingPartsFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -328,7 +293,7 @@ export type GetProjectsQuery = (
   & { getProjects: (
     { __typename?: 'ProjectConnection' }
     & Pick<ProjectConnection, 'cursor' | 'totalCount'>
-    & { edges: Array<(
+    & { items: Array<(
       { __typename?: 'Project' }
       & ProjectPartsFragment
     )> }
@@ -336,7 +301,7 @@ export type GetProjectsQuery = (
 );
 
 export type GetProjectQueryVariables = Exact<{
-  query: ProjectQuery;
+  id: Scalars['ID'];
 }>;
 
 
@@ -349,7 +314,7 @@ export type GetProjectQuery = (
 );
 
 export type GetProjectWithTrackingsQueryVariables = Exact<{
-  query: ProjectQuery;
+  id: Scalars['ID'];
 }>;
 
 
@@ -360,7 +325,7 @@ export type GetProjectWithTrackingsQuery = (
     & { trackings: (
       { __typename?: 'TrackingConnection' }
       & Pick<TrackingConnection, 'totalCount'>
-      & { edges: Array<(
+      & { items: Array<(
         { __typename?: 'Tracking' }
         & TrackingPartsFragment
       )> }
@@ -370,7 +335,8 @@ export type GetProjectWithTrackingsQuery = (
 );
 
 export type GetTrackingsQueryVariables = Exact<{
-  query: TrackingsQuery;
+  projectId: Scalars['String'];
+  date?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -379,7 +345,7 @@ export type GetTrackingsQuery = (
   & { getTrackings: (
     { __typename?: 'TrackingConnection' }
     & Pick<TrackingConnection, 'cursor' | 'totalCount'>
-    & { edges: Array<(
+    & { items: Array<(
       { __typename?: 'Tracking' }
       & TrackingPartsFragment
     )> }
@@ -663,7 +629,7 @@ export type GetPageQueryResult = Apollo.QueryResult<GetPageQuery, GetPageQueryVa
 export const GetProjectsDocument = gql`
     query getProjects {
   getProjects {
-    edges {
+    items {
       ...ProjectParts
     }
     cursor
@@ -697,8 +663,8 @@ export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
 export const GetProjectDocument = gql`
-    query getProject($query: ProjectQuery!) {
-  getProject(query: $query) {
+    query getProject($id: ID!) {
+  getProject(id: $id) {
     ...ProjectParts
   }
 }
@@ -716,7 +682,7 @@ export const GetProjectDocument = gql`
  * @example
  * const { data, loading, error } = useGetProjectQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -730,11 +696,11 @@ export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
 export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetProjectWithTrackingsDocument = gql`
-    query getProjectWithTrackings($query: ProjectQuery!) {
-  getProject(query: $query) {
+    query getProjectWithTrackings($id: ID!) {
+  getProject(id: $id) {
     ...ProjectParts
     trackings {
-      edges {
+      items {
         ...TrackingParts
       }
       totalCount
@@ -756,7 +722,7 @@ ${TrackingPartsFragmentDoc}`;
  * @example
  * const { data, loading, error } = useGetProjectWithTrackingsQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -770,9 +736,9 @@ export type GetProjectWithTrackingsQueryHookResult = ReturnType<typeof useGetPro
 export type GetProjectWithTrackingsLazyQueryHookResult = ReturnType<typeof useGetProjectWithTrackingsLazyQuery>;
 export type GetProjectWithTrackingsQueryResult = Apollo.QueryResult<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>;
 export const GetTrackingsDocument = gql`
-    query getTrackings($query: TrackingsQuery!) {
-  getTrackings(query: $query) {
-    edges {
+    query getTrackings($projectId: String!, $date: String) {
+  getTrackings(projectId: $projectId, date: $date) {
+    items {
       ...TrackingParts
     }
     cursor
@@ -793,7 +759,8 @@ export const GetTrackingsDocument = gql`
  * @example
  * const { data, loading, error } = useGetTrackingsQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      projectId: // value for 'projectId'
+ *      date: // value for 'date'
  *   },
  * });
  */

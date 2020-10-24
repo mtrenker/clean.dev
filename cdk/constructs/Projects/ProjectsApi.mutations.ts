@@ -275,6 +275,14 @@ const deleteProject = async (event: DeleteProjectEvent): Promise<MutationRespons
   const pk = `project-${id}`;
   const sk = pk;
 
+  const project = await ddbClient.get({
+    TableName,
+    Key: {
+      pk,
+      sk,
+    },
+  }).promise();
+
   await ddbClient.transactWrite({
     TransactItems: [{
       Delete: {
@@ -299,6 +307,7 @@ const deleteProject = async (event: DeleteProjectEvent): Promise<MutationRespons
     code: '200',
     message: 'Project deleted',
     success: true,
+    project,
   };
 };
 

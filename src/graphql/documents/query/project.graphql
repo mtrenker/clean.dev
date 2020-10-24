@@ -1,6 +1,6 @@
 query getProjects {
   getProjects {
-    edges {
+    items {
       ...ProjectParts
     }
     cursor
@@ -9,18 +9,18 @@ query getProjects {
 }
 
 
-query getProject($query: ProjectQuery!) {
-  getProject(query: $query) {
+query getProject($id: ID!) {
+  getProject(id: $id) {
     ...ProjectParts
   }
 }
 
 
-query getProjectWithTrackings($query: ProjectQuery!) {
-  getProject(query: $query) {
+query getProjectWithTrackings($id: ID!) {
+  getProject(id: $id) {
     ...ProjectParts
     trackings {
-      edges {
+      items {
         ...TrackingParts
       }
       totalCount

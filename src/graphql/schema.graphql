@@ -1,0 +1,99 @@
+scalar AWSDate
+scalar AWSDateTime
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Contact {
+  email: String!
+  firstName: String!
+  lastName: String!
+}
+
+type Mutation {
+  createProject(input: ProjectInput!): ProjectMutationResponse!
+  createTracking(input: TrackingInput!): TrackingMutationResponse!
+  deleteProject(id: ID!): ProjectMutationResponse!
+  deleteTracking(id: ID!): TrackingMutationResponse!
+  updateProject(id: ID!, input: ProjectInput!): ProjectMutationResponse!
+  updateTracking(id: ID!, input: TrackingInput!): TrackingMutationResponse!
+}
+
+type Page {
+  content: String!
+  layout: String!
+  slug: String!
+  title: String!
+}
+
+type Project {
+  client: String!
+  contact: [Contact!]!
+  description: String!
+  endDate: AWSDate
+  id: ID!
+  industry: String!
+  methodologies: [String!]!
+  startDate: AWSDate!
+  technologies: [String!]!
+  trackings: TrackingConnection!
+}
+
+type ProjectConnection {
+  cursor: String
+  items: [Project!]!
+  totalCount: Int!
+}
+
+type ProjectMutationResponse {
+  code: String!
+  message: String!
+  project: Project!
+  success: Boolean!
+}
+
+type Query {
+  getPage(slug: String!): Page
+  getProject(id: ID!): Project!
+  getProjects: ProjectConnection!
+  getTrackings(date: String, projectId: String!): TrackingConnection!
+}
+
+type Tracking {
+  description: String
+  endTime: AWSDateTime!
+  id: ID!
+  startTime: AWSDateTime!
+}
+
+type TrackingConnection {
+  cursor: String
+  items: [Tracking!]!
+  totalCount: Int!
+}
+
+type TrackingMutationResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+  tracking: Tracking!
+}
+
+input ProjectInput {
+  client: String!
+  description: String!
+  endDate: AWSDate
+  industry: String!
+  methodologies: [String!]!
+  startDate: AWSDate!
+  technologies: [String!]!
+}
+
+input TrackingInput {
+  description: String
+  endTime: AWSDateTime!
+  projectId: String!
+  startTime: AWSDateTime!
+}

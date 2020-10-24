@@ -1,4 +1,4 @@
-schema: cdk/constructs/Api/schema.graphql
+schema: src/graphql/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
   ./src/graphql/hooks.tsx:

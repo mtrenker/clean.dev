@@ -11,7 +11,7 @@ export const ProjectOverview: FC = () => {
   return (
     <div>
       <Link to="/projects/new">Create Project</Link>
-      {data?.getProjects.edges.map(({ id, client }) => (
+      {data?.getProjects.items.map(({ id, client }) => (
         <Table>
           <Row>
             <Cell><Link to={`/projects/${id}`}>{client}</Link></Cell>
