@@ -18,9 +18,12 @@ export type Scalars = {
 
 export type Contact = {
   __typename?: 'Contact';
+  city: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  street: Scalars['String'];
+  zip: Scalars['String'];
 };
 
 export type Mutation = {
@@ -76,7 +79,7 @@ export type Page = {
 export type Project = {
   __typename?: 'Project';
   client: Scalars['String'];
-  contact: Array<Contact>;
+  contact: Contact;
   description: Scalars['String'];
   endDate?: Maybe<Scalars['AWSDate']>;
   id: Scalars['ID'];
@@ -149,8 +152,18 @@ export type TrackingMutationResponse = {
   tracking: Tracking;
 };
 
+export type ContactInput = {
+  city: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  street: Scalars['String'];
+  zip: Scalars['String'];
+};
+
 export type ProjectInput = {
   client: Scalars['String'];
+  contact: ContactInput;
   description: Scalars['String'];
   endDate?: Maybe<Scalars['AWSDate']>;
   industry: Scalars['String'];
@@ -169,6 +182,10 @@ export type TrackingInput = {
 export type ProjectPartsFragment = (
   { __typename?: 'Project' }
   & Pick<Project, 'id' | 'client' | 'industry' | 'description' | 'startDate' | 'endDate' | 'methodologies' | 'technologies'>
+  & { contact: (
+    { __typename?: 'Contact' }
+    & Pick<Contact, 'firstName' | 'lastName' | 'email' | 'street' | 'city' | 'zip'>
+  ) }
 );
 
 export type TrackingPartsFragment = (
@@ -362,6 +379,14 @@ export const ProjectPartsFragmentDoc = gql`
   endDate
   methodologies
   technologies
+  contact {
+    firstName
+    lastName
+    email
+    street
+    city
+    zip
+  }
 }
     `;
 export const TrackingPartsFragmentDoc = gql`

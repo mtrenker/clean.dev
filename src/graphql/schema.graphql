@@ -1,15 +1,17 @@
 scalar AWSDate
 scalar AWSDateTime
-
 schema {
   query: Query
   mutation: Mutation
 }
 
 type Contact {
+  city: String!
   email: String!
   firstName: String!
   lastName: String!
+  street: String!
+  zip: String!
 }
 
 type Mutation {
@@ -30,7 +32,7 @@ type Page {
 
 type Project {
   client: String!
-  contact: [Contact!]!
+  contact: Contact!
   description: String!
   endDate: AWSDate
   id: ID!
@@ -81,8 +83,18 @@ type TrackingMutationResponse {
   tracking: Tracking!
 }
 
+input ContactInput {
+  city: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  street: String!
+  zip: String!
+}
+
 input ProjectInput {
   client: String!
+  contact: ContactInput!
   description: String!
   endDate: AWSDate
   industry: String!

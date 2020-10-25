@@ -46,6 +46,14 @@ interface CreateProjectEvent extends AppsyncResolverEvent {
       methodologies: string[];
       startDate: string;
       endDate: string;
+      contact: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        street: string;
+        city: string;
+        zip: string;
+      }
     }
   }
   info: {
@@ -64,6 +72,14 @@ interface UpdateProjectEvent extends AppsyncResolverEvent {
       methodologies: string[];
       startDate: string;
       endDate: string;
+      contact: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        street: string;
+        city: string;
+        zip: string;
+      }
     }
   }
   info: {
@@ -167,7 +183,7 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
   const {
     arguments: {
       input: {
-        client, description, endDate, industry, methodologies, startDate, technologies,
+        client, description, endDate, industry, methodologies, startDate, technologies, contact,
       },
     }, identity,
   } = event;
@@ -186,6 +202,7 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
     methodologies,
     startDate,
     endDate,
+    contact,
   };
 
   const userProject = {
@@ -220,7 +237,7 @@ const updateProject = async (event: UpdateProjectEvent): Promise<MutationRespons
     arguments: {
       id,
       input: {
-        client, description, endDate, industry, methodologies, startDate, technologies,
+        client, description, endDate, industry, methodologies, startDate, technologies, contact,
       },
     }, identity,
   } = event;
@@ -238,6 +255,7 @@ const updateProject = async (event: UpdateProjectEvent): Promise<MutationRespons
     methodologies,
     startDate,
     endDate,
+    contact,
   };
 
   const userProject = {

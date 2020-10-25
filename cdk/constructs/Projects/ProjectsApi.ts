@@ -1,7 +1,13 @@
 import { Construct } from '@aws-cdk/core';
 import {
   DynamoDbDataSource,
-  GraphqlApi, GraphqlType, InputType, MappingTemplate, ObjectType, ResolvableField,
+  GraphqlApi,
+  GraphqlType,
+  InputType,
+  MappingTemplate,
+  ObjectType,
+  ObjectTypeOptions,
+  ResolvableField,
 } from '@aws-cdk/aws-appsync';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { ITable } from '@aws-cdk/aws-dynamodb';
@@ -13,10 +19,15 @@ interface ProjectProps {
 }
 
 export class ProjectsApi extends Construct {
+  private readonly fields = new Map<string, ObjectType>();
+
+  private readonly api: GraphqlApi
+
   constructor(scope: Construct, id: string, props: ProjectProps) {
     super(scope, id);
 
     const { api, table, querySource } = props;
+    this.api = api;
 
     const connectionResult = `
       {
@@ -39,7 +50,7 @@ export class ProjectsApi extends Construct {
     const isList = true;
     const isRequiredList = true;
 
-    const trackingType = new ObjectType('Tracking', {
+    const trackingType = this.addType('Tracking', {
       definition: {
         id: GraphqlType.id({ isRequired }),
         startTime: GraphqlType.awsDateTime({ isRequired }),
@@ -47,18 +58,31 @@ export class ProjectsApi extends Construct {
         description: GraphqlType.string(),
       },
     });
-    api.addType(trackingType);
 
     const trackingConnection = ProjectsApi.createConnection(trackingType, api);
 
-    const contactType = new ObjectType('Contact', {
+    const contactType = this.addType('Contact', {
       definition: {
         firstName: GraphqlType.string({ isRequired }),
         lastName: GraphqlType.string({ isRequired }),
         email: GraphqlType.string({ isRequired }),
+        street: GraphqlType.string({ isRequired }),
+        city: GraphqlType.string({ isRequired }),
+        zip: GraphqlType.string({ isRequired }),
       },
     });
-    api.addType(contactType);
+
+    const contactInput = new InputType('ContactInput', {
+      definition: {
+        firstName: GraphqlType.string({ isRequired }),
+        lastName: GraphqlType.string({ isRequired }),
+        email: GraphqlType.string({ isRequired }),
+        street: GraphqlType.string({ isRequired }),
+        city: GraphqlType.string({ isRequired }),
+        zip: GraphqlType.string({ isRequired }),
+      },
+    });
+    api.addType(contactInput);
 
     const resolvableTrackingConnection = new ResolvableField({
       returnType: trackingConnection.attribute({ isRequired }),
@@ -79,7 +103,7 @@ export class ProjectsApi extends Construct {
       responseMappingTemplate: MappingTemplate.fromString(connectionResult),
     });
 
-    const projectType = new ObjectType('Project', {
+    const projectType = this.addType('Project', {
       definition: {
         id: GraphqlType.id({ isRequired }),
         client: GraphqlType.string({ isRequired }),
@@ -90,10 +114,9 @@ export class ProjectsApi extends Construct {
         methodologies: GraphqlType.string({ isRequired, isList, isRequiredList }),
         technologies: GraphqlType.string({ isRequired, isList, isRequiredList }),
         trackings: resolvableTrackingConnection,
-        contact: contactType.attribute({ isRequired, isList, isRequiredList }),
+        contact: contactType.attribute({ isRequired }),
       },
     });
-    api.addType(projectType);
 
     const projectConnection = ProjectsApi.createConnection(projectType, api);
 
@@ -179,6 +202,7 @@ export class ProjectsApi extends Construct {
           isRequired,
           isRequiredList,
         }),
+        contact: contactInput.attribute({ isRequired }),
       },
     });
     api.addType(projectInputType);
@@ -259,6 +283,13 @@ export class ProjectsApi extends Construct {
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
     }));
+  }
+
+  addType(typeName: string, options: ObjectTypeOptions): ObjectType {
+    const type = new ObjectType(typeName, options);
+    this.fields.set(typeName, type);
+    this.api.addType(type);
+    return type;
   }
 
   static createMutationResponse(type: ObjectType, api: GraphqlApi): ObjectType {

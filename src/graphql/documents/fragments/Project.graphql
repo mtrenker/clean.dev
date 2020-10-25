@@ -7,4 +7,12 @@ fragment ProjectParts on Project {
   endDate
   methodologies
   technologies
+  contact {
+    firstName
+    lastName
+    email
+    street
+    city
+    zip
+  }
 }

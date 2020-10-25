@@ -19,6 +19,12 @@ interface FormInput {
   endDate?: string;
   methodologies: string;
   technologies: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  street: string;
+  city: string;
+  zip: string;
 }
 
 interface RenderProps {
@@ -28,6 +34,9 @@ interface RenderProps {
 }
 
 const formCss = css`
+  label span {
+    display: none;
+  }
   .company-info {
     display: grid;
     grid-template:
@@ -35,9 +44,6 @@ const formCss = css`
       "description description description description" auto
       "methodologies methodologies technologies technologies" auto
     ;
-    label span {
-      display: none;
-    }
 
     .client {
       grid-area: client;
@@ -86,6 +92,12 @@ export const ProjectForm: FC = () => {
         setValue('endDate', getProject.endDate ?? new Date().toISOString());
         setValue('methodologies', getProject.methodologies.join(', '));
         setValue('technologies', getProject.technologies.join(', '));
+        setValue('firstName', getProject.contact.firstName);
+        setValue('lastName', getProject.contact.lastName);
+        setValue('email', getProject.contact.email);
+        setValue('street', getProject.contact.street);
+        setValue('city', getProject.contact.city);
+        setValue('zip', getProject.contact.zip);
       }
     },
   });
@@ -100,7 +112,19 @@ export const ProjectForm: FC = () => {
   );
 
   const onSubmit = ({
-    client, description, industry, technologies, methodologies, startDate, endDate,
+    client,
+    description,
+    industry,
+    technologies,
+    methodologies,
+    startDate,
+    endDate,
+    firstName,
+    lastName,
+    email,
+    street,
+    city,
+    zip,
   }: FormInput) => {
     if (projectId === 'new') {
       createProject({
@@ -113,6 +137,14 @@ export const ProjectForm: FC = () => {
             methodologies: methodologies.split(', '),
             startDate,
             endDate,
+            contact: {
+              email,
+              firstName,
+              lastName,
+              street,
+              city,
+              zip,
+            },
           },
         },
       });
@@ -128,6 +160,14 @@ export const ProjectForm: FC = () => {
             methodologies: methodologies.split(', '),
             startDate,
             endDate,
+            contact: {
+              email,
+              firstName,
+              lastName,
+              street,
+              city,
+              zip,
+            },
           },
         },
       });
@@ -201,6 +241,18 @@ export const ProjectForm: FC = () => {
         <label className="email" htmlFor="email">
           <span>E-Mail</span>
           <Input name="email" placeholder="E-Mail" id="email" register={register} />
+        </label>
+        <label className="street" htmlFor="street">
+          <span>Street</span>
+          <Input name="street" placeholder="Street" id="street" register={register} />
+        </label>
+        <label className="city" htmlFor="city">
+          <span>City</span>
+          <Input name="city" placeholder="City" id="city" register={register} />
+        </label>
+        <label className="zip" htmlFor="zip">
+          <span>Zip Code</span>
+          <Input name="zip" placeholder="Zip Code" id="zip" register={register} />
         </label>
       </fieldset>
       <button type="submit">Submit</button>

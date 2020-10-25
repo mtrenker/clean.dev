@@ -26,11 +26,6 @@ const sender = {
   city: 'Musterhausen',
 };
 
-const customer = {
-  name: 'Max Mustermann',
-  city: 'Musterhausen',
-};
-
 const reduceTrackings = (subtotal: number, tracking: TrackingWithHours) => subtotal + tracking.hours;
 const reduceDays = (total: number, day: Day) => total + day.trackings.reduce(reduceTrackings, 0);
 
@@ -219,13 +214,11 @@ export const TimeSheet: FC = () => {
           </address>
         </div>
         <div>
-          Kunde:
-          {' '}
-          {project.client}
+          {`Kunde: ${project.client}, ${project.contact.street}, ${project.contact.zip} ${project.contact.city} `}
           <br />
           {`Monat: ${format(month, 'MM.u')}`}
           <br />
-          {`Ort: ${sender.city}`}
+          {`Ort: ${project.contact.city}`}
         </div>
         <table css={tableStyle}>
           <thead>
@@ -297,10 +290,10 @@ export const TimeSheet: FC = () => {
           </div>
           <br />
           <div className="date">
-            {`${customer.city}, den`}
+            {`${project.contact.city}, den`}
           </div>
           <div className="signature">
-            {`${customer.name} (Auftraggeber)`}
+            {`${project.contact.firstName} ${project.contact.lastName} (Auftraggeber)`}
           </div>
         </div>
         <div css={disclaimerStyle}>
