@@ -14,6 +14,29 @@ type Contact {
   zip: String!
 }
 
+type File {
+  contentType: String!
+  details: FileDetails!
+  fileName: String!
+  url: String!
+}
+
+type FileDetails {
+  image: ImageDetails
+  size: String!
+}
+
+type HeroImage {
+  description: String!
+  file: File!
+  title: String!
+}
+
+type ImageDetails {
+  height: Int!
+  width: Int!
+}
+
 type Mutation {
   createProject(input: ProjectInput!): ProjectMutationResponse!
   createTracking(input: TrackingInput!): TrackingMutationResponse!
@@ -26,6 +49,15 @@ type Mutation {
 type Page {
   content: String!
   layout: String!
+  slug: String!
+  title: String!
+}
+
+type Post {
+  content: String!
+  heroImage: HeroImage
+  intro: String!
+  publishDate: AWSDateTime!
   slug: String!
   title: String!
 }
@@ -58,6 +90,7 @@ type ProjectMutationResponse {
 
 type Query {
   getPage(slug: String!): Page
+  getPost(slug: String!): Post
   getProject(id: ID!): Project!
   getProjects: ProjectConnection!
   getTrackings(date: String, projectId: String!): TrackingConnection!

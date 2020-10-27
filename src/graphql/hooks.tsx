@@ -26,6 +26,33 @@ export type Contact = {
   zip: Scalars['String'];
 };
 
+export type File = {
+  __typename?: 'File';
+  contentType: Scalars['String'];
+  details: FileDetails;
+  fileName: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type FileDetails = {
+  __typename?: 'FileDetails';
+  image?: Maybe<ImageDetails>;
+  size: Scalars['String'];
+};
+
+export type HeroImage = {
+  __typename?: 'HeroImage';
+  description: Scalars['String'];
+  file: File;
+  title: Scalars['String'];
+};
+
+export type ImageDetails = {
+  __typename?: 'ImageDetails';
+  height: Scalars['Int'];
+  width: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createProject: ProjectMutationResponse;
@@ -76,6 +103,16 @@ export type Page = {
   title: Scalars['String'];
 };
 
+export type Post = {
+  __typename?: 'Post';
+  content: Scalars['String'];
+  heroImage?: Maybe<HeroImage>;
+  intro: Scalars['String'];
+  publishDate: Scalars['AWSDateTime'];
+  slug: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type Project = {
   __typename?: 'Project';
   client: Scalars['String'];
@@ -108,6 +145,7 @@ export type ProjectMutationResponse = {
 export type Query = {
   __typename?: 'Query';
   getPage?: Maybe<Page>;
+  getPost?: Maybe<Post>;
   getProject: Project;
   getProjects: ProjectConnection;
   getTrackings: TrackingConnection;
@@ -115,6 +153,11 @@ export type Query = {
 
 
 export type QueryGetPageArgs = {
+  slug: Scalars['String'];
+};
+
+
+export type QueryGetPostArgs = {
   slug: Scalars['String'];
 };
 
@@ -299,6 +342,35 @@ export type GetPageQuery = (
   & { getPage?: Maybe<(
     { __typename?: 'Page' }
     & Pick<Page, 'slug' | 'title' | 'content' | 'layout'>
+  )> }
+);
+
+export type GetPostQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetPostQuery = (
+  { __typename?: 'Query' }
+  & { getPost?: Maybe<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'content' | 'intro' | 'publishDate' | 'slug' | 'title'>
+    & { heroImage?: Maybe<(
+      { __typename?: 'HeroImage' }
+      & Pick<HeroImage, 'title' | 'description'>
+      & { file: (
+        { __typename?: 'File' }
+        & Pick<File, 'url'>
+        & { details: (
+          { __typename?: 'FileDetails' }
+          & Pick<FileDetails, 'size'>
+          & { image?: Maybe<(
+            { __typename?: 'ImageDetails' }
+            & Pick<ImageDetails, 'height' | 'width'>
+          )> }
+        ) }
+      ) }
+    )> }
   )> }
 );
 
@@ -651,6 +723,57 @@ export function useGetPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetPageQueryHookResult = ReturnType<typeof useGetPageQuery>;
 export type GetPageLazyQueryHookResult = ReturnType<typeof useGetPageLazyQuery>;
 export type GetPageQueryResult = Apollo.QueryResult<GetPageQuery, GetPageQueryVariables>;
+export const GetPostDocument = gql`
+    query getPost($slug: String!) {
+  getPost(slug: $slug) {
+    content
+    intro
+    publishDate
+    slug
+    title
+    heroImage {
+      title
+      description
+      file {
+        url
+        details {
+          size
+          image {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPostQuery__
+ *
+ * To run a query within a React component, call `useGetPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetPostQuery(baseOptions?: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+      }
+export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+        }
+export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
+export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
+export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
 export const GetProjectsDocument = gql`
     query getProjects {
   getProjects {

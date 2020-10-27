@@ -1,8 +1,0 @@
-query getPage($slug: String!) {
-  getPage(slug: $slug) {
-    slug
-    title
-    content
-    layout
-  }
-}

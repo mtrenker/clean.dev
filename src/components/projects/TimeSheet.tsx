@@ -21,7 +21,7 @@ interface Day {
 
 const sender = {
   name: 'Max Musterman',
-  address: 'Musterstr. 123',
+  address: 'Musterstr 123',
   zip: 12345,
   city: 'Musterhausen',
 };

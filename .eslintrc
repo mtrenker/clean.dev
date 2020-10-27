@@ -52,6 +52,7 @@
     "jsx-a11y/label-has-associated-control": [2, {
       "controlComponents": ["DatePicker"]
     }],
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "default-case": "off"
   }
 }

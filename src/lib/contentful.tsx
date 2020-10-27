@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 import React from 'react';
-import { Asset, Entry } from 'contentful';
+import { Entry } from 'contentful';
 import { BLOCKS, Block, Inline } from '@contentful/rich-text-types';
 import { RenderNode } from '@contentful/rich-text-react-renderer';
 
@@ -15,12 +15,6 @@ enum BLUEPRINTS {
   TIME_TRACKING = 'time-tracking',
   BLOG = 'blog',
   CHANGE_PASSWORD = 'change-password',
-}
-
-interface AssetBlock extends Block {
-  data: {
-    asset: Asset
-  }
 }
 
 interface Blueprint {
@@ -43,7 +37,7 @@ const renderBlueprint = (entry: Entry<Blueprint>): JSX.Element => {
 };
 
 const renderAsset = (assetBlock: Block | Inline) => {
-  const { data: { asset: { fields: { title, file } } } } = assetBlock as AssetBlock;
+  const { file, title } = assetBlock.data.target.fields;
 
   return <img src={file.url} alt={title} />;
 };

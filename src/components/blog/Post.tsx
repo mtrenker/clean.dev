@@ -4,7 +4,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 import { HeroImage } from '../layout/HeroImage';
 
-import { useGetBlogPostQuery } from '../../graphql/hooks';
+import { useGetPostQuery } from '../../graphql/hooks';
 
 import { mapWidgets } from '../../lib/contentful';
 import { css } from '../../lib/style';
@@ -17,9 +17,12 @@ const postCss = (theme: Theme) => css`
 export const Post: FC = () => {
   const { slug } = useParams<{slug: string}>();
 
-  const { data } = useGetBlogPostQuery({ variables: { blogPostQuery: { post: slug } } });
-  if (!data) return <p>Loading</p>;
-  const { title, content, heroImage } = data?.blog?.post;
+  const { data } = useGetPostQuery({ variables: { slug } });
+  if (!data?.getPost) return <p>Loading</p>;
+
+  const {
+    content, title, heroImage,
+  } = data.getPost;
 
   const post = documentToReactComponents(JSON.parse(content), {
     renderNode: mapWidgets(),
@@ -27,7 +30,7 @@ export const Post: FC = () => {
 
   return (
     <>
-      <HeroImage url={heroImage?.url} />
+      <HeroImage url={heroImage?.file.url} />
       <article css={postCss}>
         <h2>{title}</h2>
         {post}
