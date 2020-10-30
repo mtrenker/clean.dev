@@ -42,6 +42,9 @@ export class Graphql extends Construct {
             defaultAction: UserPoolDefaultAction.ALLOW,
           },
         },
+        additionalAuthorizationModes: [{
+          authorizationType: AuthorizationType.API_KEY,
+        }],
       },
     });
 
