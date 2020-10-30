@@ -3,10 +3,10 @@ import {
 } from '@aws-cdk/aws-appsync';
 import { Construct } from '@aws-cdk/core';
 
-interface BlogApiProps {
-  api: GraphqlApi
-  querySource: DynamoDbDataSource
-}
+    interface BlogApiProps {
+      api: GraphqlApi
+      querySource: DynamoDbDataSource
+    }
 
 export class BlogApi extends Construct {
   constructor(scope: Construct, id: string, props: BlogApiProps) {
@@ -53,23 +53,32 @@ export class BlogApi extends Construct {
     });
     api.addType(fileType);
 
-    const heroImageType = new ObjectType('HeroImage', {
+    const imageType = new ObjectType('Image', {
       definition: {
         title: GraphqlType.string({ isRequired: true }),
-        description: GraphqlType.string({ isRequired: true }),
+        description: GraphqlType.string(),
         file: fileType.attribute({ isRequired: true }),
       },
     });
-    api.addType(heroImageType);
+    api.addType(imageType);
+
+    const authorType = new ObjectType('Author', {
+      definition: {
+        name: GraphqlType.string({ isRequired: true }),
+        avatar: imageType.attribute(),
+      },
+    });
+    api.addType(authorType);
 
     const postType = new ObjectType('Post', {
       definition: {
         title: GraphqlType.string({ isRequired: true }),
         slug: GraphqlType.string({ isRequired: true }),
         publishDate: GraphqlType.awsDateTime({ isRequired: true }),
-        content: GraphqlType.string({ isRequired: true }),
-        intro: GraphqlType.string({ isRequired: true }),
-        heroImage: heroImageType.attribute(),
+        content: GraphqlType.string(),
+        intro: GraphqlType.string(),
+        heroImage: imageType.attribute(),
+        author: authorType.attribute({ isRequired: true }),
       },
     });
     api.addType(postType);
@@ -81,21 +90,21 @@ export class BlogApi extends Construct {
       },
       dataSource: querySource,
       requestMappingTemplate: MappingTemplate.fromString(`
-        {
-          "version" : "2018-05-29",
-          "operation" : "Query",
-          "index": "GSI1",
-          "query":{
-            "expression": "sk = :slug AND #data = :slug",
-            "expressionNames": {
-              "#data": "data"
-            },
-            "expressionValues": {
-              ":slug": $util.dynamodb.toDynamoDBJson("$ctx.args.slug")
+            {
+              "version" : "2018-05-29",
+              "operation" : "Query",
+              "index": "GSI1",
+              "query":{
+                "expression": "sk = :slug AND #data = :slug",
+                "expressionNames": {
+                  "#data": "data"
+                },
+                "expressionValues": {
+                  ":slug": $util.dynamodb.toDynamoDBJson("$ctx.args.slug")
+                }
+              },
             }
-          },
-        }
-      `),
+          `),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.items[0])'),
     }));
 
@@ -106,22 +115,45 @@ export class BlogApi extends Construct {
       },
       dataSource: querySource,
       requestMappingTemplate: MappingTemplate.fromString(`
-        {
-          "version" : "2018-05-29",
-          "operation" : "Query",
-          "index": "GSI1",
-          "query":{
-            "expression": "sk = :slug AND #data = :slug",
-            "expressionNames": {
-              "#data": "data"
-            },
-            "expressionValues": {
-              ":slug": $util.dynamodb.toDynamoDBJson("$ctx.args.slug")
+            {
+              "version" : "2018-05-29",
+              "operation" : "Query",
+              "index": "GSI1",
+              "query":{
+                "expression": "sk = :slug AND #data = :slug",
+                "expressionNames": {
+                  "#data": "data"
+                },
+                "expressionValues": {
+                  ":slug": $util.dynamodb.toDynamoDBJson("$ctx.args.slug")
+                }
+              },
             }
-          },
-        }
-      `),
+          `),
       responseMappingTemplate: MappingTemplate.fromString('$util.toJson($ctx.result.items[0])'),
+    }));
+
+    const blogOverviewType = new ObjectType('Blog', {
+      definition: {
+        posts: postType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
+      },
+    });
+    api.addType(blogOverviewType);
+
+    api.addQuery('getBlog', new ResolvableField({
+      returnType: blogOverviewType.attribute({ isRequired: true }),
+      dataSource: querySource,
+      requestMappingTemplate: MappingTemplate.fromString(`
+      {
+        "version" : "2018-05-29",
+        "operation" : "GetItem",
+        "key" : {
+          "pk" : $util.dynamodb.toDynamoDBJson("blog"),
+          "sk" : $util.dynamodb.toDynamoDBJson("blog-overview")
+        }
+      }
+    `),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     }));
   }
 }

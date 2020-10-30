@@ -1,0 +1,14 @@
+fragment ImageParts on Image {
+  title
+  description
+  file {
+    url
+    details {
+      size
+      image {
+        height
+        width
+      }
+    }
+  }
+}

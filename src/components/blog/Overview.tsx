@@ -7,7 +7,7 @@ import de from 'date-fns/locale/de';
 import { Card } from '../layout/Card';
 import { HeroImage } from '../layout/HeroImage';
 
-import { } from '../../graphql/hooks';
+import { useGetBlogQuery } from '../../graphql/hooks';
 import { css, useTheme } from '../../lib/style';
 
 import { mapWidgets } from '../../lib/contentful';
@@ -108,29 +108,29 @@ const cardCss = css`
 `;
 
 export const Overview: FC = () => {
-  const { data } = useGetBlogListQuery();
+  const { data } = useGetBlogQuery();
   const theme = useTheme();
   if (!data) return <p>Loading</p>;
   return (
     <section css={overviewCss(theme)}>
       <main>
-        {data.blog.list.items.map((post) => {
-          const intro = documentToReactComponents(JSON.parse(post.intro), {
+        {data.getBlog.posts.map((post) => {
+          const intro = documentToReactComponents(JSON.parse(post.intro ?? ''), {
             renderNode: mapWidgets(),
           });
           const publishDate = new Date(post.publishDate);
           const publishedDistance = formatDistanceToNow(publishDate, { locale: de, addSuffix: true });
           return (
-            <Card key={post.id} css={cardCss}>
+            <Card key={post.slug} css={cardCss}>
               <header>
                 <Link to={`/blog/${post.slug}`}>
                   <h3>{post.title}</h3>
-                  <HeroImage url={post.heroImage?.url} />
+                  <HeroImage url={post.heroImage?.file.url} />
                 </Link>
               </header>
               <aside>
                 <figure>
-                  <img src={`${post.author.avatar?.url}?w=50`} alt={post.author.name} width="50" height="50" />
+                  <img src={`${post.author.avatar?.file.url}?w=50`} alt={post.author.name} width="50" height="50" />
                   <figcaption>{`Von ${post.author.name}`}</figcaption>
                 </figure>
                 <time dateTime={formatISO(publishDate)} className="publish-date">{publishedDistance}</time>

@@ -5,6 +5,15 @@ schema {
   mutation: Mutation
 }
 
+type Author {
+  avatar: Image
+  name: String!
+}
+
+type Blog {
+  posts: [Post!]!
+}
+
 type Contact {
   city: String!
   email: String!
@@ -26,7 +35,7 @@ type FileDetails {
   size: String!
 }
 
-type HeroImage {
+type Image {
   description: String!
   file: File!
   title: String!
@@ -54,9 +63,10 @@ type Page {
 }
 
 type Post {
-  content: String!
-  heroImage: HeroImage
-  intro: String!
+  author: Author!
+  content: String
+  heroImage: Image
+  intro: String
   publishDate: AWSDateTime!
   slug: String!
   title: String!
@@ -89,6 +99,7 @@ type ProjectMutationResponse {
 }
 
 type Query {
+  getBlog: Blog!
   getPage(slug: String!): Page
   getPost(slug: String!): Post
   getProject(id: ID!): Project!

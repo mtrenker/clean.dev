@@ -15,16 +15,25 @@ query getPost($slug: String!) {
     slug
     title
     heroImage {
+      ...ImageParts
+    }
+  }
+}
+
+query getBlog {
+  getBlog {
+    posts {
       title
-      description
-      file {
-        url
-        details {
-          size
-          image {
-            height
-            width
-          }
+      slug
+      publishDate
+      intro
+      heroImage {
+        ...ImageParts
+      }
+      author {
+        name
+        avatar {
+          ...ImageParts
         }
       }
     }

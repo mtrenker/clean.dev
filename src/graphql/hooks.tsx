@@ -16,6 +16,17 @@ export type Scalars = {
 
 
 
+export type Author = {
+  __typename?: 'Author';
+  avatar?: Maybe<Image>;
+  name: Scalars['String'];
+};
+
+export type Blog = {
+  __typename?: 'Blog';
+  posts: Array<Post>;
+};
+
 export type Contact = {
   __typename?: 'Contact';
   city: Scalars['String'];
@@ -40,8 +51,8 @@ export type FileDetails = {
   size: Scalars['String'];
 };
 
-export type HeroImage = {
-  __typename?: 'HeroImage';
+export type Image = {
+  __typename?: 'Image';
   description: Scalars['String'];
   file: File;
   title: Scalars['String'];
@@ -105,9 +116,10 @@ export type Page = {
 
 export type Post = {
   __typename?: 'Post';
-  content: Scalars['String'];
-  heroImage?: Maybe<HeroImage>;
-  intro: Scalars['String'];
+  author: Author;
+  content?: Maybe<Scalars['String']>;
+  heroImage?: Maybe<Image>;
+  intro?: Maybe<Scalars['String']>;
   publishDate: Scalars['AWSDateTime'];
   slug: Scalars['String'];
   title: Scalars['String'];
@@ -144,6 +156,7 @@ export type ProjectMutationResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  getBlog: Blog;
   getPage?: Maybe<Page>;
   getPost?: Maybe<Post>;
   getProject: Project;
@@ -221,6 +234,23 @@ export type TrackingInput = {
   projectId: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
 };
+
+export type ImagePartsFragment = (
+  { __typename?: 'Image' }
+  & Pick<Image, 'title' | 'description'>
+  & { file: (
+    { __typename?: 'File' }
+    & Pick<File, 'url'>
+    & { details: (
+      { __typename?: 'FileDetails' }
+      & Pick<FileDetails, 'size'>
+      & { image?: Maybe<(
+        { __typename?: 'ImageDetails' }
+        & Pick<ImageDetails, 'height' | 'width'>
+      )> }
+    ) }
+  ) }
+);
 
 export type ProjectPartsFragment = (
   { __typename?: 'Project' }
@@ -356,22 +386,35 @@ export type GetPostQuery = (
     { __typename?: 'Post' }
     & Pick<Post, 'content' | 'intro' | 'publishDate' | 'slug' | 'title'>
     & { heroImage?: Maybe<(
-      { __typename?: 'HeroImage' }
-      & Pick<HeroImage, 'title' | 'description'>
-      & { file: (
-        { __typename?: 'File' }
-        & Pick<File, 'url'>
-        & { details: (
-          { __typename?: 'FileDetails' }
-          & Pick<FileDetails, 'size'>
-          & { image?: Maybe<(
-            { __typename?: 'ImageDetails' }
-            & Pick<ImageDetails, 'height' | 'width'>
-          )> }
-        ) }
-      ) }
+      { __typename?: 'Image' }
+      & ImagePartsFragment
     )> }
   )> }
+);
+
+export type GetBlogQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBlogQuery = (
+  { __typename?: 'Query' }
+  & { getBlog: (
+    { __typename?: 'Blog' }
+    & { posts: Array<(
+      { __typename?: 'Post' }
+      & Pick<Post, 'title' | 'slug' | 'publishDate' | 'intro'>
+      & { heroImage?: Maybe<(
+        { __typename?: 'Image' }
+        & ImagePartsFragment
+      )>, author: (
+        { __typename?: 'Author' }
+        & Pick<Author, 'name'>
+        & { avatar?: Maybe<(
+          { __typename?: 'Image' }
+          & ImagePartsFragment
+        )> }
+      ) }
+    )> }
+  ) }
 );
 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -441,6 +484,22 @@ export type GetTrackingsQuery = (
   ) }
 );
 
+export const ImagePartsFragmentDoc = gql`
+    fragment ImageParts on Image {
+  title
+  description
+  file {
+    url
+    details {
+      size
+      image {
+        height
+        width
+      }
+    }
+  }
+}
+    `;
 export const ProjectPartsFragmentDoc = gql`
     fragment ProjectParts on Project {
   id
@@ -732,22 +791,11 @@ export const GetPostDocument = gql`
     slug
     title
     heroImage {
-      title
-      description
-      file {
-        url
-        details {
-          size
-          image {
-            height
-            width
-          }
-        }
-      }
+      ...ImageParts
     }
   }
 }
-    `;
+    ${ImagePartsFragmentDoc}`;
 
 /**
  * __useGetPostQuery__
@@ -774,6 +822,52 @@ export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
 export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const GetBlogDocument = gql`
+    query getBlog {
+  getBlog {
+    posts {
+      title
+      slug
+      publishDate
+      intro
+      heroImage {
+        ...ImageParts
+      }
+      author {
+        name
+        avatar {
+          ...ImageParts
+        }
+      }
+    }
+  }
+}
+    ${ImagePartsFragmentDoc}`;
+
+/**
+ * __useGetBlogQuery__
+ *
+ * To run a query within a React component, call `useGetBlogQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlogQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBlogQuery(baseOptions?: Apollo.QueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
+        return Apollo.useQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, baseOptions);
+      }
+export function useGetBlogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
+          return Apollo.useLazyQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, baseOptions);
+        }
+export type GetBlogQueryHookResult = ReturnType<typeof useGetBlogQuery>;
+export type GetBlogLazyQueryHookResult = ReturnType<typeof useGetBlogLazyQuery>;
+export type GetBlogQueryResult = Apollo.QueryResult<GetBlogQuery, GetBlogQueryVariables>;
 export const GetProjectsDocument = gql`
     query getProjects {
   getProjects {
