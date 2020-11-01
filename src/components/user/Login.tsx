@@ -6,28 +6,56 @@ import { useHistory } from 'react-router-dom';
 
 import { signIn, signOut, getCleanUser } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
-import { LoadingSpinner } from '../LoadingSpinner';
+import { Icon } from '../typography/Icon';
 
-const inputCss = css`
-  border: 1px solid #CCC;
-  margin-left: 8px;
-  width: 10rem;
+const loggedInCss = css`
+  display: flex;
+  justify-content: center;
+  svg {
+    margin-left: 4px;
+    cursor: pointer;
+  }
 `;
 
-const buttonCss = css`
-  border: 1px solid #CCC;
+const loggedOutCss = css`
+  svg {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+  .login.closed {
+    display: none;
+  }
+  .login.open {
+    padding: 4px;
+    position: absolute;
+    background-color: #FFF;
+    border: 1px solid black;
+    display: grid;
+    grid-template:
+      "username" auto
+      "password" auto
+      "submit" auto
+      / 1fr;
+    gap: 4px;
+    input, button {
+      border: 1px solid #000;
+    }
+  }
 `;
 
 export const Login: FC = () => {
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [showLogin, setShowLogin] = useState<boolean>(false);
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const toggleLogin = () => {
+    setShowLogin(!showLogin);
+  };
+
   const login = async (): Promise<void> => {
-    setLoading(true);
     try {
       const authenticatedUser = await signIn(
         usernameRef.current?.value ?? '',
@@ -45,7 +73,6 @@ export const Login: FC = () => {
     } catch (error) {
       console.log(error);
     }
-    setLoading(false);
   };
 
   const logout = async (): Promise<void> => {
@@ -55,18 +82,20 @@ export const Login: FC = () => {
 
   if (user) {
     return (
-      <p>
-        <span>{`Hi, ${user.username}`}</span>
-        <button css={buttonCss} type="submit" onClick={logout}>Logout</button>
-      </p>
+      <span css={loggedInCss}>
+        {`Hi, ${user.username}`}
+        <Icon icon="sign-out" onClick={() => logout()} />
+      </span>
     );
   }
   return (
-    <div css={{ position: 'relative' }}>
-      { loading && <LoadingSpinner />}
-      <input disabled={loading} css={inputCss} type="text" ref={usernameRef} />
-      <input disabled={loading} css={inputCss} type="password" ref={passwordRef} />
-      <button disabled={loading} css={buttonCss} type="submit" onClick={login}>Login</button>
+    <div css={loggedOutCss}>
+      <Icon icon="sign-in" onClick={() => toggleLogin()} />
+      <div className={`login ${showLogin ? 'open' : 'closed'}`}>
+        <input type="text" ref={usernameRef} />
+        <input type="password" ref={passwordRef} />
+        <button type="submit" onClick={login}>Login</button>
+      </div>
     </div>
   );
 };

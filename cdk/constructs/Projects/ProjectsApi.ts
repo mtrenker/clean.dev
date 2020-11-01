@@ -11,6 +11,7 @@ import {
 } from '@aws-cdk/aws-appsync';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { ITable } from '@aws-cdk/aws-dynamodb';
+import { Graphql } from '../Api/Graphql';
 
 interface ProjectProps {
   querySource: DynamoDbDataSource
@@ -28,14 +29,6 @@ export class ProjectsApi extends Construct {
 
     const { api, table, querySource } = props;
     this.api = api;
-
-    const connectionResult = `
-      {
-        "totalCount": $util.toJson($ctx.result.scannedCount),
-        "items": $util.toJson($ctx.result.items),
-        "cursor": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
-      }
-    `;
 
     const mutationFunction = new NodejsFunction(this, 'mutations', {
       environment: {
@@ -59,7 +52,7 @@ export class ProjectsApi extends Construct {
       },
     });
 
-    const trackingConnection = ProjectsApi.createConnection(trackingType, api);
+    const trackingConnection = Graphql.createConnection(trackingType, api);
 
     const contactType = this.addType('Contact', {
       definition: {
@@ -100,7 +93,7 @@ export class ProjectsApi extends Construct {
         },
       }
     `),
-      responseMappingTemplate: MappingTemplate.fromString(connectionResult),
+      responseMappingTemplate: MappingTemplate.fromString(Graphql.connectionResult),
     });
 
     const projectType = this.addType('Project', {
@@ -118,7 +111,7 @@ export class ProjectsApi extends Construct {
       },
     });
 
-    const projectConnection = ProjectsApi.createConnection(projectType, api);
+    const projectConnection = Graphql.createConnection(projectType, api);
 
     api.addQuery('getProjects', new ResolvableField({
       returnType: projectConnection.attribute({ isRequired }),
@@ -136,7 +129,7 @@ export class ProjectsApi extends Construct {
           },
         }
       `),
-      responseMappingTemplate: MappingTemplate.fromString(connectionResult),
+      responseMappingTemplate: MappingTemplate.fromString(Graphql.connectionResult),
     }));
 
     api.addQuery('getProject', new ResolvableField({
@@ -180,7 +173,7 @@ export class ProjectsApi extends Construct {
           },
         }
       `),
-      responseMappingTemplate: MappingTemplate.fromString(connectionResult),
+      responseMappingTemplate: MappingTemplate.fromString(Graphql.connectionResult),
     }));
 
     // Project Mutations
@@ -207,7 +200,7 @@ export class ProjectsApi extends Construct {
     });
     api.addType(projectInputType);
 
-    const projectMutationResponse = ProjectsApi.createMutationResponse(projectType, api);
+    const projectMutationResponse = Graphql.createMutationResponse(projectType, api);
 
     api.addMutation('createProject', new ResolvableField({
       returnType: projectMutationResponse.attribute({ isRequired }),
@@ -251,7 +244,7 @@ export class ProjectsApi extends Construct {
     });
     api.addType(trackingInputType);
 
-    const trackingMutationResponse = ProjectsApi.createMutationResponse(trackingType, api);
+    const trackingMutationResponse = Graphql.createMutationResponse(trackingType, api);
 
     api.addMutation('createTracking', new ResolvableField({
       returnType: trackingMutationResponse.attribute({ isRequired }),
@@ -290,36 +283,5 @@ export class ProjectsApi extends Construct {
     this.fields.set(typeName, type);
     this.api.addType(type);
     return type;
-  }
-
-  static createMutationResponse(type: ObjectType, api: GraphqlApi): ObjectType {
-    const mutationResponseType = new ObjectType(`${type.name}MutationResponse`, {
-      definition: {
-        code: GraphqlType.string({ isRequired: true }),
-        success: GraphqlType.boolean({ isRequired: true }),
-        message: GraphqlType.string({ isRequired: true }),
-        [type.name.toLowerCase()]: type.attribute({ isRequired: true }),
-      },
-    });
-    api.addType(mutationResponseType);
-    return mutationResponseType;
-  }
-
-  static createConnection(type: ObjectType, api: GraphqlApi): ObjectType {
-    const connectionType = new ObjectType(`${type.name}Connection`, {
-      definition: {
-        items: type.attribute({
-          isList: true,
-          isRequired: true,
-          isRequiredList: true,
-        }),
-        totalCount: GraphqlType.int({
-          isRequired: true,
-        }),
-        cursor: GraphqlType.string(),
-      },
-    });
-    api.addType(connectionType);
-    return connectionType;
   }
 }

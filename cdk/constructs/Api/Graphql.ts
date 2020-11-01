@@ -5,7 +5,9 @@ import {
   DynamoDbDataSource,
   FieldLogLevel,
   GraphqlApi,
+  GraphqlType,
   LambdaDataSource,
+  ObjectType,
   UserPoolDefaultAction,
 } from '@aws-cdk/aws-appsync';
 import { ITable } from '@aws-cdk/aws-dynamodb';
@@ -22,6 +24,14 @@ export class Graphql extends Construct {
   public readonly querySource: DynamoDbDataSource;
 
   public readonly mutationSource: LambdaDataSource;
+
+  public static connectionResult = `
+    {
+      "totalCount": $util.toJson($ctx.result.scannedCount),
+      "items": $util.toJson($ctx.result.items),
+      "cursor": $util.toJson($util.defaultIfNullOrBlank($ctx.result.nextToken, null))
+    }
+  `;
 
   constructor(scope: Construct, id: string, props: GraphqlProps) {
     super(scope, id);
@@ -64,5 +74,36 @@ export class Graphql extends Construct {
         `${table.tableArn}/index/GSI1`,
       ],
     }));
+  }
+
+  static createMutationResponse(type: ObjectType, api: GraphqlApi): ObjectType {
+    const mutationResponseType = new ObjectType(`${type.name}MutationResponse`, {
+      definition: {
+        code: GraphqlType.string({ isRequired: true }),
+        success: GraphqlType.boolean({ isRequired: true }),
+        message: GraphqlType.string({ isRequired: true }),
+        [type.name.toLowerCase()]: type.attribute({ isRequired: true }),
+      },
+    });
+    api.addType(mutationResponseType);
+    return mutationResponseType;
+  }
+
+  static createConnection(type: ObjectType, api: GraphqlApi): ObjectType {
+    const connectionType = new ObjectType(`${type.name}Connection`, {
+      definition: {
+        items: type.attribute({
+          isList: true,
+          isRequired: true,
+          isRequiredList: true,
+        }),
+        totalCount: GraphqlType.int({
+          isRequired: true,
+        }),
+        cursor: GraphqlType.string(),
+      },
+    });
+    api.addType(connectionType);
+    return connectionType;
   }
 }

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
@@ -24,12 +25,15 @@ export const Post: FC = () => {
     content, title, heroImage,
   } = data.getPost;
 
-  const post = documentToReactComponents(JSON.parse(content), {
+  const post = documentToReactComponents(JSON.parse(content ?? ''), {
     renderNode: mapWidgets(),
   });
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <HeroImage url={heroImage?.file.url} />
       <article css={postCss}>
         <h2>{title}</h2>
