@@ -18,7 +18,7 @@ export class BlogApi extends Construct {
     const requiredString = GraphqlType.string({ isRequired: true });
 
     const pageType = new ObjectType('Page', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         title: requiredString,
         slug: requiredString,
@@ -30,7 +30,7 @@ export class BlogApi extends Construct {
     api.addType(pageType);
 
     const imageDetailsType = new ObjectType('ImageDetails', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         height: GraphqlType.int({ isRequired: true }),
         width: GraphqlType.int({ isRequired: true }),
@@ -39,7 +39,7 @@ export class BlogApi extends Construct {
     api.addType(imageDetailsType);
 
     const fileDetailsType = new ObjectType('FileDetails', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         size: GraphqlType.string({ isRequired: true }),
         image: imageDetailsType.attribute(),
@@ -48,7 +48,7 @@ export class BlogApi extends Construct {
     api.addType(fileDetailsType);
 
     const fileType = new ObjectType('File', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         contentType: GraphqlType.string({ isRequired: true }),
         url: GraphqlType.string({ isRequired: true }),
@@ -59,7 +59,7 @@ export class BlogApi extends Construct {
     api.addType(fileType);
 
     const imageType = new ObjectType('Image', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         title: GraphqlType.string({ isRequired: true }),
         description: GraphqlType.string(),
@@ -69,7 +69,7 @@ export class BlogApi extends Construct {
     api.addType(imageType);
 
     const authorType = new ObjectType('Author', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         name: GraphqlType.string({ isRequired: true }),
         avatar: imageType.attribute(),
@@ -78,7 +78,7 @@ export class BlogApi extends Construct {
     api.addType(authorType);
 
     const postType = new ObjectType('Post', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         title: GraphqlType.string({ isRequired: true }),
         slug: GraphqlType.string({ isRequired: true }),
@@ -92,7 +92,7 @@ export class BlogApi extends Construct {
     api.addType(postType);
 
     api.addQuery('getPage', new ResolvableField({
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       returnType: pageType.attribute(),
       args: {
         slug: requiredString,
@@ -118,7 +118,7 @@ export class BlogApi extends Construct {
     }));
 
     api.addQuery('getPost', new ResolvableField({
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       returnType: postType.attribute(),
       args: {
         slug: requiredString,
@@ -144,7 +144,7 @@ export class BlogApi extends Construct {
     }));
 
     const blogOverviewType = new ObjectType('Blog', {
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       definition: {
         posts: postType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
       },
@@ -152,7 +152,7 @@ export class BlogApi extends Construct {
     api.addType(blogOverviewType);
 
     api.addQuery('getBlog', new ResolvableField({
-      directives: [Directive.apiKey()],
+      directives: [Directive.apiKey(), Directive.cognito('Admins')],
       returnType: blogOverviewType.attribute({ isRequired: true }),
       dataSource: querySource,
       requestMappingTemplate: MappingTemplate.fromString(`
