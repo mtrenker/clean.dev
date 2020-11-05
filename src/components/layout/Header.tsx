@@ -3,8 +3,31 @@ import { css } from '@emotion/core';
 
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../../lib/style';
-import { Login } from '../user/Login';
 import { Theme } from '../../themes/default';
+import MenuIcon from '../../assets/icons/menu-circle.svg';
+
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export const Header: FC<HeaderProps> = ({ onMenuClick }) => {
+  const theme = useTheme();
+  return (
+    <header css={headerCss(theme)}>
+      <div className="container">
+        <h1 className="brand">
+          <NavLink to="/">
+            clean
+            <span>dev</span>
+          </NavLink>
+        </h1>
+        <nav className="navigation">
+          <MenuIcon width="28" height="28" className="menu-icon" onClick={() => onMenuClick()} />
+        </nav>
+      </div>
+    </header>
+  );
+};
 
 const headerCss = (theme: Theme) => css`
   @media print {
@@ -13,58 +36,28 @@ const headerCss = (theme: Theme) => css`
   position: relative;
   z-index: 2;
   box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
-
-  .css-${theme.css.containerCss.name} {
+  .container {
     display: grid;
     align-items: center;
-    grid-template-columns: 1fr 2fr 1fr;
-    h1 {
+    grid-template-columns: 1fr 1fr;
+    ${theme.css.containerCss.styles};
+    .brand {
       font-weight: bold;
       span {
         font-weight: lighter;
         font-family: consolas;
       }
+      a {
+        color: black;
+      }
     }
-    nav {
-      ul {
-        display: flex;
-        margin: 0;
-        padding: 0;
-        li {
-          flex: 1;
-          list-style: none;
-          a {
-            display: block;
-            color: #000;
-          }
-        }
+    .navigation {
+      display: flex;
+      justify-content: right;
+      padding: 0 14px;
+      .menu-icon {
+        cursor: pointer;
       }
     }
   }
 `;
-
-export const Header: FC = () => {
-  const theme = useTheme();
-  const { css: { containerCss } } = theme;
-  return (
-    <header css={headerCss(theme)}>
-      <div css={containerCss}>
-        <h1>
-          clean
-          <span>dev</span>
-        </h1>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/blog">Blog</NavLink>
-            </li>
-          </ul>
-        </nav>
-        <Login />
-      </div>
-    </header>
-  );
-};

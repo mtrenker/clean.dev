@@ -140,11 +140,6 @@ export const Overview: FC = () => {
           );
         })}
       </main>
-      <aside>
-        <Card>
-          Some Search maybe
-        </Card>
-      </aside>
     </section>
   );
 };

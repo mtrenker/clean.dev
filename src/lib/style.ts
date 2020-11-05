@@ -3,3 +3,4 @@ import { Theme } from '../themes/default';
 
 export { css } from '@emotion/core';
 export const useTheme = (): Theme => emotionUseTheme<Theme>();
+export { Theme };

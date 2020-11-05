@@ -9,7 +9,7 @@ import { DatePicker } from '../controls/DatePicker';
 import {
   useCreateProjectMutation, useGetProjectQuery, useUpdateProjectMutation,
 } from '../../graphql/hooks';
-import { TextArea } from '../TextArea';
+import { TextArea } from '../controls/TextArea';
 
 interface FormInput {
   client: string;
