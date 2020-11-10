@@ -1,0 +1,74 @@
+{
+  "font": {
+    "footer_title": {
+      "family": {
+        "value": "Roboto"
+      },
+      "weight": {
+        "value": "Bold"
+      }
+    },
+    "text": {
+      "family": {
+        "value": "Roboto"
+      },
+      "weight": {
+        "value": "Regular"
+      }
+    },
+    "title_clean": {
+      "family": {
+        "value": "Consolas"
+      },
+      "weight": {
+        "value": "Regular"
+      }
+    },
+    "title_dev": {
+      "family": {
+        "value": "Roboto"
+      },
+      "weight": {
+        "value": "Medium"
+      }
+    },
+    "card_heading": {
+      "family": {
+        "value": "Roboto"
+      },
+      "weight": {
+        "value": "Bold"
+      }
+    },
+    "title_dot": {
+      "family": {
+        "value": "Myriad Pro"
+      },
+      "weight": {
+        "value": "Bold"
+      }
+    }
+  },
+  "size": {
+    "font": {
+      "footer_title": {
+        "value": "20"
+      },
+      "text": {
+        "value": "16"
+      },
+      "title_clean": {
+        "value": "50"
+      },
+      "title_dev": {
+        "value": "50"
+      },
+      "card_heading": {
+        "value": "26"
+      },
+      "title_dot": {
+        "value": "50"
+      }
+    }
+  }
+}

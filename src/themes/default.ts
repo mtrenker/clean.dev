@@ -1,22 +1,6 @@
-import { css, SerializedStyles } from '@emotion/core';
+import { css } from '@emotion/core';
 
-export interface Theme {
-  breakPoints: {
-    mobile: string;
-    tablet: string;
-    desktop: string;
-    large: string;
-  }
-  css: {
-    containerCss: SerializedStyles
-  }
-  card: {
-    border: {
-      radius: number;
-      color: string;
-    }
-  }
-}
+import { Theme } from '../lib/style';
 
 export const breakPoints = {
   mobile: '576px',

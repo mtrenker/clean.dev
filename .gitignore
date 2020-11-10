@@ -1,6 +1,6 @@
 node_modules
 cdk.out
-dist
+./dist
 data.json
 .env
 storybook-static

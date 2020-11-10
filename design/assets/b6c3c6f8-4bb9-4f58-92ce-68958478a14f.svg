@@ -1,0 +1,12 @@
+<svg id="Component_1" data-name="Component 1" xmlns="http://www.w3.org/2000/svg" width="1280" height="300" viewBox="0 0 1280 300">
+  <rect id="Rectangle_9" data-name="Rectangle 9" width="1280" height="300"/>
+  <text id="clean.dev" transform="translate(44 80)" fill="#fff" font-size="20" font-family="Roboto-Bold, Roboto" font-weight="700" letter-spacing="0.05em"><tspan x="0" y="0">clean.dev</tspan></text>
+  <text id="A_site_dedicated_to_the_craft_of_software_development" data-name="A site dedicated to the craft of software development" transform="translate(44 106)" fill="#fff" font-size="16" font-family="Roboto-Regular, Roboto" letter-spacing="0.05em"><tspan x="0" y="17">A site dedicated to the craft </tspan><tspan x="0" y="40">of software development</tspan></text>
+  <text id="Latest_posts" data-name="Latest posts" transform="translate(452 80)" fill="#fff" font-size="20" font-family="Roboto-Bold, Roboto" font-weight="700" letter-spacing="0.05em"><tspan x="0" y="0">Latest posts</tspan></text>
+  <text id="_-_How_to_approach_Design_Systems_-_Let_Storybook_help_you" data-name="- How to approach Design Systems
+- Let Storybook help you" transform="translate(452 123)" fill="#fff" font-size="16" font-family="Roboto-Regular, Roboto" letter-spacing="0.05em"><tspan x="0" y="0">- How to approach Design Systems</tspan><tspan x="0" y="20">- Let Storybook help you</tspan></text>
+  <text id="Contact" transform="translate(860 80)" fill="#fff" font-size="20" font-family="Roboto-Bold, Roboto" font-weight="700" letter-spacing="0.05em"><tspan x="0" y="0">Contact</tspan></text>
+  <text id="Martin_Trenker_martin_clean.dev_Contact_Form_" data-name="Martin Trenker
+martin@clean.dev 
+Contact Form &gt;" transform="translate(860 106)" fill="#fff" font-size="16" font-family="Roboto-Regular, Roboto" letter-spacing="0.05em"><tspan x="0" y="17">Martin Trenker</tspan><tspan x="0" y="40">martin@clean.dev </tspan><tspan x="0" y="63">Contact Form &gt;</tspan></text>
+</svg>

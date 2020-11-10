@@ -11,5 +11,7 @@
   "emmet.includeLanguages": {
     "mdx": "typescriptreact"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "xd.lastPackage": "/home/martin/dev/clean/clean.dev/design",
+  "xd.globalEditor": true
 }

@@ -27,10 +27,10 @@
     "@graphql-codegen/typescript": "^1.17.8",
     "@graphql-codegen/typescript-operations": "^1.17.8",
     "@graphql-codegen/typescript-react-apollo": "^2.0.7",
-    "@storybook/addon-a11y": "^6.0.25",
-    "@storybook/addon-actions": "^6.0.26",
-    "@storybook/addon-essentials": "^6.0.25",
-    "@storybook/react": "^6.0.25",
+    "@storybook/addon-a11y": "^6.0.28",
+    "@storybook/addon-actions": "^6.0.28",
+    "@storybook/addon-essentials": "^6.0.28",
+    "@storybook/react": "^6.0.28",
     "@svgr/webpack": "^5.4.0",
     "@types/aws-lambda": "^8.10.63",
     "@types/crypto-js": "^4.0.0",
@@ -133,6 +133,7 @@
     "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.27",
     "readable-stream": "^3.6.0",
+    "style-dictionary": "^2.10.2",
     "typeface-roboto": "0.0.75"
   },
   "husky": {

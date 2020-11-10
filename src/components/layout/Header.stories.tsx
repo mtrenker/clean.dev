@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Meta } from '@storybook/react';
 
+import { action } from '@storybook/addon-actions';
 import { Header } from './Header';
 
 export default {
@@ -11,7 +12,7 @@ export default {
 
 export const Component: FC = () => (
   <>
-    <Header />
+    <Header onMenuClick={action('onMenuClick')} />
     <h1>Lorem Ipsum</h1>
     <p>
       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti itaque a quod incidunt dicta iure assumenda,

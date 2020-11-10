@@ -1,7 +1,6 @@
 import React, { FC, Fragment } from 'react';
 
-import { css, useTheme } from '../../lib/style';
-import { Theme } from '../../themes/default';
+import { css, useTheme, Theme } from '../../lib/style';
 
 export interface HeroImageProps {
   url?: string;

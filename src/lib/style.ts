@@ -1,6 +1,23 @@
+import { SerializedStyles } from '@emotion/core';
 import { useTheme as emotionUseTheme } from 'emotion-theming';
-import { Theme } from '../themes/default';
+
+export interface Theme {
+  breakPoints: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+    large: string;
+  }
+  css: {
+    containerCss: SerializedStyles
+  }
+  card: {
+    border: {
+      radius: number;
+      color: string;
+    }
+  }
+}
 
 export { css } from '@emotion/core';
 export const useTheme = (): Theme => emotionUseTheme<Theme>();
-export { Theme };

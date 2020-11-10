@@ -1,0 +1,15 @@
+{
+  "source": ["properties/**/*.json"],
+  "platforms": {
+    "scss": {
+      "transformGroup": "js",
+      "prefix": "xd",
+      "buildPath": "../../../src/themes/",
+      "files": [{
+        "destination": "tokens.ts",
+        "format": "javascript/es6"
+      }],
+      "actions": []
+    }
+  }
+}

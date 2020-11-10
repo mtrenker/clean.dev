@@ -1,0 +1,13 @@
+{
+  "color": {
+    "footer_title": {
+      "value": "#FFFFFFff"
+    },
+    "active_link": {
+      "value": "#878787ff"
+    },
+    "text": {
+      "value": "#000000ff"
+    }
+  }
+}
