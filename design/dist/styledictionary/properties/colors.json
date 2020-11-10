@@ -8,6 +8,9 @@
     },
     "text": {
       "value": "#000000ff"
+    },
+    "card_background": {
+      "value": "#FCFCFCff"
     }
   }
 }

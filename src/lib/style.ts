@@ -12,6 +12,9 @@ export interface Theme {
     containerCss: SerializedStyles
   }
   card: {
+    background: {
+      color: string;
+    },
     border: {
       radius: number;
       color: string;

@@ -1,11 +1,12 @@
 /**
  * Do not edit directly
- * Generated on Tue, 10 Nov 2020 18:31:54 GMT
+ * Generated on Tue, 10 Nov 2020 18:47:12 GMT
  */
 
 export const XdColorFooterTitle = '#ffffff';
 export const XdColorActiveLink = '#878787';
 export const XdColorText = '#000000';
+export const XdColorCardBackground = '#fcfcfc';
 export const XdFontFooterTitleFamily = 'Roboto';
 export const XdFontFooterTitleWeight = 'Bold';
 export const XdFontTextFamily = 'Roboto';

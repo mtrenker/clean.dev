@@ -1,6 +1,7 @@
 import { css } from '@emotion/core';
 
 import { Theme } from '../lib/style';
+import * as tokens from './tokens';
 
 export const breakPoints = {
   mobile: '576px',
@@ -35,6 +36,9 @@ export const defaultTheme: Theme = {
     containerCss,
   },
   card: {
+    background: {
+      color: tokens.XdColorCardBackground,
+    },
     border: {
       color: '#000000',
       radius: 4,
