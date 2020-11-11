@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 
 import { NavLink } from 'react-router-dom';
-import { useTheme } from '../../lib/style';
-import { Theme } from '../../themes/default';
+import { Theme, useTheme } from '../../lib/style';
 import MenuIcon from '../../assets/icons/menu-circle.svg';
 
 interface HeaderProps {
@@ -22,7 +21,24 @@ export const Header: FC<HeaderProps> = ({ onMenuClick }) => {
           </NavLink>
         </h1>
         <nav className="navigation">
-          <MenuIcon width="28" height="28" className="menu-icon" onClick={() => onMenuClick()} />
+          <MenuIcon width="28" height="28" className="mobile-menu" onClick={() => onMenuClick()} />
+          <ul>
+            <li>
+              <NavLink exact to="/">
+                Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/blog">
+                Blog
+              </NavLink>
+            </li>
+            <li>
+              <NavLink exact to="/contact">
+                Contact
+              </NavLink>
+            </li>
+          </ul>
         </nav>
       </div>
     </header>
@@ -55,7 +71,30 @@ const headerCss = (theme: Theme) => css`
       display: flex;
       justify-content: right;
       padding: 0 14px;
-      .menu-icon {
+      ul {
+        display: none;
+        @media(min-width: ${theme.breakPoints.mobile}) {
+          display: flex;
+        }
+        width: 100%;
+        li {
+          flex: 1;
+          list-style: none;
+          a {
+            color: black;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+            &.active {
+              color: #AAAAAA;
+            }
+          }
+        }
+      }
+      .mobile-menu {
+        @media(min-width: ${theme.breakPoints.mobile}) {
+          display: none;
+        }
         cursor: pointer;
       }
     }

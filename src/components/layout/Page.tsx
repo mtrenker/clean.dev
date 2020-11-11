@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { useSpring, animated } from 'react-spring';
 
@@ -8,12 +8,12 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { mapWidgets } from '../../lib/contentful';
 import { ErrorBoundary } from './ErrorBoundary';
-import { useTheme, css } from '../../lib/style';
+import { useTheme, css, Theme } from '../../lib/style';
 import CloseIcon from '../../assets/icons/cross-circle.svg';
 
 export const Page: FC = () => {
   const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(false);
-  const { css: { containerCss } } = useTheme();
+  const theme = useTheme();
   const { pathname } = useLocation();
   const page = pathname.split('/')[1];
   const { data, error } = useGetPageQuery({ variables: { slug: `/${page}` } });
@@ -29,7 +29,7 @@ export const Page: FC = () => {
 
   const renderContent = () => {
     if (data.getPage?.layout === 'container') {
-      return <div css={containerCss}>{content}</div>;
+      return <div css={theme.css.containerCss}>{content}</div>;
     }
     return content;
   };
@@ -47,17 +47,26 @@ export const Page: FC = () => {
       set({ offsetRight: 275, offsetLeft: -275, opacity: 0.5 });
     }
   };
-
   return (
-    <div css={pageCss}>
+    <div css={pageCss(theme)}>
       <nav className="mobile-navigation">
         <CloseIcon onClick={() => onCloseMenuClick()} />
         <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-          <li>4</li>
-          <li>5</li>
+          <li>
+            <NavLink to="/">
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/blog">
+              Blog
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/contact">
+              Contact
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <animated.main className="page-content" style={{ left: offsetLeft, right: offsetRight, opacity }}>
@@ -72,14 +81,29 @@ export const Page: FC = () => {
   );
 };
 
-const pageCss = css`
+const pageCss = (theme: Theme) => css`
   .mobile-navigation {
+    display: flex;
+    @media(min-width: ${theme.breakPoints.mobile}) {
+      display: none;
+    }
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
+    flex-direction: row-reverse;
     background-color: #000;
+    ul {
+      margin: 60px 40px;
+      li {
+        padding: 5px;
+        a {
+          display: block;
+          font-size: 32px;
+        }
+      }
+    }
     svg {
       cursor: pointer;
       position: absolute;
