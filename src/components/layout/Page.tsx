@@ -82,6 +82,7 @@ export const Page: FC = () => {
 };
 
 const pageCss = (theme: Theme) => css`
+  height: 100%;
   .mobile-navigation {
     display: flex;
     @media(min-width: ${theme.breakPoints.mobile}) {
@@ -99,6 +100,7 @@ const pageCss = (theme: Theme) => css`
       li {
         padding: 5px;
         a {
+          color: #FFF;
           display: block;
           font-size: 32px;
         }

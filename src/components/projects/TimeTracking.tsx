@@ -34,10 +34,11 @@ const timeTrackingCss = css`
 `;
 
 export const TimeTracking: FC = () => {
+  const date = '2020-11';
   const { projectId } = useParams<{projectId: string}>();
 
   const { data: trackingData } = useGetTrackingsQuery({
-    variables: { projectId },
+    variables: { projectId, date },
   });
   const [createTracking] = useCreateTrackingMutation();
   const [deleteTracking] = useDeleteTrackingMutation();
@@ -56,13 +57,13 @@ export const TimeTracking: FC = () => {
         if (projectId && getTrackingsData?.createTracking.success) {
           const cache = proxy.readQuery<GetTrackingsQuery, GetTrackingsQueryVariables>({
             query: GetTrackingsDocument,
-            variables: { projectId },
+            variables: { projectId, date },
           });
           const newTrackingItem = getTrackingsData?.createTracking.tracking;
           if (projectId && cache && newTrackingItem) {
             proxy.writeQuery<GetTrackingsQuery, GetTrackingsQueryVariables>({
               query: GetTrackingsDocument,
-              variables: { projectId },
+              variables: { projectId, date },
               data: {
                 ...cache,
                 getTrackings: {

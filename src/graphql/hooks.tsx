@@ -53,7 +53,7 @@ export type FileDetails = {
 
 export type Image = {
   __typename?: 'Image';
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   file: File;
   title: Scalars['String'];
 };
@@ -137,6 +137,11 @@ export type Project = {
   startDate: Scalars['AWSDate'];
   technologies: Array<Scalars['String']>;
   trackings: TrackingConnection;
+};
+
+
+export type ProjectTrackingsArgs = {
+  date?: Maybe<Scalars['String']>;
 };
 
 export type ProjectConnection = {
@@ -447,6 +452,7 @@ export type GetProjectQuery = (
 
 export type GetProjectWithTrackingsQueryVariables = Exact<{
   id: Scalars['ID'];
+  date?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -938,10 +944,10 @@ export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
 export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetProjectWithTrackingsDocument = gql`
-    query getProjectWithTrackings($id: ID!) {
+    query getProjectWithTrackings($id: ID!, $date: String) {
   getProject(id: $id) {
     ...ProjectParts
-    trackings {
+    trackings(date: $date) {
       items {
         ...TrackingParts
       }
@@ -965,6 +971,7 @@ ${TrackingPartsFragmentDoc}`;
  * const { data, loading, error } = useGetProjectWithTrackingsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      date: // value for 'date'
  *   },
  * });
  */

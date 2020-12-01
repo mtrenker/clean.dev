@@ -30,13 +30,14 @@ const reduceTrackings = (subtotal: number, tracking: TrackingWithHours) => subto
 const reduceDays = (total: number, day: Day) => total + day.trackings.reduce(reduceTrackings, 0);
 
 export const TimeSheet: FC = () => {
-  const [month, setMonth] = useState(new Date());
+  const [month, setMonth] = useState(new Date('2020-11-30T14:00:00Z'));
   const [days, setDays] = useState<Day[]>([]);
   const [withProjection, setWithProjection] = useState<boolean>(false);
   const { projectId } = useParams<{projectId: string}>();
   const { data: projectData } = useGetProjectWithTrackingsQuery({
     variables: {
       id: projectId,
+      date: '2020-11',
     },
   });
 

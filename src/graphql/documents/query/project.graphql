@@ -16,10 +16,10 @@ query getProject($id: ID!) {
 }
 
 
-query getProjectWithTrackings($id: ID!) {
+query getProjectWithTrackings($id: ID!, $date: String) {
   getProject(id: $id) {
     ...ProjectParts
-    trackings {
+    trackings(date: $date) {
       items {
         ...TrackingParts
       }

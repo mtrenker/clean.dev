@@ -5,12 +5,12 @@ schema {
   mutation: Mutation
 }
 
-type Author {
+type Author @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   avatar: Image
   name: String!
 }
 
-type Blog {
+type Blog @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   posts: [Post!]!
 }
 
@@ -23,25 +23,25 @@ type Contact {
   zip: String!
 }
 
-type File {
+type File @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   contentType: String!
   details: FileDetails!
   fileName: String!
   url: String!
 }
 
-type FileDetails {
+type FileDetails @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   image: ImageDetails
   size: String!
 }
 
-type Image {
-  description: String!
+type Image @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  description: String
   file: File!
   title: String!
 }
 
-type ImageDetails {
+type ImageDetails @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   height: Int!
   width: Int!
 }
@@ -55,14 +55,14 @@ type Mutation {
   updateTracking(id: ID!, input: TrackingInput!): TrackingMutationResponse!
 }
 
-type Page {
+type Page @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   content: String!
   layout: String!
   slug: String!
   title: String!
 }
 
-type Post {
+type Post @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
   author: Author!
   content: String
   heroImage: Image
@@ -82,7 +82,7 @@ type Project {
   methodologies: [String!]!
   startDate: AWSDate!
   technologies: [String!]!
-  trackings: TrackingConnection!
+  trackings(date: String): TrackingConnection!
 }
 
 type ProjectConnection {
@@ -99,9 +99,9 @@ type ProjectMutationResponse {
 }
 
 type Query {
-  getBlog: Blog!
-  getPage(slug: String!): Page
-  getPost(slug: String!): Post
+  getBlog: Blog! @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
+  getPage(slug: String!): Page @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
+  getPost(slug: String!): Post @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
   getProject(id: ID!): Project!
   getProjects: ProjectConnection!
   getTrackings(date: String, projectId: String!): TrackingConnection!

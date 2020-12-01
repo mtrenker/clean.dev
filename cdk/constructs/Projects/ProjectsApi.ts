@@ -80,15 +80,19 @@ export class ProjectsApi extends Construct {
     const resolvableTrackingConnection = new ResolvableField({
       returnType: trackingConnection.attribute({ isRequired }),
       dataSource: querySource,
+      args: {
+        date: GraphqlType.string(),
+      },
       requestMappingTemplate: MappingTemplate.fromString(`
+      #set($date = $util.defaultIfNullOrBlank($ctx.args.date, ""))
       {
         "version" : "2018-05-29",
         "operation" : "Query",
         "query":{
-          "expression": "pk = :user AND begins_with(sk, :sk)",
+          "expression": "pk = :user AND begins_with(sk, :query)",
           "expressionValues": {
             ":user": $util.dynamodb.toDynamoDBJson("$ctx.identity.sub"),
-            ":sk": $util.dynamodb.toDynamoDBJson("tracking#$ctx.source.id#")
+            ":query": $util.dynamodb.toDynamoDBJson("tracking#$ctx.source.id#$date")
           }
         },
       }
