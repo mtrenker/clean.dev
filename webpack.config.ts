@@ -46,6 +46,10 @@ const config: Config = {
     ],
   },
   resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+    },
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.json'],
   },
   output: {

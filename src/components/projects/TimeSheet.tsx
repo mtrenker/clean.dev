@@ -4,7 +4,7 @@ import {
   getDaysInMonth, differenceInHours, isSunday, isSaturday, format,
 } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { Tracking, useGetProjectWithTrackingsQuery } from '../../graphql/hooks';
 import { DatePicker } from '../controls/DatePicker';

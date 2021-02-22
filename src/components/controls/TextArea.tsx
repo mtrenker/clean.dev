@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 interface TextAreaProps extends HTMLProps<HTMLTextAreaElement> {
   register?: any;

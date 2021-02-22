@@ -4,9 +4,9 @@ import React, {
 import { render } from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
+import { ThemeProvider } from '@emotion/react';
 import 'typeface-roboto';
 
-import { ThemeProvider } from 'emotion-theming';
 import { Page } from './components/layout/Page';
 import { GlobalStyle } from './components/layout/GlobalStyle';
 import { client } from './lib/graphql';

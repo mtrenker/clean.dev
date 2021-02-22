@@ -1,5 +1,4 @@
-import { SerializedStyles } from '@emotion/core';
-import { useTheme as emotionUseTheme } from 'emotion-theming';
+import { SerializedStyles, useTheme as emotionUseTheme } from '@emotion/react';
 
 export interface Theme {
   breakPoints: {
@@ -22,5 +21,5 @@ export interface Theme {
   }
 }
 
-export { css } from '@emotion/core';
+export { css } from '@emotion/react';
 export const useTheme = (): Theme => emotionUseTheme<Theme>();

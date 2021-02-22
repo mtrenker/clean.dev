@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import Github from '@fortawesome/fontawesome-free/svgs/brands/github.svg';
 import Clock from '@fortawesome/fontawesome-free/svgs/solid/clock.svg';
 import Bars from '@fortawesome/fontawesome-free/svgs/solid/bars.svg';

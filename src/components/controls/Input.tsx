@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 interface InputProps extends HTMLProps<HTMLInputElement> {
   register?: any;

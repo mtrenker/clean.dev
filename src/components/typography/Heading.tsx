@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 export interface HeadingProps {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';

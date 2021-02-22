@@ -1,7 +1,7 @@
 import React, {
   FC, useRef, useContext, useState,
 } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
 
 import { signIn, signOut, getCleanUser } from '../../lib/auth';

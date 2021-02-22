@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { Theme } from '../lib/style';
 import * as tokens from './tokens';

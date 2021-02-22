@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
-import { useTheme } from 'emotion-theming';
+import { css } from '@emotion/react';
 
 import { Theme } from '../../themes/default';
 
@@ -19,11 +18,8 @@ const cardCss = ({ outlined }: Partial<CardProps>, { card }: Theme) => css`
   `};
 `;
 
-export const Card: FC<CardProps> = ({ children, className, outlined }) => {
-  const theme = useTheme<Theme>();
-  return (
-    <article css={cardCss({ outlined }, theme)} className={className}>
-      {children}
-    </article>
-  );
-};
+export const Card: FC<CardProps> = ({ children, className, outlined }) => (
+  <article css={cardCss({ outlined })} className={className}>
+    {children}
+  </article>
+);

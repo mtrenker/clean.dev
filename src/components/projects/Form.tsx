@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { useForm, Controller } from 'react-hook-form';
 import { formatISO } from 'date-fns';
 

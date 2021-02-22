@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { NavLink } from 'react-router-dom';
 import { Theme, useTheme } from '../../lib/style';
