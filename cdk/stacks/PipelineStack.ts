@@ -17,7 +17,7 @@ export class PipelineStack extends Stack {
     const sourceAction = new GitHubSourceAction({
       actionName: 'Source',
       output: sourceArtifact,
-      oauthToken: SecretValue.secretsManager('clean/github'),
+      oauthToken: SecretValue.secretsManager('github/token'),
       owner: 'mtrenker',
       repo: 'clean.dev',
       branch: 'main',
