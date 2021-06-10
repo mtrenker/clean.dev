@@ -20,6 +20,7 @@ export class PipelineStack extends Stack {
       oauthToken: SecretValue.secretsManager('clean/github'),
       owner: 'mtrenker',
       repo: 'clean.dev',
+      branch: 'main',
     });
 
     const pipeline = new CdkPipeline(this, 'Pipeline', {
