@@ -13,7 +13,8 @@
     "build-storybook": "build-storybook -c .storybook -o storybook-static",
     "start": "webpack-dev-server",
     "lint": "eslint '*/**/*.{ts,tsx}' --quiet --fix",
-    "test": "jest"
+    "test": "jest",
+    "synth": "npx cdk synth"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.17",
