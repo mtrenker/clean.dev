@@ -28,6 +28,9 @@ export class PipelineStack extends Stack {
       sourceAction,
       crossAccountKeys: false,
       synthAction: SimpleSynthAction.standardNpmSynth({
+        environment: {
+          privileged: true,
+        },
         rolePolicyStatements: [
           new PolicyStatement({
             effect: Effect.ALLOW,
