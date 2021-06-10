@@ -50,6 +50,9 @@ export class GitHubBuild extends Construct {
 
     const project = new PipelineProject(this, 'Project', {
       role: projectRole,
+      environment: {
+        privileged: true,
+      },
     });
 
     const siteBucket = new Bucket(this, 'Site', {
