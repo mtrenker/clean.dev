@@ -1,12 +1,12 @@
 import {
-  Stack, App, StackProps, CfnOutput,
+  Stack, StackProps, CfnOutput, Construct,
 } from '@aws-cdk/core';
 import { StringParameter } from '@aws-cdk/aws-ssm';
 
 import { Users } from '../constructs/Users/Users';
 
 export class AuthStack extends Stack {
-  constructor(scope: App, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const domain = 'https://clean.dev';

@@ -1,11 +1,11 @@
 import {
-  Stack, App, StackProps, CfnOutput,
+  Stack, StackProps, CfnOutput, Construct,
 } from '@aws-cdk/core';
 import { DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import { HostedZone } from '@aws-cdk/aws-route53';
 
 export class CertStack extends Stack {
-  constructor(scope: App, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
     const domainName = 'clean.dev';

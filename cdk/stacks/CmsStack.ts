@@ -1,12 +1,12 @@
 import {
-  Stack, App, StackProps, Fn,
+  Stack, StackProps, Fn, Construct,
 } from '@aws-cdk/core';
 import { Table } from '@aws-cdk/aws-dynamodb';
 import { StringParameter } from '@aws-cdk/aws-ssm';
 import { Contentful } from '../constructs/Contentful/Contentful';
 
 export class CmsStack extends Stack {
-  constructor(scope: App, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
     const inventoryName = Fn.importValue('inventoryTableName');

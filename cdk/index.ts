@@ -1,12 +1,6 @@
 import { App } from '@aws-cdk/core';
 
-import { AuthStack } from './stacks/AuthStack';
-import { ApiStack } from './stacks/ApiStack';
-import { InventoryStack } from './stacks/InventoryStack';
-import { FrontStack } from './stacks/FrontStack';
-import { CmsStack } from './stacks/CmsStack';
-import { CertStack } from './stacks/CertStack';
-import { ZoneStack } from './stacks/ZoneStack';
+import { PipelineStack } from './stacks/PipelineStack';
 
 const app = new App();
 
@@ -16,18 +10,5 @@ const defaultProps = {
     region: process.env.CDK_DEFAULT_REGION,
   },
 };
-new ZoneStack(app, 'Zone', defaultProps);
 
-new CertStack(app, 'Cert', defaultProps);
-
-new AuthStack(app, 'Auth', defaultProps);
-
-new InventoryStack(app, 'Inventory', defaultProps);
-
-new ApiStack(app, 'Api', defaultProps);
-
-new FrontStack(app, 'Frontend', defaultProps);
-
-new CmsStack(app, 'Cms', defaultProps);
-
-app.synth();
+new PipelineStack(app, 'Pipeline', defaultProps);

@@ -1,5 +1,5 @@
 import {
-  Stack, StackProps, App, SecretValue, CfnOutput, Fn,
+  Stack, StackProps, SecretValue, CfnOutput, Fn, Construct,
 } from '@aws-cdk/core';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import {
@@ -13,7 +13,7 @@ import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 import { GitHubBuild } from '../constructs/GitHubBuild';
 
 export class FrontStack extends Stack {
-  constructor(scope: App, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
     const domainName = 'clean.dev';

@@ -1,17 +1,11 @@
 import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { Table, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
 
-interface InventoryProps {
-  tableName: string;
-}
-
 export class Inventory extends Construct {
   public inventoryTable: Table;
 
-  constructor(scope: Construct, id: string, props: InventoryProps) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
-
-    const { tableName } = props;
 
     this.inventoryTable = new Table(this, 'Inventory', {
       partitionKey: {
@@ -24,7 +18,6 @@ export class Inventory extends Construct {
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.RETAIN,
-      tableName,
     });
 
     this.inventoryTable.addGlobalSecondaryIndex({

@@ -1,9 +1,9 @@
 import {
   Stack,
-  App,
   StackProps,
   CfnOutput,
   Fn,
+  Construct,
 } from '@aws-cdk/core';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { Table } from '@aws-cdk/aws-dynamodb';
@@ -13,11 +13,8 @@ import { BlogApi } from '../constructs/Blog/BlogApi';
 import { ProjectsApi } from '../constructs/Projects/ProjectsApi';
 
 export class ApiStack extends Stack {
-  constructor(scope: App, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
-
-    // const eventBusArn = Fn.importValue('eventBusArn');
-    // const eventBusName = Fn.importValue('eventBusName');
 
     const inventoryName = Fn.importValue('inventoryTableName');
     const userPoolId = StringParameter.fromStringParameterName(this, 'UserPoolId', 'userPoolId');
