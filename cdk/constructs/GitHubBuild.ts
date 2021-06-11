@@ -25,8 +25,6 @@ export class GitHubBuild extends Construct {
   constructor(scope: Construct, id: string, props: GitHubBuildProps) {
     super(scope, id);
 
-    const env = this.node.tryGetContext('env');
-
     const {
       branch, oauthToken, owner, repo, environment,
     } = props;
@@ -56,7 +54,6 @@ export class GitHubBuild extends Construct {
     });
 
     const siteBucket = new Bucket(this, 'Site', {
-      bucketName: `${env}.clean.dev`,
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',
@@ -65,7 +62,6 @@ export class GitHubBuild extends Construct {
     this.siteBucket = siteBucket;
 
     const storybookBucket = new Bucket(this, 'Storybook', {
-      bucketName: `sb.${env}.clean.dev`,
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',

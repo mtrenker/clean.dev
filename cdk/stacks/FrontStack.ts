@@ -1,7 +1,7 @@
 import {
-  Stack, StackProps, SecretValue, CfnOutput, Fn, Construct,
+  Stack, StackProps, SecretValue, CfnOutput, Construct,
 } from '@aws-cdk/core';
-import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
+import { DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
