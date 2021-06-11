@@ -1,7 +1,7 @@
 import {
   Stack, StackProps, SecretValue, CfnOutput, Fn, Construct,
 } from '@aws-cdk/core';
-import { Certificate } from '@aws-cdk/aws-certificatemanager';
+import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import {
   ARecordProps, ARecord, AaaaRecord, RecordTarget, AaaaRecordProps, HostedZone,
 } from '@aws-cdk/aws-route53';
@@ -22,6 +22,12 @@ export class FrontStack extends Stack {
       domainName,
     });
 
+    const certificate = new DnsValidatedCertificate(this, 'Cert', {
+      domainName,
+      hostedZone,
+      region: 'us-east-1',
+    });
+
     const param = BuildEnvironmentVariableType.PARAMETER_STORE;
     const build = new GitHubBuild(this, 'Build', {
       oauthToken: SecretValue.secretsManager('github/token'),
@@ -36,7 +42,6 @@ export class FrontStack extends Stack {
       },
     });
 
-    const certificate = Certificate.fromCertificateArn(this, 'Cert', Fn.importValue('CertificateArn'));
     const cloudFrontDistribution = new Distribution(this, 'CloudFront', {
       errorResponses: [{
         httpStatus: 404,
