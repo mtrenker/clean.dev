@@ -78,17 +78,8 @@ export class GitHubBuild extends Construct {
     });
     this.siteBucket = siteBucket;
 
-    const storybookBucket = new Bucket(this, 'Storybook', {
-      publicReadAccess: true,
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html',
-      removalPolicy: RemovalPolicy.RETAIN,
-    });
-    this.storybookBucket = storybookBucket;
-
     const sourceOutput = new Artifact('source');
     const siteOutput = new Artifact('site');
-    const storybookOutput = new Artifact('storybook');
 
     const sourceAction = new GitHubSourceAction({
       actionName: 'source',
@@ -108,7 +99,7 @@ export class GitHubBuild extends Construct {
       actionName: 'build',
       input: sourceOutput,
       project,
-      outputs: [siteOutput, storybookOutput],
+      outputs: [siteOutput],
       environmentVariables: environment,
     });
 
@@ -123,15 +114,9 @@ export class GitHubBuild extends Construct {
       input: siteOutput,
     });
 
-    const storybookDeployAction = new S3DeployAction({
-      actionName: 'DeployStorybook',
-      bucket: storybookBucket,
-      input: storybookOutput,
-    });
-
     pipeline.addStage({
       stageName: 'Deploy',
-      actions: [storybookDeployAction, siteDeployAction],
+      actions: [siteDeployAction],
     });
   }
 }
