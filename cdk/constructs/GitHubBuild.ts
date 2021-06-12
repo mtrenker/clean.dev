@@ -1,7 +1,7 @@
 import { Construct, SecretValue, RemovalPolicy } from '@aws-cdk/core';
 import { GitHubSourceAction, CodeBuildAction, S3DeployAction } from '@aws-cdk/aws-codepipeline-actions';
 import { Artifact, Pipeline } from '@aws-cdk/aws-codepipeline';
-import { PipelineProject, BuildEnvironmentVariable } from '@aws-cdk/aws-codebuild';
+import { Project, BuildEnvironmentVariable, BuildSpec } from '@aws-cdk/aws-codebuild';
 import { Bucket } from '@aws-cdk/aws-s3';
 import {
   Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect,
@@ -46,11 +46,28 @@ export class GitHubBuild extends Construct {
 
     const pipeline = new Pipeline(this, 'Pipeline');
 
-    const project = new PipelineProject(this, 'Project', {
+    const project = new Project(this, 'Project', {
       role: projectRole,
       environment: {
         privileged: true,
       },
+      buildSpec: BuildSpec.fromObject({
+        version: '0.2',
+        phases: {
+          install: {
+            commands: ['npm ci'],
+          },
+          build: {
+            commands: ['npm run build'],
+          },
+        },
+        artifacts: {
+          'base-directory': 'dist',
+          files: [
+            '**/*',
+          ],
+        },
+      }),
     });
 
     const siteBucket = new Bucket(this, 'Site', {
