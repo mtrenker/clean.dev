@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom';
 
 import { signIn, signOut, getCleanUser } from '../../lib/auth';
 import { UserContext } from '../../context/UserContext';
-import { Icon } from '../typography/Icon';
 
 const loggedInCss = css`
   display: flex;
@@ -90,7 +89,6 @@ export const Login: FC = () => {
   }
   return (
     <div css={loggedOutCss}>
-      <Icon icon="sign-in" onClick={() => toggleLogin()} />
       <div className={`login ${showLogin ? 'open' : 'closed'}`}>
         <input type="text" ref={usernameRef} />
         <input type="password" ref={passwordRef} />
