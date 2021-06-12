@@ -36,7 +36,6 @@ export class FrontStack extends Stack {
       repo: 'clean.dev',
       environment: {
         COGNITO_POOL_ID: { value: 'userPoolId', type: param },
-        COGNITO_IDENTITY_POOL_ID: { value: 'identityPoolId', type: param },
         COGNITO_CLIENT_ID: { value: 'userPoolClientId', type: param },
         GRAPHQL_ENDPOINT: { value: 'apiUrl', type: param },
       },
