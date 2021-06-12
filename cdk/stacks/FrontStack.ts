@@ -65,10 +65,6 @@ export class FrontStack extends Stack {
     new ARecord(this, 'ARecord', recordProps);
     new AaaaRecord(this, 'AaaaRecord', recordProps);
 
-    new CfnOutput(this, 'Storybook', {
-      value: build.storybookBucket.bucketWebsiteUrl,
-    });
-
     new CfnOutput(this, 'Website', {
       value: hostedZone.zoneName,
     });

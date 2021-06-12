@@ -20,8 +20,6 @@ interface GitHubBuildProps {
 export class GitHubBuild extends Construct {
   public readonly siteBucket: Bucket;
 
-  public readonly storybookBucket: Bucket;
-
   constructor(scope: Construct, id: string, props: GitHubBuildProps) {
     super(scope, id);
 
