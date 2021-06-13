@@ -159,7 +159,7 @@ const saveEntry = async (id: string, type: 'post' | 'page'): Promise<string> => 
         },
       }).promise();
 
-      if (!oldBlogOverview) {
+      if (!oldBlogOverview.Item) {
         oldBlogOverview = await ddbClient.put({
           TableName,
           Item: {
