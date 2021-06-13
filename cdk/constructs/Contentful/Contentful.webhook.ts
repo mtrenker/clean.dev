@@ -151,13 +151,24 @@ const saveEntry = async (id: string, type: 'post' | 'page'): Promise<string> => 
         },
       } = entry;
 
-      const oldBlogOverview = await ddbClient.get({
+      let oldBlogOverview = await ddbClient.get({
         TableName,
         Key: {
           pk: 'blog',
           sk: 'blog-overview',
         },
       }).promise();
+
+      if (!oldBlogOverview) {
+        oldBlogOverview = await ddbClient.put({
+          TableName,
+          Item: {
+            pk: 'blog',
+            sk: 'blog-overview',
+            posts: [],
+          },
+        }).promise();
+      }
 
       const { posts } = oldBlogOverview.Item as PostOverview;
 
