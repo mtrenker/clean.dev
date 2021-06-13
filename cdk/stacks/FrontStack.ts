@@ -38,6 +38,7 @@ export class FrontStack extends Stack {
         COGNITO_POOL_ID: { value: 'userPoolId', type: param },
         COGNITO_CLIENT_ID: { value: 'userPoolClientId', type: param },
         GRAPHQL_ENDPOINT: { value: 'apiUrl', type: param },
+        GRAPHQL_API_TOKEN: { value: 'apiKey', type: param },
       },
     });
 

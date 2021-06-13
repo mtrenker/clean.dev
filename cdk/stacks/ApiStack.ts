@@ -43,6 +43,11 @@ export class ApiStack extends Stack {
       parameterName: 'apiUrl',
     });
 
+    new StringParameter(this, 'GraphQLApiKey', {
+      stringValue: api.apiKey!,
+      parameterName: 'apiKey',
+    });
+
     new CfnOutput(this, 'ApiUrlOutput', {
       value: api.graphqlUrl,
     });
