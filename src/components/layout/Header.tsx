@@ -28,16 +28,6 @@ export const Header: FC<HeaderProps> = ({ onMenuClick }) => {
                 Home
               </NavLink>
             </li>
-            <li>
-              <NavLink to="/blog">
-                Blog
-              </NavLink>
-            </li>
-            <li>
-              <NavLink exact to="/contact">
-                Contact
-              </NavLink>
-            </li>
           </ul>
         </nav>
       </div>

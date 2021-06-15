@@ -3,10 +3,6 @@ import { css } from '@emotion/react';
 import { NavLink } from 'react-router-dom';
 
 import { Theme, useTheme } from '../../lib/style';
-import GithubIcon from '../../assets/icons/github-original.svg';
-import LinkedInIcon from '../../assets/icons/linkedin-original.svg';
-import StackOverflowIcon from '../../assets/icons/stackoverflow.svg';
-import TwitterIcon from '../../assets/icons/twitter-original.svg';
 
 export const Footer: FC = () => {
   const theme = useTheme();
@@ -17,26 +13,13 @@ export const Footer: FC = () => {
           <h4>clean.dev</h4>
           <ul>
             <li><NavLink to="/">Home</NavLink></li>
-            <li><NavLink to="/blog">Blog</NavLink></li>
-            <li><NavLink to="/contact">Contact</NavLink></li>
           </ul>
         </section>
         <section>
           <h4>Latest Posts</h4>
-          <ul>
-            <li><NavLink to="/blog/foo">Lorem foo bar with some title</NavLink></li>
-            <li><NavLink to="/blog/bar">Totally different title but also shortish</NavLink></li>
-            <li><NavLink to="/contact">A little bit longer title, something I would probably try to avoid</NavLink></li>
-          </ul>
         </section>
         <section>
           <h4>Contact</h4>
-          <ul>
-            <li><NavLink to="/"><GithubIcon width="32" /></NavLink></li>
-            <li><NavLink to="/"><LinkedInIcon width="32" /></NavLink></li>
-            <li><NavLink to="/"><StackOverflowIcon width="32" /></NavLink></li>
-            <li><NavLink to="/"><TwitterIcon width="32" /></NavLink></li>
-          </ul>
         </section>
       </div>
     </footer>
