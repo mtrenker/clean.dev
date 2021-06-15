@@ -5,14 +5,12 @@ import { render } from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from '@emotion/react';
-import 'typeface-roboto';
 
 import { Page } from './components/layout/Page';
 import { GlobalStyle } from './components/layout/GlobalStyle';
 import { client } from './lib/graphql';
 import { UserContext } from './context/UserContext';
 import { CleanUser, getUser, getCleanUser } from './lib/auth';
-import { defaultTheme } from './themes/default';
 
 const container = document.createElement('div');
 
@@ -34,7 +32,8 @@ export const App: FC = () => {
     <UserContext.Provider value={{ user, setUser, refreshUser }}>
       <ApolloProvider client={client}>
         <StrictMode>
-          <ThemeProvider theme={defaultTheme}>
+          <ThemeProvider theme={{}}>
+            <link rel="stylesheet" href="https://use.typekit.net/ure2jht.css" />
             <GlobalStyle />
             <Router>
               <Switch>

@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
 import { Global, css } from '@emotion/react';
 
-import 'typeface-roboto';
-
 const globalStyles = css`
   html {
-    font-family: "Roboto";
+    font-family: zeitung-micro, sans-serif;
   }
   /* modern css reset by https://github.com/hankchizljaw/modern-css-reset */
   /* Box sizing rules */

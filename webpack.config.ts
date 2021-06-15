@@ -1,12 +1,9 @@
 import path from 'path';
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import DotEnv from 'dotenv-webpack';
 
-type Config = webpack.Configuration & {
-  devServer: any;
-};
+import webpack from 'webpack';
+import devServer from 'webpack-dev-server';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import DotEnv from 'dotenv-webpack';
 
 const htmlConfig: HtmlWebpackPlugin.Options = {
   title: 'clean.dev',
@@ -15,7 +12,7 @@ const htmlConfig: HtmlWebpackPlugin.Options = {
   },
 };
 
-const config: Config = {
+const config: webpack.Configuration & { devServer: devServer.Configuration } = {
   mode: 'development',
   entry: './src/app.tsx',
   devtool: 'source-map',
@@ -54,12 +51,11 @@ const config: Config = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle-[hash].js',
+    filename: 'bundle-[contenthash].js',
     publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin(htmlConfig),
-    new CleanWebpackPlugin(),
     new DotEnv({ systemvars: true }),
   ],
   devServer: {
