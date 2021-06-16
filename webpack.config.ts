@@ -14,7 +14,7 @@ const htmlConfig: HtmlWebpackPlugin.Options = {
 
 const config: webpack.Configuration & { devServer: devServer.Configuration } = {
   mode: 'development',
-  entry: './src/app.tsx',
+  entry: './src/App.tsx',
   devtool: 'source-map',
   module: {
     rules: [

@@ -1,9 +1,0 @@
-query getTrackings($projectId: String!, $date: String) {
-  getTrackings(projectId: $projectId, date: $date) {
-    items {
-      ...TrackingParts
-    }
-    cursor
-    totalCount
-  }
-}

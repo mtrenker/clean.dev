@@ -5,7 +5,7 @@
   "author": "Martin Trenker <martin@pacabytes.io>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack --mode production",
     "build:lambda": "tsc -b",
     "gen:hooks": "graphql-codegen",
     "gen:component": "cry g component",
