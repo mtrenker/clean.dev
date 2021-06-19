@@ -2,7 +2,7 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "rootDir": "/",
     "outDir": "dist",
     "target": "ES2018",
@@ -27,7 +27,10 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "types": [
+      "@emotion/react/types/css-prop"
+    ]
   },
   "exclude": [
     "node_modules",

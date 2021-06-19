@@ -1,23 +1,43 @@
-import React, { FC, StrictMode } from 'react';
-import { render } from 'react-dom';
+import {
+  FC, StrictMode, useEffect, useState,
+} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 
-const container = document.createElement('div');
+import { Construction } from './pages/Construction';
+import { GlobalStyle } from './components/GlobalStyle';
 
-export const App: FC = () => (
-  <StrictMode>
-    <ThemeProvider theme={{}}>
-      <link rel="stylesheet" href="https://use.typekit.net/ure2jht.css" />
-      <Router>
-        <Switch>
-          <Route path="/">
-            Hello World
-          </Route>
-        </Switch>
-      </Router>
-    </ThemeProvider>
-  </StrictMode>
-);
+import { getCurrentUser } from './lib/auth';
+import { UserContext } from './context/UserContext';
 
-render(<App />, document.body.appendChild(container));
+export const App: FC = () => {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const currentUser = await getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+      }
+    };
+    getUser();
+  }, []);
+
+  return (
+    <StrictMode>
+      <ThemeProvider theme={{}}>
+        <GlobalStyle />
+        <link rel="stylesheet" href="https://use.typekit.net/ure2jht.css" />
+        <UserContext.Provider value={user}>
+          <Router>
+            <Switch>
+              <Route path="/">
+                <Construction />
+              </Route>
+            </Switch>
+          </Router>
+        </UserContext.Provider>
+      </ThemeProvider>
+    </StrictMode>
+  );
+};

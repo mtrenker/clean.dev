@@ -32,7 +32,7 @@ export class Users extends Construct {
 
     this.userPool = new UserPool(this, 'UserPool', {
       userPoolName: 'Users',
-      selfSignUpEnabled: true,
+      selfSignUpEnabled: false,
       signInAliases: {
         email: true,
         phone: false,

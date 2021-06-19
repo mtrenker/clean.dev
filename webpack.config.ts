@@ -1,9 +1,13 @@
 import path from 'path';
-
 import webpack from 'webpack';
 import devServer from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import DotEnv from 'dotenv-webpack';
+
+interface WebpackEnv {
+  production?: true;
+  development?: true;
+}
 
 const htmlConfig: HtmlWebpackPlugin.Options = {
   title: 'clean.dev',
@@ -12,10 +16,11 @@ const htmlConfig: HtmlWebpackPlugin.Options = {
   },
 };
 
-const config: webpack.Configuration & { devServer: devServer.Configuration } = {
-  mode: 'development',
-  entry: './src/App.tsx',
+const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer.Configuration } => ({
+  mode: env.production ? 'production' : 'development',
+  entry: './src/index.tsx',
   devtool: 'source-map',
+  target: 'web',
   module: {
     rules: [
       {
@@ -47,7 +52,7 @@ const config: webpack.Configuration & { devServer: devServer.Configuration } = {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
     },
-    extensions: ['.ts', '.tsx', '.mjs', '.js', '.json'],
+    extensions: ['.mjs', '.js', '.json', '.ts', '.tsx', '.map'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -61,7 +66,8 @@ const config: webpack.Configuration & { devServer: devServer.Configuration } = {
   devServer: {
     open: true,
     historyApiFallback: true,
+    hot: true,
   },
-};
+});
 
 export default config;

@@ -19,6 +19,8 @@
   "rules": {
     "react/prop-types": 0,
     "react/no-unused-prop-types": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
     "import/no-unresolved": 0,
     "import/extensions": 0,
     "no-new": 0,
@@ -53,6 +55,6 @@
       "controlComponents": ["DatePicker"]
     }],
     "no-use-before-define": "off",
-    "default-case": "off"
+    "default-case": "off",
   }
 }
