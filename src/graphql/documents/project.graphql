@@ -1,0 +1,14 @@
+query getProjects {
+  getProjects {
+    totalCount
+    items {
+      id
+    }
+  }
+}
+
+mutation createProject($input: ProjectInput!) {
+  createProject(input: $input) {
+    code
+  }
+}

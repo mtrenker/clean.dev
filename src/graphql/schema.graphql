@@ -1,0 +1,155 @@
+scalar AWSDate
+scalar AWSDateTime
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Author @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  avatar: Image
+  name: String!
+}
+
+type Blog @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  posts: [Post!]!
+}
+
+type Contact {
+  city: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  street: String!
+  zip: String!
+}
+
+type File @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  contentType: String!
+  details: FileDetails!
+  fileName: String!
+  url: String!
+}
+
+type FileDetails @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  image: ImageDetails
+  size: String!
+}
+
+type Image @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  description: String
+  file: File!
+  title: String!
+}
+
+type ImageDetails @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  height: Int!
+  width: Int!
+}
+
+type Mutation {
+  createProject(input: ProjectInput!): ProjectMutationResponse!
+  createTracking(input: TrackingInput!): TrackingMutationResponse!
+  deleteProject(id: ID!): ProjectMutationResponse!
+  deleteTracking(id: ID!): TrackingMutationResponse!
+  updateProject(id: ID!, input: ProjectInput!): ProjectMutationResponse!
+  updateTracking(id: ID!, input: TrackingInput!): TrackingMutationResponse!
+}
+
+type Page @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  content: String!
+  layout: String!
+  slug: String!
+  title: String!
+}
+
+type Post @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"]) {
+  author: Author!
+  content: String
+  heroImage: Image
+  intro: String
+  publishDate: AWSDateTime!
+  slug: String!
+  title: String!
+}
+
+type Project {
+  client: String!
+  contact: Contact!
+  description: String!
+  endDate: AWSDate
+  id: ID!
+  industry: String!
+  methodologies: [String!]!
+  startDate: AWSDate!
+  technologies: [String!]!
+  trackings(date: String): TrackingConnection!
+}
+
+type ProjectConnection {
+  cursor: String
+  items: [Project!]!
+  totalCount: Int!
+}
+
+type ProjectMutationResponse {
+  code: String!
+  message: String!
+  project: Project!
+  success: Boolean!
+}
+
+type Query {
+  getBlog: Blog! @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
+  getPage(slug: String!): Page @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
+  getPost(slug: String!): Post @aws_api_key @aws_cognito_user_pools(cognito_groups : ["Admins"])
+  getProject(id: ID!): Project!
+  getProjects: ProjectConnection!
+  getTrackings(date: String, projectId: String!): TrackingConnection!
+}
+
+type Tracking {
+  description: String
+  endTime: AWSDateTime!
+  id: ID!
+  startTime: AWSDateTime!
+}
+
+type TrackingConnection {
+  cursor: String
+  items: [Tracking!]!
+  totalCount: Int!
+}
+
+type TrackingMutationResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+  tracking: Tracking!
+}
+
+input ContactInput {
+  city: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  street: String!
+  zip: String!
+}
+
+input ProjectInput {
+  client: String!
+  contact: ContactInput!
+  description: String!
+  endDate: AWSDate
+  industry: String!
+  methodologies: [String!]!
+  startDate: AWSDate!
+  technologies: [String!]!
+}
+
+input TrackingInput {
+  description: String
+  endTime: AWSDateTime!
+  projectId: String!
+  startTime: AWSDateTime!
+}

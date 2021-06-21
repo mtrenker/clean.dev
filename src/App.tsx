@@ -4,11 +4,15 @@ import {
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 
+import { ApolloProvider } from '@apollo/client';
 import { Construction } from './pages/Construction';
 import { GlobalStyle } from './components/GlobalStyle';
 
 import { getCurrentUser } from './lib/auth';
 import { UserContext } from './context/UserContext';
+import { Home } from './pages/Home';
+import { Projects } from './pages/Projects';
+import { client } from './lib/graphql';
 
 export const App: FC = () => {
   const [user, setUser] = useState();
@@ -25,19 +29,35 @@ export const App: FC = () => {
 
   return (
     <StrictMode>
-      <ThemeProvider theme={{}}>
-        <GlobalStyle />
-        <link rel="stylesheet" href="https://use.typekit.net/ure2jht.css" />
-        <UserContext.Provider value={user}>
-          <Router>
-            <Switch>
-              <Route path="/">
-                <Construction />
-              </Route>
-            </Switch>
-          </Router>
-        </UserContext.Provider>
-      </ThemeProvider>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={{}}>
+          <GlobalStyle />
+          <link rel="stylesheet" href="https://use.typekit.net/ure2jht.css" />
+          <UserContext.Provider value={user}>
+            {!user && (
+            <Router>
+              <Switch>
+                <Route path="/">
+                  <Construction />
+                </Route>
+              </Switch>
+            </Router>
+            )}
+            {user && (
+            <Router>
+              <Switch>
+                <Route path="/projects">
+                  <Projects />
+                </Route>
+                <Route path="/">
+                  <Home />
+                </Route>
+              </Switch>
+            </Router>
+            )}
+          </UserContext.Provider>
+        </ThemeProvider>
+      </ApolloProvider>
     </StrictMode>
   );
 };

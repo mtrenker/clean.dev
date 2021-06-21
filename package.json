@@ -14,7 +14,8 @@
     "start": "webpack serve --open --env=development",
     "lint": "eslint '*/**/*.{ts,tsx}' --quiet --fix",
     "test": "jest",
-    "synth": "cdk synth"
+    "synth": "cdk synth",
+    "sync": "./bin/syncSchema.sh"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",

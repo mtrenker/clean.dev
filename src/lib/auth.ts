@@ -19,7 +19,7 @@ export const changePassword = async (username: string, oldPassword: string, newP
   return result;
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<any> => {
   const user = await Auth.currentAuthenticatedUser();
   return user;
 };
