@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { VFC } from 'react';
 import { css } from '@emotion/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { useGetProjectsQuery } from '../graphql/hooks';
-import { Form } from './projects/Form';
+import { Form, FormData } from './projects/Form';
 
 const projectsCss = css`
   section {
@@ -12,6 +14,14 @@ const projectsCss = css`
 
 export const Projects: VFC = () => {
   const { data } = useGetProjectsQuery({});
+  const methods = useForm();
+  const { handleSubmit } = methods;
+
+  const onSubmit = (formData: FormData) => {
+    console.log(formData);
+
+  }
+
   return (
     <div css={projectsCss}>
       <h1>Projects</h1>
@@ -23,7 +33,9 @@ export const Projects: VFC = () => {
         ))}
       </section>
       <section>
-        <Form />
+        <FormProvider {...methods}>
+          <Form onSubmit={handleSubmit(onSubmit)} />
+        </FormProvider>
       </section>
     </div>
   );
