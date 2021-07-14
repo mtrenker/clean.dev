@@ -2,7 +2,7 @@ query getProjects {
   getProjects {
     totalCount
     items {
-      id
+      ...projectFields
     }
   }
 }
@@ -10,5 +10,53 @@ query getProjects {
 mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     code
+    message
+    success
+    project {
+      ...projectFields
+    }
   }
+}
+
+mutation createTracking($input: TrackingInput!) {
+  createTracking(input: $input) {
+    code
+    message
+    success
+    tracking {
+      ...trackingFields
+    }
+  }
+}
+
+
+fragment projectFields on Project {
+  id
+  client
+  contact {
+    city
+    email
+    firstName
+    lastName
+    street
+    zip
+  }
+  description
+  endDate
+  industry
+  methodologies
+  startDate
+  technologies
+  trackings {
+    items {
+      ...trackingFields
+    }
+  }
+}
+
+fragment trackingFields on Tracking {
+  id
+  description
+  startTime
+  endTime
 }

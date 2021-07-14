@@ -1,7 +1,7 @@
 import { ChangeEvent, VFC } from 'react';
 import { css } from '@emotion/react';
 
-import { Header } from '../components/Header';
+import { Frame } from '../components/Frame';
 
 const testCss = css`
   h1, p {
@@ -60,7 +60,7 @@ const onLightnessChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 export const Test: VFC = () => (
   <div css={testCss}>
-    <Header />
+    <Frame />
     <p>
       Lorem ipsum dolor, sit amet consectetur adipisicing elit.
       Consectetur, harum tempora dolore ab repudiandae, numquam ullam necessitatibus maxime quos iste veritatis?

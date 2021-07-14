@@ -47,17 +47,27 @@
       }
     ],
     "max-len": [
-      "error", {
+      "error",
+      {
         "code": 120
       }
     ],
-    "jsx-a11y/label-has-associated-control": [2, {
-      "controlComponents": ["DatePicker"]
-    }],
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "controlComponents": [
+          "DatePicker"
+        ]
+      }
+    ],
     "no-use-before-define": "off",
     "default-case": "off",
-    "react/jsx-props-no-spreading": ["on", {
-      "html": "ignore"
-    }]
+    "react/jsx-props-no-spreading": [
+      2,
+      {
+        "html": "ignore",
+        "exceptions": ["FormProvider"]
+      }
+    ]
   }
 }

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 export const globalCssVariables = css`
-  --brand-hue: 0;
+  --brand-hue: 220;
   --brand-saturation: 45%;
   --brand-lightness: 61%;
 `;
@@ -16,10 +16,10 @@ export const lightCssVariables = css`
   --text1-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
   --text2-light: hsl(var(--brand-hue) 30% 30%);
 
-  --surface1-light: hsl(var(--brand-hue) 50% 90%);
-  --surface2-light: hsl(var(--brand-hue) 20% 99%);
-  --surface3-light: hsl(var(--brand-hue) 20% 92%);
-  --surface4-light: hsl(var(--brand-hue) 20% 85%);
+  --surface1-light: hsl(var(--brand-hue) 30% 90%);
+  --surface2-light: hsl(var(--brand-hue) 25% 99%);
+  --surface3-light: hsl(var(--brand-hue) 15% 92%);
+  --surface4-light: hsl(var(--brand-hue) 10% 85%);
 
   --surface-shadow-light: var(--brand-hue) 10% 20%;
   --shadow-strength-light: .02;
@@ -46,7 +46,7 @@ export const darkCssVariables = css`
   --text1-dark: hsl(var(--brand-hue) 15% 90%);
   --text2-dark: hsl(var(--brand-hue) 30% 30%);
 
-  --surface1-dark: hsl(var(--brand-hue) 10% 10%);
+  --surface1-dark: hsl(var(--brand-hue) 20% 10%);
   --surface2-dark: hsl(var(--brand-hue) 10% 15%);
   --surface3-dark: hsl(var(--brand-hue) 5% 20%);
   --surface4-dark: hsl(var(--brand-hue) 5% 25%);

@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { Handler } from 'aws-lambda';
-import { nanoid } from 'nanoid';
+import { ulid } from 'ulid';
 
 interface MutationResponse {
   code: string;
@@ -188,13 +188,12 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
     }, identity,
   } = event;
 
-  const id = nanoid();
-  const pk = `project-${id}`;
+  const pk = identity.sub;
+  const sk = `project-${ulid()}`;
 
   const project = {
     pk,
-    sk: pk,
-    id,
+    sk,
     client,
     description,
     industry,
@@ -205,23 +204,9 @@ const createProject = async (event: CreateProjectEvent): Promise<MutationRespons
     contact,
   };
 
-  const userProject = {
-    ...project,
-    pk: identity.sub,
-  };
-
-  await ddbClient.transactWrite({
-    TransactItems: [{
-      Put: {
-        TableName,
-        Item: project,
-      },
-    }, {
-      Put: {
-        TableName,
-        Item: userProject,
-      },
-    }],
+  await ddbClient.put({
+    TableName,
+    Item: project,
   }).promise();
 
   return {
@@ -242,11 +227,12 @@ const updateProject = async (event: UpdateProjectEvent): Promise<MutationRespons
     }, identity,
   } = event;
 
-  const pk = `project-${id}`;
+  const pk = identity.sub;
+  const sk = `project-${id}`;
 
   const project = {
     pk,
-    sk: pk,
+    sk,
     id,
     client,
     description,
@@ -258,23 +244,9 @@ const updateProject = async (event: UpdateProjectEvent): Promise<MutationRespons
     contact,
   };
 
-  const userProject = {
-    ...project,
-    pk: identity.sub,
-  };
-
-  await ddbClient.transactWrite({
-    TransactItems: [{
-      Put: {
-        TableName,
-        Item: project,
-      },
-    }, {
-      Put: {
-        TableName,
-        Item: userProject,
-      },
-    }],
+  await ddbClient.put({
+    TableName,
+    Item: project,
   }).promise();
 
   return {
@@ -290,8 +262,8 @@ const deleteProject = async (event: DeleteProjectEvent): Promise<MutationRespons
     arguments: { id }, identity,
   } = event;
 
-  const pk = `project-${id}`;
-  const sk = pk;
+  const pk = identity.sub;
+  const sk = `project-${id}`;
 
   const project = await ddbClient.get({
     TableName,
@@ -301,24 +273,12 @@ const deleteProject = async (event: DeleteProjectEvent): Promise<MutationRespons
     },
   }).promise();
 
-  await ddbClient.transactWrite({
-    TransactItems: [{
-      Delete: {
-        TableName,
-        Key: {
-          pk,
-          sk,
-        },
-      },
-    }, {
-      Delete: {
-        TableName,
-        Key: {
-          pk: identity.sub,
-          sk,
-        },
-      },
-    }],
+  await ddbClient.delete({
+    TableName,
+    Key: {
+      pk,
+      sk,
+    },
   }).promise();
 
   return {
@@ -335,7 +295,7 @@ const createTracking = async (event: CreateTrackingEvent): Promise<MutationRespo
     description, startTime, endTime, projectId,
   } = input;
 
-  const id = nanoid();
+  const id = ulid();
   const pk = `tracking-${id}`;
   const sk = pk;
 

@@ -27,7 +27,7 @@ const globalCss = css`
     --box-shadow: var(--box-shadow-light);
   }
 
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: --disabled-dark) {
     :root {
       color-scheme: dark;
       --brand: var(--brand-dark);
@@ -52,7 +52,7 @@ const globalCss = css`
     box-sizing: border-box;
     font-size: 16px;
     font-family: zeitung-micro, sans-serif;
-    background-color: var(--surface2);
+    background-color: var(--surface1);
     color: var(--text1);
   }
 

@@ -109,6 +109,8 @@
     "@aws-cdk/aws-ssm": "^1.109.0",
     "@aws-cdk/core": "^1.109.0",
     "@aws-cdk/pipelines": "^1.109.0",
+    "@contentful/rich-text-react-renderer": "^15.0.0",
+    "@contentful/rich-text-types": "^15.0.0",
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.4.0",
     "aws-sdk": "^2.928.0",
@@ -117,11 +119,13 @@
     "graphql": "^15.5.0",
     "graphql-tag": "^2.12.4",
     "react": "^17.0.2",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.8.4",
     "react-router-dom": "^5.2.0",
-    "stream-browserify": "^3.0.0"
+    "stream-browserify": "^3.0.0",
+    "ulid": "^2.3.0"
   },
   "husky": {
     "hooks": {

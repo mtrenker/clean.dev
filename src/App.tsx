@@ -11,8 +11,12 @@ import { GlobalStyle } from './components/GlobalStyle';
 import { getCurrentUser } from './lib/auth';
 import { UserContext } from './context/UserContext';
 import { Home } from './pages/Home';
-import { Projects } from './pages/Projects';
+import { Projects } from './pages/projects/Overview';
 import { client } from './lib/graphql';
+import { Timesheet } from './pages/projects/Timesheet';
+import { Tracking } from './pages/projects/Tracking';
+import { Overview } from './pages/blog/Overview';
+import { Frame } from './components/Frame';
 
 export const App: FC = () => {
   const [user, setUser] = useState();
@@ -45,14 +49,25 @@ export const App: FC = () => {
             )}
             {user && (
             <Router>
-              <Switch>
-                <Route path="/projects">
-                  <Projects />
-                </Route>
-                <Route path="/">
-                  <Home />
-                </Route>
-              </Switch>
+              <Frame>
+                <Switch>
+                  <Route exact path="/projects/:projectId/timesheet">
+                    <Timesheet />
+                  </Route>
+                  <Route exact path="/projects/:projectId/tracking">
+                    <Tracking />
+                  </Route>
+                  <Route exact path="/projects">
+                    <Projects />
+                  </Route>
+                  <Route path="/blog">
+                    <Overview />
+                  </Route>
+                  <Route path="/">
+                    <Home />
+                  </Route>
+                </Switch>
+              </Frame>
             </Router>
             )}
           </UserContext.Provider>

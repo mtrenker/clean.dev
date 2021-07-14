@@ -1,0 +1,37 @@
+query getBlog {
+  getBlog {
+    posts {
+      ...postFields
+    }
+  }
+}
+
+query getPost($slug: String!) {
+  getPost(slug: $slug) {
+    ...postFields
+  }
+}
+
+fragment postFields on Post {
+  content
+  heroImage {
+    title
+    description
+    file {
+      contentType
+      details {
+        image {
+          height
+          width
+        }
+        size
+      }
+      fileName
+      url
+    }
+  }
+  intro
+  publishDate
+  slug
+  title
+}
