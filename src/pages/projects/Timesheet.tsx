@@ -1,6 +1,8 @@
 import { VFC } from 'react';
 import { css, Global } from '@emotion/react';
-import { differenceInHours, format } from 'date-fns';
+import { differenceInHours, differenceInMinutes, format } from 'date-fns';
+import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
+import { useParams } from 'react-router-dom';
 
 interface Tracking {
   startTime: Date;
@@ -15,23 +17,6 @@ const developer = {
   city: 'Musterhausen',
   zip: '12345',
 };
-
-const customer = {
-  client: 'Muster Client',
-  firstName: 'Muster',
-  lastName: 'Client',
-  street: 'Musterstr 456',
-  city: 'Musterhausen',
-  zip: '12345',
-};
-
-const trackingData: Tracking[] = [
-  {
-    startTime: new Date(2021, 5, 1, 9),
-    endTime: new Date(2021, 5, 1, 16),
-    description: 'TICKET-123: testing',
-  },
-];
 
 const timeSheetCss = css`
   @page {
@@ -108,66 +93,73 @@ const timeSheetCss = css`
   }
 `;
 
-export const Timesheet: VFC = () => (
-  <div css={timeSheetCss}>
-    <h1>Zeitnachweis</h1>
-    <h2>Juni 2021</h2>
+export const Timesheet: VFC = () => {
+  const { projectId } = useParams<{projectId: string}>();
 
-    <address className="developer">
-      {`${developer.firstName} ${developer.lastName}`}
-      <br />
-      {developer.address}
-      <br />
-      {`${developer.zip} ${developer.city}`}
-    </address>
+  const {data: trackingData} = useGetTrackingsQuery({
+    variables: {
+      projectId,
+      date: "2021-07"
+    }
+  })
 
-    <dl className="customer">
-      <dt>Kunde:</dt>
-      <dd>{`${customer.client}, ${customer.street}, ${customer.zip} ${customer.city}`}</dd>
-      <dt>Monat:</dt>
-      <dd>06.2021</dd>
-      <dt>Ort:</dt>
-      <dd>{customer.city}</dd>
-    </dl>
+  const {data: projectData} = useGetProjectQuery({
+    variables: {
+      projectId
+    }
+  })
+  const project = projectData?.getProject;
+  return (
+    <div css={timeSheetCss}>
+      <h1>Zeitnachweis</h1>
+      <h2>Juli 2021</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Beschreibung</th>
-          <th>Stunden</th>
-        </tr>
-      </thead>
-      <tbody>
-        {trackingData.map((data) => {
-          const hours = differenceInHours(data.endTime, data.startTime);
-          return (
-            <tr>
-              <td className="date">{format(data.startTime, 'dd.MM.yyyy')}</td>
-              <td className="description">{data.description}</td>
-              <td className="hours">{hours}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={2}>Stunden Gesamt</td>
-          <td className="hours">
-            {trackingData.reduce((hours, { startTime, endTime }) => hours + differenceInHours(endTime, startTime), 0)}
-          </td>
-        </tr>
-      </tfoot>
-    </table>
+      <address className="developer">
+        {`${developer.firstName} ${developer.lastName}`}
+        <br />
+        {developer.address}
+        <br />
+        {`${developer.zip} ${developer.city}`}
+      </address>
 
-    <footer>
-      <div className="developer">
-        Auftragnehmer
-      </div>
-      <div className="customer">
-        Kunde
-      </div>
-    </footer>
+      <dl className="customer">
+        <dt>Kunde:</dt>
+        <dd>{`${project?.client}, ${project?.contact.street}, ${project?.contact.zip} ${project?.contact.city}`}</dd>
+        <dt>Monat:</dt>
+        <dd>07.2021</dd>
+        <dt>Ort:</dt>
+        <dd>{project?.contact.city}</dd>
+      </dl>
 
-  </div>
-);
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Beschreibung</th>
+            <th>Stunden</th>
+          </tr>
+        </thead>
+        <tbody>
+          {trackingData?.getTrackings.items.map((data) => {
+            const hours = differenceInMinutes(new Date(data.endTime), new Date(data.startTime)) / 60;
+            return (
+              <tr>
+                <td className="date">{format(new Date(data.startTime), 'dd.MM.yyyy')}</td>
+                <td className="description">{data.description}</td>
+                <td className="hours">{hours}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={2}>Stunden Gesamt</td>
+            <td className="hours">
+              {trackingData?.getTrackings.items.reduce((hours, { startTime, endTime }) => hours + differenceInMinutes(new Date(endTime), new Date(startTime)) / 60, 0)}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+};

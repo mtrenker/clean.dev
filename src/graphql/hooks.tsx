@@ -306,6 +306,19 @@ export type GetProjectsQuery = (
   ) }
 );
 
+export type GetProjectQueryVariables = Exact<{
+  projectId: Scalars['ID'];
+}>;
+
+
+export type GetProjectQuery = (
+  { __typename?: 'Query' }
+  & { getProject: (
+    { __typename?: 'Project' }
+    & ProjectFieldsFragment
+  ) }
+);
+
 export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
 }>;
@@ -320,6 +333,23 @@ export type CreateProjectMutation = (
       { __typename?: 'Project' }
       & ProjectFieldsFragment
     ) }
+  ) }
+);
+
+export type GetTrackingsQueryVariables = Exact<{
+  date?: Maybe<Scalars['String']>;
+  projectId: Scalars['String'];
+}>;
+
+
+export type GetTrackingsQuery = (
+  { __typename?: 'Query' }
+  & { getTrackings: (
+    { __typename?: 'TrackingConnection' }
+    & { items: Array<(
+      { __typename?: 'Tracking' }
+      & TrackingFieldsFragment
+    )> }
   ) }
 );
 
@@ -526,6 +556,41 @@ export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export const GetProjectDocument = gql`
+    query getProject($projectId: ID!) {
+  getProject(id: $projectId) {
+    ...projectFields
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+
+/**
+ * __useGetProjectQuery__
+ *
+ * To run a query within a React component, call `useGetProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetProjectQuery(baseOptions: Apollo.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
+      }
+export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
+        }
+export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
+export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
+export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const CreateProjectDocument = gql`
     mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
@@ -564,6 +629,44 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
+export const GetTrackingsDocument = gql`
+    query getTrackings($date: String, $projectId: String!) {
+  getTrackings(date: $date, projectId: $projectId) {
+    items {
+      ...trackingFields
+    }
+  }
+}
+    ${TrackingFieldsFragmentDoc}`;
+
+/**
+ * __useGetTrackingsQuery__
+ *
+ * To run a query within a React component, call `useGetTrackingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTrackingsQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetTrackingsQuery(baseOptions: Apollo.QueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, options);
+      }
+export function useGetTrackingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, options);
+        }
+export type GetTrackingsQueryHookResult = ReturnType<typeof useGetTrackingsQuery>;
+export type GetTrackingsLazyQueryHookResult = ReturnType<typeof useGetTrackingsLazyQuery>;
+export type GetTrackingsQueryResult = Apollo.QueryResult<GetTrackingsQuery, GetTrackingsQueryVariables>;
 export const CreateTrackingDocument = gql`
     mutation createTracking($input: TrackingInput!) {
   createTracking(input: $input) {

@@ -35,6 +35,11 @@ const frameCss = css`
       margin: 0 auto;
     }
   }
+  @media print {
+    > header, > footer {
+      display: none;
+    }
+  }
 `;
 
 export const Frame: FC = ({ children }) => (

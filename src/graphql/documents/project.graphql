@@ -7,6 +7,12 @@ query getProjects {
   }
 }
 
+query getProject($projectId: ID!) {
+  getProject(id: $projectId) {
+    ...projectFields
+  }
+}
+
 mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     code
@@ -14,6 +20,14 @@ mutation createProject($input: ProjectInput!) {
     success
     project {
       ...projectFields
+    }
+  }
+}
+
+query getTrackings($date: String, $projectId: String!) {
+  getTrackings(date: $date, projectId: $projectId) {
+    items {
+      ...trackingFields
     }
   }
 }
