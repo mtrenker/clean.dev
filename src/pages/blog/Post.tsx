@@ -6,7 +6,6 @@ import { useGetPostQuery } from '../../graphql/hooks';
 import { render } from '../../lib/cms';
 
 const postCss = css`
-  padding: 0 16px;
   p {
     line-height: 1.5;
     margin-bottom: 16px;
@@ -42,7 +41,7 @@ const postCss = css`
     }
   }
 
-  q {
+  blockquote {
     display: inline-block;
     border-left: 1px solid var(--brand);
     background-color: var(--surface4);
@@ -50,27 +49,39 @@ const postCss = css`
     margin-bottom: 16px;
   }
 
-  @media(min-width: 768px) {
-    max-width: 1200px;
-    margin: 0 auto;
+  header {
+    height: 300px;
+    position: relative;
+    display: flex;
+    margin-bottom: 24px;
+    h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 40px;
+      align-self: center;
+    }
+    img {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      filter: hue-rotate(180deg) grayscale(.75);
+    }
   }
-
-  .colors {
-    .surface1 {
-      background-color: var(--surface1);
-      height: 100px;
+  main {
+  }
+  @media(min-width: 768px) {
+    header {
+      height: 400px;
+      margin-bottom: 48px;
+      h1 {
+        font-size: 60px;
+      }
     }
-    .surface2 {
-      background-color: var(--surface2);
-      height: 100px;
-    }
-    .surface3 {
-      background-color: var(--surface3);
-      height: 100px;
-    }
-    .surface4 {
-      background-color: var(--surface4);
-      height: 100px;
+    main {
+      font-size: 18px;
     }
   }
 `;
@@ -85,19 +96,18 @@ export const Post: VFC = () => {
   if (!data) {
     return null;
   }
-  const content = JSON.parse(data?.getPost?.content);
-  console.log(content);
+  const content = JSON.parse(data?.getPost?.content ?? '');
 
   return (
     <article css={postCss}>
       <header>
-        <h1>{data?.getPost?.title}</h1>
+        <h1 className="container">{data?.getPost?.title}</h1>
+        <img src={data?.getPost?.heroImage?.file.url} alt="" />
       </header>
-      <img src={data?.getPost?.heroImage?.file.url} alt="" />
       {data?.getPost?.content && (
-        <>
+        <main className="container">
           {render(content)}
-        </>
+        </main>
       )}
     </article>
   );

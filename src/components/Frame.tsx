@@ -4,32 +4,48 @@ import { css } from '@emotion/react';
 
 const frameCss = css`
   > header {
-    height: 50px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    height: 100px;
     box-shadow:
       0 12.5px 10px rgba(0, 0, 0, 0.035),
       0 100px 80px rgba(0, 0, 0, 0.07)
     ;
-    position: sticky;
     top: 0;
     background-color: #fff;
     nav {
+      flex: 1;
       ul {
         display: flex;
         justify-content: space-between;
         height: 50px;
         align-items: center;
         margin: 0 16px;
-        li:first-of-type {
-          font-weight: 600;
+        li {
+          flex: 1;
+          text-align: right;
+          &:first-of-type {
+            text-align: left;
+            flex: 2;
+            font-weight: 600;
+          }
         }
         a {
           text-decoration: none;
           color: #000;
+          &:after {
+            content: " ";
+            border-top: 1px solid red;
+            width: 20px;
+            height: 1px;
+          }
         }
       }
     }
   }
-  > main {
+  .container {
+    padding: 0 24px;
     @media(min-width: 768px) {
       max-width: 1200px;
       margin: 0 auto;
@@ -51,10 +67,10 @@ export const Frame: FC = ({ children }) => (
             <NavLink to="/">clean.dev</NavLink>
           </li>
           <li>
-            <NavLink to="/blog">Blog</NavLink>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/blog/example">About</NavLink>
+            <NavLink to="/blog">Blog</NavLink>
           </li>
           <li>
             <NavLink to="/contact">Contact</NavLink>
@@ -62,7 +78,7 @@ export const Frame: FC = ({ children }) => (
         </ul>
       </nav>
     </header>
-    <main>{children}</main>
+    {children}
     <footer>
       Footer
     </footer>

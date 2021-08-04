@@ -13,11 +13,11 @@ export const lightCssVariables = css`
     var(--brand-lightness)
   );
 
-  --text1-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
+  --text1-light: hsl(var(--brand-hue) var(--brand-saturation) 5%);
   --text2-light: hsl(var(--brand-hue) 30% 30%);
 
-  --surface1-light: hsl(var(--brand-hue) 30% 90%);
-  --surface2-light: hsl(var(--brand-hue) 25% 99%);
+  --surface1-light: hsl(var(--brand-hue) 0% 98%);
+  --surface2-light: hsl(var(--brand-hue) 10% 90%);
   --surface3-light: hsl(var(--brand-hue) 15% 92%);
   --surface4-light: hsl(var(--brand-hue) 10% 85%);
 
