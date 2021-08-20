@@ -42,6 +42,17 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
           },
         ],
       }, {
+        test: /\.png$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'images/',
+            },
+          },
+        ],
+      }, {
         test: /\.svg$/,
         use: ['@svgr/webpack'],
       },

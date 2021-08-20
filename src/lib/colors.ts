@@ -46,10 +46,9 @@ export const darkCssVariables = css`
   --text1-dark: hsl(var(--brand-hue) 15% 90%);
   --text2-dark: hsl(var(--brand-hue) 30% 30%);
 
-  --surface1-dark: hsl(var(--brand-hue) 20% 10%);
-  --surface2-dark: hsl(var(--brand-hue) 10% 15%);
-  --surface3-dark: hsl(var(--brand-hue) 5% 20%);
-  --surface4-dark: hsl(var(--brand-hue) 5% 25%);
+  --surface1-dark: #122629;
+  --surface2-dark: #003B42;
+  --surface3-dark: #2D4246;
 
   --surface-shadow-dark: var(--brand-hue) 10% 20%;
   --shadow-strength-dark: .02;

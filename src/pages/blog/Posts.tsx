@@ -8,7 +8,7 @@ export const Posts: VFC = () => {
     <div>
       {data?.getBlog.posts.map((post) => (
         <article key={post.slug}>
-          <Link to={`/blog/${post.slug}`}>
+          <Link to={`/posts/${post.slug}`}>
             {post.title}
           </Link>
         </article>

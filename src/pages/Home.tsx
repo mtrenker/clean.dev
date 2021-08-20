@@ -2,45 +2,53 @@ import { VFC } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 
-const homeCss = css`
-  .hero {
-    height: calc(100vh - 50px);
-  }
+import { useGetBlogQuery } from '../graphql/hooks';
+import { Hero } from '../components/sections/Hero';
 
+const homeCss = css`
   .posts {
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    flex-wrap: wrap;
     article {
-      flex: 1 0 150px;
+      text-align: center;
+      flex: 1 1 300px;
       .title {
         font-size: 16px;
+      }
+      picture {
+
+      }
+      img {
+        object-fit: cover;
+        height: 300px;
+        width: 300px;
       }
     }
   }
 `;
 
-export const Home: VFC = () => (
-  <div css={homeCss}>
+export const Home: VFC = () => {
+  const { data } = useGetBlogQuery();
+  return (
+    <div css={homeCss}>
+      <Hero />
+      <section className="posts container">
+        {data?.getBlog.posts.map((post) => (
+          <article>
+            <Link to={`/posts/${post.slug}`}>
+              <picture>
+                <source media="(max-width: 700px)" srcSet={`${post.heroImage?.file.url}`} />
+                <source media="(min-width: 700px)" srcSet={`${post.heroImage?.file.url}`} />
+                <img src={`${post.heroImage?.file.url}`} alt={`${post.title}`} />
+              </picture>
+              <h3 className="title">{post.title}</h3>
+            </Link>
+          </article>
+        ))}
+      </section>
 
-    <section className="hero">
-      Martin Trenker
-    </section>
-
-    <section className="posts">
-      {[...new Array(5)].map(() => (
-        <article>
-          <Link to="/blog/example">
-            <picture>
-              <source media="(max-width: 700px)" srcSet="https://picsum.photos/150/200" />
-              <source media="(min-width: 700px)" srcSet="https://picsum.photos/750/500" />
-              <img src="https://picsum.photos/750/500" alt="Test" />
-            </picture>
-            <h3 className="title">A Blog Post About Code</h3>
-          </Link>
-        </article>
-      ))}
-    </section>
-
-  </div>
-);
+    </div>
+  );
+};

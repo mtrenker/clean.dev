@@ -5,12 +5,12 @@ import { Posts } from './Posts';
 
 export const Overview: VFC = () => (
   <Switch>
-    <Route exact path="/blog/:slug">
+    <Route exact path="/posts/:slug">
       <Post />
     </Route>
-    <Route path="/blog">
+    <Route path="/posts">
       <Posts />
-      <Link to="/blog/example">Example</Link>
+      <Link to="/posts/example">Example</Link>
     </Route>
   </Switch>
 );

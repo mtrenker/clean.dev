@@ -7,13 +7,13 @@ const frameCss = css`
     z-index: 10;
     display: flex;
     align-items: center;
-    height: 100px;
+    height: 75px;
     box-shadow:
       0 12.5px 10px rgba(0, 0, 0, 0.035),
       0 100px 80px rgba(0, 0, 0, 0.07)
     ;
     top: 0;
-    background-color: #fff;
+    background-color: var(--surface2);
     nav {
       flex: 1;
       ul {
@@ -33,7 +33,7 @@ const frameCss = css`
         }
         a {
           text-decoration: none;
-          color: #000;
+          color: #ffffff;
           &:after {
             content: " ";
             border-top: 1px solid red;
@@ -47,7 +47,7 @@ const frameCss = css`
   .container {
     padding: 0 24px;
     @media(min-width: 768px) {
-      max-width: 1200px;
+      max-width: 1633px;
       margin: 0 auto;
     }
   }
@@ -70,7 +70,7 @@ export const Frame: FC = ({ children }) => (
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/blog">Blog</NavLink>
+            <NavLink to="/posts">Posts</NavLink>
           </li>
           <li>
             <NavLink to="/contact">Contact</NavLink>

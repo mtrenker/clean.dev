@@ -62,12 +62,12 @@ const postCss = css`
     }
     img {
       position: absolute;
-      top: 0; 
+      top: 0;
       left: 0;
       height: 100%;
       width: 100%;
       object-fit: cover;
-      filter: hue-rotate(180deg) grayscale(.75);
+      filter: grayscale(.75);
     }
   }
   main {

@@ -2,7 +2,7 @@ import { Auth } from '@aws-amplify/auth';
 
 Auth.configure({
   Auth: {
-    region: 'eu-central-1',
+    region: process.env.AWS_REGION,
     userPoolId: process.env.COGNITO_POOL_ID,
     userPoolWebClientId: process.env.COGNITO_CLIENT_ID,
   },
