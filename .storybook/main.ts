@@ -1,10 +1,25 @@
+import webpackConfig from "../webpack.config"
+
 module.exports = {
   stories: [
-    '../src/**/*.stories.@(tsx|mdx)',
-    '../docs/**/*.stories.@(tsx|mdx)'
+    '../src',
+    '../docs'
   ],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-a11y/register',
   ],
+  features: {
+    previewCsfV3: true,
+  },
+  webpackFinal: (config: any) => {
+    const devConfig = webpackConfig({development: true});
+    return {
+      ...config,
+      module: {
+        ...config.module,
+        rules: devConfig.module?.rules
+      }
+    };
+  },
 };

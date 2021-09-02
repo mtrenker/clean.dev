@@ -8,12 +8,7 @@ const frameCss = css`
     display: flex;
     align-items: center;
     height: 75px;
-    box-shadow:
-      0 12.5px 10px rgba(0, 0, 0, 0.035),
-      0 100px 80px rgba(0, 0, 0, 0.07)
-    ;
     top: 0;
-    background-color: var(--surface2);
     nav {
       flex: 1;
       ul {
@@ -61,7 +56,7 @@ const frameCss = css`
 export const Frame: FC = ({ children }) => (
   <div css={frameCss}>
     <header>
-      <nav>
+      <nav className="container">
         <ul>
           <li>
             <NavLink to="/">clean.dev</NavLink>

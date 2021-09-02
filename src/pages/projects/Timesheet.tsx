@@ -1,8 +1,8 @@
 import { VFC } from 'react';
-import { css, Global } from '@emotion/react';
-import { differenceInHours, differenceInMinutes, format } from 'date-fns';
-import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
+import { css } from '@emotion/react';
+import {  differenceInMinutes, format } from 'date-fns';
 import { useParams } from 'react-router-dom';
+import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
 
 interface Tracking {
   startTime: Date;
@@ -60,11 +60,11 @@ const timeSheetCss = css`
       padding: 0 4px;
     }
     tr:nth-of-type(2n) td {
-      background-color: #dfdede;
+      /* background-color: #dfdede; */
     }
     tfoot tr:last-of-type td {
       border-top: 2px solid black;
-      background-color: #dfdede;
+      /* background-color: #dfdede; */
       font-weight: bold;
     }
     .date {
@@ -96,23 +96,23 @@ const timeSheetCss = css`
 export const Timesheet: VFC = () => {
   const { projectId } = useParams<{projectId: string}>();
 
-  const {data: trackingData} = useGetTrackingsQuery({
+  const { data: trackingData } = useGetTrackingsQuery({
     variables: {
       projectId,
-      date: "2021-07"
-    }
-  })
+      date: '2021-08',
+    },
+  });
 
-  const {data: projectData} = useGetProjectQuery({
+  const { data: projectData } = useGetProjectQuery({
     variables: {
-      projectId
-    }
-  })
+      projectId,
+    },
+  });
   const project = projectData?.getProject;
   return (
     <div css={timeSheetCss}>
       <h1>Zeitnachweis</h1>
-      <h2>Juli 2021</h2>
+      <h2>August 2021</h2>
 
       <address className="developer">
         {`${developer.firstName} ${developer.lastName}`}
@@ -126,7 +126,7 @@ export const Timesheet: VFC = () => {
         <dt>Kunde:</dt>
         <dd>{`${project?.client}, ${project?.contact.street}, ${project?.contact.zip} ${project?.contact.city}`}</dd>
         <dt>Monat:</dt>
-        <dd>07.2021</dd>
+        <dd>08.2021</dd>
         <dt>Ort:</dt>
         <dd>{project?.contact.city}</dd>
       </dl>

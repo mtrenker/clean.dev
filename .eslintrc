@@ -16,6 +16,9 @@
     "node": true,
     "jest": true
   },
+  "globals": {
+    "JSX": true
+  },
   "rules": {
     "react/prop-types": 0,
     "react/no-unused-prop-types": 0,

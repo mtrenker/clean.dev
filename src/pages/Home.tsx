@@ -1,8 +1,6 @@
 import { VFC } from 'react';
-import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 
-import { useGetBlogQuery } from '../graphql/hooks';
 import { Hero } from '../components/sections/Hero';
 
 const homeCss = css`
@@ -29,26 +27,8 @@ const homeCss = css`
   }
 `;
 
-export const Home: VFC = () => {
-  const { data } = useGetBlogQuery();
-  return (
-    <div css={homeCss}>
-      <Hero />
-      <section className="posts container">
-        {data?.getBlog.posts.map((post) => (
-          <article>
-            <Link to={`/posts/${post.slug}`}>
-              <picture>
-                <source media="(max-width: 700px)" srcSet={`${post.heroImage?.file.url}`} />
-                <source media="(min-width: 700px)" srcSet={`${post.heroImage?.file.url}`} />
-                <img src={`${post.heroImage?.file.url}`} alt={`${post.title}`} />
-              </picture>
-              <h3 className="title">{post.title}</h3>
-            </Link>
-          </article>
-        ))}
-      </section>
-
-    </div>
-  );
-};
+export const Home: VFC = () => (
+  <div css={homeCss}>
+    <Hero />
+  </div>
+);

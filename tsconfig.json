@@ -29,6 +29,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "types": [
+      "node",
       "@emotion/react/types/css-prop"
     ]
   },
