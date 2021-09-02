@@ -14,11 +14,13 @@ const globalCss = css`
 
     --text1: var(--text1-light);
     --text2: var(--text2-light);
+    --text3: var(--text3-light);
 
     --surface1: var(--surface1-light);
     --surface2: var(--surface2-light);
     --surface3: var(--surface3-light);
     --surface4: var(--surface4-light);
+    --surface5: var(--surface5-light);
 
     --surface-shadow: var(--surface-shadow-light);
     --shadow-strength: var(--surface-strength-light);
@@ -27,18 +29,20 @@ const globalCss = css`
     --box-shadow: var(--box-shadow-light);
   }
 
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: darki) {
     :root {
       color-scheme: dark;
       --brand: var(--brand-dark);
 
       --text1: var(--text1-dark);
       --text2: var(--text2-dark);
+      --text3: var(--text3-dark);
 
       --surface1: var(--surface1-dark);
       --surface2: var(--surface2-dark);
       --surface3: var(--surface3-dark);
       --surface4: var(--surface4-dark);
+      --surface5: var(--surface5-dark);
 
       --surface-shadow: var(--surface-shadow-dark);
       --shadow-strength: var(--surface-strength-dark);

@@ -2,6 +2,8 @@ import { VFC } from 'react';
 import { css } from '@emotion/react';
 
 import { Hero } from '../components/sections/Hero';
+import { BlogTeaser } from '../components/sections/BlogTeaser';
+import { useGetBlogQuery } from '../graphql/hooks';
 
 const homeCss = css`
   .posts {
@@ -27,8 +29,16 @@ const homeCss = css`
   }
 `;
 
-export const Home: VFC = () => (
-  <div css={homeCss}>
-    <Hero />
-  </div>
-);
+export const Home: VFC = () => {
+  const { data } = useGetBlogQuery();
+  return (
+    <div css={homeCss}>
+      <Hero />
+      <BlogTeaser post={data?.getBlog.posts[0]} />
+      <div>dummy</div>
+      <div>dummy</div>
+      <div>dummy</div>
+      <div>dummy</div>
+    </div>
+  );
+};

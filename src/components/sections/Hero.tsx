@@ -39,13 +39,13 @@ const heroCss = css`
   ;
   --hero-wrap: wrap;
   --hero-gap: 16px;
-  --hero-image-order: 1;
+  --hero-image-order: 0;
   --hero-title-size: 32px;
   --hero-subtitle-size: 24px;
   --hero-text-length: 100%;
   --hero-caption-height: calc(100vh - 75px);
   --hero-offer-animation-display: block;
-  @media(min-width: 1024px) {
+  @media(min-width: 1200px) {
     --hero-grid:
       "cloud-title    product-title   agile-title"    auto
       "cloud-content  product-content agile-content"  auto
@@ -60,6 +60,7 @@ const heroCss = css`
     --hero-caption-height: 100%;
     --hero-offer-animation-display: none;
   }
+  background-color: var(--surface2);
   .hero-main {
     figure {
       align-items: center;
@@ -67,9 +68,10 @@ const heroCss = css`
       flex-wrap: var(--hero-wrap);
       gap: var(--hero-gap);
       margin: 0;
-      height: 500px;
+      justify-content: center;
       img {
         order: var(--hero-image-order);
+        max-height: 50vh;
       }
       figcaption {
         height: var(--hero-caption-height);
@@ -77,20 +79,20 @@ const heroCss = css`
           width: var(--hero-text-length);
         }
         h1 {
-          color: #BFD4F3;
+          color: var(--text1);
           font-size: var(--hero-title-size);
           font-weight: bold;
         }
         h2 {
-          color: #65758D;
+          color: var(--text1);
           font-size: var(--hero-subtitle-size);
           font-weight: bold;
           span {
-            color: #BFD4F3;
+            color: var(--text2);
           }
         }
         p {
-          color: #BFD4F3;
+          color: var(--text1);
           margin-bottom: 40px;
           max-width: 65ch;
         }
@@ -244,7 +246,7 @@ export const Hero: VFC = () => {
       </div>
       <div className="offers">
         <dl className="container">
-          <HeroOffer className="cloud" to="/serverless-enthusuiast" title="Serverless Enthusiast">
+          <HeroOffer className="cloud" to="/serverless-enthusiast" title="Serverless Enthusiast">
             <p>
               Unleash the power of cloud computing within your organization
               and enable your teams to focus on what really counts:

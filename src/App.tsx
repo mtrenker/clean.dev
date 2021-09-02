@@ -63,7 +63,7 @@ export const App: FC = () => {
                   <Route path="/posts">
                     <Overview />
                   </Route>
-                  <Route path="/">
+                  <Route path="/:category?">
                     <Home />
                   </Route>
                 </Switch>
