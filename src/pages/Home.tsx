@@ -35,10 +35,6 @@ export const Home: VFC = () => {
     <div css={homeCss}>
       <Hero />
       <BlogTeaser post={data?.getBlog.posts[0]} />
-      <div>dummy</div>
-      <div>dummy</div>
-      <div>dummy</div>
-      <div>dummy</div>
     </div>
   );
 };

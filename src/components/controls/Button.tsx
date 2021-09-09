@@ -8,12 +8,13 @@ interface ButtonProps extends HTMLProps<HTMLButtonElement> {
 }
 
 const buttonCss = css`
-  height: 64px;
+  height: 48px;
+  cursor: pointer;
   &.primary {
-    color: #A9BF5A;
-    border: 2px solid #A9BF5A;
+    color: var(--text1);
+    border: 2px solid var(--text1);
     border-radius: 12px;
-    background-color: hsla(73, 53%, 75%, .05);
+    background-color: var(--surface1);
     font-size: 18px;
     font-weight: bold;
     padding: 0 40px;

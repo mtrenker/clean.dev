@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import me from '../../assets/me.png';
+import { Serverless } from '../animations/Serverless';
 import { Button } from '../controls/Button';
 
 interface HeroOfferProps {
@@ -108,6 +109,7 @@ const heroCss = css`
       grid-template: var(--hero-grid);
       gap: var(--hero-gap);
       dt {
+        font-weight: bold;
         scroll-snap-align: start;
         align-self: center;
         &.cloud {
@@ -204,10 +206,6 @@ const DefaultHero: VFC = () => (
   </figure>
 );
 
-const ServerlessHero: VFC = () => (
-  <figure>SERVERLESS</figure>
-);
-
 const ProductHero: VFC = () => (
   <figure>Product</figure>
 );
@@ -221,7 +219,7 @@ type HeroCategory = 'serverless-enthusiast' |'product-thinker' | 'agile-coach'
 const renderHero = (cateogry: HeroCategory): JSX.Element => {
   switch (cateogry) {
     case 'serverless-enthusiast':
-      return <ServerlessHero />;
+      return <Serverless />;
     case 'product-thinker':
       return <ProductHero />;
     case 'agile-coach':

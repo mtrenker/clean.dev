@@ -60,8 +60,11 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
   },
   resolve: {
     fallback: {
+      fs: false,
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
+      os: require.resolve('os-browserify/browser'),
+      path: require.resolve('path-browserify'),
     },
     extensions: ['.mjs', '.js', '.json', '.ts', '.tsx', '.map'],
   },
