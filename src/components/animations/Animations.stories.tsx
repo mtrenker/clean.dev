@@ -1,10 +1,11 @@
 import { Meta } from '@storybook/react';
+import { Agile } from './Agile';
 import { Process } from './Process';
 
 export default {
   title: 'Animations',
   parameters: {
-    layout: 'fullscreen',
+    layout: 'padded',
   },
   decorators: [
     (Story) => <div style={{ height: '100vh' }}><Story /></div>,
@@ -12,3 +13,4 @@ export default {
 } as Meta;
 
 export const process = (args) => <Process />;
+export const agile = (args) => <Agile />;
