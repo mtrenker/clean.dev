@@ -123,6 +123,17 @@ export const physicsSystem = createSystem('physics').withConfig({
                 type: 'ADD_COMPONENT',
                 entity,
                 component: {
+                  name: 'velocity',
+                  data: {
+                    x: (toX - x),
+                    y: (toY - y) / 60,
+                  },
+                },
+              }, { to: 'ecs' }));
+              events.push(send({
+                type: 'ADD_COMPONENT',
+                entity,
+                component: {
                   name: 'position',
                   data: {
                     x: x + vx,
@@ -137,8 +148,8 @@ export const physicsSystem = createSystem('physics').withConfig({
                 component: {
                   name: 'velocity',
                   data: {
-                    x: 1,
-                    y: 1,
+                    x: 0,
+                    y: 0,
                   },
                 },
               }, { to: 'ecs' }));

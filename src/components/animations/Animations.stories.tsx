@@ -1,6 +1,5 @@
 import { Meta } from '@storybook/react';
 import { Agile } from './Agile';
-import { Process } from './Process';
 
 export default {
   title: 'Animations',
@@ -12,5 +11,4 @@ export default {
   ],
 } as Meta;
 
-export const process = (args) => <Process />;
 export const agile = (args) => <Agile />;

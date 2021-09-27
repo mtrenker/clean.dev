@@ -157,7 +157,9 @@ export const ecsMachine = createMachine<EcsContext, EcsEvent>({
   },
   services: {
     loop: () => (send) => {
-      const subsciption = animationFrames().subscribe(({ elapsed, timestamp }) => {
+      const subsciption = animationFrames().pipe(
+        
+      ).subscribe(({ elapsed, timestamp }) => {
         send({ type: 'TICK', elapsed, timestamp });
       });
       return () => {

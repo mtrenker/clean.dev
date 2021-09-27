@@ -89,7 +89,7 @@ export const Serverless: VFC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const codeRef = useRef<HTMLElement>(null);
 
-  const [_, send] = useMachine(serverlessAnimationMachine.withConfig({
+  const [, send] = useMachine(serverlessAnimationMachine.withConfig({
     services: {
       typeLine: (context, event: {element: HTMLElement, text: string}) => new Promise<void>((resolve) => {
         const { element, text } = event;
