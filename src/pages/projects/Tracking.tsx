@@ -68,6 +68,7 @@ export const Tracking: VFC = () => {
         },
       },
     });
+    nextDay();
   };
 
   const startTime = watch('startTime');
@@ -77,6 +78,7 @@ export const Tracking: VFC = () => {
     setValue('startTime', addDays(startTime, 1));
     setValue('endTime', addDays(endTime, 1));
   };
+
   return (
     <div css={trackingCss}>
       <form className="tracker" onSubmit={handleSubmit(onSubmit)}>

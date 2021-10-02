@@ -1,6 +1,6 @@
 import { VFC } from 'react';
 import { css } from '@emotion/react';
-import {  differenceInMinutes, format } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
 
@@ -99,7 +99,7 @@ export const Timesheet: VFC = () => {
   const { data: trackingData } = useGetTrackingsQuery({
     variables: {
       projectId,
-      date: '2021-08',
+      date: '2021-09',
     },
   });
 
@@ -112,7 +112,7 @@ export const Timesheet: VFC = () => {
   return (
     <div css={timeSheetCss}>
       <h1>Zeitnachweis</h1>
-      <h2>August 2021</h2>
+      <h2>September 2021</h2>
 
       <address className="developer">
         {`${developer.firstName} ${developer.lastName}`}
@@ -126,7 +126,7 @@ export const Timesheet: VFC = () => {
         <dt>Kunde:</dt>
         <dd>{`${project?.client}, ${project?.contact.street}, ${project?.contact.zip} ${project?.contact.city}`}</dd>
         <dt>Monat:</dt>
-        <dd>08.2021</dd>
+        <dd>09.2021</dd>
         <dt>Ort:</dt>
         <dd>{project?.contact.city}</dd>
       </dl>
