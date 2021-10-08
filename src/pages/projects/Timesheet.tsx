@@ -4,12 +4,6 @@ import { differenceInMinutes, format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
 
-interface Tracking {
-  startTime: Date;
-  endTime: Date;
-  description: string;
-}
-
 const developer = {
   firstName: 'Max',
   lastName: 'Mustermann',
@@ -155,7 +149,14 @@ export const Timesheet: VFC = () => {
           <tr>
             <td colSpan={2}>Stunden Gesamt</td>
             <td className="hours">
-              {trackingData?.getTrackings.items.reduce((hours, { startTime, endTime }) => hours + differenceInMinutes(new Date(endTime), new Date(startTime)) / 60, 0)}
+              {trackingData?.getTrackings.items.reduce(
+                (hours, { startTime, endTime }) => {
+                  const endDate = new Date(endTime);
+                  const startDate = new Date(startTime);
+                  return hours + differenceInMinutes(endDate, startDate) / 60;
+                },
+                0,
+              )}
             </td>
           </tr>
         </tfoot>
