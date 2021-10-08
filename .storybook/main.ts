@@ -3,7 +3,8 @@ import webpackConfig from "../webpack.config"
 module.exports = {
   stories: [
     '../src',
-    '../docs'
+    '../docs',
+    '../experiments',
   ],
   addons: [
     '@storybook/addon-essentials',

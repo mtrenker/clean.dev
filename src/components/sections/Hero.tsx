@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 
 import me from '../../assets/me.png';
-import { Serverless } from '../animations/Serverless';
 import { Button } from '../controls/Button';
 
 interface HeroOfferProps {
@@ -219,7 +218,7 @@ type HeroCategory = 'serverless-enthusiast' |'product-thinker' | 'agile-coach'
 const renderHero = (cateogry: HeroCategory): JSX.Element => {
   switch (cateogry) {
     case 'serverless-enthusiast':
-      return <Serverless />;
+      return <ProductHero />;
     case 'product-thinker':
       return <ProductHero />;
     case 'agile-coach':
