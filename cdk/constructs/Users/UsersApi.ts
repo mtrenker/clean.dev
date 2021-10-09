@@ -47,6 +47,8 @@ export class UsersApi extends Construct {
       },
     });
 
+    api.addType(userType);
+
     api.addQuery('me', new ResolvableField({
       returnType: userType.attribute({ isRequired: true }),
       dataSource: querySource,
