@@ -17,6 +17,7 @@ import { Timesheet } from './pages/projects/Timesheet';
 import { Tracking } from './pages/projects/Tracking';
 import { Overview } from './pages/blog/Overview';
 import { Frame } from './components/Frame';
+import { UserProfile } from './pages/user/Profile';
 
 export const App: FC = () => {
   const [user, setUser] = useState();
@@ -62,6 +63,9 @@ export const App: FC = () => {
                   </Route>
                   <Route path="/posts">
                     <Overview />
+                  </Route>
+                  <Route path="/user">
+                    <UserProfile />
                   </Route>
                   <Route path="/:category?">
                     <Home />
