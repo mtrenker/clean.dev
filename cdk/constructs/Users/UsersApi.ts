@@ -70,15 +70,21 @@ export class UsersApi extends Construct {
       `),
     }));
 
+    const contactInput = new InputType('ContactInput', {
+      definition: {
+        firstName: GraphqlType.string({ isRequired }),
+        lastName: GraphqlType.string({ isRequired }),
+        email: GraphqlType.string({ isRequired }),
+        street: GraphqlType.string({ isRequired }),
+        city: GraphqlType.string({ isRequired }),
+        zip: GraphqlType.string({ isRequired }),
+      },
+    });
+
     api.addMutation('updateContact', new ResolvableField({
       returnType: contactType.attribute(),
       args: {
-        firstName: GraphqlType.string(),
-        lastName: GraphqlType.string(),
-        email: GraphqlType.string(),
-        street: GraphqlType.string(),
-        city: GraphqlType.string(),
-        zip: GraphqlType.string(),
+        contact: contactInput.attribute({ isRequired }),
       },
       dataSource: querySource,
       requestMappingTemplate: MappingTemplate.fromString(`
