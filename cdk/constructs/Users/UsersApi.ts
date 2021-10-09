@@ -96,14 +96,12 @@ export class UsersApi extends Construct {
             "sk" : $util.dynamodb.toDynamoDBJson("user-$ctx.identity.sub")
           },
           "attributeValues": {
-            "contact": $util.dynamodb.toDynamoDBJson("$ctx.args.contact")
+            "contact": $util.dynamodb.toDynamoDBJson($ctx.args.contact)
           }
         }
       `),
       responseMappingTemplate: MappingTemplate.fromString(`
-        {
-          "contact": $util.dynamodb.toDynamoDBJson("$ctx.args.contact")
-        }
+        $util.toJson($ctx.args.contact)
       `),
     }));
   }
