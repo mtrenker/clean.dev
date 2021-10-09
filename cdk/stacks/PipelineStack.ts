@@ -40,6 +40,7 @@ export class PipelineStack extends Stack {
         ],
         cloudAssemblyArtifact,
         sourceArtifact,
+        installCommand: 'npm i',
         synthCommand: 'npm run synth',
       }),
     });
