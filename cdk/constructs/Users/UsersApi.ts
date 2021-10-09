@@ -9,9 +9,7 @@ import {
   ObjectTypeOptions,
   ResolvableField,
 } from '@aws-cdk/aws-appsync';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { ITable } from '@aws-cdk/aws-dynamodb';
-import { Graphql } from '../Api/Graphql';
 
 interface ProjectProps {
   querySource: DynamoDbDataSource
@@ -19,7 +17,7 @@ interface ProjectProps {
   table: ITable
 }
 
-export class ProjectsApi extends Construct {
+export class UsersApi extends Construct {
   private readonly fields = new Map<string, ObjectType>();
 
   private readonly api: GraphqlApi
@@ -32,17 +30,6 @@ export class ProjectsApi extends Construct {
     this.api = api;
 
     const contactType = new ObjectType('Contact', {
-      definition: {
-        firstName: GraphqlType.string({ isRequired }),
-        lastName: GraphqlType.string({ isRequired }),
-        email: GraphqlType.string({ isRequired }),
-        street: GraphqlType.string({ isRequired }),
-        city: GraphqlType.string({ isRequired }),
-        zip: GraphqlType.string({ isRequired }),
-      },
-    });
-
-    const contactInput = new InputType('ContactInput', {
       definition: {
         firstName: GraphqlType.string({ isRequired }),
         lastName: GraphqlType.string({ isRequired }),

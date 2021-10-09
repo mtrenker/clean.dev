@@ -11,6 +11,7 @@ import { StringParameter } from '@aws-cdk/aws-ssm';
 import { Graphql } from '../constructs/Api/Graphql';
 import { BlogApi } from '../constructs/Blog/BlogApi';
 import { ProjectsApi } from '../constructs/Projects/ProjectsApi';
+import { UsersApi } from '../constructs/Users/UsersApi';
 
 export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
@@ -36,6 +37,12 @@ export class ApiStack extends Stack {
       api,
       table,
       querySource,
+    });
+
+    new UsersApi(this, 'UsersApi', {
+      api,
+      querySource,
+      table,
     });
 
     new StringParameter(this, 'GraphQlUrlParam', {

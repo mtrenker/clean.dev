@@ -53,7 +53,7 @@ export class GitHubBuild extends Construct {
         version: '0.2',
         phases: {
           install: {
-            commands: ['npm ci'],
+            commands: ['npm i'],
           },
           build: {
             commands: ['npm run build'],
