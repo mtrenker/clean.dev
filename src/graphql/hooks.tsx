@@ -17,8 +17,6 @@ export type Scalars = {
   AWSDateTime: string;
 };
 
-
-
 export type Author = {
   __typename?: 'Author';
   avatar?: Maybe<Image>;
@@ -82,6 +80,7 @@ export type Mutation = {
   createTracking: TrackingMutationResponse;
   deleteProject: ProjectMutationResponse;
   deleteTracking: TrackingMutationResponse;
+  updateContact?: Maybe<Contact>;
   updateProject: ProjectMutationResponse;
   updateTracking: TrackingMutationResponse;
 };
@@ -104,6 +103,11 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteTrackingArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationUpdateContactArgs = {
+  contact: ContactInput;
 };
 
 
@@ -190,6 +194,7 @@ export type Query = {
   getProject: Project;
   getProjects: ProjectConnection;
   getTrackings: TrackingConnection;
+  me: User;
 };
 
 
@@ -243,98 +248,44 @@ export type TrackingMutationResponse = {
   tracking: Tracking;
 };
 
+export type User = {
+  __typename?: 'User';
+  contact?: Maybe<Contact>;
+  id: Scalars['ID'];
+};
+
 export type GetBlogQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBlogQuery = (
-  { __typename?: 'Query' }
-  & { getBlog: (
-    { __typename?: 'Blog' }
-    & { posts: Array<(
-      { __typename?: 'Post' }
-      & PostFieldsFragment
-    )> }
-  ) }
-);
+export type GetBlogQuery = { __typename?: 'Query', getBlog: { __typename?: 'Blog', posts: Array<{ __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined }> } };
 
 export type GetPostQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
-export type GetPostQuery = (
-  { __typename?: 'Query' }
-  & { getPost?: Maybe<(
-    { __typename?: 'Post' }
-    & PostFieldsFragment
-  )> }
-);
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined } | null | undefined };
 
-export type PostFieldsFragment = (
-  { __typename?: 'Post' }
-  & Pick<Post, 'content' | 'intro' | 'publishDate' | 'slug' | 'title'>
-  & { heroImage?: Maybe<(
-    { __typename?: 'Image' }
-    & Pick<Image, 'title' | 'description'>
-    & { file: (
-      { __typename?: 'File' }
-      & Pick<File, 'contentType' | 'fileName' | 'url'>
-      & { details: (
-        { __typename?: 'FileDetails' }
-        & Pick<FileDetails, 'size'>
-        & { image?: Maybe<(
-          { __typename?: 'ImageDetails' }
-          & Pick<ImageDetails, 'height' | 'width'>
-        )> }
-      ) }
-    ) }
-  )> }
-);
+export type PostFieldsFragment = { __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined };
 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = (
-  { __typename?: 'Query' }
-  & { getProjects: (
-    { __typename?: 'ProjectConnection' }
-    & Pick<ProjectConnection, 'totalCount'>
-    & { items: Array<(
-      { __typename?: 'Project' }
-      & ProjectFieldsFragment
-    )> }
-  ) }
-);
+export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'ProjectConnection', totalCount: number, items: Array<{ __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } }> } };
 
 export type GetProjectQueryVariables = Exact<{
   projectId: Scalars['ID'];
 }>;
 
 
-export type GetProjectQuery = (
-  { __typename?: 'Query' }
-  & { getProject: (
-    { __typename?: 'Project' }
-    & ProjectFieldsFragment
-  ) }
-);
+export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } } };
 
 export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
 }>;
 
 
-export type CreateProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { createProject: (
-    { __typename?: 'ProjectMutationResponse' }
-    & Pick<ProjectMutationResponse, 'code' | 'message' | 'success'>
-    & { project: (
-      { __typename?: 'Project' }
-      & ProjectFieldsFragment
-    ) }
-  ) }
-);
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'ProjectMutationResponse', code: string, message: string, success: boolean, project: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } } } };
 
 export type GetTrackingsQueryVariables = Exact<{
   date?: Maybe<Scalars['String']>;
@@ -342,53 +293,25 @@ export type GetTrackingsQueryVariables = Exact<{
 }>;
 
 
-export type GetTrackingsQuery = (
-  { __typename?: 'Query' }
-  & { getTrackings: (
-    { __typename?: 'TrackingConnection' }
-    & { items: Array<(
-      { __typename?: 'Tracking' }
-      & TrackingFieldsFragment
-    )> }
-  ) }
-);
+export type GetTrackingsQuery = { __typename?: 'Query', getTrackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } };
 
 export type CreateTrackingMutationVariables = Exact<{
   input: TrackingInput;
 }>;
 
 
-export type CreateTrackingMutation = (
-  { __typename?: 'Mutation' }
-  & { createTracking: (
-    { __typename?: 'TrackingMutationResponse' }
-    & Pick<TrackingMutationResponse, 'code' | 'message' | 'success'>
-    & { tracking: (
-      { __typename?: 'Tracking' }
-      & TrackingFieldsFragment
-    ) }
-  ) }
-);
+export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
 
-export type ProjectFieldsFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'client' | 'description' | 'endDate' | 'industry' | 'methodologies' | 'startDate' | 'technologies'>
-  & { contact: (
-    { __typename?: 'Contact' }
-    & Pick<Contact, 'city' | 'email' | 'firstName' | 'lastName' | 'street' | 'zip'>
-  ), trackings: (
-    { __typename?: 'TrackingConnection' }
-    & { items: Array<(
-      { __typename?: 'Tracking' }
-      & TrackingFieldsFragment
-    )> }
-  ) }
-);
+export type ProjectFieldsFragment = { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } };
 
-export type TrackingFieldsFragment = (
-  { __typename?: 'Tracking' }
-  & Pick<Tracking, 'id' | 'description' | 'startTime' | 'endTime'>
-);
+export type TrackingFieldsFragment = { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', contact?: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string } | null | undefined } };
+
+export type ContactFieldsFragment = { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string };
 
 export const PostFieldsFragmentDoc = gql`
     fragment postFields on Post {
@@ -415,6 +338,16 @@ export const PostFieldsFragmentDoc = gql`
   title
 }
     `;
+export const ContactFieldsFragmentDoc = gql`
+    fragment contactFields on Contact {
+  city
+  email
+  firstName
+  lastName
+  street
+  zip
+}
+    `;
 export const TrackingFieldsFragmentDoc = gql`
     fragment trackingFields on Tracking {
   id
@@ -428,12 +361,7 @@ export const ProjectFieldsFragmentDoc = gql`
   id
   client
   contact {
-    city
-    email
-    firstName
-    lastName
-    street
-    zip
+    ...contactFields
   }
   description
   endDate
@@ -447,7 +375,8 @@ export const ProjectFieldsFragmentDoc = gql`
     }
   }
 }
-    ${TrackingFieldsFragmentDoc}`;
+    ${ContactFieldsFragmentDoc}
+${TrackingFieldsFragmentDoc}`;
 export const GetBlogDocument = gql`
     query getBlog {
   getBlog {
@@ -705,3 +634,39 @@ export function useCreateTrackingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTrackingMutation>;
 export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
 export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
+export const MeDocument = gql`
+    query me {
+  me {
+    contact {
+      ...contactFields
+    }
+  }
+}
+    ${ContactFieldsFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;

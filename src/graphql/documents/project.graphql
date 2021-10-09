@@ -48,12 +48,7 @@ fragment projectFields on Project {
   id
   client
   contact {
-    city
-    email
-    firstName
-    lastName
-    street
-    zip
+    ...contactFields
   }
   description
   endDate

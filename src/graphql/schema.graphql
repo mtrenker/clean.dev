@@ -51,6 +51,7 @@ type Mutation {
   createTracking(input: TrackingInput!): TrackingMutationResponse!
   deleteProject(id: ID!): ProjectMutationResponse!
   deleteTracking(id: ID!): TrackingMutationResponse!
+  updateContact(contact: ContactInput!): Contact
   updateProject(id: ID!, input: ProjectInput!): ProjectMutationResponse!
   updateTracking(id: ID!, input: TrackingInput!): TrackingMutationResponse!
 }
@@ -105,6 +106,7 @@ type Query {
   getProject(id: ID!): Project!
   getProjects: ProjectConnection!
   getTrackings(date: String, projectId: String!): TrackingConnection!
+  me: User!
 }
 
 type Tracking {
@@ -125,6 +127,11 @@ type TrackingMutationResponse {
   message: String!
   success: Boolean!
   tracking: Tracking!
+}
+
+type User {
+  contact: Contact
+  id: ID!
 }
 
 input ContactInput {

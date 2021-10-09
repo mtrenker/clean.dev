@@ -2,15 +2,7 @@ import { VFC } from 'react';
 import { css } from '@emotion/react';
 import { differenceInMinutes, format } from 'date-fns';
 import { useParams } from 'react-router-dom';
-import { useGetProjectQuery, useGetTrackingsQuery } from '../../graphql/hooks';
-
-const developer = {
-  firstName: 'Max',
-  lastName: 'Mustermann',
-  address: 'Muster Str 123',
-  city: 'Musterhausen',
-  zip: '12345',
-};
+import { useGetProjectQuery, useGetTrackingsQuery, useMeQuery } from '../../graphql/hooks';
 
 const timeSheetCss = css`
   @page {
@@ -90,6 +82,9 @@ const timeSheetCss = css`
 export const Timesheet: VFC = () => {
   const { projectId } = useParams<{projectId: string}>();
 
+  const { data: userData } = useMeQuery();
+  const developer = userData?.me.contact;
+
   const { data: trackingData } = useGetTrackingsQuery({
     variables: {
       projectId,
@@ -109,11 +104,11 @@ export const Timesheet: VFC = () => {
       <h2>September 2021</h2>
 
       <address className="developer">
-        {`${developer.firstName} ${developer.lastName}`}
+        {`${developer?.firstName} ${developer?.lastName}`}
         <br />
-        {developer.address}
+        {developer?.street}
         <br />
-        {`${developer.zip} ${developer.city}`}
+        {`${developer?.zip} ${developer?.city}`}
       </address>
 
       <dl className="customer">
