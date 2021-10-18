@@ -85,6 +85,9 @@ export const Frame: FC = ({ children }) => {
             <li>
               <NavLink to="/contact">Contact</NavLink>
             </li>
+            <li>
+              <NavLink to="/projects">Projects</NavLink>
+            </li>
           </ul>
         </nav>
       </header>

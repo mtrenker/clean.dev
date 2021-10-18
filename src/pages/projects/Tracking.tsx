@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useCreateTrackingMutation } from '../../graphql/hooks';
+import { Timesheet } from './Timesheet';
 
 interface TrackingData {
   description: string;
@@ -129,6 +130,7 @@ export const Tracking: VFC = () => {
         <button type="reset">Reset</button>
         <button type="submit">Submit</button>
       </form>
+      <Timesheet date="2021-10" />
     </div>
   );
 };

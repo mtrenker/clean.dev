@@ -18,7 +18,7 @@ const projectsCss = css`
 
 export const Projects: VFC = () => {
   const [createProject] = useCreateProjectMutation();
-  const { data } = useGetProjectsQuery({});
+  const { data } = useGetProjectsQuery();
   const methods = useForm();
   const { path } = useRouteMatch();
   const { handleSubmit } = methods;
@@ -40,15 +40,25 @@ export const Projects: VFC = () => {
       <h1>Projects</h1>
       <section>
         <h2>Existing Projects</h2>
-        {data?.getProjects.items.map((project) => (
-          <div>
-            <Link to={`${path}/${project.id}/tracking`}>
-              {project.client}
-              {' '}
-              Tracking
-            </Link>
-          </div>
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <td>Client</td>
+              <td>Actions</td>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.getProjects.items.map((project) => (
+              <tr>
+                <td>{project.client}</td>
+                <td>
+                  <Link to={`${path}/${project.id}/tracking`}>Tracking</Link>
+                  <Link to={`${path}/${project.id}/timesheet`}>Timesheet</Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
       <section>
         <h2>New Projects</h2>

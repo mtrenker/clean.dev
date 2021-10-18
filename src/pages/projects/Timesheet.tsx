@@ -4,6 +4,10 @@ import { differenceInMinutes, format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { useGetProjectQuery, useGetTrackingsQuery, useMeQuery } from '../../graphql/hooks';
 
+interface TimesheetProps {
+  date: string;
+}
+
 const timeSheetCss = css`
   @page {
     margin: 0;
@@ -79,7 +83,7 @@ const timeSheetCss = css`
   }
 `;
 
-export const Timesheet: VFC = () => {
+export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
   const { projectId } = useParams<{projectId: string}>();
 
   const { data: userData } = useMeQuery();
@@ -88,7 +92,7 @@ export const Timesheet: VFC = () => {
   const { data: trackingData } = useGetTrackingsQuery({
     variables: {
       projectId,
-      date: '2021-09',
+      date,
     },
   });
 
