@@ -1,6 +1,8 @@
 /* eslint-disable react/button-has-type */
 import { css } from '@emotion/react';
-import { setHours, setMinutes, addDays } from 'date-fns';
+import {
+  setHours, setMinutes, addDays, differenceInHours,
+} from 'date-fns';
 import { VFC } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -75,9 +77,18 @@ export const Tracking: VFC = () => {
   const startTime = watch('startTime');
   const endTime = watch('endTime');
 
+  const prevDay = () => {
+    setValue('startTime', addDays(startTime, -1));
+    setValue('endTime', addDays(endTime, -1));
+  };
   const nextDay = () => {
     setValue('startTime', addDays(startTime, 1));
     setValue('endTime', addDays(endTime, 1));
+  };
+
+  const today = () => {
+    setValue('startTime', setHours(setMinutes(new Date(), 0), 8));
+    setValue('endTime', setHours(setMinutes(new Date(), 0), 16));
   };
 
   return (
@@ -121,7 +132,10 @@ export const Tracking: VFC = () => {
         </label>
 
         <div className="tools">
+          <button type="button" onClick={prevDay}>Prev Day</button>
+          <button type="button" onClick={today}>Today (8-16)</button>
           <button type="button" onClick={nextDay}>Next Day</button>
+          <span>{differenceInHours(endTime, startTime)}</span>
         </div>
 
         <label htmlFor="description" className="description">
