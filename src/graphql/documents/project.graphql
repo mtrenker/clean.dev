@@ -43,6 +43,28 @@ mutation createTracking($input: TrackingInput!) {
   }
 }
 
+mutation updateTracking($id: ID!, $input: TrackingInput!) {
+  updateTracking(id: $id, input: $input) {
+    code
+    message
+    success
+    tracking {
+      ...trackingFields
+    }
+  }
+}
+
+mutation deleteTracking($id: ID!) {
+  deleteTracking(id: $id) {
+    code
+    message
+    success
+    tracking {
+      ...trackingFields
+    }
+  }
+}
+
 
 fragment projectFields on Project {
   id

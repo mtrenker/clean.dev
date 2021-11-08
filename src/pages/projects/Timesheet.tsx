@@ -1,8 +1,10 @@
 import { VFC } from 'react';
 import { css } from '@emotion/react';
-import { differenceInMinutes, format } from 'date-fns';
-import { useParams } from 'react-router-dom';
-import { useGetProjectQuery, useGetTrackingsQuery, useMeQuery } from '../../graphql/hooks';
+import { differenceInMinutes, format, setSeconds } from 'date-fns';
+import { Link, useParams } from 'react-router-dom';
+import {
+  useDeleteTrackingMutation, useGetProjectQuery, useGetTrackingsQuery, useMeQuery,
+} from '../../graphql/hooks';
 
 interface TimesheetProps {
   date: string;
@@ -11,6 +13,16 @@ interface TimesheetProps {
 const timeSheetCss = css`
   @page {
     margin: 0;
+  }
+  @media print {
+    a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    button {
+      display: none;
+    }
   }
   display: grid;
   height: 100vh;
@@ -50,11 +62,11 @@ const timeSheetCss = css`
       padding: 0 4px;
     }
     tr:nth-of-type(2n) td {
-      /* background-color: #dfdede; */
+      background-color: #dfdede;
     }
     tfoot tr:last-of-type td {
       border-top: 2px solid black;
-      /* background-color: #dfdede; */
+      background-color: #dfdede;
       font-weight: bold;
     }
     .date {
@@ -96,6 +108,15 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
     },
   });
 
+  const [deleteTracking] = useDeleteTrackingMutation();
+  const onDeleteTracking = (id: string) => () => {
+    deleteTracking({
+      variables: {
+        id,
+      },
+    });
+  };
+
   const { data: projectData } = useGetProjectQuery({
     variables: {
       projectId,
@@ -105,7 +126,7 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
   return (
     <div css={timeSheetCss}>
       <h1>Zeitnachweis</h1>
-      <h2>September 2021</h2>
+      <h2>Oktober 2021</h2>
 
       <address className="developer">
         {`${developer?.firstName} ${developer?.lastName}`}
@@ -119,7 +140,7 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
         <dt>Kunde:</dt>
         <dd>{`${project?.client}, ${project?.contact.street}, ${project?.contact.zip} ${project?.contact.city}`}</dd>
         <dt>Monat:</dt>
-        <dd>09.2021</dd>
+        <dd>10.2021</dd>
         <dt>Ort:</dt>
         <dd>{project?.contact.city}</dd>
       </dl>
@@ -133,13 +154,21 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
           </tr>
         </thead>
         <tbody>
-          {trackingData?.getTrackings.items.map((data) => {
-            const hours = differenceInMinutes(new Date(data.endTime), new Date(data.startTime)) / 60;
+          {trackingData?.getTrackings.items.map((tracking) => {
+            const hours = differenceInMinutes(
+              setSeconds(new Date(tracking.endTime), 0),
+              setSeconds(new Date(tracking.startTime), 0),
+            ) / 60;
             return (
               <tr>
-                <td className="date">{format(new Date(data.startTime), 'dd.MM.yyyy')}</td>
-                <td className="description">{data.description}</td>
-                <td className="hours">{hours}</td>
+                <td className="date">{format(new Date(tracking.startTime), 'dd.MM.yyyy')}</td>
+                <td className="description">
+                  <Link to={`/projects/${projectId}/tracking/${tracking.id}`}>{tracking.description}</Link>
+                </td>
+                <td className="hours">
+                  {hours}
+                  <button type="button" onClick={onDeleteTracking(tracking.id)}>X</button>
+                </td>
               </tr>
             );
           })}
@@ -150,8 +179,8 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
             <td className="hours">
               {trackingData?.getTrackings.items.reduce(
                 (hours, { startTime, endTime }) => {
-                  const endDate = new Date(endTime);
-                  const startDate = new Date(startTime);
+                  const endDate = setSeconds(new Date(endTime), 0);
+                  const startDate = setSeconds(new Date(startTime), 0);
                   return hours + differenceInMinutes(endDate, startDate) / 60;
                 },
                 0,

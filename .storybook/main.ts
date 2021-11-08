@@ -17,10 +17,13 @@ module.exports = {
     const devConfig = webpackConfig({development: true});
     return {
       ...config,
-      module: {
-        ...config.module,
-        rules: devConfig.module?.rules
-      }
+      // module: {
+      //   ...config.module,
+      //   rules: {
+      //     ...config.module?.rules,
+      //     ...devConfig.module?.rules
+      //   }
+      // }
     };
   },
 };

@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useCreateTrackingMutation } from '../../graphql/hooks';
+import { useCreateTrackingMutation, useUpdateTrackingMutation } from '../../graphql/hooks';
 import { Timesheet } from './Timesheet';
 
 interface TrackingData {
@@ -59,18 +59,33 @@ export const Tracking: VFC = () => {
     handleSubmit, control, register, watch, setValue,
   } = useForm<TrackingData>();
   const [createTracking] = useCreateTrackingMutation();
-  const { projectId } = useParams<{projectId: string}>();
+  const [updateTracking] = useUpdateTrackingMutation();
+  const { projectId, trackingId } = useParams<{projectId: string, trackingId: string}>();
   const onSubmit = (data: TrackingData) => {
-    createTracking({
-      variables: {
-        input: {
-          ...data,
-          startTime: data.startTime.toISOString(),
-          endTime: data.endTime.toISOString(),
-          projectId,
+    if (trackingId) {
+      updateTracking({
+        variables: {
+          id: trackingId,
+          input: {
+            ...data,
+            startTime: data.startTime.toISOString(),
+            endTime: data.endTime.toISOString(),
+            projectId,
+          },
         },
-      },
-    });
+      });
+    } else {
+      createTracking({
+        variables: {
+          input: {
+            ...data,
+            startTime: data.startTime.toISOString(),
+            endTime: data.endTime.toISOString(),
+            projectId,
+          },
+        },
+      });
+    }
     nextDay();
   };
 
@@ -144,7 +159,7 @@ export const Tracking: VFC = () => {
         <button type="reset">Reset</button>
         <button type="submit">Submit</button>
       </form>
-      <Timesheet date="2021-10" />
+      <Timesheet date="2021-11" />
     </div>
   );
 };

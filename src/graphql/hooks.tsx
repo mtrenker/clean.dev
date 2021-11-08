@@ -302,6 +302,21 @@ export type CreateTrackingMutationVariables = Exact<{
 
 export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
 
+export type UpdateTrackingMutationVariables = Exact<{
+  id: Scalars['ID'];
+  input: TrackingInput;
+}>;
+
+
+export type UpdateTrackingMutation = { __typename?: 'Mutation', updateTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
+
+export type DeleteTrackingMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteTrackingMutation = { __typename?: 'Mutation', deleteTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
+
 export type ProjectFieldsFragment = { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } };
 
 export type TrackingFieldsFragment = { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string };
@@ -634,6 +649,83 @@ export function useCreateTrackingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTrackingMutation>;
 export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
 export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
+export const UpdateTrackingDocument = gql`
+    mutation updateTracking($id: ID!, $input: TrackingInput!) {
+  updateTracking(id: $id, input: $input) {
+    code
+    message
+    success
+    tracking {
+      ...trackingFields
+    }
+  }
+}
+    ${TrackingFieldsFragmentDoc}`;
+export type UpdateTrackingMutationFn = Apollo.MutationFunction<UpdateTrackingMutation, UpdateTrackingMutationVariables>;
+
+/**
+ * __useUpdateTrackingMutation__
+ *
+ * To run a mutation, you first call `useUpdateTrackingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTrackingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTrackingMutation, { data, loading, error }] = useUpdateTrackingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTrackingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTrackingMutation, UpdateTrackingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTrackingMutation, UpdateTrackingMutationVariables>(UpdateTrackingDocument, options);
+      }
+export type UpdateTrackingMutationHookResult = ReturnType<typeof useUpdateTrackingMutation>;
+export type UpdateTrackingMutationResult = Apollo.MutationResult<UpdateTrackingMutation>;
+export type UpdateTrackingMutationOptions = Apollo.BaseMutationOptions<UpdateTrackingMutation, UpdateTrackingMutationVariables>;
+export const DeleteTrackingDocument = gql`
+    mutation deleteTracking($id: ID!) {
+  deleteTracking(id: $id) {
+    code
+    message
+    success
+    tracking {
+      ...trackingFields
+    }
+  }
+}
+    ${TrackingFieldsFragmentDoc}`;
+export type DeleteTrackingMutationFn = Apollo.MutationFunction<DeleteTrackingMutation, DeleteTrackingMutationVariables>;
+
+/**
+ * __useDeleteTrackingMutation__
+ *
+ * To run a mutation, you first call `useDeleteTrackingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTrackingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTrackingMutation, { data, loading, error }] = useDeleteTrackingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTrackingMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTrackingMutation, DeleteTrackingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTrackingMutation, DeleteTrackingMutationVariables>(DeleteTrackingDocument, options);
+      }
+export type DeleteTrackingMutationHookResult = ReturnType<typeof useDeleteTrackingMutation>;
+export type DeleteTrackingMutationResult = Apollo.MutationResult<DeleteTrackingMutation>;
+export type DeleteTrackingMutationOptions = Apollo.BaseMutationOptions<DeleteTrackingMutation, DeleteTrackingMutationVariables>;
 export const MeDocument = gql`
     query me {
   me {

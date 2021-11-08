@@ -55,7 +55,7 @@ export const App: FC = () => {
                   <Route exact path="/projects/:projectId/timesheet">
                     <Timesheet date="2021-10" />
                   </Route>
-                  <Route exact path="/projects/:projectId/tracking">
+                  <Route exact path="/projects/:projectId/tracking/:trackingId?">
                     <Tracking />
                   </Route>
                   <Route exact path="/projects">
