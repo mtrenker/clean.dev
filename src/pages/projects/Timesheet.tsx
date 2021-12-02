@@ -126,7 +126,7 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
   return (
     <div css={timeSheetCss}>
       <h1>Zeitnachweis</h1>
-      <h2>Oktober 2021</h2>
+      <h2>November 2021</h2>
 
       <address className="developer">
         {`${developer?.firstName} ${developer?.lastName}`}
@@ -140,7 +140,7 @@ export const Timesheet: VFC<TimesheetProps> = ({ date }) => {
         <dt>Kunde:</dt>
         <dd>{`${project?.client}, ${project?.contact.street}, ${project?.contact.zip} ${project?.contact.city}`}</dd>
         <dt>Monat:</dt>
-        <dd>10.2021</dd>
+        <dd>11.2021</dd>
         <dt>Ort:</dt>
         <dd>{project?.contact.city}</dd>
       </dl>
