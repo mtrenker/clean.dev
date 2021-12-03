@@ -1,7 +1,7 @@
 /* eslint-disable react/button-has-type */
 import { css } from '@emotion/react';
 import {
-  setHours, setMinutes, addDays, differenceInHours,
+  setHours, setMinutes, addDays, differenceInHours, setSeconds, setMilliseconds,
 } from 'date-fns';
 import { VFC } from 'react';
 import DatePicker from 'react-datepicker';
@@ -16,6 +16,8 @@ interface TrackingData {
   startTime: Date;
   endTime: Date;
 }
+
+const resetTime = (date: Date) => setMilliseconds(setSeconds(setMinutes(date, 0), 0), 0);
 
 const trackingCss = css`
   .tracker {
@@ -102,8 +104,8 @@ export const Tracking: VFC = () => {
   };
 
   const today = () => {
-    setValue('startTime', setHours(setMinutes(new Date(), 0), 8));
-    setValue('endTime', setHours(setMinutes(new Date(), 0), 16));
+    setValue('startTime', resetTime(setHours(new Date(), 8)));
+    setValue('endTime', resetTime(setHours(new Date(), 16)));
   };
 
   return (
@@ -121,8 +123,8 @@ export const Tracking: VFC = () => {
                 onChange={field.onChange}
                 selected={field.value}
                 dateFormat="dd.MM.yyyy HH:mm"
-                minTime={setHours(setMinutes(new Date(), 0), 8)}
-                maxTime={setHours(setMinutes(new Date(), 0), 18)}
+                minTime={resetTime(setHours(new Date(), 8))}
+                maxTime={resetTime(setHours(new Date(), 16))}
               />
             )}
           />
@@ -139,8 +141,8 @@ export const Tracking: VFC = () => {
                 onChange={field.onChange}
                 selected={field.value}
                 dateFormat="dd.MM.yyyy HH:mm"
-                minTime={setHours(setMinutes(new Date(), 0), 8)}
-                maxTime={setHours(setMinutes(new Date(), 0), 18)}
+                minTime={resetTime(setHours(new Date(), 8))}
+                maxTime={resetTime(setHours(new Date(), 16))}
               />
             )}
           />
@@ -159,7 +161,7 @@ export const Tracking: VFC = () => {
         <button type="reset">Reset</button>
         <button type="submit">Submit</button>
       </form>
-      <Timesheet date="2021-11" />
+      <Timesheet date="2021-12" />
     </div>
   );
 };
