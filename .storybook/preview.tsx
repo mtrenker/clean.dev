@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { addDecorator } from "@storybook/react"
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
-import { GlobalStyle } from "../src/components/GlobalStyle";
+const theme = createTheme({palette: {mode :"dark"}})
 
-const withTheme = (storyFn) => (
+const withTheme = (Story) => (
   <ThemeProvider theme={{}}>
-    <GlobalStyle />
-    {storyFn()}
+    <CssBaseline />
+    <Story />
   </ThemeProvider>
 )
 

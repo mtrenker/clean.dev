@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import devServer from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import DotEnv from 'dotenv-webpack';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 
 interface WebpackEnv {
   production?: true;
@@ -18,7 +19,7 @@ const htmlConfig: HtmlWebpackPlugin.Options = {
 
 const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer.Configuration } => ({
   mode: env.production ? 'production' : 'development',
-  entry: './src/index.tsx',
+  entry: './src/main.tsx',
   devtool: 'source-map',
   target: 'web',
   module: {
@@ -59,13 +60,6 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
     ],
   },
   resolve: {
-    fallback: {
-      fs: false,
-      crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify'),
-      os: require.resolve('os-browserify/browser'),
-      path: require.resolve('path-browserify'),
-    },
     extensions: ['.mjs', '.js', '.json', '.ts', '.tsx', '.map'],
   },
   output: {
@@ -74,6 +68,7 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
     publicPath: '/',
   },
   plugins: [
+    new NodePolyfillPlugin(),
     new HtmlWebpackPlugin(htmlConfig),
     new DotEnv({ systemvars: true }),
   ],
