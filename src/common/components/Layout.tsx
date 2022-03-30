@@ -1,10 +1,13 @@
-import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Header } from './Header';
 
 export const Layout: React.VFC = () => (
-    <Box p={2} sx={{color: 'primary.main'}}>
-      <Typography variant='h5'>clean.dev</Typography>
-      <Typography variant='caption'>currently under construction</Typography>
+  <Box>
+    <Header />
+    <Box marginY={10}>
+      <Outlet />
     </Box>
+  </Box>
 );

@@ -1,11 +1,10 @@
 /* eslint-disable */
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { api } from '../app/api/baseApi';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -157,7 +156,7 @@ export type Project = {
 
 
 export type ProjectTrackingsArgs = {
-  date?: Maybe<Scalars['String']>;
+  date?: InputMaybe<Scalars['String']>;
 };
 
 export type ProjectConnection = {
@@ -171,7 +170,7 @@ export type ProjectInput = {
   client: Scalars['String'];
   contact: ContactInput;
   description: Scalars['String'];
-  endDate?: Maybe<Scalars['AWSDate']>;
+  endDate?: InputMaybe<Scalars['AWSDate']>;
   industry: Scalars['String'];
   methodologies: Array<Scalars['String']>;
   startDate: Scalars['AWSDate'];
@@ -214,7 +213,7 @@ export type QueryGetProjectArgs = {
 
 
 export type QueryGetTrackingsArgs = {
-  date?: Maybe<Scalars['String']>;
+  date?: InputMaybe<Scalars['String']>;
   projectId: Scalars['String'];
 };
 
@@ -234,7 +233,7 @@ export type TrackingConnection = {
 };
 
 export type TrackingInput = {
-  description?: Maybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime: Scalars['AWSDateTime'];
   projectId: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
@@ -257,50 +256,50 @@ export type User = {
 export type GetBlogQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBlogQuery = { __typename?: 'Query', getBlog: { __typename?: 'Blog', posts: Array<{ __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined }> } };
+export type GetBlogQuery = { __typename?: 'Query', getBlog: { __typename?: 'Blog', posts: Array<{ __typename?: 'Post', content?: string | null, intro?: string | null, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null } } } | null }> } };
 
 export type GetPostQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined } | null | undefined };
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', content?: string | null, intro?: string | null, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null } } } | null } | null };
 
-export type PostFieldsFragment = { __typename?: 'Post', content?: string | null | undefined, intro?: string | null | undefined, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null | undefined, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null | undefined } } } | null | undefined };
+export type PostFieldsFragment = { __typename?: 'Post', content?: string | null, intro?: string | null, publishDate: string, slug: string, title: string, heroImage?: { __typename?: 'Image', title: string, description?: string | null, file: { __typename?: 'File', contentType: string, fileName: string, url: string, details: { __typename?: 'FileDetails', size: string, image?: { __typename?: 'ImageDetails', height: number, width: number } | null } } } | null };
 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'ProjectConnection', totalCount: number, items: Array<{ __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } }> } };
+export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'ProjectConnection', totalCount: number, items: Array<{ __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string }> } }> } };
 
 export type GetProjectQueryVariables = Exact<{
   projectId: Scalars['ID'];
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } } };
+export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string }> } } };
 
 export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'ProjectMutationResponse', code: string, message: string, success: boolean, project: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } } } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'ProjectMutationResponse', code: string, message: string, success: boolean, project: { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string }> } } } };
 
 export type GetTrackingsQueryVariables = Exact<{
-  date?: Maybe<Scalars['String']>;
+  date?: InputMaybe<Scalars['String']>;
   projectId: Scalars['String'];
 }>;
 
 
-export type GetTrackingsQuery = { __typename?: 'Query', getTrackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } };
+export type GetTrackingsQuery = { __typename?: 'Query', getTrackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string }> } };
 
 export type CreateTrackingMutationVariables = Exact<{
   input: TrackingInput;
 }>;
 
 
-export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
+export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string } } };
 
 export type UpdateTrackingMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -308,27 +307,27 @@ export type UpdateTrackingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTrackingMutation = { __typename?: 'Mutation', updateTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
+export type UpdateTrackingMutation = { __typename?: 'Mutation', updateTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string } } };
 
 export type DeleteTrackingMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteTrackingMutation = { __typename?: 'Mutation', deleteTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string } } };
+export type DeleteTrackingMutation = { __typename?: 'Mutation', deleteTracking: { __typename?: 'TrackingMutationResponse', code: string, message: string, success: boolean, tracking: { __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string } } };
 
-export type ProjectFieldsFragment = { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null | undefined, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string }> } };
+export type ProjectFieldsFragment = { __typename?: 'Project', id: string, client: string, description: string, endDate?: string | null, industry: string, methodologies: Array<string>, startDate: string, technologies: Array<string>, contact: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string }, trackings: { __typename?: 'TrackingConnection', items: Array<{ __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string }> } };
 
-export type TrackingFieldsFragment = { __typename?: 'Tracking', id: string, description?: string | null | undefined, startTime: string, endTime: string };
+export type TrackingFieldsFragment = { __typename?: 'Tracking', id: string, description?: string | null, startTime: string, endTime: string };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', contact?: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string } | null | undefined } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', contact?: { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string } | null } };
 
 export type ContactFieldsFragment = { __typename?: 'Contact', city: string, email: string, firstName: string, lastName: string, street: string, zip: string };
 
-export const PostFieldsFragmentDoc = gql`
+export const PostFieldsFragmentDoc = `
     fragment postFields on Post {
   content
   heroImage {
@@ -353,7 +352,7 @@ export const PostFieldsFragmentDoc = gql`
   title
 }
     `;
-export const ContactFieldsFragmentDoc = gql`
+export const ContactFieldsFragmentDoc = `
     fragment contactFields on Contact {
   city
   email
@@ -363,7 +362,7 @@ export const ContactFieldsFragmentDoc = gql`
   zip
 }
     `;
-export const TrackingFieldsFragmentDoc = gql`
+export const TrackingFieldsFragmentDoc = `
     fragment trackingFields on Tracking {
   id
   description
@@ -371,7 +370,7 @@ export const TrackingFieldsFragmentDoc = gql`
   endTime
 }
     `;
-export const ProjectFieldsFragmentDoc = gql`
+export const ProjectFieldsFragmentDoc = `
     fragment projectFields on Project {
   id
   client
@@ -392,7 +391,7 @@ export const ProjectFieldsFragmentDoc = gql`
 }
     ${ContactFieldsFragmentDoc}
 ${TrackingFieldsFragmentDoc}`;
-export const GetBlogDocument = gql`
+export const GetBlogDocument = `
     query getBlog {
   getBlog {
     posts {
@@ -401,69 +400,14 @@ export const GetBlogDocument = gql`
   }
 }
     ${PostFieldsFragmentDoc}`;
-
-/**
- * __useGetBlogQuery__
- *
- * To run a query within a React component, call `useGetBlogQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBlogQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBlogQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetBlogQuery(baseOptions?: Apollo.QueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
-      }
-export function useGetBlogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
-        }
-export type GetBlogQueryHookResult = ReturnType<typeof useGetBlogQuery>;
-export type GetBlogLazyQueryHookResult = ReturnType<typeof useGetBlogLazyQuery>;
-export type GetBlogQueryResult = Apollo.QueryResult<GetBlogQuery, GetBlogQueryVariables>;
-export const GetPostDocument = gql`
+export const GetPostDocument = `
     query getPost($slug: String!) {
   getPost(slug: $slug) {
     ...postFields
   }
 }
     ${PostFieldsFragmentDoc}`;
-
-/**
- * __useGetPostQuery__
- *
- * To run a query within a React component, call `useGetPostQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPostQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useGetPostQuery(baseOptions: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
-      }
-export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
-        }
-export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
-export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
-export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
-export const GetProjectsDocument = gql`
+export const GetProjectsDocument = `
     query getProjects {
   getProjects {
     totalCount
@@ -473,69 +417,14 @@ export const GetProjectsDocument = gql`
   }
 }
     ${ProjectFieldsFragmentDoc}`;
-
-/**
- * __useGetProjectsQuery__
- *
- * To run a query within a React component, call `useGetProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
-      }
-export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
-        }
-export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
-export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
-export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
-export const GetProjectDocument = gql`
+export const GetProjectDocument = `
     query getProject($projectId: ID!) {
   getProject(id: $projectId) {
     ...projectFields
   }
 }
     ${ProjectFieldsFragmentDoc}`;
-
-/**
- * __useGetProjectQuery__
- *
- * To run a query within a React component, call `useGetProjectQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectQuery({
- *   variables: {
- *      projectId: // value for 'projectId'
- *   },
- * });
- */
-export function useGetProjectQuery(baseOptions: Apollo.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
-      }
-export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
-        }
-export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
-export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
-export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
-export const CreateProjectDocument = gql`
+export const CreateProjectDocument = `
     mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     code
@@ -547,33 +436,7 @@ export const CreateProjectDocument = gql`
   }
 }
     ${ProjectFieldsFragmentDoc}`;
-export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
-
-/**
- * __useCreateProjectMutation__
- *
- * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, options);
-      }
-export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
-export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
-export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
-export const GetTrackingsDocument = gql`
+export const GetTrackingsDocument = `
     query getTrackings($date: String, $projectId: String!) {
   getTrackings(date: $date, projectId: $projectId) {
     items {
@@ -582,36 +445,7 @@ export const GetTrackingsDocument = gql`
   }
 }
     ${TrackingFieldsFragmentDoc}`;
-
-/**
- * __useGetTrackingsQuery__
- *
- * To run a query within a React component, call `useGetTrackingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTrackingsQuery({
- *   variables: {
- *      date: // value for 'date'
- *      projectId: // value for 'projectId'
- *   },
- * });
- */
-export function useGetTrackingsQuery(baseOptions: Apollo.QueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, options);
-      }
-export function useGetTrackingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrackingsQuery, GetTrackingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTrackingsQuery, GetTrackingsQueryVariables>(GetTrackingsDocument, options);
-        }
-export type GetTrackingsQueryHookResult = ReturnType<typeof useGetTrackingsQuery>;
-export type GetTrackingsLazyQueryHookResult = ReturnType<typeof useGetTrackingsLazyQuery>;
-export type GetTrackingsQueryResult = Apollo.QueryResult<GetTrackingsQuery, GetTrackingsQueryVariables>;
-export const CreateTrackingDocument = gql`
+export const CreateTrackingDocument = `
     mutation createTracking($input: TrackingInput!) {
   createTracking(input: $input) {
     code
@@ -623,33 +457,7 @@ export const CreateTrackingDocument = gql`
   }
 }
     ${TrackingFieldsFragmentDoc}`;
-export type CreateTrackingMutationFn = Apollo.MutationFunction<CreateTrackingMutation, CreateTrackingMutationVariables>;
-
-/**
- * __useCreateTrackingMutation__
- *
- * To run a mutation, you first call `useCreateTrackingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTrackingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTrackingMutation, { data, loading, error }] = useCreateTrackingMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateTrackingMutation(baseOptions?: Apollo.MutationHookOptions<CreateTrackingMutation, CreateTrackingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTrackingMutation, CreateTrackingMutationVariables>(CreateTrackingDocument, options);
-      }
-export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTrackingMutation>;
-export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
-export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
-export const UpdateTrackingDocument = gql`
+export const UpdateTrackingDocument = `
     mutation updateTracking($id: ID!, $input: TrackingInput!) {
   updateTracking(id: $id, input: $input) {
     code
@@ -661,34 +469,7 @@ export const UpdateTrackingDocument = gql`
   }
 }
     ${TrackingFieldsFragmentDoc}`;
-export type UpdateTrackingMutationFn = Apollo.MutationFunction<UpdateTrackingMutation, UpdateTrackingMutationVariables>;
-
-/**
- * __useUpdateTrackingMutation__
- *
- * To run a mutation, you first call `useUpdateTrackingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTrackingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTrackingMutation, { data, loading, error }] = useUpdateTrackingMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateTrackingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTrackingMutation, UpdateTrackingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateTrackingMutation, UpdateTrackingMutationVariables>(UpdateTrackingDocument, options);
-      }
-export type UpdateTrackingMutationHookResult = ReturnType<typeof useUpdateTrackingMutation>;
-export type UpdateTrackingMutationResult = Apollo.MutationResult<UpdateTrackingMutation>;
-export type UpdateTrackingMutationOptions = Apollo.BaseMutationOptions<UpdateTrackingMutation, UpdateTrackingMutationVariables>;
-export const DeleteTrackingDocument = gql`
+export const DeleteTrackingDocument = `
     mutation deleteTracking($id: ID!) {
   deleteTracking(id: $id) {
     code
@@ -700,33 +481,7 @@ export const DeleteTrackingDocument = gql`
   }
 }
     ${TrackingFieldsFragmentDoc}`;
-export type DeleteTrackingMutationFn = Apollo.MutationFunction<DeleteTrackingMutation, DeleteTrackingMutationVariables>;
-
-/**
- * __useDeleteTrackingMutation__
- *
- * To run a mutation, you first call `useDeleteTrackingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTrackingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTrackingMutation, { data, loading, error }] = useDeleteTrackingMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteTrackingMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTrackingMutation, DeleteTrackingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteTrackingMutation, DeleteTrackingMutationVariables>(DeleteTrackingDocument, options);
-      }
-export type DeleteTrackingMutationHookResult = ReturnType<typeof useDeleteTrackingMutation>;
-export type DeleteTrackingMutationResult = Apollo.MutationResult<DeleteTrackingMutation>;
-export type DeleteTrackingMutationOptions = Apollo.BaseMutationOptions<DeleteTrackingMutation, DeleteTrackingMutationVariables>;
-export const MeDocument = gql`
+export const MeDocument = `
     query me {
   me {
     contact {
@@ -736,29 +491,41 @@ export const MeDocument = gql`
 }
     ${ContactFieldsFragmentDoc}`;
 
-/**
- * __useMeQuery__
- *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    getBlog: build.query<GetBlogQuery, GetBlogQueryVariables | void>({
+      query: (variables) => ({ document: GetBlogDocument, variables })
+    }),
+    getPost: build.query<GetPostQuery, GetPostQueryVariables>({
+      query: (variables) => ({ document: GetPostDocument, variables })
+    }),
+    getProjects: build.query<GetProjectsQuery, GetProjectsQueryVariables | void>({
+      query: (variables) => ({ document: GetProjectsDocument, variables })
+    }),
+    getProject: build.query<GetProjectQuery, GetProjectQueryVariables>({
+      query: (variables) => ({ document: GetProjectDocument, variables })
+    }),
+    createProject: build.mutation<CreateProjectMutation, CreateProjectMutationVariables>({
+      query: (variables) => ({ document: CreateProjectDocument, variables })
+    }),
+    getTrackings: build.query<GetTrackingsQuery, GetTrackingsQueryVariables>({
+      query: (variables) => ({ document: GetTrackingsDocument, variables })
+    }),
+    createTracking: build.mutation<CreateTrackingMutation, CreateTrackingMutationVariables>({
+      query: (variables) => ({ document: CreateTrackingDocument, variables })
+    }),
+    updateTracking: build.mutation<UpdateTrackingMutation, UpdateTrackingMutationVariables>({
+      query: (variables) => ({ document: UpdateTrackingDocument, variables })
+    }),
+    deleteTracking: build.mutation<DeleteTrackingMutation, DeleteTrackingMutationVariables>({
+      query: (variables) => ({ document: DeleteTrackingDocument, variables })
+    }),
+    me: build.query<MeQuery, MeQueryVariables | void>({
+      query: (variables) => ({ document: MeDocument, variables })
+    }),
+  }),
+});
+
+export { injectedRtkApi as api };
+export const { useGetBlogQuery, useLazyGetBlogQuery, useGetPostQuery, useLazyGetPostQuery, useGetProjectsQuery, useLazyGetProjectsQuery, useGetProjectQuery, useLazyGetProjectQuery, useCreateProjectMutation, useGetTrackingsQuery, useLazyGetTrackingsQuery, useCreateTrackingMutation, useUpdateTrackingMutation, useDeleteTrackingMutation, useMeQuery, useLazyMeQuery } = injectedRtkApi;
+

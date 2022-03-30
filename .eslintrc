@@ -69,10 +69,23 @@
       2,
       {
         "html": "ignore",
-        "exceptions": ["FormProvider"]
+        "exceptions": [
+          "FormProvider"
+        ]
       }
     ],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function"
+      }
+    ]
   }
 }

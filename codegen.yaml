@@ -4,14 +4,16 @@ generates:
   ./src/graphql/hooks.tsx:
     plugins:
       - add:
-          content: '/* eslint-disable */'
+          content: "/* eslint-disable */"
       - typescript
       - typescript-operations
-      - typescript-react-apollo
+      - typescript-rtk-query:
+          importBaseApiFrom: "../app/api/baseApi"
+          exportHooks: true
     config:
       withHOC: false
       withHooks: true
       scalars:
         AWSDate: string
         AWSDateTime: string
-        AWSJSON: "{ [key: string]: any }"
+        AWSJSON: string
