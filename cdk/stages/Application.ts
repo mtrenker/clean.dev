@@ -2,7 +2,6 @@ import { Construct, Stage, StageProps } from '@aws-cdk/core';
 
 import { ApiStack } from '../stacks/ApiStack';
 import { AuthStack } from '../stacks/AuthStack';
-import { CmsStack } from '../stacks/CmsStack';
 import { FrontStack } from '../stacks/FrontStack';
 import { InventoryStack } from '../stacks/InventoryStack';
 
@@ -20,8 +19,5 @@ export class Application extends Stage {
 
     const frontend = new FrontStack(this, 'Frontend', props);
     frontend.addDependency(api);
-
-    const cms = new CmsStack(this, 'Cms', props);
-    cms.addDependency(api);
   }
 }

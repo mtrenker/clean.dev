@@ -5,7 +5,9 @@ import {
 } from '@mui/material';
 import { DeleteForever as DeleteIcon } from '@mui/icons-material';
 import React from 'react';
-import { useDeleteTrackingMutation, useGetTrackingsQuery } from '../../../graphql/hooks';
+import { differenceInHours, format } from 'date-fns';
+import { useDeleteTrackingMutation } from '../../../app/api/generated';
+import { useGetTrackingsQuery } from '../api';
 
 interface TimeTableProps {
   projectId: string;
@@ -24,25 +26,32 @@ export const TimeTable: React.VFC<TimeTableProps> = ({ date, projectId }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Start</TableCell>
-              <TableCell>End</TableCell>
+              <TableCell>Date</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Time</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {trackingData?.getTrackings.items.map((tracking) => (
-              <TableRow>
-                <TableCell>{tracking.startTime}</TableCell>
-                <TableCell>{tracking.endTime}</TableCell>
-                <TableCell>{tracking.description}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => deleteTracking({ id: tracking.id })}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {trackingData?.getTrackings.items.map((tracking) => {
+              const date = new Date(tracking.startTime);
+              const time = differenceInHours(
+                new Date(tracking.endTime),
+                new Date(tracking.startTime),
+              );
+              return (
+                <TableRow key={tracking.id}>
+                  <TableCell>{format(date, 'dd.MM.yyyy')}</TableCell>
+                  <TableCell>{tracking.description}</TableCell>
+                  <TableCell>{time}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => deleteTracking({ id: tracking.id })}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

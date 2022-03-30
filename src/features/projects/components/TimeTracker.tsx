@@ -9,7 +9,7 @@ import {
 import { TextField } from '../../../common/components/TextField';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '../../../common/components/Button';
-import { useCreateTrackingMutation } from '../../../graphql/hooks';
+import { useCreateTrackingMutation } from '../../../app/api/generated';
 
 export interface TimeTrackerData {
   startTime: Date;

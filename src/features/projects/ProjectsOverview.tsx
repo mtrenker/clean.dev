@@ -3,7 +3,7 @@ import {
   Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
 import { Link } from '../../common/components/Link';
-import { useGetProjectsQuery } from '../../graphql/hooks';
+import { useGetProjectsQuery } from '../../app/api/generated';
 
 export const ProjectsOverview: VFC = () => {
   const { data: projectsData } = useGetProjectsQuery({});
@@ -20,10 +20,12 @@ export const ProjectsOverview: VFC = () => {
           </TableHead>
           <TableBody>
             {projectsData?.getProjects.items.map((project) => (
-              <TableRow>
+              <TableRow key={project.id}>
                 <TableCell>{project.client}</TableCell>
                 <TableCell>
                   <Link to={`${project.id}/track`}>Tracking</Link>
+                  -
+                  <Link to={`${project.id}/timesheet`}>Timesheet</Link>
                 </TableCell>
               </TableRow>
             ))}

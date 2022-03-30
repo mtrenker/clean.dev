@@ -13,6 +13,7 @@ import { useAuthenticator } from '../features/user/hooks/useAuthenticator';
 import { ProjectsOverview } from '../features/projects/ProjectsOverview';
 import { TimeTracking } from '../features/projects/TimeTracking';
 import { store } from './store';
+import { Timesheet } from '../features/projects/Timesheet';
 
 const theme = createTheme({ palette: { mode: 'dark' } });
 
@@ -33,6 +34,7 @@ export const App: FC = () => {
                   <Route path=":projectId">
                     <Route index element={<div>ProjectDetails</div>} />
                     <Route path="track" element={<TimeTracking />} />
+                    <Route path="timesheet" element={<Timesheet />} />
                   </Route>
                 </Route>
               </Route>

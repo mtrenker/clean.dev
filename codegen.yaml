@@ -1,18 +1,16 @@
 schema: src/graphql/schema.graphql
 documents: src/graphql/documents/**/*.graphql
 generates:
-  ./src/graphql/hooks.tsx:
+  ./src/app/api/generated.tsx:
     plugins:
       - add:
           content: "/* eslint-disable */"
       - typescript
       - typescript-operations
       - typescript-rtk-query:
-          importBaseApiFrom: "../app/api/baseApi"
+          importBaseApiFrom: "./baseApi"
           exportHooks: true
     config:
-      withHOC: false
-      withHooks: true
       scalars:
         AWSDate: string
         AWSDateTime: string
