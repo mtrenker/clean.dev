@@ -6,7 +6,12 @@ import { Header } from './Header';
 export const Layout: React.VFC = () => (
   <Box>
     <Header />
-    <Box marginY={10}>
+    <Box sx={{
+      '@media screen': {
+        paddingY: 10,
+      },
+    }}
+    >
       <Outlet />
     </Box>
   </Box>

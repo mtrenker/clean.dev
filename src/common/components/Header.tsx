@@ -8,7 +8,12 @@ import { Link } from './Link';
 export const Header: React.VFC = () => {
   const { user } = useAuthenticator();
   return (
-    <AppBar>
+    <AppBar sx={{
+      '@media print': {
+        display: 'none',
+      },
+    }}
+    >
       <Container sx={{
         display: 'flex',
         justifyContent: 'space-between',

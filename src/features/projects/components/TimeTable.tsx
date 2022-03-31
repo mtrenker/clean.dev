@@ -1,12 +1,13 @@
 import {
   Box,
   IconButton,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Typography,
 } from '@mui/material';
 import { DeleteForever as DeleteIcon } from '@mui/icons-material';
 import React from 'react';
-import { differenceInHours, format } from 'date-fns';
-import { useDeleteTrackingMutation } from '../../../app/api/generated';
+import { format, differenceInMinutes } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { useDeleteTrackingMutation, useGetProjectQuery, useMeQuery } from '../../../app/api/generated';
 import { useGetTrackingsQuery } from '../api';
 
 interface TimeTableProps {
@@ -19,32 +20,110 @@ export const TimeTable: React.VFC<TimeTableProps> = ({ date, projectId }) => {
     projectId,
     date,
   });
+  const billableTime = trackingData?.getTrackings.items.reduce((acc, tracking) => {
+    const hours = differenceInMinutes(
+      new Date(tracking.endTime),
+      new Date(tracking.startTime),
+    ) / 60;
+    return acc + hours;
+  }, 0);
   const [deleteTracking] = useDeleteTrackingMutation();
+  const { data: meData } = useMeQuery();
+  const {
+    firstName, lastName, city, street, zip,
+  } = meData?.me.contact ?? {};
+  const monthOfService = format(new Date(`${date}`), 'MMMM yyyy', { locale: de });
+  const { data: projectData } = useGetProjectQuery({ projectId });
+  const { contact, client } = projectData?.getProject ?? {};
   return (
     <Box>
-      <TableContainer>
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        gap={2}
+        justifyContent="space-between"
+        p={2}
+      >
+        <Box>
+          <Typography variant="h4" flex="0 0 100%">
+            Zeiterfassung
+          </Typography>
+          <Typography variant="h5" flex="0 0 100%">
+            {monthOfService}
+          </Typography>
+        </Box>
+        <Box>
+          <Box
+            component="address"
+            sx={{
+              fontStyle: 'normal',
+            }}
+          >
+            {`${firstName} ${lastName}`}
+            <br />
+            {street}
+            <br />
+            {`${zip} ${city}`}
+          </Box>
+        </Box>
+      </Box>
+      <Box display="flex" flexWrap="wrap" marginY={2} p={2}>
+        <Typography flex="0 0 20%">Kunde</Typography>
+        <Typography flex="0 0 70%">
+          {`${client}, ${contact?.street}, ${contact?.city}`}
+        </Typography>
+        <Typography flex="0 0 20%">Zeitraum</Typography>
+        <Typography flex="0 0 80%">{monthOfService}</Typography>
+        <Typography flex="0 0 20%">Ort</Typography>
+        <Typography flex="0 0 80%">{contact?.city}</Typography>
+      </Box>
+      <TableContainer sx={{
+        '@media print': {
+          '& .MuiTableCell-root': {
+            color: '#000',
+            paddingX: 2,
+            paddingY: 0.5,
+          },
+        },
+        '& .MuiTableFooter-root .MuiTableCell-root': {
+          fontWeight: 'bold',
+        },
+      }}
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
+              <TableCell width="20%">Date</TableCell>
               <TableCell>Description</TableCell>
-              <TableCell>Time</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell align="right">Time</TableCell>
+              <TableCell sx={{
+                '@media print': {
+                  display: 'none',
+                },
+              }}
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {trackingData?.getTrackings.items.map((tracking) => {
-              const date = new Date(tracking.startTime);
-              const time = differenceInHours(
+              const trackingDate = new Date(tracking.startTime);
+              const trackingTime = differenceInMinutes(
                 new Date(tracking.endTime),
                 new Date(tracking.startTime),
-              );
+              ) / 60;
               return (
                 <TableRow key={tracking.id}>
-                  <TableCell>{format(date, 'dd.MM.yyyy')}</TableCell>
-                  <TableCell>{tracking.description}</TableCell>
-                  <TableCell>{time}</TableCell>
-                  <TableCell>
+                  <TableCell>{format(trackingDate, 'dd.MM.yyyy')}</TableCell>
+                  <TableCell>{tracking.description?.toUpperCase()}</TableCell>
+                  <TableCell align="right">{trackingTime}</TableCell>
+                  <TableCell sx={{
+                    '@media print': {
+                      display: 'none',
+                    },
+                  }}
+                  >
                     <IconButton onClick={() => deleteTracking({ id: tracking.id })}>
                       <DeleteIcon />
                     </IconButton>
@@ -53,6 +132,12 @@ export const TimeTable: React.VFC<TimeTableProps> = ({ date, projectId }) => {
               );
             })}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Gesamt:</TableCell>
+              <TableCell colSpan={2} align="right">{billableTime}</TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </Box>
