@@ -10,7 +10,7 @@ export const TimeTracking: VFC = () => {
   return (
     <Container>
       <TimeTracker projectId={projectId} />
-      <TimeTable projectId={projectId} date="2022-03" />
+      <TimeTable projectId={projectId} date="2022-04" />
     </Container>
   );
 };

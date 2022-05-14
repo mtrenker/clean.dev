@@ -1,8 +1,7 @@
 /* eslint-disable import/no-import-module-exports */
-import Auth from '@aws-amplify/auth';
+import { Auth } from '@aws-amplify/auth';
 import React from 'react';
-import { render } from 'react-dom';
-
+import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
 
 const awsConfig = {
@@ -16,11 +15,11 @@ const awsConfig = {
 Auth.configure(awsConfig);
 
 const container = document.body.appendChild(document.createElement('div'));
-container.classList.add('root');
-render(<App />, container);
+const root = createRoot(container);
+root.render(<App />);
 
 if (module.hot) {
   module.hot.accept('./app/App.tsx', () => {
-    render(<App />, container);
+    root.render(<App />);
   });
 }
