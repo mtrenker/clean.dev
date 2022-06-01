@@ -15,6 +15,9 @@ export const api = generatedApi.enhanceEndpoints({
           : ['Tracking']
       ),
     },
+    createTracking: {
+      invalidatesTags: () => ['Tracking'],
+    },
   },
 });
 

@@ -1,15 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import {
-  setHours, setMinutes, addDays, differenceInHours, setSeconds, setMilliseconds,
+  setHours, setMinutes, addDays, setSeconds, setMilliseconds,
 } from 'date-fns';
+import de from 'date-fns/locale/de';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TextField } from '../../../common/components/TextField';
-import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '../../../common/components/Button';
 import { useCreateTrackingMutation } from '../../../app/api/generated';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 export interface TimeTrackerData {
   startTime: Date;
@@ -18,27 +21,35 @@ export interface TimeTrackerData {
 }
 
 export interface TimeTrackerProps {
+  date: string;
   projectId: string;
 }
 
+registerLocale('de', de);
+
 const resetTime = (date: Date) => setMilliseconds(setSeconds(setMinutes(date, 0), 0), 0);
 
-export const TimeTracker: React.VFC<TimeTrackerProps> = ({ projectId }) => {
+export const TimeTracker: React.FC<TimeTrackerProps> = ({ projectId, date }) => {
   const {
     control, setValue, watch, handleSubmit, register,
-  } = useForm<TimeTrackerData>();
+  } = useForm<TimeTrackerData>({
+    defaultValues: {
+      startTime: setHours(new Date(date), 8),
+      endTime: setHours(new Date(date), 16),
+    },
+  });
 
   const [track] = useCreateTrackingMutation();
 
-  const trackTime = (data: TimeTrackerData) => {
-    track({
+  const trackTime = async (data: TimeTrackerData) => {
+    await track({
       input: {
         projectId,
         startTime: data.startTime.toISOString(),
         endTime: data.endTime.toISOString(),
         description: data.description,
       },
-    });
+    }).unwrap();
   };
 
   const startTime = watch('startTime');
@@ -69,13 +80,27 @@ export const TimeTracker: React.VFC<TimeTrackerProps> = ({ projectId }) => {
         gap: 1,
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton size="small" onClick={() => prevDay()}>
+          <ArrowBack />
+        </IconButton>
         <Controller
           control={control}
           name="startTime"
           render={({ field }) => (
             <DatePicker
-              customInput={<TextField fullWidth label="Start date" />}
+              customInput={(
+                <TextField
+                  size="small"
+                  fullWidth
+                  label="Start date"
+                />
+              )}
               showTimeSelect
               placeholderText="Start date"
               onChange={field.onChange}
@@ -83,18 +108,30 @@ export const TimeTracker: React.VFC<TimeTrackerProps> = ({ projectId }) => {
               dateFormat="dd.MM.yyyy HH:mm"
               minTime={resetTime(setHours(new Date(), 8))}
               maxTime={resetTime(setHours(new Date(), 16))}
+              locale="de"
             />
           )}
         />
       </Box>
 
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <Controller
           control={control}
           name="endTime"
           render={({ field }) => (
             <DatePicker
-              customInput={<TextField fullWidth label="End date" />}
+              customInput={(
+                <TextField
+                  size="small"
+                  fullWidth
+                  label="End date"
+                />
+              )}
               showTimeSelect
               placeholderText="End date"
               onChange={field.onChange}
@@ -102,9 +139,13 @@ export const TimeTracker: React.VFC<TimeTrackerProps> = ({ projectId }) => {
               dateFormat="dd.MM.yyyy HH:mm"
               minTime={resetTime(setHours(new Date(), 8))}
               maxTime={resetTime(setHours(new Date(), 16))}
+              locale="de"
             />
           )}
         />
+        <IconButton size="small" onClick={() => nextDay()}>
+          <ArrowForward />
+        </IconButton>
       </Box>
 
       <Box
@@ -115,6 +156,7 @@ export const TimeTracker: React.VFC<TimeTrackerProps> = ({ projectId }) => {
         <TextField
           fullWidth
           multiline
+          size="small"
           label="Description"
           placeholder="Description"
           rows={2}

@@ -4,6 +4,7 @@ import devServer from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import DotEnv from 'dotenv-webpack';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import remarkFrontmatter from 'remark-frontmatter';
 
 interface WebpackEnv {
   production?: true;
@@ -29,6 +30,9 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
         exclude: [path.resolve(__dirname, 'node_modules')],
         loader: 'babel-loader',
       }, {
+        test: /\.mdx?$/,
+        loader: '@mdx-js/loader',
+      }, {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       }, {
@@ -43,16 +47,8 @@ const config = (env: WebpackEnv): webpack.Configuration & { devServer: devServer
           },
         ],
       }, {
-        test: /\.png$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'images/',
-            },
-          },
-        ],
+        test: /\.(png|jpg)$/,
+        type: 'asset',
       }, {
         test: /\.svg$/,
         use: ['@svgr/webpack'],

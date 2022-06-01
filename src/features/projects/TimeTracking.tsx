@@ -1,16 +1,17 @@
-import React, { VFC } from 'react';
 import { Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { TimeTracker } from './components/TimeTracker';
 import { TimeTable } from './components/TimeTable';
 
-export const TimeTracking: VFC = () => {
+export const TimeTracking: React.FC = () => {
   const { projectId = '' } = useParams();
+  const [date, setDate] = useState('2022-05');
 
   return (
     <Container>
-      <TimeTracker projectId={projectId} />
-      <TimeTable projectId={projectId} date="2022-04" />
+      <TimeTracker projectId={projectId} date={date} />
+      <TimeTable projectId={projectId} date={date} />
     </Container>
   );
 };

@@ -1,11 +1,11 @@
-import React, { VFC } from 'react';
+import { FC } from 'react';
 import {
   Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
 import { Link } from '../../common/components/Link';
 import { useGetProjectsQuery } from '../../app/api/generated';
 
-export const ProjectsOverview: VFC = () => {
+export const ProjectsOverview: FC = () => {
   const { data: projectsData } = useGetProjectsQuery({});
 
   return (

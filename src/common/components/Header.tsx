@@ -5,7 +5,7 @@ import {
 import { useAuthenticator } from '../../features/user/hooks/useAuthenticator';
 import { Link } from './Link';
 
-export const Header: React.VFC = () => {
+export const Header: React.FC = () => {
   const { user } = useAuthenticator();
   return (
     <AppBar sx={{
@@ -26,7 +26,9 @@ export const Header: React.VFC = () => {
         }}
         >
           <ListItem><Link to="/">Home</Link></ListItem>
-          <ListItem><Link to="/blog">Blog</Link></ListItem>
+          {user && (
+            <ListItem><Link to="/blog">Blog</Link></ListItem>
+          )}
           {user && (
             <ListItem><Link to="/projects">Projects</Link></ListItem>
           )}
