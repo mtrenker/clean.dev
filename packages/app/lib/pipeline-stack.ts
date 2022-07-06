@@ -20,10 +20,12 @@ export class PipelineStack extends Stack {
           connectionArn,
         }),
         commands: [
-          'npm ci',
-          'npm run synth -w packages/app/'
+          'cd packages/app',
+          'npm i',
+          'npm run synth'
         ],
         primaryOutputDirectory: 'packages/app/cdk.out',
+
       }),
     });
 
