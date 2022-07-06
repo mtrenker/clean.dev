@@ -1,0 +1,23 @@
+{
+  "name": "clean.dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtrenker/clean.dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtrenker/clean.dev/issues"
+  },
+  "homepage": "https://github.com/mtrenker/clean.dev#readme",
+  "workspaces": [
+    "packages/app"
+  ]
+}
