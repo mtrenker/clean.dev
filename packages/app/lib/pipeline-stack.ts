@@ -21,9 +21,9 @@ export class PipelineStack extends Stack {
         }),
         commands: [
           'npm ci',
-          'cd ./packages/app',
-          'npx cdk synth',
+          'npm run synth -w packages/app/'
         ],
+        primaryOutputDirectory: 'packages/app/cdk.out',
       }),
     });
 

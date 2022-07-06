@@ -5,10 +5,8 @@
     "app": "bin/app.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "synth": "npx cdk synth"
   },
   "devDependencies": {
     "@types/jest": "^27.5.2",
