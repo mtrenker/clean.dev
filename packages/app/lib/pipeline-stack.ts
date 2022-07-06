@@ -2,10 +2,13 @@ import { Stack, StackProps } from "aws-cdk-lib";
 import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
+import { AppStage } from "./app-stage";
 
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
+
+    const app = new AppStage(this, 'AppStack');
 
     const repositry = 'mtrenker/clean.dev';
     const branch = 'next';
@@ -22,6 +25,8 @@ export class PipelineStack extends Stack {
           'npx cdk synth',
         ],
       }),
-    })
+    });
+
+    pipeline.addStage(app);
   }
 }

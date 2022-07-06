@@ -1,9 +1,9 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { RemovalPolicy, Stage, StageProps } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 
-export class AppStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+export class AppStage extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
     const inventoryTable = new Table(this, 'InventoryTable', {
