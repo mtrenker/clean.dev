@@ -6,7 +6,7 @@ import { TimeTable } from './components/TimeTable';
 
 export const TimeTracking: React.FC = () => {
   const { projectId = '' } = useParams();
-  const [date, setDate] = useState('2022-05');
+  const [date, setDate] = useState('2022-06');
 
   return (
     <Container>

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { TimeTable } from './components/TimeTable';
 
 export const Timesheet: React.FC = () => {
-  const [date, setDate] = useState(format(new Date().setMonth(4), 'yyyy-MM'));
+  const [date, setDate] = useState(format(new Date().setMonth(5), 'yyyy-MM'));
   const { projectId = '' } = useParams();
   return (
     <Container>

@@ -93,9 +93,9 @@ export const TimeTable: React.VFC<TimeTableProps> = ({ date, projectId }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell width="20%">Date</TableCell>
+              <TableCell width="20%">Datum</TableCell>
               <TableCell>Description</TableCell>
-              <TableCell align="right">Time</TableCell>
+              <TableCell align="right">Stunden</TableCell>
               <TableCell sx={{
                 '@media print': {
                   display: 'none',
