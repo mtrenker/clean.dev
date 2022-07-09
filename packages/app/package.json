@@ -6,7 +6,8 @@
   },
   "scripts": {
     "test": "jest",
-    "synth": "npx cdk synth"
+    "synth": "npx cdk synth",
+    "deploy": "npx cdk deploy --profile clean"
   },
   "devDependencies": {
     "@types/jest": "^27.5.2",

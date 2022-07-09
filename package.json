@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "deploy": "npm run deploy -w packages/app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -15,11 +15,15 @@ export class PipelineStack extends Stack {
     const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
+      codeBuildDefaults: {
+
+      },
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.connection(repositry, branch, {
           connectionArn,
         }),
         commands: [
+          'npm i -g npm',
           'node -v',
           'npm -v',
           'npm ci',
