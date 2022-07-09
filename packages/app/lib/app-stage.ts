@@ -1,5 +1,4 @@
-import { RemovalPolicy, Stage, StageProps } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { InventoryStack } from './inventory-stack';
 
