@@ -6,7 +6,7 @@ export class InventoryStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const inventoryTable = new Table(this, 'InventoryTable', {
+    new Table(this, 'InventoryTable', {
       partitionKey: {
         name: 'pk',
         type: AttributeType.STRING,
