@@ -24,7 +24,8 @@
   "homepage": "https://github.com/mtrenker/clean.dev#readme",
   "workspaces": [
     "packages/app",
-    "packages/clean-web"
+    "packages/clean-web",
+    "packages/eslint-config-clean"
   ],
   "devDependencies": {
     "@types/jest": "^28.1.4",
