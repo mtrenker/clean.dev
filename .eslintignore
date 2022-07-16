@@ -1,1 +1,4 @@
+packages/**/out/**/*
+packages/**/.next/**/*
+
 packages/eslint-config-clean

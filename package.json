@@ -9,7 +9,8 @@
     "dev:web": "npm run dev -w packages/clean-web",
     "sb:web": "npm run storybook -w packages/clean-web",
     "deploy": "npm run deploy -w packages/app",
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,11 @@
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
     "typescript": "^4.7.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint . --fix"
   }
 }
