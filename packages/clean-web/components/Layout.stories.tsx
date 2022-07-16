@@ -6,7 +6,7 @@ export default {
   component: Layout,
   parameters: {
     layout: 'fullscreen',
-  }
+  },
 } as Meta<LayoutProps>;
 
 const Template: Story<LayoutProps> = (props) => (

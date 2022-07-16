@@ -6,9 +6,11 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended',
   ],
   rules: {
+    'comma-spacing': ['error', { before: false, after: true }],
+    'comma-dangle': ['error', 'always-multiline'],
     'no-multi-spaces': 'error',
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
@@ -33,8 +35,8 @@ module.exports = {
        'arrow': 'parens-new-line',
        'condition': 'parens-new-line',
        'logical': 'parens-new-line',
-       'prop': 'parens-new-line'
-     }
-   ]
-  }
+       'prop': 'parens-new-line',
+     },
+   ],
+  },
 };
