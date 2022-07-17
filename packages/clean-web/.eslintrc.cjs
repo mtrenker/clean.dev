@@ -1,5 +1,5 @@
 module.exports = {
-  root: true,
+  root: false,
   extends: [
     'next/core-web-vitals',
     'plugin:tailwindcss/recommended',
@@ -9,11 +9,6 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
   ],
   rules: {
-    'comma-spacing': ['error', { before: false, after: true }],
-    'comma-dangle': ['error', 'always-multiline'],
-    'no-multi-spaces': 'error',
-    'array-bracket-spacing': ['error', 'never'],
-    'object-curly-spacing': ['error', 'always'],
     'react/button-has-type': 'error',
     'react/function-component-definition': ['error', { namedComponents: 'arrow-function' }],
     'react/no-array-index-key': 'error',
@@ -21,6 +16,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/self-closing-comp': 'error',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-first-prop-new-line': 'error',
     'react/jsx-tag-spacing': 'error',
     'react/jsx-sort-props': 'error',
     'react/jsx-boolean-value': 'error',
