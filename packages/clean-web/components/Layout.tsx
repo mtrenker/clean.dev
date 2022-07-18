@@ -28,11 +28,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => (
 
     <header className="flex h-20 grow-0 items-center border-b border-b-slate-700 p-4">
       <div className="container mx-auto flex">
-        <h1 className="flex-1">clean web</h1>
+        <h1 className="flex-1">clean</h1>
         <nav className="w-fit flex-initial">
-          <ul className="flex justify-end divide-x divide-slate-400 px-4">
+          <ul className="flex justify-end divide-x divide-slate-400">
             {navItems.map(({ href, label }) => (
-              <li className="flex-1 px-4 text-center" key={href}>
+              <li className="flex-1 px-4 text-center first:pl-0 last:pr-0" key={href}>
                 <Link href={href} passHref>
                   <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">{label}</a>
                 </Link>

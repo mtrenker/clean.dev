@@ -2,21 +2,22 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import { Projects } from './Projects';
-import { exampleProjects } from './Projects.stories';
+import { exampleProjectsData } from './Projects.stories';
 
 describe('components/Projects', () => {
   it('renders', () => {
 
     // arrange
-
-    render(<Projects projects={exampleProjects} />);
+    const projects = exampleProjectsData(5);
+    projects[2].title = 'Example Project';
+    render(<Projects projects={projects} />);
 
     // act
 
-    const component = screen.getByRole('heading');
+    const component = screen.getByText('Example Project');
 
     // assert
 
-    expect(component).toHaveTextContent('Example Project');
+    expect(component).toBeInTheDocument();
   });
 });
