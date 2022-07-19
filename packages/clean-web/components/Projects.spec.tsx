@@ -8,6 +8,7 @@ describe('components/Projects', () => {
   it('renders', () => {
 
     // arrange
+
     const projects = exampleProjectsData(5);
     projects[2].title = 'Example Project';
     render(<Projects projects={projects} />);
