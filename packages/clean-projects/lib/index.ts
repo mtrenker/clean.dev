@@ -13,9 +13,7 @@ export class CleanProjects extends Construct {
   constructor (scope: Construct, id: string, { tableName }: CleanProjectsProps) {
     super(scope, id);
     // const table = Table.fromTableName(this, 'CleanProjectsTable', tableName);
-    const trpcFunction = new NodejsFunction(this, 'CleanProjectsFunction', {
-      entry: './trcp-server.ts',
-    });
+    const trpcFunction = new NodejsFunction(this, 'server');
     // table.grantReadWriteData(trpcFunction);
     // Define construct contents here
 
