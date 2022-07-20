@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { AppRouter } from '../../clean-projects/lib/trcp-server';
 
 export interface ProjectsProps {
   projects: Project[];
