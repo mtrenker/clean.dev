@@ -1,0 +1,32 @@
+{
+  "name": "clean-projects",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.101",
+    "@types/jest": "^27.5.2",
+    "@types/node": "10.17.27",
+    "@types/prettier": "2.6.0",
+    "aws-cdk-lib": "2.33.0",
+    "constructs": "^10.0.0",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "~3.9.7"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.33.0",
+    "constructs": "^10.0.0"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.33.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.33.0-alpha.0",
+    "@trpc/server": "^9.26.2",
+    "zod": "^3.17.9"
+  }
+}
