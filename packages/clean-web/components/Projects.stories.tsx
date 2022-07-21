@@ -22,12 +22,13 @@ const Template: Story<ProjectsProps> = (props) => (
   </Layout>
 );
 
-export const exampleProjectsData = (amount: number) =>
+export const exampleProjectsData = (amount: number): ProjectsProps["projects"] =>
 [...new Array(amount)].map(_ => ({
   title: faker.company.companyName(),
-  summary: faker.lorem.paragraph(),
+  summary: faker.lorem.paragraph(2),
   startDate: faker.date.past().toISOString(),
   endDate: faker.date.future().toISOString(),
+  technologies: ['react', 'typescript', 'nextjs', 'tailwindcss'],
 }));
 
 export const Default = Template.bind({});

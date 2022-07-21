@@ -20,5 +20,9 @@ module.exports = {
     'no-multi-spaces': 'error',
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
+    '@typescript-eslint/no-unused-vars': ['error', {
+      'argsIgnorePattern': '^_',
+      'destructuredArrayIgnorePattern': '^_',
+    }]
   }
 };

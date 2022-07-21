@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { AppRouter } from '../../clean-projects/lib/trcp-server';
+import Link from "next/link";
 
 export interface ProjectsProps {
   projects: Project[];
@@ -8,6 +8,7 @@ export interface ProjectsProps {
 interface Project {
   title: string;
   summary: string;
+  technologies: string[];
   startDate: string;
   endDate: string;
 }
@@ -20,18 +21,27 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
           className="my-6 first:mt-0 last:mb-0"
           key={project.title}
         >
-          <div className="rounded bg-slate-900 p-6 ring-1 ring-slate-400">
-            <div className="flex gap-4">
-              <Image
-                alt=""
-                className="h-20 w-20 rounded-lg"
-                height="85"
-                src="https://picsum.photos/85"
-                width="85"
-              />
-              <h3 className="text-xl">{project.title}</h3>
+          <div className="flex flex-col bg-slate-900 shadow">
+            <Image
+              alt=""
+              height={144}
+              src={`https://picsum.photos/1000?random=${Math.random()}`}
+              width="100%"
+            />
+            <div className="flex flex-col gap-3 p-4">
+              <h3 className="text-lg font-bold">{project.title}</h3>
+              <div className="flex justify-between gap-1">
+                {project.technologies.map((technology) => (
+                  <span className="rounded bg-slate-400 p-1 text-sm text-slate-900" key={technology}>{technology}</span>
+              ))}
+              </div>
+              <p className="">{project.summary}</p>
+              <Link href="#" passHref>
+                <a className="text-end" href="/">
+                  more &gt;
+                </a>
+              </Link>
             </div>
-            <p>{project.summary}</p>
           </div>
         </li>
       ))}
