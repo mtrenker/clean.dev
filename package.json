@@ -42,5 +42,9 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^2.1.2",
+    "@next/mdx": "^12.2.3"
   }
 }
