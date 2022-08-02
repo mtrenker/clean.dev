@@ -3,7 +3,7 @@ import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 
 export class InventoryStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor (scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     new Table(this, 'InventoryTable', {

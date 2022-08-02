@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import { AppStage } from "./app-stage";
 
 export class PipelineStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps) {
+  constructor (scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
     const app = new AppStage(this, 'AppStage');
@@ -27,9 +27,9 @@ export class PipelineStack extends Stack {
           'node -v',
           'npm -v',
           'npm ci',
-          'npm run synth -w packages/app'
+          'npm run synth -w packages/clean-app',
         ],
-        primaryOutputDirectory: 'packages/app/cdk.out',
+        primaryOutputDirectory: 'packages/clean-app/cdk.out',
       }),
     });
 

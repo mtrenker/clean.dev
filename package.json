@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --fix",
     "dev:web": "npm run dev -w packages/clean-web",
     "sb:web": "npm run storybook -w packages/clean-web",
-    "deploy": "npm run deploy -w packages/app",
+    "deploy": "npm run deploy -w packages/clean-app",
     "test": "npm run test --workspaces --if-present",
     "prepare": "husky install"
   },
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mtrenker/clean.dev#readme",
   "workspaces": [
-    "packages/app",
+    "packages/clean-app",
     "packages/clean-web",
     "packages/clean-projects",
     "packages/eslint-config-clean"
