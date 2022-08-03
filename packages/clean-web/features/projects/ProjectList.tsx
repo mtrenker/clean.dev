@@ -15,7 +15,7 @@ interface Project {
 
 export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
   <main className="m-4 md:m-0">
-    <ul>
+    <ul className="max-w-md">
       {projects.map((project) => (
         <li
           className="my-6 first:mt-0 last:mb-0"

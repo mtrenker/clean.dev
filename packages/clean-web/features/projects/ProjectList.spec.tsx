@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import { Projects } from './Projects';
-import { exampleProjectsData } from './Projects.stories';
+import { Projects } from './ProjectList';
+import { exampleProjectsData } from './ProjectList.stories';
 
 describe('components/Projects', () => {
   it('renders', () => {

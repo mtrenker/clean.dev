@@ -27,5 +27,5 @@ describe('components/Layout', () => {
     // assert
 
     expect(component).toBeInTheDocument();
-  })
+  });
 });

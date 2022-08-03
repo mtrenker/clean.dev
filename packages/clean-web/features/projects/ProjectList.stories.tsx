@@ -1,9 +1,8 @@
 import { Story, Meta } from '@storybook/react';
 import { faker } from "@faker-js/faker";
 
-import { Layout } from './Layout';
-
-import { Projects, ProjectsProps } from './Projects';
+import { Projects, ProjectsProps } from './ProjectList';
+import { Layout } from '../../common/components/Layout';
 
 export default {
   title: 'Projects',
