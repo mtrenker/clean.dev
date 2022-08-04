@@ -27,6 +27,8 @@
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.33.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.33.0-alpha.0",
     "@trpc/server": "^9.26.2",
+    "aws-cdk": "^2.35.0",
+    "aws-sdk": "^2.1188.0",
     "zod": "^3.17.9"
   }
 }

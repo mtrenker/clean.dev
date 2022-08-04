@@ -8,7 +8,7 @@ export interface ProjectsProps {
 interface Project {
   title: string;
   summary: string;
-  technologies: string[];
+  highlights: string[];
   startDate: string;
   endDate: string;
 }
@@ -22,16 +22,20 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
           key={project.title}
         >
           <div className="flex flex-col bg-slate-900 shadow">
-            <Image
-              alt=""
-              height={144}
-              src={`https://picsum.photos/1000?random=${Math.random()}`}
-              width="100%"
-            />
+            <div>
+              <Image
+                alt=""
+                className="clip-hexagon"
+                height={125}
+                objectFit="cover"
+                src={`https://picsum.photos/1000?random=${Math.random()}`}
+                width={125}
+              />
+            </div>
             <div className="flex flex-col gap-3 p-4">
               <h3 className="text-lg font-bold">{project.title}</h3>
               <div className="flex justify-between gap-1">
-                {project.technologies.map((technology) => (
+                {project.highlights.map((technology) => (
                   <span className="rounded bg-slate-400 p-1 text-sm text-slate-900" key={technology}>{technology}</span>
               ))}
               </div>

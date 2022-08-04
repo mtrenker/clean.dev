@@ -27,7 +27,7 @@ export const exampleProjectsData = (amount: number): ProjectsProps["projects"] =
   summary: faker.lorem.paragraph(2),
   startDate: faker.date.past().toISOString(),
   endDate: faker.date.future().toISOString(),
-  technologies: ['react', 'typescript', 'nextjs', 'tailwindcss'],
+  highlights: ['react', 'typescript', 'nextjs', 'tailwindcss'],
 }));
 
 export const Default = Template.bind({});
