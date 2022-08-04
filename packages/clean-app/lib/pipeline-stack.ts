@@ -23,7 +23,7 @@ export class PipelineStack extends Stack {
           connectionArn,
         }),
         commands: [
-          'npm i -g npm',
+          'npm i -g npm@8.4',
           'node -v',
           'npm -v',
           'npm ci',
