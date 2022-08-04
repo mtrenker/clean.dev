@@ -7,7 +7,8 @@ export class AppStage extends Stage {
   constructor (scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    new InventoryStack(this, 'InventoryStack');
-    new ApiStack(this, 'ApiStack');
+    const inventoryStack = new InventoryStack(this, 'InventoryStack');
+    const apiStack = new ApiStack(this, 'ApiStack');
+    apiStack.addDependency(inventoryStack);
   }
 }
