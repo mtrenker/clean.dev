@@ -26,7 +26,7 @@ export class CleanProjects extends Construct {
 
     const httpApi = new HttpApi(this, 'HttpApi');
     httpApi.addRoutes({
-      path: '/',
+      path: '$default',
       methods: [HttpMethod.GET],
       integration: new HttpLambdaIntegration('TRCP', trpcFunction),
     });
