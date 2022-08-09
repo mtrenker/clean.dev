@@ -1,8 +1,8 @@
 import { Story, Meta } from '@storybook/react';
-import { faker } from "@faker-js/faker";
 
 import { Projects, ProjectsProps } from './ProjectList';
 import { Layout } from '../../common/components/Layout';
+import { projects } from '../../data/projects';
 
 export default {
   title: 'Projects',
@@ -21,16 +21,9 @@ const Template: Story<ProjectsProps> = (props) => (
   </Layout>
 );
 
-export const exampleProjectsData = (amount: number): ProjectsProps["projects"] =>
-[...new Array(amount)].map(_ => ({
-  title: faker.company.companyName(),
-  summary: faker.lorem.paragraph(2),
-  startDate: faker.date.past().toISOString(),
-  endDate: faker.date.future().toISOString(),
-  highlights: ['react', 'typescript', 'nextjs', 'tailwindcss'],
-}));
+
 
 export const Default = Template.bind({});
 Default.args = {
-  projects: exampleProjectsData(5),
+  projects,
 };

@@ -1,15 +1,64 @@
-import { Stack, Fn } from "aws-cdk-lib";
+import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, ResolvableField } from "@aws-cdk/aws-appsync-alpha";
+import { Stack, Fn, Expiration } from "aws-cdk-lib";
+import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
-import { CleanProjects } from "../../clean-projects/lib";
 
 export class ApiStack extends Stack {
+  api: GraphqlApi;
+  querySource: DynamoDbDataSource;
+  projectType: ObjectType;
+
   constructor (scope: Construct, id: string) {
     super(scope, id);
 
     const tableName = Fn.importValue('InventoryTableName');
+    const table = Table.fromTableName(this, 'InventoryTable', tableName);
 
-    new CleanProjects(this, 'CleanProjects', {
-      tableName,
+    this.api = new GraphqlApi(this, 'Api', {
+      name: 'CleanApi',
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.API_KEY,
+          apiKeyConfig: {
+            expires: Expiration.atDate(new Date('2022-12-31')),
+          },
+        },
+      },
     });
+
+    this.querySource = this.api.addDynamoDbDataSource('QuerySource', table);
+
+    this.setupTypes();
+  }
+
+  setupTypes (): void {
+
+    const projectHightlightType = new ObjectType('ProjectHightlight', {
+      definition: {
+        title: GraphqlType.string({ isRequired: true }),
+        description: GraphqlType.string({ isRequired: true }),
+      },
+    });
+
+    this.projectType = new ObjectType('Project', {
+      definition: {
+        id: GraphqlType.id({ isRequired: true }),
+        position: GraphqlType.string({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+        hightlights: projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
+        startDate: GraphqlType.awsDate(),
+        endDate: GraphqlType.awsDate(),
+      },
+    });
+    this.api.addType(this.projectType);
+  }
+
+  setupResolvers (): void {
+    this.api.addQuery('projects', new ResolvableField({
+      returnType: this.projectType.attribute({ isRequired: true, isRequiredList: true }),
+      dataSource: this.querySource,
+      requestMappingTemplate: MappingTemplate.dynamoDbScanTable(),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
+    }));
   }
 }

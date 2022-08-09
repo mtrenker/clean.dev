@@ -1,16 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Project } from "../../data/projects";
 
 export interface ProjectsProps {
   projects: Project[];
-}
-
-interface Project {
-  title: string;
-  summary: string;
-  highlights: string[];
-  startDate: string;
-  endDate: string;
 }
 
 export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
@@ -39,7 +32,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
                   <span className="rounded bg-slate-400 p-1 text-sm text-slate-900" key={technology}>{technology}</span>
               ))}
               </div>
-              <p className="">{project.summary}</p>
+              <p className="">{project.description}</p>
               <Link href="#" passHref>
                 <a className="text-end" href="/">
                   more &gt;

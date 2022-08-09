@@ -26,7 +26,6 @@
   "workspaces": [
     "packages/clean-app",
     "packages/clean-web",
-    "packages/clean-projects",
     "packages/eslint-config-clean"
   ],
   "devDependencies": {
