@@ -1,5 +1,6 @@
-import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, ResolvableField } from "@aws-cdk/aws-appsync-alpha";
-import { Stack, Fn, Expiration } from "aws-cdk-lib";
+import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, PrimaryKey, ResolvableField, Values } from "@aws-cdk/aws-appsync-alpha";
+import { Stack, Fn } from "aws-cdk-lib";
+import { UserPool } from "aws-cdk-lib/aws-cognito";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 
@@ -13,15 +14,16 @@ export class ApiStack extends Stack {
     super(scope, id);
 
     const tableName = Fn.importValue('InventoryTableName');
+    const userPoolId = Fn.importValue('UserPoolId');
     const table = Table.fromTableName(this, 'InventoryTable', tableName);
 
     this.api = new GraphqlApi(this, 'Api', {
       name: 'CleanApi',
       authorizationConfig: {
         defaultAuthorization: {
-          authorizationType: AuthorizationType.API_KEY,
-          apiKeyConfig: {
-            expires: Expiration.atDate(new Date('2022-12-31')),
+          authorizationType: AuthorizationType.USER_POOL,
+          userPoolConfig: {
+            userPool: UserPool.fromUserPoolId(this, 'UserPool', userPoolId),
           },
         },
       },
@@ -30,7 +32,7 @@ export class ApiStack extends Stack {
     this.querySource = this.api.addDynamoDbDataSource('QuerySource', table);
 
     this.setupTypes();
-    this.setupResolvers();
+    this.setupQueries();
   }
 
   setupTypes (): void {
@@ -56,12 +58,23 @@ export class ApiStack extends Stack {
     this.api.addType(this.projectType);
   }
 
-  setupResolvers (): void {
+  setupQueries (): void {
     this.api.addQuery('projects', new ResolvableField({
       returnType: this.projectType.attribute({ isRequired: true, isRequiredList: true }),
       dataSource: this.querySource,
       requestMappingTemplate: MappingTemplate.dynamoDbScanTable(),
       responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
+    }));
+  }
+
+  setupMutations (): void {
+    this.api.addMutation('createProject', new ResolvableField({
+      returnType: this.projectType.attribute({ isRequired: true }),
+      requestMappingTemplate: MappingTemplate.dynamoDbPutItem(
+        PrimaryKey.partition('pk').is('$ctx.identity.sub').sort('sk').is('input.id'),
+        Values.projecting('project')
+      ),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     }));
   }
 }
