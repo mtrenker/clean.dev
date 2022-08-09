@@ -7,6 +7,7 @@ export class ApiStack extends Stack {
   api: GraphqlApi;
   querySource: DynamoDbDataSource;
   projectType: ObjectType;
+  projectHightlightType: ObjectType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -34,19 +35,20 @@ export class ApiStack extends Stack {
 
   setupTypes (): void {
 
-    const projectHightlightType = new ObjectType('ProjectHightlight', {
+    this.projectHightlightType = new ObjectType('ProjectHightlight', {
       definition: {
         title: GraphqlType.string({ isRequired: true }),
         description: GraphqlType.string({ isRequired: true }),
       },
     });
+    this.api.addType(this.projectHightlightType);
 
     this.projectType = new ObjectType('Project', {
       definition: {
         id: GraphqlType.id({ isRequired: true }),
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        hightlights: projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
+        hightlights: this.projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
       },
