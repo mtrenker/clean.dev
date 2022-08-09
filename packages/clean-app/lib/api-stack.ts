@@ -29,6 +29,7 @@ export class ApiStack extends Stack {
     this.querySource = this.api.addDynamoDbDataSource('QuerySource', table);
 
     this.setupTypes();
+    this.setupResolvers();
   }
 
   setupTypes (): void {
