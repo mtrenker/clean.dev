@@ -1,12 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Project } from "../../data/projects";
+import Image from 'next/image';
+import Link from 'next/link';
 
-export interface ProjectsProps {
-  projects: Project[];
-}
+import { projects } from '../../data/projects';
 
-export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
+export const ProjectList: React.FC = () => (
   <main className="m-4 md:m-0">
     <ul className="max-w-md">
       {projects.map((project) => (
@@ -30,7 +27,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => (
               <div className="flex justify-between gap-1">
                 {project.highlights.map((technology) => (
                   <span className="rounded bg-slate-400 p-1 text-sm text-slate-900" key={technology}>{technology}</span>
-              ))}
+                ))}
               </div>
               <p className="">{project.description}</p>
               <Link href="#" passHref>

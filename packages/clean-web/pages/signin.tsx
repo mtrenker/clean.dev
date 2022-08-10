@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from '../common/components/Button';
 import { useAuthenticator } from '../common/hooks/useAuthenticator';
 
 type SignInModes = 'signin' | 'changepw' | 'success';
@@ -88,12 +89,9 @@ const SignIn: NextPage = () => {
           </div>
         )}
         <div>
-          <button
-            className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-            type="submit"
-          >
+          <Button type="submit">
             {mode === 'signin' ? 'Sign In' : 'Change Password'}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

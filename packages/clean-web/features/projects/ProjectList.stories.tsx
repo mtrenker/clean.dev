@@ -1,22 +1,22 @@
 import { Story, Meta } from '@storybook/react';
 
-import { Projects, ProjectsProps } from './ProjectList';
+import { ProjectList } from './ProjectList';
 import { Layout } from '../../common/components/Layout';
 import { projects } from '../../data/projects';
 
 export default {
   title: 'Projects',
-  component: Projects,
+  component: ProjectList,
   parameters: {
     layout: 'fullscreen',
   },
   excludeStories: /.*Data$/,
-} as Meta<ProjectsProps>;
+} as Meta;
 
-const Template: Story<ProjectsProps> = (props) => (
+const Template: Story = () => (
   <Layout>
-    <div className='container mx-auto  py-6'>
-      <Projects {...props} />
+    <div className="container mx-auto  py-6">
+      <ProjectList />
     </div>
   </Layout>
 );

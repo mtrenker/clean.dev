@@ -1,4 +1,5 @@
 import { Auth } from '@aws-amplify/auth';
+import { IconLogin, IconLogout } from '@tabler/icons';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useAuthenticator } from '../hooks/useAuthenticator';
@@ -15,9 +16,6 @@ export interface NavItem {
 const navItems: NavItem[] = [{
   label: 'Home',
   href: '/',
-}, {
-  label: 'Blog',
-  href: '/blog',
 }, {
   label: 'Profile',
   href: '/profile',
@@ -53,13 +51,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               {user ? (
                 <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
                   <Link href="/signout" passHref>
-                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">Sign out</a>
+                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
+                      <IconLogout />
+                    </a>
                   </Link>
                 </li>
               ) : (
                 <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
                   <Link href="/signin" passHref>
-                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">Sign in</a>
+                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
+                      <IconLogin />
+                    </a>
                   </Link>
                 </li>
               )}

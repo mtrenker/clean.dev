@@ -1,5 +1,5 @@
 ---
-to: features/<%=feature%>/<%=h.capitalize(name)%>.tsx
+to: features/<%=feature%>/components/<%=h.capitalize(name)%>.tsx
 ---
 export interface <%=h.capitalize(name)%>Props {
   className?: string;

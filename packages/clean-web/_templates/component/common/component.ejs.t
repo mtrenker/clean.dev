@@ -1,5 +1,5 @@
 ---
-to: common/<%=h.capitalize(name)%>.tsx
+to: common/components/<%=h.capitalize(name)%>.tsx
 ---
 export interface <%=h.capitalize(name)%>Props {
   className?: string;
