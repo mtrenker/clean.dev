@@ -71,6 +71,7 @@ export class ApiStack extends Stack {
   setupMutations (): void {
     this.api.addMutation('createProject', new ResolvableField({
       returnType: this.projectType.attribute({ isRequired: true }),
+      dataSource: this.querySource,
       requestMappingTemplate: MappingTemplate.dynamoDbPutItem(
         PrimaryKey.partition('pk').is('$ctx.identity.sub').sort('sk').is('input.id'),
         Values.projecting('project')
