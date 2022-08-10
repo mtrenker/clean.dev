@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../common/components/Button';
+import { TextField } from '../common/components/TextField';
 import { useAuthenticator } from '../common/hooks/useAuthenticator';
 
 type SignInModes = 'signin' | 'changepw' | 'success';
@@ -57,20 +58,14 @@ const SignIn: NextPage = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label className="sr-only" htmlFor="username">Username</label>
-          <input
-            className="text-black"
-            id="username"
+          <TextField
             placeholder="Username"
             type="text"
             {...register('username')}
           />
         </div>
         <div>
-          <label className="sr-only" htmlFor="password">Password</label>
-          <input
-            className="text-black"
-            id="password"
+          <TextField
             placeholder="Password"
             type="password"
             {...register('password')}
@@ -78,10 +73,7 @@ const SignIn: NextPage = () => {
         </div>
         {mode === 'changepw' && (
           <div>
-            <label className="sr-only" htmlFor="newPassword">New Password</label>
-            <input
-              className="text-black"
-              id="newPassword"
+            <TextField
               placeholder="New Password"
               type="password"
               {...register('newPassword')}
