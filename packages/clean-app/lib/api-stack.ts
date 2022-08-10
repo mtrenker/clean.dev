@@ -1,8 +1,8 @@
-import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, PrimaryKey, ResolvableField, Values } from "@aws-cdk/aws-appsync-alpha";
-import { Stack, Fn } from "aws-cdk-lib";
-import { UserPool } from "aws-cdk-lib/aws-cognito";
-import { Table } from "aws-cdk-lib/aws-dynamodb";
-import { Construct } from "constructs";
+import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, PrimaryKey, ResolvableField, Values } from '@aws-cdk/aws-appsync-alpha';
+import { Stack, Fn } from 'aws-cdk-lib';
+import { UserPool } from 'aws-cdk-lib/aws-cognito';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Construct } from 'constructs';
 
 export class ApiStack extends Stack {
   api: GraphqlApi;
@@ -33,6 +33,7 @@ export class ApiStack extends Stack {
 
     this.setupTypes();
     this.setupQueries();
+    this.setupMutations();
   }
 
   setupTypes (): void {

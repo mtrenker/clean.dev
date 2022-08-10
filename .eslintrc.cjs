@@ -14,6 +14,8 @@ module.exports = {
     'clean'
   ],
   rules: {
+    'quotes': ['error', 'single'],
+    'jsx-quotes': ['error', 'prefer-double'],
     'comma-spacing': ['error', { before: false, after: true }],
     'comma-dangle': ['error', 'always-multiline'],
     'space-before-function-paren': 'error',
