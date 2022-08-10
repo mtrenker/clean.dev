@@ -1,5 +1,5 @@
 ---
-to: "<%= type === 'Common Component' ? `common/components/${h.capitalize(name)}.tsx` : `features/${h.lower(feature)}/${h.capitalize(name)}.tsx` %>"
+to: common/<%=h.capitalize(name)%>.tsx
 ---
 export interface <%=h.capitalize(name)%>Props {
   className?: string;

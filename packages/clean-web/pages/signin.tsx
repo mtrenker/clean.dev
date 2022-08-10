@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAuthenticator } from '../common/hooks/useAuthenticator';
 
 type SignInModes = 'signin' | 'changepw' | 'success';
 
@@ -14,6 +15,7 @@ interface SignInData {
 
 const SignIn: NextPage = () => {
   const [mode, setMode] = useState<SignInModes>('signin');
+  const { setUser } = useAuthenticator();
   const { register, handleSubmit } = useForm<SignInData>();
 
   const router = useRouter();
@@ -25,6 +27,7 @@ const SignIn: NextPage = () => {
         if (result.challengeName === 'NEW_PASSWORD_REQUIRED') {
           setMode('changepw');
         } else {
+          setUser(result);
           router.push('/');
         }
         break;

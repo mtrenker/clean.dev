@@ -1,5 +1,5 @@
 ---
-to: components/<%=h.capitalize(name)%>.spec.tsx
+to: features/<%=feature%>/<%=h.capitalize(name)%>.spec.tsx
 ---
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';

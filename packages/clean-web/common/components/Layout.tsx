@@ -1,6 +1,7 @@
 import { Auth } from '@aws-amplify/auth';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useAuthenticator } from '../hooks/useAuthenticator';
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ const navItems: NavItem[] = [{
 }];
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuthenticator();
   useEffect(() => {
     const getUser = async () => {
       const user = await Auth.currentAuthenticatedUser();

@@ -3,6 +3,7 @@ import { Auth } from '@aws-amplify/auth';
 
 import { Layout } from '../common/components/Layout';
 import '../styles/globals.css';
+import { Authenticator } from '../common/components/Authenticator';
 
 const awsConfig = {
   Auth: {
@@ -16,9 +17,11 @@ Auth.configure(awsConfig);
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <Authenticator>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Authenticator>
   );
 };
 

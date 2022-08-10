@@ -1,5 +1,5 @@
 ---
-to: components/<%=h.capitalize(name)%>.stories.tsx
+to: features/<%=feature%>/<%=h.capitalize(name)%>.stories.tsx
 ---
 import { Story, Meta } from '@storybook/react';
 
