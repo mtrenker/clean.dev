@@ -7,7 +7,7 @@ export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputEleme
 export const TextField: React.FC<TextFieldProps> = (props) => (
   <input
     className={clsx([
-      'rounded-sm shadow-sm ring-1 ring-slate-500',
+      'rounded-sm p-1 shadow-sm ring-1 ring-slate-500',
       'focus:outline-none focus:ring-2',
       'focus:ring-blue-500',
     ])}

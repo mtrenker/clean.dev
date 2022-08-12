@@ -1,4 +1,5 @@
 interface BaseProject {
+  id?: string;
   title: string;
   description: string;
   city: string;
