@@ -1,3 +1,53 @@
+import { clsx } from "clsx";
+import Image from "next/image";
+
 <div className="container mx-auto">
-  # Test
+
+<div>
+  <h1
+    className={clsx([
+      "text-center text-green-700 text-2xl font-semibold",
+      "after:block after:h-10 after:w-min after:mx-auto",
+      "after:border-l-2 after:border-l-green-900",
+    ])}
+  >
+    Who I am
+  </h1>
+
+  <div className="flex max-w-max mx-auto">
+    <div className="w-96 text-center">
+      <Image width="192" height="288" src="/dummy.jpg" />
+    </div>
+    <div className="w-96 flex flex-col">
+      I'm a passionate web engineer with over 15 years of experience in various
+      industries. Over those years, I specialized on:
+      <div className="grid grid-rows-2 grid-cols-2 gap-1 flex-1">
+        <div className="bg-slate-700 border-l pl-1">
+          Developer Experience
+        </div>
+        <div className="bg-slate-700 border-l pl-1">
+          Automation
+        </div>
+        <div className="bg-slate-700 border-l pl-1">
+          Agility
+        </div>
+        <div className="bg-slate-700 border-l pl-1">
+          Serverless
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2
+    className={clsx([
+    "text-center text-green-700 text-2xl font-semibold",
+    "before:block before:h-10 before:w-min before:mx-auto",
+    "before:border-l-2 before:border-l-green-900",
+    "after:block after:h-10 after:w-min after:mx-auto",
+    "after:border-l-2 after:border-l-green-900",
+    ])}
+  >What I do</h2>
+
+</div>
+
 </div>
