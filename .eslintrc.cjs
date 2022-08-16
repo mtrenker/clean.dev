@@ -26,5 +26,9 @@ module.exports = {
       'argsIgnorePattern': '^_',
       'destructuredArrayIgnorePattern': '^_',
     }]
-  }
+  },
+  overrides: [{
+    files: ['*.mdx'],
+    extends: 'plugin:mdx/recommended',
+  }]
 };

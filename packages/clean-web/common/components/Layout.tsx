@@ -36,7 +36,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen flex-col dark:bg-slate-900 dark:text-white">
 
-      <header className="flex h-20 grow-0 items-center border-b border-b-slate-700 p-4">
+      <header className="flex h-20 grow-0 items-center p-4">
         <div className="container mx-auto flex">
           <h1 className="flex-1">clean</h1>
           <nav className="w-fit flex-initial">
