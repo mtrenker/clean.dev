@@ -1,4 +1,5 @@
 import { Auth, CognitoUser } from '@aws-amplify/auth';
+import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -49,12 +50,18 @@ const SignIn: NextPage = () => {
   };
 
   return (
-    <div className="m-4 mx-auto w-full max-w-xl rounded bg-slate-200 p-4 text-black shadow">
+    <div className={clsx([
+      'container mx-auto flex flex-col items-center self-center',
+    ])}
+    >
       {mode === 'changepw' && (
         <p className="p-4 text-center text-teal-900">Your password needs to be changed</p>
       )}
       <form
-        className="flex flex-col items-center gap-4"
+        className={clsx([
+          'flex max-w-max flex-col items-center gap-4 p-20',
+          'rounded-lg bg-slate-800 shadow-lg',
+        ])}
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
@@ -82,7 +89,7 @@ const SignIn: NextPage = () => {
         )}
         <div>
           <Button type="submit">
-            {mode === 'signin' ? 'Sign In' : 'Change Password'}
+            {mode === 'signin' ? 'Sign in' : 'Change password'}
           </Button>
         </div>
       </form>

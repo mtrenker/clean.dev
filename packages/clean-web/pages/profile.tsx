@@ -54,8 +54,6 @@ export const Profile: NextPage = () => (
         <h2
           className={clsx([
           'text-center text-2xl font-semibold text-green-700',
-          'before:mx-auto before:block before:h-10 before:w-min',
-          'before:border-l-2 before:border-l-green-900',
           'after:mx-auto after:block after:h-10 after:w-min',
           'after:border-l-2 after:border-l-green-900',
         ])}
