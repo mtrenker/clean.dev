@@ -1,17 +1,17 @@
 import clsx from 'clsx';
 import { NextPage } from 'next';
-import Image from 'next/image';
+import { projects } from '../data/projects';
 
-export const Profile: NextPage = () => (
-  <>
-    <section>
-      <div className="prose dark:prose-invert container mx-auto">
+export const Profile: NextPage = () => {
+  return (
+    <main className="container mx-auto flex flex-col items-center">
+      <section className="prose dark:prose-invert px-6">
         <h1
           className={clsx([
-          'text-center text-2xl font-semibold text-green-700',
-          'after:mx-auto after:block after:h-10 after:w-min',
-          'after:border-l-2 after:border-l-green-900',
-        ])}
+            'text-center text-2xl font-semibold',
+            'after:mx-auto after:block after:h-5 after:w-min',
+            'after:border-l-2 after:border-l-zinc-50',
+          ])}
         >
           Who I am
         </h1>
@@ -25,9 +25,6 @@ export const Profile: NextPage = () => (
           After completing my apprenticeship as an IT systems sales professional, I took an opportunity in 2008 and became a full-time self-employed web developer.
         </p>
         <div className="mx-auto flex max-w-max">
-          <div className="w-96 text-center">
-            <Image alt="Dummy" height="288" src="/dummy.jpg" width="192" />
-          </div>
           <div className="flex w-96 flex-col">
             I&apos;m a passionate web engineer with over 15 years of experience in various
             industries. Over those years, I specialized on:
@@ -47,16 +44,14 @@ export const Profile: NextPage = () => (
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section>
-      <div className="prose dark:prose-invert container mx-auto">
+      </section>
+      <section className="prose dark:prose-invert">
         <h2
           className={clsx([
-          'text-center text-2xl font-semibold text-green-700',
-          'after:mx-auto after:block after:h-10 after:w-min',
-          'after:border-l-2 after:border-l-green-900',
-        ])}
+            'text-center text-2xl font-semibold',
+            'after:mx-auto after:block after:h-10 after:w-min',
+            'after:border-l-2 after:border-l-zinc-50',
+          ])}
         >
           What I do
         </h2>
@@ -75,9 +70,25 @@ export const Profile: NextPage = () => (
         <p>
           Nothing kills more productivity than untreated or invisible constraints. Continuously improving the process by eliminating bottlenecks is key to becoming a top performer and improving the overall quality of a project.
         </p>
-      </div>
-    </section>
-  </>
-);
+      </section>
+      <section className="prose dark:prose-invert">
+        <h2
+          className={clsx([
+            'text-center text-2xl font-semibold',
+            'after:mx-auto after:block after:h-10 after:w-min',
+            'after:border-l-2 after:border-l-zinc-50',
+          ])}
+        >
+          Projects
+        </h2>
+        {projects.map((project) => (
+          <div key={project.id}>
+            <h3>{project.title}</h3>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+};
 
 export default Profile;
