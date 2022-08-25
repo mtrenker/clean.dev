@@ -1,22 +1,15 @@
-interface BaseProject {
+interface Project {
   id?: string;
+  industry?: string;
+  company?: string;
   title: string;
   description: string;
   city: string;
   highlights: string[];
   startDate: string;
   endDate: string;
+  featured?: boolean;
 }
-
-interface IndustryProject extends BaseProject {
-  industry: string;
-}
-
-interface PublicProject extends BaseProject {
-  company: string;
-}
-
-export type Project = IndustryProject | PublicProject;
 
 export const projects: Project[] = [
   {
@@ -27,6 +20,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '11-2008',
     endDate: '02-2009',
+    featured: true,
   }, {
     company: 'McKinsey & Company',
     title: 'Web Developer',
@@ -35,6 +29,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '02-2009',
     endDate: '07-2012',
+    featured: true,
   }, {
     company: 'Travian Games',
     title: 'Web Developer',
@@ -43,6 +38,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '12-2010',
     endDate: '10-2011',
+    featured: true,
   }, {
     company: 'Mindogo GmbH',
     title: 'Web Developer',
@@ -51,6 +47,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '07-2012',
     endDate: '01-2016',
+    featured: true,
   }, {
     company: 'McKinsey & Company',
     title: 'Web Developer',
@@ -59,6 +56,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '08-2012',
     endDate: '10-2014',
+    featured: true,
   }, {
     company: 'BMW Group',
     title: 'Web Developer',
@@ -67,14 +65,16 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '01-2013',
     endDate: '07-2013',
+    featured: true,
   }, {
     company: 'McKinsey & Company',
     title: 'Lead Developer',
-    description: 'Migration Bookking 2.0 - Migration of a legacy system to a new system using Zend Framework 2, Oracle DB and custom JavaScript',
+    description: 'Migration Booking 2.0 - Migration of a legacy system to a new system using Zend Framework 2, Oracle DB and custom JavaScript',
     city: 'Munich',
     highlights: [],
     startDate: '09-2014',
     endDate: '06-2016',
+    featured: true,
   }, {
     company: 'Mindogo GmbH',
     title: 'Lead Developer',
@@ -83,6 +83,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '04-2016',
     endDate: '07-2016',
+    featured: true,
   }, {
     company: 'F24 AG',
     title: 'Lead Developer',
@@ -91,6 +92,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '08-2016',
     endDate: '10-2016',
+    featured: true,
   }, {
     company: 'Brückner Group',
     title: 'Frontend Developer',
@@ -99,6 +101,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '11-2016',
     endDate: '11-2017',
+    featured: true,
   }, {
     company: 'Lufthansa AG',
     title: 'Frontend Developer',
@@ -107,6 +110,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '11-2017',
     endDate: '05-2018',
+    featured: true,
   }, {
     company: 'Fineway AG',
     title: 'Frontend Developer',
@@ -115,6 +119,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '08-2018',
     endDate: '12-2018',
+    featured: true,
   }, {
     company: 'InstaMotion Retail GmbH',
     title: 'Frontend Developer',
@@ -123,6 +128,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '04-2019',
     endDate: '07-2019',
+    featured: true,
   }, {
     company: 'ProSiebenSat.1 Digital GmbH',
     title: 'Frontend Developer',
@@ -131,6 +137,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '07-2019',
     endDate: '01-2020',
+    featured: true,
   }, {
     company: 'Interhyp AG',
     title: 'Frontend Developer',
@@ -139,6 +146,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '07-2020',
     endDate: '04-2021',
+    featured: true,
   }, {
     company: 'Fielmann AG',
     title: 'Frontend Developer',
@@ -147,6 +155,7 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '03-2021',
     endDate: '12-2021',
+    featured: true,
   }, {
     company: 'UXMA GmbH & Co. KG',
     title: 'Frontend Developer',
@@ -155,5 +164,6 @@ export const projects: Project[] = [
     highlights: [],
     startDate: '01-2022',
     endDate: '07-2022',
+    featured: true,
   },
 ];

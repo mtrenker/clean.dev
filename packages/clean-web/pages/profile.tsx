@@ -4,13 +4,11 @@ import { projects } from '../data/projects';
 
 export const Profile: NextPage = () => {
   return (
-    <main className="container mx-auto flex flex-col items-center">
+    <main className="container mx-auto flex flex-col items-center gap-5">
       <section className="prose dark:prose-invert px-6">
         <h1
           className={clsx([
             'text-center text-2xl font-semibold',
-            'after:mx-auto after:block after:h-5 after:w-min',
-            'after:border-l-2 after:border-l-zinc-50',
           ])}
         >
           Who I am
@@ -24,33 +22,11 @@ export const Profile: NextPage = () => {
         <p>
           After completing my apprenticeship as an IT systems sales professional, I took an opportunity in 2008 and became a full-time self-employed web developer.
         </p>
-        <div className="mx-auto flex max-w-max">
-          <div className="flex w-96 flex-col">
-            I&apos;m a passionate web engineer with over 15 years of experience in various
-            industries. Over those years, I specialized on:
-            <div className="grid flex-1 grid-cols-2 grid-rows-2 gap-1">
-              <div className="border-l bg-slate-700 pl-1">
-                Developer Experience
-              </div>
-              <div className="border-l bg-slate-700 pl-1">
-                Automation
-              </div>
-              <div className="border-l bg-slate-700 pl-1">
-                Agility
-              </div>
-              <div className="border-l bg-slate-700 pl-1">
-                Serverless
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
-      <section className="prose dark:prose-invert">
+      <section className="prose dark:prose-invert px-6">
         <h2
           className={clsx([
             'text-center text-2xl font-semibold',
-            'after:mx-auto after:block after:h-10 after:w-min',
-            'after:border-l-2 after:border-l-zinc-50',
           ])}
         >
           What I do
@@ -71,20 +47,32 @@ export const Profile: NextPage = () => {
           Nothing kills more productivity than untreated or invisible constraints. Continuously improving the process by eliminating bottlenecks is key to becoming a top performer and improving the overall quality of a project.
         </p>
       </section>
-      <section className="prose dark:prose-invert">
+      <section className="prose dark:prose-invert px-6">
         <h2
           className={clsx([
             'text-center text-2xl font-semibold',
-            'after:mx-auto after:block after:h-10 after:w-min',
-            'after:border-l-2 after:border-l-zinc-50',
           ])}
         >
           Projects
         </h2>
-        {projects.map((project) => (
-          <div key={project.id}>
-            <h3>{project.title}</h3>
-          </div>
+        {projects.filter(p => p.featured).reverse().map((project) => (
+          <article className="flex flex-col" key={project.id}>
+            <h3 className="m-0">{project.title}</h3>
+            <div className="flex items-center justify-between">
+              <h4 className="m-0">{project.company ? project.company : project.industry}</h4>
+              <time dateTime={project.startDate}>
+                {project.startDate}
+                -
+                {project.endDate}
+              </time>
+            </div>
+            <p className="flex-1">{project.description}</p>
+            <ul>
+              {project.highlights.length > 0 && project.highlights.map((highlight) => (
+                <li key={highlight}>{highlight}</li>
+              ))}
+            </ul>
+          </article>
         ))}
       </section>
     </main>

@@ -29,7 +29,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen flex-col dark:bg-zinc-900 dark:text-zinc-50">
 
-      <header className="flex h-20 grow-0 items-center p-4">
+      <header className="flex h-20 grow-0 items-center p-4 print:hidden">
         <div className="container mx-auto flex">
           <h1 className="flex-1">clean.dev</h1>
           <nav className="w-fit flex-initial">
@@ -60,16 +60,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </div>
 
-      <footer className="h-40 w-full grow-0 p-4 dark:bg-zinc-900">
+      <footer className="h-40 w-full grow-0 p-4 dark:bg-zinc-900 print:hidden">
         <div className="container mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-slate-400">
+              <p className="text-zinc-400">
                 clean.dev
               </p>
             </div>
             <div className="flex-1">
-              <p className="text-slate-400">
+              <p className="text-zinc-400">
                 QuickLinks
               </p>
             </div>
