@@ -1,9 +1,14 @@
 import clsx from 'clsx';
 import { NextPage } from 'next';
+import { AppContext } from 'next/app';
 import Image from 'next/image';
-import { projects } from '../data/projects';
+import { projects as projectSource, Project } from '../data/projects';
 
-export const Profile: NextPage = () => {
+interface ProfileProps {
+  projects: Project[];
+}
+
+export const Profile: NextPage<ProfileProps> = ({ projects }) => {
   return (
     <main className={clsx([
       'mx-auto flex flex-col items-center gap-5',
@@ -156,5 +161,14 @@ export const Profile: NextPage = () => {
     </main>
   );
 };
+
+export async function getStaticProps (_context: AppContext) {
+  return {
+    props: {
+      projects: projectSource,
+    },
+  };
+}
+
 
 export default Profile;

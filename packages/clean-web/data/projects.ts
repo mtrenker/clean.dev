@@ -1,4 +1,4 @@
-interface Project {
+export interface Project {
   id?: string;
   industry?: string;
   company?: string;
