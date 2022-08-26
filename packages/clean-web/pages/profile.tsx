@@ -1,75 +1,153 @@
 import clsx from 'clsx';
 import { NextPage } from 'next';
+import Image from 'next/image';
 import { projects } from '../data/projects';
 
 export const Profile: NextPage = () => {
   return (
-    <main className="container mx-auto flex flex-col items-center gap-5">
-      <section className="prose dark:prose-invert px-6">
-        <h1
-          className={clsx([
-            'text-center text-2xl font-semibold',
-          ])}
+    <main className={clsx([
+      'mx-auto flex flex-col items-center gap-5',
+      'print:m-0 print:mx-14 print:w-full print:max-w-none print:items-start',
+    ])}
+    >
+      <section
+        className={clsx([
+          'prose dark:prose-invert flex-1 px-6',
+          'w-full print:max-w-none print:px-0',
+        ])}
+      >
+        <figure className={clsx([
+          'm-0 text-center',
+          'print:flex print:gap-16 print:text-start',
+        ])}
         >
-          Who I am
-        </h1>
-        <p>
-          My passion for coding began in the early 90s while playing Street Fighter 2 and realizing I could create something similar.
-        </p>
-        <p>
-          During my teenage years, I became active in the web-development community, helping people with HTML, CSS, Javascript, PHP, and MySQL-related questions on IRC.
-        </p>
-        <p>
-          After completing my apprenticeship as an IT systems sales professional, I took an opportunity in 2008 and became a full-time self-employed web developer.
-        </p>
+          <Image
+            alt="Me"
+            className="rounded-full print:rounded-none"
+            height={200}
+            src="/me.jpg"
+            width={200}
+          />
+          <figcaption className="flex flex-col gap-4">
+            <h1
+              className={clsx([
+                  'm-0 text-3xl font-semibold uppercase',
+              ])}
+            >
+              Martin Trenker
+            </h1>
+            <h2 className={clsx([
+                  'm-0 text-2xl uppercase',
+              ])}
+            >
+              Consultant, Web Developer
+            </h2>
+          </figcaption>
+        </figure>
+        <div className={clsx([
+          'print:border-l-2 print:border-zinc-900 print:px-6',
+        ])}
+        >
+          <h3 className="uppercase tracking-widest">About me</h3>
+          <p className="my-1 font-medium tracking-wide">
+            My passion for web development started in the 90s when free web hosting became popular.
+            I became active in the community, helping aspiring developers with HTML, CSS, PHP, MySQL, and JS.
+          </p>
+          <p className="my-1 font-medium tracking-wide">
+            Today, I love building things in the cloud and creating user-oriented,
+            interactive interfaces while spreading awareness for clean code and authentic agile practices.
+          </p>
+        </div>
       </section>
-      <section className="prose dark:prose-invert px-6">
-        <h2
+
+      <div className="print:flex print:gap-5">
+        <div className="hidden print:flex print:flex-col print:justify-between">
+          <section
+            className={clsx([
+              'prose dark:prose-invert px-6',
+              'print:max-w-none print:flex-1 print:grow-0 print:px-0',
+            ])}
+          >
+            <h3 className="tracking-widest">Contact</h3>
+            <ul className="pl-4">
+              <li className="my-0">martin@example.com</li>
+              <li className="my-0">https://clean.dev</li>
+            </ul>
+          </section>
+
+          <section
+            className={clsx([
+              'prose dark:prose-invert px-6',
+              'print:max-w-none print:flex-1 print:grow-0 print:px-0',
+            ])}
+          >
+            <h3 className="capitalize tracking-widest">Skills</h3>
+            <h4>Programming</h4>
+            <ul className="pl-4">
+              <li className="my-0">Clean Code</li>
+              <li className="my-0">TypeScript</li>
+              <li className="my-0">Serverless</li>
+              <li className="my-0">Web Components</li>
+              <li className="my-0">REST / GraphQL</li>
+            </ul>
+            <h4>Organizational</h4>
+            <ul className="pl-4">
+              <li className="my-0">Agile Mindset</li>
+              <li className="my-0">Quality Management</li>
+              <li className="my-0">Transparent Communication</li>
+              <li className="my-0">Theory of Constraints</li>
+            </ul>
+          </section>
+        </div>
+
+        <section
           className={clsx([
-            'text-center text-2xl font-semibold',
+            'prose dark:prose-invert px-6',
+            'print:max-w-none print:flex-1 print:px-0',
           ])}
         >
-          What I do
-        </h2>
-        <p>
-          Solving problems for the user and creating maintainable developer experiences are at the core of my work. To achieve this, I use a holistic approach built on these three pillars:
-        </p>
-        <h3>Coaching</h3>
-        <p>
-          As a consultant, I am fortunate to experience dozens of projects, teams, processes, and successes/failures. Sharing this information and helping teams understand the &ldquo;why&rdquo; behind all the buzzwords has become one of my primary goals when consulting. Knowledge!
-        </p>
-        <h3>Automating</h3>
-        <p>
-          Way too many teams still rely on manual tasks like testing or deploying. As an automation nerd, I can help identify and implement automation of repetitive tasks that waste time and energy teams could use for new features instead.
-        </p>
-        <h3>Identifying and eliminating constraints</h3>
-        <p>
-          Nothing kills more productivity than untreated or invisible constraints. Continuously improving the process by eliminating bottlenecks is key to becoming a top performer and improving the overall quality of a project.
-        </p>
-      </section>
-      <section className="prose dark:prose-invert px-6">
-        <h2
-          className={clsx([
-            'text-center text-2xl font-semibold',
-          ])}
-        >
+          <h4 className="uppercase tracking-widest">
+            Clean and Agile
+          </h4>
+          <p className="tracking-wide">
+            I am privileged to have worked with many bright minds over the years and want to share my experience with my clients.
+            With a better understanding of quality management, agile best practices, and a human-centric approach,
+            we can build better products and create a healthier work environment for everyone.
+          </p>
+          <h4 className="uppercase tracking-widest">Learner and Mentor</h4>
+          <p className="tracking-wide">
+            Every project has its unique challenges.
+            I love analyzing and understanding them from a cross-functional perspective to expand my horizon and, on the way, pass some of it to aspiring and seasoned developers alike.
+          </p>
+          <h4 className="uppercase tracking-widest">Automator</h4>
+          <p className="tracking-wide">
+            As an automation nerd, I can help identify and implement automation of repetitive tasks that waste time and energy teams could use for new features instead.
+          </p>
+        </section>
+      </div>
+
+      <section
+        className={clsx([
+          'prose dark:prose-invert px-6',
+          'print:max-w-none print:px-0',
+        ])}
+      >
+        <h3 className="mt-6 break-before-page uppercase tracking-widest">
           Projects
-        </h2>
+        </h3>
         {projects.filter(p => p.featured).reverse().map((project) => (
-          <article className="flex flex-col" key={project.id}>
-            <h3 className="m-0">{project.title}</h3>
+          <article className="my-4 flex flex-col" key={project.id}>
+            <h4 className="m-0 uppercase tracking-widest">{project.title}</h4>
             <div className="flex items-center justify-between">
-              <h4 className="m-0">{project.company ? project.company : project.industry}</h4>
-              <time dateTime={project.startDate}>
-                {project.startDate}
-                -
-                {project.endDate}
+              <h5 className="m-0 font-semibold uppercase">{project.company ? project.company : project.industry}</h5>
+              <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
+                {`${new Date(project.startDate).getFullYear()} - ${new Date(project.endDate).getFullYear()}`}
               </time>
             </div>
-            <p className="flex-1">{project.description}</p>
-            <ul>
+            <p className="m-0 flex-1 tracking-wide">{project.description}</p>
+            <ul className="m-2 pl-4">
               {project.highlights.length > 0 && project.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
+                <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
               ))}
             </ul>
           </article>

@@ -6,6 +6,10 @@ module.exports = {
     './features/**/*.{ts,tsx}',
   ],
   theme: {
+    fontFamily: {
+      sans: ['depot-new-web', 'sans-serif'],
+      condensed: ['depot-new-condensed-web', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [
