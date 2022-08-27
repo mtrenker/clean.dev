@@ -8,7 +8,7 @@ export class PipelineStack extends Stack {
   constructor (scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const app = new AppStage(this, 'AppStage');
+    const app = new AppStage(this, 'AppStage', props);
 
     const repositry = 'mtrenker/clean.dev';
     const branch = 'main';
