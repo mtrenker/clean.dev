@@ -11,7 +11,7 @@ export class PipelineStack extends Stack {
     const app = new AppStage(this, 'AppStage');
 
     const repositry = 'mtrenker/clean.dev';
-    const branch = 'next';
+    const branch = 'main';
     const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
