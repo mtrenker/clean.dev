@@ -2,7 +2,7 @@ import { RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { BuildSpec, Project } from 'aws-cdk-lib/aws-codebuild';
+import { BuildSpec, LinuxBuildImage, Project } from 'aws-cdk-lib/aws-codebuild';
 import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
 import { CodeBuildAction, CodeStarConnectionsSourceAction, S3DeployAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
@@ -50,6 +50,7 @@ export class WebStack extends Stack {
     const project = new Project(this, 'Project', {
       role: projectRole,
       environment: {
+        buildImage: LinuxBuildImage.STANDARD_5_0,
         privileged: true,
       },
       buildSpec: BuildSpec.fromObject({
