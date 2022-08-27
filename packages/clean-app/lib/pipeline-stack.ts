@@ -1,8 +1,8 @@
-import { Stack, StackProps } from "aws-cdk-lib";
-import { Secret } from "aws-cdk-lib/aws-secretsmanager";
-import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
-import { Construct } from "constructs";
-import { AppStage } from "./app-stage";
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
+import { Construct } from 'constructs';
+import { AppStage } from './app-stage';
 
 export class PipelineStack extends Stack {
   constructor (scope: Construct, id: string, props: StackProps) {

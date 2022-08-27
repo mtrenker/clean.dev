@@ -60,20 +60,20 @@ export const Profile: NextPage<ProfileProps> = ({ projects }) => {
           </p>
           <p className="my-1 font-medium tracking-wide">
             Today, I love building things in the cloud and creating user-oriented,
-            interactive interfaces while spreading awareness for clean code and authentic agile practices.
+            interactive experiences while spreading awareness for clean code and authentic agile practices.
           </p>
         </div>
       </section>
 
       <div className="print:flex print:gap-5">
-        <div className="hidden print:flex print:flex-col print:justify-between">
+        <div className="hidden print:flex print:flex-col print:justify-between print:gap-5">
           <section
             className={clsx([
               'prose dark:prose-invert px-6',
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
-            <h3 className="tracking-widest">Contact</h3>
+            <h3 className="my-0 uppercase tracking-widest">Contact</h3>
             <ul className="pl-4">
               <li className="my-0">martin@example.com</li>
               <li className="my-0">https://clean.dev</li>
@@ -86,8 +86,8 @@ export const Profile: NextPage<ProfileProps> = ({ projects }) => {
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
-            <h3 className="capitalize tracking-widest">Skills</h3>
-            <h4>Programming</h4>
+            <h3 className="my-0 uppercase tracking-widest">Skills</h3>
+            <h4 className="uppercase tracking-widest">Programming</h4>
             <ul className="pl-4">
               <li className="my-0">Clean Code</li>
               <li className="my-0">TypeScript</li>
@@ -95,7 +95,7 @@ export const Profile: NextPage<ProfileProps> = ({ projects }) => {
               <li className="my-0">Web Components</li>
               <li className="my-0">REST / GraphQL</li>
             </ul>
-            <h4>Organizational</h4>
+            <h4 className="uppercase tracking-widest">Organizational</h4>
             <ul className="pl-4">
               <li className="my-0">Agile Mindset</li>
               <li className="my-0">Quality Management</li>
@@ -124,7 +124,7 @@ export const Profile: NextPage<ProfileProps> = ({ projects }) => {
             Every project has its unique challenges.
             I love analyzing and understanding them from a cross-functional perspective to expand my horizon and, on the way, pass some of it to aspiring and seasoned developers alike.
           </p>
-          <h4 className="uppercase tracking-widest">Automator</h4>
+          <h4 className="uppercase tracking-widest">Automation</h4>
           <p className="tracking-wide">
             As an automation nerd, I can help identify and implement automation of repetitive tasks that waste time and energy teams could use for new features instead.
           </p>
@@ -142,13 +142,14 @@ export const Profile: NextPage<ProfileProps> = ({ projects }) => {
         </h3>
         {projects.filter(p => p.featured).reverse().map((project) => (
           <article className="my-4 flex flex-col" key={project.id}>
-            <h4 className="m-0 uppercase tracking-widest">{project.title}</h4>
-            <div className="flex items-center justify-between">
-              <h5 className="m-0 font-semibold uppercase">{project.company ? project.company : project.industry}</h5>
+            <div className="flex items-center justify-between gap-6">
+              <h4 className="m-0 flex-initial font-semibold">{project.company ? project.company : project.industry}</h4>
+              <hr className="my-0 block h-px w-full flex-1 border-b border-zinc-700 print:border-zinc-900" />
               <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
                 {`${new Date(project.startDate).getFullYear()} - ${new Date(project.endDate).getFullYear()}`}
               </time>
             </div>
+            <h5 className="m-0 font-semibold uppercase tracking-widest">{project.title}</h5>
             <p className="m-0 flex-1 tracking-wide">{project.description}</p>
             <ul className="m-2 pl-4">
               {project.highlights.length > 0 && project.highlights.map((highlight) => (

@@ -31,7 +31,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       <header className="flex h-20 grow-0 items-center p-4 print:hidden">
         <div className="container mx-auto flex">
-          <h1 className="flex-1">clean.dev</h1>
+          <h1 className="flex-1 text-xl">
+            <span className="font-bold">clean</span>
+            <span className="font-light">.dev</span>
+          </h1>
           <nav className="w-fit flex-initial">
             <ul className="flex justify-end divide-x divide-slate-400">
               {user ? (

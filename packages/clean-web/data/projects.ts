@@ -1,5 +1,5 @@
 export interface Project {
-  id?: string;
+  id: string;
   industry?: string;
   company?: string;
   title: string;
@@ -13,6 +13,7 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: '1',
     company: 'Siemens AG',
     title: 'Web Developer',
     description: 'Developing and maintaining Sites in a Share point environment.',
@@ -22,9 +23,10 @@ export const projects: Project[] = [
     endDate: '2009-02',
     featured: false,
   }, {
+    id: '2',
     company: 'McKinsey & Company',
     industry: 'Consulting',
-    title: 'Web Developer',
+    title: 'Fullstack Developer',
     description: 'Developing and maintenance of an asset management system based on PHP, ExtJS, Oracle DB in an Agile team.',
     city: 'Munich',
     highlights: [],
@@ -32,9 +34,10 @@ export const projects: Project[] = [
     endDate: '2012-07',
     featured: false,
   }, {
+    id: '3',
     company: 'Travian Games',
     industry: 'Gaming',
-    title: 'Web Developer',
+    title: 'Frontend Developer',
     description: 'Developing the JavaScript components for Web based Browser game with MooTools',
     city: 'Munich',
     highlights: [],
@@ -42,6 +45,7 @@ export const projects: Project[] = [
     endDate: '2011-10',
     featured: false,
   }, {
+    id: '4',
     company: 'Mindogo GmbH',
     industry: 'Consulting',
     title: 'Web Developer',
@@ -52,6 +56,7 @@ export const projects: Project[] = [
     endDate: '2016-01',
     featured: false,
   }, {
+    id: '5',
     company: 'McKinsey & Company',
     industry: 'Consulting',
     title: 'Web Developer',
@@ -62,9 +67,10 @@ export const projects: Project[] = [
     endDate: '2014-10',
     featured: false,
   }, {
+    id: '6',
     company: 'BMW Group',
     industry: 'Automotive',
-    title: 'Web Developer',
+    title: 'Fullstack Developer',
     description: 'Creating a web-based survey system for global and local evaluation of car dealerships with PHP, Oracle DB, Laravel, AngularJS',
     city: 'Munich',
     highlights: [],
@@ -72,9 +78,10 @@ export const projects: Project[] = [
     endDate: '2013-07',
     featured: true,
   }, {
+    id: '7',
     company: 'McKinsey & Company',
     industry: 'Consulting',
-    title: 'Lead Developer',
+    title: 'Fullstack Developer / Lead',
     description: 'Architected and developed a hardware migration management application with PHP, Oracle DB, Symfony, React',
     city: 'Munich',
     highlights: [
@@ -84,6 +91,7 @@ export const projects: Project[] = [
     endDate: '2016-06',
     featured: true,
   }, {
+    id: '8',
     company: 'Mindogo GmbH',
     industry: 'Consulting',
     title: 'Lead Developer',
@@ -94,6 +102,7 @@ export const projects: Project[] = [
     endDate: '2016-07',
     featured: false,
   }, {
+    id: '9',
     company: 'F24 AG',
     title: 'Lead Developer',
     description: 'Migrating Apple App to Android using react and Cordova',
@@ -103,6 +112,7 @@ export const projects: Project[] = [
     endDate: '2016-10',
     featured: false,
   }, {
+    id: '10',
     company: 'Brückner Group',
     industry: 'Mascine Manufacturing',
     title: 'Frontend Developer',
@@ -115,6 +125,7 @@ export const projects: Project[] = [
     endDate: '2017-11',
     featured: true,
   }, {
+    id: '11',
     company: 'Lufthansa AG',
     title: 'Frontend Developer',
     description: 'Developing react components for usage in Adobe Experience Manager',
@@ -127,6 +138,7 @@ export const projects: Project[] = [
     endDate: '2018-05',
     featured: true,
   }, {
+    id: '12',
     company: 'Fineway AG',
     industry: 'Travel',
     title: 'Frontend Developer',
@@ -137,6 +149,7 @@ export const projects: Project[] = [
     endDate: '2018-12',
     featured: true,
   }, {
+    id: '13',
     company: 'InstaMotion Retail GmbH',
     industry: 'Retail',
     title: 'Frontend Developer',
@@ -147,6 +160,7 @@ export const projects: Project[] = [
     endDate: '2019-07',
     featured: true,
   }, {
+    id: '14',
     company: 'ProSiebenSat.1 Digital GmbH',
     industry: 'Media',
     title: 'Frontend Developer',
@@ -157,6 +171,7 @@ export const projects: Project[] = [
     endDate: '2020-01',
     featured: true,
   }, {
+    id: '15',
     company: 'Interhyp AG',
     industry: 'Finance',
     title: 'Frontend Developer',
@@ -170,6 +185,7 @@ export const projects: Project[] = [
     endDate: '2021-04',
     featured: true,
   }, {
+    id: '16',
     company: 'Fielmann AG',
     industry: 'Retail',
     title: 'Frontend Developer',
@@ -184,6 +200,7 @@ export const projects: Project[] = [
     endDate: '2021-12',
     featured: true,
   }, {
+    id: '17',
     company: 'UXMA GmbH & Co. KG',
     title: 'Frontend Developer',
     description: 'Led a team of 3 developers building a server-data-heavy web app written with TypeScript, React, Redux Toolkit, TanStack Table, React MUI',
