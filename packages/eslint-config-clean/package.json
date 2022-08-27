@@ -1,0 +1,20 @@
+{
+  "name": "eslint-config-clean",
+  "version": "1.0.0",
+  "description": "custom eslint config for clean.dev projects",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtrenker/clean.dev.git"
+  },
+  "author": "Martin Trenker <martin@pacabytes.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtrenker/clean.dev/issues"
+  },
+  "homepage": "https://github.com/mtrenker/clean.dev#readme"
+}

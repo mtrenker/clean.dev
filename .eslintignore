@@ -1,4 +1,4 @@
-cdk.out
-dist
-node_modules
-doc
+packages/**/out/**/*
+packages/**/.next/**/*
+
+packages/eslint-config-clean

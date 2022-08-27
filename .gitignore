@@ -1,9 +1,2 @@
 node_modules
-cdk.out
-./dist
-data.json
 .env
-storybook-static
-cdk.context.json
-tsconfig.tsbuildinfo
-.parcel-cache
