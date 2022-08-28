@@ -1,6 +1,6 @@
 import { GraphqlApi, MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 import { Stack } from 'aws-cdk-lib';
-import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -31,10 +31,12 @@ export class ComminucationStack extends Stack {
         MAIL_TO: Secret.fromSecretNameV2(this, 'MailTo', 'mail/admin').secretValue.unsafeUnwrap(),
       },
     });
-    contactLambda.addPermission('SendEmail', {
-      principal: new ServicePrincipal('ses.amazonaws.com'),
-      action: 'ses:SendEmail',
-    });
+
+    contactLambda.addToRolePolicy( new PolicyStatement({
+      actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+      resources: ['*'],
+      effect: Effect.ALLOW,
+    }));
 
     const contactResource = api.addLambdaDataSource('ContactLambda', contactLambda);
     contactResource.createResolver({
