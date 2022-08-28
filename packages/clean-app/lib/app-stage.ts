@@ -14,11 +14,10 @@ export class AppStage extends Stage {
     const userStack = new UserStack(this, 'UserStack');
     const apiStack = new ApiStack(this, 'ApiStack');
     new WebStack(this, 'WebStack');
-    const communicationStack = new ComminucationStack(this, 'ComminucationStack', {
+    new ComminucationStack(this, 'ComminucationStack', {
       domainName: 'clean.dev',
       api: apiStack.api,
     });
-    communicationStack.addDependency(apiStack);
     apiStack.addDependency(userStack);
     apiStack.addDependency(inventoryStack);
   }
