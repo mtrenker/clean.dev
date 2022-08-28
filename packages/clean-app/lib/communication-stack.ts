@@ -1,4 +1,4 @@
-import { GraphqlApi, MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
+import { GraphqlApi, GraphqlType, MappingTemplate, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
 import { Stack } from 'aws-cdk-lib';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -38,12 +38,18 @@ export class ComminucationStack extends Stack {
       effect: Effect.ALLOW,
     }));
 
+
     const contactResource = api.addLambdaDataSource('ContactLambda', contactLambda);
-    contactResource.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'contact',
+    api.addMutation('contact', new ResolvableField({
+      returnType: GraphqlType.string(),
+      dataSource: contactResource,
+      args: {
+        name: GraphqlType.string(),
+        email: GraphqlType.string(),
+        message: GraphqlType.string(),
+      },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
-    });
+    }));
   }
 }
