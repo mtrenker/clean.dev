@@ -24,7 +24,7 @@ export class ComminucationStack extends Stack {
 
     new EmailIdentity(this, 'EmailIdentity', {
       identity: Identity.publicHostedZone(hostedZone),
-      mailFromDomain: domainName,
+      mailFromDomain: 'mail.clean.dev',
     });
 
     const contactLambda = new NodejsFunction(this, 'mailer', {
