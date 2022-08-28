@@ -22,6 +22,8 @@ export class ComminucationStack extends Stack {
       domainName,
     });
 
+    Identity.domain('clean.dev');
+
     new EmailIdentity(this, 'EmailIdentity', {
       identity: Identity.publicHostedZone(hostedZone),
       mailFromDomain: 'mail.clean.dev',

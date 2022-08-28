@@ -10,7 +10,7 @@ interface Message {
 export const handler = async (event: AppSyncResolverEvent<Message>) => {
   const ses = new SES();
   await ses.sendEmail({
-    Source: 'noreply@clean.dev',
+    Source: 'noreply@mail.clean.dev',
     Destination: {
       ToAddresses: [process.env.MAIL_TO as string],
     },
