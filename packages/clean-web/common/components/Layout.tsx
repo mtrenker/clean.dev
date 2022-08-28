@@ -37,6 +37,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </h1>
           <nav className="w-fit flex-initial">
             <ul className="flex justify-end divide-x divide-slate-400">
+              <li>
+                <Link href="/" passHref>
+                  <a className="px-4" href="/">Home</a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" passHref>
+                  <a className="px-4" href="/">Contact</a>
+                </Link>
+              </li>
               {user ? (
                 <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
                   <Link href="/signout" passHref>

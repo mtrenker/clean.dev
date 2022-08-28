@@ -140,24 +140,28 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
         <h3 className="mt-6 break-before-page uppercase tracking-widest">
           Projects
         </h3>
-        {projects.filter(p => p.featured).reverse().map((project) => (
-          <article className="my-4 flex flex-col" key={project.id}>
-            <div className="flex items-center justify-between gap-6">
-              <h4 className="m-0 flex-initial font-semibold">{project.company ? project.company : project.industry}</h4>
-              <hr className="my-0 block h-px w-full flex-1 border-b border-zinc-700 print:border-zinc-900" />
-              <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
-                {`${new Date(project.startDate).getFullYear()} - ${new Date(project.endDate).getFullYear()}`}
-              </time>
-            </div>
-            <h5 className="m-0 font-semibold uppercase tracking-widest">{project.title}</h5>
-            <p className="m-0 flex-1 tracking-wide">{project.description}</p>
-            <ul className="m-2 pl-4">
-              {project.highlights.length > 0 && project.highlights.map((highlight) => (
-                <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-          </article>
-        ))}
+        {projects.filter(p => p.featured).reverse().map((project) => {
+          const startYear = new Date(project.startDate).getFullYear();
+          const endYear = new Date(project.endDate).getFullYear();
+          return (
+            <article className="my-4 flex flex-col" key={project.id}>
+              <div className="flex items-center justify-between gap-6">
+                <h4 className="m-0 flex-initial font-semibold">{project.company ? project.company : project.industry}</h4>
+                <hr className="my-0 block h-px w-full flex-1 border-b border-zinc-700 print:border-zinc-900" />
+                <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
+                  {startYear === endYear ? startYear : `${startYear} - ${endYear}`}
+                </time>
+              </div>
+              <h5 className="m-0 font-semibold uppercase tracking-widest">{project.title}</h5>
+              <p className="m-0 flex-1 tracking-wide">{project.description}</p>
+              <ul className="m-2 pl-4">
+                {project.highlights.length > 0 && project.highlights.map((highlight) => (
+                  <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
       </section>
     </main>
   );

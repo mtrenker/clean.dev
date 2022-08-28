@@ -94,7 +94,7 @@ export const projects: Project[] = [
     id: '8',
     company: 'Mindogo GmbH',
     industry: 'Consulting',
-    title: 'Lead Developer',
+    title: 'Fullstack Developer / Lead',
     description: 'People Management System',
     city: 'Munich',
     highlights: [],
@@ -114,9 +114,9 @@ export const projects: Project[] = [
   }, {
     id: '10',
     company: 'Brückner Group',
-    industry: 'Mascine Manufacturing',
+    industry: 'Maschine Manufacturing',
     title: 'Frontend Developer',
-    description: 'Developed dashboard components for web-based monitoring applications on their machines',
+    description: 'Developed dashboard components for web-based monitoring applications directly the maschines',
     city: 'Siegsdorf',
     highlights: [
       'native web components via Polymer',
@@ -144,7 +144,9 @@ export const projects: Project[] = [
     title: 'Frontend Developer',
     description: 'Developed and maintained components for an online travel magazine with React, TypeScript, GraphQL',
     city: 'Munich',
-    highlights: [],
+    highlights: [
+      'used contentful as headless CMS',
+    ],
     startDate: '2018-08',
     endDate: '2018-12',
     featured: true,
@@ -168,7 +170,7 @@ export const projects: Project[] = [
     city: 'Munich',
     highlights: [],
     startDate: '2019-07',
-    endDate: '2020-01',
+    endDate: '2019-12',
     featured: true,
   }, {
     id: '15',
@@ -182,7 +184,7 @@ export const projects: Project[] = [
       'positive first WebRTC experience',
     ],
     startDate: '2020-07',
-    endDate: '2021-04',
+    endDate: '2021-03',
     featured: true,
   }, {
     id: '16',

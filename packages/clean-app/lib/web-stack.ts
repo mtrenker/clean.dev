@@ -51,7 +51,6 @@ export class WebStack extends Stack {
       role: projectRole,
       environment: {
         buildImage: LinuxBuildImage.STANDARD_5_0,
-        privileged: true,
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',

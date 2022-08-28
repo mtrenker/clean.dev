@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 
-export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
 }
 
 // eslint-disable-next-line react/display-name
-export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, TextFieldProps>(({ label, ...props }, ref) => (
+export const TextArea: React.FC<TextAreaProps> = forwardRef<HTMLTextAreaElement, TextAreaProps>(({ label, ...props }, ref) => (
   <>
     {label && (
       <label
@@ -18,9 +18,9 @@ export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, 
         {label}
       </label>
   )}
-    <input
+    <textarea
       className={clsx([
-      'h-10 rounded-sm bg-zinc-200 p-1 dark:bg-zinc-800',
+      'rounded-sm bg-zinc-200 p-1 dark:bg-zinc-800',
       'focus:outline-none focus-visible:outline-zinc-300 dark:focus-visible:outline-zinc-700',
     ])}
       {...props}
