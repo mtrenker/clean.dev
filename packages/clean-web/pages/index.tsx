@@ -26,13 +26,19 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
           'print:flex print:gap-16 print:text-start',
         ])}
         >
-          <Image
-            alt="Me"
-            className="rounded-full print:rounded-none"
-            height={200}
-            src="/me.jpg"
-            width={200}
-          />
+          <picture className={clsx([
+              'inline-block h-[200px] overflow-hidden rounded-full ring ring-zinc-900 dark:ring-zinc-50',
+              'print:h-auto print:rounded-none print:ring-0',
+            ])}
+          >
+            <Image
+              alt="Me"
+              height={200}
+              layout="fixed"
+              src="/me.png"
+              width={200}
+            />
+          </picture>
           <figcaption className="flex flex-col gap-4">
             <h1
               className={clsx([
