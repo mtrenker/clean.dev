@@ -25,5 +25,5 @@ export const handler = async (event: AppSyncResolverEvent<Message>) => {
       },
     },
   }).promise();
-  return '';
+  return 'ok';
 };
