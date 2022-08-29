@@ -4,7 +4,7 @@ import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { Identity } from 'aws-cdk-lib/aws-ses';
+import { EmailIdentity, Identity } from 'aws-cdk-lib/aws-ses';
 import { Construct } from 'constructs';
 
 interface CommunicationStackProps {
@@ -22,7 +22,10 @@ export class ComminucationStack extends Stack {
       domainName,
     });
 
-    Identity.publicHostedZone(hostedZone);
+    new EmailIdentity(this, 'EmailIdentity', {
+      identity: Identity.publicHostedZone(hostedZone),
+      mailFromDomain: 'mail.clean.dev',
+    });
 
     const contactLambda = new NodejsFunction(this, 'mailer', {
       environment: {
