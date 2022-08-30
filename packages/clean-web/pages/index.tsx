@@ -81,7 +81,7 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
           >
             <h3 className="my-0 uppercase tracking-widest">Contact</h3>
             <ul className="pl-4">
-              <li className="my-0">martin@example.com</li>
+              <li className="my-0">info@clean.dev</li>
               <li className="my-0">https://clean.dev</li>
             </ul>
           </section>

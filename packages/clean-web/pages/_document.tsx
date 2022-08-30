@@ -9,7 +9,7 @@ class MyDocument extends Document {
           <meta content="https://clean.dev" property="og:url" />
           <meta content="clean.dev" property="og:title" />
           <meta content="Hi, I'm Martin and I love code!" property="og:description" />
-          <meta content="https://clean.dev/me.jpg" property="og:image" />
+          <meta content="https://clean.dev/open.png" property="og:image" />
           <meta content="clean.dev" property="og:site_name" />
           <meta content="summary_large_image" name="twitter:card" />
           <meta content="@martintrenker" name="twitter:creator" />
