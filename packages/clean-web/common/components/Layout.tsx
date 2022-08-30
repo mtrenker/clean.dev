@@ -27,13 +27,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     getUser();
   }, [setUser]);
   return (
-    <div className="flex min-h-screen flex-col dark:bg-zinc-900 dark:text-zinc-50">
+    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-50">
 
       <header className="flex h-20 grow-0 items-center p-4 print:hidden">
         <div className="container mx-auto flex">
           <h1 className="flex-1 text-xl">
-            <span className="font-bold">clean</span>
-            <span className="font-light">.dev</span>
+            <Link href="/" passHref>
+              <a href="/">
+                <span className="font-bold">clean</span>
+                <span className="font-light">.dev</span>
+              </a>
+            </Link>
           </h1>
           <nav className="w-fit flex-initial">
             <ul className="flex justify-end divide-x divide-slate-400">
@@ -83,7 +87,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className="flex-1">
               <p className="text-zinc-400">
-                QuickLinks
+                &copy; 2022 Martin Trenker
               </p>
             </div>
           </div>

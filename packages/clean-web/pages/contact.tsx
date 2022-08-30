@@ -1,19 +1,22 @@
 import clsx from 'clsx';
 import type { NextPage } from 'next';
-import { Button } from '../common/components/Button';
-import { TextArea } from '../common/components/TextArea';
-import { TextField } from '../common/components/TextField';
 
 const Contact: NextPage = () => (
   <main className={clsx([
-    'container mx-auto p-4',
+    'container mx-auto max-w-md p-4',
   ])}
   >
-    <form className="flex flex-col">
-      <TextField id="name" label="Name" type="text" />
-      <TextArea id="message" label="Message" />
-      <Button primary type="submit">Send</Button>
-    </form>
+    <h1 className="text-3xl font-semibold uppercase">Contact</h1>
+    <div className="mx-auto my-4 rounded border border-zinc-700 bg-zinc-800 p-4">
+      <p>This website is the online portfolio of:</p>
+      <address>
+        Martin Trenker
+        <br />
+        Philipp-Loewenfeld-Str. 63
+        <br />
+        80339 München
+      </address>
+    </div>
   </main>
 );
 
