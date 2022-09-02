@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@mdx-js/loader": "^2.1.2",
-    "@next/mdx": "^12.2.3"
+    "@next/mdx": "^12.2.3",
+    "pixi.js": "^6.5.2"
   }
 }
