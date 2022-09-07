@@ -1,5 +1,6 @@
 import { CfnOutput, Stack } from 'aws-cdk-lib';
 import { OAuthScope, UserPool } from 'aws-cdk-lib/aws-cognito';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 
 export class UserStack extends Stack {
@@ -23,6 +24,16 @@ export class UserStack extends Stack {
         scopes: [OAuthScope.OPENID],
         callbackUrls: ['https://clean.dev'],
       },
+    });
+
+    new StringParameter(this, 'UserPoolId', {
+      stringValue: userPool.userPoolId,
+      parameterName: 'userPoolId',
+    });
+
+    new StringParameter(this, 'UserPoolClientId', {
+      stringValue: client.userPoolClientId,
+      parameterName: 'userPoolClientId',
     });
 
     new CfnOutput(this, 'UserPoolId', {

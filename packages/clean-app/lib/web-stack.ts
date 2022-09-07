@@ -2,7 +2,7 @@ import { RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { BuildSpec, LinuxBuildImage, Project } from 'aws-cdk-lib/aws-codebuild';
+import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project } from 'aws-cdk-lib/aws-codebuild';
 import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
 import { CodeBuildAction, CodeStarConnectionsSourceAction, S3DeployAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
@@ -51,6 +51,24 @@ export class WebStack extends Stack {
       role: projectRole,
       environment: {
         buildImage: LinuxBuildImage.STANDARD_5_0,
+      },
+      environmentVariables: {
+        NEXT_PUBLIC_AWS_REGION: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: 'eu-central-1',
+        },
+        NEXT_PUBLIC_COGNITO_POOL_ID: {
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+          value: 'userPoolId',
+        },
+        NEXT_PUBLIC_COGNITO_CLIENT_ID: {
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+          value: 'userPoolClientId',
+        },
+        NEXT_PUBLIC_GRAPHQL_URL: {
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+          value: 'graphqlUrl',
+        },
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
