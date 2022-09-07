@@ -91,7 +91,7 @@ export class ApiStack extends Stack {
       args: {
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        hightlights: this.projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
+        // hightlights: this.projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
       },
