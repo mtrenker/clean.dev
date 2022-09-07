@@ -45,7 +45,7 @@ export class ApiStack extends Stack {
     this.setupQueries();
     this.setupMutations();
 
-    new StringParameter(this, 'GraphqlUrl', {
+    new StringParameter(this, 'GraphqlUrlParam', {
       stringValue: this.api.graphqlUrl,
       parameterName: 'graphqlUrl',
     });

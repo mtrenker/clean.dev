@@ -26,12 +26,12 @@ export class UserStack extends Stack {
       },
     });
 
-    new StringParameter(this, 'UserPoolId', {
+    new StringParameter(this, 'UserPoolIdParam', {
       stringValue: userPool.userPoolId,
       parameterName: 'userPoolId',
     });
 
-    new StringParameter(this, 'UserPoolClientId', {
+    new StringParameter(this, 'UserPoolClientIdParam', {
       stringValue: client.userPoolClientId,
       parameterName: 'userPoolClientId',
     });
