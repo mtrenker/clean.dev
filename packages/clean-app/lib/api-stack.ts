@@ -1,4 +1,4 @@
-import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, MappingTemplate, ObjectType, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
+import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, LambdaDataSource, MappingTemplate, ObjectType, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
 import { Stack, Fn } from 'aws-cdk-lib';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -11,7 +11,7 @@ export class ApiStack extends Stack {
   querySource: DynamoDbDataSource;
   projectType: ObjectType;
   projectHightlightType: ObjectType;
-  mutationSource: any;
+  mutationSource: LambdaDataSource;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
