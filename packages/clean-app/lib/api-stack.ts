@@ -91,12 +91,38 @@ export class ApiStack extends Stack {
       args: {
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        // hightlights: this.projectHightlightType.attribute({ isRequired: true, isRequiredList: true }),
+        hightlights: GraphqlType.string({ isList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
     }));
+
+    this.api.addMutation('updateProject', new ResolvableField({
+      returnType: this.projectType.attribute({ isRequired: true }),
+      dataSource: this.mutationSource,
+      args: {
+        id: GraphqlType.id({ isRequired: true }),
+        position: GraphqlType.string({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+        hightlights: GraphqlType.string({ isList: true }),
+        startDate: GraphqlType.awsDate(),
+        endDate: GraphqlType.awsDate(),
+      },
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    }));
+
+    this.api.addMutation('removeProject', new ResolvableField({
+      returnType: this.projectType.attribute({ isRequired: true }),
+      dataSource: this.mutationSource,
+      args: {
+        id: GraphqlType.id({ isRequired: true }),
+      },
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    }));
+
   }
 }

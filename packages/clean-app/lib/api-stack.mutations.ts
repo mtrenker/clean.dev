@@ -1,15 +1,31 @@
-import { AppSyncResolverEvent } from 'aws-lambda';
+import { AppSyncIdentityCognito, AppSyncResolverEvent } from 'aws-lambda';
+import { DynamoDB } from 'aws-sdk';
+import { z } from 'zod';
+import { ulid } from 'ulid';
+
+const project = z.object({
+  title: z.string(),
+  description: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
+  hightlights: z.array(z.string()),
+});
+
+type Project = z.infer<typeof project>;
+
+const dbclient = new DynamoDB.DocumentClient();
+const TableName = process.env.TABLE_NAME || '';
 
 export const handler = async (event: AppSyncResolverEvent<unknown>) => {
-  const { arguments: args, info: { fieldName, parentTypeName } } = event;
+  const { arguments: args, info: { fieldName, parentTypeName }, identity } = event;
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
       case 'createProject':
-        return createProject(args);
+        return await createProject(args as Project, identity as AppSyncIdentityCognito);
       case 'updateProject':
         return updateProject(args);
-      case 'deleteProject':
-        return deleteProject(args);
+      case 'removeProject':
+        return removeProject(args);
       default:
         throw new Error(`Unknown mutation ${fieldName}`);
     }
@@ -17,17 +33,33 @@ export const handler = async (event: AppSyncResolverEvent<unknown>) => {
   return 'Only mutations are supported';
 };
 
-function createProject (_args: unknown): void {
-  console.log('createProject', _args);
+async function createProject (args: Project, identity: AppSyncIdentityCognito) {
+  const { success } = project.safeParse(args);
+  const { sub } = identity;
 
-  throw new Error('Function not implemented.');
+  if (!success) {
+    throw new Error('Invalid project');
+  }
+
+  try {
+    const { $response: { data } } = await dbclient.put({
+      TableName,
+      Item: {
+        pk: `USER#${sub}`,
+        sk: `PROJECT#${ulid()}`,
+        ...args,
+      },
+    }).promise();
+    return data;
+  } catch (error) {
+    return error;
+  }
 }
 
 function updateProject (_args: unknown) {
   throw new Error('Function not implemented.');
 }
-
-function deleteProject (_args: unknown) {
+function removeProject (_args: unknown) {
   throw new Error('Function not implemented.');
 }
 
