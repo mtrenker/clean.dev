@@ -4,11 +4,11 @@ import { z } from 'zod';
 import { ulid } from 'ulid';
 
 const project = z.object({
-  title: z.string(),
-  description: z.string(),
-  startDate: z.string(),
-  endDate: z.string(),
-  hightlights: z.array(z.string()),
+  position: z.string(),
+  summary: z.string(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  hightlights: z.array(z.string()).optional(),
 });
 
 type Project = z.infer<typeof project>;
