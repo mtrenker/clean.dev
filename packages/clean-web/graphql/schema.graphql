@@ -1,0 +1,33 @@
+scalar AWSDate
+scalar AWSDateTime
+scalar AWSJSON
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Mutation {
+  contact(email: String, message: String, name: String): String
+  createProject(endDate: AWSDate, hightlights: [String], position: String!, startDate: AWSDate, summary: String!): Project!
+  removeProject(id: ID!): Project!
+  updateProject(endDate: AWSDate, hightlights: [String], id: ID!, position: String!, startDate: AWSDate, summary: String!): Project!
+}
+
+type Project {
+  endDate: AWSDate
+  hightlights: [ProjectHightlight!]!
+  id: ID!
+  position: String!
+  startDate: AWSDate
+  summary: String!
+}
+
+type ProjectHightlight {
+  description: String!
+  title: String!
+}
+
+type Query {
+  projects: [Project!]!
+}
