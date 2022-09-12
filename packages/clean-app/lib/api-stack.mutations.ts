@@ -46,7 +46,7 @@ async function createProject (project: Project, identity: AppSyncIdentityCognito
 
   try {
     const id = ulid();
-    const { $response: { data } } = await dbclient.put({
+    await dbclient.put({
       TableName,
       Item: {
         pk: `USER#${sub}`,
@@ -55,9 +55,11 @@ async function createProject (project: Project, identity: AppSyncIdentityCognito
         ...project,
       },
     }).promise();
-    console.log(data);
 
-    return data;
+    return {
+      id,
+      ...project,
+    };
   } catch (error) {
     return error;
   }
