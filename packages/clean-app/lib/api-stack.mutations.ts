@@ -3,7 +3,7 @@ import { DynamoDB } from 'aws-sdk';
 import { z } from 'zod';
 import { ulid } from 'ulid';
 
-const project = z.object({
+const projectSchema = z.object({
   client: z.string(),
   location: z.string().optional(),
   position: z.string(),
@@ -14,21 +14,21 @@ const project = z.object({
   featured: z.boolean().optional(),
 });
 
-export type Project = z.infer<typeof project>;
+export type Project = z.infer<typeof projectSchema>;
 
 const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
 
-export const handler = async (event: AppSyncResolverEvent<unknown>) => {
-  const { arguments: args, info: { fieldName, parentTypeName }, identity } = event;
+export const handler = async (event: AppSyncResolverEvent<any>) => {
+  const { arguments: { project }, info: { fieldName, parentTypeName }, identity } = event;
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
       case 'createProject':
-        return await createProject(args as Project, identity as AppSyncIdentityCognito);
+        return await createProject(project as Project, identity as AppSyncIdentityCognito);
       case 'updateProject':
-        return updateProject(args);
+        return updateProject(project);
       case 'removeProject':
-        return removeProject(args);
+        return removeProject(project);
       default:
         throw new Error(`Unknown mutation ${fieldName}`);
     }
@@ -36,8 +36,8 @@ export const handler = async (event: AppSyncResolverEvent<unknown>) => {
   return 'Only mutations are supported';
 };
 
-async function createProject (args: Project, identity: AppSyncIdentityCognito) {
-  const { success } = project.safeParse(args);
+async function createProject (project: Project, identity: AppSyncIdentityCognito) {
+  const { success } = projectSchema.safeParse(project);
   const { sub } = identity;
 
   if (!success) {
@@ -52,7 +52,7 @@ async function createProject (args: Project, identity: AppSyncIdentityCognito) {
         pk: `USER#${sub}`,
         sk: `PROJECT#${id}`,
         id,
-        ...args,
+        ...project,
       },
     }).promise();
     return data;

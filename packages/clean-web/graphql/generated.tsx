@@ -14,7 +14,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   AWSDate: string;
-  AWSDateTime: string;
   AWSJSON: string;
 };
 
@@ -35,11 +34,7 @@ export type MutationContactArgs = {
 
 
 export type MutationCreateProjectArgs = {
-  endDate?: InputMaybe<Scalars['AWSDate']>;
-  hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  position: Scalars['String'];
-  startDate?: InputMaybe<Scalars['AWSDate']>;
-  summary: Scalars['String'];
+  project: ProjectInput;
 };
 
 
@@ -49,19 +44,18 @@ export type MutationRemoveProjectArgs = {
 
 
 export type MutationUpdateProjectArgs = {
-  endDate?: InputMaybe<Scalars['AWSDate']>;
-  hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   id: Scalars['ID'];
-  position: Scalars['String'];
-  startDate?: InputMaybe<Scalars['AWSDate']>;
-  summary: Scalars['String'];
+  project: ProjectInput;
 };
 
 export type Project = {
   __typename?: 'Project';
+  client: Scalars['String'];
   endDate?: Maybe<Scalars['AWSDate']>;
+  featured?: Maybe<Scalars['Boolean']>;
   hightlights: Array<ProjectHightlight>;
   id: Scalars['ID'];
+  location?: Maybe<Scalars['String']>;
   position: Scalars['String'];
   startDate?: Maybe<Scalars['AWSDate']>;
   summary: Scalars['String'];
@@ -73,10 +67,28 @@ export type ProjectHightlight = {
   title: Scalars['String'];
 };
 
+export type ProjectInput = {
+  client: Scalars['String'];
+  endDate?: InputMaybe<Scalars['AWSDate']>;
+  featured?: InputMaybe<Scalars['Boolean']>;
+  hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  location?: InputMaybe<Scalars['String']>;
+  position: Scalars['String'];
+  startDate?: InputMaybe<Scalars['AWSDate']>;
+  summary: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   projects: Array<Project>;
 };
+
+export type CreateProjectMutationVariables = Exact<{
+  project: ProjectInput;
+}>;
+
+
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: string } };
 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -84,6 +96,39 @@ export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string }> };
 
 
+export const CreateProjectDocument = gql`
+    mutation createProject($project: ProjectInput!) {
+  createProject(project: $project) {
+    id
+  }
+}
+    `;
+export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      project: // value for 'project'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation (baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
+        const options = { ...defaultOptions, ...baseOptions };
+        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, options);
+      }
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const GetProjectsDocument = gql`
     query getProjects {
   projects {

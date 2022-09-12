@@ -1,3 +1,6 @@
+scalar AWSDate
+scalar AWSJSON
+
 schema {
   query: Query
   mutation: Mutation
@@ -5,9 +8,9 @@ schema {
 
 type Mutation {
   contact(email: String, message: String, name: String): String
-  createProject(client: String!, endDate: AWSDate, featured: Boolean, hightlights: [String], location: String, position: String!, startDate: AWSDate, summary: String!): Project!
+  createProject(project: ProjectInput!): Project!
   removeProject(id: ID!): Project!
-  updateProject(client: String!, endDate: AWSDate, featured: Boolean, hightlights: [String], id: ID!, location: String, position: String!, startDate: AWSDate, summary: String!): Project!
+  updateProject(id: ID!, project: ProjectInput!): Project!
 }
 
 type Project {
@@ -29,4 +32,15 @@ type ProjectHightlight {
 
 type Query {
   projects: [Project!]!
+}
+
+input ProjectInput {
+  client: String!
+  endDate: AWSDate
+  featured: Boolean
+  hightlights: [String]
+  location: String
+  position: String!
+  startDate: AWSDate
+  summary: String!
 }
