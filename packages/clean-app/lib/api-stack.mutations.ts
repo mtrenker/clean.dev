@@ -4,14 +4,17 @@ import { z } from 'zod';
 import { ulid } from 'ulid';
 
 const project = z.object({
+  client: z.string(),
+  location: z.string().optional(),
   position: z.string(),
   summary: z.string(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   hightlights: z.array(z.string()).optional(),
+  featured: z.boolean().optional(),
 });
 
-type Project = z.infer<typeof project>;
+export type Project = z.infer<typeof project>;
 
 const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';

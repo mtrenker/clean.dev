@@ -7,11 +7,11 @@ export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputEleme
 
 // eslint-disable-next-line react/display-name
 export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, TextFieldProps>(({ label, ...props }, ref) => (
-  <>
+  <span>
     {label && (
       <label
         className={clsx([
-        'mb-1 block',
+        'mb-1 block w-full',
       ])}
         htmlFor={props.id}
       >
@@ -19,12 +19,12 @@ export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, 
       </label>
   )}
     <input
-      className={clsx([
-      'h-10 rounded-sm bg-zinc-200 p-1 dark:bg-zinc-800',
-      'focus:outline-none focus-visible:outline-zinc-300 dark:focus-visible:outline-zinc-700',
-    ])}
       {...props}
+      className={clsx([
+        'h-10 w-full rounded-sm border border-zinc-500 bg-zinc-200 p-1 dark:bg-zinc-800',
+        'focus:outline-none focus-visible:outline-zinc-300 dark:focus-visible:outline-zinc-700',
+      ])}
       ref={ref}
     />
-  </>
+  </span>
 ));
