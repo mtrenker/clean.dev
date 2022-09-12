@@ -55,6 +55,8 @@ async function createProject (project: Project, identity: AppSyncIdentityCognito
         ...project,
       },
     }).promise();
+    console.log(data);
+
     return data;
   } catch (error) {
     return error;
