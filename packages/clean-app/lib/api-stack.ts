@@ -1,4 +1,4 @@
-import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, LambdaDataSource, MappingTemplate, ObjectType, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
+import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, InputType, LambdaDataSource, MappingTemplate, ObjectType, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
 import { Stack, Fn } from 'aws-cdk-lib';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -9,9 +9,10 @@ import { Construct } from 'constructs';
 export class ApiStack extends Stack {
   api: GraphqlApi;
   querySource: DynamoDbDataSource;
+  mutationSource: LambdaDataSource;
   projectType: ObjectType;
   projectHightlightType: ObjectType;
-  mutationSource: LambdaDataSource;
+  projectInputType: InputType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -75,6 +76,20 @@ export class ApiStack extends Stack {
       },
     });
     this.api.addType(this.projectType);
+
+    this.projectInputType = new InputType('ProjectInput', {
+      definition: {
+        client: GraphqlType.string({ isRequired: true }),
+        location: GraphqlType.string(),
+        position: GraphqlType.string({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+        hightlights: GraphqlType.string({ isList: true }),
+        startDate: GraphqlType.awsDate(),
+        endDate: GraphqlType.awsDate(),
+        featured: GraphqlType.boolean(),
+      },
+    });
+    this.api.addType(this.projectInputType);
   }
 
   setupQueries (): void {
@@ -106,14 +121,7 @@ export class ApiStack extends Stack {
       returnType: this.projectType.attribute({ isRequired: true }),
       dataSource: this.mutationSource,
       args: {
-        client: GraphqlType.string({ isRequired: true }),
-        location: GraphqlType.string(),
-        position: GraphqlType.string({ isRequired: true }),
-        summary: GraphqlType.string({ isRequired: true }),
-        hightlights: GraphqlType.string({ isList: true }),
-        startDate: GraphqlType.awsDate(),
-        endDate: GraphqlType.awsDate(),
-        featured: GraphqlType.boolean(),
+        project: this.projectInputType.attribute({ isRequired: true }),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
@@ -124,14 +132,7 @@ export class ApiStack extends Stack {
       dataSource: this.mutationSource,
       args: {
         id: GraphqlType.id({ isRequired: true }),
-        client: GraphqlType.string({ isRequired: true }),
-        location: GraphqlType.string(),
-        position: GraphqlType.string({ isRequired: true }),
-        summary: GraphqlType.string({ isRequired: true }),
-        hightlights: GraphqlType.string({ isList: true }),
-        startDate: GraphqlType.awsDate(),
-        endDate: GraphqlType.awsDate(),
-        featured: GraphqlType.boolean(),
+        project: this.projectInputType.attribute({ isRequired: true }),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
