@@ -1,5 +1,15 @@
 mutation createProject($project: ProjectInput!) {
   createProject(project: $project) {
-    id
+    ...ProjectFragment
   }
+}
+
+mutation updateProject($id: ID!, $project: ProjectInput!) {
+  updateProject(id: $id, project: $project) {
+    ...ProjectFragment
+  }
+}
+
+mutation removeProject($id: ID!) {
+  removeProject(id: $id)
 }

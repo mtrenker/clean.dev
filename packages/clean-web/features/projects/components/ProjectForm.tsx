@@ -19,10 +19,13 @@ export interface ProjectData {
 
 export interface ProjectFormProps {
   onSubmit: (data: any) => void;
+  defaultValues?: ProjectData;
 }
 
-export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit }) => {
-  const { setValue, handleSubmit, register, control } = useForm<ProjectData>();
+export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues }) => {
+  const { setValue, handleSubmit, register, control } = useForm<ProjectData>({
+    defaultValues,
+  });
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

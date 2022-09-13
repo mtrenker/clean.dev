@@ -9,7 +9,7 @@ schema {
 type Mutation {
   contact(email: String, message: String, name: String): String
   createProject(project: ProjectInput!): Project!
-  removeProject(id: ID!): Project!
+  removeProject(id: ID!): String!
   updateProject(id: ID!, project: ProjectInput!): Project!
 }
 
