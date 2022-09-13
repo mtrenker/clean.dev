@@ -1,5 +1,16 @@
 query getProjects {
   projects {
-    id
+    ...ProjectFragment
   }
+}
+
+fragment ProjectFragment on Project {
+  client
+  endDate
+  featured
+  id
+  location
+  position
+  startDate
+  summary
 }

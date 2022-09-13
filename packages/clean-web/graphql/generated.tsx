@@ -93,9 +93,22 @@ export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string }> };
+export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string }> };
 
+export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string };
 
+export const ProjectFragmentFragmentDoc = gql`
+    fragment ProjectFragment on Project {
+  client
+  endDate
+  featured
+  id
+  location
+  position
+  startDate
+  summary
+}
+    `;
 export const CreateProjectDocument = gql`
     mutation createProject($project: ProjectInput!) {
   createProject(project: $project) {
@@ -132,10 +145,10 @@ export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProj
 export const GetProjectsDocument = gql`
     query getProjects {
   projects {
-    id
+    ...ProjectFragment
   }
 }
-    `;
+    ${ProjectFragmentFragmentDoc}`;
 
 /**
  * __useGetProjectsQuery__

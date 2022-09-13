@@ -20,15 +20,15 @@ const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
 
 export const handler = async (event: AppSyncResolverEvent<any>) => {
-  const { arguments: { project }, info: { fieldName, parentTypeName }, identity } = event;
+  const { arguments: { id, project }, info: { fieldName, parentTypeName }, identity } = event;
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
       case 'createProject':
         return await createProject(project as Project, identity as AppSyncIdentityCognito);
       case 'updateProject':
-        return updateProject(project);
+        return updateProject(id, project as Project, identity as AppSyncIdentityCognito);
       case 'removeProject':
-        return removeProject(project);
+        return removeProject(id, identity as AppSyncIdentityCognito);
       default:
         throw new Error(`Unknown mutation ${fieldName}`);
     }
@@ -37,38 +37,55 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
 };
 
 async function createProject (project: Project, identity: AppSyncIdentityCognito) {
-  const { success } = projectSchema.safeParse(project);
-  const { sub } = identity;
-
-  if (!success) {
-    throw new Error('Invalid project');
-  }
-
+  projectSchema.parse(project);
+  const id = ulid();
   try {
-    const id = ulid();
-    await dbclient.put({
-      TableName,
-      Item: {
-        pk: `USER#${sub}`,
-        sk: `PROJECT#${id}`,
-        id,
-        ...project,
-      },
-    }).promise();
-
+    await putProject(id, project, identity);
     return {
       id,
       ...project,
     };
-  } catch (error) {
-    return error;
+  } catch (e) {
+    return e;
   }
 }
 
-function updateProject (_args: unknown) {
-  throw new Error('Function not implemented.');
+async function updateProject (id: string, project: Project, identity: AppSyncIdentityCognito) {
+  projectSchema.parse(project);
+  try {
+    await putProject(id, project, identity);
+    return {
+      id,
+      ...project,
+    };
+  } catch (e) {
+    return e;
+  }
 }
-function removeProject (_args: unknown) {
-  throw new Error('Function not implemented.');
+async function removeProject (id: string, identity: AppSyncIdentityCognito) {
+  try {
+    await deleteProject(id, identity);
+    return 'ok';
+  } catch (e) {
+    return e;
+  }
 }
 
+async function putProject (id: string, project: Project, identity: AppSyncIdentityCognito) {
+  const { sub } = identity;
+  const pk = `USER#${sub}`;
+  const sk = `PROJECT#${id}`;
+  const item = {
+    ...project,
+    pk,
+    sk,
+  };
+  return dbclient.put({ TableName, Item: item }).promise();
+}
+
+async function deleteProject (id: string, identity: AppSyncIdentityCognito) {
+  const { sub } = identity;
+  const pk = `USER#${sub}`;
+  const sk = `PROJECT#${id}`;
+  return dbclient.delete({ TableName, Key: { pk, sk } }).promise();
+}

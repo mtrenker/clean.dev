@@ -139,7 +139,7 @@ export class ApiStack extends Stack {
     }));
 
     this.api.addMutation('removeProject', new ResolvableField({
-      returnType: this.projectType.attribute({ isRequired: true }),
+      returnType: GraphqlType.string({ isRequired: true }),
       dataSource: this.mutationSource,
       args: {
         id: GraphqlType.id({ isRequired: true }),

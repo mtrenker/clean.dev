@@ -1,11 +1,11 @@
 import { NextPage } from 'next';
+import { ProjectData, ProjectForm } from '../../../features/projects/components/ProjectForm';
+import { useCreateProjectMutation } from '../../../graphql/generated';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { useCreateProjectMutation } from '../../graphql/generated';
-import { ProjectData, ProjectForm } from '../../features/projects/components/ProjectForm';
 
 
-const NewProjectPage: NextPage = () => {
+const EditProjectPage: NextPage = () => {
 
   const [createProject] = useCreateProjectMutation();
 
@@ -20,16 +20,10 @@ const NewProjectPage: NextPage = () => {
 
   return (
     <main className="container mx-auto max-w-md p-4">
-      <h1>New Project</h1>
+      <h1>Edit Project</h1>
       <ProjectForm onSubmit={onSubmit} />
     </main>
   );
 };
 
-export async function getStaticProps () {
-  return {
-    props: {},
-  };
-}
-
-export default NewProjectPage;
+export default EditProjectPage;

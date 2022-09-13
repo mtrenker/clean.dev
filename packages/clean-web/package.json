@@ -11,7 +11,7 @@
     "build-storybook": "build-storybook -s ./public",
     "test": "jest",
     "test:watch": "jest --watch",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "generate": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
