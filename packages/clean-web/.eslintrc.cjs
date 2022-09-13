@@ -34,5 +34,6 @@ module.exports = {
        'prop': 'parens-new-line',
      },
    ],
+   'jsx-a11y/anchor-is-valid': 'off',
   },
 };

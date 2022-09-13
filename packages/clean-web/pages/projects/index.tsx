@@ -30,12 +30,12 @@ const ProjectsPage: NextPage = () => {
             <tr key={project.id}>
               <td>
                 <Link href={`/projects/${project.id}`} passHref>
-                  <a className="text-blue-500" href="/">{project.client}</a>
+                  <a className="text-blue-500">{project.client}</a>
                 </Link>
               </td>
               <td>
                 <Link href={`/projects/${project.id}/edit`} passHref>
-                  <a className="text-blue-500" href="/">edit</a>
+                  <a className="text-blue-500">edit</a>
                 </Link>
               </td>
             </tr>
