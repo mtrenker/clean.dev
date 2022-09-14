@@ -1,4 +1,4 @@
+packages/**/cdk.out/**/*
 packages/**/out/**/*
 packages/**/.next/**/*
-
 packages/eslint-config-clean

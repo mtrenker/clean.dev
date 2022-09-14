@@ -21,9 +21,7 @@ const Contact: NextPage = () => (
 );
 
 export async function getStaticProps () {
-  return {
-    props: {},
-  };
+  return { props: {} };
 }
 
 export default Contact;

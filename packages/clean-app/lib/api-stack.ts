@@ -1,4 +1,14 @@
-import { AuthorizationType, DynamoDbDataSource, GraphqlApi, GraphqlType, InputType, LambdaDataSource, MappingTemplate, ObjectType, ResolvableField } from '@aws-cdk/aws-appsync-alpha';
+import {
+  AuthorizationType,
+  DynamoDbDataSource,
+  GraphqlApi,
+  GraphqlType,
+  InputType,
+  LambdaDataSource,
+  MappingTemplate,
+  ObjectType,
+  ResolvableField,
+} from '@aws-cdk/aws-appsync-alpha';
 import { Stack, Fn } from 'aws-cdk-lib';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -13,6 +23,8 @@ export class ApiStack extends Stack {
   projectType: ObjectType;
   projectHightlightType: ObjectType;
   projectInputType: InputType;
+  contactType: ObjectType;
+  contactInputType: InputType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -26,17 +38,11 @@ export class ApiStack extends Stack {
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: AuthorizationType.USER_POOL,
-          userPoolConfig: {
-            userPool: UserPool.fromUserPoolId(this, 'UserPool', userPoolId),
-          },
+          userPoolConfig: { userPool: UserPool.fromUserPoolId(this, 'UserPool', userPoolId) },
         },
       },
     });
-    const mutationLambda = new NodejsFunction (this, 'mutations', {
-      environment: {
-        TABLE_NAME: tableName,
-      },
-    });
+    const mutationLambda = new NodejsFunction (this, 'mutations', { environment: { TABLE_NAME: tableName } });
     table.grantReadWriteData(mutationLambda);
 
     this.querySource = this.api.addDynamoDbDataSource('QuerySource', table);
@@ -54,13 +60,33 @@ export class ApiStack extends Stack {
 
   setupTypes (): void {
 
-    this.projectHightlightType = new ObjectType('ProjectHightlight', {
+    this.contactType = new ObjectType('Contact', {
       definition: {
-        title: GraphqlType.string({ isRequired: true }),
-        description: GraphqlType.string({ isRequired: true }),
+        company: GraphqlType.string(),
+        firstName: GraphqlType.string(),
+        lastName: GraphqlType.string(),
+        email: GraphqlType.string(),
+        street: GraphqlType.string(),
+        city: GraphqlType.string(),
+        zip: GraphqlType.string(),
+        country: GraphqlType.string(),
       },
     });
-    this.api.addType(this.projectHightlightType);
+    this.api.addType(this.contactType);
+
+    this.contactInputType = new InputType('ContactInput', {
+      definition: {
+        client: GraphqlType.string({ isRequired: true }),
+        location: GraphqlType.string(),
+        position: GraphqlType.string({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+        hightlights: GraphqlType.string({ isList: true }),
+        startDate: GraphqlType.awsDate(),
+        endDate: GraphqlType.awsDate(),
+        featured: GraphqlType.boolean(),
+      },
+    });
+    this.api.addType(this.contactInputType);
 
     this.projectType = new ObjectType('Project', {
       definition: {
@@ -73,6 +99,7 @@ export class ApiStack extends Stack {
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
         featured: GraphqlType.boolean(),
+        contact: this.contactType.attribute(),
       },
     });
     this.api.addType(this.projectType);
@@ -122,6 +149,7 @@ export class ApiStack extends Stack {
       dataSource: this.mutationSource,
       args: {
         project: this.projectInputType.attribute({ isRequired: true }),
+        contact: this.contactInputType.attribute(),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
@@ -133,6 +161,7 @@ export class ApiStack extends Stack {
       args: {
         id: GraphqlType.id({ isRequired: true }),
         project: this.projectInputType.attribute({ isRequired: true }),
+        contact: this.contactInputType.attribute(),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),

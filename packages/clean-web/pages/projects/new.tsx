@@ -11,11 +11,7 @@ const NewProjectPage: NextPage = () => {
 
   const onSubmit = (data: ProjectData) => {
     console.log({ data });
-    createProject({
-      variables: {
-        project: data,
-      },
-    });
+    createProject({ variables: { project: data } });
   };
 
   return (
@@ -27,9 +23,7 @@ const NewProjectPage: NextPage = () => {
 };
 
 export async function getStaticProps () {
-  return {
-    props: {},
-  };
+  return { props: {} };
 }
 
 export default NewProjectPage;

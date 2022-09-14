@@ -174,11 +174,7 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
 };
 
 export async function getStaticProps (_context: AppContext) {
-  return {
-    props: {
-      projects: projectSource,
-    },
-  };
+  return { props: { projects: projectSource } };
 }
 
 

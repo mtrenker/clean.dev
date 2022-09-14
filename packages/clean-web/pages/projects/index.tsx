@@ -47,9 +47,7 @@ const ProjectsPage: NextPage = () => {
 };
 
 export async function getStaticProps () {
-  return {
-    props: {},
-  };
+  return { props: {} };
 }
 
 export default ProjectsPage;
