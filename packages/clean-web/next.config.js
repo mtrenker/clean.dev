@@ -11,12 +11,8 @@ module.exports = withMDX({
   reactStrictMode: true,
   swcMinify: true,
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  experimental: {
-    images: {
-      unoptimized: true,
-    },
-  },
   images: {
     domains: ['picsum.photos'],
+    unoptimized: true,
   },
 });
