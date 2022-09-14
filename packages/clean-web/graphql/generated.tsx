@@ -14,7 +14,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   AWSDate: string;
-  AWSJSON: string;
 };
 
 export type Mutation = {
@@ -53,7 +52,7 @@ export type Project = {
   client: Scalars['String'];
   endDate?: Maybe<Scalars['AWSDate']>;
   featured?: Maybe<Scalars['Boolean']>;
-  hightlights: Array<ProjectHightlight>;
+  hightlights?: Maybe<Array<Maybe<Scalars['String']>>>;
   id: Scalars['ID'];
   location?: Maybe<Scalars['String']>;
   position: Scalars['String'];

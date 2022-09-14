@@ -1,5 +1,4 @@
 scalar AWSDate
-scalar AWSJSON
 
 schema {
   query: Query
@@ -17,7 +16,7 @@ type Project {
   client: String!
   endDate: AWSDate
   featured: Boolean
-  hightlights: [ProjectHightlight!]!
+  hightlights: [String]
   id: ID!
   location: String
   position: String!

@@ -8,6 +8,7 @@ fragment ProjectFragment on Project {
   client
   endDate
   featured
+  highlights
   id
   location
   position
