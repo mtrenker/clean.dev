@@ -52,7 +52,7 @@ export type Project = {
   client: Scalars['String'];
   endDate?: Maybe<Scalars['AWSDate']>;
   featured?: Maybe<Scalars['Boolean']>;
-  hightlights?: Maybe<Array<Maybe<Scalars['String']>>>;
+  highlights?: Maybe<Array<Maybe<Scalars['String']>>>;
   id: Scalars['ID'];
   location?: Maybe<Scalars['String']>;
   position: Scalars['String'];
@@ -87,7 +87,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string } };
 
 export type UpdateProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -95,7 +95,7 @@ export type UpdateProjectMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string } };
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string } };
 
 export type RemoveProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -107,15 +107,16 @@ export type RemoveProjectMutation = { __typename?: 'Mutation', removeProject: st
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string }> };
+export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string }> };
 
-export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string };
+export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string };
 
 export const ProjectFragmentFragmentDoc = gql`
     fragment ProjectFragment on Project {
   client
   endDate
   featured
+  highlights
   id
   location
   position

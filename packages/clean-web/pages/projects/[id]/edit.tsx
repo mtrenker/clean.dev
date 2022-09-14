@@ -20,7 +20,6 @@ const EditProjectPage: NextPage = () => {
     location: project?.location || '',
     startDate: project?.startDate || '',
     endDate: project?.endDate || '',
-    highlights: project?.highlights || [],
     featured: project?.featured || false,
   };
 
