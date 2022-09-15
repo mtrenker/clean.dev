@@ -1,5 +1,6 @@
 import { Application, Sprite, Graphics } from 'pixi.js';
 import { useEffect, useRef } from 'react';
+import { Subject } from 'rxjs';
 
 export interface CanvasProps {
   className?: string;
@@ -12,10 +13,11 @@ export const Canvas: React.FC<CanvasProps> = () => {
   useEffect(() => {
     if (containerRef.current) {
       app.current = new Application({
+        antialias: true,
         width: containerRef.current?.clientWidth || 0,
         height: containerRef.current?.clientHeight || 0,
         backgroundColor: 0x1099bb,
-        resolution: window.devicePixelRatio,
+        resolution: 1, //window.devicePixelRatio,
       });
 
       if (containerRef.current.firstChild) {
@@ -41,10 +43,13 @@ export const Canvas: React.FC<CanvasProps> = () => {
         app.current?.stage.addChild(sprite);
         app.current?.stage.addChild(line);
 
-        app.current?.ticker.add(() => {
-          sprite.rotation += 0.01;
+        const sub = new Subject<number>();
+
+        sub.subscribe((_delta) => {
+          sprite.rotation += .01;
         });
 
+        app.current?.ticker.add((d) => sub.next(d));
       });
     }
   }, []);
