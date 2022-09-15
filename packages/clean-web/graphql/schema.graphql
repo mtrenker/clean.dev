@@ -5,15 +5,27 @@ schema {
   mutation: Mutation
 }
 
+type Contact {
+  city: String
+  company: String
+  country: String
+  email: String
+  firstName: String
+  lastName: String
+  street: String
+  zip: String
+}
+
 type Mutation {
   contact(email: String, message: String, name: String): String
-  createProject(project: ProjectInput!): Project!
+  createProject(contact: ContactInput, project: ProjectInput!): Project!
   removeProject(id: ID!): String!
-  updateProject(id: ID!, project: ProjectInput!): Project!
+  updateProject(contact: ContactInput, id: ID!, project: ProjectInput!): Project!
 }
 
 type Project {
   client: String!
+  contact: Contact
   endDate: AWSDate
   featured: Boolean
   highlights: [String]
@@ -24,13 +36,19 @@ type Project {
   summary: String!
 }
 
-type ProjectHightlight {
-  description: String!
-  title: String!
-}
-
 type Query {
   projects: [Project!]!
+}
+
+input ContactInput {
+  client: String!
+  endDate: AWSDate
+  featured: Boolean
+  hightlights: [String]
+  location: String
+  position: String!
+  startDate: AWSDate
+  summary: String!
 }
 
 input ProjectInput {

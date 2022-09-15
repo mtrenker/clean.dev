@@ -1,7 +1,21 @@
 query getProjects {
   projects {
     ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
   }
+}
+
+fragment ContactFragment on Contact {
+  company
+  firstName
+  lastName
+  email
+  street
+  city
+  zip
+  country
 }
 
 fragment ProjectFragment on Project {
