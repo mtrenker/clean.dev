@@ -35,13 +35,15 @@ const ProjectsPage: NextPage = () => {
                   <a className="text-blue-500">{project.client}</a>
                 </Link>
               </td>
-              <td>
-                <Link href={`/projects/${project.id}/edit`} passHref>
-                  <a className="text-blue-500">edit</a>
-                </Link>
-                <Button onClick={() => removeProject({ variables: { id: project.id } })}>
-                  <IconTrash />
-                </Button>
+              <td className="w-40">
+                <div className="flex w-full justify-end gap-4">
+                  <Link href={`/projects/${project.id}/edit`} passHref>
+                    <a className="text-blue-500">edit</a>
+                  </Link>
+                  <Button onClick={() => removeProject({ variables: { id: project.id } })}>
+                    <IconTrash />
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

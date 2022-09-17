@@ -1,12 +1,18 @@
 mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
     ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
   }
 }
 
 mutation updateProject($id: ID!, $input: ProjectInput!) {
   updateProject(id: $id, input: $input) {
     ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
   }
 }
 

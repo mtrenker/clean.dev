@@ -2,11 +2,35 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { IconLoader } from '@tabler/icons';
 
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
 import { TextField } from '../../../common/components/TextField';
-import { IconLoader } from '@tabler/icons';
+
+const projectSchema = yup.object().shape({
+  project: yup.object().shape({
+    client: yup.string().required(),
+    position: yup.string().required(),
+    summary: yup.string().required(),
+    location: yup.string().optional(),
+    startDate: yup.date().optional(),
+    endDate: yup.date().optional(),
+    featured: yup.boolean().optional(),
+  }),
+  contact: yup.object().shape({
+    company: yup.string().optional(),
+    firstName: yup.string().optional(),
+    lastName: yup.string().optional(),
+    email: yup.string().optional(),
+    street: yup.string().optional(),
+    city: yup.string().optional(),
+    zip: yup.string().optional(),
+    country: yup.string().optional(),
+  }),
+});
 
 export interface ProjectData {
   client: string;
@@ -41,17 +65,23 @@ export interface ProjectFormProps {
   defaultValues?: ProjectFormData;
 }
 
+
+
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
     const [showContacts, setShowContacts] = useState(
     defaultValues ? Object.values(defaultValues.contact).filter(Boolean).length > 0: false
   );
-  const { setValue, handleSubmit, register, control } = useForm<ProjectFormData>({
+  const { setValue, handleSubmit, register, control, formState: { errors } } = useForm<ProjectFormData>({
     defaultValues,
+    resolver: yupResolver(projectSchema),
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 rounded border bg-zinc-800 p-4">
         <TextField id="client" label="client" {...register('project.client')} />
+        {errors.project?.client &&
+          <p className="text-red-500">{errors.project.client.message}</p>
+        }
         <TextField id="location" label="location" {...register('project.location')} />
         <TextField id="position" label="position" {...register('project.position')} />
         <TextArea id="summary" label="summary" {...register('project.summary')} />

@@ -3,7 +3,7 @@ import { DynamoDB } from 'aws-sdk';
 import { z } from 'zod';
 import { ulid } from 'ulid';
 
-const projectSchema = z.object({
+export const projectSchema = z.object({
   client: z.string(),
   location: z.string().optional(),
   position: z.string(),

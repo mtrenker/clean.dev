@@ -17,6 +17,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@aws-amplify/auth": "^4.6.6",
     "@faker-js/faker": "^7.5.0",
+    "@hookform/resolvers": "^2.9.8",
     "@tabler/icons": "^1.95.1",
     "apollo-boost": "^0.4.9",
     "aws-sdk": "^2.1214.0",
@@ -26,7 +27,8 @@
     "react": "18.2.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.35.0"
+    "react-hook-form": "^7.35.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",

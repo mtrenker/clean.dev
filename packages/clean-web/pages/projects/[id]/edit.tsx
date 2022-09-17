@@ -15,23 +15,23 @@ const EditProjectPage: NextPage = () => {
 
   const defaultValues: ProjectFormData = {
     project: {
-      client: project?.client || '',
-      position: project?.position || '',
-      summary: project?.summary || '',
-      location: project?.location || '',
-      startDate: project?.startDate || '',
-      endDate: project?.endDate || '',
-      featured: project?.featured || false,
+      client: project?.client ?? '',
+      position: project?.position ?? '',
+      summary: project?.summary ?? '',
+      location: project?.location ?? undefined,
+      startDate: project?.startDate ?? undefined,
+      endDate: project?.endDate ?? undefined,
+      featured: project?.featured ?? undefined,
     },
     contact: {
-      company: project?.contact?.company || '',
-      firstName: project?.contact?.firstName || '',
-      lastName: project?.contact?.lastName || '',
-      email: project?.contact?.email || '',
-      street: project?.contact?.street || '',
-      city: project?.contact?.city || '',
-      zip: project?.contact?.zip || '',
-      country: project?.contact?.country || '',
+      company: project?.contact?.company ?? undefined,
+      firstName: project?.contact?.firstName ?? undefined,
+      lastName: project?.contact?.lastName ?? undefined,
+      email: project?.contact?.email ?? undefined,
+      street: project?.contact?.street ?? undefined,
+      city: project?.contact?.city ?? undefined,
+      zip: project?.contact?.zip ?? undefined,
+      country: project?.contact?.country ?? undefined,
     },
   };
 
