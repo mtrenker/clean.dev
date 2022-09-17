@@ -114,6 +114,7 @@ export class ApiStack extends Stack {
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
         featured: GraphqlType.boolean(),
+        contact: this.contactInputType.attribute(),
       },
     });
     this.api.addType(this.projectInputType);
@@ -148,8 +149,7 @@ export class ApiStack extends Stack {
       returnType: this.projectType.attribute({ isRequired: true }),
       dataSource: this.mutationSource,
       args: {
-        project: this.projectInputType.attribute({ isRequired: true }),
-        contact: this.contactInputType.attribute(),
+        input: this.projectInputType.attribute({ isRequired: true }),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
@@ -160,8 +160,7 @@ export class ApiStack extends Stack {
       dataSource: this.mutationSource,
       args: {
         id: GraphqlType.id({ isRequired: true }),
-        project: this.projectInputType.attribute({ isRequired: true }),
-        contact: this.contactInputType.attribute(),
+        input: this.projectInputType.attribute({ isRequired: true }),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
