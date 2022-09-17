@@ -10,7 +10,11 @@ module.exports = {
       sans: ['depot-new-web', 'sans-serif'],
       condensed: ['depot-new-condensed-web', 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

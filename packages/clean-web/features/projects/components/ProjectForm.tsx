@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
 import { TextField } from '../../../common/components/TextField';
+import { IconLoader } from '@tabler/icons';
 
 export interface ProjectData {
   client: string;
@@ -35,11 +36,12 @@ export interface ProjectFormData {
 }
 
 export interface ProjectFormProps {
+  loading?: boolean;
   onSubmit: (data: ProjectFormData) => void;
   defaultValues?: ProjectFormData;
 }
 
-export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues }) => {
+export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
   const [showContacts, setShowContacts] = useState(false);
   const { setValue, handleSubmit, register, control } = useForm<ProjectFormData>({
     defaultValues,
@@ -86,7 +88,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           <label className="flex-1" htmlFor="featured">Featured</label>
           <input
             id="contact" onChange={e => {
-            e.currentTarget.checked ? setShowContacts(true) : setShowContacts(false);
+              e.currentTarget.checked ? setShowContacts(true) : setShowContacts(false);
             }}
             type="checkbox"
           />
@@ -104,7 +106,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
             <TextField id="country" label="country" {...register('contact.country')} />
           </div>
           )}
-        <Button primary type="submit">Save</Button>
+        <Button disabled={loading} primary type="submit">
+          <span className="flex items-center justify-center gap-4">
+            {loading && (
+              <IconLoader className="animate-spin-slow h-5 w-5" />
+            )}
+            Save
+          </span>
+        </Button>
       </div>
     </form>
   );

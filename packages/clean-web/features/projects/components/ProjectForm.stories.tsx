@@ -20,5 +20,22 @@ Default.decorators = [
         <Story />
       </div>
     </Layout>
-),
+  ),
+];
+
+export const Loading = Template.bind({});
+Loading.args = {
+  loading: true,
+};
+Loading.parameters = {
+  layout: 'fullscreen',
+};
+Loading.decorators = [
+  (Story) => (
+    <Layout>
+      <div className="container mx-auto mt-10">
+        <Story />
+      </div>
+    </Layout>
+  ),
 ];
