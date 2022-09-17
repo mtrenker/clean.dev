@@ -86,9 +86,10 @@ async function putProject (id: string, project: Project, identity: AppSyncIdenti
   const pk = `USER#${sub}`;
   const sk = `PROJECT#${id}`;
   const item = {
-    ...project,
     pk,
     sk,
+    id,
+    ...project,
   };
   return dbclient.put({ TableName, Item: item }).promise();
 }

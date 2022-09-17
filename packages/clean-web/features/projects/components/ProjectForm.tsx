@@ -57,12 +57,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           <div className="flex-1">
             <Controller
               control={control}
-              name="startDate"
+              name="project.startDate"
               render={({ field }) => (
                 <DatePicker
                   customInput={<TextField id="startDate" label="startDate" />}
                   {...field}
-                  onChange={(date: Date) => setValue('startDate', format(date, 'yyyy-MM-dd'))}
+                  onChange={(date: Date) => setValue('project.startDate', format(date, 'yyyy-MM-dd'))}
                 />
               )}
             />
@@ -70,12 +70,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           <div className="flex-1">
             <Controller
               control={control}
-              name="endDate"
+              name="project.endDate"
               render={({ field }) => (
                 <DatePicker
                   customInput={<TextField id="endDate" label="endDate" />}
                   {...field}
-                  onChange={(date: Date) => setValue('endDate', format(date, 'yyyy-MM-dd'))}
+                  onChange={(date: Date) => setValue('project.endDate', format(date, 'yyyy-MM-dd'))}
                 />
               )}
             />
