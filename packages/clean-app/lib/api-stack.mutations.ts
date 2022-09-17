@@ -30,13 +30,13 @@ const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
 
 export const handler = async (event: AppSyncResolverEvent<any>) => {
-  const { arguments: { id, project }, info: { fieldName, parentTypeName }, identity } = event;
+  const { arguments: { id, input }, info: { fieldName, parentTypeName }, identity } = event;
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
       case 'createProject':
-        return await createProject(project as Project, identity as AppSyncIdentityCognito);
+        return await createProject(input as Project, identity as AppSyncIdentityCognito);
       case 'updateProject':
-        return updateProject(id, project as Project, identity as AppSyncIdentityCognito);
+        return updateProject(id, input as Project, identity as AppSyncIdentityCognito);
       case 'removeProject':
         return removeProject(id, identity as AppSyncIdentityCognito);
       default:

@@ -13,7 +13,10 @@ const NewProjectPage: NextPage = () => {
     console.log({ data });
     createProject({
       variables: {
-        ...data,
+        input: {
+          ...data.project,
+          contact: data.contact,
+        },
        },
     });
   };

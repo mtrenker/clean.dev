@@ -29,14 +29,14 @@ export type Contact = {
 };
 
 export type ContactInput = {
-  client: Scalars['String'];
-  endDate?: InputMaybe<Scalars['AWSDate']>;
-  featured?: InputMaybe<Scalars['Boolean']>;
-  hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  location?: InputMaybe<Scalars['String']>;
-  position: Scalars['String'];
-  startDate?: InputMaybe<Scalars['AWSDate']>;
-  summary: Scalars['String'];
+  city?: InputMaybe<Scalars['String']>;
+  company?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  street?: InputMaybe<Scalars['String']>;
+  zip?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -56,8 +56,7 @@ export type MutationContactArgs = {
 
 
 export type MutationCreateProjectArgs = {
-  contact?: InputMaybe<ContactInput>;
-  project: ProjectInput;
+  input: ProjectInput;
 };
 
 
@@ -67,9 +66,8 @@ export type MutationRemoveProjectArgs = {
 
 
 export type MutationUpdateProjectArgs = {
-  contact?: InputMaybe<ContactInput>;
   id: Scalars['ID'];
-  project: ProjectInput;
+  input: ProjectInput;
 };
 
 export type Project = {
@@ -88,6 +86,7 @@ export type Project = {
 
 export type ProjectInput = {
   client: Scalars['String'];
+  contact?: InputMaybe<ContactInput>;
   endDate?: InputMaybe<Scalars['AWSDate']>;
   featured?: InputMaybe<Scalars['Boolean']>;
   hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -103,8 +102,7 @@ export type Query = {
 };
 
 export type CreateProjectMutationVariables = Exact<{
-  project: ProjectInput;
-  contact?: InputMaybe<ContactInput>;
+  input: ProjectInput;
 }>;
 
 
@@ -112,8 +110,7 @@ export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { 
 
 export type UpdateProjectMutationVariables = Exact<{
   id: Scalars['ID'];
-  project: ProjectInput;
-  contact?: InputMaybe<ContactInput>;
+  input: ProjectInput;
 }>;
 
 
@@ -161,8 +158,8 @@ export const ProjectFragmentFragmentDoc = gql`
 }
     `;
 export const CreateProjectDocument = gql`
-    mutation createProject($project: ProjectInput!, $contact: ContactInput) {
-  createProject(project: $project, contact: $contact) {
+    mutation createProject($input: ProjectInput!) {
+  createProject(input: $input) {
     ...ProjectFragment
   }
 }
@@ -182,8 +179,7 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutat
  * @example
  * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
  *   variables: {
- *      project: // value for 'project'
- *      contact: // value for 'contact'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -195,8 +191,8 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const UpdateProjectDocument = gql`
-    mutation updateProject($id: ID!, $project: ProjectInput!, $contact: ContactInput) {
-  updateProject(id: $id, project: $project, contact: $contact) {
+    mutation updateProject($id: ID!, $input: ProjectInput!) {
+  updateProject(id: $id, input: $input) {
     ...ProjectFragment
   }
 }
@@ -217,8 +213,7 @@ export type UpdateProjectMutationFn = Apollo.MutationFunction<UpdateProjectMutat
  * const [updateProjectMutation, { data, loading, error }] = useUpdateProjectMutation({
  *   variables: {
  *      id: // value for 'id'
- *      project: // value for 'project'
- *      contact: // value for 'contact'
+ *      input: // value for 'input'
  *   },
  * });
  */

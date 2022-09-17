@@ -40,7 +40,10 @@ const EditProjectPage: NextPage = () => {
     updateProject({
       variables: {
         id,
-        ...data,
+        input: {
+          ...data.project,
+          contact: data.contact,
+        },
       },
     });
   };

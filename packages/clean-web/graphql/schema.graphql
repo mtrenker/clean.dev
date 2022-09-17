@@ -18,9 +18,9 @@ type Contact {
 
 type Mutation {
   contact(email: String, message: String, name: String): String
-  createProject(contact: ContactInput, project: ProjectInput!): Project!
+  createProject(input: ProjectInput!): Project!
   removeProject(id: ID!): String!
-  updateProject(contact: ContactInput, id: ID!, project: ProjectInput!): Project!
+  updateProject(id: ID!, input: ProjectInput!): Project!
 }
 
 type Project {
@@ -41,18 +41,19 @@ type Query {
 }
 
 input ContactInput {
-  client: String!
-  endDate: AWSDate
-  featured: Boolean
-  hightlights: [String]
-  location: String
-  position: String!
-  startDate: AWSDate
-  summary: String!
+  city: String
+  company: String
+  country: String
+  email: String
+  firstName: String
+  lastName: String
+  street: String
+  zip: String
 }
 
 input ProjectInput {
   client: String!
+  contact: ContactInput
   endDate: AWSDate
   featured: Boolean
   hightlights: [String]

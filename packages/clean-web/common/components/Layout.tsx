@@ -52,13 +52,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </Link>
               </li>
               {user ? (
-                <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
-                  <Link href="/signout" passHref>
-                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
-                      <IconLogout />
-                    </a>
-                  </Link>
-                </li>
+                <>
+                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                    <Link href="/projects" passHref>
+                      <a href="/">
+                        Projects
+                      </a>
+                    </Link>
+                  </li>
+                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                    <Link href="/signout" passHref>
+                      <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
+                        <IconLogout />
+                      </a>
+                    </Link>
+                  </li>
+                </>
               ) : (
                 <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
                   <Link href="/signin" passHref>
