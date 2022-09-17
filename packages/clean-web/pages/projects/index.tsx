@@ -3,10 +3,12 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { Button } from '../../common/components/Button';
-import { useGetProjectsQuery } from '../../graphql/generated';
+import { useGetProjectsQuery, useRemoveProjectMutation } from '../../graphql/generated';
+import { IconTrash } from '@tabler/icons';
 
 const ProjectsPage: NextPage = () => {
   const { data } = useGetProjectsQuery();
+  const [removeProject] = useRemoveProjectMutation();
   return (
     <main className={clsx([
       'container mx-auto',
@@ -37,6 +39,9 @@ const ProjectsPage: NextPage = () => {
                 <Link href={`/projects/${project.id}/edit`} passHref>
                   <a className="text-blue-500">edit</a>
                 </Link>
+                <Button onClick={() => removeProject({ variables: { id: project.id } })}>
+                  <IconTrash />
+                </Button>
               </td>
             </tr>
           ))}

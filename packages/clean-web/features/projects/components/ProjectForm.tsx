@@ -42,14 +42,14 @@ export interface ProjectFormProps {
 }
 
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
-  const [showContacts, setShowContacts] = useState(false);
+    const [showContacts, setShowContacts] = useState(
+    defaultValues ? Object.values(defaultValues.contact).filter(Boolean).length > 0: false
+  );
   const { setValue, handleSubmit, register, control } = useForm<ProjectFormData>({
     defaultValues,
   });
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 rounded border bg-zinc-800 p-4">
         <TextField id="client" label="client" {...register('project.client')} />
         <TextField id="location" label="location" {...register('project.location')} />
@@ -87,7 +87,9 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           <input id="featured" type="checkbox" {...register('project.featured')} />
           <label className="flex-1" htmlFor="featured">Featured</label>
           <input
-            id="contact" onChange={e => {
+            checked={showContacts}
+            id="contact"
+            onChange={e => {
               e.currentTarget.checked ? setShowContacts(true) : setShowContacts(false);
             }}
             type="checkbox"
