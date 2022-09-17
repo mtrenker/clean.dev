@@ -76,14 +76,14 @@ export class ApiStack extends Stack {
 
     this.contactInputType = new InputType('ContactInput', {
       definition: {
-        client: GraphqlType.string({ isRequired: true }),
-        location: GraphqlType.string(),
-        position: GraphqlType.string({ isRequired: true }),
-        summary: GraphqlType.string({ isRequired: true }),
-        hightlights: GraphqlType.string({ isList: true }),
-        startDate: GraphqlType.awsDate(),
-        endDate: GraphqlType.awsDate(),
-        featured: GraphqlType.boolean(),
+        company: GraphqlType.string(),
+        firstName: GraphqlType.string(),
+        lastName: GraphqlType.string(),
+        email: GraphqlType.string(),
+        street: GraphqlType.string(),
+        city: GraphqlType.string(),
+        zip: GraphqlType.string(),
+        country: GraphqlType.string(),
       },
     });
     this.api.addType(this.contactInputType);

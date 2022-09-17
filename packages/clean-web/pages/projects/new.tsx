@@ -1,19 +1,19 @@
 import { NextPage } from 'next';
 
-import 'react-datepicker/dist/react-datepicker.css';
 import { useCreateProjectMutation } from '../../graphql/generated';
-import { ProjectData, ProjectForm } from '../../features/projects/components/ProjectForm';
+import { ProjectForm, ProjectFormData } from '../../features/projects/components/ProjectForm';
 
+import 'react-datepicker/dist/react-datepicker.css';
 
 const NewProjectPage: NextPage = () => {
 
   const [createProject] = useCreateProjectMutation();
 
-  const onSubmit = (data: ProjectData) => {
+  const onSubmit = (data: ProjectFormData) => {
     console.log({ data });
     createProject({
       variables: {
-        project: data,
+        ...data,
        },
     });
   };

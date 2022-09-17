@@ -12,6 +12,16 @@ const projectSchema = z.object({
   endDate: z.string().optional(),
   hightlights: z.array(z.string()).optional(),
   featured: z.boolean().optional(),
+  contact: z.object({
+    company: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    email: z.string().optional(),
+    street: z.string().optional(),
+    city: z.string().optional(),
+    zip: z.string().optional(),
+    country: z.string().optional(),
+  }).optional(),
 });
 
 export type Project = z.infer<typeof projectSchema>;

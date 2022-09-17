@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { ProjectData, ProjectForm } from '../../../features/projects/components/ProjectForm';
+import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
 import { useGetProjectsQuery, useUpdateProjectMutation } from '../../../graphql/generated';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,23 +13,34 @@ const EditProjectPage: NextPage = () => {
   const { data } = useGetProjectsQuery();
   const project = data?.projects.find((project) => project.id === id);
 
-  const defaultValues: ProjectData = {
-    client: project?.client || '',
-    position: project?.position || '',
-    summary: project?.summary || '',
-    location: project?.location || '',
-    startDate: project?.startDate || '',
-    endDate: project?.endDate || '',
-    featured: project?.featured || false,
+  const defaultValues: ProjectFormData = {
+    project: {
+      client: project?.client || '',
+      position: project?.position || '',
+      summary: project?.summary || '',
+      location: project?.location || '',
+      startDate: project?.startDate || '',
+      endDate: project?.endDate || '',
+      featured: project?.featured || false,
+    },
+    contact: {
+      company: project?.contact?.company || '',
+      firstName: project?.contact?.firstName || '',
+      lastName: project?.contact?.lastName || '',
+      email: project?.contact?.email || '',
+      street: project?.contact?.street || '',
+      city: project?.contact?.city || '',
+      zip: project?.contact?.zip || '',
+      country: project?.contact?.country || '',
+    },
   };
 
 
-  const onSubmit = (data: ProjectData) => {
-    console.log({ data });
+  const onSubmit = (data: ProjectFormData) => {
     updateProject({
       variables: {
         id,
-        project: data,
+        ...data,
       },
     });
   };
