@@ -129,7 +129,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           {fields.map((field, index) => (
             <div className="flex" key={field.id}>
               <div className="flex-1">
-                <TextField defaultValue={field.text} />
+                <TextField defaultValue={field.text} {...register(`project.highlights.${index}.text`)} />
               </div>
               <div className="flex-none">
                 <Button

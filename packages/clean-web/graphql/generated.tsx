@@ -89,7 +89,7 @@ export type ProjectInput = {
   contact?: InputMaybe<ContactInput>;
   endDate?: InputMaybe<Scalars['AWSDate']>;
   featured?: InputMaybe<Scalars['Boolean']>;
-  hightlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  highlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   location?: InputMaybe<Scalars['String']>;
   position: Scalars['String'];
   startDate?: InputMaybe<Scalars['AWSDate']>;

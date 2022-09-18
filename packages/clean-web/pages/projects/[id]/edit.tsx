@@ -20,7 +20,7 @@ const EditProjectPage: NextPage = () => {
       startDate: project?.startDate ?? undefined,
       endDate: project?.endDate ?? undefined,
       featured: project?.featured ?? undefined,
-      highlights: project?.highlights?.map((highlight) => ({ text: highlight })),
+      highlights: project?.highlights?.map((highlight) => ({ text: highlight ?? '' })),
     },
     contact: {
       company: project?.contact?.company ?? undefined,
