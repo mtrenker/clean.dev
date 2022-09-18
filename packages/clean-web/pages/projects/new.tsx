@@ -2,9 +2,6 @@ import { NextPage } from 'next';
 
 import { useCreateProjectMutation } from '../../graphql/generated';
 import { ProjectForm, ProjectFormData } from '../../features/projects/components/ProjectForm';
-
-import 'react-datepicker/dist/react-datepicker.css';
-
 const NewProjectPage: NextPage = () => {
 
   const [createProject] = useCreateProjectMutation();
@@ -15,6 +12,7 @@ const NewProjectPage: NextPage = () => {
       variables: {
         input: {
           ...data.project,
+          highlights: data.project.highlights?.map((highlight) => highlight.text),
           contact: data.contact,
         },
        },

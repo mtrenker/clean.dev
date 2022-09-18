@@ -1,34 +1,36 @@
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { object, string, date, boolean } from 'yup';
 import { IconLoader } from '@tabler/icons';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
 import { TextField } from '../../../common/components/TextField';
 
-const projectSchema = yup.object().shape({
-  project: yup.object().shape({
-    client: yup.string().required(),
-    position: yup.string().required(),
-    summary: yup.string().required(),
-    location: yup.string().optional(),
-    startDate: yup.date().optional(),
-    endDate: yup.date().optional(),
-    featured: yup.boolean().optional(),
+const projectSchema = object().shape({
+  project: object().shape({
+    client: string().required(),
+    position: string().required(),
+    summary: string().required(),
+    location: string().optional(),
+    startDate: date().optional(),
+    endDate: date().optional(),
+    featured: boolean().optional(),
   }),
-  contact: yup.object().shape({
-    company: yup.string().optional(),
-    firstName: yup.string().optional(),
-    lastName: yup.string().optional(),
-    email: yup.string().optional(),
-    street: yup.string().optional(),
-    city: yup.string().optional(),
-    zip: yup.string().optional(),
-    country: yup.string().optional(),
+  contact: object().shape({
+    company: string().optional(),
+    firstName: string().optional(),
+    lastName: string().optional(),
+    email: string().optional(),
+    street: string().optional(),
+    city: string().optional(),
+    zip: string().optional(),
+    country: string().optional(),
   }),
 });
 
@@ -39,7 +41,9 @@ export interface ProjectData {
   summary: string;
   startDate?: string;
   endDate?: string;
-  highlights?: string[];
+  highlights?: Array<{
+    text: string;
+  }>;
   featured?: boolean;
 }
 
@@ -65,8 +69,6 @@ export interface ProjectFormProps {
   defaultValues?: ProjectFormData;
 }
 
-
-
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
     const [showContacts, setShowContacts] = useState(
     defaultValues ? Object.values(defaultValues.contact).filter(Boolean).length > 0: false
@@ -75,9 +77,13 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
     defaultValues,
     resolver: yupResolver(projectSchema),
   });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'project.highlights',
+  });
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-4 rounded border bg-zinc-800 p-4">
+      <div className="flex flex-col gap-4 rounded border p-4 dark:bg-zinc-800">
         <TextField id="client" label="client" {...register('project.client')} />
         {errors.project?.client &&
           <p className="text-red-500">{errors.project.client.message}</p>
@@ -113,6 +119,29 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
             />
           </div>
         </div>
+        <fieldset className="flex flex-col gap-2">
+          <div className="flex items-center">
+            <legend className="flex-1">Highlights</legend>
+            <div className="flex-none">
+              <Button onClick={() => append({ text: '' })}>Add</Button>
+            </div>
+          </div>
+          {fields.map((field, index) => (
+            <div className="flex" key={field.id}>
+              <div className="flex-1">
+                <TextField defaultValue={field.text} />
+              </div>
+              <div className="flex-none">
+                <Button
+                  onClick={() => remove(index)}
+                  type="button"
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          ))}
+        </fieldset>
         <div className="flex flex-row items-center gap-2">
           <input id="featured" type="checkbox" {...register('project.featured')} />
           <label className="flex-1" htmlFor="featured">Featured</label>

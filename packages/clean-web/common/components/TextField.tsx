@@ -7,7 +7,7 @@ export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputEleme
 
 // eslint-disable-next-line react/display-name
 export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, TextFieldProps>(({ label, ...props }, ref) => (
-  <span>
+  <div>
     {label && (
       <label
         className={clsx([
@@ -26,5 +26,5 @@ export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, 
       ])}
       ref={ref}
     />
-  </span>
+  </div>
 ));

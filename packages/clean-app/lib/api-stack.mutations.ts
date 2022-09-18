@@ -10,7 +10,7 @@ export const projectSchema = z.object({
   summary: z.string(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  hightlights: z.array(z.string()).optional(),
+  highlights: z.array(z.string()).optional(),
   featured: z.boolean().optional(),
   contact: z.object({
     company: z.string().optional(),

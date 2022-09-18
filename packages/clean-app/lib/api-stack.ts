@@ -21,7 +21,6 @@ export class ApiStack extends Stack {
   querySource: DynamoDbDataSource;
   mutationSource: LambdaDataSource;
   projectType: ObjectType;
-  projectHightlightType: ObjectType;
   projectInputType: InputType;
   contactType: ObjectType;
   contactInputType: InputType;
@@ -110,7 +109,7 @@ export class ApiStack extends Stack {
         location: GraphqlType.string(),
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        hightlights: GraphqlType.string({ isList: true }),
+        highlights: GraphqlType.string({ isList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
         featured: GraphqlType.boolean(),

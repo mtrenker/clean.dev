@@ -1,10 +1,8 @@
 import { NextPage } from 'next';
-import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
-import { useGetProjectsQuery, useUpdateProjectMutation } from '../../../graphql/generated';
-
-import 'react-datepicker/dist/react-datepicker.css';
 import { useRouter } from 'next/router';
 
+import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
+import { useGetProjectsQuery, useUpdateProjectMutation } from '../../../graphql/generated';
 
 const EditProjectPage: NextPage = () => {
   const [updateProject] = useUpdateProjectMutation();
@@ -22,6 +20,7 @@ const EditProjectPage: NextPage = () => {
       startDate: project?.startDate ?? undefined,
       endDate: project?.endDate ?? undefined,
       featured: project?.featured ?? undefined,
+      highlights: project?.highlights?.map((highlight) => ({ text: highlight })),
     },
     contact: {
       company: project?.contact?.company ?? undefined,
@@ -35,13 +34,13 @@ const EditProjectPage: NextPage = () => {
     },
   };
 
-
   const onSubmit = (data: ProjectFormData) => {
     updateProject({
       variables: {
         id,
         input: {
           ...data.project,
+          highlights: data.project.highlights?.map((highlight) => highlight.text),
           contact: data.contact,
         },
       },

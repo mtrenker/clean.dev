@@ -23,6 +23,48 @@ Default.decorators = [
   ),
 ];
 
+export const Prefilled = Template.bind({});
+Prefilled.parameters = {
+  layout: 'fullscreen',
+};
+Prefilled.decorators = [
+  (Story) => (
+    <Layout>
+      <div className="container mx-auto mt-10">
+        <Story />
+      </div>
+    </Layout>
+  ),
+];
+Prefilled.args = {
+  defaultValues: {
+    project: {
+      client: 'Google',
+      position: 'Software Engineer',
+      summary: 'I worked on the Google search engine.',
+      location: 'Mountain View, CA',
+      startDate: '2019-01-01',
+      endDate: '2020-01-01',
+      highlights: [
+        {
+          text: 'I worked on the Google search engine.',
+        },
+      ],
+    },
+    contact: {
+      company: 'Google',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: '',
+      street: '1600 Amphitheatre Parkway',
+      city: 'Mountain View',
+      zip: '94043',
+      country: 'United States',
+    },
+  },
+};
+
+
 export const Loading = Template.bind({});
 Loading.args = {
   loading: true,

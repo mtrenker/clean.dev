@@ -35,5 +35,10 @@ module.exports = {
      },
    ],
    'jsx-a11y/anchor-is-valid': 'off',
+   'tailwindcss/no-custom-classname': ['warn', {
+      'whitelist': [
+        'animate-spin-slow',
+      ]
+   }],
   },
 };
