@@ -11,7 +11,7 @@ export const TextArea: React.FC<TextAreaProps> = forwardRef<HTMLTextAreaElement,
     {label && (
       <label
         className={clsx([
-        'mb-1 block w-full',
+        'block w-full',
       ])}
         htmlFor={props.id}
       >
@@ -20,8 +20,8 @@ export const TextArea: React.FC<TextAreaProps> = forwardRef<HTMLTextAreaElement,
   )}
     <textarea
       className={clsx([
-      'w-full rounded-sm border border-zinc-500 bg-zinc-200 p-1 dark:bg-zinc-800',
-      'focus:outline-none focus-visible:outline-zinc-300 dark:focus-visible:outline-zinc-700',
+        'mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
+        'dark:bg-zinc-50',
     ])}
       {...props}
       ref={ref}
