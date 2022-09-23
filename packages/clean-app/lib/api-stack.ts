@@ -24,6 +24,10 @@ export class ApiStack extends Stack {
   projectInputType: InputType;
   contactType: ObjectType;
   contactInputType: InputType;
+  projectCategoryType: ObjectType;
+  projectCategoryInputType: InputType;
+  projectHighlightType: ObjectType;
+  highlightInputType: InputType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -87,6 +91,39 @@ export class ApiStack extends Stack {
     });
     this.api.addType(this.contactInputType);
 
+    this.projectCategoryType = new ObjectType('ProjectCategory', {
+      definition: {
+        name: GraphqlType.string({ isRequired: true }),
+        color: GraphqlType.string(),
+        rate: GraphqlType.float(),
+      },
+    });
+    this.api.addType(this.projectCategoryType);
+
+    this.projectHighlightType = new ObjectType('ProjectHighlight', {
+      definition: {
+        name: GraphqlType.string({ isRequired: true }),
+      },
+    });
+    this.api.addType(this.projectHighlightType);
+
+
+    this.projectCategoryInputType = new InputType('ProjectCategoryInput', {
+      definition: {
+        name: GraphqlType.string({ isRequired: true }),
+        color: GraphqlType.string(),
+        rate: GraphqlType.float(),
+      },
+    });
+    this.api.addType(this.projectCategoryInputType);
+
+    this.highlightInputType = new InputType('HighlightInput', {
+      definition: {
+        name: GraphqlType.string({ isRequired: true }),
+      },
+    });
+    this.api.addType(this.highlightInputType);
+
     this.projectType = new ObjectType('Project', {
       definition: {
         id: GraphqlType.id({ isRequired: true }),
@@ -94,10 +131,11 @@ export class ApiStack extends Stack {
         location: GraphqlType.string(),
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        highlights: GraphqlType.string({ isList: true }),
+        highlights: this.projectHighlightType.attribute({ isList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
         featured: GraphqlType.boolean(),
+        categories: this.projectCategoryType.attribute({ isList: true }),
         contact: this.contactType.attribute(),
       },
     });
@@ -109,11 +147,12 @@ export class ApiStack extends Stack {
         location: GraphqlType.string(),
         position: GraphqlType.string({ isRequired: true }),
         summary: GraphqlType.string({ isRequired: true }),
-        highlights: GraphqlType.string({ isList: true }),
+        highlights: this.highlightInputType.attribute({ isList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
         featured: GraphqlType.boolean(),
         contact: this.contactInputType.attribute(),
+        categories: this.projectCategoryInputType.attribute({ isList: true }),
       },
     });
     this.api.addType(this.projectInputType);

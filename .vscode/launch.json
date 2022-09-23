@@ -18,8 +18,7 @@
       "name": "Next.js: debug full stack",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev",
-      "console": "integratedTerminal",
+      "command": "npm run dev:web",
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",

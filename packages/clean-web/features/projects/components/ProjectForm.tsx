@@ -84,7 +84,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="shadow sm:rounded-sm">
-        <div className="flex flex-col gap-4 space-y-1 p-4 dark:bg-zinc-800">
+        <div className="flex flex-col gap-4 space-y-1 bg-white p-4 dark:bg-zinc-800">
           <TextField id="client" label="Client" {...register('project.client')} />
           {errors.project?.client &&
             <p className="text-red-500">{errors.project.client.message}</p>
