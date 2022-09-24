@@ -102,7 +102,7 @@ export class ApiStack extends Stack {
 
     this.projectHighlightType = new ObjectType('ProjectHighlight', {
       definition: {
-        name: GraphqlType.string({ isRequired: true }),
+        description: GraphqlType.string({ isRequired: true }),
       },
     });
     this.api.addType(this.projectHighlightType);

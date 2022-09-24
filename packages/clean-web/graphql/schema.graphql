@@ -1,3 +1,4 @@
+scalar AWSDate
 schema {
   query: Query
   mutation: Mutation
@@ -26,7 +27,7 @@ type Project {
   client: String!
   contact: Contact
   endDate: AWSDate
-  featured: Boolean
+  featured: Boolean!
   highlights: [ProjectHighlight]
   id: ID!
   location: String
@@ -61,7 +62,7 @@ input ContactInput {
 }
 
 input HighlightInput {
-  name: String!
+  description: String!
 }
 
 input ProjectCategoryInput {
