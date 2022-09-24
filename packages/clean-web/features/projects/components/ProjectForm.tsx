@@ -49,18 +49,21 @@ export interface ProjectFormProps {
 }
 
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
-  console.log(defaultValues);
+
   const [showContacts, setShowContacts] = useState(
     defaultValues ? Object.values(defaultValues.contact ?? {}).filter(Boolean).length > 0: false
   );
+
   const { setValue, handleSubmit, register, control, formState: { errors } } = useForm<ProjectFormData>({
     defaultValues,
     resolver: zodResolver(projectInputSchema),
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'highlights',
   });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="shadow sm:rounded-sm">
