@@ -119,7 +119,7 @@ export class ApiStack extends Stack {
 
     this.highlightInputType = new InputType('HighlightInput', {
       definition: {
-        name: GraphqlType.string({ isRequired: true }),
+        description: GraphqlType.string({ isRequired: true }),
       },
     });
     this.api.addType(this.highlightInputType);
@@ -134,7 +134,7 @@ export class ApiStack extends Stack {
         highlights: this.projectHighlightType.attribute({ isList: true }),
         startDate: GraphqlType.awsDate(),
         endDate: GraphqlType.awsDate(),
-        featured: GraphqlType.boolean(),
+        featured: GraphqlType.boolean({ isRequired : true }),
         categories: this.projectCategoryType.attribute({ isList: true }),
         contact: this.contactType.attribute(),
       },

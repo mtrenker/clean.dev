@@ -19,13 +19,28 @@ fragment ContactFragment on Contact {
 }
 
 fragment ProjectFragment on Project {
+  categories {
+    ...ProjectCategoryFragment
+  }
   client
   endDate
   featured
-  highlights
+  highlights {
+    ...ProjectHighlightFragment
+  }
   id
   location
   position
   startDate
   summary
+}
+
+fragment ProjectHighlightFragment on ProjectHighlight {
+  description
+}
+
+fragment ProjectCategoryFragment on ProjectCategory {
+  name
+  color
+  rate
 }

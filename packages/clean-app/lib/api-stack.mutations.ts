@@ -10,7 +10,14 @@ export const projectSchema = z.object({
   summary: z.string(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  highlights: z.array(z.string()).optional(),
+  highlights: z.array(z.object({
+    description: z.string(),
+  })).optional(),
+  categories: z.array(z.object({
+    name: z.string(),
+    color: z.string().optional(),
+    rate: z.number().optional(),
+  })).optional(),
   featured: z.boolean().optional(),
   contact: z.object({
     company: z.string().optional(),
@@ -90,6 +97,9 @@ async function putProject (id: string, project: Project, identity: AppSyncIdenti
     sk,
     id,
     ...project,
+    featured: project.featured || false,
+    categories: project.categories ?? [],
+    highlights: project.highlights ?? [],
   };
   return dbclient.put({ TableName, Item: item }).promise();
 }
