@@ -28,7 +28,7 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.36.0",
-    "yup": "^0.32.11"
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",

@@ -3,7 +3,7 @@ import { DynamoDB } from 'aws-sdk';
 import { z } from 'zod';
 import { ulid } from 'ulid';
 
-export const projectSchema = z.object({
+export const projectInputSchema = z.object({
   client: z.string(),
   location: z.string().optional(),
   position: z.string(),
@@ -31,7 +31,7 @@ export const projectSchema = z.object({
   }).optional(),
 });
 
-export type Project = z.infer<typeof projectSchema>;
+export type Project = z.infer<typeof projectInputSchema>;
 
 const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
@@ -54,7 +54,7 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
 };
 
 async function createProject (project: Project, identity: AppSyncIdentityCognito) {
-  projectSchema.parse(project);
+  projectInputSchema.parse(project);
   const id = ulid();
   try {
     await putProject(id, project, identity);
@@ -68,7 +68,7 @@ async function createProject (project: Project, identity: AppSyncIdentityCognito
 }
 
 async function updateProject (id: string, project: Project, identity: AppSyncIdentityCognito) {
-  projectSchema.parse(project);
+  projectInputSchema.parse(project);
   try {
     await putProject(id, project, identity);
     return {

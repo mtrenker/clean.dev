@@ -43,7 +43,7 @@ type ProjectCategory {
 }
 
 type ProjectHighlight {
-  name: String!
+  description: String!
 }
 
 type Query {

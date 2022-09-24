@@ -12,16 +12,15 @@ const EditProjectPage: NextPage = () => {
   const project = data?.projects.find((project) => project.id === id);
 
   const defaultValues: ProjectFormData = {
-    project: {
-      client: project?.client ?? '',
-      position: project?.position ?? '',
-      summary: project?.summary ?? '',
-      location: project?.location ?? undefined,
-      startDate: project?.startDate ?? undefined,
-      endDate: project?.endDate ?? undefined,
-      featured: project?.featured ?? undefined,
-      highlights: project?.highlights?.map((highlight) => ({ text: highlight ?? '' })),
-    },
+    client: project?.client ?? '',
+    position: project?.position ?? '',
+    summary: project?.summary ?? '',
+    location: project?.location ?? undefined,
+    startDate: project?.startDate ?? undefined,
+    endDate: project?.endDate ?? undefined,
+    featured: project?.featured ?? undefined,
+    highlights: project?.highlights ?? [],
+    categories: project?.categories ?? [],
     contact: {
       company: project?.contact?.company ?? undefined,
       firstName: project?.contact?.firstName ?? undefined,
@@ -38,11 +37,7 @@ const EditProjectPage: NextPage = () => {
     updateProject({
       variables: {
         id,
-        input: {
-          ...data.project,
-          highlights: data.project.highlights?.map((highlight) => highlight.text),
-          contact: data.contact,
-        },
+        input: data,
       },
     });
   };

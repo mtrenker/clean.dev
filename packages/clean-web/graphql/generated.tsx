@@ -39,6 +39,10 @@ export type ContactInput = {
   zip?: InputMaybe<Scalars['String']>;
 };
 
+export type HighlightInput = {
+  description: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   contact?: Maybe<Scalars['String']>;
@@ -72,11 +76,12 @@ export type MutationUpdateProjectArgs = {
 
 export type Project = {
   __typename?: 'Project';
+  categories?: Maybe<Array<Maybe<ProjectCategory>>>;
   client: Scalars['String'];
   contact?: Maybe<Contact>;
   endDate?: Maybe<Scalars['AWSDate']>;
-  featured?: Maybe<Scalars['Boolean']>;
-  highlights?: Maybe<Array<Maybe<Scalars['String']>>>;
+  featured: Scalars['Boolean'];
+  highlights?: Maybe<Array<Maybe<ProjectHighlight>>>;
   id: Scalars['ID'];
   location?: Maybe<Scalars['String']>;
   position: Scalars['String'];
@@ -84,12 +89,31 @@ export type Project = {
   summary: Scalars['String'];
 };
 
+export type ProjectCategory = {
+  __typename?: 'ProjectCategory';
+  color?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  rate?: Maybe<Scalars['Float']>;
+};
+
+export type ProjectCategoryInput = {
+  color?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  rate?: InputMaybe<Scalars['Float']>;
+};
+
+export type ProjectHighlight = {
+  __typename?: 'ProjectHighlight';
+  description: Scalars['String'];
+};
+
 export type ProjectInput = {
+  categories?: InputMaybe<Array<InputMaybe<ProjectCategoryInput>>>;
   client: Scalars['String'];
   contact?: InputMaybe<ContactInput>;
   endDate?: InputMaybe<Scalars['AWSDate']>;
   featured?: InputMaybe<Scalars['Boolean']>;
-  highlights?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  highlights?: InputMaybe<Array<InputMaybe<HighlightInput>>>;
   location?: InputMaybe<Scalars['String']>;
   position: Scalars['String'];
   startDate?: InputMaybe<Scalars['AWSDate']>;
@@ -106,7 +130,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories?: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null> | null, highlights?: Array<{ __typename?: 'ProjectHighlight', description: string } | null> | null } };
 
 export type UpdateProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -114,7 +138,7 @@ export type UpdateProjectMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null } };
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories?: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null> | null, highlights?: Array<{ __typename?: 'ProjectHighlight', description: string } | null> | null } };
 
 export type RemoveProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -126,11 +150,15 @@ export type RemoveProjectMutation = { __typename?: 'Mutation', removeProject: st
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null }> };
+export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories?: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null> | null, highlights?: Array<{ __typename?: 'ProjectHighlight', description: string } | null> | null }> };
 
 export type ContactFragmentFragment = { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null };
 
-export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured?: boolean | null, highlights?: Array<string | null> | null, id: string, location?: string | null, position: string, startDate?: string | null, summary: string };
+export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, categories?: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null> | null, highlights?: Array<{ __typename?: 'ProjectHighlight', description: string } | null> | null };
+
+export type ProjectHighlightFragmentFragment = { __typename?: 'ProjectHighlight', description: string };
+
+export type ProjectCategoryFragmentFragment = { __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null };
 
 export const ContactFragmentFragmentDoc = gql`
     fragment ContactFragment on Contact {
@@ -144,19 +172,37 @@ export const ContactFragmentFragmentDoc = gql`
   country
 }
     `;
+export const ProjectCategoryFragmentFragmentDoc = gql`
+    fragment ProjectCategoryFragment on ProjectCategory {
+  name
+  color
+  rate
+}
+    `;
+export const ProjectHighlightFragmentFragmentDoc = gql`
+    fragment ProjectHighlightFragment on ProjectHighlight {
+  description
+}
+    `;
 export const ProjectFragmentFragmentDoc = gql`
     fragment ProjectFragment on Project {
+  categories {
+    ...ProjectCategoryFragment
+  }
   client
   endDate
   featured
-  highlights
+  highlights {
+    ...ProjectHighlightFragment
+  }
   id
   location
   position
   startDate
   summary
 }
-    `;
+    ${ProjectCategoryFragmentFragmentDoc}
+${ProjectHighlightFragmentFragmentDoc}`;
 export const CreateProjectDocument = gql`
     mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {

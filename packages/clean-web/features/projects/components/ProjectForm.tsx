@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string, date, boolean } from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { IconLoader } from '@tabler/icons';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,56 +12,35 @@ import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
 import { TextField } from '../../../common/components/TextField';
 
-const projectSchema = object().shape({
-  project: object().shape({
-    client: string().required(),
-    position: string().required(),
-    summary: string().required(),
-    location: string().optional(),
-    startDate: date().optional(),
-    endDate: date().optional(),
-    featured: boolean().optional(),
-  }),
-  contact: object().shape({
-    company: string().optional(),
-    firstName: string().optional(),
-    lastName: string().optional(),
-    email: string().optional(),
-    street: string().optional(),
-    city: string().optional(),
-    zip: string().optional(),
-    country: string().optional(),
-  }),
+export const projectInputSchema = z.object({
+  client: z.string(),
+  location: z.string().optional(),
+  position: z.string(),
+  summary: z.string(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  highlights: z.array(z.object({
+    description: z.string(),
+  })).optional(),
+  categories: z.array(z.object({
+    name: z.string(),
+    color: z.string().optional(),
+    rate: z.number().optional(),
+  })).optional(),
+  featured: z.boolean().optional(),
+  contact: z.object({
+    company: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    email: z.string().optional(),
+    street: z.string().optional(),
+    city: z.string().optional(),
+    zip: z.string().optional(),
+    country: z.string().optional(),
+  }).optional(),
 });
 
-export interface ProjectData {
-  client: string;
-  location?: string;
-  position: string;
-  summary: string;
-  startDate?: string;
-  endDate?: string;
-  highlights?: Array<{
-    text: string;
-  }>;
-  featured?: boolean;
-}
-
-export interface ContactData {
-  company?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  street?: string;
-  city?: string;
-  zip?: string;
-  country?: string;
-}
-
-export interface ProjectFormData {
-  project: ProjectData;
-  contact: ContactData;
-}
+export type ProjectFormData = z.infer<typeof projectInputSchema>;
 
 export interface ProjectFormProps {
   loading?: boolean;
@@ -70,38 +49,39 @@ export interface ProjectFormProps {
 }
 
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
-    const [showContacts, setShowContacts] = useState(
-    defaultValues ? Object.values(defaultValues.contact).filter(Boolean).length > 0: false
+  console.log(defaultValues);
+  const [showContacts, setShowContacts] = useState(
+    defaultValues ? Object.values(defaultValues.contact ?? {}).filter(Boolean).length > 0: false
   );
   const { setValue, handleSubmit, register, control, formState: { errors } } = useForm<ProjectFormData>({
     defaultValues,
-    resolver: yupResolver(projectSchema),
+    resolver: zodResolver(projectInputSchema),
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'project.highlights',
+    name: 'highlights',
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="shadow sm:rounded-sm">
         <div className="flex flex-col gap-4 space-y-1 bg-white p-4 dark:bg-zinc-800">
-          <TextField id="client" label="Client" {...register('project.client')} />
-          {errors.project?.client &&
-            <p className="text-red-500">{errors.project.client.message}</p>
+          <TextField id="client" label="Client" {...register('client')} />
+          {errors.client &&
+            <p className="text-red-500">{errors.client.message}</p>
           }
-          <TextField id="location" label="Location" {...register('project.location')} />
-          <TextField id="position" label="Position" {...register('project.position')} />
-          <TextArea id="summary" label="Summary" {...register('project.summary')} />
+          <TextField id="location" label="Location" {...register('location')} />
+          <TextField id="position" label="Position" {...register('position')} />
+          <TextArea id="summary" label="Summary" {...register('summary')} />
           <div className="flex gap-2">
             <div className="flex-1">
               <Controller
                 control={control}
-                name="project.startDate"
+                name="startDate"
                 render={({ field }) => (
                   <DatePicker
                     customInput={<TextField id="startDate" label="Start Date" />}
                     {...field}
-                    onChange={(date: Date) => setValue('project.startDate', format(date, 'yyyy-MM-dd'))}
+                    onChange={(date: Date) => setValue('startDate', format(date, 'yyyy-MM-dd'))}
                   />
                 )}
               />
@@ -109,12 +89,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
             <div className="flex-1">
               <Controller
                 control={control}
-                name="project.endDate"
+                name="endDate"
                 render={({ field }) => (
                   <DatePicker
                     customInput={<TextField id="endDate" label="End Date" />}
                     {...field}
-                    onChange={(date: Date) => setValue('project.endDate', format(date, 'yyyy-MM-dd'))}
+                    onChange={(date: Date) => setValue('endDate', format(date, 'yyyy-MM-dd'))}
                   />
                 )}
               />
@@ -124,13 +104,13 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
             <div className="flex items-center">
               <legend className="flex-1">Highlights</legend>
               <div className="flex-none">
-                <Button onClick={() => append({ text: '' })}>Add</Button>
+                <Button onClick={() => append({ description: '' })}>Add</Button>
               </div>
             </div>
             {fields.map((field, index) => (
               <div className="flex items-center gap-6" key={field.id}>
                 <div className="flex-1">
-                  <TextField defaultValue={field.text} {...register(`project.highlights.${index}.text`)} />
+                  <TextField defaultValue={field.description} {...register(`highlights.${index}.description`)} />
                 </div>
                 <div className="flex-none">
                   <Button
@@ -144,7 +124,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           ))}
           </fieldset>
           <div className="flex flex-row items-center gap-2">
-            <input id="featured" type="checkbox" {...register('project.featured')} />
+            <input id="featured" type="checkbox" {...register('featured')} />
             <label className="flex-1" htmlFor="featured">Featured</label>
             <input
               checked={showContacts}

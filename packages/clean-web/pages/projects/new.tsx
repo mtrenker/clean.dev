@@ -10,11 +10,7 @@ const NewProjectPage: NextPage = () => {
     console.log({ data });
     createProject({
       variables: {
-        input: {
-          ...data.project,
-          highlights: data.project.highlights?.map((highlight) => highlight.text),
-          contact: data.contact,
-        },
+        input: data,
        },
     });
   };
