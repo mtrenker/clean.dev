@@ -31,7 +31,16 @@ export const projectInputSchema = z.object({
   }).optional(),
 });
 
-export type Project = z.infer<typeof projectInputSchema>;
+export const trackingInputSchema = z.object({
+  projectId: z.string(),
+  category: z.string().optional(),
+  startTime: z.string(),
+  endTime: z.string().optional(),
+  summary: z.string().optional(),
+});
+
+export type ProjectInput = z.infer<typeof projectInputSchema>;
+export type TrackingInput = z.infer<typeof trackingInputSchema>;
 
 const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
@@ -41,11 +50,15 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
       case 'createProject':
-        return await createProject(input as Project, identity as AppSyncIdentityCognito);
+        return await createProject(input as ProjectInput, identity as AppSyncIdentityCognito);
       case 'updateProject':
-        return updateProject(id, input as Project, identity as AppSyncIdentityCognito);
+        return await updateProject(id, input as ProjectInput, identity as AppSyncIdentityCognito);
       case 'removeProject':
-        return removeProject(id, identity as AppSyncIdentityCognito);
+        return await removeProject(id, identity as AppSyncIdentityCognito);
+      case 'addTracking':
+        return createTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
+      case 'removeTracking':
+        return removeTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
       default:
         throw new Error(`Unknown mutation ${fieldName}`);
     }
@@ -53,7 +66,7 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
   return 'Only mutations are supported';
 };
 
-async function createProject (project: Project, identity: AppSyncIdentityCognito) {
+async function createProject (project: ProjectInput, identity: AppSyncIdentityCognito) {
   projectInputSchema.parse(project);
   const id = ulid();
   try {
@@ -67,7 +80,7 @@ async function createProject (project: Project, identity: AppSyncIdentityCognito
   }
 }
 
-async function updateProject (id: string, project: Project, identity: AppSyncIdentityCognito) {
+async function updateProject (id: string, project: ProjectInput, identity: AppSyncIdentityCognito) {
   projectInputSchema.parse(project);
   try {
     await putProject(id, project, identity);
@@ -88,7 +101,7 @@ async function removeProject (id: string, identity: AppSyncIdentityCognito) {
   }
 }
 
-async function putProject (id: string, project: Project, identity: AppSyncIdentityCognito) {
+async function putProject (id: string, project: ProjectInput, identity: AppSyncIdentityCognito) {
   const { sub } = identity;
   const pk = `USER#${sub}`;
   const sk = `PROJECT#${id}`;
@@ -109,4 +122,44 @@ async function deleteProject (id: string, identity: AppSyncIdentityCognito) {
   const pk = `USER#${sub}`;
   const sk = `PROJECT#${id}`;
   return dbclient.delete({ TableName, Key: { pk, sk } }).promise();
+}
+
+async function createTracking (tracking: TrackingInput, identity: AppSyncIdentityCognito) {
+  trackingInputSchema.parse(tracking);
+  try {
+    await putTracking(tracking, identity);
+    return {
+      ...tracking,
+    };
+  } catch (e) {
+    return e;
+  }
+}
+
+async function removeTracking (tracking: TrackingInput, identity: AppSyncIdentityCognito) {
+  try {
+    await deleteTracking(tracking.projectId, tracking.startTime, identity);
+    return 'ok';
+  } catch (e) {
+    return e;
+  }
+}
+
+async function putTracking (tracking: TrackingInput, identity: AppSyncIdentityCognito) {
+  const { sub } = identity;
+  const pk = `USER#${sub}`;
+  const sk = `TRACKING#${tracking.projectId}#${tracking.startTime}`;
+  const item = {
+    pk,
+    sk,
+    ...tracking,
+  };
+  return dbclient.put({ TableName, Item: item }).promise();
+}
+
+async function deleteTracking (projectId: string, startTime: string, identity: AppSyncIdentityCognito) {
+  const { sub } = identity;
+  const pk = `USER#${sub}`;
+  const sk = `TRACKING#${projectId}#${startTime}`;
+  return await dbclient.delete({ TableName, Key: { pk, sk } }).promise();
 }

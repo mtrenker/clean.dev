@@ -28,6 +28,8 @@ export class ApiStack extends Stack {
   projectCategoryInputType: InputType;
   projectHighlightType: ObjectType;
   highlightInputType: InputType;
+  trackingType: ObjectType;
+  trackingInputType: InputType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -156,6 +158,26 @@ export class ApiStack extends Stack {
       },
     });
     this.api.addType(this.projectInputType);
+
+    this.trackingType = new ObjectType('Tracking', {
+      definition: {
+        category: GraphqlType.string(),
+        startTime: GraphqlType.awsDateTime({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+      },
+    });
+    this.api.addType(this.trackingType);
+
+    this.trackingInputType = new InputType('TrackingInput', {
+      definition: {
+        category: GraphqlType.string(),
+        startTime: GraphqlType.awsDateTime({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime({ isRequired: true }),
+        summary: GraphqlType.string({ isRequired: true }),
+      },
+    });
+    this.api.addType(this.trackingInputType);
   }
 
   setupQueries (): void {
@@ -214,5 +236,24 @@ export class ApiStack extends Stack {
       responseMappingTemplate: MappingTemplate.lambdaResult(),
     }));
 
+    this.api.addMutation('createTracking', new ResolvableField({
+      returnType: this.trackingType.attribute({ isRequired: true }),
+      dataSource: this.mutationSource,
+      args: {
+        input: this.trackingInputType.attribute({ isRequired: true }),
+      },
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    }));
+
+    this.api.addMutation('removeTracking', new ResolvableField({
+      returnType: GraphqlType.string({ isRequired: true }),
+      dataSource: this.mutationSource,
+      args: {
+        input: this.trackingInputType.attribute({ isRequired: true }),
+      },
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    }));
   }
 }
