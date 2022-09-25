@@ -16,18 +16,31 @@ const EditProjectPage: NextPage = () => {
   useEffect(() => {
     const project = data?.projects.find((project) => project.id === id);
     if (project) {
-      setDefaultValues(() => ({
-        client: project.client,
-        position: project.position,
-        summary: project.summary,
-        startDate: project.startDate ?? '',
-        endDate: project.endDate ?? '',
-        categories: [...project.categories],
-        contact: { ...project.contact },
-        featured: project.featured,
-        highlights: [...project.highlights],
-        location: project.location ?? '',
-      }));
+      setDefaultValues({
+        ...project,
+        location: project.location || '',
+        startDate: project.startDate || '',
+        endDate: project.endDate || '',
+        highlights: project.highlights.map((highlight) => ({
+          description: highlight.description ?? '',
+        })),
+        categories: project.categories.map((category) => ({
+          ...category,
+          name: category?.name || '',
+          color: category?.color ?? '',
+          rate: category?.rate ?? undefined,
+        })),
+        contact: {
+          company: project.contact?.company || '',
+          firstName: project.contact?.firstName || '',
+          lastName: project.contact?.lastName || '',
+          email: project.contact?.email || '',
+          street: project.contact?.street || '',
+          city: project.contact?.city || '',
+          zip: project.contact?.zip || '',
+          country: project.contact?.country || '',
+        },
+      });
     }
   }, [data, id]);
 
