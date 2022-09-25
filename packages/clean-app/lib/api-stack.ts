@@ -163,18 +163,19 @@ export class ApiStack extends Stack {
       definition: {
         category: GraphqlType.string(),
         startTime: GraphqlType.awsDateTime({ isRequired: true }),
-        endTime: GraphqlType.awsDateTime({ isRequired: true }),
-        summary: GraphqlType.string({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime(),
+        summary: GraphqlType.string(),
       },
     });
     this.api.addType(this.trackingType);
 
     this.trackingInputType = new InputType('TrackingInput', {
       definition: {
+        projectId: GraphqlType.string({ isRequired: true }),
         category: GraphqlType.string(),
         startTime: GraphqlType.awsDateTime({ isRequired: true }),
-        endTime: GraphqlType.awsDateTime({ isRequired: true }),
-        summary: GraphqlType.string({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime(),
+        summary: GraphqlType.string(),
       },
     });
     this.api.addType(this.trackingInputType);

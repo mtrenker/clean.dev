@@ -1,4 +1,5 @@
 scalar AWSDate
+scalar AWSDateTime
 schema {
   query: Query
   mutation: Mutation
@@ -18,7 +19,9 @@ type Contact {
 type Mutation {
   contact(email: String, message: String, name: String): String
   createProject(input: ProjectInput!): Project!
+  createTracking(input: TrackingInput!): Tracking!
   removeProject(id: ID!): String!
+  removeTracking(input: TrackingInput!): String!
   updateProject(id: ID!, input: ProjectInput!): Project!
 }
 
@@ -48,6 +51,13 @@ type ProjectHighlight {
 
 type Query {
   projects: [Project!]!
+}
+
+type Tracking {
+  category: String
+  endTime: AWSDateTime!
+  startTime: AWSDateTime!
+  summary: String!
 }
 
 input ContactInput {
@@ -81,5 +91,12 @@ input ProjectInput {
   location: String
   position: String!
   startDate: AWSDate
+  summary: String!
+}
+
+input TrackingInput {
+  category: String
+  endTime: AWSDateTime!
+  startTime: AWSDateTime!
   summary: String!
 }
