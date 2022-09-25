@@ -1,0 +1,44 @@
+fragment ContactFragment on Contact {
+  company
+  firstName
+  lastName
+  email
+  street
+  city
+  zip
+  country
+}
+
+fragment ProjectFragment on Project {
+  categories {
+    ...ProjectCategoryFragment
+  }
+  client
+  endDate
+  featured
+  highlights {
+    ...ProjectHighlightFragment
+  }
+  id
+  location
+  position
+  startDate
+  summary
+}
+
+fragment ProjectHighlightFragment on ProjectHighlight {
+  description
+}
+
+fragment ProjectCategoryFragment on ProjectCategory {
+  name
+  color
+  rate
+}
+
+fragment TrackingFragment on Tracking {
+  category
+  endTime
+  startTime
+  summary
+}

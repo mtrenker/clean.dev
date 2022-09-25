@@ -154,6 +154,16 @@ export type TrackingInput = {
   summary?: InputMaybe<Scalars['String']>;
 };
 
+export type ContactFragmentFragment = { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null };
+
+export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> };
+
+export type ProjectHighlightFragmentFragment = { __typename?: 'ProjectHighlight', description: string };
+
+export type ProjectCategoryFragmentFragment = { __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null };
+
+export type TrackingFragmentFragment = { __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null };
+
 export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
 }>;
@@ -176,18 +186,24 @@ export type RemoveProjectMutationVariables = Exact<{
 
 export type RemoveProjectMutation = { __typename?: 'Mutation', removeProject: string };
 
+export type CreateTrackingMutationVariables = Exact<{
+  input: TrackingInput;
+}>;
+
+
+export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null } };
+
+export type RemoveTrackingMutationVariables = Exact<{
+  input: TrackingInput;
+}>;
+
+
+export type RemoveTrackingMutation = { __typename?: 'Mutation', removeTracking: string };
+
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> }> };
-
-export type ContactFragmentFragment = { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null };
-
-export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> };
-
-export type ProjectHighlightFragmentFragment = { __typename?: 'ProjectHighlight', description: string };
-
-export type ProjectCategoryFragmentFragment = { __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null };
 
 export const ContactFragmentFragmentDoc = gql`
     fragment ContactFragment on Contact {
@@ -232,6 +248,14 @@ export const ProjectFragmentFragmentDoc = gql`
 }
     ${ProjectCategoryFragmentFragmentDoc}
 ${ProjectHighlightFragmentFragmentDoc}`;
+export const TrackingFragmentFragmentDoc = gql`
+    fragment TrackingFragment on Tracking {
+  category
+  endTime
+  startTime
+  summary
+}
+    `;
 export const CreateProjectDocument = gql`
     mutation createProject($input: ProjectInput!) {
   createProject(input: $input) {
@@ -338,6 +362,70 @@ export function useRemoveProjectMutation (baseOptions?: Apollo.MutationHookOptio
 export type RemoveProjectMutationHookResult = ReturnType<typeof useRemoveProjectMutation>;
 export type RemoveProjectMutationResult = Apollo.MutationResult<RemoveProjectMutation>;
 export type RemoveProjectMutationOptions = Apollo.BaseMutationOptions<RemoveProjectMutation, RemoveProjectMutationVariables>;
+export const CreateTrackingDocument = gql`
+    mutation createTracking($input: TrackingInput!) {
+  createTracking(input: $input) {
+    ...TrackingFragment
+  }
+}
+    ${TrackingFragmentFragmentDoc}`;
+export type CreateTrackingMutationFn = Apollo.MutationFunction<CreateTrackingMutation, CreateTrackingMutationVariables>;
+
+/**
+ * __useCreateTrackingMutation__
+ *
+ * To run a mutation, you first call `useCreateTrackingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTrackingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTrackingMutation, { data, loading, error }] = useCreateTrackingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTrackingMutation (baseOptions?: Apollo.MutationHookOptions<CreateTrackingMutation, CreateTrackingMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateTrackingMutation, CreateTrackingMutationVariables>(CreateTrackingDocument, options);
+}
+export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTrackingMutation>;
+export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
+export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
+export const RemoveTrackingDocument = gql`
+    mutation removeTracking($input: TrackingInput!) {
+  removeTracking(input: $input)
+}
+    `;
+export type RemoveTrackingMutationFn = Apollo.MutationFunction<RemoveTrackingMutation, RemoveTrackingMutationVariables>;
+
+/**
+ * __useRemoveTrackingMutation__
+ *
+ * To run a mutation, you first call `useRemoveTrackingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveTrackingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeTrackingMutation, { data, loading, error }] = useRemoveTrackingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveTrackingMutation (baseOptions?: Apollo.MutationHookOptions<RemoveTrackingMutation, RemoveTrackingMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RemoveTrackingMutation, RemoveTrackingMutationVariables>(RemoveTrackingDocument, options);
+}
+export type RemoveTrackingMutationHookResult = ReturnType<typeof useRemoveTrackingMutation>;
+export type RemoveTrackingMutationResult = Apollo.MutationResult<RemoveTrackingMutation>;
+export type RemoveTrackingMutationOptions = Apollo.BaseMutationOptions<RemoveTrackingMutation, RemoveTrackingMutationVariables>;
 export const GetProjectsDocument = gql`
     query getProjects {
   projects {

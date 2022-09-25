@@ -1,5 +1,5 @@
 import { Story, Meta } from '@storybook/react';
-import { Layout } from '../../../common/components/Layout';
+import { LayoutDecorator } from '../../../.storybook/decorators';
 
 import { ProjectForm, ProjectFormProps } from './ProjectForm';
 export default {
@@ -13,29 +13,13 @@ export const Default = Template.bind({});
 Default.parameters = {
   layout: 'fullscreen',
 };
-Default.decorators = [
-  (Story) => (
-    <Layout>
-      <div className="container mx-auto mt-10">
-        <Story />
-      </div>
-    </Layout>
-  ),
-];
+Default.decorators = [LayoutDecorator];
 
 export const Prefilled = Template.bind({});
 Prefilled.parameters = {
   layout: 'fullscreen',
 };
-Prefilled.decorators = [
-  (Story) => (
-    <Layout>
-      <div className="container mx-auto mt-10">
-        <Story />
-      </div>
-    </Layout>
-  ),
-];
+Prefilled.decorators = [LayoutDecorator];
 Prefilled.args = {
   defaultValues: {
     client: 'Google',
@@ -70,12 +54,4 @@ Loading.args = {
 Loading.parameters = {
   layout: 'fullscreen',
 };
-Loading.decorators = [
-  (Story) => (
-    <Layout>
-      <div className="container mx-auto mt-10">
-        <Story />
-      </div>
-    </Layout>
-  ),
-];
+Loading.decorators = [LayoutDecorator];

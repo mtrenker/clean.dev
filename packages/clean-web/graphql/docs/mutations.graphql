@@ -19,3 +19,13 @@ mutation updateProject($id: ID!, $input: ProjectInput!) {
 mutation removeProject($id: ID!) {
   removeProject(id: $id)
 }
+
+mutation createTracking($input: TrackingInput!) {
+  createTracking(input: $input) {
+    ...TrackingFragment
+  }
+}
+
+mutation removeTracking($input: TrackingInput!) {
+  removeTracking(input: $input)
+}

@@ -7,7 +7,6 @@ import { useGetProjectsQuery, useUpdateProjectMutation } from '../../../graphql/
 
 const EditProjectPage: NextPage = () => {
   const [updateProject] = useUpdateProjectMutation();
-  // devaultValues state
   const [defaultValues, setDefaultValues] = useState<ProjectFormData>();
   const router = useRouter();
   const id = router.query.id as string;
@@ -22,7 +21,7 @@ const EditProjectPage: NextPage = () => {
         startDate: project.startDate || '',
         endDate: project.endDate || '',
         highlights: project.highlights.map((highlight) => ({
-          description: highlight.description ?? '',
+          description: highlight?.description ?? '',
         })),
         categories: project.categories.map((category) => ({
           ...category,
