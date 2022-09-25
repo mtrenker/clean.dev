@@ -22,10 +22,10 @@ const EditProjectPage: NextPage = () => {
         summary: project.summary,
         startDate: project.startDate ?? '',
         endDate: project.endDate ?? '',
-        categories: project.categories ?? [],
-        contact: project.contact ?? {},
+        categories: [...project.categories],
+        contact: { ...project.contact },
         featured: project.featured,
-        highlights: project.highlights ?? [],
+        highlights: [...project.highlights],
         location: project.location ?? '',
       }));
     }
