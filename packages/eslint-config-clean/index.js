@@ -4,6 +4,7 @@ module.exports = {
   },
   rules: {
     semi: [2, "always"],
+    indent: ["error", 2]
     // "object-curly-newline": ["error", {
     //   "ObjectExpression": { "multiline": true },
     //   "ObjectPattern": { "multiline": true },

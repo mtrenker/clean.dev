@@ -11,18 +11,18 @@ export const TextArea: React.FC<TextAreaProps> = forwardRef<HTMLTextAreaElement,
     {label && (
       <label
         className={clsx([
-        'block w-full',
-      ])}
+          'block w-full',
+        ])}
         htmlFor={props.id}
       >
         {label}
       </label>
-  )}
+    )}
     <textarea
       className={clsx([
         'mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
         'dark:bg-zinc-50 dark:text-black',
-    ])}
+      ])}
       {...props}
       ref={ref}
     />

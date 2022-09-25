@@ -124,7 +124,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
                   </Button>
                 </div>
               </div>
-          ))}
+            ))}
           </fieldset>
           <div className="flex flex-row items-center gap-2">
             <input id="featured" type="checkbox" {...register('featured')} />
@@ -133,7 +133,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
               checked={showContacts}
               id="contact"
               onChange={e => {
-              e.currentTarget.checked ? setShowContacts(true) : setShowContacts(false);
+                e.currentTarget.checked ? setShowContacts(true) : setShowContacts(false);
               }}
               type="checkbox"
             />
@@ -156,7 +156,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
             <span className="flex items-center justify-center gap-4">
               {loading && (
                 <IconLoader className="animate-spin-slow h-5 w-5" />
-            )}
+              )}
               Save
             </span>
           </Button>

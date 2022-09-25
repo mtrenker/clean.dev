@@ -19,7 +19,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const getUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-      setUser(user);
+        setUser(user);
       } catch (error) {
         console.info(error);
       }

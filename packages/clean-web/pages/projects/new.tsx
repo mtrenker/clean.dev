@@ -11,7 +11,7 @@ const NewProjectPage: NextPage = () => {
     createProject({
       variables: {
         input: data,
-       },
+      },
     });
   };
 

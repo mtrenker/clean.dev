@@ -49,18 +49,18 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
   const { arguments: { id, input }, info: { fieldName, parentTypeName }, identity } = event;
   if (parentTypeName === 'Mutation') {
     switch (fieldName) {
-      case 'createProject':
-        return await createProject(input as ProjectInput, identity as AppSyncIdentityCognito);
-      case 'updateProject':
-        return await updateProject(id, input as ProjectInput, identity as AppSyncIdentityCognito);
-      case 'removeProject':
-        return await removeProject(id, identity as AppSyncIdentityCognito);
-      case 'addTracking':
-        return createTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
-      case 'removeTracking':
-        return removeTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
-      default:
-        throw new Error(`Unknown mutation ${fieldName}`);
+    case 'createProject':
+      return await createProject(input as ProjectInput, identity as AppSyncIdentityCognito);
+    case 'updateProject':
+      return await updateProject(id, input as ProjectInput, identity as AppSyncIdentityCognito);
+    case 'removeProject':
+      return await removeProject(id, identity as AppSyncIdentityCognito);
+    case 'addTracking':
+      return createTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
+    case 'removeTracking':
+      return removeTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
+    default:
+      throw new Error(`Unknown mutation ${fieldName}`);
     }
   }
   return 'Only mutations are supported';

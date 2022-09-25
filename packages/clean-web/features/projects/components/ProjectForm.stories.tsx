@@ -38,19 +38,17 @@ Prefilled.decorators = [
 ];
 Prefilled.args = {
   defaultValues: {
-    project: {
-      client: 'Google',
-      position: 'Software Engineer',
-      summary: 'I worked on the Google search engine.',
-      location: 'Mountain View, CA',
-      startDate: '2019-01-01',
-      endDate: '2020-01-01',
-      highlights: [
-        {
-          text: 'I worked on the Google search engine.',
-        },
-      ],
-    },
+    client: 'Google',
+    position: 'Software Engineer',
+    summary: 'I worked on the Google search engine.',
+    location: 'Mountain View, CA',
+    startDate: '2019-01-01',
+    endDate: '2020-01-01',
+    highlights: [
+      {
+        description: 'I worked on the Google search engine.',
+      },
+    ],
     contact: {
       company: 'Google',
       firstName: 'John',

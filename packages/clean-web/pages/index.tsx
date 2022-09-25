@@ -27,9 +27,9 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
         ])}
         >
           <picture className={clsx([
-              'inline-block h-[200px] overflow-hidden rounded-full ring ring-zinc-900 dark:ring-zinc-50',
-              'print:h-auto print:rounded-none print:ring-0',
-            ])}
+            'inline-block h-[200px] overflow-hidden rounded-full ring ring-zinc-900 dark:ring-zinc-50',
+            'print:h-auto print:rounded-none print:ring-0',
+          ])}
           >
             <Image
               alt="Me"
@@ -42,14 +42,14 @@ export const Home: NextPage<HomeProps> = ({ projects }) => {
           <figcaption className="flex flex-col gap-4">
             <h1
               className={clsx([
-                  'm-0 text-3xl font-semibold uppercase',
+                'm-0 text-3xl font-semibold uppercase',
               ])}
             >
               Martin Trenker
             </h1>
             <h2 className={clsx([
-                  'm-0 text-2xl uppercase',
-              ])}
+              'm-0 text-2xl uppercase',
+            ])}
             >
               Consultant, Web Developer
             </h2>

@@ -25,27 +25,27 @@ const SignIn: NextPage = () => {
 
   const onSubmit = async ({ username, password, newPassword }: SignInData) => {
     switch (mode) {
-      case 'signin': {
-        const result = await Auth.signIn(username, password) as CognitoUser;
-        if (result.challengeName === 'NEW_PASSWORD_REQUIRED') {
-          setMode('changepw');
-        } else {
-          setUser(result);
-          router.push('/');
-        }
-        break;
+    case 'signin': {
+      const result = await Auth.signIn(username, password) as CognitoUser;
+      if (result.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        setMode('changepw');
+      } else {
+        setUser(result);
+        router.push('/');
       }
-      case 'changepw': {
-        if(!newPassword) {
-          throw new Error('new password is required');
-        }
-        const user = await Auth.signIn(username, password) as CognitoUser;
-        await Auth.completeNewPassword(user, newPassword);
-        setMode('success');
-        break;
+      break;
+    }
+    case 'changepw': {
+      if(!newPassword) {
+        throw new Error('new password is required');
       }
-      default:
-        break;
+      const user = await Auth.signIn(username, password) as CognitoUser;
+      await Auth.completeNewPassword(user, newPassword);
+      setMode('success');
+      break;
+    }
+    default:
+      break;
     }
   };
 

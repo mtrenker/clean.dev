@@ -18,7 +18,7 @@ describe('components/ProjectForm', () => {
 
     // act
 
-   // assert
+    // assert
 
     expect(true).toBe(true);
   });
