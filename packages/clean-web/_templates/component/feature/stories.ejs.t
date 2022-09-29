@@ -11,6 +11,6 @@ export default {
   decorators: [LayoutDecorator],
 } as Meta<<%=h.capitalize(name)%>Props>;
 
-const Template: Story<<%=h.capitalize(name)%>Props> = (props) => <<%=h.capitalize(name)%> />;
+const Template: Story<<%=h.capitalize(name)%>Props> = (props) => <<%=h.capitalize(name)%> {...props} />;
 
 export const Default = Template.bind({});
