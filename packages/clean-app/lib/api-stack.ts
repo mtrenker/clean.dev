@@ -143,21 +143,21 @@ export class ApiStack extends Stack {
           returnType: this.trackingType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
           dataSource: this.querySource,
           requestMappingTemplate: MappingTemplate.fromString(`
-          {
-            "version" : "2017-02-28",
-            "operation" : "Query",
-            "query" : {
-              "expression" : "pk = :userId and begins_with(sk, :tracking)",
-              "expressionValues" : {
-                ":userId" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
-                ":tracking" : $util.dynamodb.toDynamoDBJson("TRACKING#$context.source.id")
+            {
+              "version" : "2017-02-28",
+              "operation" : "Query",
+              "query" : {
+                "expression" : "pk = :userId and begins_with(sk, :tracking)",
+                "expressionValues" : {
+                  ":userId" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
+                  ":tracking" : $util.dynamodb.toDynamoDBJson("TRACKING#$context.source.id")
+                }
               }
             }
-          }
-        `),
+          `),
           responseMappingTemplate: MappingTemplate.fromString(`
-          $util.toJson($context.result.items)
-        `),
+            $util.toJson($context.result.items)
+          `),
         }),
       },
     });
