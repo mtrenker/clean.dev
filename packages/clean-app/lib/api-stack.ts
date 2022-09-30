@@ -139,6 +139,26 @@ export class ApiStack extends Stack {
         featured: GraphqlType.boolean({ isRequired : true }),
         categories: this.projectCategoryType.attribute({ isList: true, isRequiredList: true, isRequired: true }),
         contact: this.contactType.attribute(),
+        trackings: new ResolvableField({
+          returnType: this.trackingType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
+          dataSource: this.querySource,
+          requestMappingTemplate: MappingTemplate.fromString(`
+          {
+            "version" : "2017-02-28",
+            "operation" : "Query",
+            "query" : {
+              "expression" : "pk = :userId and begins_with(sk, :tracking)",
+              "expressionValues" : {
+                ":userId" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
+                ":tracking" : $util.dynamodb.toDynamoDBJson("TRACKING#$context.source.id")
+              }
+            }
+          }
+        `),
+          responseMappingTemplate: MappingTemplate.fromString(`
+          $util.toJson($context.result.items)
+        `),
+        }),
       },
     });
     this.api.addType(this.projectType);
