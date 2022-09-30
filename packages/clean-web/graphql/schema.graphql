@@ -27,17 +27,18 @@ type Mutation {
 }
 
 type Project {
-  categories: [ProjectCategory]!
+  categories: [ProjectCategory!]!
   client: String!
   contact: Contact
   endDate: AWSDate
   featured: Boolean!
-  highlights: [ProjectHighlight]!
+  highlights: [ProjectHighlight!]!
   id: ID!
   location: String
   position: String!
   startDate: AWSDate
   summary: String!
+  trackings: [Tracking!]!
 }
 
 type ProjectCategory {

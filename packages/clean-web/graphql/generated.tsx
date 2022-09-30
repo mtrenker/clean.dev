@@ -89,17 +89,18 @@ export type MutationUpdateProjectArgs = {
 
 export type Project = {
   __typename?: 'Project';
-  categories: Array<Maybe<ProjectCategory>>;
+  categories: Array<ProjectCategory>;
   client: Scalars['String'];
   contact?: Maybe<Contact>;
   endDate?: Maybe<Scalars['AWSDate']>;
   featured: Scalars['Boolean'];
-  highlights: Array<Maybe<ProjectHighlight>>;
+  highlights: Array<ProjectHighlight>;
   id: Scalars['ID'];
   location?: Maybe<Scalars['String']>;
   position: Scalars['String'];
   startDate?: Maybe<Scalars['AWSDate']>;
   summary: Scalars['String'];
+  trackings: Array<Tracking>;
 };
 
 export type ProjectCategory = {
@@ -156,7 +157,7 @@ export type TrackingInput = {
 
 export type ContactFragmentFragment = { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null };
 
-export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> };
+export type ProjectFragmentFragment = { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> };
 
 export type ProjectHighlightFragmentFragment = { __typename?: 'ProjectHighlight', description: string };
 
@@ -169,7 +170,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> } };
 
 export type UpdateProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -177,7 +178,7 @@ export type UpdateProjectMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> } };
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> } };
 
 export type RemoveProjectMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -203,7 +204,12 @@ export type RemoveTrackingMutation = { __typename?: 'Mutation', removeTracking: 
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null } | null>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string } | null> }> };
+export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> }> };
+
+export type GetProjectsWithTrackingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProjectsWithTrackingsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, trackings: Array<{ __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null }>, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> }> };
 
 export const ContactFragmentFragmentDoc = gql`
     fragment ContactFragment on Contact {
@@ -464,3 +470,45 @@ export function useGetProjectsLazyQuery (baseOptions?: Apollo.LazyQueryHookOptio
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export const GetProjectsWithTrackingsDocument = gql`
+    query getProjectsWithTrackings {
+  projects {
+    ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
+    trackings {
+      ...TrackingFragment
+    }
+  }
+}
+    ${ProjectFragmentFragmentDoc}
+${ContactFragmentFragmentDoc}
+${TrackingFragmentFragmentDoc}`;
+
+/**
+ * __useGetProjectsWithTrackingsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectsWithTrackingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsWithTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectsWithTrackingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProjectsWithTrackingsQuery (baseOptions?: Apollo.QueryHookOptions<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>(GetProjectsWithTrackingsDocument, options);
+}
+export function useGetProjectsWithTrackingsLazyQuery (baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>(GetProjectsWithTrackingsDocument, options);
+}
+export type GetProjectsWithTrackingsQueryHookResult = ReturnType<typeof useGetProjectsWithTrackingsQuery>;
+export type GetProjectsWithTrackingsLazyQueryHookResult = ReturnType<typeof useGetProjectsWithTrackingsLazyQuery>;
+export type GetProjectsWithTrackingsQueryResult = Apollo.QueryResult<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>;

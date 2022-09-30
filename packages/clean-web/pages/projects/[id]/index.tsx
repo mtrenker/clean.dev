@@ -4,15 +4,15 @@ import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
-import { useCreateTrackingMutation, useGetProjectsQuery } from '../../../graphql/generated';
+import { useCreateTrackingMutation, useGetProjectsWithTrackingsQuery } from '../../../graphql/generated';
 
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data } = useGetProjectsQuery();
+  const { data } = useGetProjectsWithTrackingsQuery();
   const project = data?.projects.find(project => project.id === id);
 
-  const [page, setPage] = useState<'overview' | 'tracking'>();
+  const [page, setPage] = useState<'overview' | 'tracking'>('overview');
 
   const [createTracking] = useCreateTrackingMutation();
 

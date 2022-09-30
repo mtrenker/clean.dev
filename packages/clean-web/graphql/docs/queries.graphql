@@ -6,3 +6,15 @@ query getProjects {
     }
   }
 }
+
+query getProjectsWithTrackings {
+  projects {
+    ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
+    trackings {
+      ...TrackingFragment
+    }
+  }
+}
