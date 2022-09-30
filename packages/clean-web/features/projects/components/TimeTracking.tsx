@@ -1,7 +1,7 @@
-import ReactDatePicker from 'react-datepicker';
+import ReactDatePicker, { setDefaultLocale } from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { formatISO } from 'date-fns';
+import { setMilliseconds, setSeconds, setHours, setMinutes } from 'date-fns';
 
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
@@ -13,6 +13,8 @@ export interface TimeTrackingProps {
   onSubmit: (data: TrackingInput) => void;
 }
 
+setDefaultLocale('de');
+
 export const trackingInputSchema = z.object({
   projectId: z.string(),
   category: z.string().optional(),
@@ -23,9 +25,10 @@ export const trackingInputSchema = z.object({
 
 export type TrackingInput = z.infer<typeof trackingInputSchema>;
 
+const resetTime = (date: Date) => setMilliseconds(setSeconds(setMinutes(date, 0), 0), 0);
 
 export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmit, projectId }) => {
-  const { handleSubmit, register, control, setValue } = useForm<TrackingInput>({
+  const { handleSubmit, register, control } = useForm<TrackingInput>({
     defaultValues: {
       projectId,
       category: 'dev',
@@ -41,10 +44,14 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmit, projectId 
               name="startTime"
               render={({ field }) => (
                 <ReactDatePicker
-                  customInput={<TextField id="startTime" label="Start Time" />}
-                  showTimeSelect
                   {...field}
-                  onChange={(date: Date) => setValue('startTime', formatISO(date))}
+                  customInput={<TextField id="startTime" />}
+                  dateFormat="dd.MM.yyyy HH:mm"
+                  maxTime={resetTime(setHours(new Date(), 18))}
+                  minTime={resetTime(setHours(new Date(), 8))}
+                  placeholderText="Start Time"
+                  selected={field.value}
+                  showTimeSelect
                 />
               )}
             />
@@ -60,10 +67,14 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmit, projectId 
               name="endTime"
               render={({ field }) => (
                 <ReactDatePicker
-                  customInput={<TextField id="endTime" label="End Time" />}
-                  showTimeSelect
                   {...field}
-                  onChange={(date: Date) => setValue('endTime', formatISO(date))}
+                  customInput={<TextField id="endTime" />}
+                  dateFormat="dd.MM.yyyy HH:mm"
+                  maxTime={resetTime(setHours(new Date(), 16))}
+                  minTime={resetTime(setHours(new Date(), 8))}
+                  placeholderText="End Time"
+                  selected={field.value}
+                  showTimeSelect
                 />
               )}
             />

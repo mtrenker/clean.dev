@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 
 export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  value?: string;
 }
 
 // eslint-disable-next-line react/display-name

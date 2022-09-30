@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
-import { useCreateTrackingMutation, useGetProjectsWithTrackingsQuery } from '../../../graphql/generated';
+import { Tracking, useCreateTrackingMutation, useGetProjectsWithTrackingsQuery, useRemoveTrackingMutation } from '../../../graphql/generated';
+import { TimeSheet } from '../../../features/projects/components/TimeSheet';
 
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
@@ -12,14 +13,26 @@ const ProjectDetailPage: NextPage = () => {
   const { data } = useGetProjectsWithTrackingsQuery();
   const project = data?.projects.find(project => project.id === id);
 
-  const [page, setPage] = useState<'overview' | 'tracking'>('overview');
+  const [page, setPage] = useState<'overview' | 'tracking'>('tracking');
 
   const [createTracking] = useCreateTrackingMutation();
+  const [removeTracking] = useRemoveTrackingMutation();
 
-  const onTrackingSubmit = (data: TrackingInput) => {
+  const onRemoveTracking = ({ __typename, ...input }: Tracking) => {
+    removeTracking({
+      variables: {
+        input: {
+          ...input,
+          projectId: id as string,
+        },
+      },
+    });
+  };
+
+  const onTrackingSubmit = (input: TrackingInput) => {
     createTracking({
       variables: {
-        input: data,
+        input,
       },
     });
   };
@@ -56,7 +69,11 @@ const ProjectDetailPage: NextPage = () => {
           </>
         )}
         {page === 'tracking' && (
-          <TimeTracking onSubmit={onTrackingSubmit} projectId={id as string} />
+          <>
+            <TimeTracking onSubmit={onTrackingSubmit} projectId={id as string} />
+            <hr />
+            <TimeSheet onRemoveTracking={onRemoveTracking} project={project} />
+          </>
         )}
       </div>
     </main>
