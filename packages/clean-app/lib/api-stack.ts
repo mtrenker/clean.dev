@@ -126,6 +126,27 @@ export class ApiStack extends Stack {
     });
     this.api.addType(this.highlightInputType);
 
+    this.trackingType = new ObjectType('Tracking', {
+      definition: {
+        category: GraphqlType.string(),
+        startTime: GraphqlType.awsDateTime({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime(),
+        summary: GraphqlType.string(),
+      },
+    });
+    this.api.addType(this.trackingType);
+
+    this.trackingInputType = new InputType('TrackingInput', {
+      definition: {
+        projectId: GraphqlType.string({ isRequired: true }),
+        category: GraphqlType.string(),
+        startTime: GraphqlType.awsDateTime({ isRequired: true }),
+        endTime: GraphqlType.awsDateTime(),
+        summary: GraphqlType.string(),
+      },
+    });
+    this.api.addType(this.trackingInputType);
+
     this.projectType = new ObjectType('Project', {
       definition: {
         id: GraphqlType.id({ isRequired: true }),
@@ -178,27 +199,6 @@ export class ApiStack extends Stack {
       },
     });
     this.api.addType(this.projectInputType);
-
-    this.trackingType = new ObjectType('Tracking', {
-      definition: {
-        category: GraphqlType.string(),
-        startTime: GraphqlType.awsDateTime({ isRequired: true }),
-        endTime: GraphqlType.awsDateTime(),
-        summary: GraphqlType.string(),
-      },
-    });
-    this.api.addType(this.trackingType);
-
-    this.trackingInputType = new InputType('TrackingInput', {
-      definition: {
-        projectId: GraphqlType.string({ isRequired: true }),
-        category: GraphqlType.string(),
-        startTime: GraphqlType.awsDateTime({ isRequired: true }),
-        endTime: GraphqlType.awsDateTime(),
-        summary: GraphqlType.string(),
-      },
-    });
-    this.api.addType(this.trackingInputType);
   }
 
   setupQueries (): void {
