@@ -55,7 +55,7 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
       return await updateProject(id, input as ProjectInput, identity as AppSyncIdentityCognito);
     case 'removeProject':
       return await removeProject(id, identity as AppSyncIdentityCognito);
-    case 'addTracking':
+    case 'createTracking':
       return createTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
     case 'removeTracking':
       return removeTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
