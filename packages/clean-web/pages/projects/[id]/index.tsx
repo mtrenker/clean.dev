@@ -4,8 +4,10 @@ import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
-import { Tracking, useCreateTrackingMutation, useGetProjectsWithTrackingsQuery, useRemoveTrackingMutation } from '../../../graphql/generated';
-import { TimeSheet } from '../../../features/projects/components/TimeSheet';
+import { Tracking, useCreateTrackingMutation, useGetProjectsWithTrackingsQuery, useRemoveTrackingMutation, useUpdateProjectMutation } from '../../../graphql/generated';
+import { TrackingTable } from '../../../features/projects/components/TrackingTable';
+import Link from 'next/link';
+import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
 
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
@@ -13,10 +15,21 @@ const ProjectDetailPage: NextPage = () => {
   const { data } = useGetProjectsWithTrackingsQuery();
   const project = data?.projects.find(project => project.id === id);
 
-  const [page, setPage] = useState<'overview' | 'tracking'>('tracking');
+  const [page, setPage] = useState<'overview' | 'edit' | 'tracking'>('overview');
 
   const [createTracking] = useCreateTrackingMutation();
   const [removeTracking] = useRemoveTrackingMutation();
+
+  const [updateProject] = useUpdateProjectMutation();
+
+  const onProjectUpdate = async (project: ProjectFormData) => {
+    await updateProject({
+      variables: {
+        id: id as string,
+        input: project,
+      },
+    });
+  };
 
   const onRemoveTracking = ({ __typename, ...input }: Tracking) => {
     removeTracking({
@@ -36,6 +49,8 @@ const ProjectDetailPage: NextPage = () => {
       },
     });
   };
+
+  if (!id) return null;
 
   return (
     <main className="container mx-auto">
@@ -59,20 +74,42 @@ const ProjectDetailPage: NextPage = () => {
               Tracking
             </a>
           </li>
+          <li className="mr-2">
+            <a
+              className="inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+              href="#"
+              onClick={() => setPage('edit')}
+            >
+              Edit
+            </a>
+          </li>
         </ul>
       </div>
 
       <div>
         {page === 'overview' && (
           <>
-            {project?.client}
+            <h2>{project?.client}</h2>
+            <ul>
+              <li><Link href={`/projects/${id}/timesheet`}>Timesheet</Link></li>
+              <li><Link href={`/projects/${id}/invoice`}>Invoice</Link></li>
+            </ul>
           </>
+        )}
+        {page === 'edit' && (
+          <ProjectForm defaultValues={project} onSubmit={onProjectUpdate} />
         )}
         {page === 'tracking' && (
           <>
-            <TimeTracking onSubmit={onTrackingSubmit} projectId={id as string} />
+            <TimeTracking
+              onSubmitTracking={onTrackingSubmit}
+              projectId={id as string}
+            />
             <hr />
-            <TimeSheet onRemoveTracking={onRemoveTracking} project={project} />
+            <TrackingTable
+              onRemoveTracking={onRemoveTracking}
+              project={project}
+            />
           </>
         )}
       </div>

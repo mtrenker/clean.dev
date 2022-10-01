@@ -1,7 +1,8 @@
-import ReactDatePicker, { setDefaultLocale } from 'react-datepicker';
+import ReactDatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { setMilliseconds, setSeconds, setHours, setMinutes } from 'date-fns';
+import de from 'date-fns/locale/de';
 
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
@@ -10,10 +11,13 @@ import { TextField } from '../../../common/components/TextField';
 export interface TimeTrackingProps {
   projectId: string;
   className?: string;
-  onSubmit: (data: TrackingInput) => void;
+  onSubmitTracking: (data: TrackingInput) => void;
+  defaultValues?: TrackingInput;
 }
 
+registerLocale('de', de);
 setDefaultLocale('de');
+
 
 export const trackingInputSchema = z.object({
   projectId: z.string(),
@@ -27,15 +31,16 @@ export type TrackingInput = z.infer<typeof trackingInputSchema>;
 
 const resetTime = (date: Date) => setMilliseconds(setSeconds(setMinutes(date, 0), 0), 0);
 
-export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmit, projectId }) => {
+export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmitTracking, projectId, defaultValues }) => {
   const { handleSubmit, register, control } = useForm<TrackingInput>({
     defaultValues: {
+      ...defaultValues,
       projectId,
       category: 'dev',
     },
   });
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmitTracking)}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-1 items-end gap-4">
           <div className="flex-1">

@@ -28,6 +28,7 @@ export const TextField: React.FC<TextFieldProps> = forwardRef<HTMLInputElement, 
           },
           className,
         ])}
+        id={id}
         ref={ref}
         type={type}
         {...rest}

@@ -2,6 +2,10 @@ module.exports = {
   globals: {
       MyGlobal: true
   },
+  extends: [
+    'plugin:import/recommended',
+    'plugin:import/typescript'
+  ],
   rules: {
     semi: [2, "always"],
     indent: ["error", 2]

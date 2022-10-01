@@ -2,14 +2,14 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import { TimeSheet } from './TimeSheet';
+import { TrackingTable } from './TrackingTable';
 
 describe('components/TimeSheet', () => {
   it('renders', () => {
 
     // arrange
 
-    render(<TimeSheet />);
+    render(<TrackingTable />);
 
     // act
 

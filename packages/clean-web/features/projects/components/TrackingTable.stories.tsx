@@ -1,13 +1,13 @@
 import { Story, Meta } from '@storybook/react';
 import { LayoutDecorator } from '../../../.storybook/decorators';
 
-import { TimeSheet, TimeSheetProps } from './TimeSheet';
+import { TrackingTable, TrackingTableProps } from './TrackingTable';
 export default {
   title: 'TimeSheet',
-  component: TimeSheet,
+  component: TrackingTable,
   decorators: [LayoutDecorator],
-} as Meta<TimeSheetProps>;
+} as Meta<TrackingTableProps>;
 
-const Template: Story<TimeSheetProps> = (props) => <TimeSheet {...props} />;
+const Template: Story<TrackingTableProps> = (props) => <TrackingTable {...props} />;
 
 export const Default = Template.bind({});

@@ -13,13 +13,13 @@ export const Button: React.FC<ButtonProps> = forwardRef<HTMLButtonElement, Butto
   return (
     <button
       className={clsx(
-        'inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
+        'inline-flex justify-center rounded-md border border-transparent p-2 text-sm font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
         {
           'dark:bg-zinc-50 dark:text-black': !primary,
           'dark:bg-zinc-900 dark:text-white': primary,
           'text-white dark:bg-red-500': danger,
         },
-        className
+        className,
       )}
       type="button"
       {...rest}

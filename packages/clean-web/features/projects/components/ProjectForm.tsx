@@ -51,7 +51,7 @@ export interface ProjectFormProps {
 export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
 
   const [showContacts, setShowContacts] = useState(
-    defaultValues ? Object.values(defaultValues.contact ?? {}).filter(Boolean).length > 0: false
+    defaultValues ? Object.values(defaultValues.contact ?? {}).filter(Boolean).length > 0: false,
   );
 
   const { setValue, handleSubmit, register, control, formState: { errors } } = useForm<ProjectFormData>({
@@ -59,9 +59,17 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
     resolver: zodResolver(projectInputSchema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  console.log(errors);
+
+
+  const { fields: highlightFields, append: appendHighlight, remove: removeHighlight } = useFieldArray({
     control,
     name: 'highlights',
+  });
+
+  const { fields: categoryFields, append: appendCategory, remove: removeCategory } = useFieldArray({
+    control,
+    name: 'categories',
   });
 
   return (
@@ -105,19 +113,60 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValue
           </div>
           <fieldset className="flex flex-col gap-2">
             <div className="flex items-center">
-              <legend className="flex-1">Highlights</legend>
+              <legend className="flex-1">Categories</legend>
               <div className="flex-none">
-                <Button onClick={() => append({ description: '' })}>Add</Button>
+                <Button onClick={() => appendCategory({ name: 'Development' })}>Add</Button>
               </div>
             </div>
-            {fields.map((field, index) => (
+            {categoryFields.map((field, index) => (
+              <div className="flex items-center gap-6" key={field.id}>
+                <div className="flex flex-1 gap-1">
+                  <TextField
+                    defaultValue={field.name}
+                    {...register(`categories.${index}.name`)}
+                  />
+                  <TextField
+                    defaultValue={field.color}
+                    {...register(`categories.${index}.color`)}
+                  />
+                  <Controller
+                    control={control}
+                    name={`categories.${index}.rate`}
+                    render={({ field }) => (
+                      <TextField
+                        defaultValue={field.value}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                        placeholder="Rate"
+                      />
+                    )}
+                  />
+                </div>
+                <div className="flex-none">
+                  <Button
+                    onClick={() => removeCategory(index)}
+                    type="button"
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </fieldset>
+          <fieldset className="flex flex-col gap-2">
+            <div className="flex items-center">
+              <legend className="flex-1">Highlights</legend>
+              <div className="flex-none">
+                <Button onClick={() => appendHighlight({ description: '' })}>Add</Button>
+              </div>
+            </div>
+            {highlightFields.map((field, index) => (
               <div className="flex items-center gap-6" key={field.id}>
                 <div className="flex-1">
                   <TextField defaultValue={field.description} {...register(`highlights.${index}.description`)} />
                 </div>
                 <div className="flex-none">
                   <Button
-                    onClick={() => remove(index)}
+                    onClick={() => removeHighlight(index)}
                     type="button"
                   >
                     Remove

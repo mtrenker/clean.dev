@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "custom eslint config for clean.dev projects",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-plugin-import": "^2.26.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
   },
