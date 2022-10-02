@@ -1,7 +1,7 @@
 import ReactDatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { setMilliseconds, setSeconds, setHours, setMinutes } from 'date-fns';
+import { setMilliseconds, setSeconds, setHours, setMinutes, format } from 'date-fns';
 import de from 'date-fns/locale/de';
 
 import { Button } from '../../../common/components/Button';
@@ -22,8 +22,8 @@ setDefaultLocale('de');
 export const trackingInputSchema = z.object({
   projectId: z.string(),
   category: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
+  startTime: z.date(),
+  endTime: z.date(),
   summary: z.string(),
 });
 
@@ -57,6 +57,7 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmitTracking, pr
                   placeholderText="Start Time"
                   selected={field.value}
                   showTimeSelect
+                  value={format(field.value ?? new Date(), 'dd.MM.yyyy HH:mm')}
                 />
               )}
             />
@@ -80,6 +81,7 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ onSubmitTracking, pr
                   placeholderText="End Time"
                   selected={field.value}
                   showTimeSelect
+                  value={format(field.value ?? new Date(), 'dd.MM.yyyy HH:mm')}
                 />
               )}
             />

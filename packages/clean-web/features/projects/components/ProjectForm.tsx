@@ -84,9 +84,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, project, loa
     },
   });
 
-  console.log(errors);
-
-
   const { fields: highlightFields, append: appendHighlight, remove: removeHighlight } = useFieldArray({
     control,
     name: 'highlights',
