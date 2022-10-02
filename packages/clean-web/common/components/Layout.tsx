@@ -26,6 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     };
     getUser();
   }, [setUser]);
+
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-50">
 

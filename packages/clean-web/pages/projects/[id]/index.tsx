@@ -97,7 +97,7 @@ const ProjectDetailPage: NextPage = () => {
           </>
         )}
         {page === 'edit' && (
-          <ProjectForm defaultValues={project} onSubmit={onProjectUpdate} />
+          <ProjectForm onSubmit={onProjectUpdate} project={project} />
         )}
         {page === 'tracking' && (
           <>

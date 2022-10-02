@@ -21,10 +21,10 @@ setDefaultLocale('de');
 
 export const trackingInputSchema = z.object({
   projectId: z.string(),
-  category: z.string().optional(),
+  category: z.string(),
   startTime: z.string(),
-  endTime: z.string().optional(),
-  summary: z.string().optional(),
+  endTime: z.string(),
+  summary: z.string(),
 });
 
 export type TrackingInput = z.infer<typeof trackingInputSchema>;

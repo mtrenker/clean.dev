@@ -26,19 +26,20 @@ module.exports = {
     'react/jsx-closing-bracket-location': 'error',
     'react/jsx-wrap-multilines': ['error', {
       'declaration': 'parens-new-line',
-       'assignment': 'parens-new-line',
-       'return': 'parens-new-line',
-       'arrow': 'parens-new-line',
-       'condition': 'parens-new-line',
-       'logical': 'parens-new-line',
-       'prop': 'parens-new-line',
-     },
-   ],
-   'jsx-a11y/anchor-is-valid': 'off',
-   'tailwindcss/no-custom-classname': ['warn', {
+      'assignment': 'parens-new-line',
+      'return': 'parens-new-line',
+      'arrow': 'parens-new-line',
+      'condition': 'parens-new-line',
+      'logical': 'parens-new-line',
+      'prop': 'parens-new-line',
+    },
+    ],
+    'jsx-a11y/anchor-is-valid': 'off',
+    'tailwindcss/no-custom-classname': ['warn', {
       'whitelist': [
-        'animate-spin-slow',
-      ]
-   }],
+        'language-',
+        'language\\-(jsx|tsx|js|ts|css|scss|json|graphql|md|mdx|html|yml|yaml|xml|svg)',
+      ],
+    }],
   },
 };
