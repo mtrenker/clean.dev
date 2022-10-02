@@ -10,6 +10,9 @@ const TimeSheetPage: NextPage = () => {
   const { id } = router.query;
   const { data } = useGetProjectsWithTrackingsQuery();
   const project = data?.projects.find(project => project.id === id);
+  if (!project) {
+    return null;
+  }
   const firstDate = new Date(project?.trackings[0]?.startTime ?? '');
 
   return (

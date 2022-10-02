@@ -12,9 +12,9 @@ const InvoicePage: NextPage = () => {
   const categories = project?.trackings.reduce((acc, tracking) => {
     const category = tracking.category ?? 'Sonstiges';
     if (acc[category]) {
-      acc[category] += differenceInHours(new Date(tracking.endTime ??''), new Date(tracking.startTime));
+      acc[category] += differenceInHours(new Date(tracking.endTime ?? ''), new Date(tracking.startTime));
     } else {
-      acc[category] = differenceInHours(new Date(tracking.endTime ??''), new Date(tracking.startTime));
+      acc[category] = differenceInHours(new Date(tracking.endTime ?? ''), new Date(tracking.startTime));
     }
     return acc;
   }, {} as Record<string, number>);

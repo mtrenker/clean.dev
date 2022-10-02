@@ -21,7 +21,7 @@ Prefilled.parameters = {
 };
 Prefilled.decorators = [LayoutDecorator];
 Prefilled.args = {
-  defaultValues: {
+  project: {
     client: 'Google',
     position: 'Software Engineer',
     summary: 'I worked on the Google search engine.',
@@ -33,6 +33,10 @@ Prefilled.args = {
         description: 'I worked on the Google search engine.',
       },
     ],
+    categories: [],
+    featured: false,
+    id: '123',
+    trackings: [],
     contact: {
       company: 'Google',
       firstName: 'John',

@@ -11,6 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '../../../common/components/Button';
 import { TextArea } from '../../../common/components/TextArea';
 import { TextField } from '../../../common/components/TextField';
+import { Project } from '../../../graphql/generated';
 
 export const projectInputSchema = z.object({
   client: z.string(),
@@ -45,18 +46,42 @@ export type ProjectFormData = z.infer<typeof projectInputSchema>;
 export interface ProjectFormProps {
   loading?: boolean;
   onSubmit: (data: ProjectFormData) => void;
-  defaultValues?: ProjectFormData;
+  project?: Project;
 }
 
-export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, defaultValues, loading }) => {
+export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, project, loading }) => {
 
   const [showContacts, setShowContacts] = useState(
-    defaultValues ? Object.values(defaultValues.contact ?? {}).filter(Boolean).length > 0: false,
+    project ? Object.values(project.contact ?? {}).filter(Boolean).length > 0 : false,
   );
 
   const { setValue, handleSubmit, register, control, formState: { errors } } = useForm<ProjectFormData>({
-    defaultValues,
     resolver: zodResolver(projectInputSchema),
+    defaultValues: {
+      client: project?.client,
+      location: project?.location ?? '',
+      startDate: project?.startDate ?? '',
+      endDate: project?.endDate ?? '',
+      highlights: project?.highlights ?? [],
+      contact: {
+        city: project?.contact?.city ?? '',
+        company: project?.contact?.company ?? '',
+        country: project?.contact?.country ?? '',
+        email: project?.contact?.email ?? '',
+        firstName: project?.contact?.firstName ?? '',
+        lastName: project?.contact?.lastName ?? '',
+        street: project?.contact?.street ?? '',
+        zip: project?.contact?.zip ?? '',
+      },
+      categories: project?.categories.map(cat => ({
+        color: cat.color ?? '',
+        name: cat.name ?? '',
+        rate: cat.rate ?? 0,
+      })),
+      featured: project?.featured ?? false,
+      position: project?.position ?? '',
+      summary: project?.summary ?? '',
+    },
   });
 
   console.log(errors);
