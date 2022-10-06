@@ -141,18 +141,18 @@ export type Query = {
 
 export type Tracking = {
   __typename?: 'Tracking';
-  category?: Maybe<Scalars['String']>;
-  endTime?: Maybe<Scalars['AWSDateTime']>;
+  category: Scalars['String'];
+  endTime: Scalars['AWSDateTime'];
   startTime: Scalars['AWSDateTime'];
-  summary?: Maybe<Scalars['String']>;
+  summary: Scalars['String'];
 };
 
 export type TrackingInput = {
-  category?: InputMaybe<Scalars['String']>;
-  endTime?: InputMaybe<Scalars['AWSDateTime']>;
+  category: Scalars['String'];
+  endTime: Scalars['AWSDateTime'];
   projectId: Scalars['String'];
   startTime: Scalars['AWSDateTime'];
-  summary?: InputMaybe<Scalars['String']>;
+  summary: Scalars['String'];
 };
 
 export type ContactFragmentFragment = { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null };
@@ -163,7 +163,7 @@ export type ProjectHighlightFragmentFragment = { __typename?: 'ProjectHighlight'
 
 export type ProjectCategoryFragmentFragment = { __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null };
 
-export type TrackingFragmentFragment = { __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null };
+export type TrackingFragmentFragment = { __typename?: 'Tracking', category: string, endTime: string, startTime: string, summary: string };
 
 export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
@@ -192,7 +192,7 @@ export type CreateTrackingMutationVariables = Exact<{
 }>;
 
 
-export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null } };
+export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'Tracking', category: string, endTime: string, startTime: string, summary: string } };
 
 export type RemoveTrackingMutationVariables = Exact<{
   input: TrackingInput;
@@ -209,7 +209,7 @@ export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typen
 export type GetProjectsWithTrackingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsWithTrackingsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, trackings: Array<{ __typename?: 'Tracking', category?: string | null, endTime?: string | null, startTime: string, summary?: string | null }>, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> }> };
+export type GetProjectsWithTrackingsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null } | null, trackings: Array<{ __typename?: 'Tracking', category: string, endTime: string, startTime: string, summary: string }>, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> }> };
 
 export const ContactFragmentFragmentDoc = gql`
     fragment ContactFragment on Contact {

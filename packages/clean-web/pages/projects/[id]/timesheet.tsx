@@ -19,8 +19,10 @@ const TimeSheetPage: NextPage = () => {
     <main className="container mx-auto flex flex-col gap-6 py-10">
       <div className="flex justify-between">
         <div>
-          <h2 className="text-4xl">Zeiterfassung</h2>
-          <h3 className="text-2xl">{format(firstDate, 'MMMM', { locale: de })}</h3>
+          <h2 className="text-3xl">Timesheet</h2>
+          <h3 className="text-2xl">
+            {format(firstDate, 'MMMM yyyy', { locale: de })}
+          </h3>
         </div>
         <address>
           Martin Trenker
@@ -31,13 +33,11 @@ const TimeSheetPage: NextPage = () => {
         </address>
       </div>
       <dl className="grid grid-cols-[max-content_1fr] gap-x-10 text-lg">
-        <dt>Projekt</dt>
-        <dd>
-          {`${project?.contact?.company}, ${project?.contact?.street}, ${project?.contact?.city}`}
-        </dd>
-        <dt>Zeitraum</dt>
+        <dt>Project</dt>
+        <dd>{project?.client}</dd>
+        <dt>Period</dt>
         <dd>{`${format(firstDate, 'dd.MM.yyyy')} - ${format(lastDayOfMonth(firstDate), 'dd.MM.yyyy')}`}</dd>
-        <dt>Ort</dt>
+        <dt>Location</dt>
         <dd>{project?.location}</dd>
       </dl>
       <TrackingTable project={project} />

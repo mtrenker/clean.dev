@@ -35,8 +35,8 @@ const ProjectDetailPage: NextPage = () => {
     removeTracking({
       variables: {
         input: {
-          ...input,
           projectId: id as string,
+          ...input,
         },
       },
     });
@@ -54,7 +54,8 @@ const ProjectDetailPage: NextPage = () => {
 
   return (
     <main className="container mx-auto">
-      <div className="border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+
+      <div className="my-4 border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
         <ul className="-mb-px flex flex-wrap">
           <li className="mr-2">
             <a
@@ -100,17 +101,16 @@ const ProjectDetailPage: NextPage = () => {
           <ProjectForm onSubmit={onProjectUpdate} project={project} />
         )}
         {page === 'tracking' && (
-          <>
+          <div className="flex flex-col gap-16">
             <TimeTracking
               onSubmitTracking={onTrackingSubmit}
               projectId={id as string}
             />
-            <hr />
             <TrackingTable
               onRemoveTracking={onRemoveTracking}
               project={project}
             />
-          </>
+          </div>
         )}
       </div>
     </main>

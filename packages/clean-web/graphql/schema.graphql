@@ -56,10 +56,10 @@ type Query {
 }
 
 type Tracking {
-  category: String
-  endTime: AWSDateTime
+  category: String!
+  endTime: AWSDateTime!
   startTime: AWSDateTime!
-  summary: String
+  summary: String!
 }
 
 input ContactInput {
@@ -97,9 +97,9 @@ input ProjectInput {
 }
 
 input TrackingInput {
-  category: String
-  endTime: AWSDateTime
+  category: String!
+  endTime: AWSDateTime!
   projectId: String!
   startTime: AWSDateTime!
-  summary: String
+  summary: String!
 }
