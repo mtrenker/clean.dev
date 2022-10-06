@@ -7,6 +7,10 @@ fragment ContactFragment on Contact {
   city
   zip
   country
+  bank
+  iban
+  bic
+  vat
 }
 
 fragment ProjectFragment on Project {

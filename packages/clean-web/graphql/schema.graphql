@@ -7,13 +7,17 @@ schema {
 }
 
 type Contact {
+  bank: String
+  bic: String
   city: String
   company: String
   country: String
   email: String
   firstName: String
+  iban: String
   lastName: String
   street: String
+  vat: String
   zip: String
 }
 
@@ -23,6 +27,7 @@ type Mutation {
   createTracking(input: TrackingInput!): Tracking!
   removeProject(id: ID!): String!
   removeTracking(input: TrackingInput!): String!
+  updateProfile(input: UserInput!): User!
   updateProject(id: ID!, input: ProjectInput!): Project!
 }
 
@@ -52,6 +57,7 @@ type ProjectHighlight {
 }
 
 type Query {
+  me: User
   projects: [Project!]!
 }
 
@@ -62,14 +68,22 @@ type Tracking {
   summary: String!
 }
 
+type User {
+  contact: Contact
+}
+
 input ContactInput {
+  bank: String
+  bic: String
   city: String
   company: String
   country: String
   email: String
   firstName: String
+  iban: String
   lastName: String
   street: String
+  vat: String
   zip: String
 }
 
@@ -102,4 +116,8 @@ input TrackingInput {
   projectId: String!
   startTime: AWSDateTime!
   summary: String!
+}
+
+input UserInput {
+  contact: ContactInput
 }

@@ -3,6 +3,17 @@ import { DynamoDB } from 'aws-sdk';
 import { z } from 'zod';
 import { ulid } from 'ulid';
 
+export const contactSchema = z.object({
+  company: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().optional(),
+  street: z.string().optional(),
+  city: z.string().optional(),
+  zip: z.string().optional(),
+  country: z.string().optional(),
+});
+
 export const projectInputSchema = z.object({
   client: z.string(),
   location: z.string().optional(),
@@ -19,16 +30,7 @@ export const projectInputSchema = z.object({
     rate: z.number().optional(),
   })).optional(),
   featured: z.boolean().optional(),
-  contact: z.object({
-    company: z.string().optional(),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().optional(),
-    street: z.string().optional(),
-    city: z.string().optional(),
-    zip: z.string().optional(),
-    country: z.string().optional(),
-  }).optional(),
+  contact: contactSchema.optional(),
 });
 
 export const trackingInputSchema = z.object({
@@ -39,8 +41,13 @@ export const trackingInputSchema = z.object({
   summary: z.string().optional(),
 });
 
+export const userInputSchema = z.object({
+  contact: contactSchema,
+});
+
 export type ProjectInput = z.infer<typeof projectInputSchema>;
 export type TrackingInput = z.infer<typeof trackingInputSchema>;
+export type UserInput = z.infer<typeof userInputSchema>;
 
 const dbclient = new DynamoDB.DocumentClient();
 const TableName = process.env.TABLE_NAME || '';
@@ -59,6 +66,8 @@ export const handler = async (event: AppSyncResolverEvent<any>) => {
       return createTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
     case 'removeTracking':
       return removeTracking(input as TrackingInput, identity as AppSyncIdentityCognito);
+    case 'updateProfile':
+      return updateProfile(input as UserInput, identity as AppSyncIdentityCognito);
     default:
       throw new Error(`Unknown mutation ${fieldName}`);
     }
@@ -153,6 +162,30 @@ async function putTracking (tracking: TrackingInput, identity: AppSyncIdentityCo
     pk,
     sk,
     ...tracking,
+  };
+  return dbclient.put({ TableName, Item: item }).promise();
+}
+
+async function updateProfile (user: UserInput, identity: AppSyncIdentityCognito) {
+  userInputSchema.parse(user);
+  try {
+    await putProfile(user, identity);
+    return {
+      ...user,
+    };
+  } catch (e) {
+    return e;
+  }
+}
+
+async function putProfile (user: UserInput, identity: AppSyncIdentityCognito) {
+  const { sub } = identity;
+  const pk = `USER#${sub}`;
+  const sk = `USER#${sub}`;
+  const item = {
+    pk,
+    sk,
+    ...user,
   };
   return dbclient.put({ TableName, Item: item }).promise();
 }

@@ -29,3 +29,11 @@ mutation createTracking($input: TrackingInput!) {
 mutation removeTracking($input: TrackingInput!) {
   removeTracking(input: $input)
 }
+
+mutation updateProfile($input: UserInput!) {
+  updateProfile(input: $input) {
+    contact {
+      ...ContactFragment
+    }
+  }
+}
