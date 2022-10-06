@@ -30,6 +30,8 @@ export class ApiStack extends Stack {
   highlightInputType: InputType;
   trackingType: ObjectType;
   trackingInputType: InputType;
+  userType: ObjectType;
+  userInputType: InputType;
 
   constructor (scope: Construct, id: string) {
     super(scope, id);
@@ -75,6 +77,10 @@ export class ApiStack extends Stack {
         city: GraphqlType.string(),
         zip: GraphqlType.string(),
         country: GraphqlType.string(),
+        bank: GraphqlType.string(),
+        iban: GraphqlType.string(),
+        bic: GraphqlType.string(),
+        vat: GraphqlType.string(),
       },
     });
     this.api.addType(this.contactType);
@@ -89,9 +95,27 @@ export class ApiStack extends Stack {
         city: GraphqlType.string(),
         zip: GraphqlType.string(),
         country: GraphqlType.string(),
+        bank: GraphqlType.string(),
+        iban: GraphqlType.string(),
+        bic: GraphqlType.string(),
+        vat: GraphqlType.string(),
       },
     });
     this.api.addType(this.contactInputType);
+
+    this.userType = new ObjectType('User', {
+      definition: {
+        contact: this.contactType.attribute(),
+      },
+    });
+    this.api.addType(this.userType);
+
+    this.userInputType = new InputType('UserInput', {
+      definition: {
+        contact: this.contactInputType.attribute(),
+      },
+    });
+    this.api.addType(this.userInputType);
 
     this.projectCategoryType = new ObjectType('ProjectCategory', {
       definition: {
@@ -202,6 +226,24 @@ export class ApiStack extends Stack {
   }
 
   setupQueries (): void {
+    this.api.addQuery('me', new ResolvableField({
+      returnType: this.userType.attribute(),
+      dataSource: this.querySource,
+      requestMappingTemplate: MappingTemplate.fromString(`
+        {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+            "pk" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
+            "sk" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub")
+          }
+        }
+      `),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        $util.toJson($context.result)
+      `),
+    }));
+
     this.api.addQuery('projects', new ResolvableField({
       returnType: this.projectType.attribute({ isRequired: true, isRequiredList: true }),
       dataSource: this.querySource,
@@ -272,6 +314,16 @@ export class ApiStack extends Stack {
       dataSource: this.mutationSource,
       args: {
         input: this.trackingInputType.attribute({ isRequired: true }),
+      },
+      requestMappingTemplate: MappingTemplate.lambdaRequest(),
+      responseMappingTemplate: MappingTemplate.lambdaResult(),
+    }));
+
+    this.api.addMutation('updateProfile', new ResolvableField({
+      returnType: this.userType.attribute({ isRequired: true }),
+      dataSource: this.mutationSource,
+      args: {
+        input: this.userInputType.attribute({ isRequired: true }),
       },
       requestMappingTemplate: MappingTemplate.lambdaRequest(),
       responseMappingTemplate: MappingTemplate.lambdaResult(),
