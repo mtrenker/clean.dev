@@ -3,7 +3,7 @@ import { Auth } from '@aws-amplify/auth';
 import { ApolloProvider } from '@apollo/client';
 
 import { Layout } from '../common/components/Layout';
-import { Authenticator } from '../common/components/Authenticator';
+import { Authenticator } from '../features/users/components/Authenticator';
 import { client } from '../graphql/client';
 
 import '../styles/globals.css';

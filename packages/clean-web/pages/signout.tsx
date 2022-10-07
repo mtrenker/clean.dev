@@ -1,7 +1,7 @@
 import { Auth } from '@aws-amplify/auth';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
-import { useAuthenticator } from '../common/hooks/useAuthenticator';
+import { useAuthenticator } from '../features/users/hooks/useAuthenticator';
 
 const SignIn: NextPage = () => {
   const { setUser } = useAuthenticator();

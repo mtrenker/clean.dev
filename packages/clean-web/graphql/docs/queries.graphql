@@ -18,3 +18,11 @@ query getProjectsWithTrackings {
     }
   }
 }
+
+query me {
+  me {
+    contact {
+      ...ContactFragment
+    }
+  }
+}

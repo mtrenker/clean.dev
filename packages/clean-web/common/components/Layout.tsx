@@ -2,7 +2,8 @@ import { Auth } from '@aws-amplify/auth';
 import { IconLogin, IconLogout } from '@tabler/icons';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useAuthenticator } from '../hooks/useAuthenticator';
+import { useAuthenticator } from '../../features/users/hooks/useAuthenticator';
+import { useMeLazyQuery } from '../../graphql/generated';
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -15,17 +16,25 @@ export interface NavItem {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, setUser } = useAuthenticator();
+  const [meQuery] = useMeLazyQuery();
   useEffect(() => {
     const getUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
+        if (user) {
+          meQuery().then(res => {
+            if (res.data?.me) {
+              setUser(res.data.me);
+            }
+          });
+        }
         setUser(user);
       } catch (error) {
         console.info(error);
       }
     };
     getUser();
-  }, [setUser]);
+  }, [meQuery, setUser]);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-50">

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../common/components/Button';
 import { TextField } from '../common/components/TextField';
-import { useAuthenticator } from '../common/hooks/useAuthenticator';
+import { useAuthenticator } from '../features/users/hooks/useAuthenticator';
 
 type SignInModes = 'signin' | 'changepw' | 'success';
 
