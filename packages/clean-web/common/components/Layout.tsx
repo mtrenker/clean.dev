@@ -1,9 +1,8 @@
 import { Auth } from '@aws-amplify/auth';
-import { IconLogin, IconLogout } from '@tabler/icons';
+import { IconLogin, IconLogout, IconUserCircle } from '@tabler/icons';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useAuthenticator } from '../../features/users/hooks/useAuthenticator';
-import { useMeLazyQuery } from '../../graphql/generated';
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -16,28 +15,20 @@ export interface NavItem {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, setUser } = useAuthenticator();
-  const [meQuery] = useMeLazyQuery();
   useEffect(() => {
     const getUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        if (user) {
-          meQuery().then(res => {
-            if (res.data?.me) {
-              setUser(res.data.me);
-            }
-          });
-        }
         setUser(user);
       } catch (error) {
         console.info(error);
       }
     };
     getUser();
-  }, [meQuery, setUser]);
+  }, [setUser]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-50">
+    <div className="flex min-h-screen flex-col bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-50">
 
       <header className="flex h-20 grow-0 items-center p-4 print:hidden">
         <div className="container mx-auto flex">
@@ -67,6 +58,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <Link href="/projects" passHref>
                       <a href="/">
                         Projects
+                      </a>
+                    </Link>
+                  </li>
+                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                    <Link href="/user/profile" passHref>
+                      <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
+                        <IconUserCircle />
                       </a>
                     </Link>
                   </li>

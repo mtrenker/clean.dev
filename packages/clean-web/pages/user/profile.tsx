@@ -13,9 +13,11 @@ const ProfilePage: NextPage = () => {
     });
   };
   return (
-    <main className="container mx-auto">
-      <ProfileForm onSubmit={onSubmit} />
-    </main>
+    <div className="flex-1 bg-zinc-50 dark:bg-zinc-800">
+      <main className="container mx-auto">
+        <ProfileForm onSubmit={onSubmit} />
+      </main>
+    </div>
   );
 };
 
