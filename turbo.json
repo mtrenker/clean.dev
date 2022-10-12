@@ -23,12 +23,8 @@
       ]
     },
     "synth": {
-      "dependsOn": [
-        "lint",
-        "test"
-      ],
       "outputs": [
-        "./out/**"
+        "./cdk.out/**"
       ]
     },
     "lint": {
