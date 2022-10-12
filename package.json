@@ -4,14 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "dev:web": "npm run dev -w packages/clean-web",
-    "sb:web": "npm run storybook -w packages/clean-web",
-    "deploy": "npm run deploy -w packages/clean-app",
-    "test": "npm run test --workspaces --if-present",
+    "dev": "turbo run dev --parallel",
     "prepare": "husky install",
-    "generate": "npm run generate --workspaces --if-present"
+    "generate": "turbo run generate",
+    "export": "turbo run export",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
   },
   "repository": {
     "type": "git",
@@ -25,9 +24,8 @@
   },
   "homepage": "https://github.com/mtrenker/clean.dev#readme",
   "workspaces": [
-    "packages/clean-app",
-    "packages/clean-web",
-    "packages/eslint-config-clean"
+    "packages/*",
+    "apps/*"
   ],
   "devDependencies": {
     "@types/jest": "^29.0.3",
@@ -39,6 +37,7 @@
     "eslint-plugin-mdx": "^2.0.5",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
+    "turbo": "^1.5.6",
     "typescript": "^4.8.3"
   },
   "lint-staged": {

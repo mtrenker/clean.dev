@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from '../common/components/Button';
 import { TextField } from '../common/components/TextField';
 import { useAuthenticator } from '../features/users/hooks/useAuthenticator';
+import { useMeLazyQuery } from '../graphql/generated';
 
 type SignInModes = 'signin' | 'changepw' | 'success';
 
@@ -23,6 +24,8 @@ const SignIn: NextPage = () => {
 
   const router = useRouter();
 
+  const [me] = useMeLazyQuery();
+
   const onSubmit = async ({ username, password, newPassword }: SignInData) => {
     switch (mode) {
     case 'signin': {
@@ -30,8 +33,22 @@ const SignIn: NextPage = () => {
       if (result.challengeName === 'NEW_PASSWORD_REQUIRED') {
         setMode('changepw');
       } else {
-        setUser(result);
-        router.push('/');
+        const { data } = await me();
+        if (data?.me) {
+          setUser({
+            contact: {
+              city: data.me.contact?.city ?? '',
+              company: data.me.contact?.company ?? '',
+              country: data.me.contact?.country ?? '',
+              email: data.me.contact?.email ?? '',
+              firstName: data.me.contact?.firstName ?? '',
+              lastName: data.me.contact?.lastName ?? '',
+              street: data.me.contact?.street ?? '',
+              zip: data.me.contact?.zip ?? '',
+            },
+          });
+          router.push('/');
+        }
       }
       break;
     }

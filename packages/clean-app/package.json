@@ -6,6 +6,7 @@
   },
   "scripts": {
     "test": "jest",
+    "build": "npx cdk synth --profile clean",
     "synth": "npx cdk synth",
     "deploy": "npx cdk deploy --profile clean"
   },
