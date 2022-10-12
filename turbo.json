@@ -22,6 +22,15 @@
         "./out/**"
       ]
     },
+    "synth": {
+      "dependsOn": [
+        "lint",
+        "test"
+      ],
+      "outputs": [
+        "./out/**"
+      ]
+    },
     "lint": {
       "outputs": []
     },

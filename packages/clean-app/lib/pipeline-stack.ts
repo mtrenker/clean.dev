@@ -27,7 +27,7 @@ export class PipelineStack extends Stack {
           'node -v',
           'npm -v',
           'npm ci',
-          'npm run synth -w packages/clean-app',
+          'npm run synth',
         ],
         primaryOutputDirectory: 'packages/clean-app/cdk.out',
       }),

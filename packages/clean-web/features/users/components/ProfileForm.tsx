@@ -7,7 +7,7 @@ import { User } from '../../../graphql/generated';
 
 export interface ProfileFormProps {
   className?: string;
-  onSubmit: (data: any) => void;
+  onSubmit?: (data: any) => void;
   profile?: User
 }
 

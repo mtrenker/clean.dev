@@ -10,6 +10,7 @@
     "export": "turbo run export",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "synth": "turbo run synth",
     "test": "turbo run test"
   },
   "repository": {

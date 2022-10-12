@@ -13,9 +13,7 @@ describe('components/TimeSheet', () => {
 
     // act
 
-    const component = screen.getByRole('button', {
-      name: /🐦 . o 0 (do I look like a canary?) /i,
-    });
+    const component = screen.getByRole('table');
 
     userEvent.click(component);
 

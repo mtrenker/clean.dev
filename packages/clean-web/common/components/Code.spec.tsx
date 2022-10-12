@@ -1,5 +1,4 @@
-import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import { Code } from './Code';
@@ -9,15 +8,7 @@ describe('components/Code', () => {
 
     // arrange
 
-    render(<Code />);
-
-    // act
-
-    const component = screen.getByRole('button', {
-      name: /🐦 . o 0 (do I look like a canary?) /i,
-    });
-
-    userEvent.click(component);
+    const { container: component } = render(<Code language="jsx" />);
 
     // assert
 
