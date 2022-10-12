@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useGetProjectsWithTrackingsQuery } from '../../../graphql/generated';
+import { useGetProjectsWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 import { differenceInMinutes } from 'date-fns';
 
 const formatPrice = (number: number) => new Intl.NumberFormat('de-DE', {
@@ -12,6 +12,7 @@ const InvoicePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data } = useGetProjectsWithTrackingsQuery();
+  const { data: userData } = useMeQuery();
   const project = data?.projects.find(project => project.id === id);
 
   const categories = project?.trackings.reduce((acc, tracking) => {
@@ -33,6 +34,8 @@ const InvoicePage: NextPage = () => {
   const tax = total * taxRate;
   const totalPlusTax = total + tax;
 
+  const contact = userData?.me?.contact;
+
   return (
     <main className="container mx-auto grid grid-rows-[max-content_max-content_1fr_max-content] gap-10 print:h-[105vh]">
       <header className="mt-14">
@@ -42,7 +45,7 @@ const InvoicePage: NextPage = () => {
       <div className="flex justify-between">
         <address className="flex grow-0 flex-col">
           <span className="text-xs">
-            Martin Trenker, Philipp-Leowenfeld-Str. 63, 80339 München
+            {`${contact?.firstName} ${contact?.lastName}, ${contact?.street}, ${contact?.zip} ${contact?.city}`}
           </span>
           <span>
             {project?.contact?.company}
@@ -126,19 +129,20 @@ const InvoicePage: NextPage = () => {
       <footer className="flex">
         <div className="flex flex-1 flex-col">
           <address className="flex-1">
-            Martin Trenker
+            {`${contact?.firstName} ${contact?.lastName}`}
             <br />
-            Philipp-Leowenfeld-Str. 63
+            {contact?.street}
             <br />
-            80339 München
+            {`${contact?.zip} ${contact?.city}`}
+            <br />
+            <a href="#">{contact?.email}</a>
           </address>
-          <a href="#">martin@example.com</a>
         </div>
         <div className="flex flex-1 flex-col items-end">
-          <span>SomeBank</span>
-          <span>IBAN: DE12 3456 7890 1234 5678 90</span>
-          <span>BIC: XXXXXXXXXX</span>
-          <span>USt-ID: XXXXXXXXXX</span>
+          <span>{contact?.bank}</span>
+          <span>{`IBAN: ${contact?.iban}`}</span>
+          <span>{`BIC: ${contact?.bic}`}</span>
+          <span>{`USt-ID: ${contact?.vat}`}</span>
         </div>
       </footer>
     </main>

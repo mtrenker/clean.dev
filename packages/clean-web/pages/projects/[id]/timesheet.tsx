@@ -3,17 +3,20 @@ import { useRouter } from 'next/router';
 import { format, lastDayOfMonth } from 'date-fns';
 import { TrackingTable } from '../../../features/projects/components/TrackingTable';
 import { de } from 'date-fns/locale';
-import { useGetProjectsWithTrackingsQuery } from '../../../graphql/generated';
+import { useGetProjectsWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 
 const TimeSheetPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data } = useGetProjectsWithTrackingsQuery();
+  const { data: userData } = useMeQuery();
   const project = data?.projects.find(project => project.id === id);
+
   if (!project) {
     return null;
   }
   const firstDate = new Date(project?.trackings[0]?.startTime ?? '');
+  const contact = userData?.me?.contact;
 
   return (
     <main className="container mx-auto flex flex-col gap-6 py-10">
@@ -24,12 +27,14 @@ const TimeSheetPage: NextPage = () => {
             {format(firstDate, 'MMMM yyyy', { locale: de })}
           </h3>
         </div>
-        <address>
-          Martin Trenker
+        <address className="flex-1">
+          {`${contact?.firstName} ${contact?.lastName}`}
           <br />
-          Philipp-Loewenfeld-str. 63
+          {contact?.street}
           <br />
-          80339 München
+          {`${contact?.zip} ${contact?.city}`}
+          <br />
+          <a href="#">{contact?.email}</a>
         </address>
       </div>
       <dl className="grid grid-cols-[max-content_1fr] gap-x-10 text-lg">

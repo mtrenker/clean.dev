@@ -1,11 +1,14 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../../common/components/Button';
 import { TextField } from '../../../common/components/TextField';
+import { User } from '../../../graphql/generated';
 
 export interface ProfileFormProps {
   className?: string;
   onSubmit: (data: any) => void;
+  profile?: User
 }
 
 export const profileInputSchema = z.object({
@@ -21,14 +24,34 @@ export const profileInputSchema = z.object({
     bank: z.string().optional(),
     iban: z.string().optional(),
     bic: z.string().optional(),
+    vat: z.string().optional(),
   }),
 });
 
 export type ProfileFormData = z.infer<typeof profileInputSchema>;
 
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
-  const { handleSubmit, register } = useForm<ProfileFormData>();
+export const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, profile }) => {
+
+  const { handleSubmit, register, setValue } = useForm<ProfileFormData>();
+
+  useEffect(() => {
+    if (profile && profile.contact) {
+      setValue('contact.bank', profile.contact.bank || '');
+      setValue('contact.bic', profile.contact.bic || '');
+      setValue('contact.city', profile.contact.city || '');
+      setValue('contact.company', profile.contact.company || '');
+      setValue('contact.country', profile.contact.country || '');
+      setValue('contact.email', profile.contact.email || '');
+      setValue('contact.firstName', profile.contact.firstName || '');
+      setValue('contact.iban', profile.contact.iban || '');
+      setValue('contact.lastName', profile.contact.lastName || '');
+      setValue('contact.street', profile.contact.street || '');
+      setValue('contact.zip', profile.contact.zip || '');
+      setValue('contact.vat', profile.contact.zip || '');
+    }
+  }, [profile, setValue]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mx-auto flex w-1/2 flex-wrap gap-4">

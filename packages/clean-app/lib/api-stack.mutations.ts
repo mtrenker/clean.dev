@@ -12,6 +12,10 @@ export const contactSchema = z.object({
   city: z.string().optional(),
   zip: z.string().optional(),
   country: z.string().optional(),
+  bank: z.string().optional(),
+  iban: z.string().optional(),
+  bic: z.string().optional(),
+  vat: z.string().optional(),
 });
 
 export const projectInputSchema = z.object({
