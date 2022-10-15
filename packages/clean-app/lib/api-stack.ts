@@ -281,7 +281,7 @@ export class ApiStack extends Stack {
           "operation" : "GetItem",
           "key" : {
             "pk" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
-            "sk" : $util.dynamodb.toDynamoDBJson("PROJECT#$context.args.projectId")
+            "sk" : $util.dynamodb.toDynamoDBJson("PROJECT#$context.args.id")
           }
         }
       `),
