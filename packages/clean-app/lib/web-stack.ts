@@ -89,6 +89,7 @@ export class WebStack extends Stack {
           build: {
             commands: [
               'npm run build -w packages/clean-web',
+              'npm run export -w packages/clean-web',
             ],
           },
         },
