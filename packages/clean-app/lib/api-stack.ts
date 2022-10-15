@@ -188,7 +188,7 @@ export class ApiStack extends Stack {
           returnType: this.trackingType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
           dataSource: this.querySource,
           args: {
-            date: GraphqlType.awsDate(),
+            date: GraphqlType.string(),
           },
           requestMappingTemplate: MappingTemplate.fromString(`
             #set($date = $util.defaultIfNullOrBlank($ctx.args.date, ""))
