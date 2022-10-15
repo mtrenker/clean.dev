@@ -285,9 +285,7 @@ export class ApiStack extends Stack {
           }
         }
       `),
-      responseMappingTemplate: MappingTemplate.fromString(`
-        $util.toJson($context.result.items)
-      `),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     }));
   }
 
