@@ -187,7 +187,11 @@ export class ApiStack extends Stack {
         trackings: new ResolvableField({
           returnType: this.trackingType.attribute({ isList: true, isRequired: true, isRequiredList: true }),
           dataSource: this.querySource,
+          args: {
+            date: GraphqlType.awsDate(),
+          },
           requestMappingTemplate: MappingTemplate.fromString(`
+            #set($date = $util.defaultIfNullOrBlank($ctx.args.date, ""))
             {
               "version" : "2017-02-28",
               "operation" : "Query",
@@ -195,7 +199,7 @@ export class ApiStack extends Stack {
                 "expression" : "pk = :userId and begins_with(sk, :tracking)",
                 "expressionValues" : {
                   ":userId" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
-                  ":tracking" : $util.dynamodb.toDynamoDBJson("TRACKING#$context.source.id")
+                  ":tracking" : $util.dynamodb.toDynamoDBJson("TRACKING#$context.source.id#$date")
                 }
               }
             }
@@ -257,6 +261,27 @@ export class ApiStack extends Stack {
               ":userId" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
               ":project" : $util.dynamodb.toDynamoDBJson("PROJECT#")
             }
+          }
+        }
+      `),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        $util.toJson($context.result.items)
+      `),
+    }));
+
+    this.api.addQuery('project', new ResolvableField({
+      returnType: this.projectType.attribute({ isRequired: true }),
+      dataSource: this.querySource,
+      args: {
+        id: GraphqlType.id({ isRequired: true }),
+      },
+      requestMappingTemplate: MappingTemplate.fromString(`
+        {
+          "version" : "2017-02-28",
+          "operation" : "GetItem",
+          "key" : {
+            "pk" : $util.dynamodb.toDynamoDBJson("USER#$context.identity.sub"),
+            "sk" : $util.dynamodb.toDynamoDBJson("PROJECT#$context.args.projectId")
           }
         }
       `),
