@@ -2,7 +2,7 @@ import { RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project } from 'aws-cdk-lib/aws-codebuild';
+import { BuildEnvironmentVariableType, BuildSpec, Cache, LinuxBuildImage, Project } from 'aws-cdk-lib/aws-codebuild';
 import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
 import { CodeBuildAction, CodeStarConnectionsSourceAction, S3DeployAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
@@ -47,8 +47,13 @@ export class WebStack extends Stack {
       },
     });
 
+    const cacheBucket = new Bucket(this, 'CacheBucket', {
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+
     const project = new Project(this, 'Project', {
       role: projectRole,
+      cache: Cache.bucket(cacheBucket),
       environment: {
         buildImage: LinuxBuildImage.STANDARD_5_0,
       },
@@ -91,6 +96,12 @@ export class WebStack extends Stack {
           'base-directory': 'packages/clean-web/out',
           files: [
             '**/*',
+          ],
+        },
+        cache: {
+          paths: [
+            'node_modules/**/*',
+            '.next/cache/**/*',
           ],
         },
       }),

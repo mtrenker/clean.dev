@@ -9,7 +9,7 @@ describe('components/ProfileForm', () => {
 
     // arrange
 
-    render(<ProfileForm />);
+    render(<ProfileForm onSubmit={jest.fn} />);
 
     // act
 
