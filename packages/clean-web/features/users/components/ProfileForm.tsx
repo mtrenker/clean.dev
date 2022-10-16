@@ -48,7 +48,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, profile }) =
       setValue('contact.lastName', profile.contact.lastName || '');
       setValue('contact.street', profile.contact.street || '');
       setValue('contact.zip', profile.contact.zip || '');
-      setValue('contact.vat', profile.contact.zip || '');
+      setValue('contact.vat', profile.contact.vat || '');
     }
   }, [profile, setValue]);
 
@@ -92,6 +92,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit, profile }) =
           </div>
           <div>
             <TextField id="bic" label="bic" {...register('contact.bic')} />
+          </div>
+          <div>
+            <TextField id="vat" label="vat" {...register('contact.vat')} />
           </div>
         </fieldset>
         <Button className="w-full shrink-0" type="submit">Submit</Button>
