@@ -3,14 +3,19 @@ import { useRouter } from 'next/router';
 import { format, lastDayOfMonth } from 'date-fns';
 import { TrackingTable } from '../../../features/projects/components/TrackingTable';
 import { de } from 'date-fns/locale';
-import { useGetProjectsWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
+import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 
 const TimeSheetPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data } = useGetProjectsWithTrackingsQuery();
+  const { data } = useGetProjectWithTrackingsQuery({
+    variables: {
+      id: id as string,
+      date: '2022-10',
+    },
+  });
   const { data: userData } = useMeQuery();
-  const project = data?.projects.find(project => project.id === id);
+  const project = data?.project;
 
   if (!project) {
     return null;

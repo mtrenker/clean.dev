@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
-import { Tracking, useCreateTrackingMutation, useGetProjectsWithTrackingsQuery, useRemoveTrackingMutation, useUpdateProjectMutation } from '../../../graphql/generated';
+import { Tracking, useCreateTrackingMutation, useGetProjectWithTrackingsQuery, useRemoveTrackingMutation, useUpdateProjectMutation } from '../../../graphql/generated';
 import { TrackingTable } from '../../../features/projects/components/TrackingTable';
 import Link from 'next/link';
 import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
@@ -12,8 +12,13 @@ import { ProjectForm, ProjectFormData } from '../../../features/projects/compone
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data } = useGetProjectsWithTrackingsQuery();
-  const project = data?.projects.find(project => project.id === id);
+  const { data } = useGetProjectWithTrackingsQuery({
+    variables: {
+      id: id as string,
+      date: '2022-10',
+    },
+  });
+  const project = data?.project;
 
   const [page, setPage] = useState<'overview' | 'edit' | 'tracking'>('overview');
 

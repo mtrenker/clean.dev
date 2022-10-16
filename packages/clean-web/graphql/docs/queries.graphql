@@ -19,6 +19,18 @@ query getProjectsWithTrackings {
   }
 }
 
+query getProjectWithTrackings($id: ID!, $date: String!) {
+  project(id: $id) {
+    ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
+    trackings(date: $date) {
+      ...TrackingFragment
+    }
+  }
+}
+
 query me {
   me {
     contact {

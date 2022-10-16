@@ -117,6 +117,11 @@ export type Project = {
   trackings: Array<Tracking>;
 };
 
+
+export type ProjectTrackingsArgs = {
+  date?: InputMaybe<Scalars['String']>;
+};
+
 export type ProjectCategory = {
   __typename?: 'ProjectCategory';
   color?: Maybe<Scalars['String']>;
@@ -151,7 +156,13 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
+  project: Project;
   projects: Array<Project>;
+};
+
+
+export type QueryProjectArgs = {
+  id: Scalars['ID'];
 };
 
 export type Tracking = {
@@ -241,6 +252,14 @@ export type GetProjectsWithTrackingsQueryVariables = Exact<{ [key: string]: neve
 
 
 export type GetProjectsWithTrackingsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null, bank?: string | null, iban?: string | null, bic?: string | null, vat?: string | null } | null, trackings: Array<{ __typename?: 'Tracking', category: string, endTime: string, startTime: string, summary: string }>, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> }> };
+
+export type GetProjectWithTrackingsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  date: Scalars['String'];
+}>;
+
+
+export type GetProjectWithTrackingsQuery = { __typename?: 'Query', project: { __typename?: 'Project', client: string, endDate?: string | null, featured: boolean, id: string, location?: string | null, position: string, startDate?: string | null, summary: string, contact?: { __typename?: 'Contact', company?: string | null, firstName?: string | null, lastName?: string | null, email?: string | null, street?: string | null, city?: string | null, zip?: string | null, country?: string | null, bank?: string | null, iban?: string | null, bic?: string | null, vat?: string | null } | null, trackings: Array<{ __typename?: 'Tracking', category: string, endTime: string, startTime: string, summary: string }>, categories: Array<{ __typename?: 'ProjectCategory', name: string, color?: string | null, rate?: number | null }>, highlights: Array<{ __typename?: 'ProjectHighlight', description: string }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -587,6 +606,50 @@ export function useGetProjectsWithTrackingsLazyQuery (baseOptions?: Apollo.LazyQ
 export type GetProjectsWithTrackingsQueryHookResult = ReturnType<typeof useGetProjectsWithTrackingsQuery>;
 export type GetProjectsWithTrackingsLazyQueryHookResult = ReturnType<typeof useGetProjectsWithTrackingsLazyQuery>;
 export type GetProjectsWithTrackingsQueryResult = Apollo.QueryResult<GetProjectsWithTrackingsQuery, GetProjectsWithTrackingsQueryVariables>;
+export const GetProjectWithTrackingsDocument = gql`
+    query getProjectWithTrackings($id: ID!, $date: String!) {
+  project(id: $id) {
+    ...ProjectFragment
+    contact {
+      ...ContactFragment
+    }
+    trackings(date: $date) {
+      ...TrackingFragment
+    }
+  }
+}
+    ${ProjectFragmentFragmentDoc}
+${ContactFragmentFragmentDoc}
+${TrackingFragmentFragmentDoc}`;
+
+/**
+ * __useGetProjectWithTrackingsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectWithTrackingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectWithTrackingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectWithTrackingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useGetProjectWithTrackingsQuery (baseOptions: Apollo.QueryHookOptions<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>(GetProjectWithTrackingsDocument, options);
+}
+export function useGetProjectWithTrackingsLazyQuery (baseOptions?: Apollo.LazyQueryHookOptions<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>(GetProjectWithTrackingsDocument, options);
+}
+export type GetProjectWithTrackingsQueryHookResult = ReturnType<typeof useGetProjectWithTrackingsQuery>;
+export type GetProjectWithTrackingsLazyQueryHookResult = ReturnType<typeof useGetProjectWithTrackingsLazyQuery>;
+export type GetProjectWithTrackingsQueryResult = Apollo.QueryResult<GetProjectWithTrackingsQuery, GetProjectWithTrackingsQueryVariables>;
 export const MeDocument = gql`
     query me {
   me {

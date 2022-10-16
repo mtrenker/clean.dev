@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useGetProjectsWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
+import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 import { differenceInMinutes } from 'date-fns';
 
 const formatPrice = (number: number) => new Intl.NumberFormat('de-DE', {
@@ -11,9 +11,14 @@ const formatPrice = (number: number) => new Intl.NumberFormat('de-DE', {
 const InvoicePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data } = useGetProjectsWithTrackingsQuery();
+  const { data } = useGetProjectWithTrackingsQuery({
+    variables: {
+      id: id as string,
+      date: '2022-10',
+    },
+  });
   const { data: userData } = useMeQuery();
-  const project = data?.projects.find(project => project.id === id);
+  const project = data?.project;
 
   const categories = project?.trackings.reduce((acc, tracking) => {
     const category = tracking.category ?? 'Sonstiges';
