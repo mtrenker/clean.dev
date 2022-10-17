@@ -16,32 +16,14 @@ const ProjectsPage: NextPage = () => {
           <Button>New Project</Button>
         </Link>
       </div>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th>Project</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.projects.map(project => (
-            <tr key={project.id}>
-              <td>
-                <Link href={`/projects/${project.id}`} passHref>
-                  <a className="text-blue-500">{project.client}</a>
-                </Link>
-              </td>
-              <td className="w-40">
-                <div className="flex w-full justify-end gap-4">
-                  <Button onClick={() => removeProject({ variables: { id: project.id } })}>
-                    <IconTrash />
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="flex flex-wrap gap-4 justify-between">
+        {data?.projects.map((project) => (
+          <div className="flex-initial w-64 p-4 rounded border border-stone-300" key={project.id}>
+            <h3><Link href={`projects/${project.id}`}>{project.client}</Link></h3>
+            <h4>{project.position}</h4>
+          </div>
+        ))}
+      </div>
     </main>
   );
 };
