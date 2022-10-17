@@ -113,6 +113,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, project, loa
                 render={({ field }) => (
                   <DatePicker
                     customInput={<TextField id="startDate" label="Start Date" />}
+                    showMonthYearPicker
                     {...field}
                     onChange={(date: Date) => setValue('startDate', format(date, 'yyyy-MM-dd'))}
                   />
@@ -126,6 +127,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, project, loa
                 render={({ field }) => (
                   <DatePicker
                     customInput={<TextField id="endDate" label="End Date" />}
+                    showMonthYearPicker
                     {...field}
                     onChange={(date: Date) => setValue('endDate', format(date, 'yyyy-MM-dd'))}
                   />
