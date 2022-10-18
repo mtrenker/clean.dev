@@ -2,12 +2,10 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 
 import { Button } from '../../common/components/Button';
-import { useGetProjectsQuery, useRemoveProjectMutation } from '../../graphql/generated';
-import { IconTrash } from '@tabler/icons';
+import { useGetProjectsQuery } from '../../graphql/generated';
 
 const ProjectsPage: NextPage = () => {
   const { data } = useGetProjectsQuery();
-  const [removeProject] = useRemoveProjectMutation();
   return (
     <main className="container mx-auto">
       <h1 className="text-3xl font-semibold uppercase">Projects</h1>
@@ -16,9 +14,9 @@ const ProjectsPage: NextPage = () => {
           <Button>New Project</Button>
         </Link>
       </div>
-      <div className="flex flex-wrap gap-4 justify-between">
+      <div className="flex flex-wrap justify-between gap-4">
         {data?.projects.map((project) => (
-          <div className="flex-initial w-64 p-4 rounded border border-stone-300" key={project.id}>
+          <div className="w-64 flex-initial rounded border border-stone-300 p-4" key={project.id}>
             <h3><Link href={`projects/${project.id}`}>{project.client}</Link></h3>
             <h4>{project.position}</h4>
           </div>
