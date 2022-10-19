@@ -16,10 +16,12 @@ const ProjectsPage: NextPage = () => {
       </div>
       <div className="flex flex-wrap justify-between gap-4">
         {data?.projects.map((project) => (
-          <div className="w-64 flex-initial rounded border border-stone-300 p-4" key={project.id}>
-            <h3><Link href={`projects/${project.id}`}>{project.client}</Link></h3>
-            <h4>{project.position}</h4>
-          </div>
+          <Link href={`projects/${project.id}`} key={project.id}>
+            <div className="w-64 flex-initial cursor-pointer rounded border border-stone-300 p-4">
+              <h3>{project.client}</h3>
+              <h4>{project.position}</h4>
+            </div>
+          </Link>
         ))}
       </div>
     </main>
