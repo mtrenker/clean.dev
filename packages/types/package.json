@@ -1,6 +1,0 @@
-{
-  "name": "clean-types",
-  "dependencies": {
-    "typescript": "^4.8.4"
-  }
-}

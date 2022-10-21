@@ -174,6 +174,7 @@ export class ApiStack extends Stack {
     this.projectType = new ObjectType('Project', {
       definition: {
         id: GraphqlType.id({ isRequired: true }),
+        name: GraphqlType.string(),
         client: GraphqlType.string({ isRequired: true }),
         location: GraphqlType.string(),
         position: GraphqlType.string({ isRequired: true }),
@@ -204,9 +205,7 @@ export class ApiStack extends Stack {
               }
             }
           `),
-          responseMappingTemplate: MappingTemplate.fromString(`
-            $util.toJson($context.result.items)
-          `),
+          responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
         }),
       },
     });
@@ -214,6 +213,7 @@ export class ApiStack extends Stack {
 
     this.projectInputType = new InputType('ProjectInput', {
       definition: {
+        name: GraphqlType.string(),
         client: GraphqlType.string({ isRequired: true }),
         location: GraphqlType.string(),
         position: GraphqlType.string({ isRequired: true }),
@@ -243,9 +243,7 @@ export class ApiStack extends Stack {
           }
         }
       `),
-      responseMappingTemplate: MappingTemplate.fromString(`
-        $util.toJson($context.result)
-      `),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     }));
 
     this.api.addQuery('projects', new ResolvableField({
@@ -264,9 +262,7 @@ export class ApiStack extends Stack {
           }
         }
       `),
-      responseMappingTemplate: MappingTemplate.fromString(`
-        $util.toJson($context.result.items)
-      `),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
     }));
 
     this.api.addQuery('project', new ResolvableField({
