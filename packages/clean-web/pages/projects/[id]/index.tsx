@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
@@ -8,6 +7,7 @@ import { Tracking, useCreateTrackingMutation, useGetProjectWithTrackingsQuery, u
 import { TrackingTable } from '../../../features/projects/components/TrackingTable';
 import Link from 'next/link';
 import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
+import { TrackingGraph } from '../../../features/projects/components/TrackingGraph';
 
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
@@ -19,8 +19,6 @@ const ProjectDetailPage: NextPage = () => {
     },
   });
   const project = data?.project;
-
-  const [page, setPage] = useState<'overview' | 'edit' | 'tracking'>('overview');
 
   const [createTracking] = useCreateTrackingMutation();
   const [removeTracking] = useRemoveTrackingMutation();
@@ -58,64 +56,31 @@ const ProjectDetailPage: NextPage = () => {
   if (!id) return null;
 
   return (
-    <main className="container mx-auto">
-
-      <div className="my-4 border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
-        <ul className="-mb-px flex flex-wrap">
-          <li className="mr-2">
-            <a
-              className="inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
-              href="#"
-              onClick={() => setPage('overview')}
-            >
-              Overview
-            </a>
-          </li>
-          <li className="mr-2">
-            <a
-              className="inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
-              href="#"
-              onClick={() => setPage('tracking')}
-            >
-              Tracking
-            </a>
-          </li>
-          <li className="mr-2">
-            <a
-              className="inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
-              href="#"
-              onClick={() => setPage('edit')}
-            >
-              Edit
-            </a>
-          </li>
-        </ul>
+    <main className="container mx-4 sm:mx-auto">
+      <div className="flex flex-wrap sm:flex-nowrap">
+        <div className="flex-1">
+          <h2>{project?.client}</h2>
+          <ul>
+            <li><Link href={`/projects/${id}/timesheet`}>Timesheet</Link></li>
+            <li><Link href={`/projects/${id}/invoice`}>Invoice</Link></li>
+          </ul>
+          <TrackingGraph project={project} />
+        </div>
+        <div className="flex-1">
+          <TimeTracking
+            onSubmitTracking={onTrackingSubmit}
+            projectId={id as string}
+          />
+          <TrackingTable
+            onRemoveTracking={onRemoveTracking}
+            project={project}
+          />
+        </div>
       </div>
 
       <div>
-        {page === 'overview' && (
-          <>
-            <h2>{project?.client}</h2>
-            <ul>
-              <li><Link href={`/projects/${id}/timesheet`}>Timesheet</Link></li>
-              <li><Link href={`/projects/${id}/invoice`}>Invoice</Link></li>
-            </ul>
-          </>
-        )}
-        {page === 'edit' && (
+        {project && (
           <ProjectForm onSubmit={onProjectUpdate} project={project} />
-        )}
-        {page === 'tracking' && (
-          <div className="flex flex-col gap-16">
-            <TimeTracking
-              onSubmitTracking={onTrackingSubmit}
-              projectId={id as string}
-            />
-            <TrackingTable
-              onRemoveTracking={onRemoveTracking}
-              project={project}
-            />
-          </div>
         )}
       </div>
     </main>

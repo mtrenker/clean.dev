@@ -112,7 +112,7 @@ const InvoicePage: NextPage = () => {
             <tr className="bg-stone-100">
               <th className="text-start">Pos.</th>
               <th className="text-start">Bezeichnung</th>
-              <th className="text-end">Menge</th>
+              <th className="text-end">Menge / Stunden</th>
               <th className="text-end">MwSt.</th>
               <th className="text-end">Preis</th>
               <th className="text-end">Gesamt</th>

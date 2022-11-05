@@ -15,7 +15,7 @@ const TimeSheetPage: NextPage = () => {
   const { data, refetch } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: format(new Date(), 'yyyy-MM'),
+      date: format(new Date().setMonth(9), 'yyyy-MM'),
     },
   });
   const { data: userData } = useMeQuery();
