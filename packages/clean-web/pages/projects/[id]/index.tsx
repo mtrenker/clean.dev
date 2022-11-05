@@ -57,7 +57,7 @@ const ProjectDetailPage: NextPage = () => {
 
   return (
     <main className="container mx-4 sm:mx-auto">
-      <div className="flex flex-wrap sm:flex-nowrap">
+      <div className="flex flex-wrap gap-4 sm:flex-nowrap">
         <div className="flex-1">
           <h2>{project?.client}</h2>
           <ul>
