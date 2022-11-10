@@ -15,7 +15,7 @@ const ProjectDetailPage: NextPage = () => {
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: '2022-10',
+      date: '2022-11',
     },
   });
   const project = data?.project;
