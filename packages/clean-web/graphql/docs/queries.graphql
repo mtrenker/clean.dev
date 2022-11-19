@@ -38,3 +38,15 @@ query me {
     }
   }
 }
+
+query blogPosts {
+  posts {
+    ...BlogPostFragment
+  }
+}
+
+query blogPost($where: PostWhereUniqueInput!) {
+  post(where: $where) {
+    ...BlogPostFragment
+  }
+}

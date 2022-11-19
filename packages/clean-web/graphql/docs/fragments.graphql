@@ -46,3 +46,30 @@ fragment TrackingFragment on Tracking {
   startTime
   summary
 }
+
+fragment BlogPostFragment on Post {
+  id
+  title
+  slug
+  tags
+  updatedAt
+  author {
+    name
+    biography
+    id
+    picture {
+      url
+      width
+      id
+      height
+    }
+  }
+  content {
+    markdown
+  }
+  coverImage {
+    url
+    width
+    height
+  }
+}
