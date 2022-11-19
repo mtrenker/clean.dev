@@ -3,12 +3,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../../common/components/Button';
 import { TextField } from '../../../common/components/TextField';
-import { User } from '../../../graphql/generated';
 
 export interface ProfileFormProps {
   className?: string;
   onSubmit: (data: any) => void;
-  profile?: User
+  profile?: any
 }
 
 export const profileInputSchema = z.object({
