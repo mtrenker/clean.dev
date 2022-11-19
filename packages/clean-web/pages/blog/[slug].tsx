@@ -33,8 +33,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const BlogPost: NextPage<{ post: Post, mdxSource: MDXRemoteSerializeResult }> = ({ post, mdxSource }) => {
   return (
     <div>
-      <h1>{post.title}</h1>
-      <MDXRemote {...mdxSource} />
+      {post && mdxSource && (
+        <>
+          <h1>{post?.title}</h1>
+          <MDXRemote {...mdxSource} />
+        </>
+      )}
     </div>
   );
 };
