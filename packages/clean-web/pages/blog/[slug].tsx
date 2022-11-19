@@ -12,7 +12,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params: { slug } }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug } = params as { slug: string };
   const { post } = await hygraph.request<{ post: Post }, BlogPostQueryVariables>(BlogPostDocument, {
     where: {
       slug,
