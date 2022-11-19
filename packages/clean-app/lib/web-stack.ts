@@ -74,6 +74,10 @@ export class WebStack extends Stack {
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
           value: 'graphqlUrl',
         },
+        NEXT_PUBLIC_HYGRAPH_API: {
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+          value: 'hygraphApi',
+        },
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
