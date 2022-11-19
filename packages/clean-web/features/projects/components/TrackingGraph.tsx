@@ -75,10 +75,16 @@ export const TrackingGraph: React.FC<TrackingGraphProps> = ({ project }) => {
           </text>
         </g>
         <g>
-          <HoursAxis domain={yScale.domain()} range={yScale.range()} />
+          <HoursAxis
+            domain={yScale.range() as [number, number]}
+            range={yScale.range() as [number, number]}
+          />
         </g>
         <g transform={`translate(10, ${dms.height - 20})`}>
-          <DayAxis domain={xScale.domain()} range={xScale.range()} />
+          <DayAxis
+            domain={xScale.domain() as [number, number]}
+            range={xScale.range() as [number, number]}
+          />
         </g>
       </svg>
     </div>
