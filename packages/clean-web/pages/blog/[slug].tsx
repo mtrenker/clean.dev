@@ -20,8 +20,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   });
   const mdxSource = await serialize(post.content.markdown);
-  console.log(mdxSource);
-
   return {
     props: {
       post,

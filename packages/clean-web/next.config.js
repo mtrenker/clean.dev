@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
@@ -7,10 +6,12 @@ const withMDX = require('@next/mdx')({
     rehypePlugins: [],
   },
 });
+/** @type {import('next').NextConfig} */
 module.exports = withMDX({
+  trailingSlash: true,
   reactStrictMode: true,
   swcMinify: true,
-  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   images: {
     domains: ['picsum.photos'],
     unoptimized: true,
