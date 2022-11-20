@@ -105,8 +105,8 @@ export class WebStack extends Stack {
         },
         cache: {
           paths: [
-            'node_modules/**/*',
-            '.next/cache/**/*',
+            'packages/clean-web/node_modules/**/*',
+            'packages/clean-web/.next/cache/**/*',
           ],
         },
       }),
