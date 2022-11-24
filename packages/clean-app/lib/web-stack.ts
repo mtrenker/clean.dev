@@ -78,12 +78,17 @@ export class WebStack extends Stack {
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
           value: 'hygraphApi',
         },
+        ARTIFACTS_BUCKET: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: siteBucket.bucketName,
+        },
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
           install: {
             commands: [
+              'aws s3 rm --recursive "s3://${ARTIFACTS_BUCKET}/"',
               'npm i -g npm@8.4',
               'node -v',
               'npm -v',
@@ -111,6 +116,8 @@ export class WebStack extends Stack {
         },
       }),
     });
+
+    siteBucket.grantDelete(project);
 
     const sourceOutput = new Artifact('source');
     const siteOutput = new Artifact('site');
