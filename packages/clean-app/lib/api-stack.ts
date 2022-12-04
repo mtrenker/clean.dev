@@ -15,6 +15,7 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
+import { Invoice } from './constructs/Invoice';
 
 export class ApiStack extends Stack {
   api: GraphqlApi;
@@ -58,6 +59,8 @@ export class ApiStack extends Stack {
     this.setupTypes();
     this.setupQueries();
     this.setupMutations();
+
+    new Invoice(this, 'Invoice', { api: this.api });
 
     new StringParameter(this, 'GraphqlUrlParam', {
       stringValue: this.api.graphqlUrl,

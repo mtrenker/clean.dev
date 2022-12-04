@@ -10,7 +10,7 @@ export class PipelineStack extends Stack {
 
     const app = new AppStage(this, 'AppStage', props);
 
-    const repositry = 'mtrenker/clean.dev';
+    const repository = 'mtrenker/clean.dev';
     const branch = 'main';
     const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
@@ -19,7 +19,7 @@ export class PipelineStack extends Stack {
 
       },
       synth: new ShellStep('Synth', {
-        input: CodePipelineSource.connection(repositry, branch, {
+        input: CodePipelineSource.connection(repository, branch, {
           connectionArn,
         }),
         commands: [
