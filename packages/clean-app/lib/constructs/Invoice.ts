@@ -117,6 +117,9 @@ export class Invoice extends Construct {
           "attributeValues": $util.dynamodb.toMapValuesJson($util.dynamodb.toMapValues($ctx.args.input))
         }
       `),
+      responseMappingTemplate: MappingTemplate.fromString(`
+        $util.toJson($ctx.result)
+      `),
     }));
 
     api.addQuery('getInvoices', new ResolvableField({
