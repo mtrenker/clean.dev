@@ -126,7 +126,7 @@ export class Invoice extends Construct {
       dataSource,
       returnType: invoiceType.attribute({ isList: true, isRequiredList: true }),
       args: {
-        date: GraphqlType.awsDate(),
+        date: GraphqlType.string(),
       },
       requestMappingTemplate: MappingTemplate.fromString(`
         {
