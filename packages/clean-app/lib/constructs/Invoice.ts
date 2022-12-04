@@ -101,6 +101,7 @@ export class Invoice extends Construct {
     api.addType(invoiceInputType);
 
     api.addMutation('createInvoice', new ResolvableField({
+      dataSource,
       returnType: invoiceType.attribute(),
       args: {
         input: invoiceInputType.attribute({ isRequired: true }),
