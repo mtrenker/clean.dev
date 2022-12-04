@@ -42,6 +42,11 @@ export class WebStack extends Stack {
               resources: ['*'],
               effect: Effect.ALLOW,
             }),
+            new PolicyStatement({
+              actions: ['s3:ListObjectsV2', 's3:ListBucket', 's3:DeleteObject'],
+              resources: [siteBucket.bucketArn],
+              effect: Effect.ALLOW,
+            }),
           ],
         }),
       },
