@@ -21,7 +21,7 @@ const InvoicePage: NextPage = () => {
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: '2022-10',
+      date: '2022-11',
     },
   });
   const { data: userData } = useMeQuery();
@@ -128,7 +128,7 @@ const InvoicePage: NextPage = () => {
                   <td className="text-end">{hours}</td>
                   <td className="text-end">{formatTaxRate(taxRate)}</td>
                   <td className="text-end">{formatPrice(rate ?? 0)}</td>
-                  <td className="text-end">{formatPrice(hours * (rate ?? 0)) }</td>
+                  <td className="text-end">{formatPrice(hours * (rate ?? 0))}</td>
                 </tr>
               );
             })}
