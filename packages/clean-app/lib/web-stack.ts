@@ -93,7 +93,6 @@ export class WebStack extends Stack {
         phases: {
           install: {
             commands: [
-              'aws s3 rm --recursive "s3://${ARTIFACTS_BUCKET}/"',
               'npm i -g npm@8.4',
               'node -v',
               'npm -v',
@@ -104,6 +103,7 @@ export class WebStack extends Stack {
             commands: [
               'npm run build -w packages/clean-web',
               'npm run export -w packages/clean-web',
+              'aws s3 rm --recursive "s3://${ARTIFACTS_BUCKET}/"',
             ],
           },
         },

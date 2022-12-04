@@ -3,7 +3,7 @@ import { ITable } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 
 interface InvoiceProps {
-  readonly api: GraphqlApi;
+  api: GraphqlApi;
   table: ITable;
 }
 
@@ -33,6 +33,25 @@ export class Invoice extends Construct {
     });
     api.addType(contactType);
 
+    const contactInputType = new InputType('InvoiceContactInput', {
+      definition: {
+        company: GraphqlType.string(),
+        firstName: GraphqlType.string(),
+        lastName: GraphqlType.string(),
+        street: GraphqlType.string(),
+        city: GraphqlType.string(),
+        state: GraphqlType.string(),
+        zip: GraphqlType.string(),
+        vat: GraphqlType.string(),
+        email: GraphqlType.string(),
+        website: GraphqlType.string(),
+        bank: GraphqlType.string(),
+        iban: GraphqlType.string(),
+        bic: GraphqlType.string(),
+      },
+    });
+    api.addType(contactInputType);
+
     const invoicePosition = new ObjectType('InvoicePosition', {
       definition: {
         description: GraphqlType.string(),
@@ -42,6 +61,16 @@ export class Invoice extends Construct {
       },
     });
     api.addType(invoicePosition);
+
+    const invoicePositionInput = new InputType('InvoicePositionInput', {
+      definition: {
+        description: GraphqlType.string(),
+        quantity: GraphqlType.float(),
+        tax: GraphqlType.float(),
+        unitPrice: GraphqlType.float(),
+      },
+    });
+    api.addType(invoicePositionInput);
 
     const invoiceType = new ObjectType('Invoice', {
       definition: {
@@ -59,14 +88,14 @@ export class Invoice extends Construct {
 
     const invoiceInputType = new InputType('InvoiceInput', {
       definition: {
-        vendor: contactType.attribute({ isRequired: true }),
-        client: contactType.attribute({ isRequired: true }),
+        vendor: contactInputType.attribute({ isRequired: true }),
+        client: contactInputType.attribute({ isRequired: true }),
         number: GraphqlType.int({ isRequired: true }),
         date: GraphqlType.awsDate({ isRequired: true }),
         deliveryDate: GraphqlType.awsDate({ isRequired: true }),
         dueDate: GraphqlType.awsDate({ isRequired: true }),
         project: GraphqlType.string({ isRequired: true }),
-        positions: invoicePosition.attribute({ isRequired: true, isList: true }),
+        positions: invoicePositionInput.attribute({ isRequired: true, isList: true }),
       },
     });
     api.addType(invoiceInputType);
