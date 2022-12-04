@@ -60,7 +60,10 @@ export class ApiStack extends Stack {
     this.setupQueries();
     this.setupMutations();
 
-    new Invoice(this, 'Invoice', { api: this.api });
+    new Invoice(this, 'Invoice', {
+      api: this.api,
+      table,
+    });
 
     new StringParameter(this, 'GraphqlUrlParam', {
       stringValue: this.api.graphqlUrl,
