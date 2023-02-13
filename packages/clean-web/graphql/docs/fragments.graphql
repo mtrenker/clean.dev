@@ -47,29 +47,42 @@ fragment TrackingFragment on Tracking {
   summary
 }
 
-fragment BlogPostFragment on Post {
-  id
-  title
-  slug
-  tags
-  updatedAt
-  author {
-    name
-    biography
-    id
-    picture {
-      url
-      width
-      id
-      height
-    }
+fragment InvoiceContactFragment on InvoiceContact {
+  company
+  firstName
+  lastName
+  street
+  city
+  state
+  zip
+  vat
+  email
+  website
+  bank
+  iban
+  bic
+}
+
+fragment InvoicePositionFragment on InvoicePosition {
+  description
+  quantity
+  tax
+  unitPrice
+}
+
+fragment InvoiceFragment on Invoice {
+  vendor {
+    ...InvoiceContactFragment
   }
-  content {
-    markdown
+  client {
+    ...InvoiceContactFragment
   }
-  coverImage {
-    url
-    width
-    height
-  }
+  number
+  date
+  deliveryDate
+  dueDate
+  project
+  positions {
+    ...InvoicePositionFragment
+  },
 }

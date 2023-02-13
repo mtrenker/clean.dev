@@ -15,9 +15,10 @@ const ProjectDetailPage: NextPage = () => {
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: '2022-11',
+      date: '2023-02',
     },
   });
+
   const project = data?.project;
 
   const [createTracking] = useCreateTrackingMutation();

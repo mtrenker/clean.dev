@@ -1,10 +1,14 @@
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { differenceInMinutes, format } from 'date-fns';
-
+import { differenceInMinutes } from 'date-fns';
 import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
-import { TextField } from '../../../common/components/TextField';
+
+export interface InvoiceProps {
+  projectId: string;
+  date: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
+  invoiceDeliveryDate: string;
+}
 
 const formatPrice = (number: number) => new Intl.NumberFormat('de-DE', {
   style: 'currency',
@@ -15,15 +19,14 @@ const formatTaxRate = (number: number) => new Intl.NumberFormat('de-DE', {
   style: 'percent',
 }).format(number);
 
-const InvoicePage: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+export const Invoice: React.FC<InvoiceProps> = ({ date, projectId, invoiceDate, invoiceDeliveryDate, invoiceNumber, dueDate }) => {
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
-      id: id as string,
-      date: '2023-01',
+      id: projectId,
+      date,
     },
   });
+
   const { data: userData } = useMeQuery();
   const project = data?.project;
 
@@ -49,33 +52,8 @@ const InvoicePage: NextPage = () => {
 
   const contact = userData?.me?.contact;
 
-  const lastMonth = new Date().setMonth(new Date().getMonth() - 1);
-
-  const [invoiceNumber, setInvoiceNumber] = useState(`${format(new Date(), 'yyyyMMdd')}1`);
-  const [invoiceDate, setInvoiceDate] = useState(format(new Date(), 'dd.MM.yyyy'));
-  const [invoiceDeliveryDate, setInvoiceDeliveryDate] = useState(format(lastMonth, 'MMMM yyyy'));
-
   return (
     <main className="container mx-auto grid grid-rows-[max-content_max-content_1fr_max-content] gap-10 print:h-[105vh]">
-      <div className="flex gap-4 print:hidden">
-        <div className="flex-1">
-          <TextField defaultValue={invoiceDate} label="Rechnungsdatum" onChange={(e) => setInvoiceDate(e.target.value)} />
-        </div>
-        <div className="flex-1">
-          <TextField
-            defaultValue={invoiceDeliveryDate}
-            label="Leistungszeitraum"
-            onChange={(e) => setInvoiceDeliveryDate(e.target.value)}
-          />
-        </div>
-        <div className="flex-1">
-          <TextField
-            defaultValue={invoiceNumber}
-            label="Rechnungsnummer"
-            onChange={(e) => setInvoiceNumber(e.target.value)}
-          />
-        </div>
-      </div>
       <header className="mt-14">
         <h2 className="text-center text-4xl">{`${contact?.firstName} ${contact?.lastName}`}</h2>
         <h3 className="text-center text-2xl">Software Entwicklung</h3>
@@ -158,7 +136,9 @@ const InvoicePage: NextPage = () => {
           {' '}
           <span className="font-bold">{formatPrice(totalPlusTax)}</span>
           {' '}
-          innerhalb von 30 Tagen auf das unten angegebene Konto.
+          innerhalb von 30 (
+          {dueDate}
+          ) Tagen auf das unten angegebene Konto.
         </p>
         <p>
           Ich bedanke mich für das entgegengebrachte Vertrauen und freue mich auf eine weitere Zusammenarbeit.
@@ -186,5 +166,3 @@ const InvoicePage: NextPage = () => {
     </main>
   );
 };
-
-export default InvoicePage;

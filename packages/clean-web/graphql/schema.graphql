@@ -1,3 +1,6 @@
+scalar AWSDate
+scalar AWSDateTime
+
 schema {
   query: Query
   mutation: Mutation
@@ -91,7 +94,7 @@ type ProjectHighlight {
 
 type Query {
   getInvoice(number: Int!): Invoice
-  getInvoices(date: AWSDate): [Invoice]!
+  getInvoices(date: String): [Invoice]!
   me: User
   project(id: ID!): Project!
   projects: [Project!]!

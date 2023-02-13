@@ -12,12 +12,16 @@ import { TrackingTable } from '../../../features/projects/components/TrackingTab
 const TimeSheetPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const lastMonth = new Date();
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+  // lastMonth.setFullYear(lastMonth.getFullYear() - 1);
   const { data, refetch } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: format(new Date().setMonth(9), 'yyyy-MM'),
+      date: format(lastMonth, 'yyyy-MM'),
     },
   });
+  console.log(data);
   const { data: userData } = useMeQuery();
   const project = data?.project;
 
@@ -25,7 +29,7 @@ const TimeSheetPage: NextPage = () => {
     return null;
   }
 
-  const firstDate = new Date(project?.trackings[0]?.startTime ?? '');
+  const firstDate = new Date(project?.trackings[0]?.startTime ?? 'now');
   const contact = userData?.me?.contact;
 
   return (

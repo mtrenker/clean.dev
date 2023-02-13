@@ -37,3 +37,9 @@ mutation updateProfile($input: UserInput!) {
     }
   }
 }
+
+mutation createInvoice($input: InvoiceInput!) {
+  createInvoice(input: $input) {
+    ...InvoiceFragment
+  }
+}
