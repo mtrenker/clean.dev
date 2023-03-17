@@ -89,6 +89,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     response = await fetch(request);
     responseBody = await response.json();
     if (responseBody.errors) statusCode = 400;
+    console.log(statusCode, responseBody);
   } catch (error) {
     statusCode = 500;
     responseBody = {
@@ -98,10 +99,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         },
       ],
     };
+    console.log(statusCode, responseBody);
+
   }
 
   return {
     statusCode,
-    body: JSON.stringify(body),
+    body: JSON.stringify(responseBody),
   };
 };
