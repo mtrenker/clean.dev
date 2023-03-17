@@ -43,7 +43,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const query = /* GraphQL */ `
     mutation updatePost($data: PostUpdateInput!, $where: PostWhereUniqueInput!) {
-      updatePost(data: $data, where: $where)
+      updatePost(data: $data, where: $where) {
+        id
+      }
     }
   `;
 
