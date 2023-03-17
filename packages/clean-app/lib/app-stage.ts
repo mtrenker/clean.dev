@@ -5,6 +5,7 @@ import { ApiStack } from './api-stack';
 import { UserStack } from './user-stack';
 import { WebStack } from './web-stack';
 import { ComminucationStack } from './communication-stack';
+import { BlogStack } from './blog-stack';
 
 export class AppStage extends Stage {
   constructor (scope: Construct, id: string, props?: StageProps) {
@@ -18,6 +19,7 @@ export class AppStage extends Stage {
       domainName: 'clean.dev',
       api: apiStack.api,
     });
+    new BlogStack(this, 'BlogStack');
     apiStack.addDependency(userStack);
     apiStack.addDependency(inventoryStack);
   }

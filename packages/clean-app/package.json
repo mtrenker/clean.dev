@@ -21,12 +21,14 @@
   },
   "dependencies": {
     "@aws-cdk/aws-appsync-alpha": "^2.43.1-alpha.0",
+    "@hygraph/management-sdk": "^1.1.2-alpha.1",
     "@types/aws-lambda": "^8.10.104",
     "aws-cdk-lib": "2.43.1",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1222.0",
     "clean-types": "*",
     "constructs": "^10.1.110",
+    "openai": "^3.2.1",
     "source-map-support": "^0.5.21",
     "ulid": "^2.3.0",
     "zod": "^3.19.1"
