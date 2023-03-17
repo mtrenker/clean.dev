@@ -5,6 +5,7 @@ import { differenceInMinutes, format } from 'date-fns';
 
 import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 import { TextField } from '../../../common/components/TextField';
+import ReactDatePicker from 'react-datepicker';
 
 const formatPrice = (number: number) => new Intl.NumberFormat('de-DE', {
   style: 'currency',
@@ -18,10 +19,11 @@ const formatTaxRate = (number: number) => new Intl.NumberFormat('de-DE', {
 const InvoicePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM'));
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: '2023-01',
+      date,
     },
   });
   const { data: userData } = useMeQuery();
@@ -57,6 +59,14 @@ const InvoicePage: NextPage = () => {
 
   return (
     <main className="container mx-auto grid grid-rows-[max-content_max-content_1fr_max-content] gap-10 print:h-[105vh]">
+      <div className="print:hidden">
+        <ReactDatePicker
+          dateFormat="yyyy-MM"
+          onChange={(date: Date) => setDate(format(date, 'yyyy-MM'))}
+          selected={new Date(date)}
+          showMonthYearPicker
+        />
+      </div>
       <div className="flex gap-4 print:hidden">
         <div className="flex-1">
           <TextField defaultValue={invoiceDate} label="Rechnungsdatum" onChange={(e) => setInvoiceDate(e.target.value)} />
@@ -78,7 +88,7 @@ const InvoicePage: NextPage = () => {
       </div>
       <header className="mt-14">
         <h2 className="text-center text-4xl">{`${contact?.firstName} ${contact?.lastName}`}</h2>
-        <h3 className="text-center text-2xl">Software Entwicklung</h3>
+        <h3 className="text-center text-2xl">Software Beratung</h3>
       </header>
       <div className="flex justify-between">
         <address className="flex grow-0 flex-col">
@@ -113,7 +123,7 @@ const InvoicePage: NextPage = () => {
             <tr className="bg-stone-100">
               <th className="text-start">Pos.</th>
               <th className="text-start">Bezeichnung</th>
-              <th className="text-end">Menge / Stunden</th>
+              <th className="text-end">Stunden</th>
               <th className="text-end">MwSt.</th>
               <th className="text-end">Preis</th>
               <th className="text-end">Gesamt</th>
@@ -125,7 +135,7 @@ const InvoicePage: NextPage = () => {
               return (
                 <tr key={category}>
                   <td className="text-start">{index + 1}</td>
-                  <td className="text-start">Audit</td>
+                  <td className="text-start">Beratung / Entwicklung</td>
                   <td className="text-end">{hours}</td>
                   <td className="text-end">{formatTaxRate(taxRate)}</td>
                   <td className="text-end">{formatPrice(rate ?? 0)}</td>
@@ -136,7 +146,7 @@ const InvoicePage: NextPage = () => {
           </tbody>
         </table>
         <div className="mb-4 flex justify-end">
-          <table className="w-1/3">
+          <table className="w-1/2">
             <tbody>
               <tr>
                 <td>Summe netto</td>
@@ -146,9 +156,17 @@ const InvoicePage: NextPage = () => {
                 <td>{`MwSt. ${formatTaxRate(taxRate)}`}</td>
                 <td className="text-end">{formatPrice(tax)}</td>
               </tr>
-              <tr className="border-b-4 border-double border-black dark:border-white">
+              <tr className="border-b border-black dark:border-white">
                 <td className="font-bold">Gesamt</td>
                 <td className="text-end font-bold">{formatPrice(totalPlusTax)}</td>
+              </tr>
+              <tr className="border-b border-black dark:border-white">
+                <td className="font-bold">Überzahlung am 16.01.2023</td>
+                <td className="text-end font-bold">{`-${formatPrice(14357.35 - 8591.80)}`}</td>
+              </tr>
+              <tr className="border-b-4 border-double border-black dark:border-white">
+                <td className="font-bold">Zu zahlen</td>
+                <td className="text-end font-bold">{formatPrice(totalPlusTax - (14357.35 - 8591.80))}</td>
               </tr>
             </tbody>
           </table>
@@ -156,7 +174,7 @@ const InvoicePage: NextPage = () => {
         <p>
           Bitte zahlen Sie den Betrag von
           {' '}
-          <span className="font-bold">{formatPrice(totalPlusTax)}</span>
+          <span className="font-bold">{formatPrice(totalPlusTax - (14357.35 - 8591.80))}</span>
           {' '}
           innerhalb von 30 Tagen auf das unten angegebene Konto.
         </p>

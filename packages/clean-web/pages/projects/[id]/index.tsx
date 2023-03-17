@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
+import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import { TimeTracking, TrackingInput } from '../../../features/projects/components/TimeTracking';
 import { Tracking, useCreateTrackingMutation, useGetProjectWithTrackingsQuery, useRemoveTrackingMutation, useUpdateProjectMutation } from '../../../graphql/generated';
@@ -8,14 +9,17 @@ import { TrackingTable } from '../../../features/projects/components/TrackingTab
 import Link from 'next/link';
 import { ProjectForm, ProjectFormData } from '../../../features/projects/components/ProjectForm';
 import { TrackingGraph } from '../../../features/projects/components/TrackingGraph';
+import { useState } from 'react';
+import ReactDatePicker from 'react-datepicker';
 
 const ProjectDetailPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM'));
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: '2023-02',
+      date,
     },
   });
 
@@ -58,6 +62,12 @@ const ProjectDetailPage: NextPage = () => {
 
   return (
     <main className="container mx-4 sm:mx-auto">
+      <ReactDatePicker
+        dateFormat="yyyy-MM"
+        onChange={(date: Date) => setDate(format(date, 'yyyy-MM'))}
+        selected={new Date(date)}
+        showMonthYearPicker
+      />
       <div className="flex flex-wrap gap-4 sm:flex-nowrap">
         <div className="flex-1">
           <h2>{project?.client}</h2>
@@ -80,7 +90,7 @@ const ProjectDetailPage: NextPage = () => {
       </div>
 
       <div>
-        {project && (
+        {project && false && (
           <ProjectForm onSubmit={onProjectUpdate} project={project} />
         )}
       </div>

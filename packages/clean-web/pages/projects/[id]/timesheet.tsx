@@ -7,21 +7,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 import { TrackingTable } from '../../../features/projects/components/TrackingTable';
+import { useState } from 'react';
 
 
 const TimeSheetPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const lastMonth = new Date();
-  lastMonth.setMonth(lastMonth.getMonth() - 1);
-  // lastMonth.setFullYear(lastMonth.getFullYear() - 1);
-  const { data, refetch } = useGetProjectWithTrackingsQuery({
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM'));
+  const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,
-      date: format(lastMonth, 'yyyy-MM'),
+      date,
     },
   });
-  console.log(data);
   const { data: userData } = useMeQuery();
   const project = data?.project;
 
@@ -33,20 +31,16 @@ const TimeSheetPage: NextPage = () => {
   const contact = userData?.me?.contact;
 
   return (
-    <main className="container mx-auto flex flex-col gap-6 py-10">
+    <main className="container mx-auto flex flex-col gap-6">
       <div className="print:hidden">
         <ReactDatePicker
-          onChange={(date: Date) => {
-            refetch({
-              id: id as string,
-              date: format(date, 'yyyy-MM'),
-            });
-          }}
-          selected={new Date()}
+          dateFormat="yyyy-MM"
+          onChange={(date: Date) => setDate(format(date, 'yyyy-MM'))}
+          selected={new Date(date)}
           showMonthYearPicker
         />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between py-10">
         <div className="flex-1">
           <h2 className="text-3xl">Timesheet</h2>
           <h3 className="text-2xl">
