@@ -1,0 +1,13 @@
+query Posts {
+  posts {
+    id
+    title
+    slug
+    teaser {
+      raw
+    }
+    content {
+      raw
+    }
+  }
+}

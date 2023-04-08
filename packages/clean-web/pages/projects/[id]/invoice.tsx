@@ -146,7 +146,7 @@ const InvoicePage: NextPage = () => {
           </tbody>
         </table>
         <div className="mb-4 flex justify-end">
-          <table className="w-1/2">
+          <table className="w-1/3">
             <tbody>
               <tr>
                 <td>Summe netto</td>
@@ -160,13 +160,9 @@ const InvoicePage: NextPage = () => {
                 <td className="font-bold">Gesamt</td>
                 <td className="text-end font-bold">{formatPrice(totalPlusTax)}</td>
               </tr>
-              <tr className="border-b border-black dark:border-white">
-                <td className="font-bold">Überzahlung am 16.01.2023</td>
-                <td className="text-end font-bold">{`-${formatPrice(14357.35 - 8591.80)}`}</td>
-              </tr>
               <tr className="border-b-4 border-double border-black dark:border-white">
                 <td className="font-bold">Zu zahlen</td>
-                <td className="text-end font-bold">{formatPrice(totalPlusTax - (14357.35 - 8591.80))}</td>
+                <td className="text-end font-bold">{formatPrice(totalPlusTax)}</td>
               </tr>
             </tbody>
           </table>
@@ -174,7 +170,7 @@ const InvoicePage: NextPage = () => {
         <p>
           Bitte zahlen Sie den Betrag von
           {' '}
-          <span className="font-bold">{formatPrice(totalPlusTax - (14357.35 - 8591.80))}</span>
+          <span className="font-bold">{formatPrice(totalPlusTax)}</span>
           {' '}
           innerhalb von 30 Tagen auf das unten angegebene Konto.
         </p>

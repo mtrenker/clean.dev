@@ -13,7 +13,7 @@ import { useState } from 'react';
 const TimeSheetPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [date, setDate] = useState(format(new Date(), 'yyyy-MM'));
+  const [date, setDate] = useState(format(new Date().setMonth(2), 'yyyy-MM'));
   const { data } = useGetProjectWithTrackingsQuery({
     variables: {
       id: id as string,

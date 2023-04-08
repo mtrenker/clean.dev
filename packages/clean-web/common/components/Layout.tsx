@@ -33,59 +33,47 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="flex h-20 grow-0 items-center p-4 print:hidden">
         <div className="container mx-auto flex">
           <h1 className="flex-1 text-xl">
-            <Link href="/" passHref>
-              <a href="/">
-                <span className="font-bold">clean</span>
-                <span className="font-light">.dev</span>
-              </a>
+            <Link href="/">
+              <span className="font-bold">clean</span>
+              <span className="font-light">.dev</span>
             </Link>
           </h1>
           <nav className="w-fit flex-initial">
             <ul className="flex justify-end divide-x divide-slate-400">
               <li>
-                <Link href="/" passHref>
-                  <a className="px-4" href="/">Home</a>
-                </Link>
+                <Link className="px-4" href="/">Home</Link>
               </li>
               <li>
-                <Link href="/contact" passHref>
-                  <a className="px-4" href="/">Contact</a>
-                </Link>
+                <Link className="px-4" href="/contact">Contact</Link>
               </li>
-              {user ? (
-                <>
-                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
-                    <Link href="/projects" passHref>
-                      <a href="/">
-                        Projects
-                      </a>
-                    </Link>
-                  </li>
-                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
-                    <Link href="/user/profile" passHref>
-                      <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
-                        <IconUserCircle />
-                      </a>
-                    </Link>
-                  </li>
-                  <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
-                    <Link href="/signout" passHref>
-                      <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
-                        <IconLogout />
-                      </a>
-                    </Link>
-                  </li>
-                </>
-              ) : (
+            </ul>
+            {user ? (
+              <ul className="hidden">
                 <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
-                  <Link href="/signin" passHref>
-                    <a className="block font-medium text-slate-400 hover:text-slate-300" href="/">
-                      <IconLogin />
-                    </a>
+                  <Link href="/projects">
+                    Projects
                   </Link>
                 </li>
-              )}
-            </ul>
+                <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                  <Link className="block font-medium text-slate-400 hover:text-slate-300" href="/user/profile">
+                    <IconUserCircle />
+                  </Link>
+                </li>
+                <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                  <Link className="block font-medium text-slate-400 hover:text-slate-300" href="/signout">
+                    <IconLogout />
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul className="hidden">
+                <li className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                  <Link className="block font-medium text-slate-400 hover:text-slate-300" href="/signin">
+                    <IconLogin />
+                  </Link>
+                </li>
+              </ul>
+            )}
           </nav>
         </div>
       </header>

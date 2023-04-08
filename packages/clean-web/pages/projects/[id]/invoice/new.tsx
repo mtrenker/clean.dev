@@ -39,7 +39,7 @@ const InvoicePage: NextPage = () => {
         dueDate={watch('dueDate')}
         invoiceDate={watch('date')}
         invoiceDeliveryDate={watch('deliveryDate')}
-        invoiceNumber={watch('number').toString()}
+        invoiceNumber={watch('number')?.toString()}
         projectId="1"
       />
     </div>

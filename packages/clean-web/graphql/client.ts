@@ -24,3 +24,11 @@ export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
+export const hygraphClient = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_HYGRAPH_API,
+  headers: {
+    authorization: process.env.NEXT_PUBLIC_HYGRAPH_API_KEY ?? '',
+  },
+  cache: new InMemoryCache(),
+});
