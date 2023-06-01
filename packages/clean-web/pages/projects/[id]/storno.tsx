@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { differenceInMinutes, format, addDays } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 
 import { useGetProjectWithTrackingsQuery, useMeQuery } from '../../../graphql/generated';
 import { TextField } from '../../../common/components/TextField';
@@ -69,7 +69,7 @@ const InvoicePage: NextPage = () => {
       </div>
       <div className="flex gap-4 print:hidden">
         <div className="flex-1">
-          <TextField defaultValue={invoiceDate} label="Rechnungsdatum" onChange={(e) => setInvoiceDate(e.target.value)} />
+          <TextField defaultValue={invoiceDate} label="Datum" onChange={(e) => setInvoiceDate(e.target.value)} />
         </div>
         <div className="flex-1">
           <TextField
@@ -81,7 +81,7 @@ const InvoicePage: NextPage = () => {
         <div className="flex-1">
           <TextField
             defaultValue={invoiceNumber}
-            label="Rechnungsnummer"
+            label="Storno-Nr"
             onChange={(e) => setInvoiceNumber(e.target.value)}
           />
         </div>
@@ -106,21 +106,18 @@ const InvoicePage: NextPage = () => {
           </span>
         </address>
         <div className="flex grow-0 flex-col">
-          <span>{`Rechnungsdatum: ${invoiceDate}`}</span>
+          <span>{`Datum: ${invoiceDate}`}</span>
           <span>{`Leistungszeitraum: ${invoiceDeliveryDate}`}</span>
-          <span className="font-bold">{`Rechnungsnummer: ${invoiceNumber}`}</span>
+          <span className="font-bold">{`Storno-Nr: ${invoiceNumber}`}</span>
+          <span className="font-bold">{'Storno für Rechnung: 202212021'}</span>
         </div>
       </div>
       <div>
-        <h4 className="mb-4 text-2xl">
-          Rechnung
-          {' '}
-          {invoiceNumber}
-        </h4>
+        <h4 className="mb-4 text-2xl">Stornorechnung</h4>
         <h3 className="mb-4 text-xl">{project?.client}</h3>
         <p className="flex flex-col gap-4">
           <span>Sehr geehrte Damen und Herren,</span>
-          <span>hiermit erlaube ich mir Ihnen folgende Leistungen in Rechnung zu stellen:</span>
+          <span>hiermit schreibe ich Ihnen die Nachfolgenden Leistungen gut:</span>
         </p>
         <table className="my-10 w-full">
           <thead>
@@ -140,48 +137,55 @@ const InvoicePage: NextPage = () => {
                 <tr key={category}>
                   <td className="text-start">{index + 1}</td>
                   <td className="text-start">Beratung / Entwicklung</td>
-                  <td className="text-end">{hours}</td>
-                  <td className="text-end">{formatTaxRate(taxRate)}</td>
-                  <td className="text-end">{formatPrice(rate ?? 0)}</td>
-                  <td className="text-end">{formatPrice(hours * (rate ?? 0))}</td>
+                  <td className="text-end">
+                    -
+                    {hours}
+                  </td>
+                  <td className="text-end">
+                    {formatTaxRate(taxRate)}
+                  </td>
+                  <td className="text-end">
+                    {formatPrice(rate ?? 0)}
+                  </td>
+                  <td className="text-end">
+                    -
+                    {formatPrice(hours * (rate ?? 0))}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
         <div className="mb-4 flex justify-end">
-          <table className="w-2/3">
+          <table className="w-1/3">
             <tbody>
               <tr>
                 <td>Summe netto</td>
                 <td />
-                <td className="text-end">{formatPrice(total)}</td>
+                <td className="text-end">
+                  -
+                  {formatPrice(total)}
+                </td>
               </tr>
               <tr>
                 <td>{`MwSt. ${formatTaxRate(taxRate)}`}</td>
                 <td />
-                <td className="text-end">{formatPrice(tax)}</td>
+                <td className="text-end">
+                  -
+                  {formatPrice(tax)}
+                </td>
               </tr>
               <tr className="border-b border-black dark:border-white">
                 <td className="font-bold">Gesamt</td>
                 <td />
-                <td className="text-end font-bold">{formatPrice(totalPlusTax)}</td>
-              </tr>
-              <tr className="border-b-4 border-double border-black dark:border-white">
-                <td className="font-bold">Zu zahlen</td>
-                <td />
-                <td className="text-end font-bold">{formatPrice(totalPlusTax)}</td>
+                <td className="text-end font-bold">
+                  -
+                  {formatPrice(totalPlusTax)}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p className="mb-1">
-          Bitte überweisen Sie den Rechnungsbetrag bis zum
-          {' '}
-          <strong>{format(addDays(new Date(), 30), 'dd.MM.yyyy')}</strong>
-          {' '}
-          auf das unten angegebene Konto.
-        </p>
         <p>
           Ich bedanke mich für das entgegengebrachte Vertrauen und freue mich auf eine weitere Zusammenarbeit.
         </p>
