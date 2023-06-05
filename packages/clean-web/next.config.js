@@ -1,13 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
 /** @type {import('next').NextConfig} */
-module.exports = withMDX({
+module.exports = {
   trailingSlash: true,
   reactStrictMode: true,
   swcMinify: true,
@@ -16,4 +9,4 @@ module.exports = withMDX({
     domains: ['picsum.photos'],
     unoptimized: true,
   },
-});
+};
