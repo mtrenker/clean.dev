@@ -1,6 +1,6 @@
 module.exports = {
   globals: {
-      MyGlobal: true
+    MyGlobal: true
   },
   extends: [
     'plugin:import/recommended',
@@ -9,6 +9,7 @@ module.exports = {
   rules: {
     semi: [2, "always"],
     indent: ["error", 2],
+    "@typescript-eslint/no-empty-function": "off",
     "space-infix-ops": "error"
     // "object-curly-newline": ["error", {
     //   "ObjectExpression": { "multiline": true },
