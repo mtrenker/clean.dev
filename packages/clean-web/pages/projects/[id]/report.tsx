@@ -3,23 +3,71 @@ import { NextPage } from 'next';
 const findings = [{
   title: 'Design System',
   issues: [{
-    title: 'Issue 1',
-    severity: 'Severity',
-    kb: 'kb',
+    description: 'No design tokens used. All colors, fonts, borders, etc. are hardcoded into the components.',
+    severity: 'high',
+    kb: 'design-tokens',
+  }, {
+    description: 'Related to #1: No theming support.',
+    severity: 'high',
+    kb: 'design-tokens#theming',
+  }, {
+    description: 'Unnecessary mix of tailwind (tw), styled-components(sc), and tw-sc makes it difficult to maintain and extend the design system.',
+    severity: 'high',
+    kb: 'mixed-design-approaches',
+  }, {
+    description: 'Unclear naming conventions for components and styles.',
+    severity: 'medium',
+    kb: 'design-tokens',
+  }, {
+    description: 'Split in components-library (main and corporate-main) due to lack of theming support.',
+    severity: 'medium',
+    kb: 'design-system#source-of-truth',
   }]
 }, {
   title: 'SaaS',
   issues: [{
-    title: 'Issue 1',
-    severity: 'Severity',
-    kb: 'kb',
+    description: 'Hygraph: Separating home and corporate into two projects adds unnecessary complexity and costs.',
+    severity: 'high',
+    kb: 'reusable-cms-model',
+  }, {
+    description: 'Hygraph: Opting for a page-per-locale approach instead of using the localization approach provided by the CMS.',
+    severity: 'high',
+    kb: 'cms-localization',
+  }, {
+    description: 'Hygraph: Complex model structure could be simplified by using a more generic approach.',
+    severity: 'medium',
+    kb: 'reusable-cms-model#composition',
+  }, {
+    description: 'Algolia: Clarify cost / benefit of a high-performance search.',
+    severity: 'medium',
+    kb: 'cost-benefit',
+  }, {
+    description: 'Algolia: Constantly scratching on 1k index limit.',
+    severity: 'medium',
+    kb: '',
   }]
 }, {
-  title: 'Clean Code',
+  title: 'Architecture / Clean Code',
   issues: [{
-    title: 'Issue 1',
-    severity: 'Severity',
-    kb: 'kb',
+    description: 'Complex repository dependencies, consider a monorepo approach',
+    severity: 'medium',
+    kb: 'mono-repo',
+  }, {
+    description: 'Complexity of components higher than necessary.',
+    severity: 'high',
+    kb: 'component-complexity',
+  }, {
+    description: 'Components coupled to CMS data structure.',
+    severity: 'medium',
+    kb: 'decoupled-components',
+  }, {
+    description: 'Inheritance used over composition.',
+    severity: 'medium',
+    kb: 'composition-over-inheritance',
+  }, {
+    description: 'Manual code patterns despite codegeneration.',
+    severity: 'medium',
+    kb: 'code-generation',
   }]
 }];
 
