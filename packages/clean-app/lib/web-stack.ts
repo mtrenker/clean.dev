@@ -60,7 +60,7 @@ export class WebStack extends Stack {
       role: projectRole,
       cache: Cache.bucket(cacheBucket),
       environment: {
-        buildImage: LinuxBuildImage.STANDARD_5_0,
+        buildImage: LinuxBuildImage.STANDARD_6_0,
       },
       environmentVariables: {
         NEXT_PUBLIC_AWS_REGION: {
