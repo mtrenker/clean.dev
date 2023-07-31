@@ -93,10 +93,9 @@ export class WebStack extends Stack {
         phases: {
           install: {
             commands: [
-              'npm i -g npm@8.4',
-              'node -v',
-              'npm -v',
-              'npm ci',
+              'corepack enable',
+              'corepack prepare pnpm@latest-8 --activate',
+              'pnpm i',
             ],
           },
           build: {
