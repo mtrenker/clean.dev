@@ -6,7 +6,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "npx cdk synth --profile clean",
     "synth": "npx cdk synth",
     "deploy": "npx cdk deploy --profile clean"
   },
