@@ -3,6 +3,7 @@ import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { AppStage } from './app-stage';
+import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
 
 export class PipelineStack extends Stack {
   constructor (scope: Construct, id: string, props: StackProps) {
@@ -16,18 +17,20 @@ export class PipelineStack extends Stack {
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
       codeBuildDefaults: {
-
+        buildEnvironment: {
+          buildImage: LinuxBuildImage.STANDARD_6_0,
+          computeType: ComputeType.MEDIUM,
+        },
       },
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.connection(repository, branch, {
           connectionArn,
         }),
         commands: [
-          'npm i -g npm@8.4',
-          'node -v',
-          'npm -v',
-          'npm ci',
-          'npm run synth',
+          'corepack enable',
+          'corepack prepare pnpm@latest-8 --activate',
+          'pnpm i',
+          'pnpm synth',
         ],
         primaryOutputDirectory: 'packages/clean-app/cdk.out',
       }),
