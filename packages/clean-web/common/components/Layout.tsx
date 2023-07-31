@@ -44,7 +44,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Link className="px-4" href="/">Home</Link>
               </li>
               <li>
-                <Link className="px-4" href="/contact">Contact</Link>
+                <Link className="px-4" href="/imprint">Imprint</Link>
               </li>
             </ul>
             {user ? (

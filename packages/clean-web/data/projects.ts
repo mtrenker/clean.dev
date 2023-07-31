@@ -214,5 +214,20 @@ export const projects: Project[] = [
     startDate: '2022-01',
     endDate: '2022-07',
     featured: true,
+  }, {
+    id: '18',
+    company: 'Oetker Digital GmbH',
+    title: 'Solutions Architect',
+    description: 'Evaluated and managed the handover of a web project from an external agency to an newly formed internal team',
+    city: 'Berlin',
+    highlights: [
+      'reviewed and improved best practices for next.js, TypeScript, React, GraphQL, Apollo, Cypress, Storybook, tailwindcss',
+      'coordinated the merge of two web-projects into one',
+      'onboarded new hires and helped them to get up to speed',
+      'supported the team with agile practices',
+    ],
+    startDate: '2022-09',
+    endDate: '2023-05',
+    featured: true,
   },
 ];

@@ -15,6 +15,7 @@
     "generate": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.17",
     "@apollo/react-hooks": "^4.0.0",
     "@aws-amplify/auth": "^4.6.7",
     "@faker-js/faker": "^7.5.0",

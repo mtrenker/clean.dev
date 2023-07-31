@@ -1,5 +1,5 @@
 module.exports = {
-  root: false,
+  root: true,
   extends: [
     'next/core-web-vitals',
     'plugin:tailwindcss/recommended',
@@ -34,6 +34,7 @@ module.exports = {
       'prop': 'parens-new-line',
     },
     ],
+    " @typescript-eslint/no-empty-function": "off",
     'jsx-a11y/anchor-is-valid': 'off',
     'tailwindcss/no-custom-classname': ['warn', {
       'whitelist': [
