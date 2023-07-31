@@ -100,8 +100,8 @@ export class WebStack extends Stack {
           },
           build: {
             commands: [
-              'npm run build -w packages/clean-web',
-              'npm run export -w packages/clean-web',
+              'pnpm build --filter packages/clean-web',
+              'pnpm export --filter packages/clean-web',
               'aws s3 rm --recursive "s3://${ARTIFACTS_BUCKET}/"',
             ],
           },
