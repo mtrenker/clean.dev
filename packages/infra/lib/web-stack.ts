@@ -10,7 +10,7 @@ export class WebStack extends Stack {
     super(scope, id);
 
     new NextApp(this, "CdkNextApp", {
-
+      nextDir: "apps/web",
     });
   }
 }

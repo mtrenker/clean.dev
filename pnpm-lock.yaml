@@ -95,6 +95,9 @@ importers:
 
   packages/cdk-next-app:
     dependencies:
+      '@types/node':
+        specifier: 18.16.0
+        version: 18.16.0
       aws-cdk-lib:
         specifier: 2.93.0
         version: 2.93.0(constructs@10.1.110)
@@ -2669,6 +2672,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: false
+
+  /@types/node@18.16.0:
+    resolution: {integrity: sha512-BsAaKhB+7X+H4GnSjGhJG9Qi8Tw+inU9nJDwmD5CgOmBLEI6ArdhikpLX7DjbjDRDTbqZzU2LSQNZg8WGPiSZQ==}
     dev: false
 
   /@types/node@18.16.17:

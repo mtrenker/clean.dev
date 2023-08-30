@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "18.16.0",
     "aws-cdk-lib": "2.93.0",
     "constructs": "10.1.110",
     "esbuild": "^0.19.2",
