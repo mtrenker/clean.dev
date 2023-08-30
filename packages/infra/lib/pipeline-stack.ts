@@ -5,17 +5,24 @@ import { Construct } from 'constructs';
 import { AppStage } from './app-stage';
 import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
 
+export interface PipelineStackProps extends StackProps {
+  readonly repository: string;
+  readonly branch: string;
+}
+
 export class PipelineStack extends Stack {
-  constructor (scope: Construct, id: string, props: StackProps) {
+  constructor (scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
 
-    const app = new AppStage(this, 'AppStage', props);
+    const { repository, branch, env } = props;
 
-    const repository = 'mtrenker/clean.dev';
-    const branch = 'main';
+    const app = new AppStage(this, 'App', {
+      env,
+    });
+
     const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
-    const pipeline = new CodePipeline(this, 'Pipeline', {
+    const pipeline = new CodePipeline(this, 'CodePipeline', {
       codeBuildDefaults: {
         buildEnvironment: {
           buildImage: LinuxBuildImage.STANDARD_7_0,
@@ -32,7 +39,7 @@ export class PipelineStack extends Stack {
           'pnpm i',
           'pnpm synth',
         ],
-        primaryOutputDirectory: 'packages/clean-app/cdk.out',
+        primaryOutputDirectory: 'packages/infra/cdk.out',
       }),
     });
     pipeline.addStage(app);
