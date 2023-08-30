@@ -1,16 +1,21 @@
-import { Stack } from "aws-cdk-lib";
+import { Stack, StackProps } from "aws-cdk-lib";
 import { NextApp } from "@cleandev/cdk-next-app";
 import { Construct } from "constructs";
 
-export interface WebStackProps {
+export interface WebStackProps extends StackProps {
+  webCertificateArn: string;
 }
 
 export class WebStack extends Stack {
   constructor(scope: Construct, id: string, props: WebStackProps) {
-    super(scope, id);
+    super(scope, id, props);
 
-    new NextApp(this, "CdkNextApp", {
+    const { webCertificateArn } = props;
+
+    new NextApp(this, "NextApp", {
+      domainName: "clean.dev",
       nextDir: "apps/web",
+      certArn: webCertificateArn,
     });
   }
 }
