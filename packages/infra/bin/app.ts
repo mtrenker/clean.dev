@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import { App, CfnParameter } from 'aws-cdk-lib';
+import { App } from 'aws-cdk-lib';
 import { PipelineStack, PipelineStackProps } from '../lib/pipeline-stack';
 
 const repository = 'mtrenker/clean.dev';
