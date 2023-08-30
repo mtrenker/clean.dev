@@ -2,7 +2,7 @@ import * as path from "path";
 import * as child_process from 'child_process';
 import { Construct } from "constructs";
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
-import { Architecture, Code, Function, FunctionUrl, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, Function, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -35,37 +35,37 @@ export class NextApp extends Construct {
   readonly relativeNextPath: string;
 
   /** the bucket that serves static assets */
-  staticBucket?: Bucket;
+  staticBucket: Bucket;
 
   /** the bucket that serves cache */
-  cacheBucket?: Bucket;
+  cacheBucket: Bucket;
 
   /** the bucket that serves optimized images */
-  imageBucket?: Bucket;
+  imageBucket: Bucket;
 
   /** relative path to the open-next output */
-  relativeOpenNextPath?: string;
+  relativeOpenNextPath: string;
 
   /** the queue that triggers revalidation */
-  revalidationQueue?: Queue;
+  revalidationQueue: Queue;
 
   /** the lambda function that serves the next.js app */
-  serverFunction?: Function;
+  serverFunction: Function;
 
   /** the lambda function that revalidates the next.js app */
-  revalidationFunction?: Function;
+  revalidationFunction: Function;
 
   /** the lambda function that optimizes images */
-  imageOptimizationFunction?: Function;
+  imageOptimizationFunction: Function;
 
   /** the certificate for the domain */
-  certificate?: ICertificate;
+  certificate: ICertificate;
 
   /** the cloudfront distribution that serves the next.js app */
-  distribution?: Distribution;
+  distribution: Distribution;
 
   /** the deployment of the static assets */
-  assetDeployment?: BucketDeployment;
+  assetDeployment: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: NextAppProps) {
     super(scope, id);
@@ -76,45 +76,43 @@ export class NextApp extends Construct {
     this.relativeNextPath = `../../${nextDir}`;
     this.relativeOpenNextPath = `${this.relativeNextPath}/.open-next`;
 
-    this.buildApp().then(() => {
-      this.staticBucket = this.getStaticBucket();
-      this.imageBucket = this.getImageBucket();
-      this.cacheBucket = this.getCacheBucket();
+    this.buildApp();
+    this.staticBucket = this.getStaticBucket();
+    this.imageBucket = this.getImageBucket();
+    this.cacheBucket = this.getCacheBucket();
 
-      this.revalidationQueue = this.getRevalidationQueue();
+    this.revalidationQueue = this.getRevalidationQueue();
 
-      this.imageOptimizationFunction = this.getImageOptimizationFunction();
-      this.serverFunction = this.getServerFunction();
-      this.revalidationFunction = this.getRevalidationFunction();
+    this.imageOptimizationFunction = this.getImageOptimizationFunction();
+    this.serverFunction = this.getServerFunction();
+    this.revalidationFunction = this.getRevalidationFunction();
 
-      this.certificate = this.getCertificate(certArn);
+    this.certificate = this.getCertificate(certArn);
 
-      this.distribution = this.getDistribution();
+    this.distribution = this.getDistribution();
 
-      this.assetDeployment = this.getAssetDeployment();
+    this.assetDeployment = this.getAssetDeployment();
 
-      // domain config
-      const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
-        domainName,
-      });
-
-      const recordProps: ARecordProps = {
-        recordName: domainName,
-        zone: hostedZone,
-        target: RecordTarget.fromAlias(new CloudFrontTarget(this.distribution)),
-      };
-      new ARecord(this, 'ARecord', recordProps);
-      new AaaaRecord(this, 'AaaaRecord', recordProps);
-
-      // queue config
-      this.revalidationQueue.grantSendMessages(this.serverFunction);
-      this.revalidationQueue.grantConsumeMessages(this.revalidationFunction);
-      this.revalidationFunction.addEventSource(new SqsEventSource(this.revalidationQueue));
-
-      // bucket config
-      this.cacheBucket.grantReadWrite(this.serverFunction);
+    // domain config
+    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+      domainName,
     });
 
+    const recordProps: ARecordProps = {
+      recordName: domainName,
+      zone: hostedZone,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(this.distribution)),
+    };
+    new ARecord(this, 'ARecord', recordProps);
+    new AaaaRecord(this, 'AaaaRecord', recordProps);
+
+    // queue config
+    this.revalidationQueue.grantSendMessages(this.serverFunction);
+    this.revalidationQueue.grantConsumeMessages(this.revalidationFunction);
+    this.revalidationFunction.addEventSource(new SqsEventSource(this.revalidationQueue));
+
+    // bucket config
+    this.cacheBucket.grantReadWrite(this.serverFunction);
   }
 
   private getStaticBucket() {
@@ -146,7 +144,7 @@ export class NextApp extends Construct {
   }
 
   private getImageOptimizationFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath!, 'image-optimization-function');
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'image-optimization-function');
     return new Function(this, 'ImageFunction', {
       runtime: Runtime.NODEJS_18_X,
       architecture: Architecture.ARM_64,
@@ -154,13 +152,13 @@ export class NextApp extends Construct {
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
-        BUCKET_NAME: this.imageBucket!.bucketName,
+        BUCKET_NAME: this.imageBucket.bucketName,
       },
     });
   }
 
   private getServerFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath!, 'server-function');
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'server-function');
     return new Function(this, 'ServerFunction', {
       runtime: Runtime.NODEJS_18_X,
       memorySize: 1024,
@@ -169,16 +167,16 @@ export class NextApp extends Construct {
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
-        CACHE_BUCKET_NAME: this.cacheBucket!.bucketName,
+        CACHE_BUCKET_NAME: this.cacheBucket.bucketName,
         CACHE_BUCKET_REGION: this.region,
-        REVALIDATION_QUEUE_URL: this.revalidationQueue!.queueUrl,
+        REVALIDATION_QUEUE_URL: this.revalidationQueue.queueUrl,
         REVALIDATION_QUEUE_REGION: this.region,
       },
     });
   }
 
   private getRevalidationFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath!, 'revalidation-function');
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'revalidation-function');
     return new Function(this, 'RevalidationFunction', {
       runtime: Runtime.NODEJS_18_X,
       code: Code.fromAsset(assetPath),
@@ -192,12 +190,12 @@ export class NextApp extends Construct {
   }
 
   private getDistribution() {
-    const serverFunctionUrl = this.serverFunction!.addFunctionUrl({
+    const serverFunctionUrl = this.serverFunction.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
-    const staticOrigin = new S3Origin(this.staticBucket!);
-    const imageOrigin = new S3Origin(this.imageBucket!);
+    const staticOrigin = new S3Origin(this.staticBucket);
+    const imageOrigin = new S3Origin(this.imageBucket);
 
     const fallbackGroup = new OriginGroup({
       primaryOrigin: serverOrigin,
@@ -293,7 +291,7 @@ export class NextApp extends Construct {
   }
 
   private getAssetDeployment() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath!, 'assets');
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'assets');
 
     const cacheControl = CacheControl.fromString(
       `public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`
@@ -301,7 +299,7 @@ export class NextApp extends Construct {
 
     return new BucketDeployment(this, 'AssetDeployment', {
       sources: [Source.asset(assetPath)],
-      destinationBucket: this.staticBucket!,
+      destinationBucket: this.staticBucket,
       distribution: this.distribution,
       prune: true,
       cacheControl: [cacheControl],
@@ -309,36 +307,24 @@ export class NextApp extends Construct {
     });
   }
 
-  private async buildApp() {
-    await this.buildNext();
-    await this.buildOpenNext();
+  private buildApp() {
+    this.buildNext();
+    this.buildOpenNext();
   }
 
   private buildNext() {
-    return this.run('pnpm run build', this.relativeNextPath);
+    this.run('pnpm run build', this.relativeNextPath);
   }
 
   private buildOpenNext() {
-    return this.run('npx open-next build', this.relativeNextPath);
+    this.run('npx open-next build', this.relativeNextPath);
   }
 
   private run(cmd: string, cwd: string) {
-    return new Promise<number>((resolve, reject) => {
-      const child = child_process.spawn(cmd, {
-        cwd,
-        shell: true,
-      });
-      child.stdout.setEncoding('utf8');
-      child.stdout.on('data', (data) => {
-        console.log(data);
-      });
-      child.on('close', (code) => {
-        if (code === 0) {
-          resolve(code);
-        } else {
-          reject(code);
-        }
-      });
+    const child = child_process.spawnSync(cmd, {
+      cwd,
+      shell: true,
     });
+    console.log(child.stdout.toString());
   }
 }
