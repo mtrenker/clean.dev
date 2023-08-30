@@ -8,13 +8,14 @@ import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
 export interface PipelineStackProps extends StackProps {
   readonly repository: string;
   readonly branch: string;
+  readonly packagePath: string;
 }
 
 export class PipelineStack extends Stack {
   constructor (scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
 
-    const { repository, branch, env } = props;
+    const { repository, branch, env, packagePath } = props;
 
     const app = new AppStage(this, 'App', {
       env,
@@ -39,7 +40,7 @@ export class PipelineStack extends Stack {
           'pnpm i',
           'pnpm synth',
         ],
-        primaryOutputDirectory: 'packages/infra/cdk.out',
+        primaryOutputDirectory: `${packagePath}/cdk.out`
       }),
     });
     pipeline.addStage(app);

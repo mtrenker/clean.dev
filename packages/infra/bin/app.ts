@@ -7,6 +7,7 @@ const repository = 'mtrenker/clean.dev';
 const branch = 'main';
 
 const pipelineProps: PipelineStackProps = {
+  packagePath: 'packages/infra',
   repository,
   branch,
   env: {
