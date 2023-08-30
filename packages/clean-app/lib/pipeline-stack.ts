@@ -18,7 +18,7 @@ export class PipelineStack extends Stack {
     const pipeline = new CodePipeline(this, 'Pipeline', {
       codeBuildDefaults: {
         buildEnvironment: {
-          buildImage: LinuxBuildImage.STANDARD_6_0,
+          buildImage: LinuxBuildImage.STANDARD_7_0,
           computeType: ComputeType.MEDIUM,
         },
       },
@@ -35,7 +35,6 @@ export class PipelineStack extends Stack {
         primaryOutputDirectory: 'packages/clean-app/cdk.out',
       }),
     });
-
     pipeline.addStage(app);
   }
 }
