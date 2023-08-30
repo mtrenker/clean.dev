@@ -4,6 +4,7 @@ import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelin
 import { Construct } from 'constructs';
 import { AppStage } from './app-stage';
 import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
+import { WebStack } from './web-stack';
 
 export interface PipelineStackProps extends StackProps {
   readonly repository: string;

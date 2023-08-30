@@ -1,0 +1,19 @@
+{
+  "name": "@cleandev/cdk-next-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cdk-next-app-construct.ts",
+  "module": "cdk-next-app-construct.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-cdk-lib": "2.93.0",
+    "constructs": "10.1.110",
+    "esbuild": "^0.19.2",
+    "open-next": "2.0.5"
+  }
+}
