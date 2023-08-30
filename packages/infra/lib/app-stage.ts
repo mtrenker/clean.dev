@@ -15,9 +15,11 @@ export class AppStage extends Stage {
       domainName: 'clean.dev',
     });
 
-    new WebStack(this, 'WebStack', {
+    const webStack = new WebStack(this, 'WebStack', {
       crossRegionReferences: true,
       webCertificateArn: certStack.webCertificate.certificateArn,
     });
+
+    webStack.addDependency(certStack);
   }
 }
