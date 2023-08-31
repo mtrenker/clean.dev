@@ -1,7 +1,0 @@
-query getPosts {
-  posts {
-    id
-    slug
-    title
-  }
-}

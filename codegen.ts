@@ -14,7 +14,7 @@ const config: CodegenConfig = {
        },
     },
   }],
-  documents: ['./apps/web/src/lib/blog/documents/**/*.graphql'],
+  documents: ['./apps/web/src/lib/blog/client.ts'],
   generates: {
     './apps/web/src/lib/blog/generated.tsx': {
       plugins: [

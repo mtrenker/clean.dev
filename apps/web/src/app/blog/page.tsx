@@ -3,8 +3,8 @@ import { draftMode } from 'next/headers';
 import { getPosts } from "@/lib/blog/client";
 
 const BlogPage: NextPage = async () => {
-  const isDraftMode = draftMode();
-  const { posts } = await getPosts();
+  const draft = draftMode();
+  const posts = await getPosts({ draft: draft.isEnabled });
   return (
     <div>
       {posts.map((post) => (

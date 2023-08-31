@@ -1,26 +1,21 @@
-import { GetPostsQuery } from '@/lib/blog/generated';
+import gql from "gql-tag";
+
+import { GetPostsQuery } from "./generated";
 
 const API_TOKEN = process.env.API_TOKEN as string;
 const CONTENT_API_URL = process.env.CONTENT_API_URL as string;
 
-export interface BlogOptions {
+export interface QueryOptions {
   draft?: boolean;
+  variables?: any;
 }
 
-export const getPosts = async (options?: BlogOptions) => {
+const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
   const { draft } = options || {};
   const response = await fetch(CONTENT_API_URL, {
     method: 'POST',
     body: JSON.stringify({
-      query: `
-        query {
-          posts {
-            id
-            slug
-            title
-          }
-        }
-      `,
+      query,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -29,5 +24,18 @@ export const getPosts = async (options?: BlogOptions) => {
     },
   });
   const { data, errors } = await response.json();
-  return data as GetPostsQuery;
+  return data as T;
+}
+
+export const getPosts = async (options?: QueryOptions) => {
+  const getPostsQuery = gql`
+    query GetPosts {
+      posts {
+        id
+        title
+      }
+    }
+  `;
+  const { posts } = await query<GetPostsQuery>(getPostsQuery, options);
+  return posts;
 }
