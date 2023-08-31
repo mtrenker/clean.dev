@@ -216,7 +216,7 @@ export class NextApp extends Construct {
     const serverFunctionUrl = this.serverFunction.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
-    const imageFunctionUrl = this.serverFunction.addFunctionUrl({
+    const imageFunctionUrl = this.imageOptimizationFunction.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
