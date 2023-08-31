@@ -117,8 +117,8 @@ importers:
         specifier: workspace:*
         version: link:../cdk-next-app
       '@types/aws-lambda':
-        specifier: 8.10.104
-        version: 8.10.104
+        specifier: 8.10.119
+        version: 8.10.119
       '@types/jest':
         specifier: ^29.1.2
         version: 29.5.2
@@ -2608,8 +2608,8 @@ packages:
     resolution: {integrity: sha512-RbwvSJQsuN9TB04AQbGULYfOGE/RnSFk/FLQ5b0NmDf5Kx2q/lABZbHQPKCO1vZ6Fiwkplu+yb9pGdLy1iGseQ==}
     dev: false
 
-  /@types/aws-lambda@8.10.104:
-    resolution: {integrity: sha512-HXZJH8aBa06re9NCtFudOr21izYZycgXIVjd8vFBSNSf6Ca4GYD77TfKqwYgcDqv4olqj5KK+Ks7Xi5IXFbNGA==}
+  /@types/aws-lambda@8.10.119:
+    resolution: {integrity: sha512-Vqm22aZrCvCd6I5g1SvpW151jfqwTzEZ7XJ3yZ6xaZG31nUEOEyzzVImjRcsN8Wi/QyPxId/x8GTtgIbsy8kEw==}
     dev: false
 
   /@types/babel__core@7.20.1:
