@@ -32,6 +32,7 @@ const Home: React.FC = () => (
               src="/me.png"
               width={200}
               className='m-0'
+              unoptimized
             />
           </picture>
           <figcaption className="flex flex-col gap-4">
