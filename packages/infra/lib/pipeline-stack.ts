@@ -1,10 +1,11 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
-import { AppStage } from './app-stage';
 import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
-import { WebStack } from './web-stack';
+
+import { AppStage } from './app-stage';
 
 export interface PipelineStackProps extends StackProps {
   readonly repository: string;
@@ -36,10 +37,15 @@ export class PipelineStack extends Stack {
         input: CodePipelineSource.connection(repository, branch, {
           connectionArn,
         }),
+        env: {
+          BLOG_ENDPOINT: StringParameter.valueForStringParameter(this, '/clean/blog-endpoint'),
+          BLOG_TOKEN: StringParameter.valueForStringParameter(this, '/clean/blog-token'),
+        },
         commands: [
           'corepack enable',
           'corepack prepare pnpm@latest-8 --activate',
           'pnpm i',
+          'pnpm build:open',
           'pnpm synth',
         ],
         primaryOutputDirectory: `${packagePath}/cdk.out`

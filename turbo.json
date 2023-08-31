@@ -1,17 +1,8 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDotEnv": [
-    ".env"
-  ],
   "pipeline": {
     "dev": {
-      "cache": false,
-      "dotEnv": [
-        ".env.development.local",
-        ".env.local",
-        ".env.development",
-        ".env"
-      ]
+      "cache": false
     },
     "generate": {},
     "build": {
@@ -19,16 +10,15 @@
         "^build"
       ],
       "outputs": [
-        ".next/**",
-        ".cdk.out/**"
+        ".next/**"
       ]
     },
-    "export": {
+    "build:open": {
       "dependsOn": [
         "build"
       ],
       "outputs": [
-        "./out/**"
+        ".open-next/**"
       ]
     },
     "synth": {

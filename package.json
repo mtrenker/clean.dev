@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "codegen": "graphql-codegen --config codegen.ts",
-    "dev": "dotenv -- turbo dev dev --parallel",
+    "dev": "dotenv -- turbo dev --parallel",
     "prepare": "husky install",
     "generate": "turbo run generate",
     "export": "turbo run export",
-    "build": "turbo run build",
+    "build": "dotenv -- turbo run build",
+    "build:open": "dotenv -- turbo build:open",
     "lint": "turbo run lint",
     "synth": "turbo run synth",
     "test": "turbo run test"

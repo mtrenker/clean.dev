@@ -2,8 +2,8 @@ import gql from "gql-tag";
 
 import { GetPostsQuery } from "./generated";
 
-const API_TOKEN = process.env.API_TOKEN as string;
-const CONTENT_API_URL = process.env.CONTENT_API_URL as string;
+const BLOG_TOKEN = process.env.BLOG_TOKEN as string;
+const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT as string;
 
 export interface QueryOptions {
   draft?: boolean;
@@ -12,7 +12,7 @@ export interface QueryOptions {
 
 const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
   const { draft } = options || {};
-  const response = await fetch(CONTENT_API_URL, {
+  const response = await fetch(BLOG_ENDPOINT, {
     method: 'POST',
     body: JSON.stringify({
       query,
@@ -20,7 +20,7 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
     headers: {
       'Content-Type': 'application/json',
       'gcms-stage': draft ? 'DRAFT' : 'PUBLISHED',
-      Authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${BLOG_TOKEN}`,
     },
   });
   const { data, errors } = await response.json();
