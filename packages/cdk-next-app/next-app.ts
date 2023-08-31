@@ -194,6 +194,8 @@ export class NextApp extends Construct {
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
+        BLOG_TOKEN: process.env.BLOG_TOKEN as string,
+        BLOG_ENDPOINT: process.env.BLOG_ENDPOINT as string,
         CACHE_BUCKET_NAME: this.cacheBucket.bucketName,
         CACHE_BUCKET_REGION: this.region,
         REVALIDATION_QUEUE_URL: this.revalidationQueue.queueUrl,
