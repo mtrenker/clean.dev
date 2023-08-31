@@ -58,6 +58,9 @@ export class NextApp extends Construct {
   /** the lambda function that optimizes images */
   imageOptimizationFunction: Function;
 
+  /** the lambda function that warms up the next.js app */
+  warmerFunction: Function;
+
   /** the certificate for the domain */
   certificate: ICertificate;
 
@@ -77,21 +80,22 @@ export class NextApp extends Construct {
     this.relativeOpenNextPath = `${this.relativeNextPath}/.open-next`;
 
     this.buildApp();
-    this.staticBucket = this.getStaticBucket();
-    this.imageBucket = this.getImageBucket();
-    this.cacheBucket = this.getCacheBucket();
+    this.staticBucket = this.prepareStaticBucket();
+    this.imageBucket = this.prepareImageBucket();
+    this.cacheBucket = this.prepareCacheBucket();
 
-    this.revalidationQueue = this.getRevalidationQueue();
+    this.revalidationQueue = this.prepareRevalidationQueue();
 
-    this.imageOptimizationFunction = this.getImageOptimizationFunction();
-    this.serverFunction = this.getServerFunction();
-    this.revalidationFunction = this.getRevalidationFunction();
+    this.imageOptimizationFunction = this.prepareImageOptimizationFunction();
+    this.serverFunction = this.prepareServerFunction();
+    this.revalidationFunction = this.prepareRevalidationFunction();
+    this.warmerFunction = this.prepareWarmerFunction();
 
-    this.certificate = this.getCertificate(certArn);
+    this.certificate = this.prepareCertificate(certArn);
 
-    this.distribution = this.getDistribution();
+    this.distribution = this.prepareDistribution();
 
-    this.assetDeployment = this.getAssetDeployment();
+    this.assetDeployment = this.prepareAssetDeployment();
 
     // domain config
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
@@ -111,39 +115,44 @@ export class NextApp extends Construct {
     this.revalidationQueue.grantConsumeMessages(this.revalidationFunction);
     this.revalidationFunction.addEventSource(new SqsEventSource(this.revalidationQueue));
 
+    // warmer config
+
+    this.serverFunction.grantInvoke(this.warmerFunction);
+
     // bucket config
     this.cacheBucket.grantReadWrite(this.serverFunction);
+    this.imageBucket.grantReadWrite(this.imageOptimizationFunction);
   }
 
-  private getStaticBucket() {
+  private prepareStaticBucket() {
     return new Bucket(this, 'StaticBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private getImageBucket() {
+  private prepareImageBucket() {
     return new Bucket(this, 'ImageBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private getCacheBucket() {
+  private prepareCacheBucket() {
     return new Bucket(this, 'CacheBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private getRevalidationQueue() {
+  private prepareRevalidationQueue() {
     return new Queue(this, 'RevalidationQueue', {
       fifo: true,
       removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
-  private getImageOptimizationFunction() {
+  private prepareImageOptimizationFunction() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'image-optimization-function');
     return new Function(this, 'ImageFunction', {
       runtime: Runtime.NODEJS_18_X,
@@ -157,7 +166,7 @@ export class NextApp extends Construct {
     });
   }
 
-  private getServerFunction() {
+  private prepareServerFunction() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'server-function');
     return new Function(this, 'ServerFunction', {
       runtime: Runtime.NODEJS_18_X,
@@ -175,7 +184,7 @@ export class NextApp extends Construct {
     });
   }
 
-  private getRevalidationFunction() {
+  private prepareRevalidationFunction() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'revalidation-function');
     return new Function(this, 'RevalidationFunction', {
       runtime: Runtime.NODEJS_18_X,
@@ -185,11 +194,25 @@ export class NextApp extends Construct {
     });
   }
 
-  private getCertificate(certArn: string) {
+  private prepareWarmerFunction() {
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'warmer-function');
+    return new Function(this, 'WarmerFunction', {
+      runtime: Runtime.NODEJS_18_X,
+      code: Code.fromAsset(assetPath),
+      handler: 'index.handler',
+      logRetention: RetentionDays.ONE_WEEK,
+      environment: {
+        FUNCTION_NAME: this.serverFunction.functionName,
+        CONCURRENCY: '1'
+      },
+    });
+  }
+
+  private prepareCertificate(certArn: string) {
     return Certificate.fromCertificateArn(this, 'Certificate', certArn);
   }
 
-  private getDistribution() {
+  private prepareDistribution() {
     const serverFunctionUrl = this.serverFunction.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
@@ -290,7 +313,7 @@ export class NextApp extends Construct {
     });
   }
 
-  private getAssetDeployment() {
+  private prepareAssetDeployment() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'assets');
 
     const cacheControl = CacheControl.fromString(
@@ -298,6 +321,23 @@ export class NextApp extends Construct {
     );
 
     return new BucketDeployment(this, 'AssetDeployment', {
+      sources: [Source.asset(assetPath)],
+      destinationBucket: this.staticBucket,
+      distribution: this.distribution,
+      prune: true,
+      cacheControl: [cacheControl],
+      logRetention: RetentionDays.ONE_WEEK,
+    });
+  }
+
+  private prepareCacheDeployment() {
+    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'cache');
+
+    const cacheControl = CacheControl.fromString(
+      `public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`
+    );
+
+    return new BucketDeployment(this, 'CacheDeployment', {
       sources: [Source.asset(assetPath)],
       destinationBucket: this.staticBucket,
       distribution: this.distribution,
