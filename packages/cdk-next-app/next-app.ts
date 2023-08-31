@@ -84,7 +84,7 @@ export class NextApp extends Construct {
     this.relativeNextPath = `../../${nextDir}`;
     this.relativeOpenNextPath = `${this.relativeNextPath}/.open-next`;
 
-    this.buildApp();
+    // this.buildApp();
     this.staticBucket = this.prepareStaticBucket();
     this.imageBucket = this.prepareImageBucket();
     this.cacheBucket = this.prepareCacheBucket();
