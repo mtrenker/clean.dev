@@ -216,9 +216,12 @@ export class NextApp extends Construct {
     const serverFunctionUrl = this.serverFunction.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
+    const imageFunctionUrl = this.serverFunction.addFunctionUrl({
+      authType: FunctionUrlAuthType.NONE
+    });
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
+    const imageOrigin = new HttpOrigin(Fn.parseDomainName(imageFunctionUrl.url));
     const staticOrigin = new S3Origin(this.staticBucket);
-    const imageOrigin = new S3Origin(this.imageBucket);
 
     const fallbackGroup = new OriginGroup({
       primaryOrigin: serverOrigin,
