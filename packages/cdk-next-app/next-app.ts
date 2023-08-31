@@ -13,6 +13,7 @@ import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -127,6 +128,18 @@ export class NextApp extends Construct {
     // bucket config
     this.cacheBucket.grantReadWrite(this.serverFunction);
     this.imageBucket.grantReadWrite(this.imageOptimizationFunction);
+
+    // secret config
+    this.serverFunction.addToRolePolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ['secretsmanager:GetSecretValue'],
+      resources: ['*'],
+      conditions: {
+        StringEquals: {
+          "secretsmanager:ResourceTag/access": "web"
+        },
+      },
+    }));
   }
 
   private prepareStaticBucket() {
