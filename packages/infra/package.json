@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@cleandev/cdk-next-app": "workspace:*",
+    "@cleandev/cdk-next-blog": "workspace:*",
     "@types/aws-lambda": "8.10.119",
     "@types/jest": "^29.1.2",
     "@types/node": "^20.5.7",
