@@ -70,6 +70,10 @@ export class NextApp extends Construct {
   /** the deployment of the static assets */
   assetDeployment: BucketDeployment;
 
+  /** the deployment of the cache */
+  cacheDeployment: BucketDeployment;
+
+
   constructor(scope: Construct, id: string, props: NextAppProps) {
     super(scope, id);
     const { nextDir, domainName, certArn } = props;
@@ -96,6 +100,7 @@ export class NextApp extends Construct {
     this.distribution = this.prepareDistribution();
 
     this.assetDeployment = this.prepareAssetDeployment();
+    this.cacheDeployment = this.prepareCacheDeployment();
 
     // domain config
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
@@ -342,7 +347,7 @@ export class NextApp extends Construct {
 
     return new BucketDeployment(this, 'CacheDeployment', {
       sources: [Source.asset(assetPath)],
-      destinationBucket: this.staticBucket,
+      destinationBucket: this.cacheBucket,
       distribution: this.distribution,
       prune: true,
       cacheControl: [cacheControl],
