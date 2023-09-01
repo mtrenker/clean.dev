@@ -15,7 +15,6 @@ export class WebStack extends Stack {
 
     const { webCertificateArn } = props;
 
-
     const webApp = new NextApp(this, "NextApp", {
       domainName: "clean.dev",
       nextDir: "apps/web",
