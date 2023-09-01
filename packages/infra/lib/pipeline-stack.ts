@@ -38,8 +38,7 @@ export class PipelineStack extends Stack {
           connectionArn,
         }),
         env: {
-          BLOG_ENDPOINT: StringParameter.valueForStringParameter(this, '/clean/blog-endpoint'),
-          BLOG_TOKEN: StringParameter.valueForStringParameter(this, '/clean/blog-token'),
+          BLOG_ENDPOINT: StringParameter.valueForStringParameter(this, '/clean/blog/api-endpoint'),
         },
         commands: [
           'corepack enable',

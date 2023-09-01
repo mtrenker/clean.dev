@@ -1,8 +1,8 @@
 import gql from "gql-tag";
 
 import { GetPostsQuery } from "./generated";
+import { getSecret } from "../secrets";
 
-const BLOG_TOKEN = process.env.BLOG_TOKEN as string;
 const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT as string;
 
 export interface QueryOptions {
@@ -12,6 +12,9 @@ export interface QueryOptions {
 
 const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
   const { draft } = options || {};
+
+  const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN')
+
   const response = await fetch(BLOG_ENDPOINT, {
     method: 'POST',
     body: JSON.stringify({
