@@ -4,12 +4,16 @@ const secretsManagerClient = new SecretsManagerClient();
 
 export const getSecret = async (secretId: string, fallbackEnv: string) => {
   if (process.env.NODE_ENV === 'production') {
-    const { SecretString } = await secretsManagerClient.send(
-      new GetSecretValueCommand({
-        SecretId: secretId,
-      })
-    );
-    return SecretString;
+    try {
+      const { SecretString } = await secretsManagerClient.send(
+        new GetSecretValueCommand({
+          SecretId: secretId,
+        })
+      );
+      return SecretString;
+    } catch (error) {
+      return process.env[fallbackEnv] || '';
+    }
   }
   return process.env[fallbackEnv] || '';
 };
