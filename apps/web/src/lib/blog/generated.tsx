@@ -4433,7 +4433,14 @@ export enum _SystemDateTimeFieldVariation {
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, slug?: string | null, title?: string | null }> };
+export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', title?: string | null, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any } }> };
+
+export type GetPostQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title?: string | null, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any } } | null };
 
 
 

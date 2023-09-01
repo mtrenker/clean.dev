@@ -36,43 +36,43 @@ export class NextApp extends Construct {
   readonly relativeNextPath: string;
 
   /** the bucket that serves static assets */
-  staticBucket: Bucket;
+  readonly staticBucket: Bucket;
 
   /** the bucket that serves cache */
-  cacheBucket: Bucket;
+  readonly cacheBucket: Bucket;
 
   /** the bucket that serves optimized images */
-  imageBucket: Bucket;
+  readonly imageBucket: Bucket;
 
   /** relative path to the open-next output */
-  relativeOpenNextPath: string;
+  readonly relativeOpenNextPath: string;
 
   /** the queue that triggers revalidation */
-  revalidationQueue: Queue;
+  readonly revalidationQueue: Queue;
 
   /** the lambda function that serves the next.js app */
-  serverFunction: Function;
+  readonly serverFunction: Function;
 
   /** the lambda function that revalidates the next.js app */
-  revalidationFunction: Function;
+  readonly revalidationFunction: Function;
 
   /** the lambda function that optimizes images */
-  imageOptimizationFunction: Function;
+  readonly imageOptimizationFunction: Function;
 
   /** the lambda function that warms up the next.js app */
-  warmerFunction: Function;
+  readonly warmerFunction: Function;
 
   /** the certificate for the domain */
-  certificate: ICertificate;
+  readonly certificate: ICertificate;
 
   /** the cloudfront distribution that serves the next.js app */
-  distribution: Distribution;
+  readonly distribution: Distribution;
 
   /** the deployment of the static assets */
-  assetDeployment: BucketDeployment;
+  readonly assetDeployment: BucketDeployment;
 
   /** the deployment of the cache */
-  cacheDeployment: BucketDeployment;
+  readonly cacheDeployment: BucketDeployment;
 
 
   constructor(scope: Construct, id: string, props: NextAppProps) {

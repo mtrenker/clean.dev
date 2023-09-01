@@ -1,6 +1,6 @@
 import gql from "gql-tag";
 
-import { GetPostsQuery } from "./generated";
+import { GetPostQuery, GetPostsQuery } from "./generated";
 import { getSecret } from "../secrets";
 
 const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT as string;
@@ -11,7 +11,7 @@ export interface QueryOptions {
 }
 
 const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
-  const { draft } = options || {};
+  const { draft, variables } = options || {};
 
   const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN')
 
@@ -19,6 +19,7 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
     method: 'POST',
     body: JSON.stringify({
       query,
+      variables,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -27,6 +28,11 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
     },
   });
   const { data, errors } = await response.json();
+
+  if (errors) {
+    throw new Error(errors[0].message);
+  }
+
   return data as T;
 }
 
@@ -34,11 +40,33 @@ export const getPosts = async (options?: QueryOptions) => {
   const getPostsQuery = gql`
     query GetPosts {
       posts {
-        id
         title
+        slug
+        teaser {
+          raw
+        }
       }
     }
   `;
   const { posts } = await query<GetPostsQuery>(getPostsQuery, options);
   return posts;
+}
+
+export const getPost = async (slug: string, options?: QueryOptions) => {
+  const getPostQuery = gql`
+    query GetPost($slug: String!) {
+      post(where: { slug: $slug }) {
+        title
+        slug
+        teaser {
+          raw
+        }
+        content {
+          raw
+        }
+      }
+    }
+  `;
+  const { post } = await query<GetPostQuery>(getPostQuery, { variables: { slug }, ...options });
+  return post;
 }
