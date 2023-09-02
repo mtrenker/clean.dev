@@ -14,8 +14,6 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
   const { draft, variables } = options || {};
 
   const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN');
-  console.log({BLOG_TOKEN});
-
 
   const response = await fetch(BLOG_ENDPOINT, {
     method: 'POST',
@@ -29,6 +27,7 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
       Authorization: `Bearer ${BLOG_TOKEN}`,
     },
   });
+
   const { data, errors } = await response.json();
 
   return data as T;
