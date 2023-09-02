@@ -29,10 +29,6 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
   });
   const { data, errors } = await response.json();
 
-  if (errors) {
-    throw new Error(errors[0].message);
-  }
-
   return data as T;
 }
 
