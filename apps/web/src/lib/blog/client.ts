@@ -45,8 +45,12 @@ export const getPosts = async (options?: QueryOptions) => {
       }
     }
   `;
-  const { posts } = await query<GetPostsQuery>(getPostsQuery, options);
-  return posts;
+  try {
+    const { posts } = await query<GetPostsQuery>(getPostsQuery, options);
+    return posts;
+  } catch (error) {
+    return [];
+  }
 }
 
 export const getPost = async (slug: string, options?: QueryOptions) => {
