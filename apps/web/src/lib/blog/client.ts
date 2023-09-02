@@ -13,7 +13,9 @@ export interface QueryOptions {
 const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
   const { draft, variables } = options || {};
 
-  const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN')
+  const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN');
+  console.log({BLOG_TOKEN});
+
 
   const response = await fetch(BLOG_ENDPOINT, {
     method: 'POST',
