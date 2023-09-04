@@ -17,7 +17,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
 import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
-import { BuildSpec, PipelineProject } from "aws-cdk-lib/aws-codebuild";
+import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -394,6 +394,10 @@ export class NextApp extends Construct {
     const application = new LambdaApplication(this, 'LambdaApplication');
 
     const functionsProject = new PipelineProject(this, 'FunctionsProject', {
+      environment: {
+        buildImage: LinuxBuildImage.STANDARD_7_0,
+        computeType: ComputeType.MEDIUM,
+      },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
@@ -434,6 +438,10 @@ export class NextApp extends Construct {
     });
 
     const assetsProject = new PipelineProject(this, 'AssetsProject', {
+      environment: {
+        buildImage: LinuxBuildImage.STANDARD_7_0,
+        computeType: ComputeType.MEDIUM,
+      },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
