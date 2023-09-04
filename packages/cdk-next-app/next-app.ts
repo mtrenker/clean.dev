@@ -17,7 +17,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
 import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
-import { Artifacts, BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
+import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -398,6 +398,14 @@ export class NextApp extends Construct {
         buildImage: LinuxBuildImage.STANDARD_7_0,
         computeType: ComputeType.MEDIUM,
       },
+      environmentVariables: {
+        SERVER_FUNCTION_NAME: {
+          value: this.serverFunction.functionName,
+        },
+        SERVER_FUNCTION_VERSION: {
+          value: this.serverFunction.currentVersion.version,
+        }
+      },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
@@ -411,7 +419,8 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
-              'ls'
+              'ECHO NAME $SERVER_FUNCTION_NAME',
+              'ECHO VERION $SERVER_FUNCTION_VERSION',
             ],
           }
         },
@@ -517,6 +526,7 @@ export class NextApp extends Construct {
       this.serverFunction,
       serverFunctionArtifact
     );
+
     const revalidationDeployAction = this.prepareFunctionDeployAction(
       pipeline,
       application,
@@ -524,6 +534,7 @@ export class NextApp extends Construct {
       this.revalidationFunction,
       revalidationFunctionArtifact
     );
+
     const warmerDeployAction = this.prepareFunctionDeployAction(
       pipeline,
       application,
@@ -531,6 +542,7 @@ export class NextApp extends Construct {
       this.warmerFunction,
       warmerFunctionArtifact
     );
+
     const imageOptimizationDeployAction = this.prepareFunctionDeployAction(
       pipeline,
       application,
@@ -600,7 +612,7 @@ export class NextApp extends Construct {
     const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
       application,
       alias,
-      deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_1MINUTE,
+      deploymentConfig: LambdaDeploymentConfig.ALL_AT_ONCE,
     });
 
     pipeline.artifactBucket.grantRead(deploymentGroup.role);
