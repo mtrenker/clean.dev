@@ -381,11 +381,6 @@ export class NextApp extends Construct {
 
   private prepareDeployment(connectionArn: string, owner: string, repo: string, branch: string) {
 
-    const pipelineBucket = new Bucket(this, 'PipelineBucket', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    });
-
     const sourceArtifact = new Artifact('Source');
     const assetsArtifact = new Artifact('Assets');
     const cacheArtifact = new Artifact('Cache');
@@ -415,6 +410,7 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
+              'ls'
             ],
           }
         },
@@ -423,19 +419,19 @@ export class NextApp extends Construct {
           'secondary-artifacts': {
             ServerFunctionArtifact: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/server-function`,
+              'base-directory': `apps/web/.open-next/server-function`,
             },
             RevalidationFunctionArtifact: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/revalidation-function`,
+              'base-directory': `apps/web/.open-next/revalidation-function`,
             },
             WarmerFunctionArtifact: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/warmer-function`,
+              'base-directory': `apps/web/.open-next/warmer-function`,
             },
             ImageOptimizationFunctionArtifact: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/image-optimization-function`,
+              'base-directory': `apps/web/.open-next/image-optimization-function`,
             }
           }
         }
@@ -467,13 +463,11 @@ export class NextApp extends Construct {
           'secondary-artifacts': {
             Assets: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/assets`,
-              'discard-paths': 'yes',
+              'base-directory': `apps/web/.open-next/assets`,
             },
             Cache: {
               files: ["**/*"],
-              'base-directory': `${this.relativeOpenNextPath}/cache`,
-              'discard-paths': 'yes',
+              'base-directory': `apps/web/.open-next/cache`,
             }
           }
         }
