@@ -44,7 +44,6 @@ export class PipelineStack extends Stack {
           'corepack enable',
           'corepack prepare pnpm@latest-8 --activate',
           'pnpm i',
-          'pnpm build:open',
           'pnpm synth',
         ],
         primaryOutputDirectory: `${packagePath}/cdk.out`

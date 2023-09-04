@@ -4,6 +4,7 @@ import { NextBlog } from "@cleandev/cdk-next-blog";
 import { Construct } from "constructs";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 
 export interface WebStackProps extends StackProps {
   webCertificateArn: string;
@@ -13,12 +14,18 @@ export class WebStack extends Stack {
   constructor(scope: Construct, id: string, props: WebStackProps) {
     super(scope, id, props);
 
-    const { webCertificateArn } = props;
+    const {webCertificateArn } = props;
+
+    const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
     const webApp = new NextApp(this, "NextApp", {
       domainName: "clean.dev",
       nextDir: "apps/web",
       certArn: webCertificateArn,
+      connectionArn,
+      owner: 'mtrenker',
+      repo: 'clean.dev',
+      branch: 'main',
     });
 
     const blog = new NextBlog(this, "NextBlog");

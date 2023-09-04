@@ -2,7 +2,7 @@ import * as path from "path";
 import * as child_process from 'child_process';
 import { Construct } from "constructs";
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
-import { Architecture, Code, Function, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Alias, Architecture, Code, Function, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -14,6 +14,10 @@ import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
+import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
+import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
+import { BuildSpec, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -22,6 +26,10 @@ export interface NextAppProps {
   nextDir: string;
   domainName: string;
   certArn: string;
+  connectionArn: string;
+  owner: string;
+  repo: string;
+  branch: string;
 }
 
 export class NextApp extends Construct {
@@ -35,6 +43,9 @@ export class NextApp extends Construct {
   /** relative path to the next.js app package */
   readonly relativeNextPath: string;
 
+  /** relative path to the open-next output */
+  readonly relativeOpenNextPath: string;
+
   /** the bucket that serves static assets */
   readonly staticBucket: Bucket;
 
@@ -44,8 +55,6 @@ export class NextApp extends Construct {
   /** the bucket that serves optimized images */
   readonly imageBucket: Bucket;
 
-  /** relative path to the open-next output */
-  readonly relativeOpenNextPath: string;
 
   /** the queue that triggers revalidation */
   readonly revalidationQueue: Queue;
@@ -69,15 +78,15 @@ export class NextApp extends Construct {
   readonly distribution: Distribution;
 
   /** the deployment of the static assets */
-  readonly assetDeployment: BucketDeployment;
+  // readonly assetDeployment: BucketDeployment;
 
   /** the deployment of the cache */
-  readonly cacheDeployment: BucketDeployment;
+  // readonly cacheDeployment: BucketDeployment;
 
 
   constructor(scope: Construct, id: string, props: NextAppProps) {
     super(scope, id);
-    const { nextDir, domainName, certArn } = props;
+    const { nextDir, domainName, certArn, connectionArn, owner, repo, branch } = props;
 
     this.domainName = domainName;
     this.region = process.env.CDK_DEFAULT_REGION as string;
@@ -100,8 +109,10 @@ export class NextApp extends Construct {
 
     this.distribution = this.prepareDistribution();
 
-    this.assetDeployment = this.prepareAssetDeployment();
-    this.cacheDeployment = this.prepareCacheDeployment();
+    this.prepareDeployment(connectionArn, owner, repo, branch);
+
+    // this.assetDeployment = this.prepareAssetDeployment();
+    // this.cacheDeployment = this.prepareCacheDeployment();
 
     // domain config
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
@@ -159,11 +170,14 @@ export class NextApp extends Construct {
   }
 
   private prepareImageOptimizationFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'image-optimization-function');
     return new Function(this, 'ImageFunction', {
       runtime: Runtime.NODEJS_18_X,
       architecture: Architecture.ARM_64,
-      code: Code.fromAsset(assetPath),
+      code: Code.fromInline(`
+        export const handler = async () => {
+          console.log('Hello World from the image-optimization-function');
+        };
+      `),
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
@@ -173,12 +187,15 @@ export class NextApp extends Construct {
   }
 
   private prepareServerFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'server-function');
     return new Function(this, 'ServerFunction', {
       runtime: Runtime.NODEJS_18_X,
       memorySize: 1024,
       timeout: Duration.seconds(10),
-      code: Code.fromAsset(assetPath),
+      code: Code.fromInline(`
+        export const handler = async () => {
+          console.log('Hello World from the server-function');
+        };
+      `),
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
@@ -191,20 +208,26 @@ export class NextApp extends Construct {
   }
 
   private prepareRevalidationFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'revalidation-function');
     return new Function(this, 'RevalidationFunction', {
       runtime: Runtime.NODEJS_18_X,
-      code: Code.fromAsset(assetPath),
+      code: Code.fromInline(`
+        export const handler = async () => {
+          console.log('Hello World from the revalidation-function');
+        };
+      `),
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
     });
   }
 
   private prepareWarmerFunction() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'warmer-function');
     return new Function(this, 'WarmerFunction', {
       runtime: Runtime.NODEJS_18_X,
-      code: Code.fromAsset(assetPath),
+      code: Code.fromInline(`
+        export const handler = async () => {
+          console.log('Hello World from the warmer-function');
+        };
+      `),
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
@@ -354,6 +377,212 @@ export class NextApp extends Construct {
       cacheControl: [cacheControl],
       logRetention: RetentionDays.ONE_WEEK,
     });
+  }
+
+  private prepareDeployment(connectionArn: string, owner: string, repo: string, branch: string) {
+
+    const sourceArtifact = new Artifact('Source');
+
+    const assetsArtifact = new Artifact('Assets');
+    const cacheArtifact = new Artifact('Cache');
+
+    const serverFunctionArtifact = new Artifact('ServerFunctionArtifact');
+    const revalidationFunctionArtifact = new Artifact('RevalidationFunctionArtifact');
+    const warmerFunctionArtifact = new Artifact('WarmerFunctionArtifact');
+    const imageOptimizationFunctionArtifact = new Artifact('ImageOptimizationFunctionArtifact');
+
+    const application = new LambdaApplication(this, 'LambdaApplication');
+
+    const functionsProject = new PipelineProject(this, 'FunctionsProject', {
+      buildSpec: BuildSpec.fromObject({
+        version: '0.2',
+        phases: {
+          install: {
+            commands: [
+              'corepack enable',
+              'corepack prepare pnpm@latest-8 --activate',
+              'pnpm i',
+            ]
+          },
+          build: {
+            commands: [
+              'pnpm build:open',
+            ],
+          }
+        },
+        artifacts: {
+          'secondary-artifacts': {
+            ServerFunctionArtifact: {
+              'base-directory': `${this.relativeOpenNextPath}/server-function`,
+              'discard-paths': 'yes',
+            },
+            RevalidationFunctionArtifact: {
+              'base-directory': `${this.relativeOpenNextPath}/revalidation-function`,
+              'discard-paths': 'yes',
+            },
+            WarmerFunctionArtifact: {
+              'base-directory': `${this.relativeOpenNextPath}/warmer-function`,
+              'discard-paths': 'yes',
+            },
+            ImageOptimizationFunctionArtifact: {
+              'base-directory': `${this.relativeOpenNextPath}/image-optimization-function`,
+              'discard-paths': 'yes',
+            }
+          }
+        }
+      }),
+    });
+
+    const assetsProject = new PipelineProject(this, 'AssetsProject', {
+      buildSpec: BuildSpec.fromObject({
+        version: '0.2',
+        phases: {
+          install: {
+            commands: [
+              'corepack enable',
+              'corepack prepare pnpm@latest-8 --activate',
+              'pnpm i',
+            ]
+          },
+          build: {
+            commands: [
+              'pnpm build:open',
+            ],
+          }
+        },
+        artifacts: {
+          'secondary-artifacts': {
+            Assets: {
+              'base-directory': `${this.relativeOpenNextPath}/assets`,
+              'discard-paths': 'yes',
+            },
+            Cache: {
+              'base-directory': `${this.relativeOpenNextPath}/cache`,
+              'discard-paths': 'yes',
+            }
+          }
+        }
+      }),
+    });
+
+    const sourceAction = new CodeStarConnectionsSourceAction({
+      actionName: 'GetSource',
+      connectionArn,
+      owner,
+      repo,
+      branch,
+      output: sourceArtifact,
+    });
+
+    // build next, open-next and output artifacts for each function
+
+    const buildFunctions = new CodeBuildAction({
+      actionName: 'Functions',
+      project: functionsProject,
+      input: sourceArtifact,
+      outputs: [
+        serverFunctionArtifact,
+        revalidationFunctionArtifact,
+        warmerFunctionArtifact,
+        imageOptimizationFunctionArtifact,
+      ],
+    });
+
+    const buildAssets = new CodeBuildAction({
+      actionName: 'Assets',
+      project: assetsProject,
+      input: sourceArtifact,
+      outputs: [
+        assetsArtifact,
+        cacheArtifact,
+      ],
+    });
+
+    // function deployments
+
+    const serverDeployAction = this.prepareFunctionDeployAction(
+      application,
+      'ServerFunction',
+      this.serverFunction,
+      serverFunctionArtifact
+    );
+    const revalidationDeployAction = this.prepareFunctionDeployAction(
+      application,
+      'RevalidationFunction',
+      this.revalidationFunction,
+      revalidationFunctionArtifact
+    );
+    const warmerDeployAction = this.prepareFunctionDeployAction(
+      application,
+      'WarmerFunction',
+      this.warmerFunction,
+      warmerFunctionArtifact
+    );
+    const imageOptimizationDeployAction = this.prepareFunctionDeployAction(
+      application,
+      'ImageOptimizationFunction',
+      this.imageOptimizationFunction,
+      imageOptimizationFunctionArtifact
+    );
+
+    // s3 deployments
+
+    const assetDeployAction = new S3DeployAction({
+      actionName: 'DeployAssets',
+      input: assetsArtifact,
+      bucket: this.staticBucket,
+    });
+
+    const cacheDeployAction = new S3DeployAction({
+      actionName: 'DeployCache',
+      input: cacheArtifact,
+      bucket: this.cacheBucket,
+    });
+
+
+    // pipeline
+
+    const pipeline = new Pipeline(this, 'Pipeline', {
+      stages: [{
+        stageName: 'Source',
+        actions: [sourceAction],
+      }, {
+        stageName: 'Build',
+        actions: [buildFunctions, buildAssets],
+      }, {
+        stageName: 'Deploy',
+        actions: [
+          serverDeployAction,
+          revalidationDeployAction,
+          warmerDeployAction,
+          imageOptimizationDeployAction,
+          assetDeployAction,
+          cacheDeployAction
+        ],
+      }],
+    });
+  }
+
+  private prepareFunctionDeployAction(application: LambdaApplication, name: string, fn: Function, input: Artifact) {
+
+    const alias = new Alias(this, `${name}Alias`, {
+      aliasName: 'prod',
+      version: fn.currentVersion,
+    });
+
+    const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
+      application,
+      alias,
+      deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_1MINUTE,
+    });
+
+    const deployAction = new CodeDeployServerDeployAction({
+      actionName: `${name}DeployAction`,
+      input,
+      deploymentGroup,
+    });
+
+    return deployAction;
   }
 
   private buildApp() {
