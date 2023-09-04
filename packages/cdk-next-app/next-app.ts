@@ -547,8 +547,11 @@ export class NextApp extends Construct {
         stageName: 'Source',
         actions: [sourceAction],
       }, {
-        stageName: 'Build',
-        actions: [buildFunctions, buildAssets],
+        stageName: 'BuildFunctions',
+        actions: [buildFunctions],
+      }, {
+        stageName: 'BuildAssets',
+        actions: [buildAssets],
       }, {
         stageName: 'Deploy',
         actions: [
