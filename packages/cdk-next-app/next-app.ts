@@ -390,6 +390,7 @@ export class NextApp extends Construct {
     const warmerFunctionArtifact = new Artifact('WarmerFunctionArtifact');
     const imageOptimizationFunctionArtifact = new Artifact('ImageOptimizationFunctionArtifact');
 
+    const pipeline = new Pipeline(this, 'Pipeline');
     const application = new LambdaApplication(this, 'LambdaApplication');
 
     const functionsProject = new PipelineProject(this, 'FunctionsProject', {
@@ -510,24 +511,28 @@ export class NextApp extends Construct {
     // function deployments
 
     const serverDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
       application,
       'ServerFunction',
       this.serverFunction,
       serverFunctionArtifact
     );
     const revalidationDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
       application,
       'RevalidationFunction',
       this.revalidationFunction,
       revalidationFunctionArtifact
     );
     const warmerDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
       application,
       'WarmerFunction',
       this.warmerFunction,
       warmerFunctionArtifact
     );
     const imageOptimizationDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
       application,
       'ImageOptimizationFunction',
       this.imageOptimizationFunction,
@@ -549,32 +554,43 @@ export class NextApp extends Construct {
     });
 
 
-    // pipeline
-    const pipeline = new Pipeline(this, 'Pipeline', {
-      stages: [{
-        stageName: 'Source',
-        actions: [sourceAction],
-      }, {
-        stageName: 'BuildFunctions',
-        actions: [buildFunctions],
-      }, {
-        stageName: 'BuildAssets',
-        actions: [buildAssets],
-      }, {
-        stageName: 'Deploy',
-        actions: [
-          serverDeployAction,
-          revalidationDeployAction,
-          warmerDeployAction,
-          imageOptimizationDeployAction,
-          assetDeployAction,
-          cacheDeployAction
-        ],
-      }],
+    // stages
+
+    pipeline.addStage({
+      stageName: 'Source',
+      actions: [sourceAction],
+    });
+
+    pipeline.addStage({
+      stageName: 'BuildFunctions',
+      actions: [buildFunctions],
+    });
+
+    pipeline.addStage({
+      stageName: 'BuildAssets',
+      actions: [buildAssets],
+    });
+
+    pipeline.addStage({
+      stageName: 'Deploy',
+      actions: [
+        serverDeployAction,
+        revalidationDeployAction,
+        warmerDeployAction,
+        imageOptimizationDeployAction,
+        assetDeployAction,
+        cacheDeployAction
+      ],
     });
   }
 
-  private prepareFunctionDeployAction(application: LambdaApplication, name: string, fn: Function, input: Artifact) {
+  private prepareFunctionDeployAction(
+    pipeline: Pipeline,
+    application: LambdaApplication,
+    name: string,
+    fn: Function,
+    input: Artifact
+  ) {
 
     const alias = new Alias(this, `${name}Alias`, {
       aliasName: 'prod',
@@ -586,6 +602,8 @@ export class NextApp extends Construct {
       alias,
       deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_1MINUTE,
     });
+
+    pipeline.artifactBucket.grantRead(deploymentGroup.role);
 
     const deployAction = new CodeDeployServerDeployAction({
       actionName: `${name}DeployAction`,
