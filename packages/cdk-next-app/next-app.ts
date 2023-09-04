@@ -13,11 +13,11 @@ import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
 import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
-import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
+import { Artifacts, BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -381,8 +381,12 @@ export class NextApp extends Construct {
 
   private prepareDeployment(connectionArn: string, owner: string, repo: string, branch: string) {
 
-    const sourceArtifact = new Artifact('Source');
+    const pipelineBucket = new Bucket(this, 'PipelineBucket', {
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
 
+    const sourceArtifact = new Artifact('Source');
     const assetsArtifact = new Artifact('Assets');
     const cacheArtifact = new Artifact('Cache');
 
@@ -415,20 +419,25 @@ export class NextApp extends Construct {
           }
         },
         artifacts: {
+          files: ["**/*"],
           'secondary-artifacts': {
             ServerFunctionArtifact: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/server-function`,
               'discard-paths': 'yes',
             },
             RevalidationFunctionArtifact: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/revalidation-function`,
               'discard-paths': 'yes',
             },
             WarmerFunctionArtifact: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/warmer-function`,
               'discard-paths': 'yes',
             },
             ImageOptimizationFunctionArtifact: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/image-optimization-function`,
               'discard-paths': 'yes',
             }
@@ -461,10 +470,12 @@ export class NextApp extends Construct {
         artifacts: {
           'secondary-artifacts': {
             Assets: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/assets`,
               'discard-paths': 'yes',
             },
             Cache: {
+              files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/cache`,
               'discard-paths': 'yes',
             }
@@ -549,7 +560,6 @@ export class NextApp extends Construct {
 
 
     // pipeline
-
     const pipeline = new Pipeline(this, 'Pipeline', {
       stages: [{
         stageName: 'Source',
