@@ -424,22 +424,18 @@ export class NextApp extends Construct {
             ServerFunctionArtifact: {
               files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/server-function`,
-              'discard-paths': 'yes',
             },
             RevalidationFunctionArtifact: {
               files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/revalidation-function`,
-              'discard-paths': 'yes',
             },
             WarmerFunctionArtifact: {
               files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/warmer-function`,
-              'discard-paths': 'yes',
             },
             ImageOptimizationFunctionArtifact: {
               files: ["**/*"],
               'base-directory': `${this.relativeOpenNextPath}/image-optimization-function`,
-              'discard-paths': 'yes',
             }
           }
         }
