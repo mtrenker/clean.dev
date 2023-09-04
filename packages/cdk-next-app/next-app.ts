@@ -419,8 +419,8 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
-              'ECHO NAME $SERVER_FUNCTION_NAME',
-              'ECHO VERION $SERVER_FUNCTION_VERSION',
+              'echo NAME $SERVER_FUNCTION_NAME',
+              'echo VERION $SERVER_FUNCTION_VERSION',
             ],
           }
         },
