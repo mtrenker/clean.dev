@@ -467,6 +467,9 @@ export class NextApp extends Construct {
 
               // deploy functions
               './packages/cdk-next-app/update-code.sh $SERVER_NAME server-function.zip apps/web/.open-next/server-function/appspec.yml',
+              './packages/cdk-next-app/update-code.sh $WARMER_NAME warmer-function.zip apps/web/.open-next/warmer-function/appspec.yml',
+              './packages/cdk-next-app/update-code.sh $IMAGE_NAME image-optimization-function.zip apps/web/.open-next/image-optimization-function/appspec.yml',
+              './packages/cdk-next-app/update-code.sh $REVALIDATION_NAME revalidation-function.zip apps/web/.open-next/revalidation-function/appspec.yml',
             ],
           },
         },
