@@ -497,6 +497,7 @@ export class NextApp extends Construct {
       effect: Effect.ALLOW,
       actions: [
         'lambda:UpdateFunctionCode',
+        'lambda:GetAlias',
       ],
       resources: [
         this.serverFunction.functionArn,

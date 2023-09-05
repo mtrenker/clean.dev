@@ -23,7 +23,7 @@ currentVersion=$(echo $currentResponse | grep -o '"FunctionVersion": "[^"]*' | a
 
 cp "$full_source_path" "$APPSPEC_DESTINATION"
 
-// replace CURRENT_VERSION with currentVersion
+# replace CURRENT_VERSION with currentVersion
 sed -i "s|FUNCTION_NAME|$FUNCTION_NAME|g" "$APPSPEC_DESTINATION"
 sed -i "s|CURRENT_VERSION|$currentVersion|g" "$APPSPEC_DESTINATION"
 sed -i "s|TARGET_VERSION|$targetVersion|g" "$APPSPEC_DESTINATION"
