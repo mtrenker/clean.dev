@@ -460,10 +460,18 @@ export class NextApp extends Construct {
             commands: [
               'pnpm build:open',
               // create zip files
-              'zip -r server-function.zip apps/web/.open-next/server-function',
-              'zip -r warmer-function.zip apps/web/.open-next/warmer-function',
-              'zip -r image-optimization-function.zip apps/web/.open-next/image-optimization-function',
-              'zip -r revalidation-function.zip apps/web/.open-next/revalidation-function',
+              'cd apps/web/.open-next/server-function',
+              'zip -r ../../../../server-function.zip *',
+              'cd -',
+              'cd apps/web/.open-next/warmer-function',
+              'zip -r ../../../../warmer-function.zip *',
+              'cd -',
+              'cd apps/web/.open-next/image-optimization-function',
+              'zip -r ../../../../image-optimization-function.zip *',
+              'cd -',
+              'cd apps/web/.open-next/revalidation-function',
+              'zip -r ../../../../revalidation-function.zip *',
+              'cd -',
 
               // deploy functions
               './packages/cdk-next-app/update-code.sh $SERVER_NAME server-function.zip apps/web/.open-next/server-function/appspec.yml',
@@ -476,19 +484,19 @@ export class NextApp extends Construct {
         artifacts: {
           'secondary-artifacts': {
             ServerFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/server-function`,
             },
             RevalidationFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/revalidation-function`,
             },
             WarmerFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/warmer-function`,
             },
             ImageOptimizationFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/image-optimization-function`,
             }
           }
