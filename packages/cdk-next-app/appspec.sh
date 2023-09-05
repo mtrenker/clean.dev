@@ -6,18 +6,22 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-source_file="./appspec.yml.t"
 destination_file="$1"
 prefix="$2"
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source_file="./appspec.yml.t"
+
+full_source_path="$script_dir/$source_file"
+
 # Check if the source file exists
-if [ ! -f "$source_file" ]; then
-    echo "Source file '$source_file' not found."
+if [ ! -f "$full_source_path" ]; then
+    echo "Source file '$full_source_path' not found."
     exit 1
 fi
 
 # Copy the source file to the destination
-cp "$source_file" "$destination_file"
+cp "$full_source_path" "$destination_file"
 
 # Get a list of environment variables with the specified prefix
 env_vars=$(env | grep "^${prefix}_")
