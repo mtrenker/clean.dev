@@ -111,22 +111,22 @@ export class NextApp extends Construct {
 
     // aliases
     this.serverFunctionProductionAlias = new Alias(this, 'ServerFunctionProductionAlias', {
-      aliasName: 'prod',
+      aliasName: 'live',
       version: this.serverFunction.currentVersion,
     });
 
     this.imageFunctionProductionAlias = new Alias(this, 'ImageFunctionProductionAlias', {
-      aliasName: 'prod',
+      aliasName: 'live',
       version: this.imageOptimizationFunction.currentVersion,
     });
 
     this.warmerFunctionProductionAlias = new Alias(this, 'WarmerFunctionProductionAlias', {
-      aliasName: 'prod',
+      aliasName: 'live',
       version: this.warmerFunction.currentVersion,
     });
 
     this.revalidationFunctionProductionAlias = new Alias(this, 'RevalidationFunctionProductionAlias', {
-      aliasName: 'prod',
+      aliasName: 'live',
       version: this.revalidationFunction.currentVersion,
     });
 
