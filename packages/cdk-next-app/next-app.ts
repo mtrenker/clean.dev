@@ -362,6 +362,10 @@ export class NextApp extends Construct {
     });
   }
 
+  private test () {
+
+  }
+
   private prepareCacheDeployment() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'cache');
 
@@ -399,12 +403,58 @@ export class NextApp extends Construct {
         computeType: ComputeType.MEDIUM,
       },
       environmentVariables: {
-        SERVER_FUNCTION_NAME: {
+        // server function
+        SERVER_NAME: {
           value: this.serverFunction.functionName,
         },
-        SERVER_FUNCTION_VERSION: {
+        SERVER_ALIAS: {
+          value: 'prod',
+        },
+        SERVER_CURRENT_VERSION: {
           value: this.serverFunction.currentVersion.version,
-        }
+        },
+        SERVER_TARGET_VERSION: {
+          value: this.serverFunction.currentVersion.version + 1,
+        },
+        // revalidation function
+        WARMER_NAME: {
+          value: this.warmerFunction.functionName,
+        },
+        WARMER_ALIAS: {
+          value: 'prod',
+        },
+        WARMER_CURRENT_VERSION: {
+          value: this.warmerFunction.currentVersion.version,
+        },
+        WARMER_TARGET_VERSION: {
+          value: this.warmerFunction.currentVersion.version + 1,
+        },
+        // image optimization function
+        IMAGE_NAME: {
+          value: this.imageOptimizationFunction.functionName,
+        },
+        IMAGE_ALIAS: {
+          value: 'prod',
+        },
+        IMAGE_CURRENT_VERSION: {
+          value: this.imageOptimizationFunction.currentVersion.version,
+        },
+        IMAGE_TARGET_VERSION: {
+          value: this.imageOptimizationFunction.currentVersion.version + 1,
+        },
+        // revalidation function
+        REVALIDATION_NAME: {
+          value: this.revalidationFunction.functionName,
+        },
+        REVALIDATION_ALIAS: {
+          value: 'prod',
+        },
+        REVALIDATION_CURRENT_VERSION: {
+          value: this.revalidationFunction.currentVersion.version,
+        },
+        REVALIDATION_TARGET_VERSION: {
+          value: this.revalidationFunction.currentVersion.version + 1,
+        },
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
@@ -419,8 +469,10 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
-              'echo NAME $SERVER_FUNCTION_NAME',
-              'echo VERION $SERVER_FUNCTION_VERSION',
+              './packages/cdk-next-app/appspec.sh apps/web/.open-next/server-function/appspec.yml SERVER',
+              './packages/cdk-next-app/appspec.sh apps/web/.open-next/warmer-function/appspec.yml WARMER',
+              './packages/cdk-next-app/appspec.sh apps/web/.open-next/image-optimization-function/appspec.yml IMAGE',
+              './packages/cdk-next-app/appspec.sh apps/web/.open-next/revalidation-function/appspec.yml REVALIDATION'
             ],
           }
         },
