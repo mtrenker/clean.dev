@@ -174,7 +174,7 @@ export class NextApp extends Construct {
       runtime: Runtime.NODEJS_18_X,
       architecture: Architecture.ARM_64,
       code: Code.fromInline(`
-        export const handler = async () => {
+        exports.handler = async () => {
           console.log('Hello World from the image-optimization-function');
         };
       `),
@@ -192,7 +192,7 @@ export class NextApp extends Construct {
       memorySize: 1024,
       timeout: Duration.seconds(10),
       code: Code.fromInline(`
-        export const handler = async () => {
+        exports.handler = async () => {
           console.log('Hello World from the server-function');
         };
       `),
@@ -211,7 +211,7 @@ export class NextApp extends Construct {
     return new Function(this, 'RevalidationFunction', {
       runtime: Runtime.NODEJS_18_X,
       code: Code.fromInline(`
-        export const handler = async () => {
+        exports.handler = async () => {
           console.log('Hello World from the revalidation-function');
         };
       `),
@@ -224,7 +224,7 @@ export class NextApp extends Construct {
     return new Function(this, 'WarmerFunction', {
       runtime: Runtime.NODEJS_18_X,
       code: Code.fromInline(`
-        export const handler = async () => {
+        exports.handler = async () => {
           console.log('Hello World from the warmer-function');
         };
       `),
