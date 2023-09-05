@@ -414,7 +414,7 @@ export class NextApp extends Construct {
           value: this.serverFunction.currentVersion.version,
         },
         SERVER_TARGET_VERSION: {
-          value: this.serverFunction.currentVersion.version + 1,
+          value: parseInt(this.serverFunction.currentVersion.version) + 1,
         },
         // revalidation function
         WARMER_NAME: {
@@ -427,7 +427,7 @@ export class NextApp extends Construct {
           value: this.warmerFunction.currentVersion.version,
         },
         WARMER_TARGET_VERSION: {
-          value: this.warmerFunction.currentVersion.version + 1,
+          value: parseInt(this.warmerFunction.currentVersion.version) + 1,
         },
         // image optimization function
         IMAGE_NAME: {
@@ -440,7 +440,7 @@ export class NextApp extends Construct {
           value: this.imageOptimizationFunction.currentVersion.version,
         },
         IMAGE_TARGET_VERSION: {
-          value: this.imageOptimizationFunction.currentVersion.version + 1,
+          value: parseInt(this.imageOptimizationFunction.currentVersion.version) + 1,
         },
         // revalidation function
         REVALIDATION_NAME: {
@@ -453,7 +453,7 @@ export class NextApp extends Construct {
           value: this.revalidationFunction.currentVersion.version,
         },
         REVALIDATION_TARGET_VERSION: {
-          value: this.revalidationFunction.currentVersion.version + 1,
+          value: parseInt(this.revalidationFunction.currentVersion.version) + 1,
         },
       },
       buildSpec: BuildSpec.fromObject({
@@ -472,27 +472,38 @@ export class NextApp extends Construct {
               './packages/cdk-next-app/appspec.sh apps/web/.open-next/server-function/appspec.yml SERVER',
               './packages/cdk-next-app/appspec.sh apps/web/.open-next/warmer-function/appspec.yml WARMER',
               './packages/cdk-next-app/appspec.sh apps/web/.open-next/image-optimization-function/appspec.yml IMAGE',
-              './packages/cdk-next-app/appspec.sh apps/web/.open-next/revalidation-function/appspec.yml REVALIDATION'
+              './packages/cdk-next-app/appspec.sh apps/web/.open-next/revalidation-function/appspec.yml REVALIDATION',
+
+              // create zip files
+              'zip -r server-function.zip apps/web/.open-next/server-function',
+              'zip -r warmer-function.zip apps/web/.open-next/warmer-function',
+              'zip -r image-optimization-function.zip apps/web/.open-next/image-optimization-function',
+              'zip -r revalidation-function.zip apps/web/.open-next/revalidation-function',
+
+              // deploy functions
+              'aws lambda update-function-code --function-name $SERVER_NAME --zip-file fileb://server-function.zip',
+              'aws lambda update-function-code --function-name $WARMER_NAME --zip-file fileb://warmer-function.zip',
+              'aws lambda update-function-code --function-name $IMAGE_NAME --zip-file fileb://image-optimization-function.zip',
+              'aws lambda update-function-code --function-name $REVALIDATION_NAME --zip-file fileb://revalidation-function.zip',
             ],
-          }
+          },
         },
         artifacts: {
-          files: ["**/*"],
           'secondary-artifacts': {
             ServerFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/server-function`,
             },
             RevalidationFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/revalidation-function`,
             },
             WarmerFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/warmer-function`,
             },
             ImageOptimizationFunctionArtifact: {
-              files: ["**/*"],
+              files: ["appspec.yml"],
               'base-directory': `apps/web/.open-next/image-optimization-function`,
             }
           }
