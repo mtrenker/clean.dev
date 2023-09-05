@@ -6,7 +6,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-source_file="appspec.yml.t"
+source_file="./appspec.yml.t"
 destination_file="$1"
 prefix="$2"
 
