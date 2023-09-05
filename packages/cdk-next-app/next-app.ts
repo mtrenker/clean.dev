@@ -481,10 +481,10 @@ export class NextApp extends Construct {
               'zip -r revalidation-function.zip apps/web/.open-next/revalidation-function',
 
               // deploy functions
-              'aws lambda update-function-code --function-name $SERVER_NAME --zip-file fileb://server-function.zip',
-              'aws lambda update-function-code --function-name $WARMER_NAME --zip-file fileb://warmer-function.zip',
-              'aws lambda update-function-code --function-name $IMAGE_NAME --zip-file fileb://image-optimization-function.zip',
-              'aws lambda update-function-code --function-name $REVALIDATION_NAME --zip-file fileb://revalidation-function.zip',
+              'aws lambda update-function-code --function-name $SERVER_NAME --publish --zip-file fileb://server-function.zip',
+              'aws lambda update-function-code --function-name $WARMER_NAME --publish --zip-file fileb://warmer-function.zip',
+              'aws lambda update-function-code --function-name $IMAGE_NAME --publish --zip-file fileb://image-optimization-function.zip',
+              'aws lambda update-function-code --function-name $REVALIDATION_NAME --publish --zip-file fileb://revalidation-function.zip',
             ],
           },
         },
