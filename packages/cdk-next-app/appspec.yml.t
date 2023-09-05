@@ -1,8 +1,8 @@
 resources:
-  - $NAME:
+  - FUNCTION_NAME:
       type: "AWS::Lambda::Function"
       properties:
-        name: $NAME
-        alias: $ALIAS
-        currentversion: $CURRENT_VERSION
-        targetversion: $TARGET_VERSION
+        name: FUNCTION_NAME
+        alias: 'live'
+        currentversion: CURRENT_VERSION
+        targetversion: TARGET_VERSION

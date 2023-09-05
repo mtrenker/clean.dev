@@ -433,53 +433,17 @@ export class NextApp extends Construct {
         SERVER_NAME: {
           value: this.serverFunction.functionName,
         },
-        SERVER_ALIAS: {
-          value: 'prod',
-        },
-        SERVER_CURRENT_VERSION: {
-          value: this.serverFunction.currentVersion.version,
-        },
-        SERVER_TARGET_VERSION: {
-          value: parseInt(this.serverFunction.currentVersion.version) + 1,
-        },
         // revalidation function
         WARMER_NAME: {
           value: this.warmerFunction.functionName,
-        },
-        WARMER_ALIAS: {
-          value: 'prod',
-        },
-        WARMER_CURRENT_VERSION: {
-          value: this.warmerFunction.currentVersion.version,
-        },
-        WARMER_TARGET_VERSION: {
-          value: parseInt(this.warmerFunction.currentVersion.version) + 1,
         },
         // image optimization function
         IMAGE_NAME: {
           value: this.imageOptimizationFunction.functionName,
         },
-        IMAGE_ALIAS: {
-          value: 'prod',
-        },
-        IMAGE_CURRENT_VERSION: {
-          value: this.imageOptimizationFunction.currentVersion.version,
-        },
-        IMAGE_TARGET_VERSION: {
-          value: parseInt(this.imageOptimizationFunction.currentVersion.version) + 1,
-        },
         // revalidation function
         REVALIDATION_NAME: {
           value: this.revalidationFunction.functionName,
-        },
-        REVALIDATION_ALIAS: {
-          value: 'prod',
-        },
-        REVALIDATION_CURRENT_VERSION: {
-          value: this.revalidationFunction.currentVersion.version,
-        },
-        REVALIDATION_TARGET_VERSION: {
-          value: parseInt(this.revalidationFunction.currentVersion.version) + 1,
         },
       },
       buildSpec: BuildSpec.fromObject({
@@ -495,11 +459,6 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
-              './packages/cdk-next-app/appspec.sh apps/web/.open-next/server-function/appspec.yml SERVER',
-              './packages/cdk-next-app/appspec.sh apps/web/.open-next/warmer-function/appspec.yml WARMER',
-              './packages/cdk-next-app/appspec.sh apps/web/.open-next/image-optimization-function/appspec.yml IMAGE',
-              './packages/cdk-next-app/appspec.sh apps/web/.open-next/revalidation-function/appspec.yml REVALIDATION',
-
               // create zip files
               'zip -r server-function.zip apps/web/.open-next/server-function',
               'zip -r warmer-function.zip apps/web/.open-next/warmer-function',
@@ -507,10 +466,7 @@ export class NextApp extends Construct {
               'zip -r revalidation-function.zip apps/web/.open-next/revalidation-function',
 
               // deploy functions
-              'aws lambda update-function-code --function-name $SERVER_NAME --publish --zip-file fileb://server-function.zip',
-              'aws lambda update-function-code --function-name $WARMER_NAME --publish --zip-file fileb://warmer-function.zip',
-              'aws lambda update-function-code --function-name $IMAGE_NAME --publish --zip-file fileb://image-optimization-function.zip',
-              'aws lambda update-function-code --function-name $REVALIDATION_NAME --publish --zip-file fileb://revalidation-function.zip',
+              './packages/cdk-next-app/update-code.sh $SERVER_NAME server-function.zip apps/web/.open-next/server-function/appspec.yml',
             ],
           },
         },
