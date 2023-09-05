@@ -645,6 +645,10 @@ export class NextApp extends Construct {
     pipeline.addStage({
       stageName: 'Deploy',
       actions: [
+        serverDeployAction,
+        revalidationDeployAction,
+        warmerDeployAction,
+        imageOptimizationDeployAction,
         assetDeployAction,
         cacheDeployAction
       ],
