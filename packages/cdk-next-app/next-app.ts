@@ -511,6 +511,19 @@ export class NextApp extends Construct {
       }),
     });
 
+    functionsProject.grantPrincipal.addToPrincipalPolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: [
+        'lambda:UpdateFunctionCode',
+      ],
+      resources: [
+        this.serverFunction.functionArn,
+        this.warmerFunction.functionArn,
+        this.imageOptimizationFunction.functionArn,
+        this.revalidationFunction.functionArn,
+      ],
+    }));
+
     const assetsProject = new PipelineProject(this, 'AssetsProject', {
       environment: {
         buildImage: LinuxBuildImage.STANDARD_7_0,
