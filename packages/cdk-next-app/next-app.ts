@@ -517,19 +517,19 @@ export class NextApp extends Construct {
         artifacts: {
           'secondary-artifacts': {
             ServerFunctionArtifact: {
-              files: ["appspec.yml"],
+              files: ["**/*"],
               'base-directory': `apps/web/.open-next/server-function`,
             },
             RevalidationFunctionArtifact: {
-              files: ["appspec.yml"],
+              files: ["**/*"],
               'base-directory': `apps/web/.open-next/revalidation-function`,
             },
             WarmerFunctionArtifact: {
-              files: ["appspec.yml"],
+              files: ["**/*"],
               'base-directory': `apps/web/.open-next/warmer-function`,
             },
             ImageOptimizationFunctionArtifact: {
-              files: ["appspec.yml"],
+              files: ["**/*"],
               'base-directory': `apps/web/.open-next/image-optimization-function`,
             }
           }
@@ -688,10 +688,6 @@ export class NextApp extends Construct {
     pipeline.addStage({
       stageName: 'Deploy',
       actions: [
-        serverDeployAction,
-        revalidationDeployAction,
-        warmerDeployAction,
-        imageOptimizationDeployAction,
         assetDeployAction,
         cacheDeployAction
       ],
