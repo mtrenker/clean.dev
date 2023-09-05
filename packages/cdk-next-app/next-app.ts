@@ -76,6 +76,10 @@ export class NextApp extends Construct {
 
   /** the cloudfront distribution that serves the next.js app */
   readonly distribution: Distribution;
+  imageFunctionProductionAlias: Alias;
+  serverFunctionProductionAlias: Alias;
+  warmerFunctionProductionAlias: Alias;
+  revalidationFunctionProductionAlias: Alias;
 
   /** the deployment of the static assets */
   // readonly assetDeployment: BucketDeployment;
@@ -104,6 +108,28 @@ export class NextApp extends Construct {
     this.serverFunction = this.prepareServerFunction();
     this.revalidationFunction = this.prepareRevalidationFunction();
     this.warmerFunction = this.prepareWarmerFunction();
+
+    // aliases
+    this.serverFunctionProductionAlias = new Alias(this, 'ServerFunctionProductionAlias', {
+      aliasName: 'prod',
+      version: this.serverFunction.currentVersion,
+    });
+
+    this.imageFunctionProductionAlias = new Alias(this, 'ImageFunctionProductionAlias', {
+      aliasName: 'prod',
+      version: this.imageOptimizationFunction.currentVersion,
+    });
+
+    this.warmerFunctionProductionAlias = new Alias(this, 'WarmerFunctionProductionAlias', {
+      aliasName: 'prod',
+      version: this.warmerFunction.currentVersion,
+    });
+
+    this.revalidationFunctionProductionAlias = new Alias(this, 'RevalidationFunctionProductionAlias', {
+      aliasName: 'prod',
+      version: this.revalidationFunction.currentVersion,
+    });
+
 
     this.certificate = this.prepareCertificate(certArn);
 
@@ -242,10 +268,10 @@ export class NextApp extends Construct {
   }
 
   private prepareDistribution() {
-    const serverFunctionUrl = this.serverFunction.addFunctionUrl({
+    const serverFunctionUrl = this.serverFunctionProductionAlias.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
-    const imageFunctionUrl = this.imageOptimizationFunction.addFunctionUrl({
+    const imageFunctionUrl = this.imageFunctionProductionAlias.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
@@ -599,7 +625,7 @@ export class NextApp extends Construct {
       pipeline,
       application,
       'ServerFunction',
-      this.serverFunction,
+      this.serverFunctionProductionAlias,
       serverFunctionArtifact
     );
 
@@ -607,7 +633,7 @@ export class NextApp extends Construct {
       pipeline,
       application,
       'RevalidationFunction',
-      this.revalidationFunction,
+      this.revalidationFunctionProductionAlias,
       revalidationFunctionArtifact
     );
 
@@ -615,7 +641,7 @@ export class NextApp extends Construct {
       pipeline,
       application,
       'WarmerFunction',
-      this.warmerFunction,
+      this.warmerFunctionProductionAlias,
       warmerFunctionArtifact
     );
 
@@ -623,7 +649,7 @@ export class NextApp extends Construct {
       pipeline,
       application,
       'ImageOptimizationFunction',
-      this.imageOptimizationFunction,
+      this.imageFunctionProductionAlias,
       imageOptimizationFunctionArtifact
     );
 
@@ -676,14 +702,9 @@ export class NextApp extends Construct {
     pipeline: Pipeline,
     application: LambdaApplication,
     name: string,
-    fn: Function,
+    alias: Alias,
     input: Artifact
   ) {
-
-    const alias = new Alias(this, `${name}Alias`, {
-      aliasName: 'prod',
-      version: fn.currentVersion,
-    });
 
     const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
       application,
