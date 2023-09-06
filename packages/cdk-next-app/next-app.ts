@@ -13,9 +13,9 @@ import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
-import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
+import { LambdaApplication, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
 import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
 import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
@@ -80,6 +80,8 @@ export class NextApp extends Construct {
   serverFunctionProductionAlias: Alias;
   warmerFunctionProductionAlias: Alias;
   revalidationFunctionProductionAlias: Alias;
+
+  functionDeploymentGroup?: LambdaDeploymentGroup;
 
   /** the deployment of the static assets */
   // readonly assetDeployment: BucketDeployment;
@@ -388,10 +390,6 @@ export class NextApp extends Construct {
     });
   }
 
-  private test () {
-
-  }
-
   private prepareCacheDeployment() {
     const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'cache');
 
@@ -429,19 +427,15 @@ export class NextApp extends Construct {
         computeType: ComputeType.MEDIUM,
       },
       environmentVariables: {
-        // server function
         SERVER_NAME: {
           value: this.serverFunction.functionName,
         },
-        // revalidation function
         WARMER_NAME: {
           value: this.warmerFunction.functionName,
         },
-        // image optimization function
         IMAGE_NAME: {
           value: this.imageOptimizationFunction.functionName,
         },
-        // revalidation function
         REVALIDATION_NAME: {
           value: this.revalidationFunction.functionName,
         },
@@ -589,50 +583,51 @@ export class NextApp extends Construct {
 
     // function deployments
 
-    const serverDeployAction = this.prepareFunctionDeployAction(
-      pipeline,
+    this.functionDeploymentGroup = new LambdaDeploymentGroup(this, 'FunctionDeploymentGroup', {
       application,
+      alias: this.serverFunctionProductionAlias,
+    });
+
+    pipeline.artifactBucket.grantRead(this.functionDeploymentGroup.role);
+
+    const serverDeployAction = this.prepareFunctionDeployAction(
       'ServerFunction',
-      this.serverFunctionProductionAlias,
       serverFunctionArtifact
     );
 
     const revalidationDeployAction = this.prepareFunctionDeployAction(
-      pipeline,
-      application,
       'RevalidationFunction',
-      this.revalidationFunctionProductionAlias,
       revalidationFunctionArtifact
     );
 
     const warmerDeployAction = this.prepareFunctionDeployAction(
-      pipeline,
-      application,
       'WarmerFunction',
-      this.warmerFunctionProductionAlias,
       warmerFunctionArtifact
     );
 
     const imageOptimizationDeployAction = this.prepareFunctionDeployAction(
-      pipeline,
-      application,
       'ImageOptimizationFunction',
-      this.imageFunctionProductionAlias,
       imageOptimizationFunctionArtifact
     );
 
     // s3 deployments
 
+    const cacheControl = CacheControl.fromString(
+      `public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`
+    );
+
     const assetDeployAction = new S3DeployAction({
       actionName: 'DeployAssets',
       input: assetsArtifact,
       bucket: this.staticBucket,
+      cacheControl: [cacheControl],
     });
 
     const cacheDeployAction = new S3DeployAction({
       actionName: 'DeployCache',
       input: cacheArtifact,
       bucket: this.cacheBucket,
+      cacheControl: [cacheControl],
     });
 
 
@@ -666,29 +661,15 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareFunctionDeployAction(
-    pipeline: Pipeline,
-    application: LambdaApplication,
-    name: string,
-    alias: Alias,
-    input: Artifact
-  ) {
-
-    const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
-      application,
-      alias,
-      deploymentConfig: LambdaDeploymentConfig.ALL_AT_ONCE,
-    });
-
-    pipeline.artifactBucket.grantRead(deploymentGroup.role);
-
-    const deployAction = new CodeDeployServerDeployAction({
+  private prepareFunctionDeployAction(name: string, input: Artifact) {
+    if (!this.functionDeploymentGroup) {
+      throw new Error('FunctionDeploymentGroup is not defined');
+    }
+    return new CodeDeployServerDeployAction({
       actionName: `${name}DeployAction`,
       input,
-      deploymentGroup,
+      deploymentGroup: this.functionDeploymentGroup,
     });
-
-    return deployAction;
   }
 
   private buildApp() {
