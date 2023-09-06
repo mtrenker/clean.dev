@@ -13,9 +13,9 @@ import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
-import { LambdaApplication, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
+import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
 import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, ManualApprovalAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
 import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
@@ -80,8 +80,6 @@ export class NextApp extends Construct {
   serverFunctionProductionAlias: Alias;
   warmerFunctionProductionAlias: Alias;
   revalidationFunctionProductionAlias: Alias;
-
-  functionDeploymentGroup?: LambdaDeploymentGroup;
 
   /** the deployment of the static assets */
   // readonly assetDeployment: BucketDeployment;
@@ -583,30 +581,35 @@ export class NextApp extends Construct {
 
     // function deployments
 
-    this.functionDeploymentGroup = new LambdaDeploymentGroup(this, 'FunctionDeploymentGroup', {
-      application,
-      alias: this.serverFunctionProductionAlias,
-    });
-
-    pipeline.artifactBucket.grantRead(this.functionDeploymentGroup.role);
-
     const serverDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
+      application,
       'ServerFunction',
+      this.serverFunctionProductionAlias,
       serverFunctionArtifact
     );
 
     const revalidationDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
+      application,
       'RevalidationFunction',
+      this.revalidationFunctionProductionAlias,
       revalidationFunctionArtifact
     );
 
     const warmerDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
+      application,
       'WarmerFunction',
+      this.warmerFunctionProductionAlias,
       warmerFunctionArtifact
     );
 
     const imageOptimizationDeployAction = this.prepareFunctionDeployAction(
+      pipeline,
+      application,
       'ImageOptimizationFunction',
+      this.imageFunctionProductionAlias,
       imageOptimizationFunctionArtifact
     );
 
@@ -665,15 +668,29 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareFunctionDeployAction(name: string, input: Artifact) {
-    if (!this.functionDeploymentGroup) {
-      throw new Error('FunctionDeploymentGroup is not defined');
-    }
-    return new CodeDeployServerDeployAction({
+  private prepareFunctionDeployAction(
+    pipeline: Pipeline,
+    application: LambdaApplication,
+    name: string,
+    alias: Alias,
+    input: Artifact
+  ) {
+
+    const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
+      application,
+      alias,
+      deploymentConfig: LambdaDeploymentConfig.ALL_AT_ONCE,
+    });
+
+    pipeline.artifactBucket.grantRead(deploymentGroup.role);
+
+    const deployAction = new CodeDeployServerDeployAction({
       actionName: `${name}DeployAction`,
       input,
-      deploymentGroup: this.functionDeploymentGroup,
+      deploymentGroup,
     });
+
+    return deployAction;
   }
 
   private buildApp() {
