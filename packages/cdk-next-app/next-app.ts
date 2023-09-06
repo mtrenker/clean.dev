@@ -16,7 +16,7 @@ import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deplo
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import { LambdaApplication, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
-import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
+import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, ManualApprovalAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
 import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
@@ -633,9 +633,13 @@ export class NextApp extends Construct {
 
     // stages
 
+    const startAction = new ManualApprovalAction({
+      actionName: 'Start',
+    });
+
     pipeline.addStage({
       stageName: 'Source',
-      actions: [sourceAction],
+      actions: [startAction, sourceAction],
     });
 
     pipeline.addStage({
