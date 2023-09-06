@@ -639,12 +639,12 @@ export class NextApp extends Construct {
 
     pipeline.addStage({
       stageName: 'Source',
-      actions: [startAction, sourceAction],
+      actions: [sourceAction],
     });
 
     pipeline.addStage({
       stageName: 'BuildFunctions',
-      actions: [buildFunctions],
+      actions: [startAction, buildFunctions],
     });
 
     pipeline.addStage({
