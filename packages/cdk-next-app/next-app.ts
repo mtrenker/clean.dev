@@ -13,10 +13,10 @@ import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
-import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, ManualApprovalAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
+import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
 import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
@@ -636,10 +636,6 @@ export class NextApp extends Construct {
 
     // stages
 
-    const startAction = new ManualApprovalAction({
-      actionName: 'Start',
-    });
-
     pipeline.addStage({
       stageName: 'Source',
       actions: [sourceAction],
@@ -647,7 +643,7 @@ export class NextApp extends Construct {
 
     pipeline.addStage({
       stageName: 'BuildFunctions',
-      actions: [startAction, buildFunctions],
+      actions: [buildFunctions],
     });
 
     pipeline.addStage({
