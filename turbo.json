@@ -1,10 +1,13 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
-    "dev": {
-      "cache": false
+    "//#codegen": {
+      "persistent": true
     },
-    "generate": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "dependsOn": [
         "^build"

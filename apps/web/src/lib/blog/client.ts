@@ -39,8 +39,31 @@ export const getPosts = async (options?: QueryOptions) => {
       posts {
         title
         slug
+        image {
+          url(transformation: {
+            image: {
+              resize: {
+                width: 800
+              }
+            }
+          })
+        }
         teaser {
           raw
+        }
+        createdAt
+        author {
+          name
+          title
+          avatar {
+            url(transformation: {
+              image: {
+                resize: {
+                  width: 80
+                }
+              }
+            })
+          }
         }
       }
     }

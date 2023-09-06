@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts",
-    "dev": "dotenv -- turbo dev --parallel",
+    "codegen": "graphql-codegen --config codegen.ts --watch",
+    "dev": "dotenv -- turbo run dev codegen",
     "prepare": "husky install",
     "generate": "turbo run generate",
     "export": "turbo run export",
@@ -48,5 +48,8 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
   },
-  "packageManager": "pnpm@8.7.0"
+  "packageManager": "pnpm@8.7.0",
+  "dependencies": {
+    "@parcel/watcher": "^2.3.0"
+  }
 }

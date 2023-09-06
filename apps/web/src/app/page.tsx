@@ -7,12 +7,12 @@ import { projects } from './projects';
 const Home: React.FC = () => (
   <main className={clsx([
       'mx-auto flex flex-col items-center gap-5',
-      'print:m-0 print:mx-14 print:w-full print:max-w-none print:items-start',
+      'print:mx-14 print:items-start',
     ])}
     >
       <section
         className={clsx([
-          'prose dark:prose-invert flex-1 px-6',
+          'prose flex-1 px-6',
           'w-full print:max-w-none print:px-0',
         ])}
       >
@@ -71,7 +71,7 @@ const Home: React.FC = () => (
         <div className="hidden print:flex print:flex-col print:justify-between print:gap-5">
           <section
             className={clsx([
-              'prose dark:prose-invert px-6',
+              'prose px-6',
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
@@ -84,7 +84,7 @@ const Home: React.FC = () => (
 
           <section
             className={clsx([
-              'prose dark:prose-invert px-6',
+              'prose px-6',
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
@@ -109,7 +109,7 @@ const Home: React.FC = () => (
 
         <section
           className={clsx([
-            'prose dark:prose-invert px-6',
+            'prose px-6',
             'print:max-w-none print:flex-1 print:px-0',
           ])}
         >
@@ -135,7 +135,7 @@ const Home: React.FC = () => (
 
       <section
         className={clsx([
-          'prose dark:prose-invert px-6',
+          'prose px-6',
           'print:max-w-none print:px-0',
         ])}
       >

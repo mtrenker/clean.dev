@@ -2,8 +2,7 @@ import clsx from "clsx";
 import { NextPage } from "next";
 
 const ImprintPage: NextPage = () => (
-  <main className={clsx('prose prose-invert container mx-auto max-w-md p-4')}
-  >
+  <main className="prose container mx-auto max-w-md p-4">
     <h1 className="text-3xl font-semibold uppercase">Imprint</h1>
     <h2>Information according to § 5 TMG</h2>
     <address>

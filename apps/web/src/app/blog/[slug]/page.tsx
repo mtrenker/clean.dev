@@ -14,7 +14,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
   const draft = draftMode();
   const post = await getPost(slug, { draft: draft.isEnabled });
   return (
-    <div className="container mx-auto prose prose-invert">
+    <div className="container mx-auto prose">
       <h1>{post?.title}</h1>
       <SlateRender value={post?.teaser.raw.children} />
       <SlateRender value={post?.content.raw.children} />
