@@ -2004,7 +2004,7 @@ export type Post = Node & {
   stage: Stage;
   /** Will be shown on the overview page */
   teaser: PostTeaserRichText;
-  title?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
   /** The time the document was updated */
   updatedAt: Scalars['DateTime']['output'];
   /** User that last updated this document */
@@ -2154,7 +2154,7 @@ export type PostCreateInput = {
   /** teaser input for default locale (en) */
   teaser: Scalars['RichTextAST']['input'];
   /** title input for default locale (en) */
-  title?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -2162,7 +2162,7 @@ export type PostCreateLocalizationDataInput = {
   content: Scalars['RichTextAST']['input'];
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   teaser: Scalars['RichTextAST']['input'];
-  title?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -4460,14 +4460,14 @@ export enum _SystemDateTimeFieldVariation {
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', title?: string | null, slug?: string | null, createdAt: any, image?: { __typename?: 'Asset', url: string } | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, author?: { __typename?: 'Author', name: string, title?: string | null, avatar: { __typename?: 'Asset', url: string } } | null }> };
+export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', title: string, slug?: string | null, createdAt: any, image?: { __typename?: 'Asset', url: string } | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, author?: { __typename?: 'Author', name: string, title?: string | null, avatar: { __typename?: 'Asset', url: string } } | null }> };
 
 export type GetPostQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title?: string | null, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any } } | null };
 
 
 
@@ -5117,7 +5117,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   stage?: Resolver<ResolversTypes['Stage'], ParentType, ContextType>;
   teaser?: Resolver<ResolversTypes['PostTeaserRichText'], ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType, RequireFields<PostUpdatedAtArgs, 'variation'>>;
   updatedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<PostUpdatedByArgs>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
