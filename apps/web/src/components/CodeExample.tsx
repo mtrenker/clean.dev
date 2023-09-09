@@ -2,7 +2,7 @@ import React from 'react';
 import { highlight, languages } from 'prismjs';
 import { getFile } from '@/lib/github/client';
 
-import 'prismjs/themes/prism.min.css';
+import 'prismjs/themes/prism-dark.min.css';
 
 interface CodeExampleProps {
   expression: string;

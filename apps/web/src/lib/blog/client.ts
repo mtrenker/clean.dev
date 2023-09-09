@@ -86,6 +86,14 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
           raw
         }
         content {
+          references {
+            ... on CodeExample {
+              id
+              name
+              owner
+              expression
+            }
+          }
           raw
         }
       }

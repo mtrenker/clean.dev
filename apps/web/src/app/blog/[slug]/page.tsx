@@ -17,7 +17,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
     <div className="container mx-auto prose">
       <h1>{post?.title}</h1>
       <SlateRender value={post?.teaser.raw.children} />
-      <SlateRender value={post?.content.raw.children} />
+      <SlateRender value={post?.content.raw.children} references={post?.content.references} />
     </div>
   );
 };

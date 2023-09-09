@@ -8,7 +8,7 @@ export class AppStage extends Stage {
   constructor (scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    new MonitoringStack(this, 'MonitoringStack', {});
+    new MonitoringStack(this, 'MonitoringStack');
 
     const certStack = new CertStack(this, 'CertStack', {
       crossRegionReferences: true,

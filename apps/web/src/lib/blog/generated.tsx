@@ -1246,6 +1246,568 @@ export type BatchPayload = {
   count: Scalars['Long']['output'];
 };
 
+export type CodeExample = Node & {
+  __typename?: 'CodeExample';
+  /** The time the document was created */
+  createdAt: Scalars['DateTime']['output'];
+  /** User that created this document */
+  createdBy?: Maybe<User>;
+  /** Get the document in other stages */
+  documentInStages: Array<CodeExample>;
+  expression?: Maybe<Scalars['String']['output']>;
+  /** List of CodeExample versions */
+  history: Array<Version>;
+  /** The unique identifier */
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  owner?: Maybe<Scalars['String']['output']>;
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** User that last published this document */
+  publishedBy?: Maybe<User>;
+  repo?: Maybe<Scalars['String']['output']>;
+  scheduledIn: Array<ScheduledOperation>;
+  /** System stage field */
+  stage: Stage;
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime']['output'];
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>;
+};
+
+
+export type CodeExampleCreatedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']['input']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+
+export type CodeExampleDocumentInStagesArgs = {
+  includeCurrent?: Scalars['Boolean']['input'];
+  inheritLocale?: Scalars['Boolean']['input'];
+  stages?: Array<Stage>;
+};
+
+
+export type CodeExampleHistoryArgs = {
+  limit?: Scalars['Int']['input'];
+  skip?: Scalars['Int']['input'];
+  stageOverride?: InputMaybe<Stage>;
+};
+
+
+export type CodeExamplePublishedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']['input']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+
+export type CodeExampleScheduledInArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  forceParentLocale?: InputMaybe<Scalars['Boolean']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locales?: InputMaybe<Array<Locale>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ScheduledOperationWhereInput>;
+};
+
+
+export type CodeExampleUpdatedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']['input']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type CodeExampleConnectInput = {
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: InputMaybe<ConnectPositionInput>;
+  /** Document to connect */
+  where: CodeExampleWhereUniqueInput;
+};
+
+/** A connection to a list of items. */
+export type CodeExampleConnection = {
+  __typename?: 'CodeExampleConnection';
+  aggregate: Aggregate;
+  /** A list of edges. */
+  edges: Array<CodeExampleEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+export type CodeExampleCreateInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  expression?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
+  repo?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type CodeExampleCreateManyInlineInput = {
+  /** Connect multiple existing CodeExample documents */
+  connect?: InputMaybe<Array<CodeExampleWhereUniqueInput>>;
+  /** Create and connect multiple existing CodeExample documents */
+  create?: InputMaybe<Array<CodeExampleCreateInput>>;
+};
+
+export type CodeExampleCreateOneInlineInput = {
+  /** Connect one existing CodeExample document */
+  connect?: InputMaybe<CodeExampleWhereUniqueInput>;
+  /** Create and connect one CodeExample document */
+  create?: InputMaybe<CodeExampleCreateInput>;
+};
+
+/** An edge in a connection. */
+export type CodeExampleEdge = {
+  __typename?: 'CodeExampleEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: CodeExample;
+};
+
+/** Identifies documents */
+export type CodeExampleManyWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  documentInStages_every?: InputMaybe<CodeExampleWhereStageInput>;
+  documentInStages_none?: InputMaybe<CodeExampleWhereStageInput>;
+  documentInStages_some?: InputMaybe<CodeExampleWhereStageInput>;
+  expression?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  expression_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  expression_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  expression_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  expression_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  expression_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  expression_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  expression_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  expression_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  expression_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']['input']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']['input']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  owner_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  owner_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  owner_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  owner_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  owner_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  owner_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  owner_starts_with?: InputMaybe<Scalars['String']['input']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  repo?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  repo_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  repo_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  repo_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  repo_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  repo_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  repo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  repo_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  repo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  repo_starts_with?: InputMaybe<Scalars['String']['input']>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+};
+
+export enum CodeExampleOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  ExpressionAsc = 'expression_ASC',
+  ExpressionDesc = 'expression_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  OwnerAsc = 'owner_ASC',
+  OwnerDesc = 'owner_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  RepoAsc = 'repo_ASC',
+  RepoDesc = 'repo_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+export type CodeExampleUpdateInput = {
+  expression?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
+  repo?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CodeExampleUpdateManyInlineInput = {
+  /** Connect multiple existing CodeExample documents */
+  connect?: InputMaybe<Array<CodeExampleConnectInput>>;
+  /** Create and connect multiple CodeExample documents */
+  create?: InputMaybe<Array<CodeExampleCreateInput>>;
+  /** Delete multiple CodeExample documents */
+  delete?: InputMaybe<Array<CodeExampleWhereUniqueInput>>;
+  /** Disconnect multiple CodeExample documents */
+  disconnect?: InputMaybe<Array<CodeExampleWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing CodeExample documents */
+  set?: InputMaybe<Array<CodeExampleWhereUniqueInput>>;
+  /** Update multiple CodeExample documents */
+  update?: InputMaybe<Array<CodeExampleUpdateWithNestedWhereUniqueInput>>;
+  /** Upsert multiple CodeExample documents */
+  upsert?: InputMaybe<Array<CodeExampleUpsertWithNestedWhereUniqueInput>>;
+};
+
+export type CodeExampleUpdateManyInput = {
+  expression?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
+  repo?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CodeExampleUpdateManyWithNestedWhereInput = {
+  /** Update many input */
+  data: CodeExampleUpdateManyInput;
+  /** Document search */
+  where: CodeExampleWhereInput;
+};
+
+export type CodeExampleUpdateOneInlineInput = {
+  /** Connect existing CodeExample document */
+  connect?: InputMaybe<CodeExampleWhereUniqueInput>;
+  /** Create and connect one CodeExample document */
+  create?: InputMaybe<CodeExampleCreateInput>;
+  /** Delete currently connected CodeExample document */
+  delete?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Disconnect currently connected CodeExample document */
+  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Update single CodeExample document */
+  update?: InputMaybe<CodeExampleUpdateWithNestedWhereUniqueInput>;
+  /** Upsert single CodeExample document */
+  upsert?: InputMaybe<CodeExampleUpsertWithNestedWhereUniqueInput>;
+};
+
+export type CodeExampleUpdateWithNestedWhereUniqueInput = {
+  /** Document to update */
+  data: CodeExampleUpdateInput;
+  /** Unique document search */
+  where: CodeExampleWhereUniqueInput;
+};
+
+export type CodeExampleUpsertInput = {
+  /** Create document if it didn't exist */
+  create: CodeExampleCreateInput;
+  /** Update document if it exists */
+  update: CodeExampleUpdateInput;
+};
+
+export type CodeExampleUpsertWithNestedWhereUniqueInput = {
+  /** Upsert data */
+  data: CodeExampleUpsertInput;
+  /** Unique document search */
+  where: CodeExampleWhereUniqueInput;
+};
+
+/** This contains a set of filters that can be used to compare values internally */
+export type CodeExampleWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Identifies documents */
+export type CodeExampleWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<CodeExampleWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  documentInStages_every?: InputMaybe<CodeExampleWhereStageInput>;
+  documentInStages_none?: InputMaybe<CodeExampleWhereStageInput>;
+  documentInStages_some?: InputMaybe<CodeExampleWhereStageInput>;
+  expression?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  expression_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  expression_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  expression_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  expression_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  expression_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  expression_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  expression_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  expression_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  expression_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']['input']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']['input']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  owner_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  owner_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  owner_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  owner_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  owner_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  owner_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  owner_starts_with?: InputMaybe<Scalars['String']['input']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  repo?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  repo_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  repo_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  repo_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  repo_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  repo_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  repo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  repo_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  repo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  repo_starts_with?: InputMaybe<Scalars['String']['input']>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']['input']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type CodeExampleWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<CodeExampleWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<CodeExampleWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<CodeExampleWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: InputMaybe<CodeExampleWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: InputMaybe<Stage>;
+};
+
+/** References CodeExample record uniquely */
+export type CodeExampleWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
 /** Representing a color value comprising of HEX, RGBA and css color values */
 export type Color = {
   __typename?: 'Color';
@@ -1397,6 +1959,8 @@ export type Mutation = {
   createAsset?: Maybe<Asset>;
   /** Create one author */
   createAuthor?: Maybe<Author>;
+  /** Create one codeExample */
+  createCodeExample?: Maybe<CodeExample>;
   /** Create one post */
   createPost?: Maybe<Post>;
   /** Create one scheduledRelease */
@@ -1405,6 +1969,8 @@ export type Mutation = {
   deleteAsset?: Maybe<Asset>;
   /** Delete one author from _all_ existing stages. Returns deleted document. */
   deleteAuthor?: Maybe<Author>;
+  /** Delete one codeExample from _all_ existing stages. Returns deleted document. */
+  deleteCodeExample?: Maybe<CodeExample>;
   /**
    * Delete many Asset documents
    * @deprecated Please use the new paginated many mutation (deleteManyAssetsConnection)
@@ -1419,6 +1985,13 @@ export type Mutation = {
   deleteManyAuthors: BatchPayload;
   /** Delete many Author documents, return deleted documents */
   deleteManyAuthorsConnection: AuthorConnection;
+  /**
+   * Delete many CodeExample documents
+   * @deprecated Please use the new paginated many mutation (deleteManyCodeExamplesConnection)
+   */
+  deleteManyCodeExamples: BatchPayload;
+  /** Delete many CodeExample documents, return deleted documents */
+  deleteManyCodeExamplesConnection: CodeExampleConnection;
   /**
    * Delete many Post documents
    * @deprecated Please use the new paginated many mutation (deleteManyPostsConnection)
@@ -1436,6 +2009,8 @@ export type Mutation = {
   publishAsset?: Maybe<Asset>;
   /** Publish one author */
   publishAuthor?: Maybe<Author>;
+  /** Publish one codeExample */
+  publishCodeExample?: Maybe<CodeExample>;
   /**
    * Publish many Asset documents
    * @deprecated Please use the new paginated many mutation (publishManyAssetsConnection)
@@ -1451,6 +2026,13 @@ export type Mutation = {
   /** Publish many Author documents */
   publishManyAuthorsConnection: AuthorConnection;
   /**
+   * Publish many CodeExample documents
+   * @deprecated Please use the new paginated many mutation (publishManyCodeExamplesConnection)
+   */
+  publishManyCodeExamples: BatchPayload;
+  /** Publish many CodeExample documents */
+  publishManyCodeExamplesConnection: CodeExampleConnection;
+  /**
    * Publish many Post documents
    * @deprecated Please use the new paginated many mutation (publishManyPostsConnection)
    */
@@ -1463,18 +2045,24 @@ export type Mutation = {
   schedulePublishAsset?: Maybe<Asset>;
   /** Schedule to publish one author */
   schedulePublishAuthor?: Maybe<Author>;
+  /** Schedule to publish one codeExample */
+  schedulePublishCodeExample?: Maybe<CodeExample>;
   /** Schedule to publish one post */
   schedulePublishPost?: Maybe<Post>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishAsset?: Maybe<Asset>;
   /** Unpublish one author from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishAuthor?: Maybe<Author>;
+  /** Unpublish one codeExample from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishCodeExample?: Maybe<CodeExample>;
   /** Unpublish one post from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishPost?: Maybe<Post>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishAsset?: Maybe<Asset>;
   /** Unpublish one author from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishAuthor?: Maybe<Author>;
+  /** Unpublish one codeExample from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  unpublishCodeExample?: Maybe<CodeExample>;
   /**
    * Unpublish many Asset documents
    * @deprecated Please use the new paginated many mutation (unpublishManyAssetsConnection)
@@ -1490,6 +2078,13 @@ export type Mutation = {
   /** Find many Author documents that match criteria in specified stage and unpublish from target stages */
   unpublishManyAuthorsConnection: AuthorConnection;
   /**
+   * Unpublish many CodeExample documents
+   * @deprecated Please use the new paginated many mutation (unpublishManyCodeExamplesConnection)
+   */
+  unpublishManyCodeExamples: BatchPayload;
+  /** Find many CodeExample documents that match criteria in specified stage and unpublish from target stages */
+  unpublishManyCodeExamplesConnection: CodeExampleConnection;
+  /**
    * Unpublish many Post documents
    * @deprecated Please use the new paginated many mutation (unpublishManyPostsConnection)
    */
@@ -1502,6 +2097,8 @@ export type Mutation = {
   updateAsset?: Maybe<Asset>;
   /** Update one author */
   updateAuthor?: Maybe<Author>;
+  /** Update one codeExample */
+  updateCodeExample?: Maybe<CodeExample>;
   /**
    * Update many assets
    * @deprecated Please use the new paginated many mutation (updateManyAssetsConnection)
@@ -1517,6 +2114,13 @@ export type Mutation = {
   /** Update many Author documents */
   updateManyAuthorsConnection: AuthorConnection;
   /**
+   * Update many codeExamples
+   * @deprecated Please use the new paginated many mutation (updateManyCodeExamplesConnection)
+   */
+  updateManyCodeExamples: BatchPayload;
+  /** Update many CodeExample documents */
+  updateManyCodeExamplesConnection: CodeExampleConnection;
+  /**
    * Update many posts
    * @deprecated Please use the new paginated many mutation (updateManyPostsConnection)
    */
@@ -1531,6 +2135,8 @@ export type Mutation = {
   upsertAsset?: Maybe<Asset>;
   /** Upsert one author */
   upsertAuthor?: Maybe<Author>;
+  /** Upsert one codeExample */
+  upsertCodeExample?: Maybe<CodeExample>;
   /** Upsert one post */
   upsertPost?: Maybe<Post>;
 };
@@ -1543,6 +2149,11 @@ export type MutationCreateAssetArgs = {
 
 export type MutationCreateAuthorArgs = {
   data: AuthorCreateInput;
+};
+
+
+export type MutationCreateCodeExampleArgs = {
+  data: CodeExampleCreateInput;
 };
 
 
@@ -1563,6 +2174,11 @@ export type MutationDeleteAssetArgs = {
 
 export type MutationDeleteAuthorArgs = {
   where: AuthorWhereUniqueInput;
+};
+
+
+export type MutationDeleteCodeExampleArgs = {
+  where: CodeExampleWhereUniqueInput;
 };
 
 
@@ -1593,6 +2209,21 @@ export type MutationDeleteManyAuthorsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<AuthorManyWhereInput>;
+};
+
+
+export type MutationDeleteManyCodeExamplesArgs = {
+  where?: InputMaybe<CodeExampleManyWhereInput>;
+};
+
+
+export type MutationDeleteManyCodeExamplesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']['input']>;
+  before?: InputMaybe<Scalars['ID']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
 };
 
 
@@ -1641,6 +2272,12 @@ export type MutationPublishAuthorArgs = {
 };
 
 
+export type MutationPublishCodeExampleArgs = {
+  to?: Array<Stage>;
+  where: CodeExampleWhereUniqueInput;
+};
+
+
 export type MutationPublishManyAssetsArgs = {
   locales?: InputMaybe<Array<Locale>>;
   publishBase?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1680,6 +2317,24 @@ export type MutationPublishManyAuthorsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   to?: Array<Stage>;
   where?: InputMaybe<AuthorManyWhereInput>;
+};
+
+
+export type MutationPublishManyCodeExamplesArgs = {
+  to?: Array<Stage>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
+};
+
+
+export type MutationPublishManyCodeExamplesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']['input']>;
+  before?: InputMaybe<Scalars['ID']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  from?: InputMaybe<Stage>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  to?: Array<Stage>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
 };
 
 
@@ -1735,6 +2390,14 @@ export type MutationSchedulePublishAuthorArgs = {
 };
 
 
+export type MutationSchedulePublishCodeExampleArgs = {
+  releaseAt?: InputMaybe<Scalars['DateTime']['input']>;
+  releaseId?: InputMaybe<Scalars['String']['input']>;
+  to?: Array<Stage>;
+  where: CodeExampleWhereUniqueInput;
+};
+
+
 export type MutationSchedulePublishPostArgs = {
   locales?: InputMaybe<Array<Locale>>;
   publishBase?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1764,6 +2427,14 @@ export type MutationScheduleUnpublishAuthorArgs = {
 };
 
 
+export type MutationScheduleUnpublishCodeExampleArgs = {
+  from?: Array<Stage>;
+  releaseAt?: InputMaybe<Scalars['DateTime']['input']>;
+  releaseId?: InputMaybe<Scalars['String']['input']>;
+  where: CodeExampleWhereUniqueInput;
+};
+
+
 export type MutationScheduleUnpublishPostArgs = {
   from?: Array<Stage>;
   locales?: InputMaybe<Array<Locale>>;
@@ -1785,6 +2456,12 @@ export type MutationUnpublishAssetArgs = {
 export type MutationUnpublishAuthorArgs = {
   from?: Array<Stage>;
   where: AuthorWhereUniqueInput;
+};
+
+
+export type MutationUnpublishCodeExampleArgs = {
+  from?: Array<Stage>;
+  where: CodeExampleWhereUniqueInput;
 };
 
 
@@ -1825,6 +2502,24 @@ export type MutationUnpublishManyAuthorsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   stage?: InputMaybe<Stage>;
   where?: InputMaybe<AuthorManyWhereInput>;
+};
+
+
+export type MutationUnpublishManyCodeExamplesArgs = {
+  from?: Array<Stage>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
+};
+
+
+export type MutationUnpublishManyCodeExamplesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']['input']>;
+  before?: InputMaybe<Scalars['ID']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  from?: Array<Stage>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  stage?: InputMaybe<Stage>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
 };
 
 
@@ -1870,6 +2565,12 @@ export type MutationUpdateAuthorArgs = {
 };
 
 
+export type MutationUpdateCodeExampleArgs = {
+  data: CodeExampleUpdateInput;
+  where: CodeExampleWhereUniqueInput;
+};
+
+
 export type MutationUpdateManyAssetsArgs = {
   data: AssetUpdateManyInput;
   where?: InputMaybe<AssetManyWhereInput>;
@@ -1901,6 +2602,23 @@ export type MutationUpdateManyAuthorsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<AuthorManyWhereInput>;
+};
+
+
+export type MutationUpdateManyCodeExamplesArgs = {
+  data: CodeExampleUpdateManyInput;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
+};
+
+
+export type MutationUpdateManyCodeExamplesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']['input']>;
+  before?: InputMaybe<Scalars['ID']['input']>;
+  data: CodeExampleUpdateManyInput;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<CodeExampleManyWhereInput>;
 };
 
 
@@ -1942,6 +2660,12 @@ export type MutationUpsertAssetArgs = {
 export type MutationUpsertAuthorArgs = {
   upsert: AuthorUpsertInput;
   where: AuthorWhereUniqueInput;
+};
+
+
+export type MutationUpsertCodeExampleArgs = {
+  upsert: CodeExampleUpsertInput;
+  where: CodeExampleWhereUniqueInput;
 };
 
 
@@ -2140,7 +2864,7 @@ export type PostContentRichTextReferencesArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type PostContentRichTextEmbeddedTypes = Asset | Post;
+export type PostContentRichTextEmbeddedTypes = Asset | CodeExample | Post;
 
 export type PostCreateInput = {
   author?: InputMaybe<AuthorCreateOneInlineInput>;
@@ -2650,6 +3374,14 @@ export type Query = {
   authors: Array<Author>;
   /** Retrieve multiple authors using the Relay connection interface */
   authorsConnection: AuthorConnection;
+  /** Retrieve a single codeExample */
+  codeExample?: Maybe<CodeExample>;
+  /** Retrieve document version */
+  codeExampleVersion?: Maybe<DocumentVersion>;
+  /** Retrieve multiple codeExamples */
+  codeExamples: Array<CodeExample>;
+  /** Retrieve multiple codeExamples using the Relay connection interface */
+  codeExamplesConnection: CodeExampleConnection;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** Retrieve a single post */
@@ -2754,6 +3486,44 @@ export type QueryAuthorsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   stage?: Stage;
   where?: InputMaybe<AuthorWhereInput>;
+};
+
+
+export type QueryCodeExampleArgs = {
+  locales?: Array<Locale>;
+  stage?: Stage;
+  where: CodeExampleWhereUniqueInput;
+};
+
+
+export type QueryCodeExampleVersionArgs = {
+  where: VersionWhereInput;
+};
+
+
+export type QueryCodeExamplesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<CodeExampleOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  stage?: Stage;
+  where?: InputMaybe<CodeExampleWhereInput>;
+};
+
+
+export type QueryCodeExamplesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<CodeExampleOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  stage?: Stage;
+  where?: InputMaybe<CodeExampleWhereInput>;
 };
 
 
@@ -3012,7 +3782,7 @@ export type ScheduledOperationUpdatedByArgs = {
   locales?: InputMaybe<Array<Locale>>;
 };
 
-export type ScheduledOperationAffectedDocument = Asset | Author | Post;
+export type ScheduledOperationAffectedDocument = Asset | Author | CodeExample | Post;
 
 export type ScheduledOperationConnectInput = {
   /** Allow to specify document position in list of connected documents, will default to appending at end of list */
@@ -4467,7 +5237,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, owner?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
 
 
 
@@ -4538,14 +5308,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
-  PostContentRichTextEmbeddedTypes: ( Asset ) | ( Post );
+  PostContentRichTextEmbeddedTypes: ( Asset ) | ( CodeExample ) | ( Post );
   PostTeaserRichTextEmbeddedTypes: ( Asset ) | ( Post );
-  ScheduledOperationAffectedDocument: ( Asset ) | ( Author ) | ( Post );
+  ScheduledOperationAffectedDocument: ( Asset ) | ( Author ) | ( CodeExample ) | ( Post );
 };
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  Node: ( Asset ) | ( Author ) | ( Post ) | ( Omit<ScheduledOperation, 'affectedDocuments'> & { affectedDocuments: Array<RefType['ScheduledOperationAffectedDocument']> } ) | ( ScheduledRelease ) | ( User );
+  Node: ( Asset ) | ( Author ) | ( CodeExample ) | ( Post ) | ( Omit<ScheduledOperation, 'affectedDocuments'> & { affectedDocuments: Array<RefType['ScheduledOperationAffectedDocument']> } ) | ( ScheduledRelease ) | ( User );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -4606,6 +5376,27 @@ export type ResolversTypes = {
   AuthorWhereUniqueInput: AuthorWhereUniqueInput;
   BatchPayload: ResolverTypeWrapper<BatchPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CodeExample: ResolverTypeWrapper<CodeExample>;
+  CodeExampleConnectInput: CodeExampleConnectInput;
+  CodeExampleConnection: ResolverTypeWrapper<CodeExampleConnection>;
+  CodeExampleCreateInput: CodeExampleCreateInput;
+  CodeExampleCreateManyInlineInput: CodeExampleCreateManyInlineInput;
+  CodeExampleCreateOneInlineInput: CodeExampleCreateOneInlineInput;
+  CodeExampleEdge: ResolverTypeWrapper<CodeExampleEdge>;
+  CodeExampleManyWhereInput: CodeExampleManyWhereInput;
+  CodeExampleOrderByInput: CodeExampleOrderByInput;
+  CodeExampleUpdateInput: CodeExampleUpdateInput;
+  CodeExampleUpdateManyInlineInput: CodeExampleUpdateManyInlineInput;
+  CodeExampleUpdateManyInput: CodeExampleUpdateManyInput;
+  CodeExampleUpdateManyWithNestedWhereInput: CodeExampleUpdateManyWithNestedWhereInput;
+  CodeExampleUpdateOneInlineInput: CodeExampleUpdateOneInlineInput;
+  CodeExampleUpdateWithNestedWhereUniqueInput: CodeExampleUpdateWithNestedWhereUniqueInput;
+  CodeExampleUpsertInput: CodeExampleUpsertInput;
+  CodeExampleUpsertWithNestedWhereUniqueInput: CodeExampleUpsertWithNestedWhereUniqueInput;
+  CodeExampleWhereComparatorInput: CodeExampleWhereComparatorInput;
+  CodeExampleWhereInput: CodeExampleWhereInput;
+  CodeExampleWhereStageInput: CodeExampleWhereStageInput;
+  CodeExampleWhereUniqueInput: CodeExampleWhereUniqueInput;
   Color: ResolverTypeWrapper<Color>;
   ColorInput: ColorInput;
   ConnectPositionInput: ConnectPositionInput;
@@ -4794,6 +5585,26 @@ export type ResolversParentTypes = {
   AuthorWhereUniqueInput: AuthorWhereUniqueInput;
   BatchPayload: BatchPayload;
   Boolean: Scalars['Boolean']['output'];
+  CodeExample: CodeExample;
+  CodeExampleConnectInput: CodeExampleConnectInput;
+  CodeExampleConnection: CodeExampleConnection;
+  CodeExampleCreateInput: CodeExampleCreateInput;
+  CodeExampleCreateManyInlineInput: CodeExampleCreateManyInlineInput;
+  CodeExampleCreateOneInlineInput: CodeExampleCreateOneInlineInput;
+  CodeExampleEdge: CodeExampleEdge;
+  CodeExampleManyWhereInput: CodeExampleManyWhereInput;
+  CodeExampleUpdateInput: CodeExampleUpdateInput;
+  CodeExampleUpdateManyInlineInput: CodeExampleUpdateManyInlineInput;
+  CodeExampleUpdateManyInput: CodeExampleUpdateManyInput;
+  CodeExampleUpdateManyWithNestedWhereInput: CodeExampleUpdateManyWithNestedWhereInput;
+  CodeExampleUpdateOneInlineInput: CodeExampleUpdateOneInlineInput;
+  CodeExampleUpdateWithNestedWhereUniqueInput: CodeExampleUpdateWithNestedWhereUniqueInput;
+  CodeExampleUpsertInput: CodeExampleUpsertInput;
+  CodeExampleUpsertWithNestedWhereUniqueInput: CodeExampleUpsertWithNestedWhereUniqueInput;
+  CodeExampleWhereComparatorInput: CodeExampleWhereComparatorInput;
+  CodeExampleWhereInput: CodeExampleWhereInput;
+  CodeExampleWhereStageInput: CodeExampleWhereStageInput;
+  CodeExampleWhereUniqueInput: CodeExampleWhereUniqueInput;
   Color: Color;
   ColorInput: ColorInput;
   ConnectPositionInput: ConnectPositionInput;
@@ -4987,6 +5798,38 @@ export type BatchPayloadResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CodeExampleResolvers<ContextType = any, ParentType extends ResolversParentTypes['CodeExample'] = ResolversParentTypes['CodeExample']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<CodeExampleCreatedByArgs>>;
+  documentInStages?: Resolver<Array<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<CodeExampleDocumentInStagesArgs, 'includeCurrent' | 'inheritLocale' | 'stages'>>;
+  expression?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  history?: Resolver<Array<ResolversTypes['Version']>, ParentType, ContextType, RequireFields<CodeExampleHistoryArgs, 'limit' | 'skip'>>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  publishedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  publishedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<CodeExamplePublishedByArgs>>;
+  repo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  scheduledIn?: Resolver<Array<ResolversTypes['ScheduledOperation']>, ParentType, ContextType, Partial<CodeExampleScheduledInArgs>>;
+  stage?: Resolver<ResolversTypes['Stage'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<CodeExampleUpdatedByArgs>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CodeExampleConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CodeExampleConnection'] = ResolversParentTypes['CodeExampleConnection']> = {
+  aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
+  edges?: Resolver<Array<ResolversTypes['CodeExampleEdge']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CodeExampleEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CodeExampleEdge'] = ResolversParentTypes['CodeExampleEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['CodeExample'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ColorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Color'] = ResolversParentTypes['Color']> = {
   css?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hex?: Resolver<ResolversTypes['Hex'], ParentType, ContextType>;
@@ -5033,14 +5876,18 @@ export interface LongScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'data'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'data'>>;
+  createCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationCreateCodeExampleArgs, 'data'>>;
   createPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'data'>>;
   createScheduledRelease?: Resolver<Maybe<ResolversTypes['ScheduledRelease']>, ParentType, ContextType, RequireFields<MutationCreateScheduledReleaseArgs, 'data'>>;
   deleteAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'where'>>;
   deleteAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationDeleteAuthorArgs, 'where'>>;
+  deleteCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationDeleteCodeExampleArgs, 'where'>>;
   deleteManyAssets?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, Partial<MutationDeleteManyAssetsArgs>>;
   deleteManyAssetsConnection?: Resolver<ResolversTypes['AssetConnection'], ParentType, ContextType, Partial<MutationDeleteManyAssetsConnectionArgs>>;
   deleteManyAuthors?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, Partial<MutationDeleteManyAuthorsArgs>>;
   deleteManyAuthorsConnection?: Resolver<ResolversTypes['AuthorConnection'], ParentType, ContextType, Partial<MutationDeleteManyAuthorsConnectionArgs>>;
+  deleteManyCodeExamples?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, Partial<MutationDeleteManyCodeExamplesArgs>>;
+  deleteManyCodeExamplesConnection?: Resolver<ResolversTypes['CodeExampleConnection'], ParentType, ContextType, Partial<MutationDeleteManyCodeExamplesConnectionArgs>>;
   deleteManyPosts?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, Partial<MutationDeleteManyPostsArgs>>;
   deleteManyPostsConnection?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, Partial<MutationDeleteManyPostsConnectionArgs>>;
   deletePost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'where'>>;
@@ -5048,45 +5895,57 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteScheduledRelease?: Resolver<Maybe<ResolversTypes['ScheduledRelease']>, ParentType, ContextType, RequireFields<MutationDeleteScheduledReleaseArgs, 'where'>>;
   publishAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationPublishAssetArgs, 'publishBase' | 'to' | 'where' | 'withDefaultLocale'>>;
   publishAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationPublishAuthorArgs, 'to' | 'where'>>;
+  publishCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationPublishCodeExampleArgs, 'to' | 'where'>>;
   publishManyAssets?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationPublishManyAssetsArgs, 'publishBase' | 'to' | 'withDefaultLocale'>>;
   publishManyAssetsConnection?: Resolver<ResolversTypes['AssetConnection'], ParentType, ContextType, RequireFields<MutationPublishManyAssetsConnectionArgs, 'from' | 'publishBase' | 'to' | 'withDefaultLocale'>>;
   publishManyAuthors?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationPublishManyAuthorsArgs, 'to'>>;
   publishManyAuthorsConnection?: Resolver<ResolversTypes['AuthorConnection'], ParentType, ContextType, RequireFields<MutationPublishManyAuthorsConnectionArgs, 'from' | 'to'>>;
+  publishManyCodeExamples?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationPublishManyCodeExamplesArgs, 'to'>>;
+  publishManyCodeExamplesConnection?: Resolver<ResolversTypes['CodeExampleConnection'], ParentType, ContextType, RequireFields<MutationPublishManyCodeExamplesConnectionArgs, 'from' | 'to'>>;
   publishManyPosts?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationPublishManyPostsArgs, 'publishBase' | 'to' | 'withDefaultLocale'>>;
   publishManyPostsConnection?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<MutationPublishManyPostsConnectionArgs, 'from' | 'publishBase' | 'to' | 'withDefaultLocale'>>;
   publishPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationPublishPostArgs, 'publishBase' | 'to' | 'where' | 'withDefaultLocale'>>;
   schedulePublishAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationSchedulePublishAssetArgs, 'publishBase' | 'to' | 'where' | 'withDefaultLocale'>>;
   schedulePublishAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationSchedulePublishAuthorArgs, 'to' | 'where'>>;
+  schedulePublishCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationSchedulePublishCodeExampleArgs, 'to' | 'where'>>;
   schedulePublishPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationSchedulePublishPostArgs, 'publishBase' | 'to' | 'where' | 'withDefaultLocale'>>;
   scheduleUnpublishAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationScheduleUnpublishAssetArgs, 'from' | 'unpublishBase' | 'where'>>;
   scheduleUnpublishAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationScheduleUnpublishAuthorArgs, 'from' | 'where'>>;
+  scheduleUnpublishCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationScheduleUnpublishCodeExampleArgs, 'from' | 'where'>>;
   scheduleUnpublishPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationScheduleUnpublishPostArgs, 'from' | 'unpublishBase' | 'where'>>;
   unpublishAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationUnpublishAssetArgs, 'from' | 'unpublishBase' | 'where'>>;
   unpublishAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUnpublishAuthorArgs, 'from' | 'where'>>;
+  unpublishCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationUnpublishCodeExampleArgs, 'from' | 'where'>>;
   unpublishManyAssets?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUnpublishManyAssetsArgs, 'from' | 'unpublishBase'>>;
   unpublishManyAssetsConnection?: Resolver<ResolversTypes['AssetConnection'], ParentType, ContextType, RequireFields<MutationUnpublishManyAssetsConnectionArgs, 'from' | 'stage' | 'unpublishBase'>>;
   unpublishManyAuthors?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUnpublishManyAuthorsArgs, 'from'>>;
   unpublishManyAuthorsConnection?: Resolver<ResolversTypes['AuthorConnection'], ParentType, ContextType, RequireFields<MutationUnpublishManyAuthorsConnectionArgs, 'from' | 'stage'>>;
+  unpublishManyCodeExamples?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUnpublishManyCodeExamplesArgs, 'from'>>;
+  unpublishManyCodeExamplesConnection?: Resolver<ResolversTypes['CodeExampleConnection'], ParentType, ContextType, RequireFields<MutationUnpublishManyCodeExamplesConnectionArgs, 'from' | 'stage'>>;
   unpublishManyPosts?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUnpublishManyPostsArgs, 'from' | 'unpublishBase'>>;
   unpublishManyPostsConnection?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<MutationUnpublishManyPostsConnectionArgs, 'from' | 'stage' | 'unpublishBase'>>;
   unpublishPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationUnpublishPostArgs, 'from' | 'unpublishBase' | 'where'>>;
   updateAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'data' | 'where'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'data' | 'where'>>;
+  updateCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationUpdateCodeExampleArgs, 'data' | 'where'>>;
   updateManyAssets?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUpdateManyAssetsArgs, 'data'>>;
   updateManyAssetsConnection?: Resolver<ResolversTypes['AssetConnection'], ParentType, ContextType, RequireFields<MutationUpdateManyAssetsConnectionArgs, 'data'>>;
   updateManyAuthors?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUpdateManyAuthorsArgs, 'data'>>;
   updateManyAuthorsConnection?: Resolver<ResolversTypes['AuthorConnection'], ParentType, ContextType, RequireFields<MutationUpdateManyAuthorsConnectionArgs, 'data'>>;
+  updateManyCodeExamples?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUpdateManyCodeExamplesArgs, 'data'>>;
+  updateManyCodeExamplesConnection?: Resolver<ResolversTypes['CodeExampleConnection'], ParentType, ContextType, RequireFields<MutationUpdateManyCodeExamplesConnectionArgs, 'data'>>;
   updateManyPosts?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationUpdateManyPostsArgs, 'data'>>;
   updateManyPostsConnection?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<MutationUpdateManyPostsConnectionArgs, 'data'>>;
   updatePost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'data' | 'where'>>;
   updateScheduledRelease?: Resolver<Maybe<ResolversTypes['ScheduledRelease']>, ParentType, ContextType, RequireFields<MutationUpdateScheduledReleaseArgs, 'data' | 'where'>>;
   upsertAsset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<MutationUpsertAssetArgs, 'upsert' | 'where'>>;
   upsertAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpsertAuthorArgs, 'upsert' | 'where'>>;
+  upsertCodeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<MutationUpsertCodeExampleArgs, 'upsert' | 'where'>>;
   upsertPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<MutationUpsertPostArgs, 'upsert' | 'where'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'Asset' | 'Author' | 'Post' | 'ScheduledOperation' | 'ScheduledRelease' | 'User', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Asset' | 'Author' | 'CodeExample' | 'Post' | 'ScheduledOperation' | 'ScheduledRelease' | 'User', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   stage?: Resolver<ResolversTypes['Stage'], ParentType, ContextType>;
 };
@@ -5141,7 +6000,7 @@ export type PostContentRichTextResolvers<ContextType = any, ParentType extends R
 };
 
 export type PostContentRichTextEmbeddedTypesResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostContentRichTextEmbeddedTypes'] = ResolversParentTypes['PostContentRichTextEmbeddedTypes']> = {
-  __resolveType: TypeResolveFn<'Asset' | 'Post', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Asset' | 'CodeExample' | 'Post', ParentType, ContextType>;
 };
 
 export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = {
@@ -5173,6 +6032,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authorVersion?: Resolver<Maybe<ResolversTypes['DocumentVersion']>, ParentType, ContextType, RequireFields<QueryAuthorVersionArgs, 'where'>>;
   authors?: Resolver<Array<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorsArgs, 'locales' | 'stage'>>;
   authorsConnection?: Resolver<ResolversTypes['AuthorConnection'], ParentType, ContextType, RequireFields<QueryAuthorsConnectionArgs, 'locales' | 'stage'>>;
+  codeExample?: Resolver<Maybe<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<QueryCodeExampleArgs, 'locales' | 'stage' | 'where'>>;
+  codeExampleVersion?: Resolver<Maybe<ResolversTypes['DocumentVersion']>, ParentType, ContextType, RequireFields<QueryCodeExampleVersionArgs, 'where'>>;
+  codeExamples?: Resolver<Array<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<QueryCodeExamplesArgs, 'locales' | 'stage'>>;
+  codeExamplesConnection?: Resolver<ResolversTypes['CodeExampleConnection'], ParentType, ContextType, RequireFields<QueryCodeExamplesConnectionArgs, 'locales' | 'stage'>>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id' | 'locales' | 'stage'>>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'locales' | 'stage' | 'where'>>;
   postVersion?: Resolver<Maybe<ResolversTypes['DocumentVersion']>, ParentType, ContextType, RequireFields<QueryPostVersionArgs, 'where'>>;
@@ -5237,7 +6100,7 @@ export type ScheduledOperationResolvers<ContextType = any, ParentType extends Re
 };
 
 export type ScheduledOperationAffectedDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['ScheduledOperationAffectedDocument'] = ResolversParentTypes['ScheduledOperationAffectedDocument']> = {
-  __resolveType: TypeResolveFn<'Asset' | 'Author' | 'Post', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Asset' | 'Author' | 'CodeExample' | 'Post', ParentType, ContextType>;
 };
 
 export type ScheduledOperationConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ScheduledOperationConnection'] = ResolversParentTypes['ScheduledOperationConnection']> = {
@@ -5331,6 +6194,9 @@ export type Resolvers<ContextType = any> = {
   AuthorConnection?: AuthorConnectionResolvers<ContextType>;
   AuthorEdge?: AuthorEdgeResolvers<ContextType>;
   BatchPayload?: BatchPayloadResolvers<ContextType>;
+  CodeExample?: CodeExampleResolvers<ContextType>;
+  CodeExampleConnection?: CodeExampleConnectionResolvers<ContextType>;
+  CodeExampleEdge?: CodeExampleEdgeResolvers<ContextType>;
   Color?: ColorResolvers<ContextType>;
   Date?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;

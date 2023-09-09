@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import React, { Fragment, useCallback } from "react";
+import { CodeExample } from "./CodeExample";
 
 type TextNode = {
   text: string;
@@ -61,6 +62,13 @@ type ParagraphElement = {
   children: InlineElement[];
 };
 
+type CodeExampleElement = {
+  type: "embed";
+  nodeId: string;
+  nodeType: "CodeExample";
+  children: TextNode[];
+};
+
 type InlineElement = LinkElement | TextNode;
 
 type SlateNode =
@@ -73,13 +81,15 @@ type SlateNode =
   | ParagraphElement
   | HeadingOneElement
   | HeadingTwoElement
-  | HeadingThreeElement;
+  | HeadingThreeElement
+  | CodeExampleElement;
 
 export interface SlateRenderProps {
   value?: SlateNode[]
+  references?: any[]
 }
 
-export const SlateRender: React.FC<SlateRenderProps> = ({ value }) => {
+export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) => {
 
   const renderLeaf = useCallback((node: TextNode, index: number) => {
     if (!node.bold && !node.italic && !node.underline) {
@@ -174,12 +184,22 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value }) => {
                 <figcaption>{node.altText}</figcaption>
               </figure>
             );
+          case "embed": {
+            const reference = references?.find((reference) => reference.id === node.nodeId);
+            switch (node.nodeType) {
+              case "CodeExample": {
+                return reference && <CodeExample key={index} expression={reference.expression} />;
+              }
+              default:
+                return null;
+            }
+          }
         }
       } else {
         return renderLeaf(node, index);
       }
     });
-  }, [renderLeaf]);
+  }, [references, renderLeaf]);
 
   if (!value) {
     return null;
