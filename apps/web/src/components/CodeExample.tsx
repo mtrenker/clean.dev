@@ -1,6 +1,6 @@
 import React from 'react';
 import { highlight, languages } from 'prismjs';
-import { getFile } from '@/lib/github/client';
+import { getFile } from '../lib/github/client';
 
 import 'prismjs/components/prism-typescript';
 import 'prismjs/themes/prism-dark.min.css';
@@ -20,7 +20,7 @@ const getCode = async (owner: string, repo: string, expression: string) => {
   });
 
   if (file.repository?.object?.__typename === 'Blob' && file.repository.object.text) {
-    const code = highlight(file.repository.object.text, languages['typescript'], 'typescript');
+    const code = highlight(file.repository.object.text, languages.typescript, 'typescript');
     return code
   }
   return '';

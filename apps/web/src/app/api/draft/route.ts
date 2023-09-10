@@ -1,10 +1,11 @@
 import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getSecret } from '../../../lib/secrets';
 
-import { getSecret } from '@/lib/secrets';
+export const GET = async (request: Request): Promise<Response> => {
 
-export async function GET(request: Request) {
   const secret = await getSecret('clean/blog/draft-mode-secret', 'DRAFT_MODE_SECRET');
+
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
   if (token !== secret) {

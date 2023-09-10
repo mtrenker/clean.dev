@@ -1,3 +1,4 @@
+/* eslint-disable -- generated code */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -1252,6 +1253,7 @@ export type CodeExample = Node & {
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
   createdBy?: Maybe<User>;
+  description?: Maybe<Scalars['String']['output']>;
   /** Get the document in other stages */
   documentInStages: Array<CodeExample>;
   expression?: Maybe<Scalars['String']['output']>;
@@ -1338,6 +1340,7 @@ export type CodeExampleConnection = {
 
 export type CodeExampleCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
@@ -1394,6 +1397,25 @@ export type CodeExampleManyWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
   documentInStages_every?: InputMaybe<CodeExampleWhereStageInput>;
   documentInStages_none?: InputMaybe<CodeExampleWhereStageInput>;
   documentInStages_some?: InputMaybe<CodeExampleWhereStageInput>;
@@ -1532,6 +1554,8 @@ export type CodeExampleManyWhereInput = {
 export enum CodeExampleOrderByInput {
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
   ExpressionAsc = 'expression_ASC',
   ExpressionDesc = 'expression_DESC',
   IdAsc = 'id_ASC',
@@ -1549,6 +1573,7 @@ export enum CodeExampleOrderByInput {
 }
 
 export type CodeExampleUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
@@ -1573,6 +1598,7 @@ export type CodeExampleUpdateManyInlineInput = {
 };
 
 export type CodeExampleUpdateManyInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
@@ -1654,6 +1680,25 @@ export type CodeExampleWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
   documentInStages_every?: InputMaybe<CodeExampleWhereStageInput>;
   documentInStages_none?: InputMaybe<CodeExampleWhereStageInput>;
   documentInStages_some?: InputMaybe<CodeExampleWhereStageInput>;
@@ -5801,6 +5846,7 @@ export type BatchPayloadResolvers<ContextType = any, ParentType extends Resolver
 export type CodeExampleResolvers<ContextType = any, ParentType extends ResolversParentTypes['CodeExample'] = ResolversParentTypes['CodeExample']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<CodeExampleCreatedByArgs>>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   documentInStages?: Resolver<Array<ResolversTypes['CodeExample']>, ParentType, ContextType, RequireFields<CodeExampleDocumentInStagesArgs, 'includeCurrent' | 'inheritLocale' | 'stages'>>;
   expression?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   history?: Resolver<Array<ResolversTypes['Version']>, ParentType, ContextType, RequireFields<CodeExampleHistoryArgs, 'limit' | 'skip'>>;

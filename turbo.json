@@ -1,5 +1,10 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": [
+    "NODE_ENV",
+    "BLOG_ENDPOINT",
+    "BLOG_TOKEN"
+  ],
   "pipeline": {
     "//#codegen": {
       "persistent": true

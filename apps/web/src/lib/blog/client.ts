@@ -1,16 +1,15 @@
-import gql from "gql-tag";
+import gql from 'gql-tag';
+import { getSecret } from '../secrets';
+import type { GetPostQuery, GetPostsQuery } from './generated';
 
-import { GetPostQuery, GetPostsQuery } from "./generated";
-import { getSecret } from "../secrets";
-
-const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT as string;
+const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT ?? '';
 
 export interface QueryOptions {
   draft?: boolean;
-  variables?: any;
+  variables?: Record<string, string>;
 }
 
-const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: QueryOptions) => {
+const query = async <T extends object>(document: ReturnType<typeof gql>, options?: QueryOptions) => {
   const { draft, variables } = options || {};
 
   const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN');
@@ -18,7 +17,7 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
   const response = await fetch(BLOG_ENDPOINT, {
     method: 'POST',
     body: JSON.stringify({
-      query,
+      query: document,
       variables,
     }),
     headers: {
@@ -28,9 +27,9 @@ const query = async <T extends {}>(query: ReturnType<typeof gql>, options?: Quer
     },
   });
 
-  const { data, errors } = await response.json();
+  const { data } = await response.json() as { data: T };
 
-  return data as T;
+  return data;
 }
 
 export const getPosts = async (options?: QueryOptions) => {

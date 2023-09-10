@@ -1,10 +1,10 @@
-import { NextPage } from "next";
+import type { NextPage } from 'next';
 import { draftMode } from 'next/headers';
-import Link from "next/link";
-
-import { getPosts } from "@/lib/blog/client";
-import { formatBlogDateShort } from "@/lib/intl";
-import { SlateRender } from "@/components/SlateRender";
+import Link from 'next/link';
+import { getPosts } from '../../lib/blog/client';
+import { formatBlogDateShort } from '../../lib/intl';
+import type { SlateNode} from '../../components/SlateRender';
+import { SlateRender } from '../../components/SlateRender';
 
 const BlogPage: NextPage = async () => {
   const draft = draftMode().isEnabled;
@@ -26,39 +26,42 @@ const BlogPage: NextPage = async () => {
         </p>
       </header>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post) => (
-          <article
-          key={post.slug}
-          itemProp=""
-          itemType="http://schema.org/BlogPosting"
-          className="flex flex-col gap-4"
-          >
-            <header className="flex flex-col gap-4 relative">
-              <div className="z-10">
-                <p>
-                  <time itemProp="datePublished" dateTime={post.createdAt}>
-                    {formatBlogDateShort(post.createdAt)}
-                  </time>
-                </p>
-                <h2
-                  itemProp="headline"
-                  className="text-3xl font-bold leading-tight"
-                >
-                  <Link href={`/blog/${post.slug}`}>
-                    {post.title}
-                  </Link>
-                </h2>
-              </div>
-            </header>
-            <SlateRender value={post.teaser.raw.children} />
-            <Link
-              href={`/blog/${post.slug}`}
-              className="block w-64 rounded-xl bg-black text-white font-bold py-2 px-4 hover:bg-gray-700"
+        {posts.map((post) => {
+          const teaser = post.teaser.raw as { children: SlateNode[]}
+          return (
+            <article
+              className="flex flex-col gap-4"
+              itemProp=""
+              itemType="http://schema.org/BlogPosting"
+              key={post.slug}
             >
+              <header className="flex flex-col gap-4 relative">
+                <div className="z-10">
+                  <p>
+                    <time dateTime={post.createdAt as string} itemProp="datePublished">
+                      {formatBlogDateShort(post.createdAt as string)}
+                    </time>
+                  </p>
+                  <h2
+                    className="text-3xl font-bold leading-tight"
+                    itemProp="headline"
+                  >
+                    <Link href={`/blog/${post.slug}`}>
+                      {post.title}
+                    </Link>
+                  </h2>
+                </div>
+              </header>
+              <SlateRender value={teaser.children} />
+              <Link
+                className="block w-64 rounded-xl bg-black text-white font-bold py-2 px-4 hover:bg-gray-700"
+                href={`/blog/${post.slug}`}
+              >
                 Continue reading
-            </Link>
-          </article>
-        ))}
+              </Link>
+            </article>
+          );
+        })}
       </div>
     </div>
   );

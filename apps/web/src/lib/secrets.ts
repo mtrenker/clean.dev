@@ -2,7 +2,7 @@ import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-sec
 
 const secretsManagerClient = new SecretsManagerClient();
 
-export const getSecret = async (secretId: string, fallbackEnv: string) => {
+export const getSecret = async (secretId: string, fallbackEnv: string): Promise<string> => {
   if (process.env.NODE_ENV === 'production') {
     try {
       const { SecretString } = await secretsManagerClient.send(
@@ -10,7 +10,7 @@ export const getSecret = async (secretId: string, fallbackEnv: string) => {
           SecretId: secretId,
         })
       );
-      return SecretString;
+      return SecretString || '';
     } catch (error) {
       return process.env[fallbackEnv] || '';
     }

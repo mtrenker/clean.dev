@@ -1,53 +1,53 @@
-import clsx from "clsx";
-import Image from "next/image";
-import React, { Fragment, useCallback } from "react";
-import { CodeExample } from "./CodeExample";
+import clsx from 'clsx';
+import Image from 'next/image';
+import React, { Fragment, useCallback } from 'react';
+import { CodeExample } from './CodeExample';
 
-type TextNode = {
+interface TextNode {
   text: string;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
-};
+}
 
-type LinkElement = {
-  type: "link";
+interface LinkElement {
+  type: 'link';
   href: string;
   children: TextNode[];
-};
+}
 
-type HeadingOneElement = {
-  type: "heading-one";
+interface HeadingOneElement {
+  type: 'heading-one';
   children: TextNode[];
-};
+}
 
-type HeadingTwoElement = {
-  type: "heading-two";
+interface HeadingTwoElement {
+  type: 'heading-two';
   children: TextNode[];
-};
+}
 
-type HeadingThreeElement = {
-  type: "heading-three";
+interface HeadingThreeElement {
+  type: 'heading-three';
   children: TextNode[];
-};
+}
 
-type ListItemChildElement = {
-  type: "list-item-child";
+interface ListItemChildElement {
+  type: 'list-item-child';
   children: TextNode[];
-};
+}
 
-type ListItemElement = {
-  type: "list-item";
+interface ListItemElement {
+  type: 'list-item';
   children: ListItemChildElement[];
-};
+}
 
-type BulletListElement = {
-  type: "bulleted-list";
+interface BulletListElement {
+  type: 'bulleted-list';
   children: ListItemElement[];
-};
+}
 
-type ImageElement = {
-  type: "image";
+interface ImageElement {
+  type: 'image';
   src: string;
   title: string;
   altText: string;
@@ -55,23 +55,23 @@ type ImageElement = {
   height: number;
   mimeType: string;
   children: TextNode[];
-};
+}
 
-type ParagraphElement = {
-  type: "paragraph";
+interface ParagraphElement {
+  type: 'paragraph';
   children: InlineElement[];
-};
+}
 
-type CodeExampleElement = {
-  type: "embed";
+interface CodeExampleElement {
+  type: 'embed';
   nodeId: string;
-  nodeType: "CodeExample";
+  nodeType: 'CodeExample';
   children: TextNode[];
-};
+}
 
 type InlineElement = LinkElement | TextNode;
 
-type SlateNode =
+export type SlateNode =
   | TextNode
   | LinkElement
   | ImageElement
@@ -86,7 +86,7 @@ type SlateNode =
 
 export interface SlateRenderProps {
   value?: SlateNode[]
-  references?: any[]
+  references?: Record<string, string | null | undefined>[]
 }
 
 export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) => {
@@ -101,12 +101,12 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
     }
     return (
       <span
-        key={index}
         className={clsx({
-          "font-bold": node.bold,
-          "italic": node.italic,
-          "underline": node.underline,
+          'font-bold': node.bold,
+          'italic': node.italic,
+          'underline': node.underline,
         })}
+        key={index}
       >
         {node.text}
       </span>
@@ -115,85 +115,85 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
 
   const renderNodes = useCallback((nodes: SlateNode[]) => {
     return nodes.map((node, index) => {
-      if ("type" in node) {
+      if ('type' in node) {
         switch (node.type) {
-          case "paragraph":
+          case 'paragraph':
             return (
               <p key={index}>
                 {renderNodes(node.children)}
               </p>
             );
-          case "heading-one":
+          case 'heading-one':
             return (
               <h1 key={index}>
                 {renderNodes(node.children)}
               </h1>
             );
-          case "heading-two":
+          case 'heading-two':
             return (
               <h2 key={index}>
                 {renderNodes(node.children)}
               </h2>
             );
-          case "heading-three":
+          case 'heading-three':
             return (
               <h3 key={index}>
                 {renderNodes(node.children)}
               </h3>
             );
-          case "bulleted-list":
+          case 'bulleted-list':
             return (
               <ul key={index}>
                 {renderNodes(node.children)}
               </ul>
             );
-          case "list-item":
+          case 'list-item':
             return (
               <li key={index}>
                 {renderNodes(node.children)}
               </li>
             );
-          case "list-item-child":
+          case 'list-item-child':
             return (
               <Fragment key={index}>
                 {renderNodes(node.children)}
               </Fragment>
             );
-          case "link":
+          case 'link':
             return (
               <a
-                key={index}
                 href={node.href}
-                target="_blank"
+                key={index}
                 rel="noopener noreferrer"
+                target="_blank"
               >
                 {renderNodes(node.children)}
               </a>
             );
-          case "image":
+          case 'image':
             return (
               <figure key={index}>
                 <Image
-                  src={node.src}
                   alt={node.altText}
-                  title={node.title}
-                  width={node.width}
                   height={node.height}
+                  src={node.src}
+                  title={node.title}
                   unoptimized
+                  width={node.width}
                 />
                 <figcaption>{node.altText}</figcaption>
               </figure>
             );
-          case "embed": {
-            const reference = references?.find((reference) => reference.id === node.nodeId);
+          case 'embed': {
+            const reference = references?.find((ref) => ref.id === node.nodeId);
             switch (node.nodeType) {
-              case "CodeExample": {
-                return (
+              case 'CodeExample': {
+                return reference && (
                   <CodeExample
-                    key={index}
+                    expression={reference.expression}
+                    key={node.nodeId}
                     owner={reference.owner || 'mtrenker'}
                     repo={reference.repo || 'clean.dev'}
-                    expression={reference.expression}
                    />
                 )
               }
@@ -201,6 +201,8 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
                 return null;
             }
           }
+          default:
+            return null;
         }
       } else {
         return renderLeaf(node, index);

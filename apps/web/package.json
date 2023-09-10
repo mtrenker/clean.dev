@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@cleandev/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -33,6 +33,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
+    "@cleandev/eslint-config": "workspace:*",
     "@types/prismjs": "^1.26.0"
   }
 }

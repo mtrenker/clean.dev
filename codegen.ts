@@ -6,6 +6,12 @@ const BLOG_TOKEN = process.env.BLOG_TOKEN as string;
 const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT as string;
 const GITHUB_CODEFETCHER_TOKEN = process.env.GITHUB_CODEFETCHER_TOKEN as string;
 
+const disableEslint = {
+  add: {
+    content: '/* eslint-disable -- generated code */'
+  }
+};
+
 const config: CodegenConfig = {
   generates: {
     './apps/web/src/lib/github/generated.tsx': {
@@ -20,6 +26,7 @@ const config: CodegenConfig = {
       }],
       documents: ['./apps/web/src/lib/github/client.ts'],
       plugins: [
+        disableEslint,
         'typescript',
         'typescript-operations',
         'typescript-resolvers',
@@ -36,6 +43,7 @@ const config: CodegenConfig = {
       }],
       documents: ['./apps/web/src/lib/blog/client.ts'],
       plugins: [
+        disableEslint,
         'typescript',
         'typescript-operations',
         'typescript-resolvers',

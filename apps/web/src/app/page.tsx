@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import clsx from 'clsx';
-
 import { projects } from './projects';
 
 const Home: React.FC = () => (
@@ -28,11 +27,11 @@ const Home: React.FC = () => (
           >
             <Image
               alt="Profile picture of Martin Trenker, consultant and web developer"
+              className='m-0'
               height={200}
               src="/me.png"
-              width={200}
-              className='m-0'
               unoptimized
+              width={200}
             />
           </picture>
           <figcaption className="flex flex-col gap-4">

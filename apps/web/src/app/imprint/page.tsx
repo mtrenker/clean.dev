@@ -1,5 +1,4 @@
-import clsx from "clsx";
-import { NextPage } from "next";
+import type { NextPage } from 'next';
 
 const ImprintPage: NextPage = () => (
   <main className="prose container mx-auto max-w-md p-4">
