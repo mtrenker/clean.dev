@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react';
+import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-
 import './globals.css'
 import Link from 'next/link'
 
@@ -15,26 +15,26 @@ export const metadata: Metadata = {
 const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
   <html lang="en">
     <body className={inter.className}>
-      <header className='container mx-auto p-6'>
+      <header className='container mx-auto p-4'>
         <nav className='grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-10 md:gap-20'>
           <div>
-            <Link href="/" className="text-3xl font-bold">
+            <Link className="text-3xl font-bold" href="/">
               cd
             </Link>
           </div>
           <ul className="flex-1 flex gap-10">
             <li>
-              <Link href="/" className="text-base font-semibold leading-6 text-gray-900">
+              <Link className="text-base font-semibold leading-6 text-gray-900" href="/">
                 About
               </Link>
             </li>
             <li>
-              <Link href="/blog" className="text-base font-semibold leading-6 text-gray-900">
+              <Link className="text-base font-semibold leading-6 text-gray-900" href="/blog">
                 Blog
               </Link>
             </li>
             <li>
-              <Link href="/imprint" className="text-base font-semibold leading-6 text-gray-900">
+              <Link className="text-base font-semibold leading-6 text-gray-900" href="/imprint">
                 Imprint
               </Link>
             </li>
