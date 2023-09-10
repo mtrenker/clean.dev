@@ -1,10 +1,11 @@
-import { Stack, StackProps } from "aws-cdk-lib";
-import { NextApp } from "@cleandev/cdk-next-app";
-import { NextBlog } from "@cleandev/cdk-next-blog";
-import { Construct } from "constructs";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { Secret } from "aws-cdk-lib/aws-secretsmanager";
+import type { StackProps } from 'aws-cdk-lib';
+import { Stack } from 'aws-cdk-lib';
+import { NextApp } from '@cleandev/cdk-next-app';
+import { NextBlog } from '@cleandev/cdk-next-blog';
+import type { Construct } from 'constructs';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 
 export interface WebStackProps extends StackProps {
   webCertificateArn: string;
@@ -18,9 +19,9 @@ export class WebStack extends Stack {
 
     const connectionArn = Secret.fromSecretNameV2(this, 'ConnectionSecret', 'github/connection').secretValue.unsafeUnwrap();
 
-    const webApp = new NextApp(this, "NextApp", {
-      domainName: "clean.dev",
-      nextDir: "apps/web",
+    const webApp = new NextApp(this, 'NextApp', {
+      domainName: 'clean.dev',
+      nextDir: 'apps/web',
       certArn: webCertificateArn,
       connectionArn,
       owner: 'mtrenker',
@@ -28,10 +29,10 @@ export class WebStack extends Stack {
       branch: 'main',
     });
 
-    const blog = new NextBlog(this, "NextBlog");
+    const blog = new NextBlog(this, 'NextBlog');
 
     webApp.serverFunction.addEnvironment(
-      "BLOG_ENDPOINT",
+      'BLOG_ENDPOINT',
       StringParameter.valueForStringParameter(this, '/clean/blog/api-endpoint')
     );
 

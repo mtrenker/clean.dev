@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import { App } from 'aws-cdk-lib';
-import { PipelineStack, PipelineStackProps } from '../lib/pipeline-stack';
+import type { PipelineStackProps } from '../lib/pipeline-stack';
+import { PipelineStack } from '../lib/pipeline-stack';
 
 const repository = 'mtrenker/clean.dev';
 const branch = 'main';
@@ -11,8 +12,8 @@ const pipelineProps: PipelineStackProps = {
   repository,
   branch,
   env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT as string,
-    region: process.env.CDK_DEFAULT_REGION as string,
+    account: process.env.CDK_DEFAULT_ACCOUNT!,
+    region: process.env.CDK_DEFAULT_REGION!,
   },
 };
 

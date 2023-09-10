@@ -1,7 +1,8 @@
-import { Stack, StackProps } from "aws-cdk-lib";
-import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
-import { HostedZone } from "aws-cdk-lib/aws-route53";
-import { Construct } from "constructs";
+import type { StackProps } from 'aws-cdk-lib';
+import { Stack } from 'aws-cdk-lib';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import type { Construct } from 'constructs';
 
 export interface CertStackProps extends StackProps {
   domainName: string;
@@ -16,11 +17,11 @@ export class CertStack extends Stack {
 
     const { domainName } = props;
 
-    const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
+    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
       domainName,
     });
 
-    this.webCertificate = new Certificate(this, "WebCertificate", {
+    this.webCertificate = new Certificate(this, 'WebCertificate', {
       domainName,
       validation: CertificateValidation.fromDns(hostedZone),
     });

@@ -1249,6 +1249,7 @@ export type BatchPayload = {
 
 export type CodeExample = Node & {
   __typename?: 'CodeExample';
+  code?: Maybe<Scalars['String']['output']>;
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -1261,6 +1262,7 @@ export type CodeExample = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   owner?: Maybe<Scalars['String']['output']>;
   /** The time the document was published. Null on documents in draft stage. */
@@ -1339,9 +1341,11 @@ export type CodeExampleConnection = {
 };
 
 export type CodeExampleCreateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
   repo?: InputMaybe<Scalars['String']['input']>;
@@ -1381,6 +1385,25 @@ export type CodeExampleManyWhereInput = {
   OR?: InputMaybe<Array<CodeExampleWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']['input']>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  code_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  code_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  code_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  code_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  code_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  code_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  code_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  code_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  code_starts_with?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   /** All values greater than the given value. */
   createdAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -1457,6 +1480,25 @@ export type CodeExampleManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  language?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  language_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  language_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  language_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  language_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  language_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  language_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  language_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  language_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  language_starts_with?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   /** All values containing the given string. */
   name_contains?: InputMaybe<Scalars['String']['input']>;
@@ -1552,6 +1594,8 @@ export type CodeExampleManyWhereInput = {
 };
 
 export enum CodeExampleOrderByInput {
+  CodeAsc = 'code_ASC',
+  CodeDesc = 'code_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DescriptionAsc = 'description_ASC',
@@ -1560,6 +1604,8 @@ export enum CodeExampleOrderByInput {
   ExpressionDesc = 'expression_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
+  LanguageAsc = 'language_ASC',
+  LanguageDesc = 'language_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   OwnerAsc = 'owner_ASC',
@@ -1573,8 +1619,10 @@ export enum CodeExampleOrderByInput {
 }
 
 export type CodeExampleUpdateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
   repo?: InputMaybe<Scalars['String']['input']>;
@@ -1598,8 +1646,10 @@ export type CodeExampleUpdateManyInlineInput = {
 };
 
 export type CodeExampleUpdateManyInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   expression?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
   repo?: InputMaybe<Scalars['String']['input']>;
@@ -1664,6 +1714,25 @@ export type CodeExampleWhereInput = {
   OR?: InputMaybe<Array<CodeExampleWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']['input']>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  code_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  code_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  code_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  code_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  code_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  code_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  code_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  code_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  code_starts_with?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   /** All values greater than the given value. */
   createdAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -1740,6 +1809,25 @@ export type CodeExampleWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  language?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  language_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  language_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  language_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  language_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  language_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  language_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  language_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  language_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  language_starts_with?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   /** All values containing the given string. */
   name_contains?: InputMaybe<Scalars['String']['input']>;
@@ -5282,7 +5370,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, owner?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
 
 
 
@@ -5844,6 +5932,7 @@ export type BatchPayloadResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type CodeExampleResolvers<ContextType = any, ParentType extends ResolversParentTypes['CodeExample'] = ResolversParentTypes['CodeExample']> = {
+  code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<CodeExampleCreatedByArgs>>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5851,6 +5940,7 @@ export type CodeExampleResolvers<ContextType = any, ParentType extends Resolvers
   expression?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   history?: Resolver<Array<ResolversTypes['Version']>, ParentType, ContextType, RequireFields<CodeExampleHistoryArgs, 'limit' | 'skip'>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publishedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
