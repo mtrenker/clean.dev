@@ -117,92 +117,95 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
     return nodes.map((node, index) => {
       if ('type' in node) {
         switch (node.type) {
-          case 'paragraph':
-            return (
-              <p key={index}>
-                {renderNodes(node.children)}
-              </p>
-            );
-          case 'heading-one':
-            return (
-              <h1 key={index}>
-                {renderNodes(node.children)}
-              </h1>
-            );
-          case 'heading-two':
-            return (
-              <h2 key={index}>
-                {renderNodes(node.children)}
-              </h2>
-            );
-          case 'heading-three':
-            return (
-              <h3 key={index}>
-                {renderNodes(node.children)}
-              </h3>
-            );
-          case 'bulleted-list':
-            return (
-              <ul key={index}>
-                {renderNodes(node.children)}
-              </ul>
-            );
-          case 'list-item':
-            return (
-              <li key={index}>
-                {renderNodes(node.children)}
-              </li>
-            );
-          case 'list-item-child':
-            return (
-              <Fragment key={index}>
-                {renderNodes(node.children)}
-              </Fragment>
-            );
-          case 'link':
-            return (
-              <a
-                href={node.href}
-                key={index}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {renderNodes(node.children)}
-              </a>
-            );
-          case 'image':
-            return (
-              <figure key={index}>
-                <Image
-                  alt={node.altText}
-                  height={node.height}
-                  src={node.src}
-                  title={node.title}
-                  unoptimized
-                  width={node.width}
-                />
-                <figcaption>{node.altText}</figcaption>
-              </figure>
-            );
-          case 'embed': {
-            const reference = references?.find((ref) => ref.id === node.nodeId);
-            switch (node.nodeType) {
-              case 'CodeExample': {
-                return reference && (
-                  <CodeExample
-                    expression={reference.expression}
-                    key={node.nodeId}
-                    owner={reference.owner || 'mtrenker'}
-                    repo={reference.repo || 'clean.dev'}
-                   />
-                )
-              }
-              default:
-                return null;
-            }
+        case 'paragraph':
+          return (
+            <p key={index}>
+              {renderNodes(node.children)}
+            </p>
+          );
+        case 'heading-one':
+          return (
+            <h1 key={index}>
+              {renderNodes(node.children)}
+            </h1>
+          );
+        case 'heading-two':
+          return (
+            <h2 key={index}>
+              {renderNodes(node.children)}
+            </h2>
+          );
+        case 'heading-three':
+          return (
+            <h3 key={index}>
+              {renderNodes(node.children)}
+            </h3>
+          );
+        case 'bulleted-list':
+          return (
+            <ul key={index}>
+              {renderNodes(node.children)}
+            </ul>
+          );
+        case 'list-item':
+          return (
+            <li key={index}>
+              {renderNodes(node.children)}
+            </li>
+          );
+        case 'list-item-child':
+          return (
+            <Fragment key={index}>
+              {renderNodes(node.children)}
+            </Fragment>
+          );
+        case 'link':
+          return (
+            <a
+              href={node.href}
+              key={index}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {renderNodes(node.children)}
+            </a>
+          );
+        case 'image':
+          return (
+            <figure key={index}>
+              <Image
+                alt={node.altText}
+                height={node.height}
+                src={node.src}
+                title={node.title}
+                unoptimized
+                width={node.width}
+              />
+              <figcaption>{node.altText}</figcaption>
+            </figure>
+          );
+        case 'embed': {
+          const reference = references?.find((ref) => ref.id === node.nodeId);
+          switch (node.nodeType) {
+          case 'CodeExample': {
+            return reference && (
+              <CodeExample
+                code={reference.code ?? undefined}
+                description={reference.description}
+                expression={reference.expression || ''}
+                key={node.nodeId}
+                name={reference.name || ''}
+                owner={reference.owner || 'mtrenker'}
+                repo={reference.repo || 'clean.dev'}
+              />
+            )
           }
           default:
             return null;
+          }
+        }
+        default:
+          return null;
         }
       } else {
         return renderLeaf(node, index);

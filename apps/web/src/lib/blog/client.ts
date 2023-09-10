@@ -89,7 +89,11 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
             ... on CodeExample {
               id
               name
+              description
+              language
+              code
               owner
+              repo
               expression
             }
           }

@@ -1,12 +1,16 @@
 import React from 'react';
+import clsx from 'clsx';
 import { highlight, languages } from 'prismjs';
 import { getFile } from '../lib/github/client';
 
 import 'prismjs/components/prism-typescript';
-import 'prismjs/themes/prism-dark.min.css';
-
+import 'prismjs/themes/prism.min.css';
 
 interface CodeExampleProps {
+  name: string;
+  description?: string | null;
+  language?: string | null;
+  code?: string;
   owner: string;
   repo: string;
   expression: string;
@@ -26,11 +30,29 @@ const getCode = async (owner: string, repo: string, expression: string) => {
   return '';
 };
 
-export const CodeExample: React.FC<CodeExampleProps> = async ({ owner, repo, expression }) => {
-  const code = await getCode(owner, repo, expression);
+export const CodeExample: React.FC<CodeExampleProps> = async ({
+  name,
+  code,
+  owner,
+  repo,
+  expression
+}) => {
+  const exampleCode = code ? highlight(code, languages.typescript, 'typescript') : await getCode(owner, repo, expression);
   return (
-    <pre className='line-numbers'>
-      <code className="language-javascript" dangerouslySetInnerHTML={{__html: code}} />
-    </pre>
+    <details
+      className='bg-gray-200 rounded-lg'
+      open
+    >
+      <summary className='px-4 font-mono'>
+        {name}
+      </summary>
+      <pre
+        className={clsx(
+          'rounded-none bg-gray-100 m-0',
+        )}
+      >
+        <code className="language-javascript" dangerouslySetInnerHTML={{__html: exampleCode}} />
+      </pre>
+    </details>
   )
 };
