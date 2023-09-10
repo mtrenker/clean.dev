@@ -24,9 +24,6 @@
       ]
     },
     "build:open": {
-      "dependsOn": [
-        "build"
-      ],
       "outputs": [
         ".open-next/**"
       ]
