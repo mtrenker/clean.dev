@@ -3,7 +3,7 @@ import { getSecret } from '../secrets';
 import type { GetFileQuery, GetFileQueryVariables } from './generated';
 
 const query = async <T extends object, V extends object>(document: ReturnType<typeof gql>, variables?: V) => {
-  const GITHUB_CODEFETCHER_TOKEN = await getSecret('clean/blog/api-secret', 'GITHUB_CODEFETCHER_TOKEN');
+  const GITHUB_CODEFETCHER_TOKEN = await getSecret('clean/blog/github-secret', 'GITHUB_CODEFETCHER_TOKEN');
   const response = await fetch('https://api.github.com/graphql', {
     method: 'POST',
     body: JSON.stringify({

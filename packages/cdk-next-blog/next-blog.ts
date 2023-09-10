@@ -6,6 +6,7 @@ export class NextBlog extends Construct {
   draftSecret: Secret;
   apiSecret: Secret;
   webhookSecret: Secret;
+  codeFetcherSecret: Secret;
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -24,6 +25,12 @@ export class NextBlog extends Construct {
     this.webhookSecret = new Secret(this, 'WebhookSecret', {
       description: 'Secret to verify webhook calls from the blog API',
       secretName: 'clean/blog/webhook-secret',
+      removalPolicy: RemovalPolicy.DESTROY,
+    });
+
+    this.codeFetcherSecret = new Secret(this, 'CodeFetcherSecret', {
+      description: 'Secret for accessing the github api',
+      secretName: 'clean/blog/github-secret',
       removalPolicy: RemovalPolicy.DESTROY,
     });
   }
