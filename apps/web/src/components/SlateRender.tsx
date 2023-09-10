@@ -188,7 +188,14 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
             const reference = references?.find((reference) => reference.id === node.nodeId);
             switch (node.nodeType) {
               case "CodeExample": {
-                return reference && <CodeExample key={index} expression={reference.expression} />;
+                return (
+                  <CodeExample
+                    key={index}
+                    owner={reference.owner || 'mtrenker'}
+                    repo={reference.repo || 'clean.dev'}
+                    expression={reference.expression}
+                   />
+                )
               }
               default:
                 return null;

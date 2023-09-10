@@ -10,7 +10,7 @@ const BlogPage: NextPage = async () => {
   const draft = draftMode().isEnabled;
   const posts = await getPosts({ draft });
   return (
-    <div className="container mx-auto px-6">
+    <div className="container mx-auto px-4">
       <header className="max-w-2xl">
         <h1 className="text-4xl font-bold leading-tight">
           <span className="block font-display text-base font-semibold text-neutral-950">Blog</span>
