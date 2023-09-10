@@ -17,7 +17,11 @@ const query = async <T extends object, V extends object>(document: ReturnType<ty
     },
   });
 
-  const { data } = await response.json() as { data: T };
+  const { data, error } = await response.json() as { data: T, error?: {message: string} };
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return data;
 }
