@@ -81,6 +81,16 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
       post(where: { slug: $slug }) {
         title
         slug
+        image {
+          url(transformation: {image: {resize: {width: 1200}}})
+        }
+        author {
+          name
+          intro
+          avatar {
+            url(transformation: {image: {resize: {width: 80}}})
+          }
+        }
         teaser {
           raw
         }

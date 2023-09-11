@@ -747,6 +747,8 @@ export type Author = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID']['output'];
+  /** Short intro about the author, used as aside info in articles or overview pages */
+  intro?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   posts: Array<Post>;
   /** The time the document was published. Null on documents in draft stage. */
@@ -846,6 +848,7 @@ export type AuthorConnection = {
 export type AuthorCreateInput = {
   avatar: AssetCreateOneInlineInput;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  intro?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   posts?: InputMaybe<PostCreateManyInlineInput>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -924,6 +927,25 @@ export type AuthorManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  intro?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  intro_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  intro_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  intro_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  intro_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  intro_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  intro_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  intro_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  intro_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  intro_starts_with?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   /** All values containing the given string. */
   name_contains?: InputMaybe<Scalars['String']['input']>;
@@ -1007,6 +1029,8 @@ export enum AuthorOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
+  IntroAsc = 'intro_ASC',
+  IntroDesc = 'intro_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
@@ -1019,6 +1043,7 @@ export enum AuthorOrderByInput {
 
 export type AuthorUpdateInput = {
   avatar?: InputMaybe<AssetUpdateOneInlineInput>;
+  intro?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   posts?: InputMaybe<PostUpdateManyInlineInput>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -1042,6 +1067,7 @@ export type AuthorUpdateManyInlineInput = {
 };
 
 export type AuthorUpdateManyInput = {
+  intro?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1144,6 +1170,25 @@ export type AuthorWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  intro?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  intro_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  intro_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  intro_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  intro_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  intro_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  intro_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  intro_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  intro_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  intro_starts_with?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   /** All values containing the given string. */
   name_contains?: InputMaybe<Scalars['String']['input']>;
@@ -5370,7 +5415,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, image?: { __typename?: 'Asset', url: string } | null, author?: { __typename?: 'Author', name: string, intro?: string | null, avatar: { __typename?: 'Asset', url: string } } | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
 
 
 
@@ -5901,6 +5946,7 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
   documentInStages?: Resolver<Array<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<AuthorDocumentInStagesArgs, 'includeCurrent' | 'inheritLocale' | 'stages'>>;
   history?: Resolver<Array<ResolversTypes['Version']>, ParentType, ContextType, RequireFields<AuthorHistoryArgs, 'limit' | 'skip'>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  intro?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<AuthorPostsArgs>>;
   publishedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
