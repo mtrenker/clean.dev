@@ -16,6 +16,11 @@ const query = async <T extends object, V extends object>(document: ReturnType<ty
       'User-Agent': 'CleanDev',
     },
   });
+  // eslint-disable-next-line no-console -- debug
+  console.log('do we even get here?', GITHUB_CODEFETCHER_TOKEN.slice(0, 14));
+  // eslint-disable-next-line no-console -- debug
+  console.log(response);
+
 
   const { data, error } = await response.json() as { data: T, error?: {message: string} };
 
