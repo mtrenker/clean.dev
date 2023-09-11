@@ -6,7 +6,7 @@ export class NextBlog extends Construct {
   draftSecret: Secret;
   apiSecret: Secret;
   webhookSecret: Secret;
-  codeFetcherSecret: Secret;
+  githubSecret: Secret;
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -28,7 +28,7 @@ export class NextBlog extends Construct {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    this.codeFetcherSecret = new Secret(this, 'CodeFetcherSecret', {
+    this.githubSecret = new Secret(this, 'CodeFetcherSecret', {
       description: 'Secret for accessing the github api',
       secretName: 'clean/blog/github-secret',
       removalPolicy: RemovalPolicy.DESTROY,

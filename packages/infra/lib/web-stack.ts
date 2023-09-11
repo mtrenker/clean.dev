@@ -42,6 +42,7 @@ export class WebStack extends Stack {
       resources: [
         blog.draftSecret.secretArn,
         blog.apiSecret.secretArn,
+        blog.githubSecret.secretArn,
       ],
     }));
   }
