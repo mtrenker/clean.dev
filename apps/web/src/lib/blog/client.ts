@@ -92,6 +92,7 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
           }
         }
         teaser {
+          text
           raw
         }
         content {

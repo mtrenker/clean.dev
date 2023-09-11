@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { Metadata, NextPage } from 'next';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Markdown from 'markdown-to-jsx';
@@ -57,5 +57,25 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
     </div>
   );
 }
+
+type MetadataGenerator<T> = (props: T) => Promise<Metadata>;
+
+export const generateMetadata: MetadataGenerator<BlogPostPageProps> = async ({ params }) => {
+  const { slug } = params;
+  const post = await getPost(slug);
+  if (!post) {
+    return notFound();
+  }
+  return {
+    title: post.title,
+    openGraph: {
+      title: post.title,
+      description: post.teaser.text,
+      images: [{
+        url: post.image?.url ?? '',
+      }]
+    },
+  };
+};
 
 export default BlogPostPage;
