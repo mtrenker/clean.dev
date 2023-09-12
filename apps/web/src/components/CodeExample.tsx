@@ -23,6 +23,7 @@ const getCode = async (owner: string, repo: string, expression: string) => {
     expression,
   });
 
+
   if (file.repository?.object?.__typename === 'Blob' && file.repository.object.text) {
     const code = highlight(file.repository.object.text, languages.typescript, 'typescript');
     return code
@@ -38,9 +39,10 @@ export const CodeExample: React.FC<CodeExampleProps> = async ({
   expression
 }) => {
   const exampleCode = code ? highlight(code, languages.typescript, 'typescript') : await getCode(owner, repo, expression);
+
   return (
     <details
-      className='bg-gray-200 rounded-lg'
+      className='bg-gray-200 rounded-lg my-2'
       open
     >
       <summary className='px-4 font-mono'>

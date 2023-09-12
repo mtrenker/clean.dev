@@ -41,5 +41,6 @@ export const getFile = async (variables: GetFileQueryVariables) => {
     }
   `;
   const data = await query<GetFileQuery, GetFileQueryVariables>(getFileQuery, variables);
+
   return data;
 };

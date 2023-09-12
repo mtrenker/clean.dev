@@ -62,6 +62,11 @@ interface ParagraphElement {
   children: InlineElement[];
 }
 
+interface CodeBlockElement {
+  type: 'code-block';
+  children: InlineElement[];
+}
+
 interface CodeExampleElement {
   type: 'embed';
   nodeId: string;
@@ -82,7 +87,8 @@ export type SlateNode =
   | HeadingOneElement
   | HeadingTwoElement
   | HeadingThreeElement
-  | CodeExampleElement;
+  | CodeExampleElement
+  | CodeBlockElement;
 
 export interface SlateRenderProps {
   value?: SlateNode[]
@@ -204,6 +210,14 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
             return null;
           }
         }
+        case 'code-block':
+          return (
+            <pre key={index}>
+              <code>
+                {renderNodes(node.children)}
+              </code>
+            </pre>
+          );
         default:
           return null;
         }

@@ -19,9 +19,11 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
   const { slug } = params;
   const draft = draftMode();
   const post = await getPost(slug, { draft: draft.isEnabled });
+
   if (!post) {
     return notFound();
   }
+
   const teaser = post.teaser.raw as { children: SlateNode[] };
   const content = post.content.raw as { children: SlateNode[] };
   return (
