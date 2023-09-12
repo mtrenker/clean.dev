@@ -1,10 +1,10 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import type { StackProps } from 'aws-cdk-lib';
+import { Stack } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
-import { Construct } from 'constructs';
+import type { Construct } from 'constructs';
 import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
-
 import { AppStage } from './app-stage';
 
 export interface PipelineStackProps extends StackProps {
@@ -37,9 +37,6 @@ export class PipelineStack extends Stack {
         input: CodePipelineSource.connection(repository, branch, {
           connectionArn,
         }),
-        env: {
-          BLOG_ENDPOINT: StringParameter.valueForStringParameter(this, '/clean/blog/api-endpoint'),
-        },
         commands: [
           'corepack enable',
           'corepack prepare pnpm@latest-8 --activate',
