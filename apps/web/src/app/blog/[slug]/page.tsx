@@ -35,6 +35,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
       >
         <div className="prose">
           <header>
+            <p className="m-0 mb-2 font-bold leading-tight">{post.tagline}</p>
             <h1>
               {post.title}
             </h1>
@@ -73,10 +74,13 @@ export const generateMetadata: MetadataGenerator<BlogPostPageProps> = async ({ p
     return notFound();
   }
   return {
-    title: post.title,
+    title: `${post.tagline} - ${post.title}`,
     openGraph: {
-      title: post.title,
+      type: 'article',
+      locale: 'en_US',
+      title: `${post.tagline} - ${post.title}`,
       description: post.teaser.text,
+      url: `https://clean.dev/blog/${post.slug}`,
       images: [{
         url: post.image?.url ?? '',
       }]
