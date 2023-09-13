@@ -99,6 +99,10 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
         }
         content {
           references {
+            ... on Post {
+              id
+              slug
+            }
             ... on CodeExample {
               id
               name

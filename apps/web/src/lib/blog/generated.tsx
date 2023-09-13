@@ -5459,7 +5459,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', tagline?: string | null, title: string, slug?: string | null, image?: { __typename?: 'Asset', url: string } | null, author?: { __typename?: 'Author', name: string, intro?: string | null, avatar: { __typename?: 'Asset', url: string } } | null, teaser: { __typename?: 'PostTeaserRichText', text: string, raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', tagline?: string | null, title: string, slug?: string | null, image?: { __typename?: 'Asset', url: string } | null, author?: { __typename?: 'Author', name: string, intro?: string | null, avatar: { __typename?: 'Asset', url: string } } | null, teaser: { __typename?: 'PostTeaserRichText', text: string, raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post', id: string, slug?: string | null }> } } | null };
 
 
 
