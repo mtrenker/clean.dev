@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { draftMode } from 'next/headers';
 import Link from 'next/link';
 import { getPosts } from '../../lib/blog/client';
 import { formatBlogDateShort } from '../../lib/intl';
@@ -7,8 +6,7 @@ import type { SlateNode} from '../../components/SlateRender';
 import { SlateRender } from '../../components/SlateRender';
 
 const BlogPage: NextPage = async () => {
-  const draft = draftMode().isEnabled;
-  const posts = await getPosts({ draft });
+  const posts = await getPosts();
   return (
     <div className="container mx-auto px-4">
       <header className="max-w-2xl">

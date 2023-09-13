@@ -8,9 +8,10 @@ export const GET = async (request: Request): Promise<Response> => {
 
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
+  const slug = searchParams.get('slug');
   if (token !== secret) {
     return new Response('Invalid token', { status: 401 });
   }
   draftMode().enable();
-  return redirect('/');
+  return redirect(`/blog/${slug}`);
 }

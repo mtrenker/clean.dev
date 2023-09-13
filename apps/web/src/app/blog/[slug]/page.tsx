@@ -1,5 +1,4 @@
 import type { Metadata, NextPage } from 'next';
-import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
@@ -17,8 +16,7 @@ export interface BlogPostPageProps {
 
 const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
   const { slug } = params;
-  const draft = draftMode();
-  const post = await getPost(slug, { draft: draft.isEnabled });
+  const post = await getPost(slug);
 
   if (!post) {
     return notFound();

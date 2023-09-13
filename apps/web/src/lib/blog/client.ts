@@ -1,16 +1,17 @@
 import gql from 'gql-tag';
 import { getSecret } from '../secrets';
 import type { GetPostQuery, GetPostsQuery } from './generated';
+import { draftMode } from 'next/headers';
 
 const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT ?? '';
 
 export interface QueryOptions {
-  draft?: boolean;
   variables?: Record<string, string>;
 }
 
 const query = async <T extends object>(document: ReturnType<typeof gql>, options?: QueryOptions) => {
-  const { draft, variables } = options || {};
+  const { variables } = options || {};
+  const draft = draftMode().isEnabled;
 
   const BLOG_TOKEN = await getSecret('clean/blog/api-secret', 'BLOG_TOKEN');
 
