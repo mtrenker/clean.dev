@@ -29,7 +29,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
   return (
     <div className="container mx-auto px-4">
       <article
-        className="flex flex-col lg:flex-row lg:flex-wrap gap-4 items-center lg:items-start justify-center"
+        className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:flex-wrap lg:items-start"
         itemProp=""
         itemType="http://schema.org/BlogPosting"
       >
@@ -46,10 +46,10 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
             <SlateRender references={post.content.references} value={content.children} />
           </main>
         </div>
-        <aside className="lg:max-w-[280px] prose lg:[&>p]:text-sm">
+        <aside className="prose lg:max-w-[280px] lg:[&>p]:text-sm">
           <Image
             alt={post.author?.name ?? ''}
-            className="rounded-full mx-auto"
+            className="mx-auto rounded-full"
             height={80}
             src={post.author?.avatar.url ?? ''}
             unoptimized

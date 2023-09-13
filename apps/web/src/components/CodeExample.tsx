@@ -42,7 +42,7 @@ export const CodeExample: React.FC<CodeExampleProps> = async ({
 
   return (
     <details
-      className="bg-gray-200 rounded-lg my-2 max-w-[96vw] sm:max-w-none"
+      className="my-2 max-w-[96vw] rounded-lg bg-gray-200 sm:max-w-none"
       open
     >
       <summary className="px-4 font-mono">
@@ -50,7 +50,7 @@ export const CodeExample: React.FC<CodeExampleProps> = async ({
       </summary>
       <pre
         className={clsx(
-          'rounded-none bg-gray-100 m-0',
+          'm-0 rounded-none bg-gray-100',
         )}
       >
         <code className="language-javascript" dangerouslySetInnerHTML={{__html: exampleCode}} />

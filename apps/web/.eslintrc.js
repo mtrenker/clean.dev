@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     '@cleandev/eslint-config/next',
     '@cleandev/eslint-config',
+    'plugin:tailwindcss/recommended'
   ],
   ignorePatterns: [
     'node_modules/',

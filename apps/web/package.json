@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@cleandev/eslint-config": "workspace:*",
-    "@types/prismjs": "^1.26.0"
+    "@types/prismjs": "^1.26.0",
+    "eslint-plugin-tailwindcss": "^3.13.0"
   }
 }

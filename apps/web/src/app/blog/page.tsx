@@ -13,13 +13,13 @@ const BlogPage: NextPage = async () => {
     <div className="container mx-auto px-4">
       <header className="max-w-2xl">
         <h1 className="text-4xl font-bold leading-tight">
-          <span className="block font-display text-base font-semibold text-neutral-950">Blog</span>
+          <span className="block text-base font-semibold text-neutral-950">Blog</span>
           <span className="sr-only">-</span>
-          <span className="mt-6 block max-w-5xl font-display text-5xl font-medium tracking-tight text-neutral-950 [text-wrap:balance] sm:text-6xl">
+          <span className="mt-6 block max-w-5xl text-5xl font-medium tracking-tight text-neutral-950 [text-wrap:balance] sm:text-6xl">
             Articles, tutorials, and more
           </span>
         </h1>
-        <p className="my-5 leading-8 text-xl">
+        <p className="my-5 text-xl leading-8">
           Join me on my journey of learning and sharing. I write about web
           development, software architecture, and other topics from my daily
           work.
@@ -35,7 +35,7 @@ const BlogPage: NextPage = async () => {
               itemType="http://schema.org/BlogPosting"
               key={post.slug}
             >
-              <header className="flex flex-col gap-4 relative">
+              <header className="relative flex flex-col gap-4">
                 <div className="z-10">
                   <p>
                     <time dateTime={post.createdAt as string} itemProp="datePublished">
@@ -55,7 +55,7 @@ const BlogPage: NextPage = async () => {
               </header>
               <SlateRender value={teaser.children} />
               <Link
-                className="block w-64 rounded-xl bg-black text-white font-bold py-2 px-4 hover:bg-gray-700"
+                className="block w-64 rounded-xl bg-black px-4 py-2 font-bold text-white hover:bg-gray-700"
                 href={`/blog/${post.slug}`}
               >
                 Continue reading
