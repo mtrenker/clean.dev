@@ -166,6 +166,10 @@ importers:
       open-next:
         specifier: 2.0.5
         version: 2.0.5
+    devDependencies:
+      '@cleandev/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
 
   packages/cdk-next-blog:
     dependencies:

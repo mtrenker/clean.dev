@@ -1,23 +1,24 @@
-import * as path from "path";
-import * as child_process from 'child_process';
-import { Construct } from "constructs";
+import { Construct } from 'constructs';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
-import { Alias, Architecture, Code, Function, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Alias, Architecture, Code, Function as LambdaFunction, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { Bucket } from "aws-cdk-lib/aws-s3";
-import { HttpOrigin, OriginGroup, S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
-import { AllowedMethods, BehaviorOptions, CacheCookieBehavior, CacheHeaderBehavior, CachePolicy, CacheQueryStringBehavior, CachedMethods, Distribution, OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior, ResponseHeadersPolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
-import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
-import { ARecord, ARecordProps, AaaaRecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
-import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
-import { BucketDeployment, CacheControl, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
-import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from "aws-cdk-lib/aws-codedeploy";
-import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, ManualApprovalAction, S3DeployAction } from "aws-cdk-lib/aws-codepipeline-actions";
-import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
+import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { HttpOrigin, OriginGroup, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import type { BehaviorOptions} from 'aws-cdk-lib/aws-cloudfront';
+import { AllowedMethods, CacheCookieBehavior, CacheHeaderBehavior, CachePolicy, CacheQueryStringBehavior, CachedMethods, Distribution, OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior, ResponseHeadersPolicy, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import type { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import type { ARecordProps} from 'aws-cdk-lib/aws-route53';
+import { ARecord, AaaaRecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
+import { CacheControl } from 'aws-cdk-lib/aws-s3-deployment';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
+import { LambdaApplication, LambdaDeploymentConfig, LambdaDeploymentGroup } from 'aws-cdk-lib/aws-codedeploy';
+import { CodeBuildAction, CodeDeployServerDeployAction, CodeStarConnectionsSourceAction, ManualApprovalAction, S3DeployAction } from 'aws-cdk-lib/aws-codepipeline-actions';
+import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from 'aws-cdk-lib/aws-codebuild';
 
 const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
@@ -60,16 +61,16 @@ export class NextApp extends Construct {
   readonly revalidationQueue: Queue;
 
   /** the lambda function that serves the next.js app */
-  readonly serverFunction: Function;
+  readonly serverFunction: LambdaFunction;
 
   /** the lambda function that revalidates the next.js app */
-  readonly revalidationFunction: Function;
+  readonly revalidationFunction: LambdaFunction;
 
   /** the lambda function that optimizes images */
-  readonly imageOptimizationFunction: Function;
+  readonly imageOptimizationFunction: LambdaFunction;
 
   /** the lambda function that warms up the next.js app */
-  readonly warmerFunction: Function;
+  readonly warmerFunction: LambdaFunction;
 
   /** the certificate for the domain */
   readonly certificate: ICertificate;
@@ -93,7 +94,7 @@ export class NextApp extends Construct {
     const { nextDir, domainName, certArn, connectionArn, owner, repo, branch } = props;
 
     this.domainName = domainName;
-    this.region = process.env.CDK_DEFAULT_REGION as string;
+    this.region = process.env.CDK_DEFAULT_REGION!;
     this.relativeNextPath = `../../${nextDir}`;
     this.relativeOpenNextPath = `${this.relativeNextPath}/.open-next`;
 
@@ -167,36 +168,36 @@ export class NextApp extends Construct {
     this.imageBucket.grantReadWrite(this.imageOptimizationFunction);
   }
 
-  private prepareStaticBucket() {
+  private prepareStaticBucket(): Bucket {
     return new Bucket(this, 'StaticBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private prepareImageBucket() {
+  private prepareImageBucket(): Bucket {
     return new Bucket(this, 'ImageBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private prepareCacheBucket() {
+  private prepareCacheBucket(): Bucket {
     return new Bucket(this, 'CacheBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
   }
 
-  private prepareRevalidationQueue() {
+  private prepareRevalidationQueue(): Queue {
     return new Queue(this, 'RevalidationQueue', {
       fifo: true,
       removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
-  private prepareImageOptimizationFunction() {
-    return new Function(this, 'ImageFunction', {
+  private prepareImageOptimizationFunction(): LambdaFunction {
+    return new LambdaFunction(this, 'ImageFunction', {
       runtime: Runtime.NODEJS_18_X,
       architecture: Architecture.ARM_64,
       code: Code.fromInline(`
@@ -212,8 +213,8 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareServerFunction() {
-    return new Function(this, 'ServerFunction', {
+  private prepareServerFunction(): LambdaFunction {
+    return new LambdaFunction(this, 'ServerFunction', {
       runtime: Runtime.NODEJS_18_X,
       memorySize: 1024,
       timeout: Duration.seconds(10),
@@ -233,8 +234,8 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareRevalidationFunction() {
-    return new Function(this, 'RevalidationFunction', {
+  private prepareRevalidationFunction(): LambdaFunction {
+    return new LambdaFunction(this, 'RevalidationFunction', {
       runtime: Runtime.NODEJS_18_X,
       code: Code.fromInline(`
         exports.handler = async () => {
@@ -246,8 +247,8 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareWarmerFunction() {
-    return new Function(this, 'WarmerFunction', {
+  private prepareWarmerFunction(): LambdaFunction {
+    return new LambdaFunction(this, 'WarmerFunction', {
       runtime: Runtime.NODEJS_18_X,
       code: Code.fromInline(`
         exports.handler = async () => {
@@ -263,11 +264,11 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareCertificate(certArn: string) {
+  private prepareCertificate(certArn: string): ICertificate {
     return Certificate.fromCertificateArn(this, 'Certificate', certArn);
   }
 
-  private prepareDistribution() {
+  private prepareDistribution(): Distribution {
     const serverFunctionUrl = this.serverFunctionProductionAlias.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE
     });
@@ -371,41 +372,7 @@ export class NextApp extends Construct {
     });
   }
 
-  private prepareAssetDeployment() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'assets');
-
-    const cacheControl = CacheControl.fromString(
-      `public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`
-    );
-
-    return new BucketDeployment(this, 'AssetDeployment', {
-      sources: [Source.asset(assetPath)],
-      destinationBucket: this.staticBucket,
-      distribution: this.distribution,
-      prune: true,
-      cacheControl: [cacheControl],
-      logRetention: RetentionDays.ONE_WEEK,
-    });
-  }
-
-  private prepareCacheDeployment() {
-    const assetPath = path.join(__dirname, this.relativeOpenNextPath, 'cache');
-
-    const cacheControl = CacheControl.fromString(
-      `public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`
-    );
-
-    return new BucketDeployment(this, 'CacheDeployment', {
-      sources: [Source.asset(assetPath)],
-      destinationBucket: this.cacheBucket,
-      distribution: this.distribution,
-      prune: true,
-      cacheControl: [cacheControl],
-      logRetention: RetentionDays.ONE_WEEK,
-    });
-  }
-
-  private prepareDeployment(connectionArn: string, owner: string, repo: string, branch: string) {
+  private prepareDeployment(connectionArn: string, owner: string, repo: string, branch: string): Pipeline {
 
     const sourceArtifact = new Artifact('Source');
     const assetsArtifact = new Artifact('Assets');
@@ -476,20 +443,20 @@ export class NextApp extends Construct {
         artifacts: {
           'secondary-artifacts': {
             ServerFunctionArtifact: {
-              files: ["appspec.yml"],
-              'base-directory': `apps/web/.open-next/server-function`,
+              files: ['appspec.yml'],
+              'base-directory': 'apps/web/.open-next/server-function',
             },
             RevalidationFunctionArtifact: {
-              files: ["appspec.yml"],
-              'base-directory': `apps/web/.open-next/revalidation-function`,
+              files: ['appspec.yml'],
+              'base-directory': 'apps/web/.open-next/revalidation-function',
             },
             WarmerFunctionArtifact: {
-              files: ["appspec.yml"],
-              'base-directory': `apps/web/.open-next/warmer-function`,
+              files: ['appspec.yml'],
+              'base-directory': 'apps/web/.open-next/warmer-function',
             },
             ImageOptimizationFunctionArtifact: {
-              files: ["appspec.yml"],
-              'base-directory': `apps/web/.open-next/image-optimization-function`,
+              files: ['appspec.yml'],
+              'base-directory': 'apps/web/.open-next/image-optimization-function',
             }
           }
         }
@@ -534,12 +501,12 @@ export class NextApp extends Construct {
         artifacts: {
           'secondary-artifacts': {
             Assets: {
-              files: ["**/*"],
-              'base-directory': `apps/web/.open-next/assets`,
+              files: ['**/*'],
+              'base-directory': 'apps/web/.open-next/assets',
             },
             Cache: {
-              files: ["**/*"],
-              'base-directory': `apps/web/.open-next/cache`,
+              files: ['**/*'],
+              'base-directory': 'apps/web/.open-next/cache',
             }
           }
         }
@@ -671,6 +638,8 @@ export class NextApp extends Construct {
         cacheDeployAction
       ],
     });
+
+    return pipeline;
   }
 
   private prepareFunctionDeployAction(
@@ -679,7 +648,7 @@ export class NextApp extends Construct {
     name: string,
     alias: Alias,
     input: Artifact
-  ) {
+  ): CodeDeployServerDeployAction {
 
     const deploymentGroup = new LambdaDeploymentGroup(this, `${name}DeploymentGroup`, {
       application,
@@ -696,26 +665,5 @@ export class NextApp extends Construct {
     });
 
     return deployAction;
-  }
-
-  private buildApp() {
-    this.buildNext();
-    this.buildOpenNext();
-  }
-
-  private buildNext() {
-    this.run('pnpm run build', this.relativeNextPath);
-  }
-
-  private buildOpenNext() {
-    this.run('npx open-next build', this.relativeNextPath);
-  }
-
-  private run(cmd: string, cwd: string) {
-    const child = child_process.spawnSync(cmd, {
-      cwd,
-      shell: true,
-    });
-    console.log(child.stdout.toString());
   }
 }

@@ -16,5 +16,8 @@
     "constructs": "10.1.110",
     "esbuild": "^0.19.2",
     "open-next": "2.0.5"
+  },
+  "devDependencies": {
+    "@cleandev/eslint-config": "workspace:*"
   }
 }
