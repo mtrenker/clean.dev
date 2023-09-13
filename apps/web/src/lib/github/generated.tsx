@@ -2848,6 +2848,17 @@ export type ConnectedEvent = Node & {
   subject: ReferencedSubject;
 };
 
+/** The Contributing Guidelines for a repository. */
+export type ContributingGuidelines = {
+  __typename?: 'ContributingGuidelines';
+  /** The body of the Contributing Guidelines. */
+  body?: Maybe<Scalars['String']['output']>;
+  /** The HTTP path for the Contributing Guidelines. */
+  resourcePath?: Maybe<Scalars['URI']['output']>;
+  /** The HTTP URL for the Contributing Guidelines. */
+  url?: Maybe<Scalars['URI']['output']>;
+};
+
 /** Represents a contribution a user made on GitHub, such as opening an issue. */
 export type Contribution = {
   /**
@@ -20365,6 +20376,8 @@ export type Repository = Node & PackageOwner & ProjectOwner & ProjectV2Recent & 
   commitComments: CommitCommentConnection;
   /** Returns a list of contact links associated to the repository */
   contactLinks?: Maybe<Array<RepositoryContactLink>>;
+  /** Returns the contributing guidelines for this repository. */
+  contributingGuidelines?: Maybe<ContributingGuidelines>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   /** Identifies the primary key from the database. */
@@ -21589,6 +21602,8 @@ export type RepositoryRule = Node & {
   id: Scalars['ID']['output'];
   /** The parameters for this rule. */
   parameters?: Maybe<RuleParameters>;
+  /** The repository ruleset associated with this rule configuration */
+  repositoryRuleset?: Maybe<RepositoryRuleset>;
   /** The type of rule. */
   type: RepositoryRuleType;
 };
@@ -29042,6 +29057,7 @@ export type ResolversTypes = {
   ComparisonCommitConnection: ResolverTypeWrapper<ComparisonCommitConnection>;
   ComparisonStatus: ComparisonStatus;
   ConnectedEvent: ResolverTypeWrapper<Omit<ConnectedEvent, 'source' | 'subject'> & { source: ResolversTypes['ReferencedSubject'], subject: ResolversTypes['ReferencedSubject'] }>;
+  ContributingGuidelines: ResolverTypeWrapper<ContributingGuidelines>;
   Contribution: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Contribution']>;
   ContributionCalendar: ResolverTypeWrapper<ContributionCalendar>;
   ContributionCalendarDay: ResolverTypeWrapper<ContributionCalendarDay>;
@@ -30511,6 +30527,7 @@ export type ResolversParentTypes = {
   Comparison: Comparison;
   ComparisonCommitConnection: ComparisonCommitConnection;
   ConnectedEvent: Omit<ConnectedEvent, 'source' | 'subject'> & { source: ResolversParentTypes['ReferencedSubject'], subject: ResolversParentTypes['ReferencedSubject'] };
+  ContributingGuidelines: ContributingGuidelines;
   Contribution: ResolversInterfaceTypes<ResolversParentTypes>['Contribution'];
   ContributionCalendar: ContributionCalendar;
   ContributionCalendarDay: ContributionCalendarDay;
@@ -32636,6 +32653,13 @@ export type ConnectedEventResolvers<ContextType = any, ParentType extends Resolv
   isCrossRepository?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['ReferencedSubject'], ParentType, ContextType>;
   subject?: Resolver<ResolversTypes['ReferencedSubject'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ContributingGuidelinesResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributingGuidelines'] = ResolversParentTypes['ContributingGuidelines']> = {
+  body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  resourcePath?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -38721,6 +38745,7 @@ export type RepositoryResolvers<ContextType = any, ParentType extends ResolversP
   collaborators?: Resolver<Maybe<ResolversTypes['RepositoryCollaboratorConnection']>, ParentType, ContextType, Partial<RepositoryCollaboratorsArgs>>;
   commitComments?: Resolver<ResolversTypes['CommitCommentConnection'], ParentType, ContextType, Partial<RepositoryCommitCommentsArgs>>;
   contactLinks?: Resolver<Maybe<Array<ResolversTypes['RepositoryContactLink']>>, ParentType, ContextType>;
+  contributingGuidelines?: Resolver<Maybe<ResolversTypes['ContributingGuidelines']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   databaseId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   defaultBranchRef?: Resolver<Maybe<ResolversTypes['Ref']>, ParentType, ContextType>;
@@ -39040,6 +39065,7 @@ export type RepositoryOwnerResolvers<ContextType = any, ParentType extends Resol
 export type RepositoryRuleResolvers<ContextType = any, ParentType extends ResolversParentTypes['RepositoryRule'] = ResolversParentTypes['RepositoryRule']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   parameters?: Resolver<Maybe<ResolversTypes['RuleParameters']>, ParentType, ContextType>;
+  repositoryRuleset?: Resolver<Maybe<ResolversTypes['RepositoryRuleset']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['RepositoryRuleType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -41422,6 +41448,7 @@ export type Resolvers<ContextType = any> = {
   Comparison?: ComparisonResolvers<ContextType>;
   ComparisonCommitConnection?: ComparisonCommitConnectionResolvers<ContextType>;
   ConnectedEvent?: ConnectedEventResolvers<ContextType>;
+  ContributingGuidelines?: ContributingGuidelinesResolvers<ContextType>;
   Contribution?: ContributionResolvers<ContextType>;
   ContributionCalendar?: ContributionCalendarResolvers<ContextType>;
   ContributionCalendarDay?: ContributionCalendarDayResolvers<ContextType>;

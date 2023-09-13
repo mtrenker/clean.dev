@@ -27,7 +27,7 @@ const query = async <T extends object>(document: ReturnType<typeof gql>, options
     },
   });
 
-  const { data, error } = await response.json() as { data: T };
+  const { data } = await response.json() as { data: T };
 
   return data;
 }

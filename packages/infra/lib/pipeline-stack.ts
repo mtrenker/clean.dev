@@ -1,7 +1,6 @@
 import type { StackProps } from 'aws-cdk-lib';
 import { Stack } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import type { Construct } from 'constructs';
 import { ComputeType, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
