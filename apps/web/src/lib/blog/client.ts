@@ -36,6 +36,7 @@ export const getPosts = async (options?: QueryOptions) => {
   const getPostsQuery = gql`
     query GetPosts {
       posts {
+        tagline
         title
         slug
         image {
@@ -79,6 +80,7 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
   const getPostQuery = gql`
     query GetPost($slug: String!) {
       post(where: { slug: $slug }) {
+        tagline
         title
         slug
         image {

@@ -2904,6 +2904,7 @@ export type Post = Node & {
   slug?: Maybe<Scalars['String']['output']>;
   /** System stage field */
   stage: Stage;
+  tagline?: Maybe<Scalars['String']['output']>;
   /** Will be shown on the overview page */
   teaser: PostTeaserRichText;
   title: Scalars['String']['output'];
@@ -3053,6 +3054,7 @@ export type PostCreateInput = {
   /** Inline mutations for managing document localizations excluding the default locale */
   localizations?: InputMaybe<PostCreateLocalizationsInput>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  tagline?: InputMaybe<Scalars['String']['input']>;
   /** teaser input for default locale (en) */
   teaser: Scalars['RichTextAST']['input'];
   /** title input for default locale (en) */
@@ -3190,6 +3192,25 @@ export type PostManyWhereInput = {
   slug_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   /** All values starting with the given string. */
   slug_starts_with?: InputMaybe<Scalars['String']['input']>;
+  tagline?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  tagline_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  tagline_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  tagline_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  tagline_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  tagline_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  tagline_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  tagline_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  tagline_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  tagline_starts_with?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -3217,6 +3238,8 @@ export enum PostOrderByInput {
   PublishedAtDesc = 'publishedAt_DESC',
   SlugAsc = 'slug_ASC',
   SlugDesc = 'slug_DESC',
+  TaglineAsc = 'tagline_ASC',
+  TaglineDesc = 'tagline_DESC',
   TitleAsc = 'title_ASC',
   TitleDesc = 'title_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -3256,6 +3279,7 @@ export type PostUpdateInput = {
   /** Manage document localizations */
   localizations?: InputMaybe<PostUpdateLocalizationsInput>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  tagline?: InputMaybe<Scalars['String']['input']>;
   /** teaser input for default locale (en) */
   teaser?: InputMaybe<Scalars['RichTextAST']['input']>;
   /** title input for default locale (en) */
@@ -3305,6 +3329,7 @@ export type PostUpdateManyInput = {
   content?: InputMaybe<Scalars['RichTextAST']['input']>;
   /** Optional updates to localizations */
   localizations?: InputMaybe<PostUpdateManyLocalizationsInput>;
+  tagline?: InputMaybe<Scalars['String']['input']>;
   /** teaser input for default locale (en) */
   teaser?: InputMaybe<Scalars['RichTextAST']['input']>;
   /** title input for default locale (en) */
@@ -3470,6 +3495,25 @@ export type PostWhereInput = {
   slug_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   /** All values starting with the given string. */
   slug_starts_with?: InputMaybe<Scalars['String']['input']>;
+  tagline?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  tagline_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  tagline_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  tagline_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  tagline_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  tagline_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  tagline_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  tagline_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  tagline_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  tagline_starts_with?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   /** All values containing the given string. */
   title_contains?: InputMaybe<Scalars['String']['input']>;
@@ -5408,14 +5452,14 @@ export enum _SystemDateTimeFieldVariation {
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', title: string, slug?: string | null, createdAt: any, image?: { __typename?: 'Asset', url: string } | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, author?: { __typename?: 'Author', name: string, title?: string | null, avatar: { __typename?: 'Asset', url: string } } | null }> };
+export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', tagline?: string | null, title: string, slug?: string | null, createdAt: any, image?: { __typename?: 'Asset', url: string } | null, teaser: { __typename?: 'PostTeaserRichText', raw: any }, author?: { __typename?: 'Author', name: string, title?: string | null, avatar: { __typename?: 'Asset', url: string } } | null }> };
 
 export type GetPostQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', title: string, slug?: string | null, image?: { __typename?: 'Asset', url: string } | null, author?: { __typename?: 'Author', name: string, intro?: string | null, avatar: { __typename?: 'Asset', url: string } } | null, teaser: { __typename?: 'PostTeaserRichText', text: string, raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
+export type GetPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', tagline?: string | null, title: string, slug?: string | null, image?: { __typename?: 'Asset', url: string } | null, author?: { __typename?: 'Author', name: string, intro?: string | null, avatar: { __typename?: 'Asset', url: string } } | null, teaser: { __typename?: 'PostTeaserRichText', text: string, raw: any }, content: { __typename?: 'PostContentRichText', raw: any, references: Array<{ __typename?: 'Asset' } | { __typename?: 'CodeExample', id: string, name?: string | null, description?: string | null, language?: string | null, code?: string | null, owner?: string | null, repo?: string | null, expression?: string | null } | { __typename?: 'Post' }> } } | null };
 
 
 
@@ -6157,6 +6201,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   scheduledIn?: Resolver<Array<ResolversTypes['ScheduledOperation']>, ParentType, ContextType, Partial<PostScheduledInArgs>>;
   slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   stage?: Resolver<ResolversTypes['Stage'], ParentType, ContextType>;
+  tagline?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   teaser?: Resolver<ResolversTypes['PostTeaserRichText'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType, RequireFields<PostUpdatedAtArgs, 'variation'>>;

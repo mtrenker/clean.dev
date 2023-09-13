@@ -42,10 +42,10 @@ export const CodeExample: React.FC<CodeExampleProps> = async ({
 
   return (
     <details
-      className='bg-gray-200 rounded-lg my-2 max-w-[96vw] sm:max-w-none'
+      className="bg-gray-200 rounded-lg my-2 max-w-[96vw] sm:max-w-none"
       open
     >
-      <summary className='px-4 font-mono'>
+      <summary className="px-4 font-mono">
         {name}
       </summary>
       <pre

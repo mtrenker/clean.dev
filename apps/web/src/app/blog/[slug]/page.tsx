@@ -28,8 +28,12 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
   const content = post.content.raw as { children: SlateNode[] };
   return (
     <div className="container mx-auto px-4">
-      <div className='flex flex-col lg:flex-row lg:flex-wrap gap-4 items-center lg:items-start justify-center'>
-        <div className='prose'>
+      <article
+        className="flex flex-col lg:flex-row lg:flex-wrap gap-4 items-center lg:items-start justify-center"
+        itemProp=""
+        itemType="http://schema.org/BlogPosting"
+      >
+        <div className="prose">
           <header>
             <h1>
               {post.title}
@@ -42,10 +46,10 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
             <SlateRender references={post.content.references} value={content.children} />
           </main>
         </div>
-        <aside className='lg:max-w-[280px] prose lg:[&>p]:text-sm'>
+        <aside className="lg:max-w-[280px] prose lg:[&>p]:text-sm">
           <Image
             alt={post.author?.name ?? ''}
-            className='rounded-full mx-auto'
+            className="rounded-full mx-auto"
             height={80}
             src={post.author?.avatar.url ?? ''}
             unoptimized
@@ -55,7 +59,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = async ({ params }) => {
             {post.author?.intro ?? ''}
           </Markdown>
         </aside>
-      </div>
+      </article>
     </div>
   );
 }

@@ -38,5 +38,6 @@ module.exports = {
   rules: {
     "import/no-default-export": "off",
     "react/function-component-definition": ["error", { namedComponents: "arrow-function" }],
+    "jsx-quotes": ["error", "prefer-double"],
   },
 };

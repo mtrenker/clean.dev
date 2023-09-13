@@ -27,7 +27,7 @@ const Home: React.FC = () => (
         >
           <Image
             alt="Profile picture of Martin Trenker, consultant and web developer"
-            className='m-0'
+            className="m-0"
             height={200}
             src="/me.png"
             unoptimized

@@ -1,5 +1,6 @@
-import { Stage, StageProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import type { StageProps } from 'aws-cdk-lib';
+import { Stage } from 'aws-cdk-lib';
+import type { Construct } from 'constructs';
 import { WebStack } from './web-stack';
 import { CertStack } from './cert-stack';
 import { MonitoringStack } from './monitoring-stack';

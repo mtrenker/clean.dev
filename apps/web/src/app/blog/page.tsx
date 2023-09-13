@@ -42,6 +42,7 @@ const BlogPage: NextPage = async () => {
                       {formatBlogDateShort(post.createdAt as string)}
                     </time>
                   </p>
+                  <h3 className="font-bold leading-tight">{post.tagline}</h3>
                   <h2
                     className="text-3xl font-bold leading-tight"
                     itemProp="headline"
