@@ -212,7 +212,7 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
         }
         case 'code-block':
           return (
-            <pre className='overflow-x-auto px-0 mx-0' key={index}>
+            <pre className='max-w-[96vw] sm:max-w-none' key={index}>
               <code className='overflow-x-auto'>
                 {renderNodes(node.children)}
               </code>
