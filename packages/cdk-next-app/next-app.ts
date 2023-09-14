@@ -53,10 +53,6 @@ export class NextApp extends Construct {
   /** the bucket that serves cache */
   readonly cacheBucket: Bucket;
 
-  /** the bucket that serves optimized images */
-  readonly imageBucket: Bucket;
-
-
   /** the queue that triggers revalidation */
   readonly revalidationQueue: Queue;
 
@@ -100,7 +96,6 @@ export class NextApp extends Construct {
 
     // this.buildApp();
     this.staticBucket = this.prepareStaticBucket();
-    this.imageBucket = this.prepareImageBucket();
     this.cacheBucket = this.prepareCacheBucket();
 
     this.revalidationQueue = this.prepareRevalidationQueue();
@@ -165,7 +160,7 @@ export class NextApp extends Construct {
 
     // bucket config
     this.cacheBucket.grantReadWrite(this.serverFunction);
-    this.imageBucket.grantReadWrite(this.imageOptimizationFunction);
+    this.staticBucket.grantReadWrite(this.imageOptimizationFunction);
   }
 
   private prepareStaticBucket(): Bucket {
@@ -208,7 +203,7 @@ export class NextApp extends Construct {
       handler: 'index.handler',
       logRetention: RetentionDays.ONE_WEEK,
       environment: {
-        BUCKET_NAME: this.imageBucket.bucketName,
+        BUCKET_NAME: this.staticBucket.bucketName,
       },
     });
   }
