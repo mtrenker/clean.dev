@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { Fragment, useCallback } from 'react';
-import { CodeExample } from './CodeExample';
 import Link from 'next/link';
+import { CodeExample } from './CodeExample';
 
 interface TextNode {
   text: string;
@@ -167,19 +167,20 @@ export const SlateRender: React.FC<SlateRenderProps> = ({ value, references }) =
               {renderNodes(node.children)}
             </Fragment>
           );
-        case 'link':
-          const ref = references?.find((ref) => ref.id === node.nodeId);
+        case 'link': {
+          const ref = references?.find((r) => r.id === node.nodeId);
           const href = ref ? `/blog/${ref.slug}` : node.href;
           return (
             <Link
               href={href}
               key={index}
-              rel={ref ? "" : "noopener noreferrer"}
-              target={ref ? "" : "_blank"}
+              rel={ref ? '' : 'noopener noreferrer'}
+              target={ref ? '' : '_blank'}
             >
               {renderNodes(node.children)}
             </Link>
           );
+        }
         case 'image':
           return (
             <figure key={index}>
