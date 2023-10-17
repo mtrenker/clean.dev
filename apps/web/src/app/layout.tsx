@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
   <html lang="en">
     <body className={inter.className}>
-      <header className="container mx-auto p-4">
+      <header className="container mx-auto p-4 print:hidden">
         <nav className="grid grid-cols-[1fr_auto] items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-20">
           <div>
             <Link className="text-3xl font-bold" href="/">

@@ -6,6 +6,7 @@ export interface Project {
   description: string;
   city: string;
   highlights: string[];
+  technologies: string[];
   startDate: string;
   endDate: string;
   featured?: boolean;
@@ -19,9 +20,14 @@ export const projects: Project[] = [
     description: 'Developing and maintaining Sites in a Share point environment.',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'sharepoint',
+      'javascript',
+      'google-maps'
+    ],
     startDate: '2008-11',
     endDate: '2009-02',
-    featured: false,
+    featured: true,
   }, {
     id: '2',
     company: 'McKinsey & Company',
@@ -30,9 +36,14 @@ export const projects: Project[] = [
     description: 'Developing and maintenance of an asset management system based on PHP, ExtJS, Oracle DB in an Agile team.',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'extjs',
+      'oracle',
+      'php',
+    ],
     startDate: '2009-02',
     endDate: '2012-07',
-    featured: false,
+    featured: true,
   }, {
     id: '3',
     company: 'Travian Games',
@@ -41,9 +52,13 @@ export const projects: Project[] = [
     description: 'Developing the JavaScript components for Web based Browser game with MooTools',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'mootools',
+      'javascript'
+    ],
     startDate: '2010-12',
     endDate: '2011-10',
-    featured: false,
+    featured: true,
   }, {
     id: '4',
     company: 'Mindogo GmbH',
@@ -52,9 +67,14 @@ export const projects: Project[] = [
     description: 'Development and maintenance of a web based auction tool for an office wide, yearly charity auction based on Laravel 3, AngularJS and MySQL',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'laravel',
+      'angularjs',
+      'mysql',
+    ],
     startDate: '2012-07',
     endDate: '2016-01',
-    featured: false,
+    featured: true,
   }, {
     id: '5',
     company: 'McKinsey & Company',
@@ -63,9 +83,14 @@ export const projects: Project[] = [
     description: 'Development and maintenance of a word-wide Hardware-Migration-Management system for a leading Consulting Company using Zend Framework 1, Oracle DB and custom JavaScript',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'zend-framework',
+      'oracle',
+      'javascript',
+    ],
     startDate: '2012-08',
     endDate: '2014-10',
-    featured: false,
+    featured: true,
   }, {
     id: '6',
     company: 'BMW Group',
@@ -74,6 +99,11 @@ export const projects: Project[] = [
     description: 'Creating a web-based survey system for global and local evaluation of car dealerships with PHP, Oracle DB, Laravel, AngularJS',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'laravel',
+      'angularjs',
+      'mysql',
+    ],
     startDate: '2013-01',
     endDate: '2013-07',
     featured: true,
@@ -87,6 +117,11 @@ export const projects: Project[] = [
     highlights: [
       'CQRS based data-structures',
     ],
+    technologies: [
+      'symfony',
+      'react',
+      'cqrs',
+    ],
     startDate: '2014-09',
     endDate: '2016-06',
     featured: true,
@@ -98,9 +133,14 @@ export const projects: Project[] = [
     description: 'People Management System',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'laravel',
+      'angularjs',
+      'mysql',
+    ],
     startDate: '2016-04',
     endDate: '2016-07',
-    featured: false,
+    featured: true,
   }, {
     id: '9',
     company: 'F24 AG',
@@ -108,9 +148,13 @@ export const projects: Project[] = [
     description: 'Migrating Apple App to Android using react and Cordova',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'react',
+      'cordova',
+    ],
     startDate: '2016-08',
     endDate: '2016-10',
-    featured: false,
+    featured: true,
   }, {
     id: '10',
     company: 'Brückner Group',
@@ -120,6 +164,10 @@ export const projects: Project[] = [
     city: 'Siegsdorf',
     highlights: [
       'native web components via Polymer',
+    ],
+    technologies: [
+      'polymer',
+      'web-components',
     ],
     startDate: '2016-11',
     endDate: '2017-11',
@@ -134,6 +182,14 @@ export const projects: Project[] = [
       'heavy focus on accessibility',
       'modular architecture',
     ],
+    technologies: [
+      'react',
+      'aem',
+      'typescript',
+      'redux',
+      'storybook',
+      'jest'
+    ],
     startDate: '2017-11',
     endDate: '2018-05',
     featured: true,
@@ -147,6 +203,14 @@ export const projects: Project[] = [
     highlights: [
       'used contentful as headless CMS',
     ],
+    technologies: [
+      'typescript',
+      'react',
+      'graphql',
+      'headless-cms',
+      'storybook',
+      'jest',
+    ],
     startDate: '2018-08',
     endDate: '2018-12',
     featured: true,
@@ -158,6 +222,12 @@ export const projects: Project[] = [
     description: 'Developed a web magazine connected to a headless CMS with React, GraphQL',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'react',
+      'headless-cms',
+      'storybook',
+      'jest',
+    ],
     startDate: '2019-04',
     endDate: '2019-07',
     featured: true,
@@ -169,6 +239,14 @@ export const projects: Project[] = [
     description: 'Developed and maintained react components for popular TV formats with React, GraphQL, tracking',
     city: 'Munich',
     highlights: [],
+    technologies: [
+      'react',
+      'graphql',
+      'jest',
+      'cypress',
+      'storybook',
+      'apollo'
+    ],
     startDate: '2019-07',
     endDate: '2019-12',
     featured: true,
@@ -182,6 +260,14 @@ export const projects: Project[] = [
     highlights: [
       'supported the team as an agile coach',
       'positive first WebRTC experience',
+    ],
+    technologies: [
+      'react',
+      'redux-toolkit',
+      'webrtc',
+      'jest',
+      'storybook',
+      'react testing library',
     ],
     startDate: '2020-07',
     endDate: '2021-03',
@@ -198,6 +284,13 @@ export const projects: Project[] = [
       'designed and developed state-machine driven, extensible multi-form architecture',
       'developed custom onscreen keyboards for optimal workflow',
     ],
+    technologies: [
+      'react',
+      'typescript',
+      'xstate',
+      'storybook',
+      'cypress',
+    ],
     startDate: '2021-03',
     endDate: '2021-12',
     featured: true,
@@ -210,6 +303,15 @@ export const projects: Project[] = [
     highlights: [
       'constant pair-programming with two juniors for quick and effective knowledge transfer',
       'significantly improved performance by eliminating bottlenecks in render cycles',
+    ],
+    technologies: [
+      'react',
+      'typescript',
+      'redux-toolkit',
+      'jest',
+      'react-testing-library',
+      'storybook',
+      'cypress',
     ],
     startDate: '2022-01',
     endDate: '2022-07',
@@ -225,6 +327,16 @@ export const projects: Project[] = [
       'coordinated the merge of two web-projects into one',
       'onboarded new hires and helped them to get up to speed',
       'supported the team with agile practices',
+    ],
+    technologies: [
+      'react',
+      'next.js',
+      'typescript',
+      'graphql',
+      'apollo',
+      'cypress',
+      'storybook',
+      'tailwindcss',
     ],
     startDate: '2022-09',
     endDate: '2023-05',

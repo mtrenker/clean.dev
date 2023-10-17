@@ -160,6 +160,16 @@ const Home: React.FC = () => (
                 <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
               ))}
             </ul>
+            {project.technologies.length > 0 && (
+              <>
+                <h6 className="font-bold">Technologies</h6>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((technology) => (
+                    <span className="rounded-md bg-zinc-900 px-2 py-1 text-sm text-zinc-50 print:px-1" key={technology}>{technology}</span>
+                  ))}
+                </div>
+              </>
+            )}
           </article>
         );
       })}

@@ -3586,6 +3586,8 @@ export type CreateLinkedBranchPayload = {
   __typename?: 'CreateLinkedBranchPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The issue that was linked to. */
+  issue?: Maybe<Issue>;
   /** The new branch issue reference. */
   linkedBranch?: Maybe<LinkedBranch>;
 };
@@ -4944,6 +4946,8 @@ export type DeploymentProtectionRule = {
   __typename?: 'DeploymentProtectionRule';
   /** Identifies the primary key from the database. */
   databaseId?: Maybe<Scalars['Int']['output']>;
+  /** Whether deployments to this environment can be approved by the user who created the deployment. */
+  preventSelfReview?: Maybe<Scalars['Boolean']['output']>;
   /** The teams or users that can review the deployment */
   reviewers: DeploymentReviewerConnection;
   /** The timeout in minutes for this protection rule. */
@@ -5307,6 +5311,8 @@ export type Discussion = Closable & Comment & Deletable & Labelable & Lockable &
   id: Scalars['ID']['output'];
   /** Check if this comment was edited and includes an edit with the creation data */
   includesCreatedEdit: Scalars['Boolean']['output'];
+  /** Only return answered/unanswered discussions */
+  isAnswered?: Maybe<Scalars['Boolean']['output']>;
   /** A list of labels associated with the object. */
   labels?: Maybe<LabelConnection>;
   /** The moment the editor made the last edit */
@@ -20711,6 +20717,7 @@ export type RepositoryDiscussionCategoryArgs = {
 /** A repository contains the content for a project. */
 export type RepositoryDiscussionsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
+  answered?: InputMaybe<Scalars['Boolean']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   categoryId?: InputMaybe<Scalars['ID']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -21405,7 +21412,9 @@ export enum RepositoryLockReason {
   /** The repository is locked due to a rename. */
   Rename = 'RENAME',
   /** The repository is locked due to a trade controls related reason. */
-  TradeRestriction = 'TRADE_RESTRICTION'
+  TradeRestriction = 'TRADE_RESTRICTION',
+  /** The repository is locked due to an ownership transfer. */
+  TransferringOwnership = 'TRANSFERRING_OWNERSHIP'
 }
 
 /** A GitHub Enterprise Importer (GEI) repository migration. */
@@ -21663,6 +21672,8 @@ export type RepositoryRuleInput = {
 
 /** The rule types supported in rulesets */
 export enum RepositoryRuleType {
+  /** Authorization */
+  Authorization = 'AUTHORIZATION',
   /** Branch name pattern */
   BranchNamePattern = 'BRANCH_NAME_PATTERN',
   /** Committer email pattern */
@@ -21675,22 +21686,46 @@ export enum RepositoryRuleType {
   Creation = 'CREATION',
   /** Only allow users with bypass permissions to delete matching refs. */
   Deletion = 'DELETION',
-  /** Prevent users with push access from force pushing to branches. */
+  /** File path pattern */
+  FilePathPattern = 'FILE_PATH_PATTERN',
+  /** Branch is read-only. Users cannot push to the branch. */
+  LockBranch = 'LOCK_BRANCH',
+  /** Max ref updates */
+  MaxRefUpdates = 'MAX_REF_UPDATES',
+  /** Merges must be performed via a merge queue. */
+  MergeQueue = 'MERGE_QUEUE',
+  /** Merge queue locked ref */
+  MergeQueueLockedRef = 'MERGE_QUEUE_LOCKED_REF',
+  /** Prevent users with push access from force pushing to refs. */
   NonFastForward = 'NON_FAST_FORWARD',
   /** Require all commits be made to a non-target branch and submitted via a pull request before they can be merged. */
   PullRequest = 'PULL_REQUEST',
-  /** Choose which environments must be successfully deployed to before branches can be merged into a branch that matches this rule. */
+  /** Choose which environments must be successfully deployed to before refs can be merged into a branch that matches this rule. */
   RequiredDeployments = 'REQUIRED_DEPLOYMENTS',
-  /** Prevent merge commits from being pushed to matching branches. */
+  /** Prevent merge commits from being pushed to matching refs. */
   RequiredLinearHistory = 'REQUIRED_LINEAR_HISTORY',
-  /** Commits pushed to matching branches must have verified signatures. */
+  /** When enabled, all conversations on code must be resolved before a pull request can be merged into a branch that matches this rule. */
+  RequiredReviewThreadResolution = 'REQUIRED_REVIEW_THREAD_RESOLUTION',
+  /** Commits pushed to matching refs must have verified signatures. */
   RequiredSignatures = 'REQUIRED_SIGNATURES',
-  /** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a branch that matches this rule after status checks have passed. */
+  /** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a ref that matches this rule after status checks have passed. */
   RequiredStatusChecks = 'REQUIRED_STATUS_CHECKS',
+  /** Require all commits be made to a non-target branch and submitted via a pull request and required workflow checks to pass before they can be merged. */
+  RequiredWorkflowStatusChecks = 'REQUIRED_WORKFLOW_STATUS_CHECKS',
+  /** Commits pushed to matching refs must have verified signatures. */
+  RulesetRequiredSignatures = 'RULESET_REQUIRED_SIGNATURES',
+  /** Secret scanning */
+  SecretScanning = 'SECRET_SCANNING',
+  /** Tag */
+  Tag = 'TAG',
   /** Tag name pattern */
   TagNamePattern = 'TAG_NAME_PATTERN',
   /** Only allow users with bypass permission to update matching refs. */
-  Update = 'UPDATE'
+  Update = 'UPDATE',
+  /** Require all changes made to a targeted branch to pass the specified workflows before they can be merged. */
+  Workflows = 'WORKFLOWS',
+  /** Workflow files cannot be modified. */
+  WorkflowUpdates = 'WORKFLOW_UPDATES'
 }
 
 /** A repository ruleset. */
@@ -22125,14 +22160,14 @@ export type RequirableByPullRequestIsRequiredArgs = {
   pullRequestNumber?: InputMaybe<Scalars['Int']['input']>;
 };
 
-/** Choose which environments must be successfully deployed to before branches can be merged into a branch that matches this rule. */
+/** Choose which environments must be successfully deployed to before refs can be merged into a branch that matches this rule. */
 export type RequiredDeploymentsParameters = {
   __typename?: 'RequiredDeploymentsParameters';
   /** The environments that must be successfully deployed to before branches can be merged. */
   requiredDeploymentEnvironments: Array<Scalars['String']['output']>;
 };
 
-/** Choose which environments must be successfully deployed to before branches can be merged into a branch that matches this rule. */
+/** Choose which environments must be successfully deployed to before refs can be merged into a branch that matches this rule. */
 export type RequiredDeploymentsParametersInput = {
   /** The environments that must be successfully deployed to before branches can be merged. */
   requiredDeploymentEnvironments: Array<Scalars['String']['input']>;
@@ -22155,7 +22190,7 @@ export type RequiredStatusCheckInput = {
   context: Scalars['String']['input'];
 };
 
-/** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a branch that matches this rule after status checks have passed. */
+/** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a ref that matches this rule after status checks have passed. */
 export type RequiredStatusChecksParameters = {
   __typename?: 'RequiredStatusChecksParameters';
   /** Status checks that are required. */
@@ -22164,7 +22199,7 @@ export type RequiredStatusChecksParameters = {
   strictRequiredStatusChecksPolicy: Scalars['Boolean']['output'];
 };
 
-/** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a branch that matches this rule after status checks have passed. */
+/** Choose which status checks must pass before branches can be merged into a branch that matches this rule. When enabled, commits must first be pushed to another branch, then merged or pushed directly to a ref that matches this rule after status checks have passed. */
 export type RequiredStatusChecksParametersInput = {
   /** Status checks that are required. */
   requiredStatusChecks: Array<StatusCheckConfigurationInput>;
@@ -22485,7 +22520,7 @@ export enum RuleEnforcement {
 }
 
 /** Types which can be parameters for `RepositoryRule` objects. */
-export type RuleParameters = BranchNamePatternParameters | CommitAuthorEmailPatternParameters | CommitMessagePatternParameters | CommitterEmailPatternParameters | PullRequestParameters | RequiredDeploymentsParameters | RequiredStatusChecksParameters | TagNamePatternParameters | UpdateParameters;
+export type RuleParameters = BranchNamePatternParameters | CommitAuthorEmailPatternParameters | CommitMessagePatternParameters | CommitterEmailPatternParameters | PullRequestParameters | RequiredDeploymentsParameters | RequiredStatusChecksParameters | TagNamePatternParameters | UpdateParameters | WorkflowsParameters;
 
 /** Specifies the parameters for a `RepositoryRule` object. Only one of the fields should be specified. */
 export type RuleParametersInput = {
@@ -22507,6 +22542,8 @@ export type RuleParametersInput = {
   tagNamePattern?: InputMaybe<TagNamePatternParametersInput>;
   /** Parameters used for the `update` rule type */
   update?: InputMaybe<UpdateParametersInput>;
+  /** Parameters used for the `workflows` rule type */
+  workflows?: InputMaybe<WorkflowsParametersInput>;
 };
 
 /** Types which can have `RepositoryRule` objects. */
@@ -23052,6 +23089,8 @@ export enum SocialAccountProvider {
   Linkedin = 'LINKEDIN',
   /** Open-source federated microblogging service. */
   Mastodon = 'MASTODON',
+  /** JavaScript package registry. */
+  Npm = 'NPM',
   /** Social news aggregation and discussion website. */
   Reddit = 'REDDIT',
   /** Live-streaming service. */
@@ -23807,7 +23846,7 @@ export enum SponsorsCountryOrRegionCode {
   Tn = 'TN',
   /** Tonga */
   To = 'TO',
-  /** Turkey */
+  /** Türkiye */
   Tr = 'TR',
   /** Trinidad and Tobago */
   Tt = 'TT',
@@ -26888,6 +26927,8 @@ export type UpdateEnvironmentInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The node ID of the environment. */
   environmentId: Scalars['ID']['input'];
+  /** Whether deployments to this environment can be approved by the user who created the deployment. */
+  preventSelfReview?: InputMaybe<Scalars['Boolean']['input']>;
   /** The ids of users or teams that can approve deployments to this environment */
   reviewers?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** The wait timer in minutes. */
@@ -28578,6 +28619,31 @@ export type WorkflowRunsArgs = {
   orderBy?: InputMaybe<WorkflowRunOrder>;
 };
 
+/** A workflow that must run for this rule to pass */
+export type WorkflowFileReference = {
+  __typename?: 'WorkflowFileReference';
+  /** The path to the workflow file */
+  path: Scalars['String']['output'];
+  /** The ref (branch or tag) of the workflow file to use */
+  ref?: Maybe<Scalars['String']['output']>;
+  /** The ID of the repository where the workflow is defined */
+  repositoryId: Scalars['Int']['output'];
+  /** The commit SHA of the workflow file to use */
+  sha?: Maybe<Scalars['String']['output']>;
+};
+
+/** A workflow that must run for this rule to pass */
+export type WorkflowFileReferenceInput = {
+  /** The path to the workflow file */
+  path: Scalars['String']['input'];
+  /** The ref (branch or tag) of the workflow file to use */
+  ref?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the repository where the workflow is defined */
+  repositoryId: Scalars['Int']['input'];
+  /** The commit SHA of the workflow file to use */
+  sha?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** A workflow run. */
 export type WorkflowRun = Node & UniformResourceLocatable & {
   __typename?: 'WorkflowRun';
@@ -28698,6 +28764,19 @@ export enum WorkflowState {
   DisabledManually = 'DISABLED_MANUALLY'
 }
 
+/** Require all changes made to a targeted branch to pass the specified workflows before they can be merged. */
+export type WorkflowsParameters = {
+  __typename?: 'WorkflowsParameters';
+  /** Workflows that must pass for this rule to pass. */
+  workflows: Array<WorkflowFileReference>;
+};
+
+/** Require all changes made to a targeted branch to pass the specified workflows before they can be merged. */
+export type WorkflowsParametersInput = {
+  /** Workflows that must pass for this rule to pass. */
+  workflows: Array<WorkflowFileReferenceInput>;
+};
+
 export type GetFileQueryVariables = Exact<{
   owner: Scalars['String']['input'];
   name: Scalars['String']['input'];
@@ -28810,7 +28889,7 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   RenamedTitleSubject: ( Issue ) | ( PullRequest );
   RequestedReviewer: ( Bot ) | ( Mannequin ) | ( Team ) | ( User );
   ReviewDismissalAllowanceActor: ( App ) | ( Team ) | ( User );
-  RuleParameters: ( BranchNamePatternParameters ) | ( CommitAuthorEmailPatternParameters ) | ( CommitMessagePatternParameters ) | ( CommitterEmailPatternParameters ) | ( PullRequestParameters ) | ( RequiredDeploymentsParameters ) | ( RequiredStatusChecksParameters ) | ( TagNamePatternParameters ) | ( UpdateParameters );
+  RuleParameters: ( BranchNamePatternParameters ) | ( CommitAuthorEmailPatternParameters ) | ( CommitMessagePatternParameters ) | ( CommitterEmailPatternParameters ) | ( PullRequestParameters ) | ( RequiredDeploymentsParameters ) | ( RequiredStatusChecksParameters ) | ( TagNamePatternParameters ) | ( UpdateParameters ) | ( WorkflowsParameters );
   RuleSource: ( Organization ) | ( Omit<Repository, 'issueOrPullRequest'> & { issueOrPullRequest?: Maybe<RefType['IssueOrPullRequest']> } );
   SearchResultItem: ( App ) | ( Discussion ) | ( Issue ) | ( MarketplaceListing ) | ( Organization ) | ( PullRequest ) | ( Omit<Repository, 'issueOrPullRequest'> & { issueOrPullRequest?: Maybe<RefType['IssueOrPullRequest']> } ) | ( User );
   Sponsor: ( Organization ) | ( User );
@@ -30341,6 +30420,8 @@ export type ResolversTypes = {
   ViewerHovercardContext: ResolverTypeWrapper<ViewerHovercardContext>;
   Votable: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Votable']>;
   Workflow: ResolverTypeWrapper<Workflow>;
+  WorkflowFileReference: ResolverTypeWrapper<WorkflowFileReference>;
+  WorkflowFileReferenceInput: WorkflowFileReferenceInput;
   WorkflowRun: ResolverTypeWrapper<WorkflowRun>;
   WorkflowRunConnection: ResolverTypeWrapper<WorkflowRunConnection>;
   WorkflowRunEdge: ResolverTypeWrapper<WorkflowRunEdge>;
@@ -30348,6 +30429,8 @@ export type ResolversTypes = {
   WorkflowRunOrder: WorkflowRunOrder;
   WorkflowRunOrderField: WorkflowRunOrderField;
   WorkflowState: WorkflowState;
+  WorkflowsParameters: ResolverTypeWrapper<WorkflowsParameters>;
+  WorkflowsParametersInput: WorkflowsParametersInput;
   X509Certificate: ResolverTypeWrapper<Scalars['X509Certificate']['output']>;
 };
 
@@ -31610,11 +31693,15 @@ export type ResolversParentTypes = {
   ViewerHovercardContext: ViewerHovercardContext;
   Votable: ResolversInterfaceTypes<ResolversParentTypes>['Votable'];
   Workflow: Workflow;
+  WorkflowFileReference: WorkflowFileReference;
+  WorkflowFileReferenceInput: WorkflowFileReferenceInput;
   WorkflowRun: WorkflowRun;
   WorkflowRunConnection: WorkflowRunConnection;
   WorkflowRunEdge: WorkflowRunEdge;
   WorkflowRunFile: WorkflowRunFile;
   WorkflowRunOrder: WorkflowRunOrder;
+  WorkflowsParameters: WorkflowsParameters;
+  WorkflowsParametersInput: WorkflowsParametersInput;
   X509Certificate: Scalars['X509Certificate']['output'];
 };
 
@@ -32856,6 +32943,7 @@ export type CreateIssuePayloadResolvers<ContextType = any, ParentType extends Re
 
 export type CreateLinkedBranchPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateLinkedBranchPayload'] = ResolversParentTypes['CreateLinkedBranchPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  issue?: Resolver<Maybe<ResolversTypes['Issue']>, ParentType, ContextType>;
   linkedBranch?: Resolver<Maybe<ResolversTypes['LinkedBranch']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -33351,6 +33439,7 @@ export type DeploymentEnvironmentChangedEventResolvers<ContextType = any, Parent
 
 export type DeploymentProtectionRuleResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeploymentProtectionRule'] = ResolversParentTypes['DeploymentProtectionRule']> = {
   databaseId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  preventSelfReview?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   reviewers?: Resolver<ResolversTypes['DeploymentReviewerConnection'], ParentType, ContextType, Partial<DeploymentProtectionRuleReviewersArgs>>;
   timeout?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DeploymentProtectionRuleType'], ParentType, ContextType>;
@@ -33506,6 +33595,7 @@ export type DiscussionResolvers<ContextType = any, ParentType extends ResolversP
   editor?: Resolver<Maybe<ResolversTypes['Actor']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   includesCreatedEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isAnswered?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   labels?: Resolver<Maybe<ResolversTypes['LabelConnection']>, ParentType, ContextType, RequireFields<DiscussionLabelsArgs, 'orderBy'>>;
   lastEditedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   locked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -38757,7 +38847,7 @@ export type RepositoryResolvers<ContextType = any, ParentType extends ResolversP
   discussion?: Resolver<Maybe<ResolversTypes['Discussion']>, ParentType, ContextType, RequireFields<RepositoryDiscussionArgs, 'number'>>;
   discussionCategories?: Resolver<ResolversTypes['DiscussionCategoryConnection'], ParentType, ContextType, RequireFields<RepositoryDiscussionCategoriesArgs, 'filterByAssignable'>>;
   discussionCategory?: Resolver<Maybe<ResolversTypes['DiscussionCategory']>, ParentType, ContextType, RequireFields<RepositoryDiscussionCategoryArgs, 'slug'>>;
-  discussions?: Resolver<ResolversTypes['DiscussionConnection'], ParentType, ContextType, RequireFields<RepositoryDiscussionsArgs, 'categoryId' | 'orderBy' | 'states'>>;
+  discussions?: Resolver<ResolversTypes['DiscussionConnection'], ParentType, ContextType, RequireFields<RepositoryDiscussionsArgs, 'answered' | 'categoryId' | 'orderBy' | 'states'>>;
   diskUsage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   environment?: Resolver<Maybe<ResolversTypes['Environment']>, ParentType, ContextType, RequireFields<RepositoryEnvironmentArgs, 'name'>>;
   environments?: Resolver<ResolversTypes['EnvironmentConnection'], ParentType, ContextType, RequireFields<RepositoryEnvironmentsArgs, 'orderBy'>>;
@@ -39437,7 +39527,7 @@ export type RevokeMigratorRolePayloadResolvers<ContextType = any, ParentType ext
 };
 
 export type RuleParametersResolvers<ContextType = any, ParentType extends ResolversParentTypes['RuleParameters'] = ResolversParentTypes['RuleParameters']> = {
-  __resolveType: TypeResolveFn<'BranchNamePatternParameters' | 'CommitAuthorEmailPatternParameters' | 'CommitMessagePatternParameters' | 'CommitterEmailPatternParameters' | 'PullRequestParameters' | 'RequiredDeploymentsParameters' | 'RequiredStatusChecksParameters' | 'TagNamePatternParameters' | 'UpdateParameters', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'BranchNamePatternParameters' | 'CommitAuthorEmailPatternParameters' | 'CommitMessagePatternParameters' | 'CommitterEmailPatternParameters' | 'PullRequestParameters' | 'RequiredDeploymentsParameters' | 'RequiredStatusChecksParameters' | 'TagNamePatternParameters' | 'UpdateParameters' | 'WorkflowsParameters', ParentType, ContextType>;
 };
 
 export type RuleSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['RuleSource'] = ResolversParentTypes['RuleSource']> = {
@@ -41280,6 +41370,14 @@ export type WorkflowResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type WorkflowFileReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkflowFileReference'] = ResolversParentTypes['WorkflowFileReference']> = {
+  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ref?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  repositoryId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  sha?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type WorkflowRunResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkflowRun'] = ResolversParentTypes['WorkflowRun']> = {
   checkSuite?: Resolver<ResolversTypes['CheckSuite'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -41321,6 +41419,11 @@ export type WorkflowRunFileResolvers<ContextType = any, ParentType extends Resol
   url?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
   viewerCanPushRepository?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   viewerCanReadRepository?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WorkflowsParametersResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkflowsParameters'] = ResolversParentTypes['WorkflowsParameters']> = {
+  workflows?: Resolver<Array<ResolversTypes['WorkflowFileReference']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -42266,10 +42369,12 @@ export type Resolvers<ContextType = any> = {
   ViewerHovercardContext?: ViewerHovercardContextResolvers<ContextType>;
   Votable?: VotableResolvers<ContextType>;
   Workflow?: WorkflowResolvers<ContextType>;
+  WorkflowFileReference?: WorkflowFileReferenceResolvers<ContextType>;
   WorkflowRun?: WorkflowRunResolvers<ContextType>;
   WorkflowRunConnection?: WorkflowRunConnectionResolvers<ContextType>;
   WorkflowRunEdge?: WorkflowRunEdgeResolvers<ContextType>;
   WorkflowRunFile?: WorkflowRunFileResolvers<ContextType>;
+  WorkflowsParameters?: WorkflowsParametersResolvers<ContextType>;
   X509Certificate?: GraphQLScalarType;
 };
 
