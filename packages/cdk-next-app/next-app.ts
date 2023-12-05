@@ -480,6 +480,11 @@ export class NextApp extends Construct {
         buildImage: LinuxBuildImage.STANDARD_7_0,
         computeType: ComputeType.MEDIUM,
       },
+      environmentVariables: {
+        BLOG_ENDPOINT: {
+          value: 'https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clav7ijug2n3n01t482yqa53o/master'
+        }
+      },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
