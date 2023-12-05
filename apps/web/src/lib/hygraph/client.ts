@@ -1,7 +1,7 @@
 import gql from 'gql-tag';
-import { getSecret } from '../secrets';
-import type { GetPostQuery, GetPostsQuery } from './generated';
 import { draftMode } from 'next/headers';
+import { getSecret } from '../secrets';
+import type { GetPostQuery, GetPostsQuery, GetProjectsQuery, GetTechnologiesQuery } from './generated';
 
 const BLOG_ENDPOINT = process.env.BLOG_ENDPOINT ?? '';
 
@@ -122,4 +122,52 @@ export const getPost = async (slug: string, options?: QueryOptions) => {
   `;
   const { post } = await query<GetPostQuery>(getPostQuery, { variables: { slug }, ...options });
   return post;
+}
+
+export const getProjects = async () => {
+  const getProjectsQuery = gql`
+    query GetProjects {
+      projects(first: 100) {
+        id
+        title
+        role
+        startDate
+        endDate
+        overview {
+          raw
+        }
+        client {
+          name
+        }
+        featured
+        processes {
+          name
+        }
+        technologies {
+          name
+          iconName
+        }
+        details {
+          raw
+        }
+      }
+    }
+  `;
+  const { projects } = await query<GetProjectsQuery>(getProjectsQuery);
+  return projects;
+}
+
+export const getTechnologies = async () => {
+  const getTechnologiesQuery = gql`
+    query GetTechnologies {
+      technologies(first: 100) {
+        id
+        name
+        iconName
+        proficiency
+      }
+    }
+  `;
+  const { technologies } = await query<GetTechnologiesQuery>(getTechnologiesQuery);
+  return technologies;
 }

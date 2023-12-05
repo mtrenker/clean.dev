@@ -147,16 +147,22 @@ const Home: React.FC = () => (
         return (
           <article className="my-4 flex break-inside-avoid flex-col" key={project.id}>
             <div className="flex items-center justify-between gap-6">
-              <h4 className="m-0 flex-initial font-semibold">{project.company ? project.company : project.industry}</h4>
+              <h4 className="m-0 flex-initial font-semibold">
+                {project.company ? project.company : project.industry?.en}
+              </h4>
               <hr className="my-0 block h-px w-full flex-1 border-b border-zinc-700 print:border-zinc-900" />
               <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
                 {startYear === endYear ? startYear : `${startYear} - ${endYear}`}
               </time>
             </div>
-            <h5 className="m-0 font-semibold uppercase tracking-widest">{project.title}</h5>
-            <p className="m-0 flex-1 tracking-wide">{project.description}</p>
+            <h5 className="m-0 font-semibold uppercase tracking-widest">
+              {project.title.en}
+            </h5>
+            <p className="m-0 flex-1 tracking-wide">
+              {project.description.en}
+            </p>
             <ul className="m-2 pl-4">
-              {project.highlights.length > 0 && project.highlights.map((highlight) => (
+              {project.highlights.en.length > 0 && project.highlights.en.map((highlight) => (
                 <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
               ))}
             </ul>

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import { getPosts } from '../../lib/blog/client';
+import { getPosts } from '../../lib/hygraph/client';
 import { formatBlogDateShort } from '../../lib/intl';
 import type { SlateNode} from '../../components/SlateRender';
 import { SlateRender } from '../../components/SlateRender';

@@ -32,7 +32,7 @@ const config: CodegenConfig = {
         'typescript-resolvers',
       ],
     },
-    './apps/web/src/lib/blog/generated.tsx': {
+    './apps/web/src/lib/hygraph/generated.tsx': {
       schema: [{
         [BLOG_ENDPOINT]: {
           headers: {
@@ -41,7 +41,7 @@ const config: CodegenConfig = {
           },
         }
       }],
-      documents: ['./apps/web/src/lib/blog/client.ts'],
+      documents: ['./apps/web/src/lib/hygraph/client.ts'],
       plugins: [
         disableEslint,
         'typescript',

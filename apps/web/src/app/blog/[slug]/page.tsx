@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import React, { Fragment } from 'react';
 import type { SlateNode } from '../../../components/SlateRender';
 import { SlateRender } from '../../../components/SlateRender';
-import { getPost } from '../../../lib/blog/client';
+import { getPost } from '../../../lib/hygraph/client';
 
 export interface BlogPostPageProps {
   params: {
