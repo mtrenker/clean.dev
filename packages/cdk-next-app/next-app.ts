@@ -399,6 +399,9 @@ export class NextApp extends Construct {
         REVALIDATION_NAME: {
           value: this.revalidationFunction.functionName,
         },
+        BLOG_ENDPOINT: {
+          value: 'https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clav7ijug2n3n01t482yqa53o/master'
+        }
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',

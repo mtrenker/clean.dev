@@ -153,7 +153,8 @@ export const getProjects = async () => {
       }
     }
   `;
-  const { projects } = await query<GetProjectsQuery>(getProjectsQuery);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- testing
+  const { projects } = await query<GetProjectsQuery>(getProjectsQuery) ?? {};
   return projects;
 }
 
@@ -168,6 +169,7 @@ export const getTechnologies = async () => {
       }
     }
   `;
-  const { technologies } = await query<GetTechnologiesQuery>(getTechnologiesQuery);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- testing
+  const { technologies } = await query<GetTechnologiesQuery>(getTechnologiesQuery) ?? {};
   return technologies;
 }
