@@ -99,7 +99,7 @@ const CVPage: NextPage = async () => {
         </p>
         <h2 className="!mb-5">Technologies</h2>
         <div className="flex flex-wrap items-center justify-evenly gap-2">
-          {technologies.sort(sortByProficiency).map((technology) => (
+          {technologies?.sort(sortByProficiency).map((technology) => (
             <div
               className="flex grow items-center gap-2 rounded border border-zinc-900 px-2 py-1 print:p-1"
               key={technology.name}
@@ -119,7 +119,7 @@ const CVPage: NextPage = async () => {
       </section>
       <section>
         <h2>Projects</h2>
-        {projects.reverse().map((project) => {
+        {projects?.reverse().map((project) => {
           const overview: SlateNode[] = project.overview?.raw.children ?? [];
           const details: SlateNode[] = project.details?.raw.children ?? [];
           const startYear = new Date(project.startDate as string).getFullYear();
