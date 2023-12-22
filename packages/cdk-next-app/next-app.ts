@@ -12,7 +12,7 @@ import type { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import type { ARecordProps} from 'aws-cdk-lib/aws-route53';
 import { ARecord, AaaaRecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
-import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
+import { BucketWebsiteTarget, CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { CacheControl } from 'aws-cdk-lib/aws-s3-deployment';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
@@ -52,6 +52,9 @@ export class NextApp extends Construct {
 
   /** the bucket that serves cache */
   readonly cacheBucket: Bucket;
+
+  /** the bucket that serves stories */
+  readonly storiesBucket: Bucket;
 
   /** the queue that triggers revalidation */
   readonly revalidationQueue: Queue;
@@ -97,6 +100,7 @@ export class NextApp extends Construct {
     // this.buildApp();
     this.staticBucket = this.prepareStaticBucket();
     this.cacheBucket = this.prepareCacheBucket();
+    this.storiesBucket = this.prepareStoriesBucket();
 
     this.revalidationQueue = this.prepareRevalidationQueue();
 
@@ -149,6 +153,16 @@ export class NextApp extends Construct {
     new ARecord(this, 'ARecord', recordProps);
     new AaaaRecord(this, 'AaaaRecord', recordProps);
 
+    // stories config
+
+    const storiesRecordProps: ARecordProps = {
+      recordName: ['stories', domainName].join('.'),
+      zone: hostedZone,
+      target: RecordTarget.fromAlias(new BucketWebsiteTarget(this.storiesBucket)),
+    };
+    new ARecord(this, 'ARecord', storiesRecordProps);
+    new AaaaRecord(this, 'AaaaRecord', storiesRecordProps);
+
     // queue config
     this.revalidationQueue.grantSendMessages(this.serverFunction);
     this.revalidationQueue.grantConsumeMessages(this.revalidationFunction);
@@ -181,6 +195,16 @@ export class NextApp extends Construct {
     return new Bucket(this, 'CacheBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+    });
+  }
+
+  private prepareStoriesBucket(): Bucket {
+    return new Bucket(this, 'StoriesBucket', {
+      bucketName: ['stories', this.domainName].join('.'),
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      publicReadAccess: true,
+      websiteIndexDocument: 'index.html',
     });
   }
 
@@ -372,6 +396,7 @@ export class NextApp extends Construct {
     const sourceArtifact = new Artifact('Source');
     const assetsArtifact = new Artifact('Assets');
     const cacheArtifact = new Artifact('Cache');
+    const storiesArtifact = new Artifact('Stories');
 
     const serverFunctionArtifact = new Artifact('ServerFunctionArtifact');
     const revalidationFunctionArtifact = new Artifact('RevalidationFunctionArtifact');
@@ -498,6 +523,7 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
+              'pnpm build:ladle',
             ],
           }
         },
@@ -510,6 +536,10 @@ export class NextApp extends Construct {
             Cache: {
               files: ['**/*'],
               'base-directory': 'apps/web/.open-next/cache',
+            },
+            Stories: {
+              files: ['**/*'],
+              'base-directory': 'apps/web/ladle-build',
             }
           }
         }
@@ -546,6 +576,7 @@ export class NextApp extends Construct {
       outputs: [
         assetsArtifact,
         cacheArtifact,
+        storiesArtifact,
       ],
     });
 
@@ -603,6 +634,12 @@ export class NextApp extends Construct {
       cacheControl: [cacheControl],
     });
 
+    const storiesDeployAction = new S3DeployAction({
+      actionName: 'DeployStories',
+      input: storiesArtifact,
+      bucket: this.storiesBucket,
+    });
+
 
     // stages
 
@@ -638,7 +675,8 @@ export class NextApp extends Construct {
         warmerDeployAction,
         imageOptimizationDeployAction,
         assetDeployAction,
-        cacheDeployAction
+        cacheDeployAction,
+        storiesDeployAction,
       ],
     });
 

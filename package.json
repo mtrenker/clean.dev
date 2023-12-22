@@ -11,6 +11,7 @@
     "export": "turbo run export",
     "build": "dotenv -- turbo run build",
     "build:open": "dotenv -- turbo build:open",
+    "build:ladle": "dotenv -- turbo build:ladle",
     "lint": "turbo run lint",
     "synth": "turbo run synth",
     "test": "turbo run test"
@@ -50,7 +51,7 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
   },
-  "packageManager": "pnpm@8.7.0",
+  "packageManager": "pnpm@8.12.1",
   "dependencies": {
     "@parcel/watcher": "^2.3.0"
   }

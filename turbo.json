@@ -28,6 +28,11 @@
         ".open-next/**"
       ]
     },
+    "build:ladle": {
+      "outputs": [
+        "ladle-build/**"
+      ]
+    },
     "synth": {
       "outputs": [
         "./cdk.out/**"
