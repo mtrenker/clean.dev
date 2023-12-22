@@ -190,9 +190,8 @@ export class NextApp extends Construct {
 
   private prepareStoriesBucket(): Bucket {
     return new Bucket(this, 'StoriesBucket', {
-      publicReadAccess: true,
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html',
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
   }
 
@@ -367,6 +366,32 @@ export class NextApp extends Construct {
             enableAcceptEncodingGzip: true,
           }),
           responseHeadersPolicy: new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+            customHeadersBehavior: {
+              customHeaders: [{
+                header: 'cache-control',
+                override: false,
+                value: `public,max-age=${DEFAULT_STATIC_MAX_AGE},immutable`,
+              }],
+            },
+          }),
+        },
+        'stories/*': {
+          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          origin: storiesOrigin,
+          allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+          compress: true,
+          cachePolicy: new CachePolicy(this, 'StoriesCachePolicy', {
+            queryStringBehavior: CacheQueryStringBehavior.none(),
+            headerBehavior: CacheHeaderBehavior.none(),
+            cookieBehavior: CacheCookieBehavior.none(),
+            defaultTtl: Duration.days(30),
+            maxTtl: Duration.days(60),
+            minTtl: Duration.days(30),
+            enableAcceptEncodingBrotli: true,
+            enableAcceptEncodingGzip: true,
+          }),
+          responseHeadersPolicy: new ResponseHeadersPolicy(this, 'StoriesResponseHeadersPolicy', {
             customHeadersBehavior: {
               customHeaders: [{
                 header: 'cache-control',
