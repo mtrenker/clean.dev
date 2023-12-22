@@ -190,8 +190,6 @@ export class NextApp extends Construct {
 
   private prepareStoriesBucket(): Bucket {
     return new Bucket(this, 'StoriesBucket', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',
