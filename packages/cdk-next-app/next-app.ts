@@ -12,7 +12,7 @@ import type { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import type { ARecordProps} from 'aws-cdk-lib/aws-route53';
 import { ARecord, AaaaRecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
-import { BucketWebsiteTarget, CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { CacheControl } from 'aws-cdk-lib/aws-s3-deployment';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
@@ -332,23 +332,6 @@ export class NextApp extends Construct {
         '/': lambdaBehavior,
         'api/*': lambdaBehavior,
         '_next/data/*': lambdaBehavior,
-        'stories/*': {
-          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          origin: storiesOrigin,
-          allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-          cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-          compress: true,
-          cachePolicy: new CachePolicy(this, 'StoriesCachePolicy', {
-            queryStringBehavior: CacheQueryStringBehavior.none(),
-            headerBehavior: CacheHeaderBehavior.none(),
-            cookieBehavior: CacheCookieBehavior.none(),
-            defaultTtl: Duration.days(30),
-            maxTtl: Duration.days(60),
-            minTtl: Duration.days(30),
-            enableAcceptEncodingBrotli: true,
-            enableAcceptEncodingGzip: true,
-          }),
-        },
         '_next/image*': {
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           origin: imageOrigin,
