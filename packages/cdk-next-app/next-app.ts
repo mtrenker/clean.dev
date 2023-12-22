@@ -192,6 +192,9 @@ export class NextApp extends Construct {
     return new Bucket(this, 'StoriesBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+      publicReadAccess: true,
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: 'index.html',
     });
   }
 
