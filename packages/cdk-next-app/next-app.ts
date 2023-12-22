@@ -160,8 +160,8 @@ export class NextApp extends Construct {
       zone: hostedZone,
       target: RecordTarget.fromAlias(new BucketWebsiteTarget(this.storiesBucket)),
     };
-    new ARecord(this, 'ARecord', storiesRecordProps);
-    new AaaaRecord(this, 'AaaaRecord', storiesRecordProps);
+    new ARecord(this, 'StoriesARecord', storiesRecordProps);
+    new AaaaRecord(this, 'StoriesAaaaRecord', storiesRecordProps);
 
     // queue config
     this.revalidationQueue.grantSendMessages(this.serverFunction);
