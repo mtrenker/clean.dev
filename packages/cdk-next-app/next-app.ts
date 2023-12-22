@@ -153,16 +153,6 @@ export class NextApp extends Construct {
     new ARecord(this, 'ARecord', recordProps);
     new AaaaRecord(this, 'AaaaRecord', recordProps);
 
-    // stories config
-
-    const storiesRecordProps: ARecordProps = {
-      recordName: ['stories', domainName].join('.'),
-      zone: hostedZone,
-      target: RecordTarget.fromAlias(new BucketWebsiteTarget(this.storiesBucket)),
-    };
-    new ARecord(this, 'StoriesARecord', storiesRecordProps);
-    new AaaaRecord(this, 'StoriesAaaaRecord', storiesRecordProps);
-
     // queue config
     this.revalidationQueue.grantSendMessages(this.serverFunction);
     this.revalidationQueue.grantConsumeMessages(this.revalidationFunction);
@@ -200,11 +190,8 @@ export class NextApp extends Construct {
 
   private prepareStoriesBucket(): Bucket {
     return new Bucket(this, 'StoriesBucket', {
-      bucketName: ['stories', this.domainName].join('.'),
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      publicReadAccess: true,
-      websiteIndexDocument: 'index.html',
     });
   }
 
@@ -297,6 +284,7 @@ export class NextApp extends Construct {
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
     const imageOrigin = new HttpOrigin(Fn.parseDomainName(imageFunctionUrl.url));
     const staticOrigin = new S3Origin(this.staticBucket);
+    const storiesOrigin = new S3Origin(this.storiesBucket);
 
     const fallbackGroup = new OriginGroup({
       primaryOrigin: serverOrigin,
@@ -343,6 +331,23 @@ export class NextApp extends Construct {
         '/': lambdaBehavior,
         'api/*': lambdaBehavior,
         '_next/data/*': lambdaBehavior,
+        'stories/*': {
+          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          origin: storiesOrigin,
+          allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+          compress: true,
+          cachePolicy: new CachePolicy(this, 'StoriesCachePolicy', {
+            queryStringBehavior: CacheQueryStringBehavior.none(),
+            headerBehavior: CacheHeaderBehavior.none(),
+            cookieBehavior: CacheCookieBehavior.none(),
+            defaultTtl: Duration.days(30),
+            maxTtl: Duration.days(60),
+            minTtl: Duration.days(30),
+            enableAcceptEncodingBrotli: true,
+            enableAcceptEncodingGzip: true,
+          }),
+        },
         '_next/image*': {
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           origin: imageOrigin,
