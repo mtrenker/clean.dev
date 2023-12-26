@@ -53,9 +53,6 @@ export class NextApp extends Construct {
   /** the bucket that serves cache */
   readonly cacheBucket: Bucket;
 
-  /** the bucket that serves stories */
-  readonly storiesBucket: Bucket;
-
   /** the queue that triggers revalidation */
   readonly revalidationQueue: Queue;
 
@@ -100,7 +97,6 @@ export class NextApp extends Construct {
     // this.buildApp();
     this.staticBucket = this.prepareStaticBucket();
     this.cacheBucket = this.prepareCacheBucket();
-    this.storiesBucket = this.prepareStoriesBucket();
 
     this.revalidationQueue = this.prepareRevalidationQueue();
 
@@ -183,13 +179,6 @@ export class NextApp extends Construct {
 
   private prepareCacheBucket(): Bucket {
     return new Bucket(this, 'CacheBucket', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    });
-  }
-
-  private prepareStoriesBucket(): Bucket {
-    return new Bucket(this, 'StoriesBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
@@ -284,7 +273,6 @@ export class NextApp extends Construct {
     const serverOrigin = new HttpOrigin(Fn.parseDomainName(serverFunctionUrl.url));
     const imageOrigin = new HttpOrigin(Fn.parseDomainName(imageFunctionUrl.url));
     const staticOrigin = new S3Origin(this.staticBucket);
-    const storiesOrigin = new S3Origin(this.storiesBucket);
 
     const fallbackGroup = new OriginGroup({
       primaryOrigin: serverOrigin,
@@ -375,32 +363,6 @@ export class NextApp extends Construct {
             },
           }),
         },
-        'stories/*': {
-          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          origin: storiesOrigin,
-          allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-          cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
-          compress: true,
-          cachePolicy: new CachePolicy(this, 'StoriesCachePolicy', {
-            queryStringBehavior: CacheQueryStringBehavior.none(),
-            headerBehavior: CacheHeaderBehavior.none(),
-            cookieBehavior: CacheCookieBehavior.none(),
-            defaultTtl: Duration.days(30),
-            maxTtl: Duration.days(60),
-            minTtl: Duration.days(30),
-            enableAcceptEncodingBrotli: true,
-            enableAcceptEncodingGzip: true,
-          }),
-          responseHeadersPolicy: new ResponseHeadersPolicy(this, 'StoriesResponseHeadersPolicy', {
-            customHeadersBehavior: {
-              customHeaders: [{
-                header: 'cache-control',
-                override: false,
-                value: `public,max-age=${DEFAULT_STATIC_MAX_AGE},immutable`,
-              }],
-            },
-          }),
-        },
       },
     });
   }
@@ -410,7 +372,6 @@ export class NextApp extends Construct {
     const sourceArtifact = new Artifact('Source');
     const assetsArtifact = new Artifact('Assets');
     const cacheArtifact = new Artifact('Cache');
-    const storiesArtifact = new Artifact('Stories');
 
     const serverFunctionArtifact = new Artifact('ServerFunctionArtifact');
     const revalidationFunctionArtifact = new Artifact('RevalidationFunctionArtifact');
@@ -537,7 +498,6 @@ export class NextApp extends Construct {
           build: {
             commands: [
               'pnpm build:open',
-              'pnpm build:ladle',
             ],
           }
         },
@@ -551,10 +511,6 @@ export class NextApp extends Construct {
               files: ['**/*'],
               'base-directory': 'apps/web/.open-next/cache',
             },
-            Stories: {
-              files: ['**/*'],
-              'base-directory': 'apps/web/ladle-build',
-            }
           }
         }
       }),
@@ -590,7 +546,6 @@ export class NextApp extends Construct {
       outputs: [
         assetsArtifact,
         cacheArtifact,
-        storiesArtifact,
       ],
     });
 
@@ -648,13 +603,6 @@ export class NextApp extends Construct {
       cacheControl: [cacheControl],
     });
 
-    const storiesDeployAction = new S3DeployAction({
-      actionName: 'DeployStories',
-      input: storiesArtifact,
-      bucket: this.storiesBucket,
-    });
-
-
     // stages
 
     const startAction = new ManualApprovalAction({
@@ -690,7 +638,6 @@ export class NextApp extends Construct {
         imageOptimizationDeployAction,
         assetDeployAction,
         cacheDeployAction,
-        storiesDeployAction,
       ],
     });
 
