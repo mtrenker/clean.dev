@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:ladle": "ladle serve",
+    "ladle": "ladle serve",
     "build": "next build",
     "build:open": "npx open-next build",
     "build:ladle": "ladle build -o ladle-build",
@@ -15,17 +15,19 @@
     "@aws-sdk/client-secrets-manager": "^3.398.0",
     "@headlessui/react": "^1.7.17",
     "@ladle/react": "^4.0.2",
+    "@react-spring/web": "^9.7.3",
     "@tabler/icons-react": "^2.42.0",
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/forms": "0.5.6",
     "@tailwindcss/typography": "0.5.9",
-    "@types/node": "20.5.7",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
+    "@xstate/react": "^4.1.1",
     "autoprefixer": "10.4.15",
     "aws-crt": "^1.18.0",
+    "class-variance-authority": "^0.7.0",
     "clsx": "2.0.0",
+    "d3": "^7.9.0",
+    "date-fns": "^3.3.1",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "gql-tag": "1.0.1",
@@ -35,13 +37,20 @@
     "prismjs": "^1.29.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.49.2",
+    "tailwind-merge": "^2.2.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
-    "vite": "^5.0.10"
+    "vite": "^5.0.10",
+    "xstate": "^5.11.0"
   },
   "devDependencies": {
     "@cleandev/eslint-config": "workspace:*",
+    "@types/d3": "^7.4.3",
+    "@types/node": "20.5.7",
     "@types/prismjs": "^1.26.0",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
     "eslint-plugin-tailwindcss": "^3.13.0"
   }
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "codegen": "graphql-codegen --config codegen.ts --watch",
     "dev": "dotenv -- turbo run dev codegen",
+    "ladle": "dotenv -- turbo run ladle",
     "prepare": "husky install",
     "generate": "turbo run generate",
     "export": "turbo run export",

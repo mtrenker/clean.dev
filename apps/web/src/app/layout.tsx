@@ -42,7 +42,7 @@ const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
         </nav>
       </header>
       {children}
-      <footer className="container mx-auto mt-10 p-6">
+      <footer className="container mx-auto mt-10 p-6 print:hidden">
         <p className="text-center text-xs leading-5 text-gray-500">
           {`© ${new Date().getFullYear()} Martin Trenker`}
         </p>

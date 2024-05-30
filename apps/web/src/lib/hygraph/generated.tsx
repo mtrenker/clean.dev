@@ -2559,6 +2559,7 @@ export enum EntityTypeName {
 export type EntityWhereInput = {
   /** The ID of an object */
   id: Scalars['ID']['input'];
+  locale?: InputMaybe<Locale>;
   stage: Stage;
   /** The Type name of an object */
   typename: EntityTypeName;
@@ -6217,6 +6218,7 @@ export type QueryCodeExamplesConnectionArgs = {
 
 
 export type QueryEntitiesArgs = {
+  locales?: InputMaybe<Array<Locale>>;
   where: Array<EntityWhereInput>;
 };
 
