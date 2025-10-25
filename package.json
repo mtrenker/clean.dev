@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts --watch",
-    "dev": "dotenv -- turbo run dev codegen",
+    "dev": "dotenv -- turbo run dev",
     "ladle": "dotenv -- turbo run ladle",
     "prepare": "husky install",
     "generate": "turbo run generate",
@@ -29,12 +28,6 @@
   },
   "homepage": "https://github.com/mtrenker/clean.dev#readme",
   "devDependencies": {
-    "@graphql-codegen/add": "^5.0.0",
-    "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/introspection": "4.0.0",
-    "@graphql-codegen/typescript": "4.0.1",
-    "@graphql-codegen/typescript-operations": "4.0.1",
-    "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@turbo/gen": "^1.10.13",
     "@types/jest": "^29.5.2",
     "@types/node": "^18.16.17",

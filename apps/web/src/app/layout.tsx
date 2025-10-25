@@ -29,11 +29,6 @@ const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
               </Link>
             </li>
             <li>
-              <Link className="text-base font-semibold leading-6 text-gray-900" href="/blog">
-                Blog
-              </Link>
-            </li>
-            <li>
               <Link className="text-base font-semibold leading-6 text-gray-900" href="/imprint">
                 Imprint
               </Link>

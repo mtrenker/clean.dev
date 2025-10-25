@@ -18,6 +18,7 @@
     "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"
@@ -27,7 +28,8 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": []
   },
   "include": [
     "next-env.d.ts",

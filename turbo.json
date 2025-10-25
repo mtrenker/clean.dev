@@ -8,9 +8,6 @@
     "CDK_DEFAULT_REGION"
   ],
   "pipeline": {
-    "//#codegen": {
-      "persistent": true
-    },
     "dev": {
       "cache": false,
       "persistent": true
