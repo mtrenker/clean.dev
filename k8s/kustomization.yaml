@@ -13,8 +13,6 @@ namespace: clean-dev
 images:
 - name: ghcr.io/mtrenker/clean-dev
   newTag: main-25884ed
-- name: ghcr.io/mtrenker/clean.dev
-  newTag: main
 
 # Common labels applied to all resources
 commonLabels:
