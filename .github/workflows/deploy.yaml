@@ -61,8 +61,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           cd k8s
-          # Use the first tag (sha-based tag)
-          NEW_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1 | cut -d':' -f2)
+          # Extract the SHA-based tag (second tag with format: main-<sha>)
+          NEW_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep -E 'main-[a-f0-9]+' | head -n1 | cut -d':' -f2)
           kustomize edit set image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${NEW_TAG}
           cat kustomization.yaml
 

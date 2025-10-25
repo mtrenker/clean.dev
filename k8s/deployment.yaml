@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 - name: clean-dev
-                  image: ghcr.io/mtrenker/clean-dev:latest # Kustomize will replace this
+                  image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
                   ports:
                       - containerPort: 3000
                         name: http
