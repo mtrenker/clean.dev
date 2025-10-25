@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: clean-dev
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: clean-dev
+    template:
+        metadata:
+            labels:
+                app: clean-dev
+        spec:
+            containers:
+                - name: clean-dev
+                  image: ghcr.io/mtrenker/clean-dev:latest # Kustomize will replace this
+                  ports:
+                      - containerPort: 3000
+                        name: http
+                  env:
+                      - name: NODE_ENV
+                        value: production
+                      # - name: DATABASE_URL
+                      #   valueFrom:
+                      #     secretKeyRef:
+                      #       name: clean-dev-secrets
+                      #       key: database-url
+                  resources:
+                      requests:
+                          cpu: 100m
+                          memory: 128Mi
+                      limits:
+                          cpu: 500m
+                          memory: 512Mi
+                  livenessProbe:
+                      httpGet:
+                          path: /api/health
+                          port: http
+                      initialDelaySeconds: 30
+                      periodSeconds: 10
+                  readinessProbe:
+                      httpGet:
+                          path: /api/ready
+                          port: http
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
