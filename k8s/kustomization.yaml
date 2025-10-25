@@ -12,7 +12,7 @@ namespace: clean-dev
 # Image configuration - this is what CI updates
 images:
 - name: ghcr.io/mtrenker/clean-dev
-  newTag: latest
+  newTag: main-25884ed
 - name: ghcr.io/mtrenker/clean.dev
   newTag: main
 
