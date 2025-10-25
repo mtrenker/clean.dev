@@ -15,7 +15,26 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('de-DE', {
 }).format(date);
 
 const InvoicePage: NextPage = () => {
- 
+
+  const customerName = 'John Doe';
+  const customerAddress = 'Musterstraße 123, 12345 Musterstadt';
+  const companyName = 'Example GmbH';
+  const companyAddress = 'Beispielstr. 1 12345 Beispielstadt';
+  const invoiceDate = new Date();
+  const leistungZeitraum = 'September 2025';
+  const invoiceNumber = '202510011';
+  const orderNumber = '450054638';
+  const hours = 176.5;
+  const hourlyRate = 80;
+  const total = hours * hourlyRate;
+  const taxRate = 0.19;
+  const tax = total * taxRate;
+  const totalPlusTax = total + tax;
+  const bankName = 'Example Bank';
+  const bankIBAN = 'DE12 3456 7890 1234 5678 90';
+  const bankBIC = 'EXAMPLEDEXXX';
+  const companyVATID = 'DE123456789';
+
 
   return (
     <main className="container mx-auto grid grid-rows-[max-content_max-content_1fr_max-content] gap-10 print:h-[105vh]">
@@ -64,7 +83,7 @@ const InvoicePage: NextPage = () => {
               <td className="text-start">1</td>
               <td className="text-start">Beratung / Entwicklung</td>
               <td className="text-end">{hours}</td>
-              <td className="text-end">{formatPrice(80)}</td>
+              <td className="text-end">{formatPrice(hourlyRate)}</td>
               <td className="text-end">{formatPrice(total)}</td>
             </tr>
           </tbody>
@@ -96,7 +115,7 @@ const InvoicePage: NextPage = () => {
           </table>
         </div>
         <p className="mb-1">
-          Zahlungsziel: <strong>3 % innerhalb drei Tagen</strong>< br/>
+          Zahlungsziel: <strong>30 Tage</strong>< br />
           Ich bitte um Überweisung auf das unten genannte Konto.
         </p>
       </div>
