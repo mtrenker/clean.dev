@@ -21,9 +21,9 @@ spec:
                   env:
                       - name: NODE_ENV
                         value: production
-                      # PostgreSQL connection via PgBouncer pooler
+                      # PostgreSQL connection (direct to database)
                       - name: DATABASE_HOST
-                        value: clean-dev-pg-pooler-rw
+                        value: clean-dev-pg-rw
                       - name: DATABASE_PORT
                         value: "5432"
                       - name: DATABASE_NAME

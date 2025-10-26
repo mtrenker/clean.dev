@@ -7,7 +7,7 @@ resources:
 - service.yaml
 - ingress.yaml
 - postgres-cluster.yaml
-- postgres-pooler.yaml
+# - postgres-pooler.yaml  # Removed for simple single-instance setup
 - postgres-monitoring-queries.yaml
 - postgres-servicemonitor.yaml
 - postgres-grafana-dashboard.yaml
