@@ -33,6 +33,8 @@ spec:
     enablePodMonitor: true
     # Custom queries for application-specific metrics
     customQueriesConfigMap:
+      - key: queries
+        name: cnpg-default-monitoring
       - name: clean-dev-pg-monitoring
         key: custom-queries.yaml
 
