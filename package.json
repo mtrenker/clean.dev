@@ -5,15 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "dotenv -- turbo run dev",
-    "ladle": "dotenv -- turbo run ladle",
-    "prepare": "husky install",
     "generate": "turbo run generate",
     "export": "turbo run export",
     "build": "dotenv -- turbo run build",
     "build:open": "dotenv -- turbo build:open",
-    "build:ladle": "dotenv -- turbo build:ladle",
     "lint": "turbo run lint",
-    "synth": "turbo run synth",
     "test": "turbo run test"
   },
   "repository": {
@@ -28,25 +24,26 @@
   },
   "homepage": "https://github.com/mtrenker/clean.dev#readme",
   "devDependencies": {
-    "@turbo/gen": "^1.10.13",
-    "@types/jest": "^29.5.2",
-    "@types/node": "^18.16.17",
-    "@typescript-eslint/eslint-plugin": "^5.59.9",
-    "@typescript-eslint/parser": "^5.59.9",
-    "dotenv": "16.3.1",
-    "dotenv-cli": "7.3.0",
+    "@turbo/gen": "^2",
+    "@types/node": "^22",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "dotenv": "^17",
+    "dotenv-cli": "^10",
     "esbuild": "^0.25.11",
-    "eslint": "^8.42.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "turbo": "^1.10.3",
-    "typescript": "5.2.2"
+    "eslint": "^9",
+    "husky": "^9",
+    "lint-staged": "^16",
+    "turbo": "^2",
+    "typescript": "^5"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
   },
-  "packageManager": "pnpm@8.12.1",
-  "dependencies": {
-    "@parcel/watcher": "^2.3.0"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": ">=10.0.0"
+    }
   }
 }
