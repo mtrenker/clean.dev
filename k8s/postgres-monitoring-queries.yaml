@@ -4,53 +4,23 @@ metadata:
   name: clean-dev-pg-monitoring
 data:
   custom-queries.yaml: |
-    # Custom monitoring queries for CloudNativePG
+    # Simplified monitoring queries for single-instance PostgreSQL
 
-    # Database size metrics
+    # Database size
     database_size:
       query: |
         SELECT
           datname,
           pg_database_size(datname) as size_bytes
         FROM pg_database
-        WHERE datname NOT IN ('template0', 'template1', 'postgres')
+        WHERE datname = 'cleandev'
       metrics:
         - datname:
             usage: "LABEL"
-            description: "Name of the database"
+            description: "Database name"
         - size_bytes:
             usage: "GAUGE"
-            description: "Size of the database in bytes"
-
-    # Table size metrics for top tables
-    table_sizes:
-      query: |
-        SELECT
-          schemaname,
-          tablename,
-          pg_total_relation_size(schemaname||'.'||tablename) as total_bytes,
-          pg_relation_size(schemaname||'.'||tablename) as table_bytes,
-          pg_indexes_size(schemaname||'.'||tablename) as index_bytes
-        FROM pg_tables
-        WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
-        ORDER BY total_bytes DESC
-        LIMIT 20
-      metrics:
-        - schemaname:
-            usage: "LABEL"
-            description: "Schema name"
-        - tablename:
-            usage: "LABEL"
-            description: "Table name"
-        - total_bytes:
-            usage: "GAUGE"
-            description: "Total size including indexes"
-        - table_bytes:
-            usage: "GAUGE"
-            description: "Table size"
-        - index_bytes:
-            usage: "GAUGE"
-            description: "Indexes size"
+            description: "Database size in bytes"
 
     # Connection stats
     connection_stats:
@@ -60,7 +30,7 @@ data:
           state,
           COUNT(*) as connections
         FROM pg_stat_activity
-        WHERE datname IS NOT NULL
+        WHERE datname = 'cleandev'
         GROUP BY datname, state
       metrics:
         - datname:
@@ -73,44 +43,17 @@ data:
             usage: "GAUGE"
             description: "Number of connections"
 
-    # Slow queries (queries running longer than 1 second)
-    slow_queries:
-      query: |
-        SELECT
-          datname,
-          usename,
-          state,
-          COUNT(*) as count
-        FROM pg_stat_activity
-        WHERE state = 'active'
-          AND NOW() - query_start > interval '1 second'
-          AND datname IS NOT NULL
-        GROUP BY datname, usename, state
-      metrics:
-        - datname:
-            usage: "LABEL"
-            description: "Database name"
-        - usename:
-            usage: "LABEL"
-            description: "Username"
-        - state:
-            usage: "LABEL"
-            description: "Query state"
-        - count:
-            usage: "GAUGE"
-            description: "Number of slow queries"
-
     # Cache hit ratio
     cache_hit_ratio:
       query: |
         SELECT
-          datname,
+          'cleandev' as datname,
           CASE
-            WHEN blks_hit + blks_read = 0 THEN 0
+            WHEN blks_hit + blks_read = 0 THEN 1
             ELSE round(blks_hit::numeric / (blks_hit + blks_read)::numeric, 4)
           END as ratio
         FROM pg_stat_database
-        WHERE datname NOT IN ('template0', 'template1')
+        WHERE datname = 'cleandev'
       metrics:
         - datname:
             usage: "LABEL"
@@ -119,75 +62,26 @@ data:
             usage: "GAUGE"
             description: "Cache hit ratio (0-1)"
 
-    # Index usage stats
-    index_usage:
+    # Transaction stats
+    transaction_stats:
       query: |
         SELECT
-          schemaname,
-          tablename,
-          indexname,
-          idx_scan,
-          idx_tup_read,
-          idx_tup_fetch
-        FROM pg_stat_user_indexes
-        WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
-        ORDER BY idx_scan DESC
-        LIMIT 20
-      metrics:
-        - schemaname:
-            usage: "LABEL"
-            description: "Schema name"
-        - tablename:
-            usage: "LABEL"
-            description: "Table name"
-        - indexname:
-            usage: "LABEL"
-            description: "Index name"
-        - idx_scan:
-            usage: "COUNTER"
-            description: "Number of index scans"
-        - idx_tup_read:
-            usage: "COUNTER"
-            description: "Number of index entries returned"
-        - idx_tup_fetch:
-            usage: "COUNTER"
-            description: "Number of rows fetched"
-
-    # Replication lag (for replicas)
-    replication_lag:
-      query: |
-        SELECT
-          application_name,
-          client_addr,
-          state,
-          COALESCE(EXTRACT(EPOCH FROM (NOW() - pg_last_xact_replay_timestamp())), 0) as lag_seconds
-        FROM pg_stat_replication
-      metrics:
-        - application_name:
-            usage: "LABEL"
-            description: "Application name"
-        - client_addr:
-            usage: "LABEL"
-            description: "Client address"
-        - state:
-            usage: "LABEL"
-            description: "Replication state"
-        - lag_seconds:
-            usage: "GAUGE"
-            description: "Replication lag in seconds"
-
-    # Deadlocks
-    deadlocks:
-      query: |
-        SELECT
-          datname,
+          'cleandev' as datname,
+          xact_commit,
+          xact_rollback,
           deadlocks
         FROM pg_stat_database
-        WHERE datname NOT IN ('template0', 'template1', 'postgres')
+        WHERE datname = 'cleandev'
       metrics:
         - datname:
             usage: "LABEL"
             description: "Database name"
+        - xact_commit:
+            usage: "COUNTER"
+            description: "Transactions committed"
+        - xact_rollback:
+            usage: "COUNTER"
+            description: "Transactions rolled back"
         - deadlocks:
             usage: "COUNTER"
-            description: "Number of deadlocks detected"
+            description: "Deadlocks detected"
