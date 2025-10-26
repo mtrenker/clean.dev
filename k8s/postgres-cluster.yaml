@@ -16,7 +16,7 @@ spec:
 
   # Storage
   storage:
-    size: 5Gi  # 5GB is plenty for a small blog
+    size: 10Gi  # Can't shrink existing PVCs - keep at 10Gi
     storageClass: hcloud-volumes # Hetzner Cloud block storage for persistent data
     pvcTemplate:
       metadata:
@@ -28,7 +28,7 @@ spec:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 5Gi
+          storage: 10Gi
 
   # Resources
   resources:
