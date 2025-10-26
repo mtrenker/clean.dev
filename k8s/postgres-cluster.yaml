@@ -1,0 +1,121 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: clean-dev-pg
+spec:
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1
+
+  # Bootstrap
+  bootstrap:
+    initdb:
+      database: cleandev
+      owner: cleandev
+      secret:
+        name: clean-dev-pg-superuser
+
+  # Storage
+  storage:
+    size: 10Gi
+    storageClass: hcloud-volumes # Hetzner Cloud block storage for persistent data
+
+  # Resources
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+
+  # Monitoring
+  monitoring:
+    enablePodMonitor: true
+    # Custom queries for application-specific metrics
+    customQueriesConfigMap:
+      - name: clean-dev-pg-monitoring
+        key: custom-queries.yaml
+
+  # PostgreSQL configuration
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+      max_connections: "200"
+      effective_cache_size: "768MB"
+      maintenance_work_mem: "64MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "2621kB"
+      min_wal_size: "1GB"
+      max_wal_size: "4GB"
+      # Enable query logging for slow queries
+      log_min_duration_statement: "1000" # Log queries slower than 1s
+      log_line_prefix: "%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h "
+      log_checkpoints: "on"
+      log_connections: "on"
+      log_disconnections: "on"
+      log_lock_waits: "on"
+      log_statement: "ddl"
+      # Extensions
+      shared_preload_libraries: "pg_stat_statements"
+    pg_hba:
+      - host all all all scram-sha-256
+
+  # Backup configuration
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://your-backup-bucket/clean-dev-pg/ # Configure your S3 bucket
+      # Uncomment and configure when you have S3 credentials
+      # s3Credentials:
+      #   accessKeyId:
+      #     name: backup-s3-credentials
+      #     key: ACCESS_KEY_ID
+      #   secretAccessKey:
+      #     name: backup-s3-credentials
+      #     key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+        encryption: AES256
+      data:
+        compression: gzip
+        encryption: AES256
+        jobs: 2
+    retentionPolicy: "30d"
+
+  # Scheduled backup
+  # Uncomment when backup credentials are configured
+  # scheduledBackups:
+  #   - name: daily-backup
+  #     schedule: "0 2 * * *" # 2 AM daily
+  #     backupOwnerReference: self
+
+  # High Availability
+  replicationSlots:
+    highAvailability:
+      enabled: true
+    updateInterval: 30
+
+  # Affinity - spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: postgresql
+                  operator: In
+                  values:
+                    - clean-dev-pg
+            topologyKey: kubernetes.io/hostname
+
+  # Maintenance windows
+  primaryUpdateStrategy: unsupervised
+
+  # Node maintenance mode
+  nodeMaintenanceWindow:
+    inProgress: false
+    reusePVC: true

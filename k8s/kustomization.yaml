@@ -5,7 +5,14 @@ resources:
 - deployment.yaml
 - service.yaml
 - ingress.yaml
-    # - sealedsecret.yaml  # Uncomment when you have secrets
+# PostgreSQL cluster with CloudNativePG
+- postgres-cluster.yaml
+- postgres-pooler.yaml
+- postgres-monitoring-queries.yaml
+- postgres-servicemonitor.yaml
+- postgres-grafana-dashboard.yaml
+- postgres-alerts.yaml
+- postgres-secrets-sealed.yaml  # Uncomment when you have sealed secrets
 
 namespace: clean-dev
 

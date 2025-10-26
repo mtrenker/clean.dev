@@ -1,0 +1,216 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: clean-dev-pg-alerts
+  labels:
+    prometheus: kube-prometheus
+    role: alert-rules
+spec:
+  groups:
+    - name: cloudnativepg
+      interval: 30s
+      rules:
+        # Cluster health
+        - alert: PostgreSQLClusterDown
+          expr: cnpg_collector_up{namespace="clean-dev"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL cluster {{ $labels.cluster }} is down"
+            description: "PostgreSQL cluster {{ $labels.cluster }} in namespace {{ $labels.namespace }} has been down for more than 1 minute."
+
+        - alert: PostgreSQLInstanceDown
+          expr: up{job=~".*clean-dev-pg.*"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL instance {{ $labels.pod }} is down"
+            description: "PostgreSQL instance {{ $labels.pod }} in namespace {{ $labels.namespace }} has been down for more than 1 minute."
+
+        # Replication
+        - alert: PostgreSQLReplicationLag
+          expr: cnpg_pg_replication_lag_seconds{namespace="clean-dev"} > 30
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL replication lag is high"
+            description: "PostgreSQL instance {{ $labels.pod }} has replication lag of {{ $value }} seconds (threshold: 30s)."
+
+        - alert: PostgreSQLReplicationLagCritical
+          expr: cnpg_pg_replication_lag_seconds{namespace="clean-dev"} > 120
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL replication lag is critical"
+            description: "PostgreSQL instance {{ $labels.pod }} has critical replication lag of {{ $value }} seconds (threshold: 120s)."
+
+        - alert: PostgreSQLReplicationSlotInactive
+          expr: cnpg_pg_replication_slots_active{namespace="clean-dev"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL replication slot is inactive"
+            description: "Replication slot {{ $labels.slot_name }} on {{ $labels.pod }} is inactive."
+
+        # Connections
+        - alert: PostgreSQLTooManyConnections
+          expr: |
+            (cnpg_pg_stat_database_numbackends{namespace="clean-dev"} /
+            cnpg_pg_settings_max_connections{namespace="clean-dev"}) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL has too many connections"
+            description: "PostgreSQL instance {{ $labels.pod }} is using {{ $value | humanizePercentage }} of max connections."
+
+        - alert: PostgreSQLTooManyConnectionsCritical
+          expr: |
+            (cnpg_pg_stat_database_numbackends{namespace="clean-dev"} /
+            cnpg_pg_settings_max_connections{namespace="clean-dev"}) > 0.95
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL connections nearly exhausted"
+            description: "PostgreSQL instance {{ $labels.pod }} is using {{ $value | humanizePercentage }} of max connections."
+
+        # Performance
+        - alert: PostgreSQLLowCacheHitRatio
+          expr: |
+            (rate(cnpg_pg_stat_database_blks_hit{namespace="clean-dev"}[5m]) /
+            (rate(cnpg_pg_stat_database_blks_hit{namespace="clean-dev"}[5m]) +
+            rate(cnpg_pg_stat_database_blks_read{namespace="clean-dev"}[5m]))) < 0.9
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL cache hit ratio is low"
+            description: "Database {{ $labels.datname }} has cache hit ratio of {{ $value | humanizePercentage }} (threshold: 90%)."
+
+        - alert: PostgreSQLDeadlocks
+          expr: rate(cnpg_pg_stat_database_deadlocks{namespace="clean-dev"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL deadlocks detected"
+            description: "Database {{ $labels.datname }} is experiencing {{ $value }} deadlocks per second."
+
+        - alert: PostgreSQLSlowQueries
+          expr: cnpg_pg_stat_activity_max_tx_duration_seconds{namespace="clean-dev"} > 300
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL has long-running queries"
+            description: "PostgreSQL instance {{ $labels.pod }} has queries running for more than 5 minutes."
+
+        # Storage
+        - alert: PostgreSQLDiskSpaceWarning
+          expr: |
+            (cnpg_pg_database_size_bytes{namespace="clean-dev"} /
+            (1024 * 1024 * 1024 * 10)) > 0.7
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL disk space usage is high"
+            description: "Database {{ $labels.datname }} is using {{ $value | humanizePercentage }} of allocated storage."
+
+        - alert: PostgreSQLDiskSpaceCritical
+          expr: |
+            (cnpg_pg_database_size_bytes{namespace="clean-dev"} /
+            (1024 * 1024 * 1024 * 10)) > 0.85
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL disk space usage is critical"
+            description: "Database {{ $labels.datname }} is using {{ $value | humanizePercentage }} of allocated storage."
+
+        # Backup
+        - alert: PostgreSQLBackupFailed
+          expr: cnpg_pg_backup_last_backup_status{namespace="clean-dev"} != 1
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL backup failed"
+            description: "Last backup for cluster {{ $labels.cluster }} failed."
+
+        - alert: PostgreSQLBackupOld
+          expr: time() - cnpg_pg_backup_last_backup_timestamp{namespace="clean-dev"} > 86400 * 2
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL backup is outdated"
+            description: "Last successful backup for cluster {{ $labels.cluster }} was more than 2 days ago."
+
+        # WAL
+        - alert: PostgreSQLWALArchivingFailing
+          expr: rate(cnpg_pg_stat_archiver_failed_count{namespace="clean-dev"}[5m]) > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL WAL archiving is failing"
+            description: "PostgreSQL instance {{ $labels.pod }} is failing to archive WAL files."
+
+        # PgBouncer
+        - alert: PgBouncerDown
+          expr: up{job=~".*clean-dev-pg-pooler.*"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PgBouncer instance {{ $labels.pod }} is down"
+            description: "PgBouncer pooler {{ $labels.pod }} has been down for more than 1 minute."
+
+        - alert: PgBouncerHighConnectionUsage
+          expr: |
+            (cnpg_pgbouncer_stats_total_clients{namespace="clean-dev"} /
+            cnpg_pgbouncer_config_max_client_conn{namespace="clean-dev"}) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PgBouncer connection usage is high"
+            description: "PgBouncer {{ $labels.pod }} is using {{ $value | humanizePercentage }} of max client connections."
+
+        - alert: PgBouncerWaitingClients
+          expr: cnpg_pgbouncer_stats_waiting_clients{namespace="clean-dev"} > 10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PgBouncer has waiting clients"
+            description: "PgBouncer {{ $labels.pod }} has {{ $value }} clients waiting for connections to database {{ $labels.database }}."
+
+        # Resource usage
+        - alert: PostgreSQLHighMemoryUsage
+          expr: |
+            (container_memory_working_set_bytes{namespace="clean-dev",pod=~"clean-dev-pg-.*"} /
+            container_spec_memory_limit_bytes{namespace="clean-dev",pod=~"clean-dev-pg-.*"}) > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL memory usage is high"
+            description: "PostgreSQL pod {{ $labels.pod }} is using {{ $value | humanizePercentage }} of memory limit."
+
+        - alert: PostgreSQLHighCPUUsage
+          expr: |
+            rate(container_cpu_usage_seconds_total{namespace="clean-dev",pod=~"clean-dev-pg-.*"}[5m]) > 0.8
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL CPU usage is high"
+            description: "PostgreSQL pod {{ $labels.pod }} is using {{ $value | humanizePercentage }} of CPU."

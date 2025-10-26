@@ -9,6 +9,18 @@ application using Kustomize and ArgoCD.
 - NGINX Ingress Controller
 - cert-manager for TLS certificates
 - Sealed Secrets controller (if using secrets)
+- CloudNativePG operator (for PostgreSQL)
+- Prometheus Operator (for monitoring)
+- Grafana (for visualization)
+
+## Components
+
+- **Web Application**: Next.js app deployed with rolling updates
+- **PostgreSQL Cluster**: 3-node HA cluster with CloudNativePG
+- **Connection Pooler**: PgBouncer for efficient connection management
+- **Monitoring**: Prometheus metrics and Grafana dashboards
+
+See [POSTGRES.md](./POSTGRES.md) for detailed PostgreSQL setup and management.
 
 ## Local Development
 
@@ -165,14 +177,14 @@ Add environment variables in `deployment.yaml`:
 
 ```yaml
 env:
-    - name: NODE_ENV
-      value: production
-    - name: CUSTOM_VAR
-      value: "custom-value"
-    # For secrets:
-    - name: SECRET_VAR
-      valueFrom:
-          secretKeyRef:
-              name: clean-dev-secrets
-              key: secret-key
+  - name: NODE_ENV
+    value: production
+  - name: CUSTOM_VAR
+    value: "custom-value"
+  # For secrets:
+  - name: SECRET_VAR
+    valueFrom:
+      secretKeyRef:
+        name: clean-dev-secrets
+        key: secret-key
 ```

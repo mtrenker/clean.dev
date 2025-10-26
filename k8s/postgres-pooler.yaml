@@ -1,0 +1,56 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: clean-dev-pg-pooler
+spec:
+  cluster:
+    name: clean-dev-pg
+
+  instances: 2
+  type: rw
+
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "25"
+      max_db_connections: "100"
+      max_user_connections: "100"
+      reserve_pool_size: "5"
+      reserve_pool_timeout: "5"
+      log_connections: "1"
+      log_disconnections: "1"
+      log_pooler_errors: "1"
+      stats_period: "60"
+
+  # Resources for pooler
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+
+  # Monitoring
+  monitoring:
+    enablePodMonitor: true
+
+  template:
+    metadata:
+      labels:
+        app: clean-dev-pg-pooler
+    spec:
+      containers: []
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: postgresql
+                      operator: In
+                      values:
+                        - clean-dev-pg
+                topologyKey: kubernetes.io/hostname

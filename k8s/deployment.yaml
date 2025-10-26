@@ -21,11 +21,32 @@ spec:
                   env:
                       - name: NODE_ENV
                         value: production
-                      # - name: DATABASE_URL
+                      # PostgreSQL connection via PgBouncer pooler
+                      - name: DATABASE_HOST
+                        value: clean-dev-pg-pooler-rw
+                      - name: DATABASE_PORT
+                        value: "5432"
+                      - name: DATABASE_NAME
+                        value: cleandev
+                      - name: DATABASE_USER
+                        valueFrom:
+                          secretKeyRef:
+                            name: clean-dev-pg-app
+                            key: username
+                      - name: DATABASE_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                            name: clean-dev-pg-app
+                            key: password
+                      # Constructed DATABASE_URL for frameworks that need it
+                      - name: DATABASE_URL
+                        value: postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)
+                      # Additional secrets if needed
+                      # - name: OTHER_SECRET
                       #   valueFrom:
                       #     secretKeyRef:
                       #       name: clean-dev-secrets
-                      #       key: database-url
+                      #       key: secret-key
                   resources:
                       requests:
                           cpu: 100m
