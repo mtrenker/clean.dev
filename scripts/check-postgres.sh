@@ -40,7 +40,7 @@ fi
 # Ready instances
 READY=$(kubectl get cluster "$CLUSTER_NAME" -n "$NAMESPACE" -o jsonpath='{.status.readyInstances}')
 INSTANCES=$(kubectl get cluster "$CLUSTER_NAME" -n "$NAMESPACE" -o jsonpath='{.status.instances}')
-echo -e "  Ready instances: $READY/$INSTANCES"
+echo -e "  Ready instances: $READY/$INSTANCES (single-instance blog setup)"
 
 # Primary pod
 PRIMARY=$(kubectl get cluster "$CLUSTER_NAME" -n "$NAMESPACE" -o jsonpath='{.status.currentPrimary}')
@@ -52,10 +52,7 @@ echo "-------------------------------------------------------------------"
 kubectl get pods -n "$NAMESPACE" -l "cnpg.io/cluster=$CLUSTER_NAME" -o wide
 echo ""
 
-echo -e "${BLUE}🔄 PgBouncer Pooler:${NC}"
-echo "-------------------------------------------------------------------"
-kubectl get pods -n "$NAMESPACE" -l "cnpg.io/poolerName=${CLUSTER_NAME}-pooler" -o wide
-echo ""
+
 
 echo -e "${BLUE}🌐 Services:${NC}"
 echo "-------------------------------------------------------------------"
@@ -81,13 +78,12 @@ echo "-------------------------------------------------------------------"
 echo "Internal (from cluster):"
 echo "  Read-Write: clean-dev-pg-rw:5432"
 echo "  Read-Only:  clean-dev-pg-ro:5432"
-echo "  Pooler:     clean-dev-pg-pooler-rw:5432 (recommended)"
 echo ""
 echo "Database: cleandev"
 echo "User:     cleandev (from clean-dev-pg-app secret)"
 echo ""
 echo "Port-forward for local access:"
-echo "  kubectl port-forward -n $NAMESPACE svc/clean-dev-pg-pooler-rw 5432:5432"
+echo "  kubectl port-forward -n $NAMESPACE svc/clean-dev-pg-rw 5432:5432"
 echo ""
 
 # Recent events
@@ -114,12 +110,12 @@ echo ""
 echo -e "${BLUE}🏥 Health Checks:${NC}"
 echo "-------------------------------------------------------------------"
 
-# Check replication lag
-if kubectl exec -n "$NAMESPACE" "$PRIMARY" -c postgres -- psql -U postgres -tAc "SELECT count(*) FROM pg_stat_replication" 2>/dev/null | grep -q "2"; then
-    echo -e "${GREEN}✓${NC} Replication is active (2 replicas)"
+# Check if single instance
+REPLICA_COUNT=$(kubectl exec -n "$NAMESPACE" "$PRIMARY" -c postgres -- psql -U postgres -tAc "SELECT count(*) FROM pg_stat_replication" 2>/dev/null || echo "0")
+if [[ "$REPLICA_COUNT" == "0" ]]; then
+    echo -e "${GREEN}✓${NC} Single-instance mode (no replication)"
 else
-    REPLICA_COUNT=$(kubectl exec -n "$NAMESPACE" "$PRIMARY" -c postgres -- psql -U postgres -tAc "SELECT count(*) FROM pg_stat_replication" 2>/dev/null || echo "0")
-    echo -e "${YELLOW}⚠${NC} Active replicas: $REPLICA_COUNT (expected: 2)"
+    echo -e "${YELLOW}⚠${NC} Active replicas: $REPLICA_COUNT (unexpected for single-instance)"
 fi
 
 # Check connections
@@ -137,7 +133,7 @@ echo "=================================================================="
 echo ""
 echo "Connect to database:"
 echo "  kubectl run -it --rm psql --image=postgres:16 --restart=Never -n $NAMESPACE -- \\"
-echo "    psql -h clean-dev-pg-pooler-rw -U cleandev -d cleandev"
+echo "    psql -h clean-dev-pg-rw -U cleandev -d cleandev"
 echo ""
 echo "View logs:"
 echo "  kubectl logs -n $NAMESPACE $PRIMARY -c postgres --tail=50"
@@ -149,6 +145,6 @@ echo ""
 echo "Trigger manual backup:"
 echo "  kubectl cnpg backup $CLUSTER_NAME -n $NAMESPACE"
 echo ""
-echo "Promote a replica to primary:"
-echo "  kubectl cnpg promote ${CLUSTER_NAME}-2 -n $NAMESPACE"
+echo "Scale cluster:"
+echo "  kubectl cnpg scale $CLUSTER_NAME -n $NAMESPACE --instances 3"
 echo ""
