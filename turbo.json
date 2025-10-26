@@ -7,7 +7,7 @@
     "CDK_DEFAULT_ACCOUNT",
     "CDK_DEFAULT_REGION"
   ],
-  "pipeline": {
+  "tasks": {
     "dev": {
       "cache": false,
       "persistent": true
