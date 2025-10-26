@@ -18,17 +18,6 @@ spec:
   storage:
     size: 10Gi  # Can't shrink existing PVCs - keep at 10Gi
     storageClass: hcloud-volumes # Hetzner Cloud block storage for persistent data
-    pvcTemplate:
-      metadata:
-        labels:
-          app: clean-dev-pg
-          component: database
-          managed-by: cloudnativepg
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 10Gi
 
   # Resources
   resources:
@@ -105,19 +94,9 @@ spec:
       enabled: true
     updateInterval: 30
 
-  # Affinity - spread pods across nodes
+  # Affinity - spread pods across nodes (for single instance, this is just metadata)
   affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-                - key: cnpg.io/cluster
-                  operator: In
-                  values:
-                    - clean-dev-pg
-            topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
 
   # Maintenance windows
   primaryUpdateStrategy: unsupervised
