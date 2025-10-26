@@ -65,32 +65,30 @@ spec:
       - host all all all scram-sha-256
 
   # Backup configuration
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://your-backup-bucket/clean-dev-pg/ # Configure your S3 bucket
-      # Uncomment and configure when you have S3 credentials
-      # s3Credentials:
-      #   accessKeyId:
-      #     name: backup-s3-credentials
-      #     key: ACCESS_KEY_ID
-      #   secretAccessKey:
-      #     name: backup-s3-credentials
-      #     key: ACCESS_SECRET_KEY
-      wal:
-        compression: gzip
-        encryption: AES256
-      data:
-        compression: gzip
-        encryption: AES256
-        jobs: 2
-    retentionPolicy: "30d"
-
-  # Scheduled backup
-  # Uncomment when backup credentials are configured
-  # scheduledBackups:
-  #   - name: daily-backup
-  #     schedule: "0 2 * * *" # 2 AM daily
-  #     backupOwnerReference: self
+  # Uncomment and configure when you have S3-compatible storage credentials
+  # See k8s/POSTGRES.md for backup setup instructions
+  # backup:
+  #   barmanObjectStore:
+  #     destinationPath: s3://your-backup-bucket/clean-dev-pg/
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: backup-s3-credentials
+  #         key: ACCESS_KEY_ID
+  #       secretAccessKey:
+  #         name: backup-s3-credentials
+  #         key: ACCESS_SECRET_KEY
+  #     wal:
+  #       compression: gzip
+  #       encryption: AES256
+  #     data:
+  #       compression: gzip
+  #       encryption: AES256
+  #       jobs: 2
+  #   retentionPolicy: "30d"
+  #   scheduledBackups:
+  #     - name: daily-backup
+  #       schedule: "0 2 * * *" # 2 AM daily
+  #       backupOwnerReference: self
 
   # High Availability
   replicationSlots:
