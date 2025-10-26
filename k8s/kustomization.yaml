@@ -2,12 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 # PostgreSQL cluster with CloudNativePG
+# - postgres-pooler.yaml  # Removed for simple single-instance setup
 resources:
 - deployment.yaml
 - service.yaml
 - ingress.yaml
 - postgres-cluster.yaml
-# - postgres-pooler.yaml  # Removed for simple single-instance setup
 - postgres-monitoring-queries.yaml
 - postgres-servicemonitor.yaml
 - postgres-grafana-dashboard.yaml
@@ -19,7 +19,7 @@ namespace: clean-dev
 # Image configuration - this is what CI updates
 images:
 - name: ghcr.io/mtrenker/clean-dev
-  newTag: main-9d1c613
+  newTag: main-1a22b2a
 
 # Common labels applied to all resources
 commonLabels:
