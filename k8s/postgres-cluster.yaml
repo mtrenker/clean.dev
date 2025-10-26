@@ -3,7 +3,7 @@ kind: Cluster
 metadata:
   name: clean-dev-pg
 spec:
-  instances: 3
+  instances: 1  # Single instance for small blog
   imageName: ghcr.io/cloudnative-pg/postgresql:16.1
 
   # Bootstrap
@@ -16,17 +16,28 @@ spec:
 
   # Storage
   storage:
-    size: 10Gi
+    size: 5Gi  # 5GB is plenty for a small blog
     storageClass: hcloud-volumes # Hetzner Cloud block storage for persistent data
+    pvcTemplate:
+      metadata:
+        labels:
+          app: clean-dev-pg
+          component: database
+          managed-by: cloudnativepg
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
 
   # Resources
   resources:
     requests:
-      memory: "512Mi"
+      memory: "256Mi"
       cpu: "100m"
     limits:
-      memory: "1Gi"
-      cpu: "500m"
+      memory: "512Mi"
+      cpu: "250m"
 
   # Monitoring
   monitoring:
@@ -39,16 +50,16 @@ spec:
   # PostgreSQL configuration
   postgresql:
     parameters:
-      shared_buffers: "256MB"
-      max_connections: "200"
-      effective_cache_size: "768MB"
+      shared_buffers: "128MB"
+      max_connections: "100"
+      effective_cache_size: "384MB"
       maintenance_work_mem: "64MB"
       checkpoint_completion_target: "0.9"
       wal_buffers: "16MB"
       default_statistics_target: "100"
       random_page_cost: "1.1"
       effective_io_concurrency: "200"
-      work_mem: "2621kB"
+      work_mem: "2560kB"
       min_wal_size: "1GB"
       max_wal_size: "4GB"
       # Enable query logging for slow queries
