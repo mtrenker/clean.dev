@@ -3,8 +3,26 @@ name: Build and Deploy
 on:
   push:
     branches: [main]
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "Dockerfile"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "tsconfig.json"
   pull_request:
     branches: [main]
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "Dockerfile"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "tsconfig.json"
 
 env:
   REGISTRY: ghcr.io
