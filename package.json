@@ -39,11 +39,5 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^10.0.0"
-    }
   }
 }
