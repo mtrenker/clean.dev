@@ -1,68 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: clean-dev
+  name: clean-dev
 spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: clean-dev
-    template:
-        metadata:
-            labels:
-                app: clean-dev
-        spec:
-            containers:
-                - name: clean-dev
-                  image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
-                  ports:
-                      - containerPort: 3000
-                        name: http
-                  env:
-                      - name: NODE_ENV
-                        value: production
-                      # PostgreSQL connection (direct to database)
-                      - name: DATABASE_HOST
-                        value: clean-dev-pg-rw
-                      - name: DATABASE_PORT
-                        value: "5432"
-                      - name: DATABASE_NAME
-                        value: cleandev
-                      - name: DATABASE_USER
-                        valueFrom:
-                          secretKeyRef:
-                            name: clean-dev-pg-app
-                            key: username
-                      - name: DATABASE_PASSWORD
-                        valueFrom:
-                          secretKeyRef:
-                            name: clean-dev-pg-app
-                            key: password
-                      # Constructed DATABASE_URL for frameworks that need it
-                      - name: DATABASE_URL
-                        value: postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)
-                      # Additional secrets if needed
-                      # - name: OTHER_SECRET
-                      #   valueFrom:
-                      #     secretKeyRef:
-                      #       name: clean-dev-secrets
-                      #       key: secret-key
-                  resources:
-                      requests:
-                          cpu: 100m
-                          memory: 128Mi
-                      limits:
-                          cpu: 500m
-                          memory: 512Mi
-                  livenessProbe:
-                      httpGet:
-                          path: /api/health
-                          port: http
-                      initialDelaySeconds: 30
-                      periodSeconds: 10
-                  readinessProbe:
-                      httpGet:
-                          path: /api/ready
-                          port: http
-                      initialDelaySeconds: 5
-                      periodSeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clean-dev
+  template:
+    metadata:
+      labels:
+        app: clean-dev
+    spec:
+      containers:
+        - name: clean-dev
+          image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              value: production
+            # Additional secrets if needed
+            # - name: OTHER_SECRET
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: clean-dev-secrets
+            #       key: secret-key
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
