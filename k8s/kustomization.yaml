@@ -4,16 +4,16 @@ kind: Kustomization
 # PostgreSQL cluster with CloudNativePG
 # - postgres-pooler.yaml  # Removed for simple single-instance setup
 resources:
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
 
 namespace: clean-dev
 
 # Image configuration - this is what CI updates
 images:
-  - name: ghcr.io/mtrenker/clean-dev
-    newTag: main-1a22b2a
+- name: ghcr.io/mtrenker/clean-dev
+  newTag: main-7a24dd3
 
 # Common labels applied to all resources
 commonLabels:
