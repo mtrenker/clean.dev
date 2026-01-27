@@ -22,17 +22,17 @@ export default function AnalyticsTestPage() {
     { url: 'https://pacabytes.io/api/event', method: 'POST', label: 'Root domain + /api/event' },
     { url: 'https://data.pacabytes.io/api/event', method: 'POST', label: 'Data subdomain + /api/event' },
     { url: 'https://stats.pacabytes.io/api/event', method: 'POST', label: 'Stats subdomain + /api/event' },
-    
+
     // Test different paths with analytics subdomain
     { url: 'https://analytics.pacabytes.io/event', method: 'POST', label: 'Analytics subdomain + /event' },
     { url: 'https://analytics.pacabytes.io/e', method: 'POST', label: 'Analytics subdomain + /e' },
     { url: 'https://analytics.pacabytes.io/collect', method: 'POST', label: 'Analytics subdomain + /collect' },
     { url: 'https://analytics.pacabytes.io/data', method: 'POST', label: 'Analytics subdomain + /data' },
     { url: 'https://analytics.pacabytes.io/track', method: 'POST', label: 'Analytics subdomain + /track' },
-    
+
     // Test with different methods
     { url: 'https://analytics.pacabytes.io/api/event', method: 'GET', label: 'Original with GET' },
-    
+
     // Test neutral endpoints
     { url: 'https://analytics.pacabytes.io/api/health', method: 'GET', label: 'Analytics subdomain + /api/health' },
     { url: 'https://pacabytes.io/', method: 'GET', label: 'Root domain /' },
@@ -40,7 +40,7 @@ export default function AnalyticsTestPage() {
 
   const runTest = async (testCase: typeof testCases[0]): Promise<TestResult> => {
     const startTime = performance.now();
-    
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
@@ -72,10 +72,10 @@ export default function AnalyticsTestPage() {
       };
     } catch (error) {
       const endTime = performance.now();
-      
+
       // Check if it's a network error (likely blocked)
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      const isNetworkError = errorMessage.includes('Failed to fetch') || 
+      const isNetworkError = errorMessage.includes('Failed to fetch') ||
                             errorMessage.includes('NetworkError') ||
                             errorMessage.includes('aborted');
 
@@ -96,7 +96,7 @@ export default function AnalyticsTestPage() {
     for (const testCase of testCases) {
       const result = await runTest(testCase);
       setResults(prev => [...prev, result]);
-      
+
       // Small delay between requests
       await new Promise(resolve => setTimeout(resolve, 300));
     }
@@ -158,7 +158,7 @@ export default function AnalyticsTestPage() {
       {results.length > 0 && (
         <div>
           <h2 className="text-2xl font-semibold mb-4">Results</h2>
-          
+
           {/* Summary */}
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="p-4 bg-green-50 rounded-lg">
@@ -252,8 +252,8 @@ export default function AnalyticsTestPage() {
 
       {/* Technical Notes */}
       <div className="mt-4 p-4 bg-gray-50 rounded-lg text-xs text-gray-600">
-        <p><strong>Note:</strong> Blocked requests typically show "Failed to fetch" errors. 
-        This page tests various combinations of subdomains (analytics, data, stats, root) 
+        <p><strong>Note:</strong> Blocked requests typically show "Failed to fetch" errors.
+        This page tests various combinations of subdomains (analytics, data, stats, root)
         and paths (/api/event, /event, /e, /collect, etc.) to identify blocking patterns.</p>
       </div>
     </div>
