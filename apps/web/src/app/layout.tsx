@@ -16,7 +16,9 @@ export const metadata: Metadata = {
 const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
   <html lang="en">
     <head>
-      <Script defer data-domain="clean.dev"
+      <Script
+        data-api="https://analytics.pacabytes.io/api/e"
+        data-domain="clean.dev"
         src="https://analytics.pacabytes.io/js/script.js" />
     </head>
     <body className={inter.className}>
