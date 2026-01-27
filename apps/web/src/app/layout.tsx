@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,6 +15,10 @@ export const metadata: Metadata = {
 
 const RootLayout: React.FC<PropsWithChildren> = ({children}) => (
   <html lang="en">
+    <head>
+      <Script defer data-domain="clean.dev"
+        src="https://analytics.pacabytes.io/js/script.js" />
+    </head>
     <body className={inter.className}>
       <header className="container mx-auto p-4 print:hidden">
         <nav className="grid grid-cols-[1fr_auto] items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-20">
