@@ -1,0 +1,40 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: clean-dev-pg
+  namespace: clean-dev
+spec:
+  instances: 1
+
+  bootstrap:
+    initdb:
+      database: cleandev
+      owner: cleandev
+      secret:
+        name: clean-dev-pg-app
+
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "256MB"
+      work_mem: "4MB"
+      maintenance_work_mem: "64MB"
+      effective_cache_size: "1GB"
+
+  monitoring:
+    enablePodMonitor: false
+
+  superuserSecret:
+    name: clean-dev-pg-superuser

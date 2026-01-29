@@ -21,12 +21,18 @@ spec:
           env:
             - name: NODE_ENV
               value: production
-            # Additional secrets if needed
-            # - name: OTHER_SECRET
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: clean-dev-secrets
-            #       key: secret-key
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-pg-app
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-pg-app
+                  key: password
+            - name: DATABASE_URL
+              value: postgresql://$(DB_USER):$(DB_PASSWORD)@clean-dev-pg-rw:5432/cleandev
           resources:
             requests:
               cpu: 100m

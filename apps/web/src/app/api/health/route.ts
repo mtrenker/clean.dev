@@ -1,17 +1,26 @@
 import { NextResponse } from 'next/server';
+import { testConnection } from '@/lib/db';
 
-export function GET(): NextResponse {
+export async function GET(): Promise<NextResponse> {
   try {
-    // Add any health checks here (database connectivity, external services, etc.)
+    const checks: Record<string, boolean> = {};
+
+    // Check database connectivity (only if DATABASE_URL is set)
+    if (process.env.DATABASE_URL) {
+      checks.database = await testConnection();
+    }
+
+    const allHealthy = Object.values(checks).every(check => check);
 
     return NextResponse.json(
       {
-        status: 'healthy',
+        status: allHealthy ? 'healthy' : 'degraded',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV,
+        checks
       },
-      { status: 200 }
+      { status: allHealthy ? 200 : 503 }
     );
   } catch (error) {
     return NextResponse.json(

@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
+import { testConnection } from '@/lib/db';
 
-export function GET(): NextResponse {
+export async function GET(): Promise<NextResponse> {
   try {
-    // Add any readiness checks here (database connectivity, external services, etc.)
-    // For now, we'll just check if the application is ready to serve requests
+    // Check database connectivity (only if DATABASE_URL is set)
+    if (process.env.DATABASE_URL) {
+      const dbReady = await testConnection();
+      if (!dbReady) {
+        return NextResponse.json(
+          {
+            status: 'not ready',
+            timestamp: new Date().toISOString(),
+            reason: 'database not ready'
+          },
+          { status: 503 }
+        );
+      }
+    }
 
     return NextResponse.json(
       {
