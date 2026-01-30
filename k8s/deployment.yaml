@@ -52,6 +52,11 @@ spec:
                 secretKeyRef:
                   name: nextauth-secrets
                   key: github-secret
+            - name: ALLOWED_GITHUB_USERS
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: allowed-github-users
           resources:
             requests:
               cpu: 100m

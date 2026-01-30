@@ -28,6 +28,10 @@ if [ -z "$GITHUB_SECRET" ]; then
     echo
 fi
 
+if [ -z "$ALLOWED_GITHUB_USERS" ]; then
+    read -p "Enter allowed GitHub username(s) (comma-separated): " ALLOWED_GITHUB_USERS
+fi
+
 NAMESPACE="clean-dev"
 
 # Create a temporary secret manifest
@@ -36,6 +40,7 @@ kubectl create secret generic nextauth-secrets \
     --from-literal=auth-secret="$AUTH_SECRET" \
     --from-literal=github-id="$GITHUB_ID" \
     --from-literal=github-secret="$GITHUB_SECRET" \
+    --from-literal=allowed-github-users="$ALLOWED_GITHUB_USERS" \
     --dry-run=client -o yaml | \
 kubeseal --namespace="$NAMESPACE" -o yaml > k8s/nextauth-secrets-sealed.yaml
 
