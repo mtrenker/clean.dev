@@ -21,6 +21,8 @@ spec:
           env:
             - name: NODE_ENV
               value: production
+            - name: AUTH_TRUST_HOST
+              value: "true"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
