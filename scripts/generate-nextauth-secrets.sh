@@ -28,14 +28,16 @@ if [ -z "$GITHUB_SECRET" ]; then
     echo
 fi
 
+NAMESPACE="clean-dev"
+
 # Create a temporary secret manifest
-cat <<EOF | kubectl create secret generic nextauth-secrets \
+kubectl create secret generic nextauth-secrets \
+    --namespace="$NAMESPACE" \
     --from-literal=auth-secret="$AUTH_SECRET" \
     --from-literal=github-id="$GITHUB_ID" \
     --from-literal=github-secret="$GITHUB_SECRET" \
     --dry-run=client -o yaml | \
-kubeseal -o yaml > k8s/nextauth-secrets-sealed.yaml
-EOF
+kubeseal --namespace="$NAMESPACE" -o yaml > k8s/nextauth-secrets-sealed.yaml
 
 echo "Sealed secret created: k8s/nextauth-secrets-sealed.yaml"
 echo "Apply it with: kubectl apply -f k8s/nextauth-secrets-sealed.yaml"
