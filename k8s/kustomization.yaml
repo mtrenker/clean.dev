@@ -9,6 +9,7 @@ resources:
 - ingress.yaml
 - postgres-secrets-sealed.yaml
 - postgres-cluster.yaml
+- nextauth-secrets-sealed.yaml
 
 namespace: clean-dev
 

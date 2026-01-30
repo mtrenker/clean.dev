@@ -33,6 +33,21 @@ spec:
                   key: password
             - name: DATABASE_URL
               value: postgresql://$(DB_USER):$(DB_PASSWORD)@clean-dev-pg-rw:5432/cleandev
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: auth-secret
+            - name: GITHUB_ID
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: github-id
+            - name: GITHUB_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: github-secret
           resources:
             requests:
               cpu: 100m
