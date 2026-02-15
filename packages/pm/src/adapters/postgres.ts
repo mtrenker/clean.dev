@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { eq, and, isNull, gte, lte, like } from 'drizzle-orm';
+import { eq, and, isNull, gte, lte, like, inArray } from 'drizzle-orm';
 import type { IProjectManagementAdapter } from './interface';
 import * as schema from '../db/schema';
 import type {
@@ -259,106 +259,112 @@ export class PostgresAdapter implements IProjectManagementAdapter {
   async createInvoice(data: CreateInvoice): Promise<InvoiceWithDetails> {
     const { clientId, invoiceNumber, invoiceDate, periodDescription, timeEntryIds, taxRate } = data;
 
-    // Get time entries
-    const timeEntries = await this.db
-      .select()
-      .from(schema.timeEntries)
-      .where(eq(schema.timeEntries.clientId, clientId));
 
-    const selectedEntries = timeEntries.filter((entry) => timeEntryIds.includes(entry.id));
+    return this.db.transaction(async (tx) => {
+      // Get time entries
+      const timeEntries = await tx
+        .select()
+        .from(schema.timeEntries)
+        .where(and(
+          eq(schema.timeEntries.clientId, clientId),
+          inArray(schema.timeEntries.id, timeEntryIds)
+        ));
 
-    if (selectedEntries.length !== timeEntryIds.length) {
-      throw new Error('Some time entries not found or belong to different client');
-    }
+      const selectedEntries = timeEntries.filter((entry) => timeEntryIds.includes(entry.id));
 
-    // Check if any already invoiced
-    const alreadyInvoiced = selectedEntries.filter((entry) => entry.isInvoiced);
-    if (alreadyInvoiced.length > 0) {
-      throw new Error('Some time entries are already invoiced');
-    }
-
-    // Calculate totals
-    let subtotal = 0;
-    selectedEntries.forEach((entry) => {
-      const hours = parseFloat(entry.hours);
-      const rate = parseFloat(entry.hourlyRate);
-      subtotal += hours * rate;
-    });
-
-    // Get tax rate
-    const settings = await this.getSettings();
-    const finalTaxRate = taxRate || settings?.defaultTaxRate || '0.19';
-    const taxAmount = subtotal * parseFloat(finalTaxRate);
-    const total = subtotal + taxAmount;
-
-    // Create invoice
-    const [invoice] = await this.db
-      .insert(schema.invoices)
-      .values({
-        clientId,
-        invoiceNumber,
-        invoiceDate,
-        periodDescription,
-        subtotal: subtotal.toFixed(2),
-        taxRate: finalTaxRate,
-        taxAmount: taxAmount.toFixed(2),
-        total: total.toFixed(2),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning();
-
-    // Create line items (group by description and rate)
-    const grouped = new Map<string, { hours: number; rate: string }>();
-
-    selectedEntries.forEach((entry) => {
-      const key = `${entry.description}|${entry.hourlyRate}`;
-      const existing = grouped.get(key);
-      if (existing) {
-        existing.hours += parseFloat(entry.hours);
-      } else {
-        grouped.set(key, {
-          hours: parseFloat(entry.hours),
-          rate: entry.hourlyRate,
-        });
+      if (selectedEntries.length !== timeEntryIds.length) {
+        throw new Error('Some time entries not found or belong to different client');
       }
-    });
 
-    let position = 1;
-    for (const [key, value] of grouped.entries()) {
-      const [description] = key.split('|');
-      const amount = value.hours * parseFloat(value.rate);
+      // Check if any already invoiced
+      const alreadyInvoiced = selectedEntries.filter((entry) => entry.isInvoiced);
+      if (alreadyInvoiced.length > 0) {
+        throw new Error('Some time entries are already invoiced');
+      }
 
-      await this.db.insert(schema.invoiceLineItems).values({
-        invoiceId: invoice.id,
-        position,
-        description,
-        quantity: value.hours.toFixed(2),
-        unitPrice: value.rate,
-        amount: amount.toFixed(2),
-        createdAt: new Date(),
+      // Calculate totals
+      let subtotal = 0;
+      selectedEntries.forEach((entry) => {
+        const hours = parseFloat(entry.hours);
+        const rate = parseFloat(entry.hourlyRate);
+        subtotal += hours * rate;
       });
 
-      position++;
-    }
+      // Get tax rate
+      const settings = await this.getSettings();
+      const finalTaxRate = taxRate || settings?.defaultTaxRate || '0.19';
+      const taxAmount = subtotal * parseFloat(finalTaxRate);
+      const total = subtotal + taxAmount;
 
-    // Update time entries
-    await this.db
-      .update(schema.timeEntries)
-      .set({
-        isInvoiced: true,
-        invoiceId: invoice.id,
-        updatedAt: new Date(),
-      })
-      .where(eq(schema.timeEntries.clientId, clientId));
+      // Create invoice
+      const [invoice] = await tx
+        .insert(schema.invoices)
+        .values({
+          clientId,
+          invoiceNumber,
+          invoiceDate,
+          periodDescription,
+          subtotal: subtotal.toFixed(2),
+          taxRate: finalTaxRate,
+          taxAmount: taxAmount.toFixed(2),
+          total: total.toFixed(2),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
 
-    // Return full invoice with details
-    const fullInvoice = await this.getInvoice(invoice.id);
-    if (!fullInvoice) {
-      throw new Error('Failed to retrieve created invoice');
-    }
+      // Create line items (group by description and rate)
+      const grouped = new Map<string, { hours: number; rate: string }>();
 
-    return fullInvoice;
+      selectedEntries.forEach((entry) => {
+        const key = `${entry.description}|${entry.hourlyRate}`;
+        const existing = grouped.get(key);
+        if (existing) {
+          existing.hours += parseFloat(entry.hours);
+        } else {
+          grouped.set(key, {
+            hours: parseFloat(entry.hours),
+            rate: entry.hourlyRate,
+          });
+        }
+      });
+
+      let position = 1;
+      for (const [key, value] of grouped.entries()) {
+        const [description] = key.split('|');
+        const amount = value.hours * parseFloat(value.rate);
+
+        await tx.insert(schema.invoiceLineItems).values({
+          invoiceId: invoice.id,
+          position,
+          description,
+          quantity: value.hours.toFixed(2),
+          unitPrice: value.rate,
+          amount: amount.toFixed(2),
+          createdAt: new Date(),
+        });
+
+        position++;
+      }
+
+      // Update selected time entries
+      await tx
+        .update(schema.timeEntries)
+        .set({
+          isInvoiced: true,
+          invoiceId: invoice.id,
+          updatedAt: new Date(),
+        })
+        .where(inArray(schema.timeEntries.id, timeEntryIds));
+
+      // Return full invoice with details
+      const fullInvoice = await this.getInvoice(invoice.id);
+      if (!fullInvoice) {
+        throw new Error('Failed to retrieve created invoice');
+      }
+
+      return fullInvoice;
+    });
   }
 
   async markInvoiceSent(id: string): Promise<Invoice> {
