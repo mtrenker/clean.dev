@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cleandev/pm": "workspace:*",
     "@headlessui/react": "^1.7.17",
     "@react-spring/web": "^9.7.3",
     "@tabler/icons-react": "^2.42.0",
@@ -31,13 +32,15 @@
     "pg": "^8.17.2",
     "postcss": "^8.4.28",
     "prismjs": "^1.29.0",
+    "puppeteer": "^24.37.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.49.2",
     "tailwind-merge": "^2.2.0",
     "tailwindcss": "3.3.3",
     "typescript": "^5.2.2",
-    "xstate": "^5.11.0"
+    "xstate": "^5.11.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@cleandev/eslint-config": "workspace:*",

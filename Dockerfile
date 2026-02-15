@@ -18,6 +18,20 @@ RUN corepack enable pnpm && pnpm i --frozen-lockfile
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Install Chromium for Puppeteer
+RUN apk add --no-cache \
+  chromium \
+  nss \
+  freetype \
+  harfbuzz \
+  ca-certificates \
+  ttf-freefont
+
+# Set Puppeteer to use installed Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -31,6 +45,19 @@ RUN corepack enable pnpm && pnpm run build
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
+
+# Install Chromium and dependencies for Puppeteer
+RUN apk add --no-cache \
+  chromium \
+  nss \
+  freetype \
+  harfbuzz \
+  ca-certificates \
+  ttf-freefont
+
+# Set Puppeteer to use installed Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.

@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1771057168799,
+      "tag": "0000_handy_marvel_apes",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771138800000,
+      "tag": "0001_rename_freelancer_add_payment_terms",
+      "breakpoints": true
+    }
+  ]
+}

@@ -19,6 +19,7 @@
     "incremental": true,
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true,
     "plugins": [
       {
         "name": "next"

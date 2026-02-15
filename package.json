@@ -10,7 +10,9 @@
     "build": "dotenv -- turbo run build",
     "build:open": "dotenv -- turbo build:open",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "db:generate": "dotenv -- pnpm --filter @cleandev/pm db:generate",
+    "db:migrate": "dotenv -- pnpm --filter @cleandev/pm db:migrate"
   },
   "repository": {
     "type": "git",

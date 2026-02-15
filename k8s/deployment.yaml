@@ -73,6 +73,36 @@ spec:
                 secretKeyRef:
                   name: nextauth-secrets
                   key: allowed-github-users
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: host
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: port
+            - name: SMTP_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: secure
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: user
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: password
+            - name: SMTP_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: clean-dev-smtp
+                  key: from
           resources:
             requests:
               cpu: 100m
