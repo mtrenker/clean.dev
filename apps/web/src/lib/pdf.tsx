@@ -1,8 +1,6 @@
 import { renderToBuffer } from '@react-pdf/renderer';
-import { InvoicePDF } from './pdf';
-import type { InvoiceWithDetails, Settings } from '../types';
-
-export { InvoicePDF } from './pdf';
+import { InvoicePDF } from '@/components/invoice-pdf';
+import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
 
 export async function generateInvoicePDF(
   invoice: InvoiceWithDetails,

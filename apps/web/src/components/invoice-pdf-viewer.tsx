@@ -1,0 +1,60 @@
+'use client';
+
+import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
+import { InvoicePDF } from '@/components/invoice-pdf';
+import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
+
+interface InvoicePDFViewerProps {
+  invoice: InvoiceWithDetails;
+  settings: Settings;
+}
+
+export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, settings }) => {
+  const document = <InvoicePDF invoice={invoice} settings={settings} />;
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-4">
+        <PDFDownloadLink
+          className="rounded bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700"
+          document={document}
+          fileName={`Rechnung_${invoice.invoiceNumber}.pdf`}
+        >
+          {({ loading }) => (loading ? 'PDF wird erstellt...' : 'PDF herunterladen')}
+        </PDFDownloadLink>
+      </div>
+
+      <BlobProvider document={document}>
+        {({ url, loading, error }) => {
+          if (loading) {
+            return (
+              <div className="flex h-[80vh] items-center justify-center rounded border bg-gray-50">
+                <p className="text-gray-500">PDF wird geladen...</p>
+              </div>
+            );
+          }
+
+          if (error) {
+            return (
+              <div className="flex h-[80vh] items-center justify-center rounded border bg-red-50">
+                <p className="text-red-600">Fehler beim Laden der PDF: {error.message}</p>
+              </div>
+            );
+          }
+
+          if (!url) {
+            return null;
+          }
+
+          return (
+            <iframe
+              className="h-[80vh] w-full rounded border"
+              src={url}
+              title={`Rechnung ${invoice.invoiceNumber}`}
+            />
+          );
+        }}
+      </BlobProvider>
+    </div>
+  );
+};

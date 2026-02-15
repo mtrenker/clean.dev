@@ -100,12 +100,10 @@ export async function sendInvoiceAction(id: string): Promise<{ success: boolean;
     }
 
     // Generate PDF
-    const { generateInvoiceHtml } = await import('@/lib/invoice-html');
-    const { generatePdfFromHtml } = await import('@/lib/pdf');
+    const { generateInvoicePDF } = await import('@/lib/pdf');
     const { sendEmail } = await import('@/lib/email');
 
-    const html = generateInvoiceHtml(invoice, settings);
-    const pdfBuffer = await generatePdfFromHtml(html);
+    const pdfBuffer = await generateInvoicePDF(invoice, settings);
 
     // Send email
     await sendEmail({

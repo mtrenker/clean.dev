@@ -1,6 +1,6 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import type { InvoiceWithDetails, Settings } from '../types';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
 
 // Formatting helpers
 const formatPrice = (number: number | string): string => {

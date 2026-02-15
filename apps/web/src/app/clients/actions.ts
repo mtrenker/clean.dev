@@ -35,7 +35,7 @@ export async function createClientAction(formData: ClientFormData) {
     name,
     address: address || '',
     vatId,
-    paymentDueDays,
+    paymentDueDays: paymentDueDays ?? 30,
     earlyPaymentDiscountRate,
     earlyPaymentDueDays,
     customFields,

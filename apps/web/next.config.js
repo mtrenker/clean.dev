@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  serverExternalPackages: ['pg', 'puppeteer'],
+  serverExternalPackages: ['pg'],
 }
 
 module.exports = nextConfig
