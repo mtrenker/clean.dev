@@ -8,7 +8,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 NAMESPACE="clean-dev"
-OUTPUT_FILE="../k8s/smtp-secrets-sealed.yaml"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUTPUT_FILE="$SCRIPT_DIR/../k8s/smtp-secrets-sealed.yaml"
 
 echo -e "${GREEN}=== SMTP Sealed Secrets Generator ===${NC}\n"
 
