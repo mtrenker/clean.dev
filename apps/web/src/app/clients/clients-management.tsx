@@ -112,7 +112,7 @@ export const ClientsManagement: React.FC<ClientsManagementProps> = ({ clients })
                 id="add-paymentDueDays"
                 min="1"
                 type="number"
-                {...register('paymentDueDays', { valueAsNumber: true })}
+                {...register('paymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
               />
             </div>
 
@@ -125,7 +125,7 @@ export const ClientsManagement: React.FC<ClientsManagementProps> = ({ clients })
                 id="add-earlyPaymentDueDays"
                 min="1"
                 type="number"
-                {...register('earlyPaymentDueDays', { valueAsNumber: true })}
+                {...register('earlyPaymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
               />
             </div>
 
@@ -295,7 +295,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, isEditing, onEdit, onUp
               id={`edit-paymentDueDays-${client.id}`}
               min="1"
               type="number"
-              {...register('paymentDueDays', { valueAsNumber: true })}
+              {...register('paymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
             />
           </div>
 
@@ -308,7 +308,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, isEditing, onEdit, onUp
               id={`edit-earlyPaymentDueDays-${client.id}`}
               min="1"
               type="number"
-              {...register('earlyPaymentDueDays', { valueAsNumber: true })}
+              {...register('earlyPaymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
             />
           </div>
 

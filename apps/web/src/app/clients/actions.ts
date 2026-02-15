@@ -34,10 +34,10 @@ export async function createClientAction(formData: ClientFormData) {
   const data: CreateClient = {
     name,
     address: address || '',
-    vatId,
-    paymentDueDays: paymentDueDays ?? 30,
-    earlyPaymentDiscountRate,
-    earlyPaymentDueDays,
+    vatId: vatId || null,
+    paymentDueDays: Number.isFinite(paymentDueDays) && paymentDueDays  ? paymentDueDays : 30,
+    earlyPaymentDiscountRate: earlyPaymentDiscountRate || null,
+    earlyPaymentDueDays: Number.isFinite(earlyPaymentDueDays) ? earlyPaymentDueDays : null,
     customFields,
   };
 
@@ -63,10 +63,10 @@ export async function updateClientAction(id: string, formData: ClientFormData) {
   const data: UpdateClient = {
     name,
     address,
-    vatId,
-    paymentDueDays,
-    earlyPaymentDiscountRate,
-    earlyPaymentDueDays,
+    vatId: vatId || null,
+    paymentDueDays: Number.isFinite(paymentDueDays) ? paymentDueDays : undefined,
+    earlyPaymentDiscountRate: earlyPaymentDiscountRate || null,
+    earlyPaymentDueDays: Number.isFinite(earlyPaymentDueDays) ? earlyPaymentDueDays : null,
     customFields,
   };
 
