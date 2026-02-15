@@ -1,0 +1,10 @@
+{
+  "name": "@cleandev/vue-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Vue dev server not configured yet'",
+    "build": "echo 'Vue build not configured yet'",
+    "lint": "echo 'Vue lint not configured yet'"
+  }
+}
