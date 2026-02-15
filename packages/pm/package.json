@@ -2,9 +2,10 @@
   "name": "@cleandev/pm",
   "version": "0.1.0",
   "description": "Project management package for client, invoice, and time tracking",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
@@ -12,7 +13,7 @@
   },
   "dependencies": {
     "drizzle-orm": "^0.36.4",
-    "nodemailer": "^6.9.16",
+    "nodemailer": "^8.0.1",
     "pg": "^8.13.1",
     "zod": "^3.25.76"
   },

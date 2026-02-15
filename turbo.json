@@ -21,7 +21,8 @@
         "^build"
       ],
       "outputs": [
-        ".next/**"
+        ".next/**",
+        "dist/**"
       ]
     },
     "build:open": {
