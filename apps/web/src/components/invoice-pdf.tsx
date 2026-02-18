@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
 import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
 
 // Formatting helpers
@@ -130,6 +130,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderBottomColor: '#000000',
   },
+  headingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  headingColumn: {
+    flexDirection: 'column',
+  },
+  qrSection: {
+    alignItems: 'center',
+  },
+  qrCode: {
+    width: 80,
+    height: 80,
+  },
+  qrLabel: {
+    fontSize: 6,
+    color: '#666666',
+    marginTop: 2,
+  },
   footer: {
     position: 'absolute',
     bottom: 40,
@@ -151,9 +172,10 @@ const styles = StyleSheet.create({
 interface InvoicePDFProps {
   invoice: InvoiceWithDetails;
   settings: Settings;
+  epcQrCodeUrl?: string;
 }
 
-export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, settings }) => {
+export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, settings, epcQrCodeUrl }) => {
   const subtotal = parseFloat(invoice.subtotal);
   const taxRate = parseFloat(invoice.taxRate);
   const taxAmount = parseFloat(invoice.taxAmount);
@@ -194,17 +216,29 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, settings }) => 
 
         {/* Main Content */}
         <View style={styles.mainContent}>
-          <Text style={styles.heading}>
-            Rechnung Nr.: {invoice.invoiceNumber}
-          </Text>
+          <View style={styles.headingRow}>
+            <View style={styles.headingColumn}>
+              <Text style={styles.heading}>
+                Rechnung Nr.: {invoice.invoiceNumber}
+              </Text>
 
-          {invoice.client.customFields &&
-           typeof invoice.client.customFields === 'object' &&
-           'orderNumber' in invoice.client.customFields && (
-            <Text style={styles.heading}>
-              Bestellnummer: {String(invoice.client.customFields.orderNumber)}
-            </Text>
-          )}
+              {invoice.client.customFields &&
+               typeof invoice.client.customFields === 'object' &&
+               'orderNumber' in invoice.client.customFields && (
+                <Text style={styles.heading}>
+                  Bestellnummer: {String(invoice.client.customFields.orderNumber)}
+                </Text>
+              )}
+            </View>
+
+            {/* EPC QR Code */}
+            {epcQrCodeUrl && (
+              <View style={styles.qrSection}>
+                <Image style={styles.qrCode} src={epcQrCodeUrl} />
+                <Text style={styles.qrLabel}>Banking QR Code</Text>
+              </View>
+            )}
+          </View>
 
           <View style={styles.paragraph}>
             <Text>Sehr geehrte Damen und Herren,</Text>

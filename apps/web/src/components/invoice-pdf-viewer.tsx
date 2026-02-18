@@ -1,7 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
 import { InvoicePDF } from '@/components/invoice-pdf';
+import { generateEpcQrCodeDataUrl } from '@/lib/epc-qr';
 import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
 
 interface InvoicePDFViewerProps {
@@ -10,7 +12,13 @@ interface InvoicePDFViewerProps {
 }
 
 export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, settings }) => {
-  const document = <InvoicePDF invoice={invoice} settings={settings} />;
+  const [epcQrCodeUrl, setEpcQrCodeUrl] = useState<string | undefined>();
+
+  useEffect(() => {
+    generateEpcQrCodeDataUrl(invoice, settings).then(setEpcQrCodeUrl);
+  }, [invoice, settings]);
+
+  const document = <InvoicePDF invoice={invoice} settings={settings} epcQrCodeUrl={epcQrCodeUrl} />;
 
   return (
     <div className="flex flex-col gap-4">
