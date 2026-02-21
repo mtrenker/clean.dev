@@ -22,6 +22,7 @@ export interface Project {
   startDate: string;
   endDate: string;
   featured?: boolean;
+  spotlight?: boolean;
 }
 
 export const projects: Project[] = [
@@ -55,6 +56,7 @@ export const projects: Project[] = [
     startDate: '2008-11',
     endDate: '2009-02',
     featured: true,
+    spotlight: true,
   },
   {
     id: '2',
@@ -216,6 +218,7 @@ export const projects: Project[] = [
     startDate: '2013-01',
     endDate: '2013-07',
     featured: true,
+    spotlight: true,
   },
   {
     id: '7',
@@ -250,6 +253,7 @@ export const projects: Project[] = [
     startDate: '2014-09',
     endDate: '2016-06',
     featured: true,
+    spotlight: true,
   },
   {
     id: '8',
@@ -371,6 +375,7 @@ export const projects: Project[] = [
     startDate: '2017-11',
     endDate: '2018-05',
     featured: true,
+    spotlight: true,
   },
   {
     id: '12',
@@ -465,6 +470,7 @@ export const projects: Project[] = [
     startDate: '2019-07',
     endDate: '2019-12',
     featured: true,
+    spotlight: true,
   },
   {
     id: '15',
@@ -503,6 +509,7 @@ export const projects: Project[] = [
     startDate: '2020-07',
     endDate: '2021-03',
     featured: true,
+    spotlight: true,
   },
   {
     id: '16',
@@ -542,6 +549,7 @@ export const projects: Project[] = [
     startDate: '2021-03',
     endDate: '2021-12',
     featured: true,
+    spotlight: true,
   },
   {
     id: '17',
@@ -617,5 +625,6 @@ export const projects: Project[] = [
     startDate: '2022-09',
     endDate: '2023-05',
     featured: true,
+    spotlight: true,
   },
 ];

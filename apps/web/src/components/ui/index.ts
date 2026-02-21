@@ -8,3 +8,4 @@ export { Textarea } from './textarea';
 export { Select } from './select';
 export { Label } from './label';
 export { FormField } from './form-field';
+export { Marquee } from './marquee';

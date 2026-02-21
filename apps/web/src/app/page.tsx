@@ -4,6 +4,20 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useIntl } from "react-intl";
+import { Marquee } from "@/components/ui";
+
+const SPOTLIGHT_COMPANIES = [
+  'Oetker Digital',
+  'Fielmann AG',
+  'Interhyp AG',
+  'ProSiebenSat.1',
+  'Lufthansa AG',
+  'BMW Group',
+  'McKinsey & Company',
+  'Siemens AG',
+  'UXMA GmbH',
+  'Brückner Group',
+];
 
 const Page: NextPage = () => {
   const intl = useIntl();
@@ -139,6 +153,14 @@ const Page: NextPage = () => {
             })}
           </div>
         </div>
+      </section>
+
+      {/* Trusted By Section */}
+      <section className="overflow-hidden border-t-[length:var(--border-width)] border-t-border py-14">
+        <p className="text-label mb-8 text-center tracking-[0.3em] text-muted-foreground/60">
+          {intl.formatMessage({ id: 'home.trustedBy.label' })}
+        </p>
+        <Marquee items={SPOTLIGHT_COMPANIES} speed="slow" />
       </section>
 
       {/* Philosophy Section */}
