@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import type { Client } from '@cleandev/pm';
 import { createClientAction, updateClientAction, deleteClientAction, type ClientFormData } from './actions';
+import { Input, Textarea, FormField, Button, Card } from '@/components/ui';
 
 interface ClientsManagementProps {
   clients: Client[];
@@ -51,142 +52,99 @@ export const ClientsManagement: React.FC<ClientsManagementProps> = ({ clients })
   return (
     <>
       <div className="mb-4">
-        <button
-          className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-          onClick={() => setIsAdding(true)}
-          type="button"
-        >
+        <Button variant="primary" onClick={() => setIsAdding(true)} type="button">
           Neuer Kunde
-        </button>
+        </Button>
       </div>
 
       {isAdding && (
-        <div className="mb-6 rounded-lg border bg-gray-50 p-4">
-          <h2 className="mb-4 text-xl font-bold">Neuer Kunde</h2>
-          <form className="space-y-4" onSubmit={handleSubmit(onAdd)}>
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-name">
-                Name *
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+        <Card className="mb-6">
+          <h2 className="mb-4 text-xl font-bold text-foreground">Neuer Kunde</h2>
+          <form className="space-y-6" onSubmit={handleSubmit(onAdd)}>
+            <FormField label="Name" htmlFor="add-name" required>
+              <Input
                 id="add-name"
-                required
                 type="text"
+                required
                 {...register('name', { required: true })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-address">
-                Adresse *
-              </label>
-              <textarea
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Adresse" htmlFor="add-address" required>
+              <Textarea
                 id="add-address"
                 required
                 rows={3}
                 {...register('address', { required: true })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-vatId">
-                USt-ID
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="USt-ID" htmlFor="add-vatId">
+              <Input
                 id="add-vatId"
                 type="text"
                 {...register('vatId')}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-paymentDueDays">
-                Zahlungsziel (Tage)
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
-                defaultValue={30}
+            <FormField label="Zahlungsziel (Tage)" htmlFor="add-paymentDueDays">
+              <Input
                 id="add-paymentDueDays"
-                min="1"
                 type="number"
+                min="1"
+                defaultValue={30}
                 {...register('paymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-earlyPaymentDueDays">
-                Skonto-Zahlungsziel (Tage)
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Skonto-Zahlungsziel (Tage)" htmlFor="add-earlyPaymentDueDays">
+              <Input
                 id="add-earlyPaymentDueDays"
-                min="1"
                 type="number"
+                min="1"
                 {...register('earlyPaymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-earlyPaymentDiscountRate">
-                Skonto-Satz (z.B. 0.03 für 3%)
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Skonto-Satz (z.B. 0.03 für 3%)" htmlFor="add-earlyPaymentDiscountRate">
+              <Input
                 id="add-earlyPaymentDiscountRate"
-                step="0.0001"
                 type="number"
+                step="0.0001"
                 {...register('earlyPaymentDiscountRate')}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-email">
-                E-Mail
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="E-Mail" htmlFor="add-email">
+              <Input
                 id="add-email"
                 type="email"
                 {...register('email')}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-orderNumber">
-                Bestellnummer
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Bestellnummer" htmlFor="add-orderNumber">
+              <Input
                 id="add-orderNumber"
                 type="text"
                 {...register('orderNumber')}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="add-department">
-                Abteilung (z.B. "Rechnungswesen")
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Abteilung (z.B. &quot;Rechnungswesen&quot;)" htmlFor="add-department">
+              <Input
                 id="add-department"
                 type="text"
                 {...register('department')}
               />
-            </div>
+            </FormField>
 
             <div className="flex gap-2">
-              <button
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                type="submit"
-              >
+              <Button variant="primary" type="submit">
                 Erstellen
-              </button>
-              <button
-                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={() => {
                   setIsAdding(false);
                   reset();
@@ -194,10 +152,10 @@ export const ClientsManagement: React.FC<ClientsManagementProps> = ({ clients })
                 type="button"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
+        </Card>
       )}
 
       <div className="space-y-4">
@@ -246,168 +204,131 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, isEditing, onEdit, onUp
 
   if (isEditing) {
     return (
-      <div className="rounded-lg border bg-white p-4 shadow">
-        <form className="space-y-4" onSubmit={handleSubmit((data) => onUpdate(client.id, data))}>
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-name-${client.id}`}>
-              Name *
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+      <Card>
+        <form className="space-y-6" onSubmit={handleSubmit((data) => onUpdate(client.id, data))}>
+          <FormField label="Name" htmlFor={`edit-name-${client.id}`} required>
+            <Input
               id={`edit-name-${client.id}`}
-              required
               type="text"
+              required
               {...register('name', { required: true })}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-address-${client.id}`}>
-              Adresse *
-            </label>
-            <textarea
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Adresse" htmlFor={`edit-address-${client.id}`} required>
+            <Textarea
               id={`edit-address-${client.id}`}
               required
               rows={3}
               {...register('address', { required: true })}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-vatId-${client.id}`}>
-              USt-ID
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="USt-ID" htmlFor={`edit-vatId-${client.id}`}>
+            <Input
               id={`edit-vatId-${client.id}`}
               type="text"
               {...register('vatId')}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-paymentDueDays-${client.id}`}>
-              Zahlungsziel (Tage)
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Zahlungsziel (Tage)" htmlFor={`edit-paymentDueDays-${client.id}`}>
+            <Input
               id={`edit-paymentDueDays-${client.id}`}
-              min="1"
               type="number"
+              min="1"
               {...register('paymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-earlyPaymentDueDays-${client.id}`}>
-              Skonto-Zahlungsziel (Tage)
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Skonto-Zahlungsziel (Tage)" htmlFor={`edit-earlyPaymentDueDays-${client.id}`}>
+            <Input
               id={`edit-earlyPaymentDueDays-${client.id}`}
-              min="1"
               type="number"
+              min="1"
               {...register('earlyPaymentDueDays', { setValueAs: (v: string) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; } })}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-earlyPaymentDiscountRate-${client.id}`}>
-              Skonto-Satz (z.B. 0.03 für 3%)
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Skonto-Satz (z.B. 0.03 für 3%)" htmlFor={`edit-earlyPaymentDiscountRate-${client.id}`}>
+            <Input
               id={`edit-earlyPaymentDiscountRate-${client.id}`}
-              step="0.0001"
               type="number"
+              step="0.0001"
               {...register('earlyPaymentDiscountRate')}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-email-${client.id}`}>
-              E-Mail
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="E-Mail" htmlFor={`edit-email-${client.id}`}>
+            <Input
               id={`edit-email-${client.id}`}
               type="email"
               {...register('email')}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-orderNumber-${client.id}`}>
-              Bestellnummer
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Bestellnummer" htmlFor={`edit-orderNumber-${client.id}`}>
+            <Input
               id={`edit-orderNumber-${client.id}`}
               type="text"
               {...register('orderNumber')}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium" htmlFor={`edit-department-${client.id}`}>
-              Abteilung (z.B. "Rechnungswesen")
-            </label>
-            <input
-              className="mt-1 w-full rounded border p-2"
+          <FormField label="Abteilung (z.B. &quot;Rechnungswesen&quot;)" htmlFor={`edit-department-${client.id}`}>
+            <Input
               id={`edit-department-${client.id}`}
               type="text"
               {...register('department')}
             />
-          </div>
+          </FormField>
 
           <div className="flex gap-2">
-            <button
-              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              type="submit"
-            >
+            <Button variant="primary" type="submit">
               Speichern
-            </button>
-            <button
-              className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() => onEdit('')}
               type="button"
             >
               Abbrechen
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="rounded-lg border bg-white p-4 shadow">
+    <Card>
       <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">{client.name}</h3>
-          {client.address && <p className="text-sm text-gray-600">{client.address}</p>}
-          {client.vatId && <p className="text-sm text-gray-600">USt-ID: {client.vatId}</p>}
-          <p className="text-sm text-gray-600">Zahlungsziel: {client.paymentDueDays || 30} Tage</p>
-          {client.earlyPaymentDiscountRate && client.earlyPaymentDueDays && (
-            <p className="text-sm text-gray-600">
-              Skonto: {(parseFloat(client.earlyPaymentDiscountRate) * 100).toFixed(2)}% bei Zahlung innerhalb {client.earlyPaymentDueDays} Tage
-            </p>
-          )}
-          {email && <p className="text-sm text-gray-600">E-Mail: {email}</p>}
-          {orderNumber && <p className="text-sm text-gray-600">Bestellnummer: {orderNumber}</p>}
-          {department && <p className="text-sm text-gray-600">Abteilung: {department}</p>}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-foreground">{client.name}</h3>
+          {client.address && <p className="mt-2 text-sm text-foreground/80">{client.address}</p>}
+          <div className="mt-3 space-y-1">
+            {client.vatId && <p className="text-sm text-foreground/70">USt-ID: {client.vatId}</p>}
+            <p className="text-sm text-foreground/70">Zahlungsziel: {client.paymentDueDays || 30} Tage</p>
+            {client.earlyPaymentDiscountRate && client.earlyPaymentDueDays && (
+              <p className="text-sm text-foreground/70">
+                Skonto: {(parseFloat(client.earlyPaymentDiscountRate) * 100).toFixed(2)}% bei Zahlung innerhalb {client.earlyPaymentDueDays} Tage
+              </p>
+            )}
+            {email && <p className="text-sm text-foreground/70">E-Mail: {email}</p>}
+            {orderNumber && <p className="text-sm text-foreground/70">Bestellnummer: {orderNumber}</p>}
+            {department && <p className="text-sm text-foreground/70">Abteilung: {department}</p>}
+          </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
+        <div className="ml-4 flex shrink-0 gap-2">
+          <Button
+            variant="secondary"
             onClick={() => onEdit(client.id)}
             type="button"
           >
             Bearbeiten
-          </button>
+          </Button>
           <button
-            className="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
+            className="rounded border-2 border-red-500 bg-transparent px-4 py-2 font-mono text-sm uppercase tracking-wider text-red-600 transition-all hover:bg-red-500 hover:text-white"
             onClick={() => onDelete(client.id)}
             type="button"
           >
@@ -415,6 +336,6 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, isEditing, onEdit, onUp
           </button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };

@@ -1,6 +1,8 @@
 import { auth } from 'auth';
 import { redirect } from 'next/navigation';
 import { AdminPanel } from './admin-panel';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
 
 const AdminPage = async () => {
   const session = await auth();
@@ -10,9 +12,16 @@ const AdminPage = async () => {
   }
 
   return (
-    <main className="container mx-auto p-10">
-      <h1 className="mb-6 text-3xl font-bold">Administration</h1>
-      <AdminPanel />
+    <main className="bg-background py-10">
+      <Container className="px-6">
+        <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
+          Administration
+        </Heading>
+        <p className="mb-8 text-muted-foreground">
+          System configuration and database management
+        </p>
+        <AdminPanel />
+      </Container>
     </main>
   );
 };

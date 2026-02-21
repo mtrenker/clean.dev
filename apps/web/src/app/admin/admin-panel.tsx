@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Card, Button } from '@/components/ui';
 
 interface MigrationResult {
   success: boolean;
@@ -30,19 +31,19 @@ export const AdminPanel: React.FC = () => {
       if (response.ok) {
         setResult({
           success: true,
-          message: data.message || 'Migrationen erfolgreich ausgeführt',
+          message: data.message || 'Datenbank-Setup erfolgreich abgeschlossen',
         });
       } else {
         setResult({
           success: false,
-          message: 'Migration fehlgeschlagen',
+          message: 'Setup fehlgeschlagen',
           error: data.error || 'Unbekannter Fehler',
         });
       }
     } catch (error) {
       setResult({
         success: false,
-        message: 'Migration fehlgeschlagen',
+        message: 'Setup fehlgeschlagen',
         error: error instanceof Error ? error.message : 'Netzwerkfehler',
       });
     } finally {
@@ -52,53 +53,54 @@ export const AdminPanel: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border bg-white p-6 shadow">
-        <h2 className="mb-4 text-xl font-semibold">Datenbankmigrationen</h2>
-        <p className="mb-4 text-gray-600">
-          Führt ausstehende Datenbankmigrationen aus. Dies aktualisiert das Datenbankschema auf die
-          neueste Version.
+      <Card>
+        <h2 className="mb-4 text-xl font-semibold text-foreground">Datenbank-Setup</h2>
+        <p className="mb-4 text-foreground/80">
+          Initialisiert oder aktualisiert die Datenbankstruktur. Führen Sie dies nach Updates aus, um neue Features verfügbar zu machen.
         </p>
 
-        <button
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400"
+        <Button
+          variant="primary"
           disabled={isRunning}
           onClick={runMigration}
           type="button"
         >
-          {isRunning ? 'Migrationen werden ausgeführt...' : 'Migrationen ausführen'}
-        </button>
+          {isRunning ? 'Setup wird ausgeführt...' : 'Setup ausführen'}
+        </Button>
 
         {result && (
           <div
-            className={`mt-4 rounded-lg p-4 ${
-              result.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+            className={`mt-4 rounded-lg border-2 p-4 ${
+              result.success
+                ? 'border-accent/30 bg-accent/10 text-foreground'
+                : 'border-red-500/30 bg-red-500/10 text-foreground'
             }`}
           >
             <p className="font-semibold">{result.message}</p>
             {result.error && (
-              <pre className="mt-2 overflow-x-auto text-sm">
+              <pre className="mt-2 overflow-x-auto text-sm font-mono text-foreground/80">
                 {result.error}
               </pre>
             )}
           </div>
         )}
-      </div>
+      </Card>
 
-      <div className="rounded-lg border bg-white p-6 shadow">
-        <h2 className="mb-4 text-xl font-semibold">Systeminformationen</h2>
+      <Card>
+        <h2 className="mb-4 text-xl font-semibold text-foreground">Systeminformationen</h2>
         <dl className="space-y-2 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-gray-600">Datenbank:</dt>
-            <dd className="font-mono">
+          <div className="flex justify-between gap-4">
+            <dt className="text-foreground/70">Datenbank:</dt>
+            <dd className="font-mono text-foreground">
               {process.env.NODE_ENV === 'production' ? 'PostgreSQL (Production)' : 'PostgreSQL (Development)'}
             </dd>
           </div>
-          <div className="flex justify-between">
-            <dt className="text-gray-600">Node-Umgebung:</dt>
-            <dd className="font-mono">{process.env.NODE_ENV}</dd>
+          <div className="flex justify-between gap-4">
+            <dt className="text-foreground/70">Node-Umgebung:</dt>
+            <dd className="font-mono text-foreground">{process.env.NODE_ENV}</dd>
           </div>
         </dl>
-      </div>
+      </Card>
     </div>
   );
 };

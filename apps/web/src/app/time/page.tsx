@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import { TimeTracking } from './time-tracking';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
 
 interface PageProps {
   searchParams: Promise<{ clientId?: string }>;
@@ -24,13 +26,20 @@ const TimeTrackingPage = async ({ searchParams }: PageProps) => {
   const timeEntries = await adapter.getTimeEntries(clientId);
 
   return (
-    <main className="container mx-auto p-10">
-      <h1 className="mb-6 text-3xl font-bold">Zeiterfassung</h1>
-      <TimeTracking
-        clients={clients}
-        timeEntries={timeEntries}
-        defaultRate={settings?.defaultHourlyRate || '80.00'}
-      />
+    <main className="bg-background py-10">
+      <Container className="px-6">
+        <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
+          Zeiterfassung
+        </Heading>
+        <p className="mb-8 text-muted-foreground">
+          Erfassen Sie Arbeitszeiten und Projektbeschreibungen für die Rechnungserstellung
+        </p>
+        <TimeTracking
+          clients={clients}
+          timeEntries={timeEntries}
+          defaultRate={settings?.defaultHourlyRate || '80.00'}
+        />
+      </Container>
     </main>
   );
 };

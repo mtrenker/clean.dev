@@ -64,7 +64,7 @@ const RootLayout = async ({children}: PropsWithChildren) => {
               </Link>
               {session ? (
                 <>
-                  <span className="text-muted">|</span>
+                  <span className="text-foreground/40">|</span>
                   <form action={async () => {
                     'use server';
                     await signOut();
@@ -79,7 +79,7 @@ const RootLayout = async ({children}: PropsWithChildren) => {
                 </>
               ) : (
                 <>
-                  <span className="text-muted">|</span>
+                  <span className="text-foreground/40">|</span>
                   <form action={async () => {
                     'use server';
                     await signIn('github');

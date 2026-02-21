@@ -200,9 +200,246 @@ apps/web/src/
 ├── app/
 │   ├── globals.css          # Design system CSS variables & components
 │   ├── layout.tsx           # Root layout using design tokens
-│   └── page.tsx             # Landing page using design tokens
+│   ├── page.tsx             # Landing page using design tokens
+│   ├── me/page.tsx          # Portfolio (with print optimization)
+│   ├── imprint/page.tsx     # Imprint page
+│   ├── admin/page.tsx       # Admin dashboard
+│   ├── clients/page.tsx     # Client management
+│   ├── invoices/
+│   │   ├── page.tsx         # Invoice list
+│   │   └── [id]/page.tsx    # Invoice detail
+│   ├── settings/page.tsx    # Settings page
+│   └── time/page.tsx        # Time tracking
+├── components/
+│   └── ui/
+│       ├── section.tsx      # Section wrapper component
+│       ├── container.tsx    # Container component
+│       ├── heading.tsx      # Heading component
+│       ├── button.tsx      # Button component
+│       ├── card.tsx        # Card component
+│       └── index.ts        # Barrel export
 └── tailwind.config.ts       # Tailwind theme configuration
 ```
+
+## Reusable UI Components
+
+The design system includes reusable React components in `@/components/ui/`:
+
+### Section
+
+Wrapper for page sections with consistent padding and borders.
+
+```tsx
+import { Section } from '@/components/ui';
+
+<Section variant="default">
+  {/* Content */}
+</Section>
+
+<Section variant="inverted">
+  {/* Dark section */}
+</Section>
+
+<Section variant="accent" noBorder>
+  {/* Accent colored section without top border */}
+</Section>
+```
+
+**Props:**
+
+- `children: React.ReactNode` - Section content
+- `className?: string` - Additional CSS classes
+- `variant?: 'default' | 'inverted' | 'accent'` - Color scheme
+- `noBorder?: boolean` - Remove top border
+- `noPadding?: boolean` - Remove section padding
+
+### Container
+
+Centered container with max-width constraints.
+
+```tsx
+import { Container } from '@/components/ui';
+
+<Container>
+  {/* Default max-width (7xl) */}
+</Container>
+
+<Container size="narrow">
+  {/* Narrow container (4xl) */}
+</Container>
+
+<Container size="wide" className="px-6">
+  {/* Wide container with custom padding */}
+</Container>
+```
+
+**Props:**
+
+- `children: React.ReactNode` - Container content
+- `className?: string` - Additional CSS classes
+- `size?: 'default' | 'narrow' | 'wide'` - Width constraint
+
+### Heading
+
+Semantic heading component with variants.
+
+```tsx
+import { Heading } from '@/components/ui';
+
+<Heading as="h1" variant="display">
+  Large Display Heading
+</Heading>
+
+<Heading as="h2" variant="section" animate>
+  Section Heading (with animation)
+</Heading>
+
+<Heading as="h3" variant="label">
+  UPPERCASE LABEL
+</Heading>
+```
+
+**Props:**
+
+- `children: React.ReactNode` - Heading text
+- `as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'` - HTML element
+- `variant?: 'display' | 'section' | 'label'` - Visual style
+- `className?: string` - Additional CSS classes
+- `animate?: boolean` - Enable scroll animation
+
+### Button
+
+Button/Link component with variants.
+
+```tsx
+import { Button } from '@/components/ui';
+
+<Button href="/contact" variant="primary">
+  Get Started
+</Button>
+
+<Button variant="secondary" onClick={handleClick}>
+  Learn More
+</Button>
+
+<Button type="submit" disabled>
+  Submit Form
+</Button>
+```
+
+**Props:**
+
+- `children: React.ReactNode` - Button text
+- `href?: string` - Next.js Link href (renders as Link)
+- `variant?: 'primary' | 'secondary'` - Visual style
+- `className?: string` - Additional CSS classes
+- `onClick?: () => void` - Click handler
+- `type?: 'button' | 'submit' | 'reset'` - Button type
+- `disabled?: boolean` - Disabled state
+
+### Card
+
+Card container with border and padding.
+
+```tsx
+import { Card } from '@/components/ui';
+
+<Card>
+  <h3>Card Title</h3>
+  <p>Card content...</p>
+</Card>
+
+<Card animate delay={200}>
+  {/* Animated card with delay */}
+</Card>
+```
+
+**Props:**
+
+- `children: React.ReactNode` - Card content
+- `className?: string` - Additional CSS classes
+- `animate?: boolean` - Enable scroll animation
+- `delay?: number` - Animation delay in milliseconds
+
+## Component Usage Examples
+
+### Page Layout Pattern
+
+```tsx
+import { Card, Container, Heading } from "@/components/ui";
+
+const MyPage = () => (
+  <main className="bg-background py-10">
+    <Container className="px-6">
+      <Heading as="h1" variant="display" className="mb-6 text-4xl">
+        Page Title
+      </Heading>
+
+      <Card>
+        {/* Page content */}
+      </Card>
+    </Container>
+  </main>
+);
+```
+
+### Landing Page Section Pattern
+
+```tsx
+import { Container, Heading, Section } from "@/components/ui";
+
+<Section variant="inverted">
+  <Container>
+    <Heading as="h2" variant="section" animate className="mb-12">
+      Section Title
+    </Heading>
+
+    {/* Section content */}
+  </Container>
+</Section>;
+```
+
+### Animated Grid Pattern
+
+```tsx
+import { Card } from "@/components/ui";
+
+<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+  {items.map((item, index) => (
+    <Card key={item.id} animate delay={index * 100}>
+      <h3 className="font-serif text-2xl font-bold">{item.title}</h3>
+      <p className="text-muted-foreground">{item.description}</p>
+    </Card>
+  ))}
+</div>;
+```
+
+## Print Styles (Portfolio Page)
+
+The portfolio page (`/me`) includes special print styles for CV generation:
+
+```tsx
+// Screen: Centered with ring
+className = "rounded-full ring-2 ring-border print:rounded-none print:ring-0";
+
+// Print: Left-aligned without decorative elements
+className = "text-center print:text-start";
+
+// Print: Show sidebar
+className = "hidden print:flex";
+
+// Print: Page break before
+className = "break-before-page";
+
+// Print: Avoid break inside
+className = "break-inside-avoid";
+```
+
+**To print the CV:**
+
+1. Navigate to `/me`
+2. Use browser print (Ctrl/Cmd + P)
+3. The page automatically adjusts for print layout
 
 ## Future Enhancements
 

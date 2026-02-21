@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import type { UpdateSettings, Settings } from '@cleandev/pm';
 import { updateSettingsAction } from './actions';
+import { Input, Textarea, FormField, Button } from '@/components/ui';
 
 interface SettingsFormProps {
   settings: Settings;
@@ -35,119 +36,84 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label className="block text-sm font-medium" htmlFor="contractorName">
-          Name *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <FormField label="Name" htmlFor="contractorName" required>
+        <Input
           id="contractorName"
-          required
           type="text"
+          required
           {...register('contractorName', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="contractorAddress">
-          Adresse *
-        </label>
-        <textarea
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="Adresse" htmlFor="contractorAddress" required>
+        <Textarea
           id="contractorAddress"
           required
           rows={3}
           {...register('contractorAddress', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="bankName">
-          Bank Name *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="Bank Name" htmlFor="bankName" required>
+        <Input
           id="bankName"
-          required
           type="text"
+          required
           {...register('bankName', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="bankIban">
-          IBAN *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="IBAN" htmlFor="bankIban" required>
+        <Input
           id="bankIban"
-          required
           type="text"
+          required
           {...register('bankIban', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="bankBic">
-          BIC *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="BIC" htmlFor="bankBic" required>
+        <Input
           id="bankBic"
-          required
           type="text"
+          required
           {...register('bankBic', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="vatId">
-          USt-ID *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="USt-ID" htmlFor="vatId" required>
+        <Input
           id="vatId"
-          required
           type="text"
+          required
           {...register('vatId', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="defaultHourlyRate">
-          Standard Stundensatz (EUR) *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="Standard Stundensatz (EUR)" htmlFor="defaultHourlyRate" required>
+        <Input
           id="defaultHourlyRate"
-          required
-          step="0.01"
           type="number"
+          step="0.01"
+          required
           {...register('defaultHourlyRate', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium" htmlFor="defaultTaxRate">
-          Standard Steuersatz (z.B. 0.19 für 19%) *
-        </label>
-        <input
-          className="mt-1 w-full rounded border p-2"
+      <FormField label="Standard Steuersatz (z.B. 0.19 für 19%)" htmlFor="defaultTaxRate" required>
+        <Input
           id="defaultTaxRate"
-          required
-          step="0.0001"
           type="number"
+          step="0.0001"
+          required
           {...register('defaultTaxRate', { required: true })}
         />
-      </div>
+      </FormField>
 
-      <button
-        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        type="submit"
-      >
+      <Button type="submit" variant="primary">
         Einstellungen speichern
-      </button>
+      </Button>
     </form>
   );
 };

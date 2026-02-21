@@ -1,4 +1,7 @@
 import type { Metadata, NextPage } from 'next';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
+import { Card } from '@/components/ui/card';
 
 export const metadata: Metadata = {
   title: 'Impressum | clean.dev',
@@ -6,125 +9,127 @@ export const metadata: Metadata = {
 };
 
 const ImprintPage: NextPage = () => (
-  <main className="container mx-auto max-w-4xl px-4 py-12 md:py-16">
-    <div className="space-y-8">
-      {/* Header */}
-      <header className="border-b border-gray-200 pb-6">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-          Impressum
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Information according to § 5 TMG (Telemediengesetz)
-        </p>
-      </header>
+  <main className="bg-background py-12 md:py-16">
+    <Container size="narrow" className="px-6">
+      <div className="space-y-8">
+        {/* Header */}
+        <header className="border-b border-border pb-6">
+          <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
+            Impressum
+          </Heading>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Information according to § 5 TMG (Telemediengesetz)
+          </p>
+        </header>
 
-      {/* Service Provider Section */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Angaben gemäß § 5 TMG
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <address className="space-y-1 not-italic text-gray-700">
-            <p className="font-semibold text-gray-900">Martin Trenker</p>
-            <p>Philipp-Loewenfeld-Str. 63</p>
-            <p>80339 München</p>
-            <p>Deutschland</p>
-          </address>
-        </div>
-      </section>
+        {/* Service Provider Section */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            Angaben gemäß § 5 TMG
+          </Heading>
+          <Card>
+            <address className="space-y-1 not-italic text-muted-foreground">
+              <p className="font-semibold text-foreground">Martin Trenker</p>
+              <p>Philipp-Loewenfeld-Str. 63</p>
+              <p>80339 München</p>
+              <p>Deutschland</p>
+            </address>
+          </Card>
+        </section>
 
-      {/* Contact Section */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Kontakt
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <address className="space-y-2 not-italic text-gray-700">
-            <p className="flex items-center gap-2">
-              <span className="font-medium text-gray-900">E-Mail:</span>
-              <a
-                className="text-blue-600 transition-colors hover:text-blue-800 hover:underline"
-                href="mailto:info@clean.dev"
-              >
-                info@clean.dev
-              </a>
+        {/* Contact Section */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            Kontakt
+          </Heading>
+          <Card>
+            <address className="space-y-2 not-italic text-muted-foreground">
+              <p className="flex items-center gap-2">
+                <span className="font-medium text-foreground">E-Mail:</span>
+                <a
+                  className="text-accent transition-colors hover:underline"
+                  href="mailto:info@clean.dev"
+                >
+                  info@clean.dev
+                </a>
+              </p>
+            </address>
+          </Card>
+        </section>
+
+        {/* Tax Information */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            Umsatzsteuer-ID
+          </Heading>
+          <Card>
+            <p className="text-muted-foreground">
+              <span className="font-medium text-foreground">
+                Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:
+              </span>
+              <br />
+              <span className="font-mono text-lg">DE262621028</span>
             </p>
-          </address>
-        </div>
-      </section>
+          </Card>
+        </section>
 
-      {/* Tax Information */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Umsatzsteuer-ID
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <p className="text-gray-700">
-            <span className="font-medium text-gray-900">
-              Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:
-            </span>
-            <br />
-            <span className="font-mono text-lg">DE262621028</span>
-          </p>
-        </div>
-      </section>
+        {/* Responsible for Content */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            Verantwortlich für den Inhalt
+          </Heading>
+          <Card>
+            <p className="text-muted-foreground">
+              <span className="font-medium text-foreground">
+                Verantwortlich nach § 55 Abs. 2 RStV:
+              </span>
+              <br />
+              Martin Trenker
+              <br />
+              Philipp-Loewenfeld-Str. 63
+              <br />
+              80339 München
+            </p>
+          </Card>
+        </section>
 
-      {/* Responsible for Content */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Verantwortlich für den Inhalt
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <p className="text-gray-700">
-            <span className="font-medium text-gray-900">
-              Verantwortlich nach § 55 Abs. 2 RStV:
-            </span>
-            <br />
-            Martin Trenker
-            <br />
-            Philipp-Loewenfeld-Str. 63
-            <br />
-            80339 München
-          </p>
-        </div>
-      </section>
+        {/* EU Dispute Resolution */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            EU-Streitschlichtung
+          </Heading>
+          <Card>
+            <p className="leading-relaxed text-muted-foreground">
+              Die Europäische Kommission stellt eine Plattform zur
+              Online-Streitbeilegung (OS) bereit:{' '}
+              <a
+                className="break-all text-accent transition-colors hover:underline"
+                href="https://ec.europa.eu/consumers/odr"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                https://ec.europa.eu/consumers/odr
+              </a>
+              <br />
+              Unsere E-Mail-Adresse finden Sie oben im Impressum.
+            </p>
+          </Card>
+        </section>
 
-      {/* EU Dispute Resolution */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          EU-Streitschlichtung
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <p className="leading-relaxed text-gray-700">
-            Die Europäische Kommission stellt eine Plattform zur
-            Online-Streitbeilegung (OS) bereit:{' '}
-            <a
-              className="break-all text-blue-600 transition-colors hover:text-blue-800 hover:underline"
-              href="https://ec.europa.eu/consumers/odr"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              https://ec.europa.eu/consumers/odr
-            </a>
-            <br />
-            Unsere E-Mail-Adresse finden Sie oben im Impressum.
-          </p>
-        </div>
-      </section>
-
-      {/* Consumer Dispute Resolution */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Verbraucherstreitbeilegung
-        </h2>
-        <div className="rounded-lg bg-gray-50 p-6">
-          <p className="leading-relaxed text-gray-700">
-            Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
-            vor einer Verbraucherschlichtungsstelle teilzunehmen.
-          </p>
-        </div>
-      </section>
-    </div>
+        {/* Consumer Dispute Resolution */}
+        <section className="space-y-4">
+          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+            Verbraucherstreitbeilegung
+          </Heading>
+          <Card>
+            <p className="leading-relaxed text-muted-foreground">
+              Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
+              vor einer Verbraucherschlichtungsstelle teilzunehmen.
+            </p>
+          </Card>
+        </section>
+      </div>
+    </Container>
   </main>
 );
 

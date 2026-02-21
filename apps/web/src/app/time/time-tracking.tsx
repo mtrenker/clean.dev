@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import type { Client, TimeEntry, CreateTimeEntry } from '@cleandev/pm';
 import { createTimeEntryAction, deleteTimeEntryAction } from './actions';
+import { Input, Textarea, Select, FormField, Button, Card } from '@/components/ui';
 
 const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat('de-DE', { dateStyle: 'short' }).format(date);
@@ -64,45 +65,40 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
     <>
       <div className="mb-6 flex items-center justify-between">
         {!showForm && (
-          <button
-            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          <Button
+            variant="primary"
             onClick={() => setShowForm(true)}
             type="button"
           >
             Neue Zeiterfassung
-          </button>
+          </Button>
         )}
       </div>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium" htmlFor="filterClient">
-          Nach Kunde filtern:
-        </label>
-        <select
-          className="mt-1 w-full max-w-md rounded border p-2"
-          id="filterClient"
-          onChange={(e) => handleClientFilter(e.target.value)}
-          value={selectedClient || ''}
-        >
-          <option value="">Alle Kunden</option>
-          {clients.map((client) => (
-            <option key={client.id} value={client.id}>
-              {client.name}
-            </option>
-          ))}
-        </select>
+        <FormField label="Nach Kunde filtern:" htmlFor="filterClient">
+          <Select
+            id="filterClient"
+            className="max-w-md"
+            onChange={(e) => handleClientFilter(e.target.value)}
+            value={selectedClient || ''}
+          >
+            <option value="">Alle Kunden</option>
+            {clients.map((client) => (
+              <option key={client.id} value={client.id}>
+                {client.name}
+              </option>
+            ))}
+          </Select>
+        </FormField>
       </div>
 
       {showForm && (
-        <div className="mb-8 rounded-lg border bg-white p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold">Neue Zeiterfassung</h2>
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label className="block text-sm font-medium" htmlFor="clientId">
-                Kunde *
-              </label>
-              <select
-                className="mt-1 w-full rounded border p-2"
+        <Card className="mb-8">
+          <h2 className="mb-4 text-xl font-semibold text-foreground">Neue Zeiterfassung</h2>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <FormField label="Kunde" htmlFor="clientId" required>
+              <Select
                 id="clientId"
                 required
                 {...register('clientId', { required: true })}
@@ -113,73 +109,54 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
                     {client.name}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Select>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="date">
-                Datum *
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Datum" htmlFor="date" required>
+              <Input
                 id="date"
-                required
                 type="date"
+                required
                 {...register('date', { required: true })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="hours">
-                Stunden *
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Stunden" htmlFor="hours" required>
+              <Input
                 id="hours"
-                required
-                step="0.25"
                 type="number"
+                step="0.25"
+                required
                 {...register('hours', { required: true })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="hourlyRate">
-                Stundensatz (EUR) *
-              </label>
-              <input
-                className="mt-1 w-full rounded border p-2"
-                defaultValue={defaultRate}
+            <FormField label="Stundensatz (EUR)" htmlFor="hourlyRate" required>
+              <Input
                 id="hourlyRate"
-                required
-                step="0.01"
                 type="number"
+                step="0.01"
+                defaultValue={defaultRate}
+                required
                 {...register('hourlyRate', { required: true })}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium" htmlFor="description">
-                Beschreibung *
-              </label>
-              <textarea
-                className="mt-1 w-full rounded border p-2"
+            <FormField label="Beschreibung" htmlFor="description" required>
+              <Textarea
                 id="description"
                 required
                 rows={3}
                 {...register('description', { required: true })}
               />
-            </div>
+            </FormField>
 
             <div className="flex gap-2">
-              <button
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                type="submit"
-              >
+              <Button variant="primary" type="submit">
                 Erstellen
-              </button>
-              <button
-                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400"
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={() => {
                   setShowForm(false);
                   reset();
@@ -187,33 +164,37 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
                 type="button"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
+        </Card>
       )}
 
-      <div className="rounded-lg border bg-white p-6 shadow">
-        <h2 className="mb-4 text-xl font-semibold">Zeiterfassungen</h2>
+      <Card>
+        <h2 className="mb-4 text-xl font-semibold text-foreground">Zeiterfassungen</h2>
         {timeEntries.length === 0 ? (
-          <p>Keine Zeiterfassungen vorhanden.</p>
+          <p className="text-foreground/70">Noch keine Zeiterfassungen vorhanden. Erstellen Sie Ihren ersten Eintrag über die Schaltfläche oben.</p>
         ) : (
           <div className="space-y-4">
             {timeEntries.map((entry) => {
               const client = clients.find((c) => c.id === entry.clientId);
               return (
-                <div key={entry.id} className="flex items-center justify-between rounded border p-4">
-                  <div>
-                    <p className="font-semibold">{client?.name}</p>
-                    <p className="text-sm text-gray-600">{formatDate(entry.date)}</p>
-                    <p className="text-sm">{entry.description}</p>
-                    <p className="text-sm">
+                <div key={entry.id} className="flex items-center justify-between rounded border border-border bg-background p-4">
+                  <div className="flex-1">
+                    <p className="font-semibold text-foreground">{client?.name}</p>
+                    <p className="text-sm text-foreground/70">{formatDate(entry.date)}</p>
+                    <p className="text-sm text-foreground/90">{entry.description}</p>
+                    <p className="text-sm text-foreground/80">
                       {entry.hours} Stunden × {formatPrice('1', entry.hourlyRate)} = {formatPrice(entry.hours, entry.hourlyRate)}
                     </p>
-                    {entry.invoiceId && <p className="text-sm text-green-600">Berechnet</p>}
+                    {entry.invoiceId && (
+                      <span className="mt-1 inline-block rounded border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+                        Berechnet
+                      </span>
+                    )}
                   </div>
                   <button
-                    className="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
+                    className="ml-4 shrink-0 rounded border-2 border-red-500 bg-transparent px-4 py-2 font-mono text-sm uppercase tracking-wider text-red-600 transition-all hover:bg-red-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!!entry.invoiceId}
                     onClick={() => onDelete(entry.id)}
                     type="button"
@@ -225,7 +206,7 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
             })}
           </div>
         )}
-      </div>
+      </Card>
     </>
   );
 };

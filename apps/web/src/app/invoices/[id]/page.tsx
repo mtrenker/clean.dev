@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import { InvoicePDFViewer } from '@/components/invoice-pdf-viewer';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -24,24 +26,32 @@ const InvoicePage = async ({ params }: PageProps) => {
 
   if (!invoice) {
     return (
-      <main className="container mx-auto p-10">
-        <p>Rechnung nicht gefunden</p>
+      <main className="bg-background py-10">
+        <Container className="px-6">
+          <p className="text-muted-foreground">Rechnung nicht gefunden</p>
+        </Container>
       </main>
     );
   }
 
   if (!settings) {
     return (
-      <main className="container mx-auto p-10">
-        <p>Einstellungen nicht gefunden</p>
+      <main className="bg-background py-10">
+        <Container className="px-6">
+          <p className="text-muted-foreground">Einstellungen nicht gefunden</p>
+        </Container>
       </main>
     );
   }
 
   return (
-    <main className="container mx-auto p-10">
-      <h1 className="mb-6 text-3xl font-bold">Rechnung {invoice.invoiceNumber}</h1>
-      <InvoicePDFViewer invoice={invoice} settings={settings} />
+    <main className="bg-background py-10">
+      <Container className="px-6">
+        <Heading as="h1" variant="display" className="mb-6 text-4xl text-foreground">
+          Rechnung {invoice.invoiceNumber}
+        </Heading>
+        <InvoicePDFViewer invoice={invoice} settings={settings} />
+      </Container>
     </main>
   );
 };

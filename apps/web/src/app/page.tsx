@@ -156,7 +156,7 @@ const Page: NextPage = () => {
                 <h3 className="mb-3 font-serif text-2xl font-bold">
                   {item.title}
                 </h3>
-                <p className="leading-relaxed text-muted">
+                <p className="leading-relaxed opacity-70">
                   {item.description}
                 </p>
               </div>

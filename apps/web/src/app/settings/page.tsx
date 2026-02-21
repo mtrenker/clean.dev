@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import { SettingsForm } from './settings-form';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
+import { Card } from '@/components/ui/card';
 
 const SettingsPage = async () => {
   const session = await auth();
@@ -17,18 +20,34 @@ const SettingsPage = async () => {
 
   if (!settings) {
     return (
-      <main className="container mx-auto p-10">
-        <p>Keine Einstellungen gefunden. Bitte Datenbank konfigurieren.</p>
+      <main className="bg-background py-10">
+        <Container className="px-6">
+          <Heading as="h1" variant="display" className="mb-4 text-4xl text-foreground">
+            Einstellungen
+          </Heading>
+          <Card>
+            <p className="text-muted-foreground">
+              Keine Einstellungen gefunden. Bitte führen Sie zunächst die Datenbankmigration im Admin-Bereich durch.
+            </p>
+          </Card>
+        </Container>
       </main>
     );
   }
 
   return (
-    <main className="container mx-auto p-10">
-      <h1 className="mb-6 text-3xl font-bold">Einstellungen</h1>
-      <div className="rounded-lg border bg-white p-6 shadow">
-        <SettingsForm settings={settings} />
-      </div>
+    <main className="bg-background py-10">
+      <Container className="px-6">
+        <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
+          Einstellungen
+        </Heading>
+        <p className="mb-8 text-muted-foreground">
+          Konfigurieren Sie Ihre Firmendaten, Bankverbindung und Standard-Abrechnungssätze
+        </p>
+        <Card>
+          <SettingsForm settings={settings} />
+        </Card>
+      </Container>
     </main>
   );
 };
