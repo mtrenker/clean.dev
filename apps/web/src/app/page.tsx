@@ -188,9 +188,6 @@ const Page: NextPage = () => {
               <p className="mb-4 font-serif text-2xl leading-relaxed">
                 {intl.formatMessage({ id: 'home.philosophy.quote' })}
               </p>
-              <cite className="text-label text-muted-foreground">
-                {intl.formatMessage({ id: 'home.philosophy.quote.author' })}
-              </cite>
             </blockquote>
           </div>
         </div>
