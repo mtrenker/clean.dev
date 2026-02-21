@@ -205,45 +205,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </div>
       </section>
 
-      {/* ── Hero (print only — preserved layout) ─────────────────────────── */}
-      <section
-        className={clsx([
-          'hidden prose flex-1 px-6',
-          'w-full print:block print:max-w-none print:px-0',
-        ])}
-      >
-        <figure className="m-0 print:flex print:gap-16 print:text-start">
-          <picture className="inline-block h-[200px] overflow-hidden rounded-full ring-2 ring-border print:h-auto print:rounded-none print:ring-0">
-            <Image
-              alt={intl.formatMessage({ id: 'work.img.alt' })}
-              className="m-0"
-              height={200}
-              src="/me.png"
-              unoptimized
-              width={200}
-            />
-          </picture>
-          <figcaption className="flex flex-col gap-4">
-            <h1 className="m-0 font-serif text-3xl font-bold uppercase tracking-tight text-foreground">
-              {intl.formatMessage({ id: 'work.title' })}
-            </h1>
-            <h2 className="m-0 text-label text-2xl text-muted-foreground">
-              {intl.formatMessage({ id: 'work.subtitle' })}
-            </h2>
-          </figcaption>
-        </figure>
-        <div className="print:border-l-2 print:border-foreground print:px-6">
-          <h3 className="text-label text-foreground">{intl.formatMessage({ id: 'work.about.heading' })}</h3>
-          <p className="my-1 font-medium tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'work.about.p1' })}
-          </p>
-          <p className="my-1 font-medium tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'work.about.p2' })}
-          </p>
-        </div>
-      </section>
-
-
       {/* ── Stats strip (screen only) ────────────────────────────────────── */}
       <div className="observe w-full border-y-[length:var(--border-width)] border-border print:hidden">
         <div className="grid grid-cols-2 divide-x-[length:var(--border-width)] divide-border md:grid-cols-4">
@@ -300,67 +261,163 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </div>
       </section>
 
-      {/* ── Print-only sidebar + trait sections (preserved 1:1) ───────────── */}
-      <div className="print:flex print:gap-5">
-        <div className="hidden print:flex print:flex-col print:justify-between print:gap-5">
-          <section
-            className={clsx([
-              'prose px-6',
-              'print:max-w-none print:flex-1 print:grow-0 print:px-0',
-            ])}
-          >
-            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'work.contact.heading' })}</h3>
-            <ul className="pl-4">
-              <li className="my-0 text-muted-foreground">info@clean.dev</li>
-              <li className="my-0 text-muted-foreground">https://clean.dev</li>
-            </ul>
-          </section>
+      {/* ── Print page 1: two-column intro (sidebar + about/traits) ─────────── */}
+      <div className="hidden w-full print:flex print:gap-8">
 
-          <section
-            className={clsx([
-              'prose px-6',
-              'print:max-w-none print:flex-1 print:grow-0 print:px-0',
-            ])}
-          >
-            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'work.skills.heading' })}</h3>
-            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'work.skills.programming.heading' })}</h4>
-            <ul className="pl-4">
-              <li className="my-0 text-muted-foreground">Clean Code</li>
-              <li className="my-0 text-muted-foreground">TypeScript</li>
-              <li className="my-0 text-muted-foreground">Serverless</li>
-              <li className="my-0 text-muted-foreground">Web Components</li>
-              <li className="my-0 text-muted-foreground">REST / GraphQL</li>
+        {/* Left sidebar */}
+        <aside className="w-[160px] shrink-0">
+          <picture className="mb-4 block overflow-hidden">
+            <Image
+              alt={intl.formatMessage({ id: 'work.img.alt' })}
+              className="m-0 h-auto w-full"
+              height={200}
+              src="/me.png"
+              unoptimized
+              width={160}
+            />
+          </picture>
+
+          <div className="mb-5 border-b border-foreground pb-4">
+            <h1 className="m-0 font-serif text-lg font-bold uppercase leading-tight tracking-tight text-foreground">
+              {intl.formatMessage({ id: 'work.title' })}
+            </h1>
+            <p className="text-label mt-1 text-xs text-muted-foreground">
+              {intl.formatMessage({ id: 'work.subtitle' })}
+            </p>
+          </div>
+
+          <div className="mb-5">
+            <h3 className="text-label mb-1 text-xs font-semibold uppercase tracking-widest text-foreground">
+              {intl.formatMessage({ id: 'work.contact.heading' })}
+            </h3>
+            <ul className="m-0 list-none p-0 text-xs text-muted-foreground">
+              <li className="my-0.5">info@clean.dev</li>
+              <li className="my-0.5">https://clean.dev</li>
             </ul>
-            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'work.skills.org.heading' })}</h4>
-            <ul className="pl-4">
-              <li className="my-0 text-muted-foreground">Agile Mindset</li>
-              <li className="my-0 text-muted-foreground">Quality Management</li>
-              <li className="my-0 text-muted-foreground">Transparent Communication</li>
-              <li className="my-0 text-muted-foreground">Theory of Constraints</li>
+          </div>
+
+          <div>
+            <h3 className="text-label mb-1 text-xs font-semibold uppercase tracking-widest text-foreground">
+              {intl.formatMessage({ id: 'work.skills.heading' })}
+            </h3>
+            <h4 className="text-label mb-0.5 mt-2 text-xs text-foreground">
+              {intl.formatMessage({ id: 'work.skills.programming.heading' })}
+            </h4>
+            <ul className="m-0 list-none p-0 text-xs text-muted-foreground">
+              <li className="my-0.5">Clean Code</li>
+              <li className="my-0.5">TypeScript</li>
+              <li className="my-0.5">Serverless</li>
+              <li className="my-0.5">Web Components</li>
+              <li className="my-0.5">REST / GraphQL</li>
             </ul>
-          </section>
+            <h4 className="text-label mb-0.5 mt-2 text-xs text-foreground">
+              {intl.formatMessage({ id: 'work.skills.org.heading' })}
+            </h4>
+            <ul className="m-0 list-none p-0 text-xs text-muted-foreground">
+              <li className="my-0.5">Agile Mindset</li>
+              <li className="my-0.5">Quality Management</li>
+              <li className="my-0.5">Transparent Communication</li>
+              <li className="my-0.5">Theory of Constraints</li>
+            </ul>
+          </div>
+        </aside>
+
+        {/* Right: about + traits — page 1 only, no projects here */}
+        <div className="min-w-0 flex-1">
+          <div className="mb-6 border-l-2 border-foreground pl-4">
+            <h3 className="text-label mb-1 text-xs font-semibold uppercase tracking-widest text-foreground">
+              {intl.formatMessage({ id: 'work.about.heading' })}
+            </h3>
+            <p className="my-1 text-sm leading-relaxed tracking-wide text-muted-foreground">
+              {intl.formatMessage({ id: 'work.about.p1' })}
+            </p>
+            <p className="my-1 text-sm leading-relaxed tracking-wide text-muted-foreground">
+              {intl.formatMessage({ id: 'work.about.p2' })}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-6 border-t border-border pt-5">
+            {[
+              {
+                heading: intl.formatMessage({ id: 'work.section.cleanAgile.heading' }),
+                body: intl.formatMessage({ id: 'work.section.cleanAgile.p' }),
+              },
+              {
+                heading: intl.formatMessage({ id: 'work.section.learner.heading' }),
+                body: intl.formatMessage({ id: 'work.section.learner.p' }),
+              },
+              {
+                heading: intl.formatMessage({ id: 'work.section.automation.heading' }),
+                body: intl.formatMessage({ id: 'work.section.automation.p' }),
+              },
+            ].map((item) => (
+              <div key={item.heading}>
+                <h4 className="text-label mb-1 text-xs font-semibold uppercase tracking-widest text-foreground">
+                  {item.heading}
+                </h4>
+                <p className="m-0 text-xs leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <section
-          className={clsx([
-            'prose px-6',
-            'hidden print:block print:max-w-none print:flex-1 print:px-0',
-          ])}
-        >
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.cleanAgile.heading' })}</h4>
-          <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'work.section.cleanAgile.p' })}
-          </p>
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.learner.heading' })}</h4>
-          <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'work.section.learner.p' })}
-          </p>
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.automation.heading' })}</h4>
-          <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'work.section.automation.p' })}
-          </p>
-        </section>
       </div>
+
+      {/* ── Print pages 2+: full-width projects ───────────────────────────── */}
+      <section className="hidden w-full break-before-page print:block">
+        <h3 className="text-label mb-4 text-xs font-semibold uppercase tracking-widest text-foreground">
+          {intl.formatMessage({ id: 'work.projects.heading' })}
+        </h3>
+        {projects
+          .filter((p) => p.featured)
+          .reverse()
+          .map((project) => {
+            const startYear = new Date(project.startDate).getFullYear();
+            const endYear = new Date(project.endDate).getFullYear();
+            return (
+              <article className="mb-5 break-inside-avoid" key={project.id}>
+                <div className="flex items-center gap-3">
+                  <h4 className="m-0 shrink-0 font-serif text-sm font-semibold text-foreground">
+                    {project.company ?? project.industry?.[lang]}
+                  </h4>
+                  <hr className="m-0 h-px flex-1 border-0 border-b border-muted" />
+                  <time className="shrink-0 text-xs text-muted-foreground" dateTime={`${startYear}`}>
+                    {startYear === endYear ? startYear : `${startYear} - ${endYear}`}
+                  </time>
+                </div>
+                <p className="text-label m-0 text-xs text-foreground">
+                  {project.title[lang]}
+                </p>
+                <p className="my-1 text-sm leading-relaxed tracking-wide text-muted-foreground">
+                  {project.description[lang]}
+                </p>
+                {project.highlights[lang].length > 0 && (
+                  <ul className="m-0 mt-1 list-none p-0 pl-3">
+                    {project.highlights[lang].map((highlight) => (
+                      <li
+                        className="my-0.5 text-sm leading-relaxed text-muted-foreground before:mr-1.5 before:text-foreground before:content-['·']"
+                        key={highlight}
+                      >
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {project.technologies.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {project.technologies.map((technology) => (
+                      <span
+                        className="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-[10px] text-background"
+                        key={technology}
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </article>
+            );
+          })}
+      </section>
 
       {/* ── Spotlight Grid (screen only) ──────────────────────────────────── */}
       <section className="w-full px-6 print:hidden">
@@ -426,70 +483,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </button>
       </section>
 
-      {/* ── Print-only full project list (preserved 1:1) ──────────────────── */}
-      <section
-        className={clsx([
-          'prose px-6',
-          'print:max-w-none print:px-0',
-          'hidden print:block',
-        ])}
-      >
-        <h3 className="text-label mt-6 break-before-page text-foreground">
-          {intl.formatMessage({ id: 'work.projects.heading' })}
-        </h3>
-        {projects
-          .filter((p) => p.featured)
-          .reverse()
-          .map((project) => {
-            const startYear = new Date(project.startDate).getFullYear();
-            const endYear = new Date(project.endDate).getFullYear();
-            return (
-              <article className="my-4 flex break-inside-avoid flex-col" key={project.id}>
-                <div className="flex items-center justify-between gap-6">
-                  <h4 className="m-0 flex-initial font-serif font-semibold text-foreground">
-                    {project.company ? project.company : project.industry?.[lang]}
-                  </h4>
-                  <hr className="my-0 block h-px w-full flex-1 border-b border-muted print:border-foreground" />
-                  <time
-                    className="text-muted-foreground"
-                    dateTime={`${new Date(project.startDate).getFullYear()}`}
-                  >
-                    {startYear === endYear ? startYear : `${startYear} - ${endYear}`}
-                  </time>
-                </div>
-                <h5 className="text-label m-0 text-foreground">
-                  {project.title[lang]}
-                </h5>
-                <p className="m-0 flex-1 tracking-wide text-muted-foreground">
-                  {project.description[lang]}
-                </p>
-                <ul className="m-2 pl-4">
-                  {project.highlights[lang].length > 0 &&
-                    project.highlights[lang].map((highlight) => (
-                      <li className="my-0 tracking-wide text-muted-foreground" key={highlight}>
-                        {highlight}
-                      </li>
-                    ))}
-                </ul>
-                {project.technologies.length > 0 && (
-                  <>
-                    <h6 className="font-bold text-foreground">{intl.formatMessage({ id: 'work.projects.technologies' })}</h6>
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((technology) => (
-                        <span
-                          className="rounded-md bg-foreground px-2 py-1 text-sm text-background print:px-1"
-                          key={technology}
-                        >
-                          {technology}
-                        </span>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </article>
-            );
-          })}
-      </section>
     </div>
   );
 };
