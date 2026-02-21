@@ -56,7 +56,6 @@ export const projects: Project[] = [
     startDate: '2008-11',
     endDate: '2009-02',
     featured: true,
-    spotlight: true,
   },
   {
     id: '2',
@@ -627,4 +626,58 @@ export const projects: Project[] = [
     featured: true,
     spotlight: true,
   },
+  {
+    id: '19',
+    company: 'Douglas GmbH',
+    industry: {
+      en: 'Retail',
+      de: 'Einzelhandel',
+    },
+    title: {
+      en: 'Consultant & Technical Lead',
+      de: 'Berater & Technischer Leiter',
+    },
+    description: {
+      en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the full rewrite of a complex, hard-to-maintain CRM integration from legacy code to a clean React architecture — shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
+      de: 'Als React-Experte und Berater engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Vollständige Neuentwicklung einer komplexen, schwer wartbaren CRM-Integration von Legacy-Code auf saubere React-Architektur – in unter einem Jahr ausgeliefert. Verantwortlich auch für die Customer-Care-App (Angular, Wartung) sowie neue Eigenentwicklungen.',
+    },
+    city: 'Düsseldorf',
+    highlights: {
+      en: [
+        'rewrote the entire CRM/POS integration from scratch in under a year — every aspect improved: architecture, testing, documentation',
+        'software runs on every cash register in ~1,800 stores across 26 European countries',
+        'shifted from fear-driven 9pm deployments to deploy-any-time by introducing resilience and self-healing patterns',
+        'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
+        'introduced "Full Stack Fridays" — team-driven learning sessions covering Figma prototyping, GraphQL/C#/.NET, and more',
+        'built an in-house shortlink and QR service in Next.js + .NET in weeks, replacing a third-party SaaS that no longer met business needs',
+        'led responsible AI adoption across the team — tooling, practices, and guardrails',
+      ],
+      de: [
+        'vollständige Neuentwicklung der CRM/POS-Integration in unter einem Jahr – Architektur, Tests und Dokumentation durchgängig verbessert',
+        'Software läuft auf jedem Kassenterminal in ~1.800 Filialen in 26 europäischen Ländern',
+        'von angstgesteuerten Deployments um 21 Uhr zu jederzeit möglichen Deployments durch Resilienz- und Self-Healing-Muster',
+        '1 Senior und 2 Junior-Entwickler eingearbeitet – alle innerhalb weniger Wochen produktive Beitragende',
+        '"Full Stack Fridays" eingeführt – teamgetriebene Lernsessions zu Figma, GraphQL/C#/.NET und mehr',
+        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut – als SaaS-Ersatz',
+        'verantwortungsvolle KI-Nutzung im Team eingeführt – Tooling, Praktiken und Leitplanken',
+      ],
+    },
+    technologies: [
+      'react',
+      'typescript',
+      'next.js',
+      'dotnet',
+      'csharp',
+      'mongodb',
+      'kubernetes',
+      'azure-devops',
+      'entra-id',
+      'instana',
+      'grafana',
+    ],
+    startDate: '2024-01',
+    endDate: '2026-02',
+    featured: true,
+    spotlight: true,
+  }
 ];
