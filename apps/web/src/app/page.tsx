@@ -100,15 +100,15 @@ const Page: NextPage = () => {
             </div>
           </div>
           <div className="border-l-2 border-foreground pl-6">
-            <div className="mb-2 font-serif text-5xl font-bold">{intl.formatMessage({ id: 'home.stats.quality.value' })}</div>
+            <div className="mb-2 font-serif text-5xl font-bold">{intl.formatMessage({ id: 'home.stats.engagements.value' })}</div>
             <div className="text-label text-muted-foreground">
-              {intl.formatMessage({ id: 'home.stats.quality.label' })}
+              {intl.formatMessage({ id: 'home.stats.engagements.label' })}
             </div>
           </div>
           <div className="border-l-2 border-foreground pl-6">
-            <div className="mb-2 font-serif text-5xl font-bold">{intl.formatMessage({ id: 'home.stats.learning.value' })}</div>
+            <div className="mb-2 font-serif text-5xl font-bold">{intl.formatMessage({ id: 'home.stats.companies.value' })}</div>
             <div className="text-label text-muted-foreground">
-              {intl.formatMessage({ id: 'home.stats.learning.label' })}
+              {intl.formatMessage({ id: 'home.stats.companies.label' })}
             </div>
           </div>
         </div>
