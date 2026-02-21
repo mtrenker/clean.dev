@@ -65,7 +65,7 @@ const Page: NextPage = () => {
                 <div className="absolute inset-0 -translate-x-full bg-accent transition-transform group-hover:translate-x-0" />
               </Link>
               <Link
-                href="/me"
+                href="/contact"
                 className="btn-secondary"
               >
                 Contact
@@ -218,7 +218,7 @@ const Page: NextPage = () => {
           </p>
           <div className="observe delay-[400ms] flex flex-wrap justify-center gap-4">
             <Link
-              href="/me"
+              href="/contact"
               className="btn bg-foreground text-background transition-all hover:bg-foreground/90"
             >
               Get in Touch

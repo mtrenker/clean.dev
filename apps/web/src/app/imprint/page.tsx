@@ -1,4 +1,5 @@
 import type { Metadata, NextPage } from 'next';
+import Link from 'next/link';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
 import { Card } from '@/components/ui/card';
@@ -45,13 +46,13 @@ const ImprintPage: NextPage = () => (
           <Card>
             <address className="space-y-2 not-italic text-muted-foreground">
               <p className="flex items-center gap-2">
-                <span className="font-medium text-foreground">E-Mail:</span>
-                <a
+                <span className="font-medium text-foreground">Kontakt:</span>
+                <Link
                   className="text-accent transition-colors hover:underline"
-                  href="mailto:info@clean.dev"
+                  href="/contact"
                 >
-                  info@clean.dev
-                </a>
+                  Kontaktformular
+                </Link>
               </p>
             </address>
           </Card>
