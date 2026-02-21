@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useIntl } from 'react-intl';
 import { Card } from '@/components/ui/card';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
@@ -11,15 +12,16 @@ import { sendContactEmail, type ContactFormState } from './actions';
 const initialState: ContactFormState = {};
 
 export const ContactForm: React.FC = () => {
+  const intl = useIntl();
   const [state, action, isPending] = useActionState(sendContactEmail, initialState);
 
   if (state.success) {
     return (
       <Card>
         <div className="space-y-2 py-4 text-center">
-          <p className="text-lg font-medium text-foreground">Message sent.</p>
+          <p className="text-lg font-medium text-foreground">{intl.formatMessage({ id: 'contact.success.heading' })}</p>
           <p className="text-sm text-muted-foreground">
-            Thank you for reaching out. I will reply to your email shortly.
+            {intl.formatMessage({ id: 'contact.success.body' })}
           </p>
         </div>
       </Card>
@@ -40,7 +42,7 @@ export const ContactForm: React.FC = () => {
         />
 
         <FormField
-          label="Name"
+          label={intl.formatMessage({ id: 'contact.form.name' })}
           htmlFor="name"
           required
           error={state.fieldErrors?.name}
@@ -56,7 +58,7 @@ export const ContactForm: React.FC = () => {
         </FormField>
 
         <FormField
-          label="Email"
+          label={intl.formatMessage({ id: 'contact.form.email' })}
           htmlFor="email"
           required
           error={state.fieldErrors?.email}
@@ -72,7 +74,7 @@ export const ContactForm: React.FC = () => {
         </FormField>
 
         <FormField
-          label="Message"
+          label={intl.formatMessage({ id: 'contact.form.message' })}
           htmlFor="message"
           required
           error={state.fieldErrors?.message}
@@ -91,7 +93,7 @@ export const ContactForm: React.FC = () => {
         )}
 
         <Button type="submit" variant="primary" disabled={isPending}>
-          {isPending ? 'Sending…' : 'Send Message'}
+          {isPending ? intl.formatMessage({ id: 'contact.form.submitting' }) : intl.formatMessage({ id: 'contact.form.submit' })}
         </Button>
       </form>
     </Card>

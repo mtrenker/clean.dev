@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
+import { useIntl } from 'react-intl';
 import { InvoicePDF } from '@/components/invoice-pdf';
 import { generateEpcQrCodeDataUrl } from '@/lib/epc-qr';
 import type { InvoiceWithDetails, Settings } from '@cleandev/pm';
@@ -12,6 +13,7 @@ interface InvoicePDFViewerProps {
 }
 
 export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, settings }) => {
+  const intl = useIntl();
   const [epcQrCodeUrl, setEpcQrCodeUrl] = useState<string | undefined>();
 
   useEffect(() => {
@@ -28,7 +30,9 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
           document={document}
           fileName={`Rechnung_${invoice.invoiceNumber}.pdf`}
         >
-          {({ loading }) => (loading ? 'PDF wird erstellt...' : 'PDF herunterladen')}
+          {({ loading }) => (loading
+            ? intl.formatMessage({ id: 'pdf.loading' })
+            : intl.formatMessage({ id: 'pdf.download' }))}
         </PDFDownloadLink>
       </div>
 
@@ -37,7 +41,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
           if (loading) {
             return (
               <div className="flex h-[80vh] items-center justify-center rounded border bg-gray-50">
-                <p className="text-gray-500">PDF wird geladen...</p>
+                <p className="text-gray-500">{intl.formatMessage({ id: 'pdf.loading2' })}</p>
               </div>
             );
           }
@@ -45,7 +49,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
           if (error) {
             return (
               <div className="flex h-[80vh] items-center justify-center rounded border bg-red-50">
-                <p className="text-red-600">Fehler beim Laden der PDF: {error.message}</p>
+                <p className="text-red-600">{intl.formatMessage({ id: 'pdf.error' }, { message: error.message })}</p>
               </div>
             );
           }

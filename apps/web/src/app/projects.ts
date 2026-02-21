@@ -37,8 +37,8 @@ export const projects: Project[] = [
       de: 'Webentwickler',
     },
     description: {
-      en: 'Developing and maintaining Sites in a SharePoint environment.',
-      de: 'Entwicklung und Pflege von Websites in einer SharePoint-Umgebung.',
+      en: 'Built and maintained internal web portals for one of Germany\'s largest engineering firms within a SharePoint environment.',
+      de: 'Aufbau und Pflege interner Webportale für eines der größten deutschen Industrieunternehmen in einer SharePoint-Umgebung.',
     },
     city: 'Munich',
     highlights: {
@@ -68,8 +68,8 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler',
     },
     description: {
-      en: 'Developing and maintenance of an asset management system based on PHP, ExtJS, Oracle DB in an Agile team.',
-      de: 'Entwicklung und Wartung eines Asset-Management-Systems auf Basis von PHP, ExtJS, Oracle DB in einem agilen Team.',
+      en: 'Extended and maintained a global asset management system for McKinsey\'s IT operations, built on PHP, ExtJS and Oracle DB within a cross-functional agile team.',
+      de: 'Erweiterung und Wartung eines globalen Asset-Management-Systems für den IT-Betrieb von McKinsey, gebaut auf PHP, ExtJS und Oracle DB in einem cross-funktionalen agilen Team.',
     },
     city: 'Munich',
     highlights: {
@@ -101,8 +101,8 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developing the JavaScript components for Web based Browser game with MooTools',
-      de: 'Entwicklung von JavaScript-Komponenten für webbasierte Browserspiele mit MooTools',
+      en: 'Built interactive JS components for a live browser game, with a tight focus on performance and smooth real-time UX.',
+      de: 'Entwicklung interaktiver JavaScript-Komponenten für ein live Browserspiel mit starkem Fokus auf Performance und flüssige Echtzeit-UX.',
     },
     city: 'Munich',
     highlights: {
@@ -131,8 +131,8 @@ export const projects: Project[] = [
       de: 'Webentwickler',
     },
     description: {
-      en: 'Development and maintenance of a web based auction tool for an office wide, yearly charity auction based on Laravel 3, AngularJS and MySQL',
-      de: 'Entwicklung und Wartung eines webbasierten Auktionswerkzeugs für eine büroweite, jährliche Wohltätigkeitsauktion basierend auf Laravel 3, AngularJS und MySQL',
+      en: 'Owned a full-stack auction platform used for a company-wide annual charity event — from database schema to frontend, soup to nuts.',
+      de: 'Vollständige Eigenverantwortung für eine Full-Stack-Auktionsplattform für die jährliche firmenweite Wohltätigkeitsveranstaltung – von der Datenbankstruktur bis zum Frontend.',
     },
     city: 'Munich',
     highlights: {
@@ -164,8 +164,8 @@ export const projects: Project[] = [
       de: 'Webentwickler',
     },
     description: {
-      en: 'Development and maintenance of a world-wide Hardware-Migration-Management system for a leading Consulting Company using Zend Framework 1, Oracle DB and custom JavaScript',
-      de: 'Entwicklung und Wartung eines weltweiten Hardware-Migrations-Managementsystems für ein führendes Beratungsunternehmen mit Zend Framework 1, Oracle DB und individuellem JavaScript',
+      en: 'Maintained a worldwide hardware migration tracking system used across McKinsey offices globally, built on Zend Framework and Oracle DB.',
+      de: 'Wartung eines weltweit genutzten Hardware-Migrations-Trackingsystems für McKinsey-Büros, gebaut auf Zend Framework und Oracle DB.',
     },
     city: 'Munich',
     highlights: {
@@ -196,8 +196,8 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler',
     },
     description: {
-      en: 'Creating a web-based survey system for global and local evaluation of car dealerships with PHP, Oracle DB, Laravel, AngularJS',
-      de: 'Erstellung eines webbasierten Umfragesystems zur globalen und lokalen Bewertung von Autohändlern mit PHP, Oracle DB, Laravel, AngularJS',
+      en: 'Built a multi-region dealer evaluation platform for BMW, supporting both customer-facing and internal staff surveys across global markets.',
+      de: 'Entwicklung einer regionenübergreifenden Händlerbewertungsplattform für BMW mit Unterstützung von Kunden- und internen Mitarbeiterumfragen in globalen Märkten.',
     },
     city: 'Munich',
     highlights: {
@@ -229,13 +229,13 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler / Leiter',
     },
     description: {
-      en: 'Architected and developed a hardware migration management application with PHP, Oracle DB, Symfony, React',
-      de: 'Architektur und Entwicklung einer Hardware-Migrationsmanagementanwendung mit PHP, Oracle DB, Symfony, React',
+      en: 'Rearchitected a legacy migration tool from scratch — moved to Symfony + React with CQRS-backed data structures, significantly improving maintainability and auditability.',
+      de: 'Neuarchitektur eines Legacy-Migrationstools von Grund auf – Migration zu Symfony + React mit CQRS-basierten Datenstrukturen für deutlich bessere Wartbarkeit und Nachvollziehbarkeit.',
     },
     city: 'Munich',
     highlights: {
-      en: ['CQRS based data-structures'],
-      de: ['CQRS-basierte Datenstrukturen'],
+      en: ['introduced CQRS — a rare pattern in PHP shops at the time'],
+      de: ['Einführung von CQRS – damals ein seltenes Muster in PHP-Projekten'],
     },
     technologies: [
       'symfony',
@@ -263,8 +263,8 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler / Leiter',
     },
     description: {
-      en: 'Development of a Web-Based Personnel and Guest Badge Management Tool',
-      de: 'Entwicklung eines webbasierten Tools zur Verwaltung von Personal- und Gästeausweisen',
+      en: 'Delivered a QR-code-based badge management system for staff and visitors, including on-demand print integration.',
+      de: 'Entwicklung eines QR-Code-basierten Ausweismanagementsystems für Mitarbeiter und Gäste, inklusive On-Demand-Druckintegration.',
     },
     city: 'Munich',
     highlights: {
@@ -294,8 +294,8 @@ export const projects: Project[] = [
       de: 'Leitender Entwickler',
     },
     description: {
-      en: 'Migrating Apple App to Android using React and Cordova',
-      de: 'Migration einer Apple-App auf Android mit React und Cordova',
+      en: 'Ported an iOS app to Android using React and Cordova. Scoped, executed and shipped within two months.',
+      de: 'Portierung einer iOS-App auf Android mit React und Cordova. Konzipiert, umgesetzt und in zwei Monaten ausgeliefert.',
     },
     city: 'Munich',
     highlights: {
@@ -322,13 +322,13 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developed dashboard components for web-based monitoring applications directly the machines',
-      de: 'Entwicklung von Dashboard-Komponenten für webbasierte Überwachungsanwendungen direkt an den Maschinen',
+      en: 'Built real-time monitoring dashboards served directly on industrial machines, using native web components years before they went mainstream.',
+      de: 'Entwicklung von Echtzeit-Monitoring-Dashboards direkt auf Industriemaschinen, mit nativen Webkomponenten – Jahre bevor diese zum Standard wurden.',
     },
     city: 'Siegsdorf',
     highlights: {
-      en: ['native web components via Polymer'],
-      de: ['native Webkomponenten über Polymer'],
+      en: ['early adopter of native web components via Polymer in a production manufacturing context'],
+      de: ['früher Einsatz nativer Webkomponenten via Polymer in einer produktiven Fertigungsumgebung'],
     },
     technologies: [
       'polymer',
@@ -346,18 +346,18 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developing react components for usage in Adobe Experience Manager',
-      de: 'Entwicklung von React-Komponenten für die Verwendung im Adobe Experience Manager',
+      en: 'Developed React components for Lufthansa\'s digital touchpoints, integrated into Adobe Experience Manager.',
+      de: 'Entwicklung von React-Komponenten für die digitalen Touchpoints von Lufthansa, integriert in Adobe Experience Manager.',
     },
     city: 'Hamburg',
     highlights: {
       en: [
-        'heavy focus on accessibility',
-        'modular architecture'
+        'accessibility as a hard requirement, not an afterthought',
+        'component library built for editorial reuse across markets'
       ],
       de: [
-        'starker Fokus auf Barrierefreiheit',
-        'modulare Architektur'
+        'Barrierefreiheit als feste Anforderung, nicht als Nachgedanke',
+        'Komponentenbibliothek für redaktionelle Wiederverwendung über mehrere Märkte'
       ],
     },
     technologies: [
@@ -384,13 +384,13 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developed and maintained components for an online travel magazine with React, TypeScript, GraphQL',
-      de: 'Entwicklung und Wartung von Komponenten für ein Online-Reisemagazin mit React, TypeScript, GraphQL',
+      en: 'Built components for an online travel magazine using React, TypeScript and GraphQL, backed by Contentful as a headless CMS.',
+      de: 'Entwicklung von Komponenten für ein Online-Reisemagazin mit React, TypeScript und GraphQL, unterstützt durch Contentful als Headless-CMS.',
     },
     city: 'Munich',
     highlights: {
-      en: ['used contentful as headless CMS'],
-      de: ['Verwendung von Contentful als Headless-CMS'],
+      en: ['adopted Contentful as headless CMS before the pattern became industry standard'],
+      de: ['Einsatz von Contentful als Headless-CMS, bevor das Muster zum Branchenstandard wurde'],
     },
     technologies: [
       'typescript',
@@ -416,8 +416,8 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developed a web magazine connected to a headless CMS with React, GraphQL',
-      de: 'Entwicklung eines Webmagazins, verbunden mit einem Headless-CMS, mit React, GraphQL',
+      en: 'Built a React + GraphQL web magazine for Germany\'s largest online car dealer, connected to a headless CMS.',
+      de: 'Entwicklung eines React- und GraphQL-basierten Webmagazins für Deutschlands größten Online-Autohändler, verbunden mit einem Headless-CMS.',
     },
     city: 'Munich',
     highlights: {
@@ -446,8 +446,8 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developed and maintained react components for popular TV formats with React, GraphQL, tracking',
-      de: 'Entwicklung und Wartung von React-Komponenten für beliebte TV-Formate mit React, GraphQL, Tracking',
+      en: 'Built and maintained React components powering high-traffic show websites for ProSieben and Sat.1 formats, with GraphQL APIs and analytics tracking throughout.',
+      de: 'Entwicklung und Wartung von React-Komponenten für stark frequentierte Show-Websites von ProSieben und Sat.1, mit GraphQL-APIs und durchgängigem Analytics-Tracking.',
     },
     city: 'Munich',
     highlights: {
@@ -478,18 +478,18 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Developed components for a communication micro-frontend with React, Redux-Toolkit, VoIP',
-      de: 'Entwicklung von Komponenten für ein Kommunikations-Micro-Frontend mit React, Redux-Toolkit, VoIP',
+      en: 'Built a real-time communication micro-frontend handling VoIP calls between customers and mortgage advisors, using React, Redux Toolkit and WebRTC.',
+      de: 'Entwicklung eines Echtzeit-Kommunikations-Micro-Frontends für VoIP-Gespräche zwischen Kunden und Hypothekenberatern, mit React, Redux Toolkit und WebRTC.',
     },
     city: 'Munich',
     highlights: {
       en: [
-        'supported the team as an agile coach',
-        'positive first WebRTC experience'
+        'doubled as agile coach, introducing practices that noticeably reduced sprint friction',
+        'first production WebRTC integration — shipped without third-party SDK'
       ],
       de: [
-        'Unterstützung des Teams als agiler Coach',
-        'erste positive Erfahrungen mit WebRTC'
+        'zusätzliche Rolle als Agile Coach mit messbarer Reduktion von Sprint-Reibung',
+        'erste produktive WebRTC-Integration – ohne Drittanbieter-SDK ausgeliefert'
       ],
     },
     technologies: [
@@ -516,20 +516,20 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Refactored an AngularJS-based server-data/form-data heavy application to a react-based app with TypeScript, XState, React Hook Form',
-      de: 'Refaktorierung einer AngularJS-basierten Anwendung mit schwerem Server-/Formulardaten-Aufkommen zu einer React-basierten App mit TypeScript, XState, React Hook Form',
+      en: 'Rewrote a complex AngularJS optometry workflow app in TypeScript/React, replacing ad-hoc state logic with XState-driven form architecture for in-store staff.',
+      de: 'Neuentwicklung einer komplexen AngularJS-Optometrie-Workflow-App in TypeScript/React – Ad-hoc-Zustandslogik wurde durch eine XState-gesteuerte Formulararchitektur für das Filial-Personal ersetzt.',
     },
     city: 'Munich',
     highlights: {
       en: [
-        'heavily leaned into pair-programming to ensure the best knowledge transfer',
-        'designed and developed state-machine driven, extensible multi-form architecture',
-        'developed custom onscreen keyboards for optimal workflow'
+        'daily pair-programming as the main knowledge transfer strategy — worked exceptionally well',
+        'state-machine driven multi-step form architecture built for extensibility',
+        'custom on-screen keyboards tailored to in-store workflows'
       ],
       de: [
-        'intensive Nutzung von Pair-Programming für optimalen Wissenstransfer',
-        'Entwurf und Entwicklung einer durch Zustandsmaschinen angetriebenen, erweiterbaren Multi-Form-Architektur',
-        'Entwicklung kundenspezifischer Bildschirmtastaturen für optimalen Workflow'
+        'tägliches Pair-Programming als zentrale Wissenstransferstrategie – außerordentlich effektiv',
+        'zustandsmaschinengesteuerte Multi-Schritt-Formulararchitektur für maximale Erweiterbarkeit',
+        'maßgeschneiderte Bildschirmtastaturen für Filial-Workflows'
       ],
     },
     technologies: [
@@ -551,18 +551,18 @@ export const projects: Project[] = [
       de: 'Frontend-Entwickler',
     },
     description: {
-      en: 'Led a team of 3 developers building a server-data-heavy web app written with TypeScript, React, Redux Toolkit, TanStack Table, React MUI',
-      de: 'Leitung eines Teams von 3 Entwicklern beim Bau einer serverdatenintensiven Web-App, geschrieben mit TypeScript, React, Redux Toolkit, TanStack Table, React MUI',
+      en: 'Led a three-person team building a data-heavy internal web app in TypeScript and React, with a strong focus on mentoring two junior developers.',
+      de: 'Leitung eines dreiköpfigen Teams beim Bau einer datenintensiven internen Web-App in TypeScript und React, mit starkem Fokus auf die Betreuung zweier Junior-Entwickler.',
     },
     city: 'Munich',
     highlights: {
       en: [
-        'constant pair-programming with two juniors for quick and effective knowledge transfer',
-        'significantly improved performance by eliminating bottlenecks in render cycles'
+        'daily pair-programming with two juniors — both grew into independent contributors within weeks',
+        'tracked down and resolved chronic render-cycle bottlenecks, cutting page interaction time noticeably'
       ],
       de: [
-        'ständiges Pair-Programming mit zwei Junioren für schnellen und effektiven Wissenstransfer',
-        'deutliche Leistungssteigerung durch Beseitigung von Engpässen in Renderzyklen'
+        'tägliches Pair-Programming mit zwei Junioren – beide wurden innerhalb weniger Wochen zu selbstständigen Entwicklern',
+        'chronische Render-Zyklen-Engpässe identifiziert und beseitigt – spürbar schnellere Seiteninteraktion'
       ],
     },
     technologies: [
@@ -586,22 +586,22 @@ export const projects: Project[] = [
       de: 'Lösungsarchitekt',
     },
     description: {
-      en: 'Evaluated and managed the handover of a web project from an external agency to an newly formed internal team',
-      de: 'Bewertung und Management der Übergabe eines Webprojekts von einer externen Agentur an ein neu gebildetes internes Team',
+      en: 'Managed the handover of a Next.js platform from an external agency to a newly formed in-house team — audited the codebase, merged two products, and got the team up to speed.',
+      de: 'Steuerung der Übergabe einer Next.js-Plattform von einer externen Agentur an ein neu gebildetes internes Team – Codebase-Audit, Zusammenführung zweier Produkte und schnelles Onboarding des Teams.',
     },
     city: 'Berlin',
     highlights: {
       en: [
-        'reviewed and improved best practices for next.js, TypeScript, React, GraphQL, Apollo, Cypress, Storybook, tailwindcss',
-        'coordinated the merge of two web-projects into one',
-        'onboarded new hires and helped them to get up to speed',
-        'supported the team with agile practices'
+        'audited and raised code quality across the full stack: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
+        'consolidated two separate web products into a single codebase without disrupting active development',
+        'onboarded four new hires in parallel while keeping delivery on track',
+        'introduced lightweight agile practices that the team still uses'
       ],
       de: [
-        'Überprüfung und Verbesserung der Best Practices für next.js, TypeScript, React, GraphQL, Apollo, Cypress, Storybook, TailwindCSS',
-        'Koordination der Zusammenführung von zwei Webprojekten zu einem',
-        'Einarbeitung neuer Mitarbeiter und Unterstützung bei der Eingewöhnung',
-        'Unterstützung des Teams mit agilen Praktiken'
+        'Codequalität über den gesamten Stack verbessert: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
+        'zwei separate Webprodukte ohne Unterbrechung der laufenden Entwicklung zu einer gemeinsamen Codebasis zusammengeführt',
+        'vier neue Mitarbeiter parallel eingearbeitet und Lieferung trotzdem im Zeitplan gehalten',
+        'schlanke agile Praktiken eingeführt, die das Team noch heute nutzt'
       ],
     },
     technologies: [

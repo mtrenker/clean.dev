@@ -1,30 +1,44 @@
-import type { Metadata, NextPage } from 'next';
+import type { Metadata } from 'next';
+import { headers, cookies } from 'next/headers';
+import { createIntl } from 'react-intl';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
 import { ContactForm } from './contact-form';
+import { getLocale, loadMessages } from '@/lib/locale';
 
-export const metadata: Metadata = {
-  title: 'Contact | clean.dev',
-  description: 'Send a message to Martin Trenker',
+export const generateMetadata = async (): Promise<Metadata> => {
+  const locale = getLocale(await headers(), await cookies());
+  return {
+    title: locale === 'de' ? 'Kontakt | clean.dev' : 'Contact | clean.dev',
+    description: locale === 'de' ? 'Senden Sie eine Nachricht an Martin Trenker' : 'Send a message to Martin Trenker',
+  };
 };
 
-const ContactPage: NextPage = () => (
-  <main className="bg-background py-12 md:py-16">
-    <Container size="narrow" className="px-6">
-      <div className="space-y-8">
-        <header className="border-b border-border pb-6">
-          <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
-            Contact
-          </Heading>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Send a message and I will get back to you directly.
-          </p>
-        </header>
+const ContactPage = async () => {
+  const headerStore = await headers();
+  const cookieStore = await cookies();
+  const locale = getLocale(headerStore, cookieStore);
+  const messages = await loadMessages(locale);
+  const intl = createIntl({ locale, messages });
 
-        <ContactForm />
-      </div>
-    </Container>
-  </main>
-);
+  return (
+    <main className="bg-background py-12 md:py-16">
+      <Container size="narrow" className="px-6">
+        <div className="space-y-8">
+          <header className="border-b border-border pb-6">
+            <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
+              {intl.formatMessage({ id: 'contact.heading' })}
+            </Heading>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {intl.formatMessage({ id: 'contact.lead' })}
+            </p>
+          </header>
+
+          <ContactForm />
+        </div>
+      </Container>
+    </main>
+  );
+};
 
 export default ContactPage;

@@ -1,25 +1,35 @@
-import type { Metadata, NextPage } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { headers, cookies } from 'next/headers';
+import { createIntl } from 'react-intl';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
 import { Card } from '@/components/ui/card';
+import { getLocale, loadMessages } from '@/lib/locale';
 
 export const metadata: Metadata = {
   title: 'Impressum | clean.dev',
   description: 'Legal information and imprint according to German law (§5 TMG)',
 };
 
-const ImprintPage: NextPage = () => (
+const ImprintPage = async () => {
+  const headerStore = await headers();
+  const cookieStore = await cookies();
+  const locale = getLocale(headerStore, cookieStore);
+  const messages = await loadMessages(locale);
+  const intl = createIntl({ locale, messages });
+
+  return (
   <main className="bg-background py-12 md:py-16">
     <Container size="narrow" className="px-6">
       <div className="space-y-8">
         {/* Header */}
         <header className="border-b border-border pb-6">
           <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
-            Impressum
+            {intl.formatMessage({ id: 'imprint.heading' })}
           </Heading>
           <p className="mt-2 text-sm text-muted-foreground">
-            Information according to § 5 TMG (Telemediengesetz)
+            {intl.formatMessage({ id: 'imprint.subtitle' })}
           </p>
         </header>
 
@@ -132,6 +142,7 @@ const ImprintPage: NextPage = () => (
       </div>
     </Container>
   </main>
-);
+  );
+};
 
 export default ImprintPage;

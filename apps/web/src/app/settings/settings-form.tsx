@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useIntl } from 'react-intl';
 import type { UpdateSettings, Settings } from '@cleandev/pm';
 import { updateSettingsAction } from './actions';
 import { Input, Textarea, FormField, Button } from '@/components/ui';
@@ -12,6 +13,7 @@ interface SettingsFormProps {
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
   const router = useRouter();
+  const intl = useIntl();
   const { register, handleSubmit } = useForm<UpdateSettings>({
     defaultValues: {
       contractorName: settings.contractorName,
@@ -28,16 +30,16 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
   const onSubmit = async (data: UpdateSettings) => {
     try {
       await updateSettingsAction(data);
-      alert('Einstellungen erfolgreich gespeichert!');
+      alert(intl.formatMessage({ id: 'settings.success' }));
       router.refresh();
     } catch (error) {
-      alert('Fehler beim Speichern der Einstellungen');
+      alert(intl.formatMessage({ id: 'settings.error' }));
     }
   };
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <FormField label="Name" htmlFor="contractorName" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.name' })} htmlFor="contractorName" required>
         <Input
           id="contractorName"
           type="text"
@@ -46,7 +48,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="Adresse" htmlFor="contractorAddress" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.address' })} htmlFor="contractorAddress" required>
         <Textarea
           id="contractorAddress"
           required
@@ -55,7 +57,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="Bank Name" htmlFor="bankName" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.bankName' })} htmlFor="bankName" required>
         <Input
           id="bankName"
           type="text"
@@ -64,7 +66,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="IBAN" htmlFor="bankIban" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.iban' })} htmlFor="bankIban" required>
         <Input
           id="bankIban"
           type="text"
@@ -73,7 +75,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="BIC" htmlFor="bankBic" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.bic' })} htmlFor="bankBic" required>
         <Input
           id="bankBic"
           type="text"
@@ -82,7 +84,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="USt-ID" htmlFor="vatId" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.vatId' })} htmlFor="vatId" required>
         <Input
           id="vatId"
           type="text"
@@ -91,7 +93,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="Standard Stundensatz (EUR)" htmlFor="defaultHourlyRate" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.defaultRate' })} htmlFor="defaultHourlyRate" required>
         <Input
           id="defaultHourlyRate"
           type="number"
@@ -101,7 +103,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
         />
       </FormField>
 
-      <FormField label="Standard Steuersatz (z.B. 0.19 für 19%)" htmlFor="defaultTaxRate" required>
+      <FormField label={intl.formatMessage({ id: 'settings.form.defaultTaxRate' })} htmlFor="defaultTaxRate" required>
         <Input
           id="defaultTaxRate"
           type="number"
@@ -112,7 +114,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
       </FormField>
 
       <Button type="submit" variant="primary">
-        Einstellungen speichern
+        {intl.formatMessage({ id: 'settings.form.submit' })}
       </Button>
     </form>
   );

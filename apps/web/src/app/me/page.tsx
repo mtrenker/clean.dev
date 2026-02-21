@@ -1,10 +1,21 @@
 import React from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
+import { headers, cookies } from 'next/headers';
+import { createIntl } from 'react-intl';
 import { projects } from '../projects';
+import { getLocale, loadMessages, type Locale } from '@/lib/locale';
 
-const Home: React.FC = () => (
-  <main
+const Home: React.FC = async () => {
+  const headerStore = await headers();
+  const cookieStore = await cookies();
+  const locale = getLocale(headerStore, cookieStore);
+  const messages = await loadMessages(locale);
+  const intl = createIntl({ locale, messages });
+  const lang = locale as Locale;
+
+  return (
+    <main
     className={clsx([
       'mx-auto flex flex-col items-center gap-5',
       'print:mx-14 print:items-start',
@@ -29,7 +40,7 @@ const Home: React.FC = () => (
           ])}
         >
           <Image
-            alt="Profile picture of Martin Trenker, consultant and web developer"
+            alt={intl.formatMessage({ id: 'me.img.alt' })}
             className="m-0"
             height={200}
             src="/me.png"
@@ -39,10 +50,10 @@ const Home: React.FC = () => (
         </picture>
         <figcaption className="flex flex-col gap-4">
           <h1 className={clsx(['m-0 font-serif text-3xl font-bold uppercase tracking-tight text-foreground'])}>
-            Martin Trenker
+            {intl.formatMessage({ id: 'me.title' })}
           </h1>
           <h2 className={clsx(['m-0 text-label text-2xl text-muted-foreground'])}>
-            Consultant, Web Developer
+            {intl.formatMessage({ id: 'me.subtitle' })}
           </h2>
         </figcaption>
       </figure>
@@ -51,14 +62,12 @@ const Home: React.FC = () => (
           'print:border-l-2 print:border-foreground print:px-6',
         ])}
       >
-        <h3 className="text-label text-foreground">About me</h3>
+        <h3 className="text-label text-foreground">{intl.formatMessage({ id: 'me.about.heading' })}</h3>
         <p className="my-1 font-medium tracking-wide text-muted-foreground">
-          My passion for web development started in the 90s when free web hosting became popular.
-          I became active in the community, helping aspiring developers with HTML, CSS, PHP, MySQL, and JS.
+          {intl.formatMessage({ id: 'me.about.p1' })}
         </p>
         <p className="my-1 font-medium tracking-wide text-muted-foreground">
-          Today, I love building things in the cloud and creating user-oriented,
-          interactive experiences while spreading awareness for clean code and authentic agile practices.
+          {intl.formatMessage({ id: 'me.about.p2' })}
         </p>
       </div>
     </section>
@@ -71,7 +80,7 @@ const Home: React.FC = () => (
             'print:max-w-none print:flex-1 print:grow-0 print:px-0',
           ])}
         >
-          <h3 className="text-label my-0 text-foreground">Contact</h3>
+          <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'me.contact.heading' })}</h3>
           <ul className="pl-4">
             <li className="my-0 text-muted-foreground">info@clean.dev</li>
             <li className="my-0 text-muted-foreground">https://clean.dev</li>
@@ -84,8 +93,8 @@ const Home: React.FC = () => (
             'print:max-w-none print:flex-1 print:grow-0 print:px-0',
           ])}
         >
-          <h3 className="text-label my-0 text-foreground">Skills</h3>
-          <h4 className="text-label text-sm text-foreground">Programming</h4>
+          <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'me.skills.heading' })}</h3>
+          <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'me.skills.programming.heading' })}</h4>
           <ul className="pl-4">
             <li className="my-0 text-muted-foreground">Clean Code</li>
             <li className="my-0 text-muted-foreground">TypeScript</li>
@@ -93,7 +102,7 @@ const Home: React.FC = () => (
             <li className="my-0 text-muted-foreground">Web Components</li>
             <li className="my-0 text-muted-foreground">REST / GraphQL</li>
           </ul>
-          <h4 className="text-label text-sm text-foreground">Organizational</h4>
+          <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'me.skills.org.heading' })}</h4>
           <ul className="pl-4">
             <li className="my-0 text-muted-foreground">Agile Mindset</li>
             <li className="my-0 text-muted-foreground">Quality Management</li>
@@ -109,20 +118,17 @@ const Home: React.FC = () => (
           'print:max-w-none print:flex-1 print:px-0',
         ])}
       >
-        <h4 className="text-label text-foreground">Clean and Agile</h4>
+        <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.cleanAgile.heading' })}</h4>
         <p className="tracking-wide text-muted-foreground">
-          I am privileged to have worked with many bright minds over the years and want to share my experience with my clients.
-          With a better understanding of quality management, agile best practices, and a human-centric approach,
-          we can build better products and create a healthier work environment for everyone.
+          {intl.formatMessage({ id: 'me.section.cleanAgile.p' })}
         </p>
-        <h4 className="text-label text-foreground">Learner and Mentor</h4>
+        <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.learner.heading' })}</h4>
         <p className="tracking-wide text-muted-foreground">
-          Every project has its unique challenges.
-          I love analyzing and understanding them from a cross-functional perspective to expand my horizon and, on the way, pass some of it to aspiring and seasoned developers alike.
+          {intl.formatMessage({ id: 'me.section.learner.p' })}
         </p>
-        <h4 className="text-label text-foreground">Automation</h4>
+        <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.automation.heading' })}</h4>
         <p className="tracking-wide text-muted-foreground">
-          As an automation nerd, I can help identify and implement automation of repetitive tasks that waste time and energy teams could use for new features instead.
+          {intl.formatMessage({ id: 'me.section.automation.p' })}
         </p>
       </section>
     </div>
@@ -133,7 +139,7 @@ const Home: React.FC = () => (
         'print:max-w-none print:px-0',
       ])}
     >
-      <h3 className="text-label mt-6 break-before-page text-foreground">Projects</h3>
+      <h3 className="text-label mt-6 break-before-page text-foreground">{intl.formatMessage({ id: 'me.projects.heading' })}</h3>
       {projects
         .filter((p) => p.featured)
         .reverse()
@@ -144,7 +150,7 @@ const Home: React.FC = () => (
             <article className="my-4 flex break-inside-avoid flex-col" key={project.id}>
               <div className="flex items-center justify-between gap-6">
                 <h4 className="m-0 flex-initial font-serif font-semibold text-foreground">
-                  {project.company ? project.company : project.industry?.en}
+                  {project.company ? project.company : project.industry?.[lang]}
                 </h4>
                 <hr className="my-0 block h-px w-full flex-1 border-b border-muted print:border-foreground" />
                 <time
@@ -155,14 +161,14 @@ const Home: React.FC = () => (
                 </time>
               </div>
               <h5 className="text-label m-0 text-foreground">
-                {project.title.en}
+                {project.title[lang]}
               </h5>
               <p className="m-0 flex-1 tracking-wide text-muted-foreground">
-                {project.description.en}
+                {project.description[lang]}
               </p>
               <ul className="m-2 pl-4">
-                {project.highlights.en.length > 0 &&
-                  project.highlights.en.map((highlight) => (
+                {project.highlights[lang].length > 0 &&
+                  project.highlights[lang].map((highlight) => (
                     <li className="my-0 tracking-wide text-muted-foreground" key={highlight}>
                       {highlight}
                     </li>
@@ -170,7 +176,7 @@ const Home: React.FC = () => (
               </ul>
               {project.technologies.length > 0 && (
                 <>
-                  <h6 className="font-bold text-foreground">Technologies</h6>
+                  <h6 className="font-bold text-foreground">{intl.formatMessage({ id: 'me.projects.technologies' })}</h6>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((technology) => (
                       <span
@@ -188,6 +194,7 @@ const Home: React.FC = () => (
         })}
     </section>
   </main>
-);
+  );
+};
 
 export default Home;

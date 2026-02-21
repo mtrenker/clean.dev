@@ -3,6 +3,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 import type { Session } from 'next-auth';
 
 interface UserMenuProps {
@@ -10,6 +11,7 @@ interface UserMenuProps {
 }
 
 export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
+  const intl = useIntl();
   const initials = session.user?.name
     ?.split(' ')
     .map((n) => n[0])
@@ -38,7 +40,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
                 className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
                 href="/clients"
               >
-                Kunden
+                {intl.formatMessage({ id: 'clients.heading' })}
               </Link>
             )}
           </Menu.Item>
@@ -48,7 +50,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
                 className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
                 href="/time"
               >
-                Zeiterfassung
+                {intl.formatMessage({ id: 'time.heading' })}
               </Link>
             )}
           </Menu.Item>
@@ -58,7 +60,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
                 className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
                 href="/invoices"
               >
-                Rechnungen
+                {intl.formatMessage({ id: 'invoices.heading' })}
               </Link>
             )}
           </Menu.Item>
@@ -68,7 +70,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
                 className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
                 href="/settings"
               >
-                Einstellungen
+                {intl.formatMessage({ id: 'settings.heading' })}
               </Link>
             )}
           </Menu.Item>
@@ -78,7 +80,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
                 className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
                 href="/admin"
               >
-                Admin
+                {intl.formatMessage({ id: 'admin.heading' })}
               </Link>
             )}
           </Menu.Item>

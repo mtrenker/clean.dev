@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Card, Button } from '@/components/ui';
 
 interface MigrationResult {
@@ -10,11 +11,12 @@ interface MigrationResult {
 }
 
 export const AdminPanel: React.FC = () => {
+  const intl = useIntl();
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<MigrationResult | null>(null);
 
   const runMigration = async () => {
-    if (!confirm('Datenbankmigrationen ausführen? Dies kann nicht rückgängig gemacht werden.')) {
+    if (!confirm(intl.formatMessage({ id: 'admin.db.confirm' }))) {
       return;
     }
 
@@ -31,20 +33,20 @@ export const AdminPanel: React.FC = () => {
       if (response.ok) {
         setResult({
           success: true,
-          message: data.message || 'Datenbank-Setup erfolgreich abgeschlossen',
+          message: data.message || intl.formatMessage({ id: 'admin.db.success' }),
         });
       } else {
         setResult({
           success: false,
-          message: 'Setup fehlgeschlagen',
-          error: data.error || 'Unbekannter Fehler',
+          message: intl.formatMessage({ id: 'admin.db.failed' }),
+          error: data.error || intl.formatMessage({ id: 'admin.db.error.unknown' }),
         });
       }
     } catch (error) {
       setResult({
         success: false,
-        message: 'Setup fehlgeschlagen',
-        error: error instanceof Error ? error.message : 'Netzwerkfehler',
+        message: intl.formatMessage({ id: 'admin.db.failed' }),
+        error: error instanceof Error ? error.message : intl.formatMessage({ id: 'admin.db.error.network' }),
       });
     } finally {
       setIsRunning(false);
@@ -54,9 +56,9 @@ export const AdminPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <h2 className="mb-4 text-xl font-semibold text-foreground">Datenbank-Setup</h2>
+        <h2 className="mb-4 text-xl font-semibold text-foreground">{intl.formatMessage({ id: 'admin.db.heading' })}</h2>
         <p className="mb-4 text-foreground/80">
-          Initialisiert oder aktualisiert die Datenbankstruktur. Führen Sie dies nach Updates aus, um neue Features verfügbar zu machen.
+          {intl.formatMessage({ id: 'admin.db.description' })}
         </p>
 
         <Button
@@ -65,7 +67,7 @@ export const AdminPanel: React.FC = () => {
           onClick={runMigration}
           type="button"
         >
-          {isRunning ? 'Setup wird ausgeführt...' : 'Setup ausführen'}
+          {isRunning ? intl.formatMessage({ id: 'admin.db.running' }) : intl.formatMessage({ id: 'admin.db.run' })}
         </Button>
 
         {result && (
@@ -87,16 +89,18 @@ export const AdminPanel: React.FC = () => {
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-xl font-semibold text-foreground">Systeminformationen</h2>
+        <h2 className="mb-4 text-xl font-semibold text-foreground">{intl.formatMessage({ id: 'admin.sysinfo.heading' })}</h2>
         <dl className="space-y-2 text-sm">
           <div className="flex justify-between gap-4">
-            <dt className="text-foreground/70">Datenbank:</dt>
+            <dt className="text-foreground/70">{intl.formatMessage({ id: 'admin.sysinfo.database' })}</dt>
             <dd className="font-mono text-foreground">
-              {process.env.NODE_ENV === 'production' ? 'PostgreSQL (Production)' : 'PostgreSQL (Development)'}
+              {process.env.NODE_ENV === 'production'
+                ? intl.formatMessage({ id: 'admin.sysinfo.db.production' })
+                : intl.formatMessage({ id: 'admin.sysinfo.db.development' })}
             </dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-foreground/70">Node-Umgebung:</dt>
+            <dt className="text-foreground/70">{intl.formatMessage({ id: 'admin.sysinfo.env' })}</dt>
             <dd className="font-mono text-foreground">{process.env.NODE_ENV}</dd>
           </div>
         </dl>
