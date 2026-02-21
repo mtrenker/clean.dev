@@ -1,186 +1,240 @@
-import React from 'react'
-import Image from 'next/image'
-import clsx from 'clsx';
-import { projects } from './projects';
+'use client';
 
-const Home: React.FC = () => (
-  <main className={clsx([
-    'mx-auto flex flex-col items-center gap-5',
-    'print:mx-14 print:items-start',
-  ])}
-  >
-    <section
-      className={clsx([
-        'prose flex-1 px-6',
-        'w-full print:max-w-none print:px-0',
-      ])}
-    >
-      <figure className={clsx([
-        'm-0 text-center',
-        'print:flex print:gap-16 print:text-start',
-      ])}
-      >
-        <picture className={clsx([
-          'inline-block h-[200px] overflow-hidden rounded-full ring ring-zinc-900 dark:ring-zinc-50',
-          'print:h-auto print:rounded-none print:ring-0',
-        ])}
-        >
-          <Image
-            alt="Profile picture of Martin Trenker, consultant and web developer"
-            className="m-0"
-            height={200}
-            src="/me.png"
-            unoptimized
-            width={200}
-          />
-        </picture>
-        <figcaption className="flex flex-col gap-4">
-          <h1
-            className={clsx([
-              'm-0 text-3xl font-semibold uppercase',
-            ])}
-          >
-              Martin Trenker
-          </h1>
-          <h2 className={clsx([
-            'm-0 text-2xl uppercase',
-          ])}
-          >
-              Consultant, Web Developer
-          </h2>
-        </figcaption>
-      </figure>
-      <div className={clsx([
-        'print:border-l-2 print:border-zinc-900 print:px-6',
-      ])}
-      >
-        <h3 className="uppercase tracking-widest">About me</h3>
-        <p className="my-1 font-medium tracking-wide">
-            My passion for web development started in the 90s when free web hosting became popular.
-            I became active in the community, helping aspiring developers with HTML, CSS, PHP, MySQL, and JS.
-        </p>
-        <p className="my-1 font-medium tracking-wide">
-            Today, I love building things in the cloud and creating user-oriented,
-            interactive experiences while spreading awareness for clean code and authentic agile practices.
-        </p>
-      </div>
-    </section>
+import { NextPage } from "next";
+import Link from "next/link";
+import { useEffect, useRef } from "react";
 
-    <div className="print:flex print:gap-5">
-      <div className="hidden print:flex print:flex-col print:justify-between print:gap-5">
-        <section
-          className={clsx([
-            'prose px-6',
-            'print:max-w-none print:flex-1 print:grow-0 print:px-0',
-          ])}
-        >
-          <h3 className="my-0 uppercase tracking-widest">Contact</h3>
-          <ul className="pl-4">
-            <li className="my-0">info@clean.dev</li>
-            <li className="my-0">https://clean.dev</li>
-          </ul>
-        </section>
+const Page: NextPage = () => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
-        <section
-          className={clsx([
-            'prose px-6',
-            'print:max-w-none print:flex-1 print:grow-0 print:px-0',
-          ])}
-        >
-          <h3 className="my-0 uppercase tracking-widest">Skills</h3>
-          <h4 className="uppercase tracking-widest">Programming</h4>
-          <ul className="pl-4">
-            <li className="my-0">Clean Code</li>
-            <li className="my-0">TypeScript</li>
-            <li className="my-0">Serverless</li>
-            <li className="my-0">Web Components</li>
-            <li className="my-0">REST / GraphQL</li>
-          </ul>
-          <h4 className="uppercase tracking-widest">Organizational</h4>
-          <ul className="pl-4">
-            <li className="my-0">Agile Mindset</li>
-            <li className="my-0">Quality Management</li>
-            <li className="my-0">Transparent Communication</li>
-            <li className="my-0">Theory of Constraints</li>
-          </ul>
-        </section>
-      </div>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
+    const elements = document.querySelectorAll('.observe');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Hero Section */}
       <section
-        className={clsx([
-          'prose px-6',
-          'print:max-w-none print:flex-1 print:px-0',
-        ])}
+        ref={heroRef}
+        className="section relative grid min-h-[90vh] grid-cols-12 gap-8"
       >
-        <h4 className="uppercase tracking-widest">
-            Clean and Agile
-        </h4>
-        <p className="tracking-wide">
-            I am privileged to have worked with many bright minds over the years and want to share my experience with my clients.
-            With a better understanding of quality management, agile best practices, and a human-centric approach,
-            we can build better products and create a healthier work environment for everyone.
-        </p>
-        <h4 className="uppercase tracking-widest">Learner and Mentor</h4>
-        <p className="tracking-wide">
-            Every project has its unique challenges.
-            I love analyzing and understanding them from a cross-functional perspective to expand my horizon and, on the way, pass some of it to aspiring and seasoned developers alike.
-        </p>
-        <h4 className="uppercase tracking-widest">Automation</h4>
-        <p className="tracking-wide">
-            As an automation nerd, I can help identify and implement automation of repetitive tasks that waste time and energy teams could use for new features instead.
-        </p>
+        {/* Decorative Grid Lines */}
+        <div className="pointer-events-none absolute inset-0 grid grid-cols-12 gap-8 px-6 opacity-5 md:px-12 lg:px-24">
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className="border-l border-foreground" />
+          ))}
+        </div>
+
+        {/* Main Content */}
+        <div className="col-span-12 flex flex-col justify-center lg:col-span-8">
+          <div className="observe">
+            <p className="text-label mb-4 tracking-[0.3em] text-accent">
+              Software Consultant
+            </p>
+            <h1 className="heading-display mb-8 text-6xl md:text-7xl lg:text-8xl">
+              Building better software through
+              <span className="block text-accent">clean code</span>
+              <span className="block">& team velocity</span>
+            </h1>
+            <p className="mb-12 max-w-2xl text-xl leading-relaxed text-muted-foreground md:text-2xl">
+              20 years of engineering excellence. Helping teams write maintainable
+              code, embrace agile practices, and amplify productivity with the right
+              blend of human expertise and AI tooling.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/me"
+                className="btn-primary group relative overflow-hidden"
+              >
+                <span className="relative z-10">View Portfolio</span>
+                <div className="absolute inset-0 -translate-x-full bg-accent transition-transform group-hover:translate-x-0" />
+              </Link>
+              <Link
+                href="/me"
+                className="btn-secondary"
+              >
+                Contact
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Sidebar */}
+        <div
+          ref={statsRef}
+          className="observe col-span-12 flex flex-col justify-center gap-12 delay-300 lg:col-span-4"
+        >
+          <div className="border-l-2 border-accent pl-6">
+            <div className="mb-2 font-serif text-5xl font-bold">20+</div>
+            <div className="text-label text-muted-foreground">
+              Years of Experience
+            </div>
+          </div>
+          <div className="border-l-2 border-foreground pl-6">
+            <div className="mb-2 font-serif text-5xl font-bold">100%</div>
+            <div className="text-label text-muted-foreground">
+              Focus on Quality
+            </div>
+          </div>
+          <div className="border-l-2 border-foreground pl-6">
+            <div className="mb-2 font-serif text-5xl font-bold">∞</div>
+            <div className="text-label text-muted-foreground">
+              Continuous Learning
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="h-12 w-0.5 bg-foreground" />
+        </div>
+      </section>
+
+      {/* Expertise Section */}
+      <section className="section section-border bg-foreground text-background">
+        <div className="container-custom">
+          <h2 className="heading-section observe mb-16">
+            Expertise that drives results
+          </h2>
+
+          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: "Clean Architecture",
+                description: "Building systems that are maintainable, scalable, and a joy to work with. Code that stands the test of time through proper design principles and patterns.",
+                icon: "01"
+              },
+              {
+                title: "Team Acceleration",
+                description: "Unlocking team potential through authentic agile practices, transparent communication, and identifying bottlenecks with Theory of Constraints.",
+                icon: "02"
+              },
+              {
+                title: "AI Integration",
+                description: "Leveraging AI tools strategically to amplify developer productivity without compromising code quality or team autonomy.",
+                icon: "03"
+              },
+              {
+                title: "TypeScript Excellence",
+                description: "Deep expertise in modern TypeScript, serverless architectures, Web Components, REST, and GraphQL for robust full-stack solutions.",
+                icon: "04"
+              },
+              {
+                title: "Quality Systems",
+                description: "Implementing quality management practices that catch issues early, reduce technical debt, and maintain high standards sustainably.",
+                icon: "05"
+              },
+              {
+                title: "Cloud Native",
+                description: "Building and deploying scalable cloud solutions with modern DevOps practices, Kubernetes, and infrastructure as code.",
+                icon: "06"
+              }
+            ].map((item, index) => (
+              <div
+                key={item.icon}
+                className="observe group relative border-l-2 border-accent pl-6"
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
+                <div className="mb-4 font-mono text-3xl font-bold text-accent">
+                  {item.icon}
+                </div>
+                <h3 className="mb-3 font-serif text-2xl font-bold">
+                  {item.title}
+                </h3>
+                <p className="leading-relaxed text-muted">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy Section */}
+      <section className="section section-border">
+        <div className="container-custom grid gap-12 lg:grid-cols-2">
+          <div className="observe">
+            <h2 className="heading-section mb-6">
+              Philosophy
+            </h2>
+            <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
+              <p>
+                Software development is a human endeavor. The best technical solutions
+                emerge from teams that communicate transparently, share knowledge freely,
+                and maintain a genuine agile mindset.
+              </p>
+              <p>
+                After two decades in this field, I've learned that sustainable productivity
+                comes from investing in quality upfront, not rushing to meet arbitrary deadlines.
+                Clean code isn't a luxury—it's the foundation of every successful project.
+              </p>
+              <p>
+                AI is transforming our industry, but it's a tool, not a replacement.
+                The real value comes from experienced engineers who know when to leverage
+                automation and when human judgment is irreplaceable.
+              </p>
+            </div>
+          </div>
+
+          <div className="observe delay-300 flex flex-col justify-center space-y-8">
+            <blockquote className="border-l-4 border-accent bg-muted p-8">
+              <p className="mb-4 font-serif text-2xl leading-relaxed">
+                "Every project has its unique challenges. I love analyzing them from
+                a cross-functional perspective to expand my horizon and pass knowledge
+                to aspiring and seasoned developers alike."
+              </p>
+              <cite className="text-label text-muted-foreground">
+                — Martin Trenker
+              </cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="section section-border bg-accent text-accent-foreground">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="heading-section observe mb-6 lg:text-6xl">
+            Ready to elevate your team's productivity?
+          </h2>
+          <p className="observe delay-200 mb-12 text-xl leading-relaxed md:text-2xl">
+            Let's discuss how clean code practices and strategic AI integration
+            can transform your engineering organization.
+          </p>
+          <div className="observe delay-[400ms] flex flex-wrap justify-center gap-4">
+            <Link
+              href="/me"
+              className="btn bg-foreground text-background transition-all hover:bg-foreground/90"
+            >
+              Get in Touch
+            </Link>
+            <Link
+              href="/me"
+              className="btn border-foreground text-foreground transition-all hover:bg-foreground hover:text-accent"
+              style={{ borderWidth: 'var(--border-width)' }}
+            >
+              View Full Portfolio
+            </Link>
+          </div>
+        </div>
       </section>
     </div>
+  );
+}
 
-    <section
-      className={clsx([
-        'prose px-6',
-        'print:max-w-none print:px-0',
-      ])}
-    >
-      <h3 className="mt-6 break-before-page uppercase tracking-widest">
-          Projects
-      </h3>
-      {projects.filter(p => p.featured).reverse().map((project) => {
-        const startYear = new Date(project.startDate).getFullYear();
-        const endYear = new Date(project.endDate).getFullYear();
-        return (
-          <article className="my-4 flex break-inside-avoid flex-col" key={project.id}>
-            <div className="flex items-center justify-between gap-6">
-              <h4 className="m-0 flex-initial font-semibold">
-                {project.company ? project.company : project.industry?.en}
-              </h4>
-              <hr className="my-0 block h-px w-full flex-1 border-b border-zinc-700 print:border-zinc-900" />
-              <time dateTime={`${new Date(project.startDate).getFullYear()}`}>
-                {startYear === endYear ? startYear : `${startYear} - ${endYear}`}
-              </time>
-            </div>
-            <h5 className="m-0 font-semibold uppercase tracking-widest">
-              {project.title.en}
-            </h5>
-            <p className="m-0 flex-1 tracking-wide">
-              {project.description.en}
-            </p>
-            <ul className="m-2 pl-4">
-              {project.highlights.en.length > 0 && project.highlights.en.map((highlight) => (
-                <li className="my-0 tracking-wide" key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-            {project.technologies.length > 0 && (
-              <>
-                <h6 className="font-bold">Technologies</h6>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((technology) => (
-                    <span className="rounded-md bg-zinc-900 px-2 py-1 text-sm text-zinc-50 print:px-1" key={technology}>{technology}</span>
-                  ))}
-                </div>
-              </>
-            )}
-          </article>
-        );
-      })}
-    </section>
-  </main>
-);
-
-export default Home;
+export default Page;

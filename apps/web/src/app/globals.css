@@ -1,25 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground: 0deg, 0%, 0%;
-  --background-start: 210deg, 60%, 98%;
-  --background-end: 0deg, 0%, 90%;
+@layer base {
+  :root {
+    /* Color System - Light Theme */
+    --background: 39 10% 98%;           /* zinc-50 */
+    --foreground: 24 10% 10%;           /* zinc-900 */
+    --muted: 24 6% 90%;                 /* zinc-200 */
+    --muted-foreground: 24 5% 40%;      /* zinc-600 */
+    --accent: 32 95% 44%;               /* amber-700 */
+    --accent-foreground: 24 10% 10%;    /* zinc-900 */
+    --border: 24 10% 10%;               /* zinc-900 */
+    --card: 0 0% 100%;                  /* white */
+    --card-foreground: 24 10% 10%;      /* zinc-900 */
+
+    /* Typography Scale */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', Menlo, monospace;
+
+    /* Spacing & Layout */
+    --border-width: 2px;
+    --section-padding-x: 1.5rem;        /* 24px */
+    --section-padding-y: 6rem;          /* 96px */
+    --container-max-width: 80rem;       /* 1280px */
+
+    /* Animation */
+    --transition-base: 150ms ease-in-out;
+    --transition-long: 300ms ease-in-out;
+    --animation-fade-in: 1000ms ease-out;
+  }
+
+  /* Dark Theme (opt-in via .dark class or media query) */
+  .dark {
+    --background: 24 10% 10%;           /* zinc-900 */
+    --foreground: 39 10% 98%;           /* zinc-50 */
+    --muted: 24 10% 20%;                /* zinc-800 */
+    --muted-foreground: 24 6% 70%;      /* zinc-400 */
+    --accent: 32 95% 44%;               /* amber-700 */
+    --accent-foreground: 39 10% 98%;    /* zinc-50 */
+    --border: 39 10% 98%;               /* zinc-50 */
+    --card: 24 10% 15%;                 /* zinc-850 */
+    --card-foreground: 39 10% 98%;      /* zinc-50 */
+  }
+
+  /* Auto dark mode support (commented out for now) */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 24 10% 10%;
+      --foreground: 39 10% 98%;
+      --muted: 24 10% 20%;
+      --muted-foreground: 24 6% 70%;
+      --accent: 32 95% 44%;
+      --accent-foreground: 39 10% 98%;
+      --border: 39 10% 98%;
+      --card: 24 10% 15%;
+      --card-foreground: 39 10% 98%;
+    }
+  }
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground: 0deg, 0%, 100%;
-    --background-start: 213deg, 55%, 10%;
-    --background-end: 197deg, 27%, 13%;
+@layer base {
+  * {
+    @apply border-border;
   }
-} */
 
-body {
-  color: hsl(var(--foreground));
-  min-height: 100lvh;
-  /* background: linear-gradient(to bottom, transparent, hsl(var(--background-end))) hsl(var(--background-start)); */
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    min-height: 100lvh;
+  }
+}
+
+@layer components {
+  /* Button Components */
+  .btn {
+    @apply px-8 py-4 font-mono text-sm uppercase tracking-wider transition-all;
+    transition-duration: var(--transition-base);
+  }
+
+  .btn-primary {
+    @apply btn bg-foreground text-background hover:bg-accent;
+  }
+
+  .btn-secondary {
+    @apply btn border-border text-foreground hover:bg-foreground hover:text-background;
+    border-width: var(--border-width);
+  }
+
+  /* Section Components */
+  .section {
+    @apply px-6 md:px-12 lg:px-24;
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+  }
+
+  .section-border {
+    border-top-width: var(--border-width);
+    @apply border-t-border;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply mx-auto;
+    max-width: var(--container-max-width);
+  }
+
+  /* Typography Components */
+  .heading-display {
+    @apply font-serif font-bold tracking-tight leading-[1.1];
+  }
+
+  .heading-section {
+    @apply font-serif font-bold text-4xl md:text-5xl;
+  }
+
+  .text-label {
+    @apply font-mono text-sm uppercase tracking-wider;
+  }
+
+  /* Animation Classes */
+  .observe {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition-property: opacity, transform;
+    transition-timing-function: ease-out;
+    transition-duration: 1000ms;
+  }
+
+  .observe.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Animation delays for staggered effects */
+  .delay-100 { transition-delay: 100ms; }
+  .delay-200 { transition-delay: 200ms; }
+  .delay-300 { transition-delay: 300ms; }
+  .delay-400 { transition-delay: 400ms; }
+  .delay-\[400ms\] { transition-delay: 400ms; }
 }
 
 @page {

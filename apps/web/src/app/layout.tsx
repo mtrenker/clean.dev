@@ -1,18 +1,15 @@
 import type { PropsWithChildren } from 'react';
 import React from 'react'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
 import Script from 'next/script';
 import { auth, signIn, signOut } from 'auth';
 import { UserMenu } from '@/components/user-menu';
 
-const inter = Inter({ subsets: ['latin'] })
-
 export const metadata: Metadata = {
-  title: 'clean.dev',
-  description: 'clean code, clean work, clean mind.',
+  title: 'clean.dev — Software Consultant',
+  description: '20 years of engineering excellence. Building better software through clean code, authentic agile practices, and strategic AI integration.',
 }
 
 const RootLayout = async ({children}: PropsWithChildren) => {
@@ -26,24 +23,25 @@ const RootLayout = async ({children}: PropsWithChildren) => {
           data-domain="clean.dev"
           src="https://analytics.pacabytes.io/js/script.js" />
       </head>
-      <body className={inter.className}>
-        <header className="container mx-auto p-4 print:hidden">
-          <nav className="flex items-center justify-between">
+      <body className="font-sans antialiased">
+        <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm print:hidden">
+          <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-24">
             <div>
-              <Link className="text-3xl font-bold" href="/">
-                cd
+              <Link className="group flex items-center gap-3 font-serif text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-accent" href="/">
+                <span className="inline-block transition-transform group-hover:scale-110">cd</span>
+                <span className="hidden font-mono text-sm font-normal tracking-wider sm:inline-block">
+                  clean.dev
+                </span>
               </Link>
             </div>
-            <div className="flex items-center gap-10">
-              <ul className="flex flex-wrap gap-4 md:gap-10">
+            <div className="flex items-center gap-6 md:gap-10">
+              <ul className="flex flex-wrap gap-4 md:gap-8">
                 <li>
-                  <Link className="text-base font-semibold leading-6 text-gray-900" href="/">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link className="text-base font-semibold leading-6 text-gray-900" href="/imprint">
-                    Imprint
+                  <Link
+                    className="text-label text-foreground transition-colors hover:text-accent"
+                    href="/me"
+                  >
+                    Portfolio
                   </Link>
                 </li>
               </ul>
@@ -52,30 +50,48 @@ const RootLayout = async ({children}: PropsWithChildren) => {
           </nav>
         </header>
         {children}
-        <footer className="container mx-auto mt-10 p-6 print:hidden">
-          <div className="flex items-center justify-between">
-            <p className="text-xs leading-5 text-gray-500">
-              {`© ${new Date().getFullYear()} Martin Trenker`}
+        <footer className="border-t border-border bg-background print:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row md:px-12 lg:px-24">
+            <p className="text-label text-xs text-muted-foreground">
+              {`© ${new Date().getFullYear()} Martin Trenker — Building better software`}
             </p>
-            <div>
+            <div className="flex items-center gap-6">
+              <Link
+                className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
+                href="/imprint"
+              >
+                Legal
+              </Link>
               {session ? (
-                <form action={async () => {
-                  'use server';
-                  await signOut();
-                }}>
-                  <button className="text-xs text-gray-500 hover:text-gray-700" type="submit">
-                    Logout
-                  </button>
-                </form>
+                <>
+                  <span className="text-muted">|</span>
+                  <form action={async () => {
+                    'use server';
+                    await signOut();
+                  }}>
+                    <button
+                      className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
+                      type="submit"
+                    >
+                      Logout
+                    </button>
+                  </form>
+                </>
               ) : (
-                <form action={async () => {
-                  'use server';
-                  await signIn('github');
-                }}>
-                  <button className="text-xs text-gray-500 hover:text-gray-700" type="submit">
-                    Login
-                  </button>
-                </form>
+                <>
+                  <span className="text-muted">|</span>
+                  <form action={async () => {
+                    'use server';
+                    await signIn('github');
+                  }}>
+                    <button
+                      className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
+                      type="submit"
+                    >
+                      Login
+                    </button>
+                  </form>
+                </>
               )}
             </div>
           </div>
