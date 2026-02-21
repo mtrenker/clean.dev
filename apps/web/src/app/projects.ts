@@ -202,8 +202,16 @@ export const projects: Project[] = [
     },
     city: 'Munich',
     highlights: {
-      en: [],
-      de: [],
+      en: [
+        'hierarchical evaluation model: store → local → regional → country — each level saw exactly the data their role required',
+        'first AngularJS application — adopted before the framework was mainstream in enterprise contexts',
+        'multi-region, multi-language rollout across BMW\'s global dealer network',
+      ],
+      de: [
+        'hierarchisches Bewertungsmodell: Filiale → lokal → regional → Land – jede Ebene sah exakt die Daten, die ihrer Rolle entsprachen',
+        'erste AngularJS-Anwendung – eingesetzt bevor das Framework in Unternehmensumgebungen verbreitet war',
+        'mehrsprachiger Rollout über das globale BMW-Händlernetz',
+      ],
     },
     technologies: [
       'laravel',
@@ -212,7 +220,7 @@ export const projects: Project[] = [
       'javascript',
       'html',
       'css',
-      'php'
+      'php',
     ],
     startDate: '2013-01',
     endDate: '2013-07',
@@ -469,7 +477,6 @@ export const projects: Project[] = [
     startDate: '2019-07',
     endDate: '2019-12',
     featured: true,
-    spotlight: true,
   },
   {
     id: '15',
