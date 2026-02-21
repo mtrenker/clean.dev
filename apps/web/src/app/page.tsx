@@ -72,7 +72,7 @@ const Page: NextPage = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/me"
+                href="/work"
                 className="btn-primary group relative overflow-hidden"
               >
                 <span className="relative z-10">{intl.formatMessage({ id: 'home.hero.cta.portfolio' })}</span>
@@ -210,7 +210,7 @@ const Page: NextPage = () => {
               {intl.formatMessage({ id: 'home.cta.contact' })}
             </Link>
             <Link
-              href="/me"
+              href="/work"
               className="btn border-foreground text-foreground transition-all hover:bg-foreground hover:text-accent"
               style={{ borderWidth: 'var(--border-width)' }}
             >

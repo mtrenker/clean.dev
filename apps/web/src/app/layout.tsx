@@ -63,7 +63,7 @@ const RootLayout = async ({children}: PropsWithChildren) => {
                   <li>
                     <Link
                       className="text-label text-foreground transition-colors hover:text-accent"
-                      href="/me"
+                      href="/work"
                     >
                       {intl.formatMessage({ id: 'nav.portfolio' })}
                     </Link>

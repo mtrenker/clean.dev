@@ -74,7 +74,7 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
       {project.technologies.length > 0 && (
         <div className={clsx('flex flex-col justify-end gap-3', hero ? 'md:w-1/3' : '')}>
           <p className="text-label m-0 text-xs text-muted-foreground/60">
-            {intl.formatMessage({ id: 'me.projects.technologies' })}
+            {intl.formatMessage({ id: 'work.projects.technologies' })}
           </p>
           <div className="flex flex-wrap gap-1.5">
             {project.technologies.map((t) => (
@@ -171,7 +171,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               <div className="absolute -bottom-3 -right-3 h-full w-full border-2 border-accent" />
               <picture className="relative block h-[260px] w-[260px] overflow-hidden md:h-[280px] md:w-[280px]">
                 <Image
-                  alt={intl.formatMessage({ id: 'me.img.alt' })}
+                  alt={intl.formatMessage({ id: 'work.img.alt' })}
                   className="m-0 h-full w-full object-cover"
                   height={280}
                   src="/me.png"
@@ -186,19 +186,19 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           <div className="flex flex-col gap-6">
             <div>
               <p className="text-label mb-3 tracking-[0.3em] text-accent">
-                {intl.formatMessage({ id: 'me.about.heading' })}
+                {intl.formatMessage({ id: 'work.about.heading' })}
               </p>
               <h1 className="font-serif text-5xl font-bold uppercase leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
-                {intl.formatMessage({ id: 'me.title' })}
+                {intl.formatMessage({ id: 'work.title' })}
               </h1>
               <h2 className="text-label mt-3 text-xl text-muted-foreground md:text-2xl">
-                {intl.formatMessage({ id: 'me.subtitle' })}
+                {intl.formatMessage({ id: 'work.subtitle' })}
               </h2>
             </div>
             <div className="h-px w-16 bg-accent" />
             <div className="max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground md:text-lg">
-              <p>{intl.formatMessage({ id: 'me.about.p1' })}</p>
-              <p>{intl.formatMessage({ id: 'me.about.p2' })}</p>
+              <p>{intl.formatMessage({ id: 'work.about.p1' })}</p>
+              <p>{intl.formatMessage({ id: 'work.about.p2' })}</p>
             </div>
           </div>
 
@@ -215,7 +215,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <figure className="m-0 print:flex print:gap-16 print:text-start">
           <picture className="inline-block h-[200px] overflow-hidden rounded-full ring-2 ring-border print:h-auto print:rounded-none print:ring-0">
             <Image
-              alt={intl.formatMessage({ id: 'me.img.alt' })}
+              alt={intl.formatMessage({ id: 'work.img.alt' })}
               className="m-0"
               height={200}
               src="/me.png"
@@ -225,20 +225,20 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           </picture>
           <figcaption className="flex flex-col gap-4">
             <h1 className="m-0 font-serif text-3xl font-bold uppercase tracking-tight text-foreground">
-              {intl.formatMessage({ id: 'me.title' })}
+              {intl.formatMessage({ id: 'work.title' })}
             </h1>
             <h2 className="m-0 text-label text-2xl text-muted-foreground">
-              {intl.formatMessage({ id: 'me.subtitle' })}
+              {intl.formatMessage({ id: 'work.subtitle' })}
             </h2>
           </figcaption>
         </figure>
         <div className="print:border-l-2 print:border-foreground print:px-6">
-          <h3 className="text-label text-foreground">{intl.formatMessage({ id: 'me.about.heading' })}</h3>
+          <h3 className="text-label text-foreground">{intl.formatMessage({ id: 'work.about.heading' })}</h3>
           <p className="my-1 font-medium tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'me.about.p1' })}
+            {intl.formatMessage({ id: 'work.about.p1' })}
           </p>
           <p className="my-1 font-medium tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'me.about.p2' })}
+            {intl.formatMessage({ id: 'work.about.p2' })}
           </p>
         </div>
       </section>
@@ -249,10 +249,10 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <div className="grid grid-cols-2 divide-x-[length:var(--border-width)] divide-border md:grid-cols-4">
           {(
             [
-              { value: '20+', label: intl.formatMessage({ id: 'me.stats.years.label' }) },
-              { value: String(projects.length), label: intl.formatMessage({ id: 'me.stats.engagements.label' }) },
-              { value: String(new Set(projects.map((p) => p.company ?? p.industry?.[lang])).size), label: intl.formatMessage({ id: 'me.stats.companies.label' }) },
-              { value: String(Math.min(...projects.map((p) => new Date(p.startDate).getFullYear()))), label: intl.formatMessage({ id: 'me.stats.since.label' }) },
+              { value: '20+', label: intl.formatMessage({ id: 'work.stats.years.label' }) },
+              { value: String(projects.length), label: intl.formatMessage({ id: 'work.stats.engagements.label' }) },
+              { value: String(new Set(projects.map((p) => p.company ?? p.industry?.[lang])).size), label: intl.formatMessage({ id: 'work.stats.companies.label' }) },
+              { value: String(Math.min(...projects.map((p) => new Date(p.startDate).getFullYear()))), label: intl.formatMessage({ id: 'work.stats.since.label' }) },
             ] as const
           ).map((stat, i) => (
             <div
@@ -273,18 +273,18 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           {([
             {
               num: '01',
-              heading: intl.formatMessage({ id: 'me.section.cleanAgile.heading' }),
-              body: intl.formatMessage({ id: 'me.section.cleanAgile.p' }),
+              heading: intl.formatMessage({ id: 'work.section.cleanAgile.heading' }),
+              body: intl.formatMessage({ id: 'work.section.cleanAgile.p' }),
             },
             {
               num: '02',
-              heading: intl.formatMessage({ id: 'me.section.learner.heading' }),
-              body: intl.formatMessage({ id: 'me.section.learner.p' }),
+              heading: intl.formatMessage({ id: 'work.section.learner.heading' }),
+              body: intl.formatMessage({ id: 'work.section.learner.p' }),
             },
             {
               num: '03',
-              heading: intl.formatMessage({ id: 'me.section.automation.heading' }),
-              body: intl.formatMessage({ id: 'me.section.automation.p' }),
+              heading: intl.formatMessage({ id: 'work.section.automation.heading' }),
+              body: intl.formatMessage({ id: 'work.section.automation.p' }),
             },
           ]).map((item, i) => (
             <div
@@ -309,7 +309,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
-            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'me.contact.heading' })}</h3>
+            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'work.contact.heading' })}</h3>
             <ul className="pl-4">
               <li className="my-0 text-muted-foreground">info@clean.dev</li>
               <li className="my-0 text-muted-foreground">https://clean.dev</li>
@@ -322,8 +322,8 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               'print:max-w-none print:flex-1 print:grow-0 print:px-0',
             ])}
           >
-            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'me.skills.heading' })}</h3>
-            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'me.skills.programming.heading' })}</h4>
+            <h3 className="text-label my-0 text-foreground">{intl.formatMessage({ id: 'work.skills.heading' })}</h3>
+            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'work.skills.programming.heading' })}</h4>
             <ul className="pl-4">
               <li className="my-0 text-muted-foreground">Clean Code</li>
               <li className="my-0 text-muted-foreground">TypeScript</li>
@@ -331,7 +331,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               <li className="my-0 text-muted-foreground">Web Components</li>
               <li className="my-0 text-muted-foreground">REST / GraphQL</li>
             </ul>
-            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'me.skills.org.heading' })}</h4>
+            <h4 className="text-label text-sm text-foreground">{intl.formatMessage({ id: 'work.skills.org.heading' })}</h4>
             <ul className="pl-4">
               <li className="my-0 text-muted-foreground">Agile Mindset</li>
               <li className="my-0 text-muted-foreground">Quality Management</li>
@@ -347,17 +347,17 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
             'hidden print:block print:max-w-none print:flex-1 print:px-0',
           ])}
         >
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.cleanAgile.heading' })}</h4>
+          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.cleanAgile.heading' })}</h4>
           <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'me.section.cleanAgile.p' })}
+            {intl.formatMessage({ id: 'work.section.cleanAgile.p' })}
           </p>
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.learner.heading' })}</h4>
+          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.learner.heading' })}</h4>
           <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'me.section.learner.p' })}
+            {intl.formatMessage({ id: 'work.section.learner.p' })}
           </p>
-          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'me.section.automation.heading' })}</h4>
+          <h4 className="text-label text-foreground">{intl.formatMessage({ id: 'work.section.automation.heading' })}</h4>
           <p className="tracking-wide text-muted-foreground">
-            {intl.formatMessage({ id: 'me.section.automation.p' })}
+            {intl.formatMessage({ id: 'work.section.automation.p' })}
           </p>
         </section>
       </div>
@@ -367,10 +367,10 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <div className="observe mb-10 flex items-end justify-between gap-4">
           <div>
             <p className="text-label mb-1 text-accent">
-              {intl.formatMessage({ id: 'me.spotlight.heading' })}
+              {intl.formatMessage({ id: 'work.spotlight.heading' })}
             </p>
             <p className="text-sm text-muted-foreground">
-              {intl.formatMessage({ id: 'me.spotlight.lead' })}
+              {intl.formatMessage({ id: 'work.spotlight.lead' })}
             </p>
           </div>
           <div className="h-px flex-1 bg-border" />
@@ -395,7 +395,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <div className="observe mb-10 flex items-end justify-between gap-4">
           <div>
             <p className="text-label mb-1 text-muted-foreground">
-              {intl.formatMessage({ id: 'me.timeline.heading' })}
+              {intl.formatMessage({ id: 'work.timeline.heading' })}
             </p>
           </div>
           <div className="h-px flex-1 bg-border" />
@@ -421,8 +421,8 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         >
           <span className="text-accent">{timelineExpanded ? '↑' : '↓'}</span>
           {timelineExpanded
-            ? intl.formatMessage({ id: 'me.timeline.collapse' })
-            : intl.formatMessage({ id: 'me.timeline.showAll' }, { count: projects.length })}
+            ? intl.formatMessage({ id: 'work.timeline.collapse' })
+            : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
         </button>
       </section>
 
@@ -435,7 +435,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         ])}
       >
         <h3 className="text-label mt-6 break-before-page text-foreground">
-          {intl.formatMessage({ id: 'me.projects.heading' })}
+          {intl.formatMessage({ id: 'work.projects.heading' })}
         </h3>
         {projects
           .filter((p) => p.featured)
@@ -473,7 +473,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
                 </ul>
                 {project.technologies.length > 0 && (
                   <>
-                    <h6 className="font-bold text-foreground">{intl.formatMessage({ id: 'me.projects.technologies' })}</h6>
+                    <h6 className="font-bold text-foreground">{intl.formatMessage({ id: 'work.projects.technologies' })}</h6>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.map((technology) => (
                         <span

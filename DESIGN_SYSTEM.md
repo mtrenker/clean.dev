@@ -416,7 +416,7 @@ import { Card } from "@/components/ui";
 
 ## Print Styles (Portfolio Page)
 
-The portfolio page (`/me`) includes special print styles for CV generation:
+The portfolio page (`/work`) includes special print styles for CV generation:
 
 ```tsx
 // Screen: Centered with ring
@@ -437,7 +437,7 @@ className = "break-inside-avoid";
 
 **To print the CV:**
 
-1. Navigate to `/me`
+1. Navigate to `/work`
 2. Use browser print (Ctrl/Cmd + P)
 3. The page automatically adjusts for print layout
 
