@@ -128,8 +128,8 @@ export const projects: Project[] = [
       de: 'Beratung',
     },
     title: {
-      en: 'Web Developer',
-      de: 'Webentwickler',
+      en: 'Fullstack Developer',
+      de: 'Fullstack-Entwickler',
     },
     description: {
       en: 'Owned a full-stack auction platform used for a company-wide annual charity event — from database schema to frontend, soup to nuts.',
@@ -161,8 +161,8 @@ export const projects: Project[] = [
       de: 'Beratung',
     },
     title: {
-      en: 'Web Developer',
-      de: 'Webentwickler',
+      en: 'Fullstack Developer',
+      de: 'Fullstack-Entwickler',
     },
     description: {
       en: 'Maintained a worldwide hardware migration tracking system used across McKinsey offices globally, built on Zend Framework and Oracle DB.',
@@ -227,8 +227,8 @@ export const projects: Project[] = [
       de: 'Beratung',
     },
     title: {
-      en: 'Fullstack Developer / Lead',
-      de: 'Fullstack-Entwickler / Leiter',
+      en: 'Technical Lead',
+      de: 'Technischer Leiter',
     },
     description: {
       en: 'Rearchitected a legacy migration tool from scratch — moved to Symfony + React with CQRS-backed data structures, significantly improving maintainability and auditability.',
@@ -262,8 +262,8 @@ export const projects: Project[] = [
       de: 'Beratung',
     },
     title: {
-      en: 'Fullstack Developer / Lead',
-      de: 'Fullstack-Entwickler / Leiter',
+      en: 'Technical Lead',
+      de: 'Technischer Leiter',
     },
     description: {
       en: 'Delivered a QR-code-based badge management system for staff and visitors, including on-demand print integration.',
@@ -321,8 +321,8 @@ export const projects: Project[] = [
       de: 'Maschinenbau',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Engineer',
+      de: 'Frontend-Ingenieur',
     },
     description: {
       en: 'Built real-time monitoring dashboards served directly on industrial machines, using native web components years before they went mainstream.',
@@ -345,8 +345,8 @@ export const projects: Project[] = [
     id: '11',
     company: 'Lufthansa AG',
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Engineer',
+      de: 'Frontend-Ingenieur',
     },
     description: {
       en: 'Developed React components for Lufthansa\'s digital touchpoints, integrated into Adobe Experience Manager.',
@@ -384,8 +384,8 @@ export const projects: Project[] = [
       de: 'Reisen',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Engineer',
+      de: 'Frontend-Ingenieur',
     },
     description: {
       en: 'Built components for an online travel magazine using React, TypeScript and GraphQL, backed by Contentful as a headless CMS.',
@@ -416,8 +416,8 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Engineer',
+      de: 'Frontend-Ingenieur',
     },
     description: {
       en: 'Built a React + GraphQL web magazine for Germany\'s largest online car dealer, connected to a headless CMS.',
@@ -446,8 +446,8 @@ export const projects: Project[] = [
       de: 'Medien',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Engineer',
+      de: 'Frontend-Ingenieur',
     },
     description: {
       en: 'Built and maintained React components powering high-traffic show websites for ProSieben and Sat.1 formats, with GraphQL APIs and analytics tracking throughout.',
@@ -479,8 +479,8 @@ export const projects: Project[] = [
       de: 'Finanzen',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Engineering Consultant',
+      de: 'Engineering-Berater',
     },
     description: {
       en: 'Built a real-time communication micro-frontend handling VoIP calls between customers and mortgage advisors, using React, Redux Toolkit and WebRTC.',
@@ -518,8 +518,8 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Frontend Architect',
+      de: 'Frontend-Architekt',
     },
     description: {
       en: 'Rewrote a complex AngularJS optometry workflow app in TypeScript/React, replacing ad-hoc state logic with XState-driven form architecture for in-store staff.',
@@ -554,8 +554,8 @@ export const projects: Project[] = [
     id: '17',
     company: 'UXMA GmbH & Co. KG',
     title: {
-      en: 'Frontend Developer',
-      de: 'Frontend-Entwickler',
+      en: 'Technical Lead',
+      de: 'Technischer Leiter',
     },
     description: {
       en: 'Led a three-person team building a data-heavy internal web app in TypeScript and React, with a strong focus on mentoring two junior developers.',
