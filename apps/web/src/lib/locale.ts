@@ -14,20 +14,13 @@ export const isValidLocale = (value: string): value is Locale =>
  * Determine the active locale from cookie → Accept-Language header → default.
  */
 export const getLocale = (
-  headers: Pick<ReadonlyHeaders, 'get'>,
+  _headers: Pick<ReadonlyHeaders, 'get'>,
   cookies: Pick<ReadonlyRequestCookies, 'get'>,
 ): Locale => {
-  // 1. Explicit cookie overrides everything
+  // Only respect an explicit manual selection (cookie). Default to English.
   const cookieValue = cookies.get(LOCALE_COOKIE)?.value;
   if (cookieValue && isValidLocale(cookieValue)) {
     return cookieValue;
-  }
-
-  // 2. Parse Accept-Language header (first tag only, e.g. "de-DE,de;q=0.9" → "de")
-  const acceptLanguage = headers.get('accept-language') ?? '';
-  const primaryTag = acceptLanguage.split(',')[0]?.split('-')[0]?.toLowerCase() ?? '';
-  if (isValidLocale(primaryTag)) {
-    return primaryTag;
   }
 
   return DEFAULT_LOCALE;
