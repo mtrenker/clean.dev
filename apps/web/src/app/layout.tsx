@@ -68,6 +68,14 @@ const RootLayout = async ({children}: PropsWithChildren) => {
                       {intl.formatMessage({ id: 'nav.portfolio' })}
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      className="text-label text-foreground transition-colors hover:text-accent"
+                      href="/blog"
+                    >
+                      {intl.formatMessage({ id: 'nav.blog' })}
+                    </Link>
+                  </li>
                 </ul>
                 <LanguageSwitcher currentLocale={locale} />
                 {session && <UserMenu session={session} />}

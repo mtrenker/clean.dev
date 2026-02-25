@@ -28,9 +28,11 @@
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.0.10",
     "gql-tag": "1.0.1",
+    "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^7.3.2",
     "next": "^16.1.5",
     "next-auth": "5.0.0-beta.30",
+    "next-mdx-remote": "^6.0.0",
     "pg": "^8.17.2",
     "postcss": "^8.4.28",
     "prismjs": "^1.29.0",
@@ -53,6 +55,7 @@
     "@types/prismjs": "^1.26.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "eslint-plugin-mdx": "^3.6.2",
     "eslint-plugin-tailwindcss": "^3.13.0"
   }
 }

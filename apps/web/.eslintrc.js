@@ -13,5 +13,14 @@ module.exports = {
     '.next/',
     '.open-next/',
     'out/'
-  ]
+  ],
+  overrides: [
+    {
+      files: ['**/*.mdx'],
+      extends: ['plugin:mdx/recommended'],
+      settings: {
+        'mdx/code-blocks': true,
+      },
+    },
+  ],
 }
