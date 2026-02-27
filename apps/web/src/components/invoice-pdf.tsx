@@ -197,7 +197,6 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice, settings, epcQr
               {settings.contractorName}, {settings.contractorAddress}
             </Text>
             <Text style={styles.addressLine}>{invoice.client.name}</Text>
-            <Text style={styles.addressLine}>– Rechnungswesen –</Text>
             <Text style={styles.addressLine}>{invoice.client.address}</Text>
           </View>
 
