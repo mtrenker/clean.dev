@@ -1,0 +1,10 @@
+{
+  "name": "@cleandev/react-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'React dev server not configured yet'",
+    "build": "echo 'React build not configured yet'",
+    "lint": "echo 'React lint not configured yet'"
+  }
+}
