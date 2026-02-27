@@ -112,7 +112,7 @@ export class PostgresAdapter implements IProjectManagementAdapter {
       .returning();
 
     if (!updated) {
-      throw new Error(`Client with id ${id} not found`);
+      throw new Error(`Cannot update client: no client found with id ${id}`);
     }
 
     return updated as Client;
@@ -187,7 +187,7 @@ export class PostgresAdapter implements IProjectManagementAdapter {
       .returning();
 
     if (!updated) {
-      throw new Error(`Time entry with id ${id} not found`);
+      throw new Error(`Cannot update time entry: no entry found with id ${id}`);
     }
 
     return updated as TimeEntry;
@@ -273,13 +273,20 @@ export class PostgresAdapter implements IProjectManagementAdapter {
       const selectedEntries = timeEntries.filter((entry) => timeEntryIds.includes(entry.id));
 
       if (selectedEntries.length !== timeEntryIds.length) {
-        throw new Error('Some time entries not found or belong to different client');
+        const foundIds = new Set(selectedEntries.map((e) => e.id));
+        const missingIds = timeEntryIds.filter((id) => !foundIds.has(id));
+        throw new Error(
+          `${missingIds.length} of ${timeEntryIds.length} time entries not found for client ${clientId}: [${missingIds.join(', ')}]`
+        );
       }
 
       // Check if any already invoiced
       const alreadyInvoiced = selectedEntries.filter((entry) => entry.isInvoiced);
       if (alreadyInvoiced.length > 0) {
-        throw new Error('Some time entries are already invoiced');
+        const invoicedIds = alreadyInvoiced.map((e) => e.id);
+        throw new Error(
+          `${alreadyInvoiced.length} time entries are already invoiced: [${invoicedIds.join(', ')}]`
+        );
       }
 
       // Calculate totals
@@ -357,13 +364,24 @@ export class PostgresAdapter implements IProjectManagementAdapter {
         })
         .where(inArray(schema.timeEntries.id, timeEntryIds));
 
-      // Return full invoice with details
-      const fullInvoice = await this.getInvoice(invoice.id);
-      if (!fullInvoice) {
-        throw new Error('Failed to retrieve created invoice');
+      // Fetch client for the response
+      const client = await this.getClient(clientId);
+      if (!client) {
+        throw new Error(`Cannot build invoice response: client ${clientId} not found`);
       }
 
-      return fullInvoice;
+      // Read back line items from within the transaction
+      const lineItems = await tx
+        .select()
+        .from(schema.invoiceLineItems)
+        .where(eq(schema.invoiceLineItems.invoiceId, invoice.id))
+        .orderBy(schema.invoiceLineItems.position);
+
+      return {
+        ...invoice,
+        client,
+        lineItems,
+      } as InvoiceWithDetails;
     });
   }
 
@@ -378,7 +396,7 @@ export class PostgresAdapter implements IProjectManagementAdapter {
       .returning();
 
     if (!updated) {
-      throw new Error(`Invoice with id ${id} not found`);
+      throw new Error(`Cannot mark invoice as sent: no invoice found with id ${id}`);
     }
 
     return updated as Invoice;
