@@ -55,7 +55,6 @@ export const projects: Project[] = [
     ],
     startDate: '2008-11',
     endDate: '2009-02',
-    featured: true,
   },
   {
     id: '2',
@@ -88,7 +87,6 @@ export const projects: Project[] = [
     ],
     startDate: '2009-02',
     endDate: '2012-07',
-    featured: true,
   },
   {
     id: '3',
@@ -118,7 +116,6 @@ export const projects: Project[] = [
     ],
     startDate: '2010-12',
     endDate: '2011-10',
-    featured: true,
   },
   {
     id: '4',
@@ -319,7 +316,6 @@ export const projects: Project[] = [
     ],
     startDate: '2016-08',
     endDate: '2016-10',
-    featured: true,
   },
   {
     id: '10',
@@ -329,8 +325,8 @@ export const projects: Project[] = [
       de: 'Maschinenbau',
     },
     title: {
-      en: 'Frontend Engineer',
-      de: 'Frontend-Ingenieur',
+      en: 'Real-time Web Systems Engineer',
+      de: 'Web-Systemingenieur für Echtzeit-Anwendungen',
     },
     description: {
       en: 'Built real-time monitoring dashboards served directly on industrial machines, using native web components years before they went mainstream.',
@@ -525,8 +521,8 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Frontend Architect',
-      de: 'Frontend-Architekt',
+      en: 'Technical Architect',
+      de: 'Technischer Architekt',
     },
     description: {
       en: 'Rewrote a complex AngularJS optometry workflow app in TypeScript/React, replacing ad-hoc state logic with XState-driven form architecture for in-store staff.',
@@ -641,8 +637,8 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Consultant & Technical Lead',
-      de: 'Berater & Technischer Leiter',
+      en: 'Principal Consultant',
+      de: 'Leitender Berater',
     },
     description: {
       en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the full rewrite of a complex, hard-to-maintain CRM integration from legacy code to a clean React architecture — shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
