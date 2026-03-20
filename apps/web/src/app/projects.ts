@@ -637,8 +637,8 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Principal Consultant',
-      de: 'Leitender Berater',
+      en: 'Consultant & Technical Lead',
+      de: 'Berater & Technischer Leiter',
     },
     description: {
       en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the full rewrite of a complex, hard-to-maintain CRM integration from legacy code to a clean React architecture — shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
