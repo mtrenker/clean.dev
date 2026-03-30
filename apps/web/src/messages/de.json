@@ -210,5 +210,6 @@
   "pdf.loading": "PDF wird erstellt...",
   "pdf.download": "PDF herunterladen",
   "pdf.loading2": "PDF wird geladen...",
-  "pdf.error": "Fehler beim Laden der PDF: {message}"
+  "pdf.error": "Fehler beim Laden der PDF: {message}",
+  "nav.references": "Referenzen"
 }

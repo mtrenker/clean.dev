@@ -15,6 +15,13 @@
       "when": 1771138800000,
       "tag": "0001_rename_freelancer_add_payment_terms",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743358800000,
+      "tag": "0002_testimonial_tables",
+      "breakpoints": true
     }
   ]
 }

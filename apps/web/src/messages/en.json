@@ -210,5 +210,6 @@
   "pdf.loading": "Creating PDF...",
   "pdf.download": "Download PDF",
   "pdf.loading2": "Loading PDF...",
-  "pdf.error": "Error loading PDF: {message}"
+  "pdf.error": "Error loading PDF: {message}",
+  "nav.references": "References"
 }
