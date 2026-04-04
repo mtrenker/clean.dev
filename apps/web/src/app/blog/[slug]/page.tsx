@@ -34,7 +34,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
     <main className="min-h-screen bg-background text-foreground">
       {/* Post Header */}
       <section className="section border-b border-border">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-3xl">
           <Link
             className="text-label mb-8 inline-flex items-center gap-2 text-xs tracking-widest text-muted-foreground transition-colors hover:text-accent"
             href="/blog"
@@ -49,11 +49,11 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
             {formatPostDate(post.frontmatter.date)}
           </time>
 
-          <h1 className="heading-display mb-6 mt-4 text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="heading-display mb-6 mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
             {post.frontmatter.title}
           </h1>
 
-          <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
             {post.frontmatter.description}
           </p>
 
@@ -62,7 +62,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
               {post.frontmatter.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-label border border-border px-3 py-1 text-xs text-muted-foreground"
+                  className="text-label rounded-sm border border-border px-3 py-1 text-xs text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -74,7 +74,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
 
       {/* Post Content */}
       <section className="section">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-3xl">
           <div
             className={[
               'prose max-w-none',
@@ -96,7 +96,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
 
       {/* Footer Nav */}
       <section className="section border-t border-border">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-3xl">
           <Link
             className="text-label inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
             href="/blog"

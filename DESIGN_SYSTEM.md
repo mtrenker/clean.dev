@@ -6,13 +6,15 @@ token-based architecture for easy theming and maintenance.
 ## Philosophy
 
 The design system is built on CSS variables (custom properties) and Tailwind
-utilities, allowing for:
+utilities, following a **"Warm Industrial"** aesthetic: editorial precision meets
+warm amber tones, generous whitespace, and characterful typography. It provides:
 
 - **Easy theming**: Switch between light/dark or create new themes by changing
   CSS variables
 - **Consistency**: All components use the same tokens
 - **Maintainability**: Update colors/spacing in one place, reflected everywhere
 - **Type-safety**: Tailwind's IntelliSense works with all tokens
+- **Accessibility**: WCAG AA contrast, visible focus states, skip-to-content
 
 ## Color System
 
@@ -21,15 +23,16 @@ utilities, allowing for:
 All colors are defined as HSL values in CSS variables:
 
 ```css
---background: 39 10% 98%; /* Main page background */
---foreground: 24 10% 10%; /* Primary text color */
---muted: 24 6% 90%; /* Subtle backgrounds */
---muted-foreground: 24 5% 40%; /* Secondary text */
---accent: 32 95% 44%; /* Brand accent (amber-700) */
---accent-foreground: 24 10% 10%; /* Text on accent */
---border: 24 10% 10%; /* Border color */
---card: 0 0% 100%; /* Card backgrounds */
---card-foreground: 24 10% 10%; /* Card text */
+--background: 40 18% 97%;           /* warm off-white */
+--foreground: 30 10% 12%;           /* warm near-black */
+--muted: 35 10% 91%;               /* warm gray */
+--muted-foreground: 30 6% 44%;     /* medium warm gray */
+--accent: 28 92% 46%;              /* rich amber */
+--accent-foreground: 40 18% 97%;   /* white on accent */
+--border: 30 10% 12%;              /* warm near-black */
+--card: 40 14% 99%;               /* barely warm white */
+--card-foreground: 30 10% 12%;     /* warm near-black */
+--ring: 28 92% 46%;               /* focus ring color */
 ```
 
 ### Usage in Tailwind
@@ -43,19 +46,33 @@ All colors are defined as HSL values in CSS variables:
 
 ### Dark Theme
 
-The `.dark` class switches to dark mode. To enable:
+The `.dark` class or `prefers-color-scheme: dark` media query switches to dark
+mode automatically. Dark mode uses warm deep charcoal tones with slightly brighter
+amber accent for adequate contrast.
 
-1. Add `class="dark"` to `<html>` element
-2. Or uncomment the `@media (prefers-color-scheme: dark)` section in globals.css
+```css
+.dark {
+  --background: 25 12% 10%;       /* deep warm charcoal */
+  --foreground: 40 14% 93%;       /* warm off-white */
+  --muted: 25 10% 18%;           /* dark warm gray */
+  --muted-foreground: 30 8% 60%; /* lighter warm gray */
+  --accent: 30 90% 52%;          /* brighter amber */
+  --accent-foreground: 25 12% 10%;
+  --border: 35 8% 26%;           /* subtle warm border */
+  --card: 25 10% 14%;
+  --card-foreground: 40 14% 93%;
+  --ring: 30 90% 52%;
+}
+```
 
 ## Typography
 
 ### Font Families
 
 ```css
---font-serif: "Playfair Display", Georgia, serif;
---font-sans: "IBM Plex Sans", system-ui, sans-serif;
---font-mono: "IBM Plex Mono", Menlo, monospace;
+--font-serif: "Bricolage Grotesque", Georgia, serif;
+--font-sans: "DM Sans", system-ui, sans-serif;
+--font-mono: "JetBrains Mono", Menlo, monospace;
 ```
 
 Usage:
@@ -147,7 +164,7 @@ The animation is controlled by the `.animate-in` class added by JavaScript.
 
 ```css
 --section-padding-x: 1.5rem; /* 24px - Horizontal section padding */
---section-padding-y: 6rem; /* 96px - Vertical section padding */
+--section-padding-y: 5rem;   /* 80px - Vertical section padding */
 --container-max-width: 80rem; /* 1280px - Max content width */
 ```
 
@@ -160,9 +177,9 @@ The animation is controlled by the `.animate-in` class added by JavaScript.
 ### Transitions
 
 ```css
---transition-base: 150ms ease-in-out; /* Standard transitions */
---transition-long: 300ms ease-in-out; /* Longer transitions */
---animation-fade-in: 1000ms ease-out; /* Scroll animations */
+--transition-base: 180ms ease-in-out; /* Standard transitions */
+--transition-long: 350ms ease-in-out; /* Longer transitions */
+--animation-fade-in: 800ms ease-out;  /* Scroll animations */
 ```
 
 ## Creating New Themes

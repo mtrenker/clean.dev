@@ -7,6 +7,7 @@ interface HeadingProps {
   variant?: 'display' | 'section' | 'label';
   className?: string;
   animate?: boolean;
+  id?: string;
 }
 
 export const Heading: React.FC<HeadingProps> = ({
@@ -15,15 +16,17 @@ export const Heading: React.FC<HeadingProps> = ({
   variant = 'section',
   className,
   animate = false,
+  id,
 }) => {
   const variantClasses = {
-    display: 'heading-display text-6xl md:text-7xl lg:text-8xl',
+    display: 'heading-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl',
     section: 'heading-section',
     label: 'text-label',
   };
 
   return (
     <Component
+      id={id}
       className={clsx(
         variantClasses[variant],
         animate && 'observe',

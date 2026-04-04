@@ -13,25 +13,25 @@ const BlogPage: React.FC = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="section border-b border-border">
-        <div className="mx-auto max-w-4xl">
+      <section className="section border-b border-border" aria-labelledby="blog-heading">
+        <div className="mx-auto max-w-3xl">
           <p className="text-label mb-4 tracking-[0.3em] text-accent">Writing</p>
-          <h1 className="heading-display mb-6 text-5xl md:text-6xl">Blog</h1>
-          <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
+          <h1 id="blog-heading" className="heading-display mb-6 text-4xl sm:text-5xl md:text-6xl">Blog</h1>
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
             Handwritten essays on Progressive Engineering, software architecture, delivery systems, governance, and what actually happens when AI meets a real codebase.
           </p>
-          <div className="mt-8 max-w-2xl border-l-4 border-accent bg-muted px-6 py-5 text-sm leading-relaxed text-muted-foreground">
+          <div className="mt-8 max-w-2xl border-l-4 border-accent bg-card px-6 py-5 text-sm leading-relaxed text-muted-foreground">
             Every post here is written by me. I use AI for research and feedback, not to generate the prose on this blog.
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="mx-auto max-w-4xl">
+      <section className="section" aria-label="Blog posts">
+        <div className="mx-auto max-w-3xl">
           {posts.length === 0 ? (
             <p className="text-muted-foreground">No posts yet. The first handwritten essays are in progress.</p>
           ) : (
-            <ol className="divide-y divide-border">
+            <ol className="divide-y divide-border" role="list">
               {posts.map((post) => (
                 <li key={post.slug} className="py-10 first:pt-0">
                   <article>
@@ -41,7 +41,7 @@ const BlogPage: React.FC = () => {
                     >
                       {formatPostDate(post.frontmatter.date)}
                     </time>
-                    <h2 className="heading-display mb-4 text-2xl md:text-3xl">
+                    <h2 className="heading-display mb-4 text-xl sm:text-2xl md:text-3xl">
                       <Link
                         className="transition-colors hover:text-accent"
                         href={`/blog/${post.slug}`}
@@ -49,7 +49,7 @@ const BlogPage: React.FC = () => {
                         {post.frontmatter.title}
                       </Link>
                     </h2>
-                    <p className="mb-6 max-w-2xl leading-relaxed text-muted-foreground">
+                    <p className="mb-6 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                       {post.frontmatter.description}
                     </p>
                     {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
@@ -57,7 +57,7 @@ const BlogPage: React.FC = () => {
                         {post.frontmatter.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-label border border-border px-3 py-1 text-xs text-muted-foreground"
+                            className="text-label rounded-sm border border-border px-3 py-1 text-xs text-muted-foreground"
                           >
                             {tag}
                           </span>
@@ -69,7 +69,7 @@ const BlogPage: React.FC = () => {
                       href={`/blog/${post.slug}`}
                     >
                       Read post
-                      <span className="transition-transform group-hover:translate-x-1">→</span>
+                      <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
                     </Link>
                   </article>
                 </li>

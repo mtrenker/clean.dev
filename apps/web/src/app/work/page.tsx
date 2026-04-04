@@ -14,7 +14,7 @@ const Home: React.FC = async () => {
   return (
     <main
       className={clsx([
-        'mx-auto flex flex-col items-center gap-10',
+        'mx-auto flex flex-col items-center gap-8 sm:gap-10',
         'print:mx-14 print:items-start',
       ])}
     >

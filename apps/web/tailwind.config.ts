@@ -25,6 +25,7 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        ring: 'hsl(var(--ring))',
       },
       fontFamily: {
         serif: ['var(--font-serif)'],

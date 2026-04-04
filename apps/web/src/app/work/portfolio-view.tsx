@@ -31,20 +31,20 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
   return (
     <article
       className={clsx(
-        'observe group relative flex flex-col gap-4 overflow-hidden border-border bg-card p-6',
+        'observe group relative flex flex-col gap-4 overflow-hidden border-border bg-card p-5 sm:p-6',
         'border-[length:var(--border-width)]',
         'transition-[opacity,transform,border-color,box-shadow]',
         'hover:border-accent hover:shadow-[4px_4px_0px_0px_hsl(var(--accent))]',
-        hero ? 'md:col-span-2 md:flex-row md:gap-10' : 'col-span-1',
+        hero ? 'sm:col-span-2 sm:flex-row sm:gap-8 md:gap-10' : 'col-span-1',
       )}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {/* Decorative corner accent */}
       <div className="pointer-events-none absolute right-0 top-0 h-16 w-16 -translate-y-1/2 translate-x-1/2 rotate-45 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
 
-      <div className={clsx('flex flex-col gap-3', hero ? 'md:w-2/3' : '')}>
+      <div className={clsx('flex flex-col gap-3', hero ? 'sm:w-2/3' : '')}>
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <h3 className="m-0 font-serif text-2xl font-bold leading-tight text-foreground">
+          <h3 className="m-0 font-serif text-xl font-bold leading-tight text-foreground sm:text-2xl">
             {project.company ?? project.industry?.[lang]}
           </h3>
           <time className="text-label shrink-0 text-accent" dateTime={`${startYear}`}>
@@ -72,7 +72,7 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
       </div>
 
       {project.technologies.length > 0 && (
-        <div className={clsx('flex flex-col justify-end gap-3', hero ? 'md:w-1/3' : '')}>
+        <div className={clsx('flex flex-col justify-end gap-3', hero ? 'sm:w-1/3' : '')}>
           <p className="text-label m-0 text-xs text-muted-foreground/60">
             {intl.formatMessage({ id: 'work.projects.technologies' })}
           </p>
@@ -161,15 +161,15 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   return (
     <div className="contents" ref={containerRef}>
       {/* ── Hero (screen) ────────────────────────────────────────────────── */}
-      <section className="observe w-full px-6 pb-12 pt-10 md:px-12 lg:px-24 print:hidden">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[280px_1fr] md:gap-16">
+      <section className="observe w-full px-6 pb-12 pt-10 md:px-12 lg:px-24 print:hidden" aria-labelledby="portfolio-hero-heading">
+        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[240px_1fr] md:gap-12 lg:grid-cols-[280px_1fr] lg:gap-16">
 
           {/* Photo */}
           <div className="flex justify-center md:justify-start">
             <div className="relative">
               {/* Decorative offset border */}
-              <div className="absolute -bottom-3 -right-3 h-full w-full border-2 border-accent" />
-              <picture className="relative block h-[260px] w-[260px] overflow-hidden md:h-[280px] md:w-[280px]">
+              <div className="absolute -bottom-2 -right-2 h-full w-full border-2 border-accent sm:-bottom-3 sm:-right-3" aria-hidden="true" />
+              <picture className="relative block h-[200px] w-[200px] overflow-hidden sm:h-[240px] sm:w-[240px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]">
                 <Image
                   alt={intl.formatMessage({ id: 'work.img.alt' })}
                   className="m-0 h-full w-full object-cover"
@@ -183,20 +183,20 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           </div>
 
           {/* Identity + About */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             <div>
               <p className="text-label mb-3 tracking-[0.3em] text-accent">
                 {intl.formatMessage({ id: 'work.about.heading' })}
               </p>
-              <h1 className="font-serif text-5xl font-bold uppercase leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
+              <h1 id="portfolio-hero-heading" className="font-serif text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                 {intl.formatMessage({ id: 'work.title' })}
               </h1>
-              <h2 className="text-label mt-3 text-xl text-muted-foreground md:text-2xl">
+              <h2 className="text-label mt-3 text-lg text-muted-foreground sm:text-xl md:text-2xl">
                 {intl.formatMessage({ id: 'work.subtitle' })}
               </h2>
             </div>
-            <div className="h-px w-16 bg-accent" />
-            <div className="max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground md:text-lg">
+            <div className="h-px w-12 bg-accent" aria-hidden="true" />
+            <div className="max-w-2xl space-y-3 text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
               <p>{intl.formatMessage({ id: 'work.about.p1' })}</p>
               <p>{intl.formatMessage({ id: 'work.about.p2' })}</p>
             </div>
@@ -206,7 +206,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
       </section>
 
       {/* ── Stats strip (screen only) ────────────────────────────────────── */}
-      <div className="observe w-full border-y-[length:var(--border-width)] border-border print:hidden">
+      <div className="observe w-full border-y-[length:var(--border-width)] border-border print:hidden" aria-label="Career statistics">
         <div className="grid grid-cols-2 divide-x-[length:var(--border-width)] divide-border md:grid-cols-4">
           {(
             [
@@ -217,19 +217,19 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
             ] as const
           ).map((stat, i) => (
             <div
-              className="observe flex flex-col gap-2 px-8 py-8"
+              className="observe flex flex-col gap-2 px-4 py-6 sm:px-6 sm:py-8 md:px-8"
               key={i}
               style={{ transitionDelay: `${i * 80}ms` }}
             >
-              <span className="font-serif text-5xl font-bold leading-none">{stat.value}</span>
-              <span className="text-label text-muted-foreground">{stat.label}</span>
+              <span className="font-serif text-3xl font-extrabold leading-none sm:text-4xl md:text-5xl">{stat.value}</span>
+              <span className="text-label text-xs text-muted-foreground sm:text-sm">{stat.label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── Traits panel (screen only) — inverted 3-col ─────────────────── */}
-      <section className="w-full border-b-[length:var(--border-width)] border-foreground bg-foreground text-background print:hidden">
+      <section className="w-full border-b-[length:var(--border-width)] border-foreground bg-foreground text-background print:hidden" aria-label="Core competencies">
         <div className="grid divide-y-[length:var(--border-width)] divide-accent/20 md:grid-cols-3 md:divide-x-[length:var(--border-width)] md:divide-y-0">
           {([
             {
@@ -248,15 +248,15 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               body: intl.formatMessage({ id: 'work.section.automation.p' }),
             },
           ]).map((item, i) => (
-            <div
-              className="observe px-8 py-10"
+            <article
+              className="observe px-6 py-8 sm:px-8 sm:py-10"
               key={item.num}
               style={{ transitionDelay: `${i * 120}ms` }}
             >
-              <div className="mb-4 font-mono text-3xl font-bold text-accent">{item.num}</div>
-              <h3 className="mb-3 font-serif text-2xl font-bold">{item.heading}</h3>
-              <p className="leading-relaxed opacity-70">{item.body}</p>
-            </div>
+              <div className="mb-4 font-mono text-2xl font-bold text-accent sm:text-3xl">{item.num}</div>
+              <h3 className="mb-3 font-serif text-xl font-bold sm:text-2xl">{item.heading}</h3>
+              <p className="text-sm leading-relaxed opacity-70 sm:text-base">{item.body}</p>
+            </article>
           ))}
         </div>
       </section>
@@ -420,20 +420,20 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
       </section>
 
       {/* ── Spotlight Grid (screen only) ──────────────────────────────────── */}
-      <section className="w-full px-6 print:hidden">
-        <div className="observe mb-10 flex items-end justify-between gap-4">
+      <section className="w-full px-6 md:px-12 lg:px-24 print:hidden" aria-labelledby="spotlight-heading">
+        <div className="observe mb-8 flex items-end justify-between gap-4 sm:mb-10">
           <div>
-            <p className="text-label mb-1 text-accent">
+            <p id="spotlight-heading" className="text-label mb-1 text-accent">
               {intl.formatMessage({ id: 'work.spotlight.heading' })}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground sm:text-sm">
               {intl.formatMessage({ id: 'work.spotlight.lead' })}
             </p>
           </div>
-          <div className="h-px flex-1 bg-border" />
+          <div className="hidden h-px flex-1 bg-border sm:block" aria-hidden="true" />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {spotlightProjects.map((project, index) => (
             <SpotlightCard
               delay={index * 80}
@@ -448,14 +448,14 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
       </section>
 
       {/* ── Timeline (screen only) ────────────────────────────────────────── */}
-      <section className="w-full px-6 print:hidden">
-        <div className="observe mb-10 flex items-end justify-between gap-4">
+      <section className="w-full px-6 md:px-12 lg:px-24 print:hidden" aria-labelledby="timeline-heading">
+        <div className="observe mb-8 flex items-end justify-between gap-4 sm:mb-10">
           <div>
-            <p className="text-label mb-1 text-muted-foreground">
+            <p id="timeline-heading" className="text-label mb-1 text-muted-foreground">
               {intl.formatMessage({ id: 'work.timeline.heading' })}
             </p>
           </div>
-          <div className="h-px flex-1 bg-border" />
+          <div className="hidden h-px flex-1 bg-border sm:block" aria-hidden="true" />
         </div>
 
         <div className="relative border-l-2 border-accent/30 pl-2">

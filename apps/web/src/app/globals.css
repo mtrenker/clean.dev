@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,59 +6,63 @@
 
 @layer base {
   :root {
-    /* Color System - Light Theme */
-    --background: 39 10% 98%;           /* zinc-50 */
-    --foreground: 24 10% 10%;           /* zinc-900 */
-    --muted: 24 6% 90%;                 /* zinc-200 */
-    --muted-foreground: 24 5% 40%;      /* zinc-600 */
-    --accent: 32 95% 44%;               /* amber-700 */
-    --accent-foreground: 24 10% 10%;    /* zinc-900 */
-    --border: 24 10% 10%;               /* zinc-900 */
-    --card: 0 0% 100%;                  /* white */
-    --card-foreground: 24 10% 10%;      /* zinc-900 */
+    /* Color System - Light Theme: Warm Industrial */
+    --background: 40 18% 97%;           /* warm off-white */
+    --foreground: 30 10% 12%;           /* warm near-black */
+    --muted: 35 10% 91%;               /* warm gray */
+    --muted-foreground: 30 6% 44%;     /* medium warm gray */
+    --accent: 28 92% 46%;              /* rich amber */
+    --accent-foreground: 40 18% 97%;   /* white on accent */
+    --border: 30 10% 12%;              /* warm near-black */
+    --card: 40 14% 99%;               /* barely warm white */
+    --card-foreground: 30 10% 12%;     /* warm near-black */
+
+    /* Focus ring */
+    --ring: 28 92% 46%;
 
     /* Typography Scale */
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-mono: 'IBM Plex Mono', Menlo, monospace;
+    --font-serif: 'Bricolage Grotesque', Georgia, serif;
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', Menlo, monospace;
 
     /* Spacing & Layout */
     --border-width: 2px;
     --section-padding-x: 1.5rem;        /* 24px */
-    --section-padding-y: 6rem;          /* 96px */
+    --section-padding-y: 5rem;          /* 80px */
     --container-max-width: 80rem;       /* 1280px */
 
     /* Animation */
-    --transition-base: 150ms ease-in-out;
-    --transition-long: 300ms ease-in-out;
-    --animation-fade-in: 1000ms ease-out;
+    --transition-base: 180ms ease-in-out;
+    --transition-long: 350ms ease-in-out;
+    --animation-fade-in: 800ms ease-out;
   }
 
   /* Dark Theme (opt-in via .dark class or media query) */
   .dark {
-    --background: 24 10% 10%;           /* zinc-900 */
-    --foreground: 39 10% 98%;           /* zinc-50 */
-    --muted: 24 10% 20%;                /* zinc-800 */
-    --muted-foreground: 24 6% 70%;      /* zinc-400 */
-    --accent: 32 95% 44%;               /* amber-700 */
-    --accent-foreground: 39 10% 98%;    /* zinc-50 */
-    --border: 39 10% 98%;               /* zinc-50 */
-    --card: 24 10% 15%;                 /* zinc-850 */
-    --card-foreground: 39 10% 98%;      /* zinc-50 */
+    --background: 25 12% 10%;           /* deep warm charcoal */
+    --foreground: 40 14% 93%;           /* warm off-white */
+    --muted: 25 10% 18%;               /* dark warm gray */
+    --muted-foreground: 30 8% 60%;     /* lighter warm gray */
+    --accent: 30 90% 52%;              /* slightly brighter amber for dark mode */
+    --accent-foreground: 25 12% 10%;   /* dark on accent */
+    --border: 35 8% 26%;               /* subtle warm border */
+    --card: 25 10% 14%;               /* slightly lighter than bg */
+    --card-foreground: 40 14% 93%;     /* warm off-white */
+    --ring: 30 90% 52%;
   }
 
-  /* Auto dark mode support (commented out for now) */
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: 24 10% 10%;
-      --foreground: 39 10% 98%;
-      --muted: 24 10% 20%;
-      --muted-foreground: 24 6% 70%;
-      --accent: 32 95% 44%;
-      --accent-foreground: 39 10% 98%;
-      --border: 39 10% 98%;
-      --card: 24 10% 15%;
-      --card-foreground: 39 10% 98%;
+      --background: 25 12% 10%;
+      --foreground: 40 14% 93%;
+      --muted: 25 10% 18%;
+      --muted-foreground: 30 8% 60%;
+      --accent: 30 90% 52%;
+      --accent-foreground: 25 12% 10%;
+      --border: 35 8% 26%;
+      --card: 25 10% 14%;
+      --card-foreground: 40 14% 93%;
+      --ring: 30 90% 52%;
     }
   }
 }
@@ -72,17 +76,44 @@
     @apply bg-background text-foreground font-sans antialiased;
     min-height: 100lvh;
   }
+
+  /* Skip-to-content link — visible only on keyboard focus */
+  .skip-to-content {
+    @apply fixed left-4 top-4 z-[100] -translate-y-20 rounded-md bg-accent px-6 py-3 font-mono text-sm font-semibold text-accent-foreground shadow-lg transition-transform duration-200;
+  }
+  .skip-to-content:focus {
+    @apply translate-y-0;
+  }
+
+  /* Global focus-visible ring */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Subtle grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
 }
 
 @layer components {
   /* Button Components */
   .btn {
-    @apply px-8 py-4 font-mono text-sm uppercase tracking-wider transition-all;
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-mono text-sm uppercase tracking-wider transition-all;
     transition-duration: var(--transition-base);
   }
 
   .btn-primary {
-    @apply btn bg-foreground text-background hover:bg-accent;
+    @apply btn bg-foreground text-background hover:bg-accent hover:text-accent-foreground;
   }
 
   .btn-secondary {
@@ -110,11 +141,11 @@
 
   /* Typography Components */
   .heading-display {
-    @apply font-serif font-bold tracking-tight leading-[1.1];
+    @apply font-serif font-extrabold tracking-tight leading-[1.05];
   }
 
   .heading-section {
-    @apply font-serif font-bold text-4xl md:text-5xl;
+    @apply font-serif font-bold text-3xl md:text-4xl lg:text-5xl;
   }
 
   .text-label {
@@ -124,10 +155,10 @@
   /* Animation Classes */
   .observe {
     opacity: 0;
-    transform: translateY(2rem);
+    transform: translateY(1.5rem);
     transition-property: opacity, transform;
-    transition-timing-function: ease-out;
-    transition-duration: 1000ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition-duration: 800ms;
   }
 
   .observe.animate-in {
@@ -177,6 +208,27 @@
     --tw-prose-invert-pre-bg:        hsl(var(--muted));
     --tw-prose-invert-th-borders:    hsl(var(--border));
     --tw-prose-invert-td-borders:    hsl(var(--border));
+  }
+
+  /* Mobile navigation drawer */
+  .nav-drawer-backdrop {
+    @apply fixed inset-0 z-40 bg-foreground/50 backdrop-blur-sm;
+    animation: fadeIn 200ms ease-out;
+  }
+
+  .nav-drawer {
+    @apply fixed inset-y-0 right-0 z-50 w-72 bg-background shadow-2xl;
+    animation: slideIn 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
   }
 }
 

@@ -20,22 +20,25 @@ const ImprintPage = async () => {
   const intl = createIntl({ locale, messages });
 
   return (
-  <main className="bg-background py-12 md:py-16">
+  <main className="bg-background py-12 md:py-20">
     <Container size="narrow" className="px-6">
-      <div className="space-y-8">
+      <div className="space-y-10">
         {/* Header */}
-        <header className="border-b border-border pb-6">
-          <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
+        <header className="border-b border-border pb-8">
+          <p className="text-label mb-3 tracking-[0.3em] text-accent">
+            {intl.formatMessage({ id: 'imprint.heading' })}
+          </p>
+          <Heading as="h1" variant="display" className="mb-3 text-4xl text-foreground sm:text-5xl">
             {intl.formatMessage({ id: 'imprint.heading' })}
           </Heading>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-base">
             {intl.formatMessage({ id: 'imprint.subtitle' })}
           </p>
         </header>
 
         {/* Service Provider Section */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-provider">
+          <Heading as="h2" id="imprint-provider" variant="section" className="text-xl text-foreground sm:text-2xl">
             Angaben gemäß § 5 TMG
           </Heading>
           <Card>
@@ -49,8 +52,8 @@ const ImprintPage = async () => {
         </section>
 
         {/* Contact Section */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-contact">
+          <Heading as="h2" id="imprint-contact" variant="section" className="text-xl text-foreground sm:text-2xl">
             Kontakt
           </Heading>
           <Card>
@@ -69,8 +72,8 @@ const ImprintPage = async () => {
         </section>
 
         {/* Tax Information */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-tax">
+          <Heading as="h2" id="imprint-tax" variant="section" className="text-xl text-foreground sm:text-2xl">
             Umsatzsteuer-ID
           </Heading>
           <Card>
@@ -85,8 +88,8 @@ const ImprintPage = async () => {
         </section>
 
         {/* Responsible for Content */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-responsible">
+          <Heading as="h2" id="imprint-responsible" variant="section" className="text-xl text-foreground sm:text-2xl">
             Verantwortlich für den Inhalt
           </Heading>
           <Card>
@@ -105,8 +108,8 @@ const ImprintPage = async () => {
         </section>
 
         {/* EU Dispute Resolution */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-eu">
+          <Heading as="h2" id="imprint-eu" variant="section" className="text-xl text-foreground sm:text-2xl">
             EU-Streitschlichtung
           </Heading>
           <Card>
@@ -128,8 +131,8 @@ const ImprintPage = async () => {
         </section>
 
         {/* Consumer Dispute Resolution */}
-        <section className="space-y-4">
-          <Heading as="h2" variant="section" className="text-2xl text-foreground">
+        <section className="space-y-4" aria-labelledby="imprint-consumer">
+          <Heading as="h2" id="imprint-consumer" variant="section" className="text-xl text-foreground sm:text-2xl">
             Verbraucherstreitbeilegung
           </Heading>
           <Card>

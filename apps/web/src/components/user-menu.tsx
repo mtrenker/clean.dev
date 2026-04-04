@@ -20,7 +20,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-sm font-semibold text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+      <Menu.Button className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
         {initials}
       </Menu.Button>
 
@@ -33,11 +33,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md border border-border bg-card py-1 shadow-lg focus:outline-none">
           <Menu.Item>
             {({ active }) => (
               <Link
-                className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                className={`block px-4 py-2 text-sm text-card-foreground ${active ? 'bg-muted text-accent' : ''}`}
                 href="/clients"
               >
                 {intl.formatMessage({ id: 'clients.heading' })}
@@ -47,7 +47,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
           <Menu.Item>
             {({ active }) => (
               <Link
-                className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                className={`block px-4 py-2 text-sm text-card-foreground ${active ? 'bg-muted text-accent' : ''}`}
                 href="/time"
               >
                 {intl.formatMessage({ id: 'time.heading' })}
@@ -57,7 +57,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
           <Menu.Item>
             {({ active }) => (
               <Link
-                className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                className={`block px-4 py-2 text-sm text-card-foreground ${active ? 'bg-muted text-accent' : ''}`}
                 href="/invoices"
               >
                 {intl.formatMessage({ id: 'invoices.heading' })}
@@ -67,7 +67,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
           <Menu.Item>
             {({ active }) => (
               <Link
-                className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                className={`block px-4 py-2 text-sm text-card-foreground ${active ? 'bg-muted text-accent' : ''}`}
                 href="/settings"
               >
                 {intl.formatMessage({ id: 'settings.heading' })}
@@ -77,7 +77,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ session }) => {
           <Menu.Item>
             {({ active }) => (
               <Link
-                className={`block px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                className={`block px-4 py-2 text-sm text-card-foreground ${active ? 'bg-muted text-accent' : ''}`}
                 href="/admin"
               >
                 {intl.formatMessage({ id: 'admin.heading' })}

@@ -17,7 +17,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={clsx(
-        'rounded-lg border border-border bg-card p-6 text-card-foreground',
+        'rounded-lg border border-border bg-card p-5 text-card-foreground sm:p-6',
         animate && 'observe',
         className
       )}

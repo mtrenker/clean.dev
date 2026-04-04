@@ -22,14 +22,17 @@ const ContactPage = async () => {
   const intl = createIntl({ locale, messages });
 
   return (
-    <main className="bg-background py-12 md:py-16">
+    <main className="bg-background py-12 md:py-20">
       <Container size="narrow" className="px-6">
         <div className="space-y-8">
-          <header className="border-b border-border pb-6">
-            <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
+          <header className="border-b border-border pb-8">
+            <p className="text-label mb-3 tracking-[0.3em] text-accent">
+              {intl.formatMessage({ id: 'contact.heading' })}
+            </p>
+            <Heading as="h1" variant="display" className="mb-3 text-4xl text-foreground sm:text-5xl">
               {intl.formatMessage({ id: 'contact.heading' })}
             </Heading>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
               {intl.formatMessage({ id: 'contact.lead' })}
             </p>
           </header>
