@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,59 +6,64 @@
 
 @layer base {
   :root {
-    /* Color System - Light Theme */
-    --background: 39 10% 98%;           /* zinc-50 */
-    --foreground: 24 10% 10%;           /* zinc-900 */
-    --muted: 24 6% 90%;                 /* zinc-200 */
-    --muted-foreground: 24 5% 40%;      /* zinc-600 */
-    --accent: 32 95% 44%;               /* amber-700 */
-    --accent-foreground: 24 10% 10%;    /* zinc-900 */
-    --border: 24 10% 10%;               /* zinc-900 */
-    --card: 0 0% 100%;                  /* white */
-    --card-foreground: 24 10% 10%;      /* zinc-900 */
+    /* Color System — Light Theme */
+    --background: 35 25% 96%;           /* warm stone cream */
+    --foreground: 20 20% 10%;           /* deep warm charcoal */
+    --muted: 30 12% 88%;               /* warm gray */
+    --muted-foreground: 20 8% 42%;     /* mid warm gray — WCAG AA on cream */
+    --accent: 10 72% 38%;              /* terracotta / rust */
+    --accent-foreground: 35 25% 96%;   /* cream on accent */
+    --border: 20 20% 10%;              /* same as foreground */
+    --card: 35 20% 99%;                /* near-white warm */
+    --card-foreground: 20 20% 10%;     /* deep charcoal */
 
     /* Typography Scale */
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-mono: 'IBM Plex Mono', Menlo, monospace;
+    --font-serif: 'Syne', 'Arial Black', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-mono: 'Fira Code', 'Menlo', monospace;
 
     /* Spacing & Layout */
     --border-width: 2px;
     --section-padding-x: 1.5rem;        /* 24px */
-    --section-padding-y: 6rem;          /* 96px */
+    --section-padding-y: 5rem;          /* 80px */
     --container-max-width: 80rem;       /* 1280px */
 
     /* Animation */
-    --transition-base: 150ms ease-in-out;
-    --transition-long: 300ms ease-in-out;
-    --animation-fade-in: 1000ms ease-out;
+    --transition-base: 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-long: 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --animation-fade-in: 800ms ease-out;
+
+    /* Focus */
+    --focus-ring: 10 72% 38%;          /* matches accent */
   }
 
   /* Dark Theme (opt-in via .dark class or media query) */
   .dark {
-    --background: 24 10% 10%;           /* zinc-900 */
-    --foreground: 39 10% 98%;           /* zinc-50 */
-    --muted: 24 10% 20%;                /* zinc-800 */
-    --muted-foreground: 24 6% 70%;      /* zinc-400 */
-    --accent: 32 95% 44%;               /* amber-700 */
-    --accent-foreground: 39 10% 98%;    /* zinc-50 */
-    --border: 39 10% 98%;               /* zinc-50 */
-    --card: 24 10% 15%;                 /* zinc-850 */
-    --card-foreground: 39 10% 98%;      /* zinc-50 */
+    --background: 20 20% 7%;            /* deep warm black */
+    --foreground: 30 12% 90%;           /* warm off-white */
+    --muted: 20 12% 16%;               /* dark warm gray */
+    --muted-foreground: 20 8% 58%;     /* mid warm — WCAG AA on dark */
+    --accent: 10 72% 56%;              /* brighter terracotta for dark */
+    --accent-foreground: 20 20% 7%;    /* dark bg on accent */
+    --border: 30 10% 25%;              /* subtle warm border */
+    --card: 20 15% 11%;                /* slightly lighter dark */
+    --card-foreground: 30 12% 90%;     /* warm off-white */
+    --focus-ring: 10 72% 56%;
   }
 
-  /* Auto dark mode support (commented out for now) */
+  /* Auto dark mode via system preference */
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: 24 10% 10%;
-      --foreground: 39 10% 98%;
-      --muted: 24 10% 20%;
-      --muted-foreground: 24 6% 70%;
-      --accent: 32 95% 44%;
-      --accent-foreground: 39 10% 98%;
-      --border: 39 10% 98%;
-      --card: 24 10% 15%;
-      --card-foreground: 39 10% 98%;
+      --background: 20 20% 7%;
+      --foreground: 30 12% 90%;
+      --muted: 20 12% 16%;
+      --muted-foreground: 20 8% 58%;
+      --accent: 10 72% 56%;
+      --accent-foreground: 20 20% 7%;
+      --border: 30 10% 25%;
+      --card: 20 15% 11%;
+      --card-foreground: 30 12% 90%;
+      --focus-ring: 10 72% 56%;
     }
   }
 }
@@ -72,27 +77,61 @@
     @apply bg-background text-foreground font-sans antialiased;
     min-height: 100lvh;
   }
+
+  /* ── Global Focus States — WCAG AA visible focus ──────────────────────── */
+  :focus-visible {
+    outline: 3px solid hsl(var(--focus-ring));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Remove default outline for mouse users — keep for keyboard */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ── Skip-to-content link ─────────────────────────────────────────────── */
+  .skip-to-content {
+    @apply fixed left-4 z-[100] -translate-y-full rounded bg-accent px-6 py-3 font-mono text-sm font-semibold uppercase tracking-wider text-accent-foreground transition-transform;
+  }
+
+  .skip-to-content:focus {
+    @apply translate-y-4;
+  }
 }
 
 @layer components {
   /* Button Components */
   .btn {
-    @apply px-8 py-4 font-mono text-sm uppercase tracking-wider transition-all;
+    @apply inline-flex items-center justify-center px-8 py-4 font-mono text-sm uppercase tracking-wider transition-all;
     transition-duration: var(--transition-base);
   }
 
+  .btn:focus-visible {
+    outline: 3px solid hsl(var(--focus-ring));
+    outline-offset: 2px;
+  }
+
   .btn-primary {
-    @apply btn bg-foreground text-background hover:bg-accent;
+    @apply btn bg-foreground text-background;
+  }
+
+  .btn-primary:hover {
+    @apply bg-accent text-accent-foreground;
   }
 
   .btn-secondary {
-    @apply btn border-border text-foreground hover:bg-foreground hover:text-background;
-    border-width: var(--border-width);
+    @apply btn text-foreground;
+    border: var(--border-width) solid hsl(var(--border));
+  }
+
+  .btn-secondary:hover {
+    @apply bg-foreground text-background;
   }
 
   /* Section Components */
   .section {
-    @apply px-6 md:px-12 lg:px-24;
+    @apply px-5 sm:px-6 md:px-12 lg:px-24;
     padding-top: var(--section-padding-y);
     padding-bottom: var(--section-padding-y);
   }
@@ -110,11 +149,11 @@
 
   /* Typography Components */
   .heading-display {
-    @apply font-serif font-bold tracking-tight leading-[1.1];
+    @apply font-serif font-extrabold tracking-tight leading-[1.05];
   }
 
   .heading-section {
-    @apply font-serif font-bold text-4xl md:text-5xl;
+    @apply font-serif font-bold text-3xl sm:text-4xl md:text-5xl;
   }
 
   .text-label {
@@ -124,10 +163,10 @@
   /* Animation Classes */
   .observe {
     opacity: 0;
-    transform: translateY(2rem);
+    transform: translateY(1.5rem);
     transition-property: opacity, transform;
-    transition-timing-function: ease-out;
-    transition-duration: 1000ms;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-duration: 800ms;
   }
 
   .observe.animate-in {
@@ -187,5 +226,21 @@
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* ── Mobile drawer overlay ──────────────────────────────────────────────── */
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes drawerSlideOut {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 

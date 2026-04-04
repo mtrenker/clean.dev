@@ -30,10 +30,10 @@ export const Marquee: React.FC<MarqueeProps> = ({ items, speed = 'normal', class
           <ul key={set} className="flex items-center gap-0">
             {items.map((item, i) => (
               <li key={`${set}-${i}`} className="flex items-center">
-                <span className="px-10 font-serif text-2xl font-bold text-muted-foreground/60 transition-colors duration-300 hover:text-foreground">
+                <span className="px-6 font-serif text-xl font-bold text-muted-foreground/60 transition-colors duration-300 hover:text-foreground sm:px-10 sm:text-2xl">
                   {item}
                 </span>
-                <span className="text-accent text-lg opacity-40" aria-hidden="true">✦</span>
+                <span className="text-base text-accent opacity-40 sm:text-lg" aria-hidden="true">✦</span>
               </li>
             ))}
           </ul>

@@ -5,7 +5,12 @@ token-based architecture for easy theming and maintenance.
 
 ## Philosophy
 
-The design system is built on CSS variables (custom properties) and Tailwind
+The design system follows a **"Neue Brutalismus"** aesthetic — refined
+architectural brutalism with massive typography hierarchy, a terracotta/rust
+accent, dramatic negative space, and precise interactions. All design choices
+prioritize mobile-first responsiveness (320px+) and WCAG AA accessibility.
+
+The system is built on CSS variables (custom properties) and Tailwind
 utilities, allowing for:
 
 - **Easy theming**: Switch between light/dark or create new themes by changing
@@ -13,6 +18,7 @@ utilities, allowing for:
 - **Consistency**: All components use the same tokens
 - **Maintainability**: Update colors/spacing in one place, reflected everywhere
 - **Type-safety**: Tailwind's IntelliSense works with all tokens
+- **Accessibility**: WCAG AA contrast ratios, visible focus states, skip-to-content
 
 ## Color System
 
@@ -21,15 +27,15 @@ utilities, allowing for:
 All colors are defined as HSL values in CSS variables:
 
 ```css
---background: 39 10% 98%; /* Main page background */
---foreground: 24 10% 10%; /* Primary text color */
---muted: 24 6% 90%; /* Subtle backgrounds */
---muted-foreground: 24 5% 40%; /* Secondary text */
---accent: 32 95% 44%; /* Brand accent (amber-700) */
---accent-foreground: 24 10% 10%; /* Text on accent */
---border: 24 10% 10%; /* Border color */
---card: 0 0% 100%; /* Card backgrounds */
---card-foreground: 24 10% 10%; /* Card text */
+--background: 35 25% 96%;           /* warm stone cream */
+--foreground: 20 20% 10%;           /* deep warm charcoal */
+--muted: 30 12% 88%;               /* warm gray */
+--muted-foreground: 20 8% 42%;     /* mid warm gray — WCAG AA */
+--accent: 10 72% 38%;              /* terracotta / rust */
+--accent-foreground: 35 25% 96%;   /* cream on accent */
+--border: 20 20% 10%;              /* same as foreground */
+--card: 35 20% 99%;                /* near-white warm */
+--card-foreground: 20 20% 10%;     /* deep charcoal */
 ```
 
 ### Usage in Tailwind
@@ -43,20 +49,34 @@ All colors are defined as HSL values in CSS variables:
 
 ### Dark Theme
 
-The `.dark` class switches to dark mode. To enable:
+The `.dark` class switches to dark mode, and auto dark mode is activated via
+`prefers-color-scheme: dark` media query.
 
-1. Add `class="dark"` to `<html>` element
-2. Or uncomment the `@media (prefers-color-scheme: dark)` section in globals.css
+```css
+.dark {
+  --background: 20 20% 7%;          /* deep warm black */
+  --foreground: 30 12% 90%;         /* warm off-white */
+  --muted: 20 12% 16%;             /* dark warm gray */
+  --muted-foreground: 20 8% 58%;   /* mid warm — WCAG AA */
+  --accent: 10 72% 56%;            /* brighter terracotta */
+  --border: 30 10% 25%;            /* subtle warm border */
+  --card: 20 15% 11%;              /* slightly lighter dark */
+}
+```
 
 ## Typography
 
 ### Font Families
 
 ```css
---font-serif: "Playfair Display", Georgia, serif;
---font-sans: "IBM Plex Sans", system-ui, sans-serif;
---font-mono: "IBM Plex Mono", Menlo, monospace;
+--font-serif: 'Syne', 'Arial Black', sans-serif;     /* Display / headings */
+--font-sans: 'Plus Jakarta Sans', system-ui, sans-serif; /* Body text */
+--font-mono: 'Fira Code', Menlo, monospace;           /* Code / labels */
 ```
+
+Note: "font-serif" is used for the display/heading font (Syne) despite the
+CSS variable name. This maintains backwards compatibility with existing
+Tailwind classes (`font-serif`).
 
 Usage:
 
@@ -75,6 +95,35 @@ Pre-built component classes for common patterns:
 <h2 className="heading-section">Section heading</h2>
 <span className="text-label">Uppercase label</span>
 ```
+
+## Accessibility
+
+### Skip-to-Content Link
+
+A visually hidden skip-to-content link is included in the layout. It becomes
+visible on keyboard focus:
+
+```tsx
+<a href="#main-content" className="skip-to-content">
+  Skip to content
+</a>
+```
+
+### Focus States
+
+All interactive elements have visible focus states using `focus-visible`:
+
+```css
+:focus-visible {
+  outline: 3px solid hsl(var(--focus-ring));
+  outline-offset: 2px;
+}
+```
+
+### Contrast
+
+All text/background combinations meet WCAG AA contrast ratios (4.5:1 for
+normal text, 3:1 for large text) in both light and dark modes.
 
 ## Layout Components
 
@@ -123,6 +172,18 @@ Centered container with max-width:
 </button>;
 ```
 
+## Navigation
+
+### Mobile Navigation
+
+On screens below `md` (768px), the main navigation collapses into a hamburger
+menu that opens a slide-in drawer from the right. The drawer includes focus
+trapping and `Escape` key dismissal.
+
+### Desktop Navigation
+
+On `md+` screens, navigation items are displayed inline in the header.
+
 ## Animation System
 
 ### Intersection Observer Animations
@@ -147,7 +208,7 @@ The animation is controlled by the `.animate-in` class added by JavaScript.
 
 ```css
 --section-padding-x: 1.5rem; /* 24px - Horizontal section padding */
---section-padding-y: 6rem; /* 96px - Vertical section padding */
+--section-padding-y: 5rem;   /* 80px - Vertical section padding */
 --container-max-width: 80rem; /* 1280px - Max content width */
 ```
 
@@ -160,9 +221,15 @@ The animation is controlled by the `.animate-in` class added by JavaScript.
 ### Transitions
 
 ```css
---transition-base: 150ms ease-in-out; /* Standard transitions */
---transition-long: 300ms ease-in-out; /* Longer transitions */
---animation-fade-in: 1000ms ease-out; /* Scroll animations */
+--transition-base: 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+--transition-long: 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+--animation-fade-in: 800ms ease-out;
+```
+
+### Focus
+
+```css
+--focus-ring: 10 72% 38%; /* Matches accent color */
 ```
 
 ## Creating New Themes
@@ -191,7 +258,9 @@ Apply to HTML element:
 2. **Use component classes**: Prefer `.btn-primary` over custom button styles
 3. **Maintain consistency**: New components should use existing tokens
 4. **Theme-aware**: Test all changes in both light and dark themes
-5. **Responsive by default**: Use the responsive variants (md:, lg:, etc.)
+5. **Responsive by default**: Use the responsive variants (sm:, md:, lg:, etc.)
+6. **Mobile-first**: Start with mobile styles, add breakpoints for larger screens
+7. **Accessible**: Ensure WCAG AA contrast and visible focus for all interactive elements
 
 ## File Structure
 

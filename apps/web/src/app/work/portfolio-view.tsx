@@ -161,15 +161,15 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   return (
     <div className="contents" ref={containerRef}>
       {/* ── Hero (screen) ────────────────────────────────────────────────── */}
-      <section className="observe w-full px-6 pb-12 pt-10 md:px-12 lg:px-24 print:hidden">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[280px_1fr] md:gap-16">
+      <section className="observe w-full px-5 pb-10 pt-8 sm:px-6 sm:pb-12 sm:pt-10 md:px-12 lg:px-24 print:hidden">
+        <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 md:grid-cols-[280px_1fr] md:gap-16">
 
           {/* Photo */}
           <div className="flex justify-center md:justify-start">
             <div className="relative">
               {/* Decorative offset border */}
-              <div className="absolute -bottom-3 -right-3 h-full w-full border-2 border-accent" />
-              <picture className="relative block h-[260px] w-[260px] overflow-hidden md:h-[280px] md:w-[280px]">
+              <div className="absolute -bottom-2.5 -right-2.5 h-full w-full border-2 border-accent sm:-bottom-3 sm:-right-3" />
+              <picture className="relative block h-[220px] w-[220px] overflow-hidden sm:h-[260px] sm:w-[260px] md:h-[280px] md:w-[280px]">
                 <Image
                   alt={intl.formatMessage({ id: 'work.img.alt' })}
                   className="m-0 h-full w-full object-cover"
@@ -188,10 +188,10 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               <p className="text-label mb-3 tracking-[0.3em] text-accent">
                 {intl.formatMessage({ id: 'work.about.heading' })}
               </p>
-              <h1 className="font-serif text-5xl font-bold uppercase leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
+              <h1 className="font-serif text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                 {intl.formatMessage({ id: 'work.title' })}
               </h1>
-              <h2 className="text-label mt-3 text-xl text-muted-foreground md:text-2xl">
+              <h2 className="text-label mt-3 text-lg text-muted-foreground sm:text-xl md:text-2xl">
                 {intl.formatMessage({ id: 'work.subtitle' })}
               </h2>
             </div>

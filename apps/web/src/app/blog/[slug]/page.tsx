@@ -36,10 +36,10 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
       <section className="section border-b border-border">
         <div className="mx-auto max-w-4xl">
           <Link
-            className="text-label mb-8 inline-flex items-center gap-2 text-xs tracking-widest text-muted-foreground transition-colors hover:text-accent"
+            className="text-label mb-6 inline-flex items-center gap-2 text-xs tracking-widest text-muted-foreground transition-colors hover:text-accent sm:mb-8"
             href="/blog"
           >
-            <span>←</span> All posts
+            <span aria-hidden="true">←</span> All posts
           </Link>
 
           <time
@@ -49,11 +49,11 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
             {formatPostDate(post.frontmatter.date)}
           </time>
 
-          <h1 className="heading-display mb-6 mt-4 text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="heading-display mb-5 mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
             {post.frontmatter.title}
           </h1>
 
-          <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
+          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {post.frontmatter.description}
           </p>
 
@@ -101,7 +101,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
             className="text-label inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
             href="/blog"
           >
-            <span>←</span> Back to all posts
+            <span aria-hidden="true">←</span> Back to all posts
           </Link>
         </div>
       </section>

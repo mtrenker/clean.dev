@@ -17,7 +17,7 @@ export const Heading: React.FC<HeadingProps> = ({
   animate = false,
 }) => {
   const variantClasses = {
-    display: 'heading-display text-6xl md:text-7xl lg:text-8xl',
+    display: 'heading-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl',
     section: 'heading-section',
     label: 'text-label',
   };
