@@ -127,7 +127,7 @@ const Page: NextPage = () => {
           </h2>
 
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-            {(['1','2','3','4','5','6'] as const).map((num, index) => {
+            {(['1','2','3'] as const).map((num, index) => {
               const item = {
                 title: intl.formatMessage({ id: `home.expertise.${num}.title` }),
                 description: intl.formatMessage({ id: `home.expertise.${num}.description` }),

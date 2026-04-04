@@ -5,7 +5,7 @@ import { getAllPosts, formatPostDate } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Blog — clean.dev',
-  description: 'Writing on software architecture, clean code, team velocity, and AI integration by Martin Trenker.',
+  description: 'Handwritten essays on Progressive Engineering, software architecture, delivery systems, governance, and AI by Martin Trenker.',
 };
 
 const BlogPage: React.FC = () => {
@@ -18,15 +18,18 @@ const BlogPage: React.FC = () => {
           <p className="text-label mb-4 tracking-[0.3em] text-accent">Writing</p>
           <h1 className="heading-display mb-6 text-5xl md:text-6xl">Blog</h1>
           <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
-            Opinions on software architecture, clean code, team velocity, and what actually happens when AI meets a real codebase.
+            Handwritten essays on Progressive Engineering, software architecture, delivery systems, governance, and what actually happens when AI meets a real codebase.
           </p>
+          <div className="mt-8 max-w-2xl border-l-4 border-accent bg-muted px-6 py-5 text-sm leading-relaxed text-muted-foreground">
+            Every post here is written by me. I use AI for research and feedback, not to generate the prose on this blog.
+          </div>
         </div>
       </section>
 
       <section className="section">
         <div className="mx-auto max-w-4xl">
           {posts.length === 0 ? (
-            <p className="text-muted-foreground">No posts yet.</p>
+            <p className="text-muted-foreground">No posts yet. The first handwritten essays are in progress.</p>
           ) : (
             <ol className="divide-y divide-border">
               {posts.map((post) => (
