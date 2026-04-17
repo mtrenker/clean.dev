@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`shared shell integration > hides social section fallback when no social links are provided 1`] = `
+<div>
+  <header
+    class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm print:hidden"
+  >
+    <div
+      class="mx-auto max-w-7xl flex items-center justify-between px-6 py-4 md:px-12 lg:px-24"
+    >
+      <div>
+        <a
+          class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-foreground hover:text-accent"
+          href="/"
+        >
+          clean.dev
+        </a>
+      </div>
+      <nav
+        aria-label="Main navigation"
+        class="flex flex-wrap items-center gap-4 md:gap-6"
+      >
+        <ul
+          class="flex flex-wrap gap-4 md:gap-8"
+          role="list"
+        >
+          <li>
+            <a
+              class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-label text-foreground hover:text-accent"
+              href="/work"
+            >
+              Portfolio
+            </a>
+          </li>
+          <li>
+            <a
+              class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-label text-foreground hover:text-accent"
+              href="/blog"
+            >
+              Blog
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <footer
+    class="border-t border-border bg-background print:hidden"
+  >
+    <div
+      class="mx-auto max-w-7xl flex flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row md:px-12 lg:px-24"
+    >
+      <p
+        class="text-label text-xs text-muted-foreground"
+      >
+        © 2026 clean.dev
+      </p>
+      <nav
+        aria-label="Footer navigation"
+        class="flex items-center gap-6"
+      >
+        <a
+          class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-muted-foreground hover:text-accent text-label text-xs"
+          href="/imprint"
+        >
+          Legal
+        </a>
+      </nav>
+    </div>
+  </footer>
+</div>
+`;

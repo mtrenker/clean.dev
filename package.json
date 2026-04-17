@@ -9,6 +9,8 @@
     "export": "turbo run export",
     "build": "dotenv -- turbo run build",
     "build:open": "dotenv -- turbo build:open",
+    "storybook": "turbo run storybook --filter=@cleandev/web",
+    "build:storybook": "turbo run build-storybook --filter=@cleandev/web",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "db:generate": "dotenv -- pnpm --filter @cleandev/pm db:generate",

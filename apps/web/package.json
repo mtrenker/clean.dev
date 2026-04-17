@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts",
+    "storybook": "pnpm run storybook:internal",
+    "storybook:internal": "storybook dev -p 6006 --no-open",
+    "build-storybook": "pnpm run build-storybook:internal",
+    "build-storybook:internal": "storybook build"
   },
   "dependencies": {
     "@cleandev/pm": "workspace:*",
@@ -49,6 +55,13 @@
   },
   "devDependencies": {
     "@cleandev/eslint-config": "workspace:*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/addon-vitest": "^10.3.5",
+    "@storybook/nextjs-vite": "^10.3.5",
+    "@testing-library/dom": "^10.4.1",
     "@types/d3": "^7.4.3",
     "@types/node": "20.5.7",
     "@types/pg": "^8.16.0",
@@ -56,6 +69,10 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint-plugin-mdx": "^3.6.2",
-    "eslint-plugin-tailwindcss": "^3.13.0"
+    "eslint-plugin-tailwindcss": "^3.13.0",
+    "jsdom": "^27.0.1",
+    "storybook": "^10.3.5",
+    "vite": "^8.0.8",
+    "vitest": "^4.1.4"
   }
 }

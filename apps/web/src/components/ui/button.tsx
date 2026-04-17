@@ -1,49 +1,51 @@
 import React from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
 
-interface ButtonProps {
-  children: React.ReactNode;
-  href?: string;
-  variant?: 'primary' | 'secondary';
-  className?: string;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  children,
-  href,
-  variant = 'primary',
-  className,
-  onClick,
-  type = 'button',
-  disabled = false,
-}) => {
-  const variantClasses = {
-    primary: 'btn-primary',
-    secondary: 'btn-secondary',
-  };
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({
+    children,
+    variant = 'primary',
+    size = 'md',
+    className,
+    type = 'button',
+    ...props
+  }, ref) => {
+    const variantClasses = {
+      primary: 'bg-foreground text-background hover:bg-accent',
+      secondary: 'border border-border bg-transparent text-foreground hover:bg-foreground hover:text-background',
+      ghost: 'border border-transparent bg-transparent text-foreground hover:bg-muted',
+      destructive: 'border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground',
+    };
 
-  const classes = clsx(variantClasses[variant], className);
+    const sizeClasses = {
+      sm: 'px-3 py-2 text-xs',
+      md: 'px-4 py-2 text-sm',
+      lg: 'px-8 py-4 text-sm',
+    };
 
-  if (href) {
     return (
-      <Link href={href} className={classes}>
+      <button
+        ref={ref}
+        className={clsx(
+          'inline-flex items-center justify-center gap-2 rounded-md font-mono uppercase tracking-wider transition-colors',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          variantClasses[variant],
+          sizeClasses[size],
+          className
+        )}
+        type={type}
+        {...props}
+      >
         {children}
-      </Link>
+      </button>
     );
   }
+);
 
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={classes}
-    >
-      {children}
-    </button>
-  );
-};
+Button.displayName = 'Button';

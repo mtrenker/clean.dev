@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`admin panel integration > renders core backoffice controls 1`] = `
+<div>
+  <div
+    class="space-y-6"
+  >
+    <div
+      class="rounded-lg border border-border bg-card p-6 text-card-foreground"
+    >
+      <h2
+        class="mb-3 text-xl font-semibold text-foreground"
+      >
+        Database Setup
+      </h2>
+      <p
+        class="mb-4 text-muted-foreground"
+      >
+        Initializes or updates the database structure. Run this after updates to enable new features.
+      </p>
+      <button
+        class="inline-flex items-center justify-center gap-2 rounded-md font-mono uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 bg-foreground text-background hover:bg-accent px-4 py-2 text-sm"
+        type="button"
+      >
+        Run Setup
+      </button>
+    </div>
+    <div
+      class="rounded-lg border border-border bg-card p-6 text-card-foreground"
+    >
+      <h2
+        class="mb-4 text-xl font-semibold text-foreground"
+      >
+        System Information
+      </h2>
+      <div
+        class="w-full overflow-x-auto"
+      >
+        <table
+          class="w-full text-sm"
+        >
+          <tbody
+            class="[&_tr:last-child]:border-0"
+          >
+            <tr
+              class="border-b border-border transition-colors hover:bg-muted/50"
+            >
+              <td
+                class="p-2 align-middle w-56 text-muted-foreground"
+              >
+                Database:
+              </td>
+              <td
+                class="p-2 align-middle font-mono text-foreground"
+              >
+                PostgreSQL (Development)
+              </td>
+            </tr>
+            <tr
+              class="border-b border-border transition-colors hover:bg-muted/50"
+            >
+              <td
+                class="p-2 align-middle text-muted-foreground"
+              >
+                Node Environment:
+              </td>
+              <td
+                class="p-2 align-middle font-mono text-foreground"
+              >
+                test
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+`;

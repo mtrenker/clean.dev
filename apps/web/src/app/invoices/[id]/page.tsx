@@ -35,7 +35,7 @@ const InvoicePage = async ({ params }: PageProps) => {
 
   if (!invoice) {
     return (
-      <main className="bg-background py-10">
+      <main id="main-content" className="bg-background py-10">
         <Container className="px-6">
           <p className="text-muted-foreground">{intl.formatMessage({ id: 'invoices.notFound' })}</p>
         </Container>
@@ -45,7 +45,7 @@ const InvoicePage = async ({ params }: PageProps) => {
 
   if (!settings) {
     return (
-      <main className="bg-background py-10">
+      <main id="main-content" className="bg-background py-10">
         <Container className="px-6">
           <p className="text-muted-foreground">{intl.formatMessage({ id: 'settings.notFound' })}</p>
         </Container>

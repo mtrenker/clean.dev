@@ -1,0 +1,339 @@
+/* =============================================================================
+ * DESIGN SYSTEM TOKENS
+ * =============================================================================
+ * Single source of truth for all design values used by both public pages
+ * (landing, blog, portfolio, contact) and backoffice screens (invoices,
+ * clients, time tracking, settings).
+ *
+ * Architecture
+ * ─────────────
+ * tokens.css   →  defines CSS custom properties (this file)
+ * tailwind.config.ts  →  maps CSS variables to Tailwind utility classes
+ * globals.css  →  imports this file; adds component-layer classes
+ *
+ * To create a new theme, add a class selector that overrides the variables
+ * below (see "THEME OVERRIDES" section at the bottom of this file).
+ * =============================================================================
+ */
+
+  /* ===========================================================================
+   * ROOT — Light Theme (default)
+   * =========================================================================== */
+  :root {
+
+    /* ── COLOR SYSTEM ──────────────────────────────────────────────────────────
+     * All color tokens use HSL channel values (no hsl() wrapper).
+     * Consume via Tailwind utilities: bg-background, text-foreground, etc.
+     * Or in raw CSS:  color: hsl(var(--foreground));
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    /* Surface */
+    --background:         39 10% 98%;     /* Page / app background */
+    --foreground:         24 10% 10%;     /* Primary text */
+
+    /* Muted / subtle */
+    --muted:              24  6% 90%;     /* Subtle surface, hover backgrounds */
+    --muted-foreground:   24  5% 40%;     /* Secondary / helper text */
+
+    /* Accent / brand */
+    --accent:             32 95% 44%;     /* Amber-700 — brand accent */
+    --accent-foreground:  24 10% 10%;     /* Text rendered on accent surfaces */
+
+    /* Border */
+    --border:             24 10% 10%;     /* Default border color */
+
+    /* Card */
+    --card:                0  0% 100%;    /* Card and panel surfaces */
+    --card-foreground:    24 10% 10%;     /* Text inside cards */
+
+    /* Popover / overlay surfaces */
+    --popover:             0  0% 100%;    /* Dropdown, tooltip, dialog surfaces */
+    --popover-foreground: 24 10% 10%;     /* Text inside popovers */
+
+    /* Form inputs */
+    --input:              24  6% 90%;     /* Input field background */
+    --input-border:       24 10% 70%;     /* Input field border */
+
+    /* Focus ring */
+    --ring:               32 95% 44%;     /* Focus ring color (matches accent) */
+
+    /* Status — Success */
+    --success:            142 71% 45%;    /* Positive / success state */
+    --success-foreground:   0  0% 100%;   /* Text on success surfaces */
+
+    /* Status — Warning */
+    --warning:             38 92% 50%;    /* Cautionary / warning state */
+    --warning-foreground:  24 10% 10%;    /* Text on warning surfaces */
+
+    /* Status — Destructive / Error */
+    --destructive:          0 72% 51%;    /* Error / destructive action */
+    --destructive-foreground: 0  0% 100%; /* Text on destructive surfaces */
+
+    /* Status — Info */
+    --info:               217 91% 60%;    /* Informational state */
+    --info-foreground:      0  0% 100%;   /* Text on info surfaces */
+
+
+    /* ── TYPOGRAPHY ────────────────────────────────────────────────────────────
+     * Font families are referenced by Tailwind via font-sans, font-serif,
+     * font-mono utilities. The type scale tokens can be used as CSS values
+     * where the Tailwind shorthand is not available (e.g., print styles).
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    /* Font families */
+    --font-serif: Georgia, serif;
+    --font-sans: system-ui, sans-serif;
+    --font-mono: Menlo, monospace;
+
+    /* Type scale */
+    --text-xs:   0.75rem;    /*  12px */
+    --text-sm:   0.875rem;   /*  14px */
+    --text-base: 1rem;       /*  16px */
+    --text-lg:   1.125rem;   /*  18px */
+    --text-xl:   1.25rem;    /*  20px */
+    --text-2xl:  1.5rem;     /*  24px */
+    --text-3xl:  1.875rem;   /*  30px */
+    --text-4xl:  2.25rem;    /*  36px */
+    --text-5xl:  3rem;       /*  48px */
+    --text-6xl:  3.75rem;    /*  60px */
+    --text-7xl:  4.5rem;     /*  72px */
+    --text-8xl:  6rem;       /*  96px */
+
+    /* Line heights */
+    --leading-none:    1;
+    --leading-tight:   1.1;     /* Display headings */
+    --leading-snug:    1.375;   /* Section headings */
+    --leading-normal:  1.5;     /* Body text */
+    --leading-relaxed: 1.625;   /* Long-form prose */
+    --leading-loose:   2;       /* Spaced lists */
+
+    /* Font weights */
+    --weight-normal:   400;
+    --weight-medium:   500;
+    --weight-semibold: 600;
+    --weight-bold:     700;
+    --weight-black:    900;
+
+
+    /* ── SPACING SYSTEM ────────────────────────────────────────────────────────
+     * Spacing tokens follow Tailwind's 4px base unit.
+     * Use Tailwind utilities (p-4, gap-8, etc.) where possible; reach for CSS
+     * variables only when a value must cross the CSS/JS boundary or is used in
+     * calc() expressions.
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    --space-0:  0;
+    --space-1:  0.25rem;   /*  4px */
+    --space-2:  0.5rem;    /*  8px */
+    --space-3:  0.75rem;   /* 12px */
+    --space-4:  1rem;      /* 16px */
+    --space-5:  1.25rem;   /* 20px */
+    --space-6:  1.5rem;    /* 24px */
+    --space-8:  2rem;      /* 32px */
+    --space-10: 2.5rem;    /* 40px */
+    --space-12: 3rem;      /* 48px */
+    --space-14: 3.5rem;    /* 56px */
+    --space-16: 4rem;      /* 64px */
+    --space-20: 5rem;      /* 80px */
+    --space-24: 6rem;      /* 96px */
+    --space-32: 8rem;      /* 128px */
+
+    /* Layout-level spacing */
+    --section-padding-x:    1.5rem;    /* 24px  — horizontal section gutter */
+    --section-padding-y:    6rem;      /* 96px  — vertical section breathing room */
+    --container-max-width:  80rem;     /* 1280px — default max-width */
+    --container-max-narrow: 48rem;     /*  768px — narrow content (articles, forms) */
+    --container-max-wide:   96rem;     /* 1536px — wide content (dashboards) */
+
+
+    /* ── BORDER RADIUS ─────────────────────────────────────────────────────────
+     * These map 1-to-1 onto Tailwind's rounded-* utilities via tailwind.config.ts
+     * so that changing a single variable updates every radius in the app.
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    --radius-none: 0;
+    --radius-sm:   0.125rem;   /*  2px */
+    --radius-base: 0.25rem;    /*  4px */
+    --radius-md:   0.375rem;   /*  6px */
+    --radius-lg:   0.5rem;     /*  8px  — default card / input radius */
+    --radius-xl:   0.75rem;    /* 12px */
+    --radius-2xl:  1rem;       /* 16px */
+    --radius-3xl:  1.5rem;     /* 24px */
+    --radius-full: 9999px;
+
+
+    /* ── ELEVATION — Box Shadows ───────────────────────────────────────────────
+     * Shadow values use hsl(foreground / alpha) so they automatically adapt
+     * to the current foreground color. In dark mode the shadows are overridden
+     * to use opaque black for more natural depth perception.
+     * Consume via Tailwind shadow-* utilities (mapped in tailwind.config.ts).
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    --shadow-sm:
+      0 1px 2px 0 hsl(var(--foreground) / 0.05);
+
+    --shadow-base:
+      0 1px 3px 0   hsl(var(--foreground) / 0.10),
+      0 1px 2px -1px hsl(var(--foreground) / 0.10);
+
+    --shadow-md:
+      0 4px 6px -1px hsl(var(--foreground) / 0.10),
+      0 2px 4px -2px hsl(var(--foreground) / 0.10);
+
+    --shadow-lg:
+      0 10px 15px -3px hsl(var(--foreground) / 0.10),
+      0  4px  6px -4px hsl(var(--foreground) / 0.10);
+
+    --shadow-xl:
+      0 20px 25px  -5px hsl(var(--foreground) / 0.10),
+      0  8px 10px  -6px hsl(var(--foreground) / 0.10);
+
+    --shadow-inner:
+      inset 0 2px 4px 0 hsl(var(--foreground) / 0.05);
+
+
+    /* ── INTERACTION STATES & MOTION ───────────────────────────────────────────
+     * Tokens that control interactive component appearance and timing.
+     * ────────────────────────────────────────────────────────────────────────── */
+
+    /* Focus ring */
+    --ring-width:  2px;
+    --ring-offset: 2px;
+
+    /* Border width */
+    --border-width: 2px;
+
+    /* Transition timing */
+    --transition-base: 150ms ease-in-out;   /* Hover, active state changes */
+    --transition-long: 300ms ease-in-out;   /* Modal open/close, panel slides */
+
+    /* Scroll-driven animations */
+    --animation-fade-in: 1000ms ease-out;
+
+  }
+
+
+  /* ===========================================================================
+   * DARK THEME
+   * Applied by adding class="dark" to <html> (or via a theme-toggle component).
+   * Only semantic roles that actually change between light and dark are listed;
+   * every other token inherits its light-mode value.
+   * =========================================================================== */
+  .dark {
+
+    /* Surface */
+    --background:         24 10% 10%;   /* zinc-900 */
+    --foreground:         39 10% 98%;   /* zinc-50  */
+
+    /* Muted */
+    --muted:              24 10% 20%;   /* zinc-800 */
+    --muted-foreground:   24  6% 70%;   /* zinc-400 */
+
+    /* Accent — unchanged; amber reads well on dark surfaces */
+    --accent:             32 95% 44%;
+    --accent-foreground:  39 10% 98%;   /* zinc-50 */
+
+    /* Border */
+    --border:             39 10% 98%;   /* zinc-50 */
+
+    /* Card */
+    --card:               24 10% 15%;   /* zinc-850 (between 800 and 900) */
+    --card-foreground:    39 10% 98%;   /* zinc-50 */
+
+    /* Popover */
+    --popover:            24 10% 15%;
+    --popover-foreground: 39 10% 98%;
+
+    /* Inputs */
+    --input:              24 10% 20%;
+    --input-border:       24 10% 40%;
+
+    /* Shadows: use opaque black in dark mode for natural depth */
+    --shadow-sm:
+      0 1px 2px 0 hsl(0 0% 0% / 0.30);
+
+    --shadow-base:
+      0 1px 3px 0    hsl(0 0% 0% / 0.40),
+      0 1px 2px -1px hsl(0 0% 0% / 0.40);
+
+    --shadow-md:
+      0 4px 6px -1px hsl(0 0% 0% / 0.40),
+      0 2px 4px -2px hsl(0 0% 0% / 0.40);
+
+    --shadow-lg:
+      0 10px 15px -3px hsl(0 0% 0% / 0.40),
+      0  4px  6px -4px hsl(0 0% 0% / 0.40);
+
+    --shadow-xl:
+      0 20px 25px  -5px hsl(0 0% 0% / 0.40),
+      0  8px 10px  -6px hsl(0 0% 0% / 0.40);
+
+    --shadow-inner:
+      inset 0 2px 4px 0 hsl(0 0% 0% / 0.30);
+  }
+
+
+  /* ===========================================================================
+   * AUTO DARK (opt-in)
+   * Uncomment to respect the OS-level color scheme preference automatically.
+   * When uncommented, the .dark class override above still wins if present.
+   * =========================================================================== */
+  /*
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background:         24 10% 10%;
+      --foreground:         39 10% 98%;
+      --muted:              24 10% 20%;
+      --muted-foreground:   24  6% 70%;
+      --accent:             32 95% 44%;
+      --accent-foreground:  39 10% 98%;
+      --border:             39 10% 98%;
+      --card:               24 10% 15%;
+      --card-foreground:    39 10% 98%;
+      --popover:            24 10% 15%;
+      --popover-foreground: 39 10% 98%;
+      --input:              24 10% 20%;
+      --input-border:       24 10% 40%;
+      --shadow-sm:   0 1px 2px 0 hsl(0 0% 0% / 0.30);
+      --shadow-base: 0 1px 3px 0 hsl(0 0% 0% / 0.40),
+                     0 1px 2px -1px hsl(0 0% 0% / 0.40);
+      --shadow-md:   0 4px 6px -1px hsl(0 0% 0% / 0.40),
+                     0 2px 4px -2px hsl(0 0% 0% / 0.40);
+      --shadow-lg:   0 10px 15px -3px hsl(0 0% 0% / 0.40),
+                     0  4px  6px -4px hsl(0 0% 0% / 0.40);
+      --shadow-xl:   0 20px 25px -5px hsl(0 0% 0% / 0.40),
+                     0  8px 10px -6px hsl(0 0% 0% / 0.40);
+      --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.30);
+    }
+  }
+  */
+
+
+  /* ===========================================================================
+   * THEME OVERRIDE EXAMPLES
+   * Copy one of the stubs below, give it a unique class name, fill in any
+   * variables you want to change, then apply the class to <html> alongside
+   * (or instead of) the default theme.
+   *
+   *   <html class="theme-forest">
+   *   <html class="dark theme-forest">   ← combine with dark mode
+   *
+   * Only list tokens you actually want to change; everything else inherits
+   * from :root (light) or .dark.
+   * =========================================================================== */
+
+  /*
+  .theme-ocean {
+    --accent:             199 89% 48%;    // Sky blue brand accent
+    --accent-foreground:   0  0% 100%;
+    --ring:               199 89% 48%;
+    --border:              24 10% 10%;
+  }
+
+  .theme-forest {
+    --accent:             142 71% 35%;    // Deep forest green
+    --accent-foreground:   0  0% 100%;
+    --ring:               142 71% 35%;
+  }
+  */
+

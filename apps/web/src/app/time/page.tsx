@@ -35,7 +35,7 @@ const TimeTrackingPage = async ({ searchParams }: PageProps) => {
   const intl = createIntl({ locale, messages });
 
   return (
-    <main className="bg-background py-10">
+    <main id="main-content" className="bg-background py-10">
       <Container className="px-6">
         <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
           {intl.formatMessage({ id: 'time.heading' })}

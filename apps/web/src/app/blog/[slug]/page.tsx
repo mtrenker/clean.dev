@@ -1,8 +1,12 @@
 import React from 'react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Section } from '@/components/ui/section';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
+import { Badge } from '@/components/ui/badge';
+import { Link } from '@/components/ui/link';
 import { getAllPosts, getPostBySlug, formatPostDate } from '@/lib/blog';
 
 type Props = {
@@ -31,15 +35,16 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
   if (!post) notFound();
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      {/* Post Header */}
-      <section className="section border-b border-border">
-        <div className="mx-auto max-w-4xl">
+    <main id="main-content" className="min-h-screen bg-background text-foreground">
+
+      {/* ── Post header ─────────────────────────────────────────────────────── */}
+      <Section noBorder>
+        <Container size="narrow">
           <Link
-            className="text-label mb-8 inline-flex items-center gap-2 text-xs tracking-widest text-muted-foreground transition-colors hover:text-accent"
             href="/blog"
+            className="text-label mb-8 inline-flex items-center gap-2 text-xs tracking-widest text-muted-foreground transition-colors hover:text-accent"
           >
-            <span>←</span> All posts
+            <span aria-hidden="true">←</span> All posts
           </Link>
 
           <time
@@ -49,9 +54,9 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
             {formatPostDate(post.frontmatter.date)}
           </time>
 
-          <h1 className="heading-display mb-6 mt-4 text-4xl md:text-5xl lg:text-6xl">
+          <Heading as="h1" variant="display" className="mb-6 mt-4 text-4xl md:text-5xl lg:text-6xl">
             {post.frontmatter.title}
-          </h1>
+          </Heading>
 
           <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground">
             {post.frontmatter.description}
@@ -60,21 +65,18 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
           {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
             <div className="mt-6 flex flex-wrap gap-2">
               {post.frontmatter.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-label border border-border px-3 py-1 text-xs text-muted-foreground"
-                >
+                <Badge key={tag} variant="outline">
                   {tag}
-                </span>
+                </Badge>
               ))}
             </div>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Post Content */}
-      <section className="section">
-        <div className="mx-auto max-w-4xl">
+      {/* ── Post body ───────────────────────────────────────────────────────── */}
+      <Section>
+        <Container size="narrow">
           <div
             className={[
               'prose max-w-none',
@@ -91,20 +93,24 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
           >
             <MDXRemote source={post.content} />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Footer Nav */}
-      <section className="section border-t border-border">
-        <div className="mx-auto max-w-4xl">
+      {/* ── Post footer nav ─────────────────────────────────────────────────── */}
+      <Section noBorder className="border-t border-border">
+        <Container size="narrow" className="flex items-center justify-between gap-4 flex-wrap">
           <Link
-            className="text-label inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
             href="/blog"
+            className="text-label inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
           >
             <span>←</span> Back to all posts
           </Link>
-        </div>
-      </section>
+          <a href="/contact" className="btn-secondary text-sm">
+            Start a Conversation →
+          </a>
+        </Container>
+      </Section>
+
     </main>
   );
 };

@@ -13,17 +13,22 @@ export async function createInvoiceAction(data: Omit<CreateInvoice, 'invoiceDate
     redirect('/api/auth/signin');
   }
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
 
-  const invoice = await adapter.createInvoice({
-    ...data,
-    invoiceDate: new Date(data.date),
-  });
+    const invoice = await adapter.createInvoice({
+      ...data,
+      invoiceDate: new Date(data.date),
+    });
 
-  revalidatePath('/invoices');
-  revalidatePath('/time');
-  return invoice;
+    revalidatePath('/invoices');
+    revalidatePath('/time');
+    return invoice;
+  } catch (err) {
+    console.error('[createInvoiceAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function deleteInvoiceAction(id: string) {
@@ -32,11 +37,16 @@ export async function deleteInvoiceAction(id: string) {
     redirect('/api/auth/signin');
   }
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  await adapter.deleteInvoice(id);
-  revalidatePath('/invoices');
-  revalidatePath('/time');
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    await adapter.deleteInvoice(id);
+    revalidatePath('/invoices');
+    revalidatePath('/time');
+  } catch (err) {
+    console.error('[deleteInvoiceAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function getUninvoicedEntriesAction(options?: { clientId?: string; fromDate?: string; toDate?: string }) {
@@ -45,13 +55,18 @@ export async function getUninvoicedEntriesAction(options?: { clientId?: string; 
     redirect('/api/auth/signin');
   }
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  return adapter.getUninvoicedTimeEntries({
-    clientId: options?.clientId,
-    fromDate: options?.fromDate ? new Date(options.fromDate) : undefined,
-    toDate: options?.toDate ? new Date(options.toDate) : undefined,
-  });
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    return adapter.getUninvoicedTimeEntries({
+      clientId: options?.clientId,
+      fromDate: options?.fromDate ? new Date(options.fromDate) : undefined,
+      toDate: options?.toDate ? new Date(options.toDate) : undefined,
+    });
+  } catch (err) {
+    console.error('[getUninvoicedEntriesAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function getNextInvoiceNumberAction(date: string): Promise<string> {
@@ -60,9 +75,14 @@ export async function getNextInvoiceNumberAction(date: string): Promise<string> 
     redirect('/api/auth/signin');
   }
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  return adapter.getNextInvoiceNumber(new Date(date));
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    return adapter.getNextInvoiceNumber(new Date(date));
+  } catch (err) {
+    console.error('[getNextInvoiceNumberAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function sendInvoiceAction(id: string): Promise<{ success: boolean; error?: string }> {

@@ -6,13 +6,13 @@ import { getLocale, loadMessages } from '@/lib/locale';
 import { PortfolioView } from './portfolio-view';
 
 const Home: React.FC = async () => {
-  const headerStore = await headers();
-  const cookieStore = await cookies();
+  const [headerStore, cookieStore] = await Promise.all([headers(), cookies()]);
   const locale = getLocale(headerStore, cookieStore);
   const messages = await loadMessages(locale);
 
   return (
     <main
+      id="main-content"
       className={clsx([
         'mx-auto flex flex-col items-center gap-10',
         'print:mx-14 print:items-start',
