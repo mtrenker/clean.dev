@@ -12,6 +12,10 @@
       "cache": false,
       "persistent": true
     },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
     "ladle": {
       "cache": false,
       "persistent": true
@@ -33,6 +37,11 @@
     "build:ladle": {
       "outputs": [
         "ladle-build/**"
+      ]
+    },
+    "build-storybook": {
+      "outputs": [
+        "storybook-static/**"
       ]
     },
     "synth": {

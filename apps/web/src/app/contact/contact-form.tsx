@@ -1,7 +1,8 @@
 'use client';
 
 import { useActionState } from 'react';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
@@ -89,12 +90,30 @@ export const ContactForm: React.FC = () => {
         </FormField>
 
         {state.error && (
-          <p className="text-sm text-red-500">{state.error}</p>
+          <p role="alert" className="text-sm text-destructive">{state.error}</p>
         )}
 
-        <Button type="submit" variant="primary" disabled={isPending}>
-          {isPending ? intl.formatMessage({ id: 'contact.form.submitting' }) : intl.formatMessage({ id: 'contact.form.submit' })}
-        </Button>
+        <div className="space-y-4">
+          <Button type="submit" variant="primary" disabled={isPending}>
+            {isPending ? intl.formatMessage({ id: 'contact.form.submitting' }) : intl.formatMessage({ id: 'contact.form.submit' })}
+          </Button>
+          {/* DSGVO Art. 13 — inline privacy notice required at point of data collection */}
+          <p className="text-xs text-muted-foreground">
+            <FormattedMessage
+              id="contact.form.privacy"
+              values={{
+                link: (
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-2 transition-colors hover:text-accent"
+                  >
+                    {intl.formatMessage({ id: 'contact.form.privacy.link' })}
+                  </Link>
+                ),
+              }}
+            />
+          </p>
+        </div>
       </form>
     </Card>
   );

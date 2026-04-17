@@ -20,7 +20,7 @@ export const Label: React.FC<LabelProps> = ({
       {...props}
     >
       {children}
-      {required && <span className="ml-1 text-red-500">*</span>}
+      {required && <span className="ml-1 text-red-500" aria-hidden="true">*</span>}
     </label>
   );
 };

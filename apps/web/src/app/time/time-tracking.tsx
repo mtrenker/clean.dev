@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useIntl } from 'react-intl';
 import type { Client, TimeEntry, CreateTimeEntry } from '@cleandev/pm';
 import { createTimeEntryAction, deleteTimeEntryAction } from './actions';
-import { Input, Textarea, Select, FormField, Button, Card } from '@/components/ui';
+import { Badge, EmptyState, Input, Textarea, Select, FormField, Button, Card } from '@/components/ui';
 
 interface TimeTrackingProps {
   clients: Client[];
@@ -129,7 +129,9 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
       <Card>
         <h2 className="mb-4 text-xl font-semibold text-foreground">{intl.formatMessage({ id: 'time.list.heading' })}</h2>
         {timeEntries.length === 0 ? (
-          <p className="text-foreground/70">{intl.formatMessage({ id: 'time.list.empty' })}</p>
+          <EmptyState
+            title={intl.formatMessage({ id: 'time.list.empty' })}
+          />
         ) : (
           <div className="space-y-4">
             {timeEntries.map((entry) => {
@@ -148,19 +150,20 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
                       })}
                     </p>
                     {entry.invoiceId && (
-                      <span className="mt-1 inline-block rounded border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+                      <Badge className="mt-1" variant="accent">
                         {intl.formatMessage({ id: 'time.entry.billed' })}
-                      </span>
+                      </Badge>
                     )}
                   </div>
-                  <button
-                    className="ml-4 shrink-0 rounded border-2 border-red-500 bg-transparent px-4 py-2 font-mono text-sm uppercase tracking-wider text-red-600 transition-all hover:bg-red-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  <Button
+                    className="ml-4 shrink-0"
                     disabled={!!entry.invoiceId}
                     onClick={() => onDelete(entry.id)}
                     type="button"
+                    variant="destructive"
                   >
                     {intl.formatMessage({ id: 'time.entry.delete' })}
-                  </button>
+                  </Button>
                 </div>
               );
             })}

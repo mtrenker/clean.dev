@@ -40,3 +40,6 @@ next-env.d.ts
 #ladle
 /.ladle
 /build-ladle
+
+*storybook.log
+storybook-static

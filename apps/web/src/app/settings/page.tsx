@@ -29,7 +29,7 @@ const SettingsPage = async () => {
 
   if (!settings) {
     return (
-      <main className="bg-background py-10">
+      <main id="main-content" className="bg-background py-10">
         <Container className="px-6">
           <Heading as="h1" variant="display" className="mb-4 text-4xl text-foreground">
             {intl.formatMessage({ id: 'settings.heading' })}
@@ -45,7 +45,7 @@ const SettingsPage = async () => {
   }
 
   return (
-    <main className="bg-background py-10">
+    <main id="main-content" className="bg-background py-10">
       <Container className="px-6">
         <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
           {intl.formatMessage({ id: 'settings.heading' })}

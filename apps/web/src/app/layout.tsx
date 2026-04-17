@@ -1,33 +1,73 @@
 import type { PropsWithChildren } from 'react';
-import React from 'react'
-import type { Metadata } from 'next'
-import './globals.css'
-import Link from 'next/link'
-import Script from 'next/script';
+import React from 'react';
+import type { Metadata } from 'next';
+import {
+  IBM_Plex_Mono,
+  Newsreader,
+  Source_Sans_3,
+} from 'next/font/google';
+import './globals.css';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { auth, signIn, signOut } from 'auth';
 import { UserMenu } from '@/components/user-menu';
 import { IntlProviderWrapper } from '@/components/intl-provider';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { AppFooter, AppNavigation, Link } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { getPersonStructuredData, getSocialProfiles } from '@/lib/social-profiles';
+
+const fontSans = Source_Sans_3({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+  variable: '--font-sans-google',
+});
+
+const fontMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  display: 'swap',
+  variable: '--font-mono-google',
+});
+
+const fontSerif = Newsreader({
+  subsets: ['latin'],
+  weight: ['400', '700', '800'],
+  display: 'swap',
+  variable: '--font-serif-google',
+});
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const headerStore = await headers();
   const cookieStore = await cookies();
   const locale = getLocale(headerStore, cookieStore);
 
-  return {
-    title: locale === 'de'
+  const title =
+    locale === 'de'
       ? 'clean.dev — Software-Berater'
-      : 'clean.dev — Software Consultant',
-    description: locale === 'de'
+      : 'clean.dev — Software Consultant';
+  const description =
+    locale === 'de'
       ? '20 Jahre Engineering-Exzellenz. Bessere Software durch Clean Code, echte Agile-Praktiken und strategische KI-Integration.'
-      : '20 years of engineering excellence. Building better software through clean code, authentic agile practices, and strategic AI integration.',
+      : '20 years of engineering excellence. Building better software through clean code, authentic agile practices, and strategic AI integration.';
+
+  return {
+    metadataBase: new URL('https://clean.dev'),
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: 'https://clean.dev',
+      siteName: 'clean.dev',
+      type: 'website',
+      locale: locale === 'de' ? 'de_DE' : 'en_US',
+    },
   };
 };
 
-const RootLayout = async ({children}: PropsWithChildren) => {
+const RootLayout = async ({ children }: PropsWithChildren) => {
   const [session, headerStore, cookieStore] = await Promise.all([
     auth(),
     headers(),
@@ -37,98 +77,90 @@ const RootLayout = async ({children}: PropsWithChildren) => {
   const locale = getLocale(headerStore, cookieStore);
   const messages = await loadMessages(locale);
   const intl = createIntl({ locale, messages });
+  const socialLinks = getSocialProfiles(intl);
 
   return (
     <html lang={locale}>
       <head>
-        <Script
-          data-api="https://analytics.pacabytes.io/api/e"
-          data-domain="clean.dev"
-          src="https://analytics.pacabytes.io/js/script.js" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(getPersonStructuredData()),
+          }}
+        />
       </head>
-      <body className="font-sans antialiased">
+      <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} font-sans antialiased`}>
+        <a
+          href="#main-content"
+          className="fixed left-2 top-2 z-[9999] -translate-y-20 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-lg transition-transform focus:translate-y-0"
+        >
+          {intl.formatMessage({ id: 'nav.skipToMain' })}
+        </a>
         <IntlProviderWrapper locale={locale} messages={messages}>
-          <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm print:hidden">
-            <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-12 lg:px-24">
-              <div>
-                <Link className="group flex items-center gap-3 font-serif text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-accent" href="/">
-                  <span className="inline-block transition-transform group-hover:scale-110">cd</span>
-                  <span className="hidden font-mono text-sm font-normal tracking-wider sm:inline-block">
-                    clean.dev
-                  </span>
-                </Link>
-              </div>
-              <div className="flex items-center gap-6 md:gap-10">
-                <ul className="flex flex-wrap gap-4 md:gap-8">
-                  <li>
-                    <Link
-                      className="text-label text-foreground transition-colors hover:text-accent"
-                      href="/work"
-                    >
-                      {intl.formatMessage({ id: 'nav.portfolio' })}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-label text-foreground transition-colors hover:text-accent"
-                      href="/blog"
-                    >
-                      {intl.formatMessage({ id: 'nav.blog' })}
-                    </Link>
-                  </li>
-                </ul>
+          <AppNavigation
+            brand={(
+              <Link className="group flex items-center gap-3 font-serif text-2xl font-bold tracking-tight" href="/">
+                <span className="inline-block transition-transform group-hover:scale-110">cd</span>
+                <span className="hidden font-mono text-sm font-normal tracking-wider sm:inline-block">
+                  clean.dev
+                </span>
+              </Link>
+            )}
+            items={[
+              { href: '/work', label: intl.formatMessage({ id: 'nav.portfolio' }) },
+              { href: '/contact', label: intl.formatMessage({ id: 'nav.contact' }) },
+            ]}
+            socialItems={socialLinks}
+            rightSlot={(
+              <>
                 <LanguageSwitcher currentLocale={locale} />
                 {session && <UserMenu session={session} />}
-              </div>
-            </nav>
-          </header>
+              </>
+            )}
+          />
           {children}
-          <footer className="border-t border-border bg-background print:hidden">
-            <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row md:px-12 lg:px-24">
-              <p className="text-label text-xs text-muted-foreground">
-                {intl.formatMessage({ id: 'footer.copyright' }, { year: new Date().getFullYear() })}
-              </p>
-              <div className="flex items-center gap-6">
-                <Link
-                  className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
-                  href="/imprint"
-                >
-                  {intl.formatMessage({ id: 'nav.legal' })}
-                </Link>
-                {session ? (
-                  <>
-                    <span className="text-foreground/40">|</span>
-                    <form action={async () => {
-                      'use server';
-                      await signOut();
-                    }}>
-                      <button
-                        className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
-                        type="submit"
-                      >
-                        {intl.formatMessage({ id: 'nav.logout' })}
-                      </button>
-                    </form>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-foreground/40">|</span>
-                    <form action={async () => {
-                      'use server';
-                      await signIn('github');
-                    }}>
-                      <button
-                        className="text-label text-xs text-muted-foreground transition-colors hover:text-accent"
-                        type="submit"
-                      >
-                        {intl.formatMessage({ id: 'nav.login' })}
-                      </button>
-                    </form>
-                  </>
-                )}
-              </div>
-            </div>
-          </footer>
+          <AppFooter
+            actionSlot={
+              session ? (
+                <>
+                  <span aria-hidden="true" className="text-foreground/40">|</span>
+                  <form action={async () => {
+                    'use server';
+                    await signOut();
+                  }}>
+                    <button
+                      className="text-label text-xs text-muted-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      type="submit"
+                    >
+                      {intl.formatMessage({ id: 'nav.logout' })}
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <span aria-hidden="true" className="text-foreground/40">|</span>
+                  <form action={async () => {
+                    'use server';
+                    await signIn('github');
+                  }}>
+                    <button
+                      className="text-label text-xs text-muted-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      type="submit"
+                    >
+                      {intl.formatMessage({ id: 'nav.login' })}
+                    </button>
+                  </form>
+                </>
+              )
+            }
+            copyright={intl.formatMessage({ id: 'footer.copyright' }, { year: new Date().getFullYear() })}
+            links={[
+              { href: '/contact', label: intl.formatMessage({ id: 'nav.contact' }) },
+              { href: '/imprint', label: intl.formatMessage({ id: 'nav.legal' }) },
+              { href: '/privacy', label: intl.formatMessage({ id: 'nav.privacy' }) },
+            ]}
+            socialLinks={socialLinks}
+          />
         </IntlProviderWrapper>
       </body>
     </html>

@@ -3,8 +3,7 @@ import { redirect } from 'next/navigation';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { AdminPanel } from './admin-panel';
-import { Container } from '@/components/ui/container';
-import { Heading } from '@/components/ui/heading';
+import { Container, Heading, Section } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
 
 const AdminPage = async () => {
@@ -21,16 +20,20 @@ const AdminPage = async () => {
   const intl = createIntl({ locale, messages });
 
   return (
-    <main className="bg-background py-10">
-      <Container className="px-6">
-        <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
-          {intl.formatMessage({ id: 'admin.heading' })}
-        </Heading>
-        <p className="mb-8 text-muted-foreground">
-          {intl.formatMessage({ id: 'admin.lead' })}
-        </p>
-        <AdminPanel />
-      </Container>
+    <main id="main-content" className="bg-background">
+      <Section className="py-10" noBorder>
+        <Container className="space-y-8 px-6">
+          <div>
+            <Heading as="h1" variant="display" className="mb-2 text-4xl text-foreground">
+              {intl.formatMessage({ id: 'admin.heading' })}
+            </Heading>
+            <p className="text-muted-foreground">
+              {intl.formatMessage({ id: 'admin.lead' })}
+            </p>
+          </div>
+          <AdminPanel />
+        </Container>
+      </Section>
     </main>
   );
 };

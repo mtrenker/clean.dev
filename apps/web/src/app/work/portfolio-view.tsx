@@ -4,6 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { createIntl } from 'react-intl';
+import { Section } from '@/components/ui/section';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
+import { Badge } from '@/components/ui/badge';
+import { Link } from '@/components/ui/link';
 import { type Project } from '../projects';
 import { type Locale } from '@/lib/locale';
 
@@ -19,11 +24,10 @@ interface SpotlightCardProps {
   project: Project;
   lang: Locale;
   intl: ReturnType<typeof createIntl>;
-  delay: number;
   hero?: boolean;
 }
 
-const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, delay, hero }) => {
+const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, hero }) => {
   const startYear = new Date(project.startDate).getFullYear();
   const endYear = new Date(project.endDate).getFullYear();
   const yearRange = startYear === endYear ? `${startYear}` : `${startYear} – ${endYear}`;
@@ -37,10 +41,9 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
         'hover:border-accent hover:shadow-[4px_4px_0px_0px_hsl(var(--accent))]',
         hero ? 'md:col-span-2 md:flex-row md:gap-10' : 'col-span-1',
       )}
-      style={{ transitionDelay: `${delay}ms` }}
     >
       {/* Decorative corner accent */}
-      <div className="pointer-events-none absolute right-0 top-0 h-16 w-16 -translate-y-1/2 translate-x-1/2 rotate-45 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
+      <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-16 w-16 -translate-y-1/2 translate-x-1/2 rotate-45 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
 
       <div className={clsx('flex flex-col gap-3', hero ? 'md:w-2/3' : '')}>
         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -78,12 +81,9 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
           </p>
           <div className="flex flex-wrap gap-1.5">
             {project.technologies.map((t) => (
-              <span
-                key={t}
-                className="rounded-sm bg-foreground px-2 py-0.5 font-mono text-xs text-background"
-              >
+              <Badge key={t} variant="muted" className="font-mono">
                 {t}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>
@@ -97,20 +97,16 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, dela
 interface TimelineEntryProps {
   project: Project;
   lang: Locale;
-  index: number;
 }
 
-const TimelineEntry: React.FC<TimelineEntryProps> = ({ project, lang, index }) => {
+const TimelineEntry: React.FC<TimelineEntryProps> = ({ project, lang }) => {
   const startYear = new Date(project.startDate).getFullYear();
   const endYear = new Date(project.endDate).getFullYear();
   const yearRange = startYear === endYear ? `${startYear}` : `${startYear}–${endYear}`;
 
   return (
-    <li
-      className="observe flex items-start gap-6"
-      style={{ transitionDelay: `${Math.min(index * 50, 400)}ms` }}
-    >
-      <div className="flex shrink-0 flex-col items-center gap-1">
+    <li className="observe flex items-start gap-6">
+      <div aria-hidden="true" className="flex shrink-0 flex-col items-center gap-1">
         <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent" />
       </div>
       <div className="flex flex-1 flex-wrap items-baseline gap-x-4 gap-y-0.5 pb-6">
@@ -140,6 +136,13 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
 
   // Single IntersectionObserver for all .observe elements on this page
   useEffect(() => {
+    // Respect the user's reduced-motion preference: mark all elements visible immediately
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const elements = containerRef.current?.querySelectorAll('.observe') ?? [];
+      elements.forEach((el) => el.classList.add('animate-in'));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -160,52 +163,54 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
 
   return (
     <div className="contents" ref={containerRef}>
-      {/* ── Hero (screen) ────────────────────────────────────────────────── */}
-      <section className="observe w-full px-6 pb-12 pt-10 md:px-12 lg:px-24 print:hidden">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[280px_1fr] md:gap-16">
 
-          {/* Photo */}
-          <div className="flex justify-center md:justify-start">
-            <div className="relative">
-              {/* Decorative offset border */}
-              <div className="absolute -bottom-3 -right-3 h-full w-full border-2 border-accent" />
-              <picture className="relative block h-[260px] w-[260px] overflow-hidden md:h-[280px] md:w-[280px]">
-                <Image
-                  alt={intl.formatMessage({ id: 'work.img.alt' })}
-                  className="m-0 h-full w-full object-cover"
-                  height={280}
-                  src="/me.png"
-                  unoptimized
-                  width={280}
-                />
-              </picture>
+      {/* ── Hero (screen) ─────────────────────────────────────────────────── */}
+      <Section noBorder className="observe w-full print:hidden">
+        <Container>
+          <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[280px_1fr] md:gap-16">
+
+            {/* Photo */}
+            <div className="flex justify-center md:justify-start">
+              <div className="relative">
+                <div className="absolute -bottom-3 -right-3 h-full w-full border-2 border-accent" />
+                <picture className="relative block h-[260px] w-[260px] overflow-hidden md:h-[280px] md:w-[280px]">
+                  <Image
+                    alt={intl.formatMessage({ id: 'work.img.alt' })}
+                    className="m-0 h-full w-full object-cover"
+                    height={280}
+                    src="/me.png"
+                    width={280}
+                    priority
+                  />
+                </picture>
+              </div>
             </div>
+
+            {/* Identity + About */}
+            <div className="flex flex-col gap-6">
+              <div>
+                <p className="text-label mb-3 tracking-[0.3em] text-accent">
+                  {intl.formatMessage({ id: 'work.about.heading' })}
+                </p>
+                <Heading as="h1" variant="display" className="text-5xl uppercase md:text-6xl lg:text-7xl">
+                  {intl.formatMessage({ id: 'work.title' })}
+                </Heading>
+                <p className="text-label mt-3 text-xl text-muted-foreground md:text-2xl">
+                  {intl.formatMessage({ id: 'work.subtitle' })}
+                </p>
+              </div>
+              <div className="h-px w-16 bg-accent" />
+              <div className="max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground md:text-lg">
+                <p>{intl.formatMessage({ id: 'work.about.p1' })}</p>
+                <p>{intl.formatMessage({ id: 'work.about.p2' })}</p>
+              </div>
+            </div>
+
           </div>
+        </Container>
+      </Section>
 
-          {/* Identity + About */}
-          <div className="flex flex-col gap-6">
-            <div>
-              <p className="text-label mb-3 tracking-[0.3em] text-accent">
-                {intl.formatMessage({ id: 'work.about.heading' })}
-              </p>
-              <h1 className="font-serif text-5xl font-bold uppercase leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
-                {intl.formatMessage({ id: 'work.title' })}
-              </h1>
-              <h2 className="text-label mt-3 text-xl text-muted-foreground md:text-2xl">
-                {intl.formatMessage({ id: 'work.subtitle' })}
-              </h2>
-            </div>
-            <div className="h-px w-16 bg-accent" />
-            <div className="max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground md:text-lg">
-              <p>{intl.formatMessage({ id: 'work.about.p1' })}</p>
-              <p>{intl.formatMessage({ id: 'work.about.p2' })}</p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── Stats strip (screen only) ────────────────────────────────────── */}
+      {/* ── Stats strip (screen only) — intentionally full-bleed ─────────── */}
       <div className="observe w-full border-y-[length:var(--border-width)] border-border print:hidden">
         <div className="grid grid-cols-2 divide-x-[length:var(--border-width)] divide-border md:grid-cols-4">
           {(
@@ -228,8 +233,8 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </div>
       </div>
 
-      {/* ── Traits panel (screen only) — inverted 3-col ─────────────────── */}
-      <section className="w-full border-b-[length:var(--border-width)] border-foreground bg-foreground text-background print:hidden">
+      {/* ── Traits panel (screen only) — intentionally full-bleed ──────────── */}
+      <Section variant="inverted" noPadding className="print:hidden">
         <div className="grid divide-y-[length:var(--border-width)] divide-accent/20 md:grid-cols-3 md:divide-x-[length:var(--border-width)] md:divide-y-0">
           {([
             {
@@ -259,9 +264,9 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
             </div>
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── Print page 1: two-column intro (sidebar + about/traits) ─────────── */}
+      {/* ── Print page 1: two-column intro (sidebar + about/traits) ──────────── */}
       <div className="hidden w-full print:flex print:gap-8">
 
         {/* Left sidebar */}
@@ -272,7 +277,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               className="m-0 h-auto w-full"
               height={200}
               src="/me.png"
-              unoptimized
               width={160}
             />
           </picture>
@@ -322,7 +326,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           </div>
         </aside>
 
-        {/* Right: about + traits — page 1 only, no projects here */}
+        {/* Right: about + traits — page 1 only */}
         <div className="min-w-0 flex-1">
           <div className="mb-6 border-l-2 border-foreground pl-4">
             <h3 className="text-label mb-1 text-xs font-semibold uppercase tracking-widest text-foreground">
@@ -362,7 +366,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </div>
       </div>
 
-      {/* ── Print pages 2+: full-width projects ───────────────────────────── */}
+      {/* ── Print pages 2+: full-width projects ────────────────────────────── */}
       <section className="hidden w-full break-before-page print:block">
         <h3 className="text-label mb-4 text-xs font-semibold uppercase tracking-widest text-foreground">
           {intl.formatMessage({ id: 'work.projects.heading' })}
@@ -419,69 +423,90 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           })}
       </section>
 
-      {/* ── Spotlight Grid (screen only) ──────────────────────────────────── */}
-      <section className="w-full px-6 print:hidden">
-        <div className="observe mb-10 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-label mb-1 text-accent">
-              {intl.formatMessage({ id: 'work.spotlight.heading' })}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {intl.formatMessage({ id: 'work.spotlight.lead' })}
-            </p>
+      {/* ── Spotlight Grid (screen only) ───────────────────────────────────── */}
+      <Section noBorder className="print:hidden">
+        <Container>
+          <div className="observe mb-10 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-label mb-1 text-accent">
+                {intl.formatMessage({ id: 'work.spotlight.heading' })}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {intl.formatMessage({ id: 'work.spotlight.lead' })}
+              </p>
+            </div>
+            <div aria-hidden="true" className="h-px flex-1 bg-border" />
           </div>
-          <div className="h-px flex-1 bg-border" />
-        </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {spotlightProjects.map((project, index) => (
-            <SpotlightCard
-              delay={index * 80}
-              hero={index === 0}
-              intl={intl}
-              key={project.id}
-              lang={lang}
-              project={project}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ── Timeline (screen only) ────────────────────────────────────────── */}
-      <section className="w-full px-6 print:hidden">
-        <div className="observe mb-10 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-label mb-1 text-muted-foreground">
-              {intl.formatMessage({ id: 'work.timeline.heading' })}
-            </p>
-          </div>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
-        <div className="relative border-l-2 border-accent/30 pl-2">
-          <ul className="m-0 list-none space-y-0 p-0">
-            {timelineProjects.map((project, index) => (
-              <TimelineEntry
-                index={index}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {spotlightProjects.map((project, index) => (
+              <SpotlightCard
+                hero={index === 0}
+                intl={intl}
                 key={project.id}
                 lang={lang}
                 project={project}
               />
             ))}
-          </ul>
-        </div>
+          </div>
+        </Container>
+      </Section>
 
-        <button
-          className="text-label mt-4 flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent"
-          onClick={() => setTimelineExpanded((v) => !v)}
-          type="button"
-        >
-          <span className="text-accent">{timelineExpanded ? '↑' : '↓'}</span>
-          {timelineExpanded
-            ? intl.formatMessage({ id: 'work.timeline.collapse' })
-            : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
-        </button>
-      </section>
+      {/* ── Timeline (screen only) ─────────────────────────────────────────── */}
+      <Section noBorder className="print:hidden">
+        <Container>
+          <div className="observe mb-10 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-label mb-1 text-muted-foreground">
+                {intl.formatMessage({ id: 'work.timeline.heading' })}
+              </h2>
+            </div>
+            <div aria-hidden="true" className="h-px flex-1 bg-border" />
+          </div>
+
+          <div className="relative border-l-2 border-accent/30 pl-2">
+            <ul id="timeline-list" className="m-0 list-none space-y-0 p-0">
+              {timelineProjects.map((project, index) => (
+                <TimelineEntry
+                  key={project.id}
+                  lang={lang}
+                  project={project}
+                />
+              ))}
+            </ul>
+          </div>
+
+          <button
+            aria-expanded={timelineExpanded}
+            aria-controls="timeline-list"
+            className="text-label mt-4 flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            onClick={() => setTimelineExpanded((v) => !v)}
+            type="button"
+          >
+            <span className="text-accent" aria-hidden="true">{timelineExpanded ? '↑' : '↓'}</span>
+            {timelineExpanded
+              ? intl.formatMessage({ id: 'work.timeline.collapse' })
+              : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
+          </button>
+        </Container>
+      </Section>
+
+      {/* ── Contact CTA (screen only) ─────────────────────────────────────── */}
+      <Section variant="accent" className="print:hidden">
+        <Container className="text-center">
+          <Heading as="h2" variant="section" animate className="mb-4">
+            {intl.formatMessage({ id: 'work.cta.heading' })}
+          </Heading>
+          <p className="observe delay-200 mb-8 text-lg leading-relaxed md:text-xl">
+            {intl.formatMessage({ id: 'work.cta.lead' })}
+          </p>
+          <div className="observe delay-300">
+            <Link href="/contact" className="btn bg-foreground text-background hover:bg-foreground/90">
+              {intl.formatMessage({ id: 'work.cta.button' })}
+            </Link>
+          </div>
+        </Container>
+      </Section>
 
     </div>
   );

@@ -41,11 +41,16 @@ export async function createClientAction(formData: ClientFormData) {
     customFields,
   };
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  const client = await adapter.createClient(data);
-  revalidatePath('/clients');
-  return client;
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    const client = await adapter.createClient(data);
+    revalidatePath('/clients');
+    return client;
+  } catch (err) {
+    console.error('[createClientAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function updateClientAction(id: string, formData: ClientFormData) {
@@ -70,11 +75,16 @@ export async function updateClientAction(id: string, formData: ClientFormData) {
     customFields,
   };
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  const client = await adapter.updateClient(id, data);
-  revalidatePath('/clients');
-  return client;
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    const client = await adapter.updateClient(id, data);
+    revalidatePath('/clients');
+    return client;
+  } catch (err) {
+    console.error('[updateClientAction] DB error:', err);
+    throw err;
+  }
 }
 
 export async function deleteClientAction(id: string) {
@@ -83,8 +93,13 @@ export async function deleteClientAction(id: string) {
     redirect('/api/auth/signin');
   }
 
-  const pool = getPool();
-  const adapter = createAdapter('postgres', pool);
-  await adapter.deleteClient(id);
-  revalidatePath('/clients');
+  try {
+    const pool = getPool();
+    const adapter = createAdapter('postgres', pool);
+    await adapter.deleteClient(id);
+    revalidatePath('/clients');
+  } catch (err) {
+    console.error('[deleteClientAction] DB error:', err);
+    throw err;
+  }
 }
