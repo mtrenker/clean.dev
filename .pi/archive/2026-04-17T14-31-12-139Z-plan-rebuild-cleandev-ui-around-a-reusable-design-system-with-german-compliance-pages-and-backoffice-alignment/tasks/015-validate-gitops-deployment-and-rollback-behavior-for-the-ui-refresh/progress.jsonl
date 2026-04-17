@@ -1,0 +1,14 @@
+{"ts":"2026-04-17T08:30:01.049Z","step":"Now I have all the context","status":"running"}
+{"ts":"2026-04-17T08:30:01.049Z","step":"Now I have all the context I need. Let me write the initial progress entry and then create the `docs/release-validation.","status":"running"}
+{"ts":"2026-04-17T12:00:00.000Z","step":"Reviewed k8s manifests, deploy workflow, copilot instructions, and dependency task outputs (012/013/014)","status":"done"}
+{"ts":"2026-04-17T12:01:00.000Z","step":"Creating docs/release-validation.md","status":"running"}
+{"ts":"2026-04-17T12:02:00.000Z","step":"Created docs/release-validation.md (160 lines) — promotion path, ArgoCD app name, smoke checks S-1–S-8, rollback via ArgoCD and git revert, rollback checkpoints R-1–R-7, deployment config table, and operational notes","status":"done"}
+{"ts":"2026-04-17T08:30:56.568Z","step":"Now","status":"running"}
+{"ts":"2026-04-17T08:30:56.966Z","step":"Now let me do a final review pass to make sure everything is accurate and consistent with","status":"running"}
+{"ts":"2026-04-17T08:30:57.418Z","step":"Now let me do a final review pass to make sure everything is accurate and consistent with the actual code.","status":"running"}
+{"ts":"2026-04-17T08:31:02.635Z","step":"All","status":"running"}
+{"ts":"2026-04-17T08:31:03.109Z","step":"All values match. Let me write the final progress entry.","status":"running"}
+{"ts":"2026-04-17T12:03:00.000Z","step":"Final verification: all k8s values (replicas:1, revisionHistoryLimit:3, maxUnavailable:0, maxSurge:1, probe paths) confirmed against deployment.yaml; deploy workflow image tagging pattern confirmed against .github/workflows/deploy.yaml; no new operational process introduced","status":"done"}
+{"ts":"2026-04-17T08:31:06.788Z","step":"The","status":"running"}
+{"ts":"2026-04-17T08:31:07.176Z","step":"The task is complete. Here is a summary of what was done:\n\n---\n\n## Review Summary —","status":"running"}
+{"ts":"2026-04-17T08:31:07.660Z","step":"The task is complete. Here is a summary of what was done:\n\n---\n\n## Review Summary — Task 015\n\n### What was validated\n\n**","status":"running"}

@@ -1,0 +1,23 @@
+{
+  "id": "001",
+  "name": "audit-the-current-ui-architecture-routes-and-compliance-relevant-surfaces",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [],
+  "startedAt": "2026-04-17T07:18:45.420Z",
+  "completedAt": "2026-04-17T07:22:15.587Z",
+  "duration": 210167,
+  "retries": 0,
+  "pid": 7156,
+  "error": null,
+  "usage": {
+    "inputTokens": 28,
+    "outputTokens": 10969
+  },
+  "latestProgressAt": "2026-04-17T07:22:15.235Z",
+  "latestProgressMessage": "The audit is complete. Here is a summary of what was found and documented in `docs/ui-audit.md`:\n\n---\n\n## What the audit"
+}

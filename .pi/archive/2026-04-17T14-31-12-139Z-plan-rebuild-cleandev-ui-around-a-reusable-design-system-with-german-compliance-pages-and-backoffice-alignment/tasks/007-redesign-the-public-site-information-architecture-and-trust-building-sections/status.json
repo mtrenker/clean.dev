@@ -1,0 +1,27 @@
+{
+  "id": "007",
+  "name": "redesign-the-public-site-information-architecture-and-trust-building-sections",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "001",
+    "004",
+    "006"
+  ],
+  "startedAt": "2026-04-17T07:49:50.197Z",
+  "completedAt": "2026-04-17T08:01:09.892Z",
+  "duration": 679695,
+  "retries": 0,
+  "pid": 19150,
+  "error": null,
+  "usage": {
+    "inputTokens": 72,
+    "outputTokens": 46784
+  },
+  "latestProgressAt": "2026-04-17T08:01:09.580Z",
+  "latestProgressMessage": "Here's a summary of everything delivered for Task 007:\n\n---\n\n## Changes delivered\n\n### New file\n- **`src/components/scro"
+}

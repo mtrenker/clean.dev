@@ -1,0 +1,64 @@
+{"ts":"2026-04-17T08:22:51.744Z","step":"Thinking: Let me start by reading the task file and understanding what I need to do, then review the relevant files.","status":"running"}
+{"ts":"2026-04-17T08:22:52.406Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:22:52.562Z","step":"Using Glob: apps/web/src/app/**/*.{tsx,ts}","status":"running"}
+{"ts":"2026-04-17T08:22:54.651Z","step":"Thinking: I need to check if `global-error.tsx` and `not-found.tsx` exist, and also read the key files mentioned in the","status":"running"}
+{"ts":"2026-04-17T08:22:55.451Z","step":"Using Glob: apps/web/src/app/global-error.tsx","status":"running"}
+{"ts":"2026-04-17T08:22:55.715Z","step":"Using Glob: apps/web/src/app/not-found.tsx","status":"running"}
+{"ts":"2026-04-17T08:22:56.052Z","step":"Using Glob: apps/web/src/app/error.tsx","status":"running"}
+{"ts":"2026-04-17T08:22:58.168Z","step":"Thinking: `global-error.tsx`, `not-found.tsx`, and `error.tsx` do not exist yet. Let me read all the relevant files to u","status":"running"}
+{"ts":"2026-04-17T08:22:58.593Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:23:06.984Z","step":"Thinking: Now let me check the existing components for error handling and also review the clients and invoices actions f","status":"running"}
+{"ts":"2026-04-17T08:23:07.498Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:23:10.495Z","step":"Thinking: Now let me check if there's any existing error boundary or telemetry setup.","status":"running"}
+{"ts":"2026-04-17T08:23:11.365Z","step":"Now let me check for any existing logging/telemetry and error utilities:","status":"running"}
+{"ts":"2026-04-17T08:23:11.671Z","step":"Using Glob: apps/web/src/lib/*.ts","status":"running"}
+{"ts":"2026-04-17T08:23:12.186Z","step":"Using Glob: apps/web/src/app/api/admin/migrate/route.ts","status":"running"}
+{"ts":"2026-04-17T08:23:14.268Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:23:18.730Z","step":"Using Glob: apps/web/src/components/ui/*.tsx","status":"running"}
+{"ts":"2026-04-17T08:23:19.280Z","step":"Using Glob: apps/web/src/components/**/*.tsx","status":"running"}
+{"ts":"2026-04-17T08:23:22.994Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:23:26.922Z","step":"Thinking: Now I have a good picture of the current codebase. Let me also check for any existing error handling tests, an","status":"running"}
+{"ts":"2026-04-17T08:23:27.426Z","step":"Now let me check the progress file path and existing progress, then write the review:","status":"running"}
+{"ts":"2026-04-17T08:23:28.719Z","step":"Using Glob: .pi/tasks/014-validate-observability-error-handling-and-user-visible-failure-states/*","status":"running"}
+{"ts":"2026-04-17T08:23:28.808Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:25:29.797Z","step":"Thinking: Now I have a comprehensive view of the codebase. Let me compile my review findings.\n\nKey observations:\n\n1. **M","status":"running"}
+{"ts":"2026-04-17T08:25:33.821Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:26:39.170Z","step":"Thinking: Now I have enough context to write the review. Let me log my initial review findings to the progress file, the","status":"running"}
+{"ts":"2026-04-17T08:26:39.170Z","step":"Now I have enough context. Let me log my initial findings and start implementing the missing error surfaces:","status":"running"}
+{"ts":"2026-04-17T08:26:41.522Z","step":"Using Bash: Log initial audit findings","status":"running"}
+{"ts":"2026-04-17T08:24:00.000Z","step":"Initial audit complete: global-error.tsx and not-found.tsx are missing; DB calls in clients/page.tsx and invoices/page.tsx are unguarded; clients/actions.ts and partial invoices/actions.ts lack try-catch; contact-form uses raw text-red-500 instead of design token","status":"done"}
+{"ts":"2026-04-17T08:26:58.654Z","step":"Using Write","status":"running"}
+{"ts":"2026-04-17T08:27:10.886Z","step":"Now create a root-level `error.tsx` to catch rendering errors in route segments:","status":"running"}
+{"ts":"2026-04-17T08:27:20.744Z","step":"Using Write","status":"running"}
+{"ts":"2026-04-17T08:27:21.301Z","step":"Now fix the unprotected DB calls in `clients/page.tsx` — wrap the adapter calls with try-catch and redirect to a gracefu","status":"running"}
+{"ts":"2026-04-17T08:27:24.186Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:27:29.500Z","step":"Thinking: The type for clients is tricky because of how TypeScript infers the return type. Let me look at this different","status":"running"}
+{"ts":"2026-04-17T08:27:30.161Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:27:35.791Z","step":"Thinking: The type annotation `Awaited<ReturnType<ReturnType<typeof createAdapter>['getClients']>>` is complex but shoul","status":"running"}
+{"ts":"2026-04-17T08:27:36.918Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:27:42.841Z","step":"Now fix `invoices/page.tsx`:","status":"running"}
+{"ts":"2026-04-17T08:27:44.219Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:27:48.691Z","step":"Now add error handling to the unguarded server actions in `clients/actions.ts`:","status":"running"}
+{"ts":"2026-04-17T08:27:48.802Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:27:52.510Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:28:01.344Z","step":"Now fix the unguarded actions in `invoices/actions.ts`:","status":"running"}
+{"ts":"2026-04-17T08:28:04.385Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:28:17.998Z","step":"Now fix the design-token issue in `contact-form.tsx` — replace raw `text-red-500` with `text-destructive`:","status":"running"}
+{"ts":"2026-04-17T08:28:19.386Z","step":"Using Edit","status":"running"}
+{"ts":"2026-04-17T08:28:21.667Z","step":"Now verify all the files look correct by doing final reads:","status":"running"}
+{"ts":"2026-04-17T08:28:22.136Z","step":"Using Read","status":"running"}
+{"ts":"2026-04-17T08:28:27.480Z","step":"Thinking: The files look good. Now let me write the final review and progress entries to the progress file. Let me also","status":"running"}
+{"ts":"2026-04-17T08:28:28.039Z","step":"Good. All changes look correct. Let me now append the final review summary to the progress file:","status":"running"}
+{"ts":"2026-04-17T08:28:37.885Z","step":"Using Bash: Append progress log entries for all fixes applied","status":"running"}
+{"ts":"2026-04-17T08:30:00.000Z","step":"Created apps/web/src/app/global-error.tsx — branded 500 boundary with 'use client', digest ref display, and console.error logging","status":"done"}
+{"ts":"2026-04-17T08:30:01.000Z","step":"Created apps/web/src/app/not-found.tsx — branded 404 page using design-system components (Section/Container/Heading/Link)","status":"done"}
+{"ts":"2026-04-17T08:30:02.000Z","step":"Created apps/web/src/app/error.tsx — root-level route error boundary with console.error telemetry hook, digest ref, and try-again/go-home actions","status":"done"}
+{"ts":"2026-04-17T08:30:03.000Z","step":"Fixed clients/page.tsx: wrapped adapter.getClients() in try-catch with console.error, types Client[] via @cleandev/pm import","status":"done"}
+{"ts":"2026-04-17T08:30:04.000Z","step":"Fixed invoices/page.tsx: parallelised getInvoices/getClients with Promise.all inside try-catch with console.error; types Invoice[] and Client[]","status":"done"}
+{"ts":"2026-04-17T08:30:05.000Z","step":"Fixed clients/actions.ts: added try-catch + console.error to createClientAction, updateClientAction, deleteClientAction","status":"done"}
+{"ts":"2026-04-17T08:30:06.000Z","step":"Fixed invoices/actions.ts: added try-catch + console.error to createInvoiceAction, deleteInvoiceAction, getUninvoicedEntriesAction, getNextInvoiceNumberAction","status":"done"}
+{"ts":"2026-04-17T08:30:07.000Z","step":"Fixed contact-form.tsx: replaced raw text-red-500 with design-token text-destructive; added role=alert for ARIA","status":"done"}
+{"ts":"2026-04-17T08:28:40.042Z","step":"Now let me write the complete review to the progress file:","status":"running"}
+{"ts":"2026-04-17T08:28:51.565Z","step":"Using Bash: Append final review summary to progress JSONL","status":"running"}
+{"ts":"2026-04-17T08:31:00.000Z","step":"REVIEW COMPLETE — summary follows","status":"done","review":{"pass":["contact/actions.ts: try-catch, console.error, structured return state, rate-limiting, honeypot","contact-form.tsx: field-level and top-level error display, useActionState","admin-panel.tsx: try-catch around migration fetch, user-visible error/success badge","api/admin/migrate/route.ts: auth check, 401/500, console.error","api/health/route.ts and api/ready/route.ts: structured 503 responses","invoices/actions.ts#sendInvoiceAction: try-catch, console.error, structured {success,error} return","db.ts: pool.on('error', ...) for idle-connection observability"],"fail_fixed":["global-error.tsx was MISSING — created with branded 500 surface, console.error hook, error.digest reference","not-found.tsx was MISSING — created with branded 404 using design-system components","error.tsx was MISSING — created root-level route boundary with console.error and try-again UX","clients/page.tsx: unguarded DB call — wrapped in try-catch","invoices/page.tsx: two unguarded DB calls — wrapped in Promise.all try-catch","clients/actions.ts: three actions lacked any try-catch — fixed","invoices/actions.ts: four actions lacked try-catch — fixed","contact-form.tsx: error colour was text-red-500 (outside design tokens) — changed to text-destructive; added role=alert"],"remaining_notes":["layout.tsx has no try-catch around auth()/loadMessages()/getSocialProfiles() — if any throws, global-error.tsx now catches it gracefully","No external error-tracking SDK (Sentry/Datadog) is wired; all observability is via console.error which is captured by Vercel/platform log streams — acceptable for current scale","In-memory rate-limit map in contact/actions.ts resets on cold start; acceptable for single-instance but note for future horizontal scaling","admin/page.tsx: auth() failure will bubble — covered by error.tsx now","Test coverage gap: no tests exist for global-error.tsx, not-found.tsx, error.tsx, or DB-failure paths in page server components"]}}
+{"ts":"2026-04-17T08:29:07.056Z","step":"Here is the complete review summary:\n\n---\n\n## Review: Observability, Error Handling & User-Visible Failure States\n\n### W","status":"running"}

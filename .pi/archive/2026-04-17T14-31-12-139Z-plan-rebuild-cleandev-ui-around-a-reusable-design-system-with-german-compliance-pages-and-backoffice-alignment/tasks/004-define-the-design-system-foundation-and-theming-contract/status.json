@@ -1,0 +1,25 @@
+{
+  "id": "004",
+  "name": "define-the-design-system-foundation-and-theming-contract",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-04-17T07:25:23.902Z",
+  "completedAt": "2026-04-17T07:35:30.052Z",
+  "duration": 606150,
+  "retries": 0,
+  "pid": 9803,
+  "error": null,
+  "usage": {
+    "inputTokens": 31,
+    "outputTokens": 33074
+  },
+  "latestProgressAt": "2026-04-17T07:35:29.568Z",
+  "latestProgressMessage": "Here's a summary of everything delivered:\n\n---\n\n## What was built\n\n### New file: `src/styles/tokens.css`\nSingle source o"
+}

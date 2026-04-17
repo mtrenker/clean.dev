@@ -1,0 +1,25 @@
+{
+  "id": "003",
+  "name": "audit-backoffice-access-boundaries-before-ui-reuse",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-04-17T07:22:15.603Z",
+  "completedAt": "2026-04-17T07:25:23.896Z",
+  "duration": 188293,
+  "retries": 0,
+  "pid": 8232,
+  "error": null,
+  "usage": {
+    "inputTokens": 29,
+    "outputTokens": 9559
+  },
+  "latestProgressAt": "2026-04-17T07:25:23.167Z",
+  "latestProgressMessage": "The audit is complete. Here's a summary of what was found and documented in `docs/backoffice-access-audit.md`:\n\n---\n\n##"
+}

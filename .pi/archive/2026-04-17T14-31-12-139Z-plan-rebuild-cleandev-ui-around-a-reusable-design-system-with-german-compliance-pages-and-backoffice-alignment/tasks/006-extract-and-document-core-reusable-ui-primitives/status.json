@@ -1,0 +1,26 @@
+{
+  "id": "006",
+  "name": "extract-and-document-core-reusable-ui-primitives",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.3-codex",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "004",
+    "005"
+  ],
+  "startedAt": "2026-04-17T07:43:03.984Z",
+  "completedAt": "2026-04-17T07:49:50.190Z",
+  "duration": 406206,
+  "retries": 0,
+  "pid": 16977,
+  "error": null,
+  "usage": {
+    "inputTokens": 1556910,
+    "outputTokens": 17650
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

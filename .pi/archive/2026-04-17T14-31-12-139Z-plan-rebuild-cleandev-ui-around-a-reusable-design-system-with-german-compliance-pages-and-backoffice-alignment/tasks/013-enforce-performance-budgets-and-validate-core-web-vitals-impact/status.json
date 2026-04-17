@@ -1,0 +1,28 @@
+{
+  "id": "013",
+  "name": "enforce-performance-budgets-and-validate-core-web-vitals-impact",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "reviewer",
+  "depends": [
+    "007",
+    "008",
+    "009",
+    "010"
+  ],
+  "startedAt": "2026-04-17T08:03:07.025Z",
+  "completedAt": "2026-04-17T08:12:20.056Z",
+  "duration": 553031,
+  "retries": 0,
+  "pid": 26663,
+  "error": null,
+  "usage": {
+    "inputTokens": 81,
+    "outputTokens": 27141
+  },
+  "latestProgressAt": "2026-04-17T08:12:19.741Z",
+  "latestProgressMessage": "## Review Complete\n\nHere's a summary of what was found and done:\n\n### Changes Made (8 fixes, TypeScript clean)\n\n| File |"
+}

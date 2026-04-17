@@ -1,0 +1,36 @@
+{
+  "id": "2026-04-17T14-31-12-139Z-plan-rebuild-cleandev-ui-around-a-reusable-design-system-with-german-compliance-pages-and-backoffice-alignment",
+  "archivedAt": "2026-04-17T14:31:12.139Z",
+  "reason": "manual",
+  "title": "Plan: Rebuild clean.dev UI around a reusable design system with German compliance pages and backoffice alignment",
+  "taskCount": 16,
+  "archivePath": ".pi/archive/2026-04-17T14-31-12-139Z-plan-rebuild-cleandev-ui-around-a-reusable-design-system-with-german-compliance-pages-and-backoffice-alignment",
+  "taskFolders": [
+    "001-audit-the-current-ui-architecture-routes-and-compliance-relevant-surfaces",
+    "002-map-legal-and-regulatory-requirements-for-a-german-einzelunternehmen-site",
+    "003-audit-backoffice-access-boundaries-before-ui-reuse",
+    "004-define-the-design-system-foundation-and-theming-contract",
+    "005-scaffold-storybook-for-internal-component-development",
+    "006-extract-and-document-core-reusable-ui-primitives",
+    "007-redesign-the-public-site-information-architecture-and-trust-building-sections",
+    "008-add-social-profile-integration-across-public-navigation-and-metadata",
+    "009-implement-german-compliance-pages-and-required-site-wide-legal-navigation",
+    "010-align-admin-client-and-invoice-screens-to-the-shared-design-system",
+    "011-harden-responsive-behavior-accessibility-and-interaction-quality",
+    "012-add-integration-and-visual-regression-coverage-for-shared-ui-flows",
+    "013-enforce-performance-budgets-and-validate-core-web-vitals-impact",
+    "014-validate-observability-error-handling-and-user-visible-failure-states",
+    "015-validate-gitops-deployment-and-rollback-behavior-for-the-ui-refresh",
+    "016-final-production-validation-and-launch-readiness-review"
+  ],
+  "summary": {
+    "total": 16,
+    "pending": 0,
+    "running": 0,
+    "done": 16,
+    "failed": 0,
+    "retrying": 0,
+    "totalInputTokens": 10175152,
+    "totalOutputTokens": 326678
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "008",
+  "name": "add-social-profile-integration-across-public-navigation-and-metadata",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.3-codex-spark",
+  "profile": "fast",
+  "thinking": "low",
+  "agent": "worker",
+  "depends": [
+    "001",
+    "007"
+  ],
+  "startedAt": "2026-04-17T08:01:09.905Z",
+  "completedAt": "2026-04-17T08:02:20.216Z",
+  "duration": 70312,
+  "retries": 0,
+  "pid": 25508,
+  "error": null,
+  "usage": {
+    "inputTokens": 1775965,
+    "outputTokens": 22433
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

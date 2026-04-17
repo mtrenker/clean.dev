@@ -1,0 +1,27 @@
+{
+  "id": "014",
+  "name": "validate-observability-error-handling-and-user-visible-failure-states",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "reviewer",
+  "depends": [
+    "010",
+    "011",
+    "012"
+  ],
+  "startedAt": "2026-04-17T08:22:46.432Z",
+  "completedAt": "2026-04-17T08:29:07.401Z",
+  "duration": 380969,
+  "retries": 0,
+  "pid": 35777,
+  "error": null,
+  "usage": {
+    "inputTokens": 426,
+    "outputTokens": 13724
+  },
+  "latestProgressAt": "2026-04-17T08:29:07.056Z",
+  "latestProgressMessage": "Here is the complete review summary:\n\n---\n\n## Review: Observability, Error Handling & User-Visible Failure States\n\n### W"
+}

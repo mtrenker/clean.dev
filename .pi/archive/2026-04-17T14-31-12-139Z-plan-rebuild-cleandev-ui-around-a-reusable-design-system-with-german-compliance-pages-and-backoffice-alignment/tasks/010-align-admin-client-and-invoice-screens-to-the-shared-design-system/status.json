@@ -1,0 +1,27 @@
+{
+  "id": "010",
+  "name": "align-admin-client-and-invoice-screens-to-the-shared-design-system",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.3-codex",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "003",
+    "004",
+    "006"
+  ],
+  "startedAt": "2026-04-17T07:55:21.357Z",
+  "completedAt": "2026-04-17T08:03:07.003Z",
+  "duration": 465646,
+  "retries": 0,
+  "pid": 23277,
+  "error": null,
+  "usage": {
+    "inputTokens": 2613382,
+    "outputTokens": 20293
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

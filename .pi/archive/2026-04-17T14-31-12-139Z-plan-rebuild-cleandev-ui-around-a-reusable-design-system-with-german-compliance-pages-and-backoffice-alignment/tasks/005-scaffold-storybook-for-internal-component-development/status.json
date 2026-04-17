@@ -1,0 +1,25 @@
+{
+  "id": "005",
+  "name": "scaffold-storybook-for-internal-component-development",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.3-codex",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "004"
+  ],
+  "startedAt": "2026-04-17T07:35:30.063Z",
+  "completedAt": "2026-04-17T07:43:03.977Z",
+  "duration": 453914,
+  "retries": 0,
+  "pid": 13126,
+  "error": null,
+  "usage": {
+    "inputTokens": 2215734,
+    "outputTokens": 13238
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

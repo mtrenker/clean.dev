@@ -1,0 +1,25 @@
+{
+  "id": "002",
+  "name": "map-legal-and-regulatory-requirements-for-a-german-einzelunternehmen-site",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-04-17T07:22:15.593Z",
+  "completedAt": "2026-04-17T07:25:27.364Z",
+  "duration": 191771,
+  "retries": 0,
+  "pid": 8230,
+  "error": null,
+  "usage": {
+    "inputTokens": 13,
+    "outputTokens": 9649
+  },
+  "latestProgressAt": "2026-04-17T07:25:27.094Z",
+  "latestProgressMessage": "`docs/compliance-scope.md` has been created. Here is a summary of what it contains and what was found:\n\n---\n\n## What the"
+}

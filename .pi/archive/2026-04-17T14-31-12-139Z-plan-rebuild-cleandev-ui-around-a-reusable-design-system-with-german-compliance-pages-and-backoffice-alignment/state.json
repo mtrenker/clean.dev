@@ -1,0 +1,303 @@
+{
+  "updatedAt": "2026-04-17T08:37:11.751Z",
+  "tasks": [
+    {
+      "id": "001",
+      "name": "audit-the-current-ui-architecture-routes-and-compliance-relevant-surfaces",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:18:45.420Z",
+      "completedAt": "2026-04-17T07:22:15.587Z",
+      "latestProgressAt": "2026-04-17T07:22:15.235Z",
+      "latestProgressMessage": "The audit is complete. Here is a summary of what was found and documented in `docs/ui-audit.md`:\n\n---\n\n## What the audit",
+      "lastProgress": "The audit is complete. Here is a summary of what was found and documented in `docs/ui-audit.md`:\n\n---\n\n## What the audit",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 28,
+        "outputTokens": 10969
+      }
+    },
+    {
+      "id": "002",
+      "name": "map-legal-and-regulatory-requirements-for-a-german-einzelunternehmen-site",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:22:15.593Z",
+      "completedAt": "2026-04-17T07:25:27.364Z",
+      "latestProgressAt": "2026-04-17T07:25:27.094Z",
+      "latestProgressMessage": "`docs/compliance-scope.md` has been created. Here is a summary of what it contains and what was found:\n\n---\n\n## What the",
+      "lastProgress": "`docs/compliance-scope.md` has been created. Here is a summary of what it contains and what was found:\n\n---\n\n## What the",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 13,
+        "outputTokens": 9649
+      }
+    },
+    {
+      "id": "003",
+      "name": "audit-backoffice-access-boundaries-before-ui-reuse",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:22:15.603Z",
+      "completedAt": "2026-04-17T07:25:23.896Z",
+      "latestProgressAt": "2026-04-17T07:25:23.167Z",
+      "latestProgressMessage": "The audit is complete. Here's a summary of what was found and documented in `docs/backoffice-access-audit.md`:\n\n---\n\n##",
+      "lastProgress": "The audit is complete. Here's a summary of what was found and documented in `docs/backoffice-access-audit.md`:\n\n---\n\n##",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 29,
+        "outputTokens": 9559
+      }
+    },
+    {
+      "id": "004",
+      "name": "define-the-design-system-foundation-and-theming-contract",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:25:23.902Z",
+      "completedAt": "2026-04-17T07:35:30.052Z",
+      "latestProgressAt": "2026-04-17T07:35:29.568Z",
+      "latestProgressMessage": "Here's a summary of everything delivered:\n\n---\n\n## What was built\n\n### New file: `src/styles/tokens.css`\nSingle source o",
+      "lastProgress": "Here's a summary of everything delivered:\n\n---\n\n## What was built\n\n### New file: `src/styles/tokens.css`\nSingle source o",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 31,
+        "outputTokens": 33074
+      }
+    },
+    {
+      "id": "005",
+      "name": "scaffold-storybook-for-internal-component-development",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T07:35:30.063Z",
+      "completedAt": "2026-04-17T07:43:03.977Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2215734,
+        "outputTokens": 13238
+      }
+    },
+    {
+      "id": "006",
+      "name": "extract-and-document-core-reusable-ui-primitives",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T07:43:03.984Z",
+      "completedAt": "2026-04-17T07:49:50.190Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 1556910,
+        "outputTokens": 17650
+      }
+    },
+    {
+      "id": "007",
+      "name": "redesign-the-public-site-information-architecture-and-trust-building-sections",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:49:50.197Z",
+      "completedAt": "2026-04-17T08:01:09.892Z",
+      "latestProgressAt": "2026-04-17T08:01:09.580Z",
+      "latestProgressMessage": "Here's a summary of everything delivered for Task 007:\n\n---\n\n## Changes delivered\n\n### New file\n- **`src/components/scro",
+      "lastProgress": "Here's a summary of everything delivered for Task 007:\n\n---\n\n## Changes delivered\n\n### New file\n- **`src/components/scro",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 72,
+        "outputTokens": 46784
+      }
+    },
+    {
+      "id": "008",
+      "name": "add-social-profile-integration-across-public-navigation-and-metadata",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex-spark",
+      "status": "done",
+      "startedAt": "2026-04-17T08:01:09.905Z",
+      "completedAt": "2026-04-17T08:02:20.216Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 1775965,
+        "outputTokens": 22433
+      }
+    },
+    {
+      "id": "009",
+      "name": "implement-german-compliance-pages-and-required-site-wide-legal-navigation",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T07:49:50.208Z",
+      "completedAt": "2026-04-17T07:55:21.349Z",
+      "latestProgressAt": "2026-04-17T07:55:21.038Z",
+      "latestProgressMessage": "Here's a summary of everything implemented for Task 009:\n\n---\n\n## Implementation Summary\n\n### Files created\n- **`apps/we",
+      "lastProgress": "Here's a summary of everything implemented for Task 009:\n\n---\n\n## Implementation Summary\n\n### Files created\n- **`apps/we",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 44,
+        "outputTokens": 19261
+      }
+    },
+    {
+      "id": "010",
+      "name": "align-admin-client-and-invoice-screens-to-the-shared-design-system",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T07:55:21.357Z",
+      "completedAt": "2026-04-17T08:03:07.003Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2613382,
+        "outputTokens": 20293
+      }
+    },
+    {
+      "id": "011",
+      "name": "harden-responsive-behavior-accessibility-and-interaction-quality",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T08:03:07.014Z",
+      "completedAt": "2026-04-17T08:15:47.088Z",
+      "latestProgressAt": "2026-04-17T08:15:46.707Z",
+      "latestProgressMessage": "Here is a complete summary of everything done in this task:\n\n## Summary of Accessibility & Responsive Hardening (Task 01",
+      "lastProgress": "Here is a complete summary of everything done in this task:\n\n## Summary of Accessibility & Responsive Hardening (Task 01",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 141,
+        "outputTokens": 40987
+      }
+    },
+    {
+      "id": "012",
+      "name": "add-integration-and-visual-regression-coverage-for-shared-ui-flows",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T08:15:47.101Z",
+      "completedAt": "2026-04-17T08:22:46.423Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2012233,
+        "outputTokens": 17286
+      }
+    },
+    {
+      "id": "013",
+      "name": "enforce-performance-budgets-and-validate-core-web-vitals-impact",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T08:03:07.025Z",
+      "completedAt": "2026-04-17T08:12:20.056Z",
+      "latestProgressAt": "2026-04-17T08:12:19.741Z",
+      "latestProgressMessage": "## Review Complete\n\nHere's a summary of what was found and done:\n\n### Changes Made (8 fixes, TypeScript clean)\n\n| File |",
+      "lastProgress": "## Review Complete\n\nHere's a summary of what was found and done:\n\n### Changes Made (8 fixes, TypeScript clean)\n\n| File |",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 81,
+        "outputTokens": 27141
+      }
+    },
+    {
+      "id": "014",
+      "name": "validate-observability-error-handling-and-user-visible-failure-states",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T08:22:46.432Z",
+      "completedAt": "2026-04-17T08:29:07.401Z",
+      "latestProgressAt": "2026-04-17T08:29:07.056Z",
+      "latestProgressMessage": "Here is the complete review summary:\n\n---\n\n## Review: Observability, Error Handling & User-Visible Failure States\n\n### W",
+      "lastProgress": "Here is the complete review summary:\n\n---\n\n## Review: Observability, Error Handling & User-Visible Failure States\n\n### W",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 426,
+        "outputTokens": 13724
+      }
+    },
+    {
+      "id": "015",
+      "name": "validate-gitops-deployment-and-rollback-behavior-for-the-ui-refresh",
+      "agent": "reviewer",
+      "engine": "pi",
+      "model": "anthropic/claude-sonnet-4-6",
+      "status": "done",
+      "startedAt": "2026-04-17T08:29:07.408Z",
+      "completedAt": "2026-04-17T08:31:19.878Z",
+      "latestProgressAt": "2026-04-17T08:31:07.660Z",
+      "latestProgressMessage": "The task is complete. Here is a summary of what was done:\n\n---\n\n## Review Summary — Task 015\n\n### What was validated\n\n**",
+      "lastProgress": "The task is complete. Here is a summary of what was done:\n\n---\n\n## Review Summary — Task 015\n\n### What was validated\n\n**",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 20,
+        "outputTokens": 6204
+      }
+    },
+    {
+      "id": "016",
+      "name": "final-production-validation-and-launch-readiness-review",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T08:31:19.886Z",
+      "completedAt": "2026-04-17T08:37:11.750Z",
+      "latestProgressAt": "2026-04-17T08:37:11.375Z",
+      "latestProgressMessage": "The launch readiness review is complete. Here's a summary of what was found across the 7 dependency tasks:\n\n---\n\n## Revi",
+      "lastProgress": "The launch readiness review is complete. Here's a summary of what was found across the 7 dependency tasks:\n\n---\n\n## Revi",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 43,
+        "outputTokens": 18426
+      }
+    }
+  ],
+  "summary": {
+    "total": 16,
+    "pending": 0,
+    "running": 0,
+    "done": 16,
+    "failed": 0,
+    "retrying": 0,
+    "totalInputTokens": 10175152,
+    "totalOutputTokens": 326678
+  }
+}
