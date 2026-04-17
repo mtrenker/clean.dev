@@ -252,8 +252,8 @@ importers:
         specifier: ^0.36.4
         version: 0.36.4(@types/pg@8.16.0)(@types/react@19.2.14)(pg@8.17.2)(react@19.2.0)
       nodemailer:
-        specifier: ^8.0.1
-        version: 8.0.1
+        specifier: ^8.0.4
+        version: 8.0.4
       pg:
         specifier: ^8.13.1
         version: 8.17.2
@@ -4579,8 +4579,8 @@ packages:
   node-releases@2.0.26:
     resolution: {integrity: sha512-S2M9YimhSjBSvYnlr5/+umAnPHE++ODwt5e2Ij6FoX45HA/s4vHdkDx1eax2pAPeAOqu4s9b7ppahsyEFdVqQA==}
 
-  nodemailer@8.0.1:
-    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
+  nodemailer@8.0.4:
+    resolution: {integrity: sha512-k+jf6N8PfQJ0Fe8ZhJlgqU5qJU44Lpvp2yvidH3vp1lPnVQMgi4yEEMPXg5eJS1gFIJTVq1NHBk7Ia9ARdSBdQ==}
     engines: {node: '>=6.0.0'}
 
   nopt@7.2.1:
@@ -11127,7 +11127,7 @@ snapshots:
 
   node-releases@2.0.26: {}
 
-  nodemailer@8.0.1: {}
+  nodemailer@8.0.4: {}
 
   nopt@7.2.1:
     dependencies:
