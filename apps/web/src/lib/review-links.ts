@@ -64,7 +64,7 @@ function base64urlDecode(value: string): string {
   ).toString('utf8');
 }
 
-function getSigningSecret(): Buffer {
+function getSigningSecret(): string {
   const secret = process.env.REVIEW_LINK_SECRET;
   if (!secret) {
     throw new Error(
@@ -72,7 +72,7 @@ function getSigningSecret(): Buffer {
         'Generate a strong secret and set it before using review-link tokens.',
     );
   }
-  return Buffer.from(secret, 'utf8');
+  return secret;
 }
 
 function computeSignature(signingInput: string): string {
@@ -194,12 +194,13 @@ export function verifyReviewToken(token: string): ReviewerContext {
   const expectedSignature = computeSignature(signingInput);
 
   // Constant-time comparison prevents timing-based side-channel attacks.
-  const suppliedBuf = Buffer.from(suppliedSignature, 'utf8');
-  const expectedBuf = Buffer.from(expectedSignature, 'utf8');
+  const encoder = new TextEncoder();
+  const suppliedBuf = encoder.encode(suppliedSignature);
+  const expectedBuf = encoder.encode(expectedSignature);
   const lengthMatch = suppliedBuf.length === expectedBuf.length;
   // If lengths differ, compare against a same-length buffer so
   // timingSafeEqual doesn't throw, then fail on the length check.
-  const compareBuf = lengthMatch ? suppliedBuf : Buffer.alloc(expectedBuf.length);
+  const compareBuf = lengthMatch ? suppliedBuf : new Uint8Array(expectedBuf.length);
   if (!timingSafeEqual(compareBuf, expectedBuf) || !lengthMatch) {
     throw new ReviewTokenError('Token signature is invalid', 'INVALID_SIGNATURE');
   }
