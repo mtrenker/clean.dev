@@ -16,6 +16,7 @@ import { LanguageSwitcher } from '@/components/language-switcher';
 import { AppFooter, AppNavigation, Link } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
 import { getPersonStructuredData, getSocialProfiles } from '@/lib/social-profiles';
+import { isAdminSession } from '@/lib/authz';
 
 const fontSans = Source_Sans_3({
   subsets: ['latin'],
@@ -114,7 +115,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
             rightSlot={(
               <>
                 <LanguageSwitcher currentLocale={locale} />
-                {session && <UserMenu session={session} />}
+                {session && isAdminSession(session) && <UserMenu session={session} />}
               </>
             )}
           />

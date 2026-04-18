@@ -1,5 +1,4 @@
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { getPool } from '@/lib/db';
@@ -7,13 +6,12 @@ import { createAdapter, type Client } from '@cleandev/pm';
 import { ClientsManagement } from './clients-management';
 import { Container, Heading, Section } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { requireAdminSession } from '@/lib/authz';
 
 const ClientsPage = async () => {
   const session = await auth();
 
-  if (!session) {
-    redirect('/api/auth/signin?callbackUrl=/clients');
-  }
+  requireAdminSession(session, '/clients');
 
   let clients: Client[];
   try {

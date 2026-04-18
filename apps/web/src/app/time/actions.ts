@@ -1,17 +1,15 @@
 'use server';
 
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import type { CreateTimeEntry } from '@cleandev/pm';
 import { revalidatePath } from 'next/cache';
+import { requireAdminSession } from '@/lib/authz';
 
 export async function createTimeEntryAction(data: Omit<CreateTimeEntry, 'date'> & { date: string }) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/time');
 
   const pool = getPool();
   const adapter = createAdapter('postgres', pool);
@@ -27,9 +25,7 @@ export async function createTimeEntryAction(data: Omit<CreateTimeEntry, 'date'> 
 
 export async function deleteTimeEntryAction(id: string) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/time');
 
   const pool = getPool();
   const adapter = createAdapter('postgres', pool);

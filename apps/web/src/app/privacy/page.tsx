@@ -108,6 +108,41 @@ const PrivacyPage = async () => {
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
+              {intl.formatMessage({ id: 'privacy.reviewFlow.heading' })}
+            </Heading>
+            <Card>
+              <div className="space-y-3 leading-relaxed text-muted-foreground">
+                <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p1' })}</p>
+                <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p2' })}</p>
+                <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p3' })}</p>
+                <p>
+                  <span className="font-medium text-foreground">
+                    {intl.formatMessage({ id: 'privacy.reviewFlow.recipient' })}
+                  </span>{' '}
+                  {intl.formatMessage(
+                    { id: 'privacy.reviewFlow.recipientValue' },
+                    { provider: intl.formatMessage({ id: 'privacy.contactForm.provider' }) },
+                  )}
+                </p>
+                <p>
+                  <span className="font-medium text-foreground">
+                    {intl.formatMessage({ id: 'privacy.reviewFlow.legalBasis' })}
+                  </span>{' '}
+                  {intl.formatMessage({ id: 'privacy.reviewFlow.legalBasisValue' })}
+                </p>
+                <p>
+                  <span className="font-medium text-foreground">
+                    {intl.formatMessage({ id: 'privacy.reviewFlow.retention' })}
+                  </span>{' '}
+                  {intl.formatMessage({ id: 'privacy.reviewFlow.retentionValue' })}
+                </p>
+                <p className="text-xs">{intl.formatMessage({ id: 'privacy.reviewFlow.linkedinNote' })}</p>
+              </div>
+            </Card>
+          </section>
+
+          <section className="space-y-4">
+            <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.hosting.heading' })}
             </Heading>
             <Card>

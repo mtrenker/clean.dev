@@ -14,8 +14,8 @@ import { Link } from '@/components/ui/link';
 
 export default function NotFound() {
   return (
-    <main id="main-content" className="flex min-h-[80vh] items-center bg-background">
-      <Section noBorder>
+    <main id="main-content" className="flex min-h-[80vh] items-center justify-center bg-background">
+      <Section noBorder className="w-full">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             {/* Error label */}

@@ -22,6 +22,81 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
+      initContainers:
+        - name: review-links-config-preflight
+          image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              flag="$(printf '%s' "${FEATURE_REVIEW_LINKS:-}" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')"
+              case "$flag" in
+                true|1|yes|false|0|no) ;;
+                *)
+                  echo "Invalid FEATURE_REVIEW_LINKS value: '$flag'. Allowed: true,false,1,0,yes,no" >&2
+                  exit 1
+                  ;;
+              esac
+
+              if [ -z "${REVIEW_LINK_SECRET:-}" ]; then
+                echo "REVIEW_LINK_SECRET is required" >&2
+                exit 1
+              fi
+              if [ "${#REVIEW_LINK_SECRET}" -lt 32 ]; then
+                echo "REVIEW_LINK_SECRET must be at least 32 characters" >&2
+                exit 1
+              fi
+
+              if [ "$flag" = "true" ] || [ "$flag" = "1" ] || [ "$flag" = "yes" ]; then
+                for var_name in LINKEDIN_CLIENT_ID LINKEDIN_CLIENT_SECRET REVIEW_RECIPIENT_EMAIL; do
+                  eval "var_value=\${$var_name:-}"
+                  if [ -z "$var_value" ]; then
+                    echo "$var_name is required when FEATURE_REVIEW_LINKS is enabled" >&2
+                    exit 1
+                  fi
+                done
+
+                case "${REVIEW_RECIPIENT_EMAIL}" in
+                  *@*) ;;
+                  *)
+                    echo "REVIEW_RECIPIENT_EMAIL must look like an email address" >&2
+                    exit 1
+                    ;;
+                esac
+              fi
+          env:
+            - name: FEATURE_REVIEW_LINKS
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: feature-flag
+            - name: REVIEW_LINK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: signing-secret
+            - name: REVIEW_RECIPIENT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: recipient-email
+            - name: LINKEDIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: linkedin-client-id
+            - name: LINKEDIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: linkedin-client-secret
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       containers:
         - name: clean-dev
           image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
@@ -73,6 +148,16 @@ spec:
                 secretKeyRef:
                   name: nextauth-secrets
                   key: allowed-github-users
+            - name: LINKEDIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: linkedin-client-id
+            - name: LINKEDIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nextauth-secrets
+                  key: linkedin-client-secret
             - name: SMTP_HOST
               valueFrom:
                 secretKeyRef:
@@ -103,6 +188,21 @@ spec:
                 secretKeyRef:
                   name: clean-dev-smtp
                   key: from
+            - name: REVIEW_LINK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: signing-secret
+            - name: REVIEW_RECIPIENT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: recipient-email
+            - name: FEATURE_REVIEW_LINKS
+              valueFrom:
+                secretKeyRef:
+                  name: review-link-secrets
+                  key: feature-flag
           resources:
             requests:
               cpu: 100m

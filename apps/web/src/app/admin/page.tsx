@@ -1,17 +1,15 @@
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { AdminPanel } from './admin-panel';
 import { Container, Heading, Section } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { requireAdminSession } from '@/lib/authz';
 
 const AdminPage = async () => {
   const session = await auth();
 
-  if (!session) {
-    redirect('/api/auth/signin?callbackUrl=/admin');
-  }
+  requireAdminSession(session, '/admin');
 
   const headerStore = await headers();
   const cookieStore = await cookies();

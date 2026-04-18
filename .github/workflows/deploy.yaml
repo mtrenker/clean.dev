@@ -6,6 +6,8 @@ on:
     paths:
       - "apps/**"
       - "packages/**"
+      - "k8s/**"
+      - ".github/workflows/deploy.yaml"
       - "Dockerfile"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -17,6 +19,8 @@ on:
     paths:
       - "apps/**"
       - "packages/**"
+      - "k8s/**"
+      - ".github/workflows/deploy.yaml"
       - "Dockerfile"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -70,10 +74,17 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Install Kustomize
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
           sudo mv kustomize /usr/local/bin/
+
+      - name: Validate Kubernetes manifests
+        run: |
+          kustomize build k8s > /tmp/k8s-rendered.yaml
+          grep -q 'name: FEATURE_REVIEW_LINKS' k8s/deployment.yaml
+          grep -q 'name: REVIEW_LINK_SECRET' k8s/deployment.yaml
+          grep -q 'name: REVIEW_RECIPIENT_EMAIL' k8s/deployment.yaml
+          grep -q 'name: review-links-config-preflight' k8s/deployment.yaml
 
       - name: Update Kustomize image tag
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
