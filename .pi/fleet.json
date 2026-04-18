@@ -1,0 +1,116 @@
+{
+  "simulate": {
+    "taskDurationMs": [
+      4000,
+      10000
+    ],
+    "progressIntervalMs": 1200,
+    "failureRate": 0.2
+  },
+  "concurrency": 2,
+  "planPath": "PLAN.md",
+  "tasksDir": ".pi/tasks",
+  "defaults": {
+    "engine": "claude",
+    "model": "sonnet",
+    "agent": "worker"
+  },
+  "engines": {
+    "pi": {
+      "command": "pi",
+      "args": [
+        "-p",
+        "--mode",
+        "json",
+        "--no-extensions"
+      ]
+    },
+    "claude": {
+      "command": "claude",
+      "args": [
+        "-p",
+        "--output-format",
+        "stream-json",
+        "--dangerously-skip-permissions"
+      ]
+    },
+    "codex": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--json",
+        "--dangerously-bypass-approvals-and-sandbox"
+      ]
+    }
+  },
+  "profiles": {
+    "fast": {
+      "pi": {
+        "model": "openai-codex/gpt-5.4-mini",
+        "thinking": "low"
+      },
+      "claude": {
+        "model": "haiku",
+        "thinking": "low"
+      },
+      "codex": {
+        "model": "gpt-5.3-codex-spark",
+        "thinking": "low"
+      }
+    },
+    "balanced": {
+      "pi": {
+        "model": "anthropic/claude-sonnet-4-6",
+        "thinking": "medium"
+      },
+      "claude": {
+        "model": "sonnet",
+        "thinking": "medium"
+      },
+      "codex": {
+        "model": "gpt-5.3-codex",
+        "thinking": "medium"
+      }
+    },
+    "deep": {
+      "pi": {
+        "model": "anthropic/claude-sonnet-4-6",
+        "thinking": "high"
+      },
+      "claude": {
+        "model": "sonnet",
+        "thinking": "high"
+      },
+      "codex": {
+        "model": "gpt-5.4",
+        "thinking": "high"
+      }
+    }
+  },
+  "agents": {
+    "worker": {
+      "prompt": "You are a worker agent. Implement the requested changes. Write clean, tested code. Track your progress in the explicit task-local progress path provided in task.md after each significant step, and never write to a repo-root progress.jsonl. Work only inside the current working directory and use relative paths from cwd; never assume paths like /root/project. Prefer targeted searches with exclusions (for example exclude node_modules, .git, and .pi/archive) instead of broad scans like **/*.md across the whole repo. Avoid unnecessary tool churn: once you have enough context, produce the deliverable promptly.",
+      "tools": null
+    },
+    "scout": {
+      "prompt": "You are a scout agent. Your job is read-only reconnaissance. Explore the codebase, gather context, and report your findings. Do NOT modify any files. Write your findings to the explicit task-local progress path provided in task.md, and never write to a repo-root progress.jsonl. Work only inside the current working directory and use relative paths from cwd; never assume paths like /root/project. Prefer targeted searches with exclusions (for example exclude node_modules, .git, and .pi/archive) instead of broad scans like **/*.md across the whole repo. Avoid unnecessary tool churn: gather the minimum context needed and then summarize.",
+      "tools": [
+        "read",
+        "grep",
+        "find",
+        "ls",
+        "bash"
+      ]
+    },
+    "reviewer": {
+      "prompt": "You are a reviewer agent. Review the changes made by previous tasks. Check for correctness, style, edge cases, and test coverage. Write your review to the explicit task-local progress path provided in task.md, and never write to a repo-root progress.jsonl. Work only inside the current working directory and use relative paths from cwd; never assume paths like /root/project. Prefer targeted searches with exclusions (for example exclude node_modules, .git, and .pi/archive) instead of broad scans like **/*.md across the whole repo. Avoid unnecessary tool churn: inspect the relevant files and then produce the review.",
+      "tools": [
+        "read",
+        "grep",
+        "find",
+        "ls",
+        "bash"
+      ]
+    }
+  }
+}
