@@ -1,0 +1,28 @@
+{
+  "id": "010",
+  "name": "verify-external-contracts-in-staging-and-define-performance-expectations",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "reviewer",
+  "depends": [
+    "003",
+    "005",
+    "008",
+    "009"
+  ],
+  "startedAt": "2026-04-17T15:09:29.103Z",
+  "completedAt": "2026-04-17T15:12:47.801Z",
+  "duration": 198698,
+  "retries": 0,
+  "pid": 132124,
+  "error": null,
+  "usage": {
+    "inputTokens": 21,
+    "outputTokens": 9731
+  },
+  "latestProgressAt": "2026-04-17T15:12:47.417Z",
+  "latestProgressMessage": "## Review Complete\n\nThe verification report has been written to `.pi/tasks/010-verify-external-contracts-in-staging-and-"
+}

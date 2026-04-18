@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "title": "Plan: Personalized LinkedIn-backed review links for clean.dev",
+  "overview": "This feature adds a new public review/reference flow to the existing `apps/web` Next.js application so you can send personalized deep links to former colleagues and let them submit a testimonial on `clean.dev`. The core design should avoid storing review data in the application database: each invite link will carry a signed, time-bounded token, the review form will submit directly to a delivery channel such as email, and LinkedIn OAuth will be used only to prefill identity details and optionally link back to the reviewer’s public profile.\n\nBecause this is a **Production Ready** feature for external users, the plan includes more than just the happy path. It covers signed-link authorization, LinkedIn OAuth integration in `apps/web/auth.ts`, graceful failure when LinkedIn is unavailable, structured observability, rate limiting and abuse controls, integration and load validation, deployment behind a feature flag, and a rollback/runbook path. No new persistent application state or database migration is planned, which narrows scope and keeps rollback simple.\n\nA key architectural decision is to treat the personalized deep link itself as the authorization boundary instead of introducing a new review database or admin CRUD UI. That keeps delivery fast within the stated timeline, but it means invite generation, token signing, token expiry, and replay/abuse controls must be implemented carefully in modules such as `apps/web/src/lib/review-links.ts` and `apps/web/src/app/reviews/actions.ts`. LinkedIn login should be optional-but-prominent: reviewers must still be able to complete the flow if OAuth fails, while signed invites prevent anonymous public abuse.\n\nScope boundaries: this plan does **not** include a new dashboard for managing reviews, long-term storage of review submissions, or a CMS workflow for publishing testimonials. The deliverable is a secure production feature that accepts invited review submissions on the web, enriches them with LinkedIn identity when available, forwards them to your existing inbound channel, and gives operators clear deployment, monitoring, and rollback procedures.",
+  "splitAt": "2026-04-17T14:32:23.751Z",
+  "sourcePlanPath": "PLAN.md",
+  "taskCount": 12,
+  "tasks": [
+    {
+      "id": "001",
+      "slug": "audit-the-existing-web-app-auth-stack-and-no-storage-constraints",
+      "name": "Audit the existing web app, auth stack, and no-storage constraints",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "agent": "scout",
+      "depends": [],
+      "description": "Inspect the existing `apps/web` application structure, with specific focus on `apps/web/auth.ts`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/contact/*`, `apps/web/src/lib/email.ts`, `apps/web/.env.example`, and the Kubernetes manifests under `k8s/`. Produce an implementation note that identifies the exact files to extend for a new `/reviews/[token]` flow, confirms how NextAuth v5 is currently wired, documents what “we won’t store any data” allows for cookies/logs/email retention, and defines the acceptance criteria for the production feature."
+    },
+    {
+      "id": "002",
+      "slug": "design-and-implement-signed-personalized-review-link-tokens-plus-feature-flag-controls",
+      "name": "Design and implement signed personalized review-link tokens plus feature flag controls",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "high",
+      "agent": "worker",
+      "depends": [
+        "001"
+      ],
+      "description": "Add a stateless invite-token module such as `apps/web/src/lib/review-links.ts` that can mint and verify signed, expiring deep-link tokens containing the minimum reviewer context needed for personalization, without database persistence. Update `apps/web/.env.example`, `k8s/deployment.yaml`, and any required sealed secret manifests to include a review-link signing secret and a feature flag like `FEATURE_REVIEW_LINKS`, and define done as successful verification of valid tokens, rejection of expired/tampered tokens, and a clean feature-off behavior that disables the route without redeploying code."
+    },
+    {
+      "id": "003",
+      "slug": "extend-nextauth-with-linkedin-oauth-for-public-review-identity-enrichment",
+      "name": "Extend NextAuth with LinkedIn OAuth for public review identity enrichment",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "worker",
+      "depends": [
+        "001"
+      ],
+      "description": "Modify `apps/web/auth.ts` and any related auth route wiring in `apps/web/src/app/api/auth/[...nextauth]/route.ts` so the app supports LinkedIn as an authentication provider alongside the existing GitHub setup. The implementation must shape session/profile data for the review flow, validate allowed callback behavior for the public review route, add the required environment variables to `apps/web/.env.example` and `k8s/deployment.yaml`, and be considered done when LinkedIn login can return reviewer name/profile information without weakening existing admin/login behavior."
+    },
+    {
+      "id": "004",
+      "slug": "build-the-public-deep-linked-review-page-and-form-flow",
+      "name": "Build the public deep-linked review page and form flow",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "worker",
+      "depends": [
+        "002",
+        "003"
+      ],
+      "description": "Create the public route files for the new experience, likely `apps/web/src/app/reviews/[token]/page.tsx` plus a client component such as `apps/web/src/app/reviews/[token]/review-form.tsx`, using the current design system components from `apps/web/src/components/ui/*`. The page must validate the invite token on load, render personalized copy, offer a prominent “Continue with LinkedIn” option plus manual fallback fields, and include invalid-link, expired-link, and disabled-feature states. This task is done when a reviewer can verify locally or in preview that a valid token renders the form, an invalid or expired token renders the correct error state, LinkedIn login entry points preserve the review callback, and the localized form can be completed through the UI up to the submission boundary."
+    },
+    {
+      "id": "005",
+      "slug": "implement-the-server-side-review-submission-path-without-persistent-storage",
+      "name": "Implement the server-side review submission path without persistent storage",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "agent": "worker",
+      "depends": [
+        "002",
+        "004"
+      ],
+      "description": "Add a submission handler in `apps/web/src/app/reviews/actions.ts` or an API route under `apps/web/src/app/api/reviews/submit/route.ts` that verifies the signed token again, validates/sanitizes reviewer input, includes LinkedIn-derived identity when present, and forwards the review to the selected delivery sink using `apps/web/src/lib/email.ts` or a dedicated delivery helper such as `apps/web/src/lib/review-delivery.ts`. The feature is done when submissions are never written to the application database, malformed input is rejected safely, successful submissions reach the configured destination, and the user receives a clear success or failure state."
+    },
+    {
+      "id": "006",
+      "slug": "add-user-facing-error-handling-privacy-disclosures-and-legal-copy-for-the-review-flow",
+      "name": "Add user-facing error handling, privacy disclosures, and legal copy for the review flow",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "worker",
+      "depends": [
+        "004",
+        "005"
+      ],
+      "description": "Update the new review route components plus the shared message catalogs in `apps/web/src/messages/en.json` and `apps/web/src/messages/de.json`, and amend `apps/web/src/app/privacy/page.tsx` if needed to describe LinkedIn login, outbound delivery, and the no-persistent-storage behavior accurately. Acceptance requires explicit UX for invalid tokens, expired links, LinkedIn failure fallback, submission failure, and reviewer consent language that is legally consistent with what the system actually processes."
+    },
+    {
+      "id": "007",
+      "slug": "harden-the-public-endpoint-against-abuse-replay-and-callback-misuse",
+      "name": "Harden the public endpoint against abuse, replay, and callback misuse",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "agent": "worker",
+      "depends": [
+        "002",
+        "003",
+        "005"
+      ],
+      "description": "Extend the review submission flow with production-grade protections in files such as `apps/web/src/app/reviews/actions.ts`, `apps/web/proxy.ts`, and any new security helpers under `apps/web/src/lib/`, including per-IP and per-token rate limiting, replay controls appropriate for a stateless invite model, input length caps, HTML escaping, and strict callback/origin validation for OAuth and form posts. The task is complete when the public route cannot be trivially spammed, token tampering and expired links are rejected, open redirects are prevented, and the protection strategy is documented in code comments or a short security note."
+    },
+    {
+      "id": "008",
+      "slug": "add-structured-logs-metricstracing-hooks-and-operational-observability-for-the-new-flow",
+      "name": "Add structured logs, metrics/tracing hooks, and operational observability for the new flow",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "agent": "worker",
+      "depends": [
+        "005",
+        "007"
+      ],
+      "description": "Introduce observability for the review journey by adding structured logging in the new review modules, and, if absent, create instrumentation files such as `apps/web/instrumentation.ts` or a shared logger module under `apps/web/src/lib/` to emit counters/timers around token validation, LinkedIn auth starts/failures, and delivery success/failure. Done means operators can answer from logs/metrics whether invites are being opened, LinkedIn is failing, submissions are succeeding, and abuse protections are triggering, without logging full review content or sensitive token material."
+    },
+    {
+      "id": "009",
+      "slug": "write-automated-tests-for-token-validation-oauth-integration-points-and-review-submission",
+      "name": "Write automated tests for token validation, OAuth integration points, and review submission",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "worker",
+      "depends": [
+        "002",
+        "003",
+        "005",
+        "007"
+      ],
+      "description": "Add unit and integration coverage in files such as `apps/web/src/lib/review-links.test.ts`, `apps/web/src/app/reviews/review-flow.integration.test.tsx`, and any auth-specific tests needed around `apps/web/auth.ts`. The test suite must cover valid and expired tokens, tampered signatures, manual-entry fallback when LinkedIn is unavailable, successful submission delivery, rate-limit rejection, and safe handling of malicious HTML input, with done defined as repeatable green test runs in CI or the local project test command."
+    },
+    {
+      "id": "010",
+      "slug": "verify-external-contracts-in-staging-and-define-performance-expectations",
+      "name": "Verify external contracts in staging and define performance expectations",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "reviewer",
+      "depends": [
+        "003",
+        "005",
+        "008",
+        "009"
+      ],
+      "description": "Run a staging verification of the full review flow against the real LinkedIn OAuth app configuration and the chosen outbound delivery provider, using the deployed auth route at `apps/web/src/app/api/auth/[...nextauth]/route.ts`, the LinkedIn provider setup in `apps/web/auth.ts`, the review submission path in `apps/web/src/app/reviews/actions.ts` or `apps/web/src/app/api/reviews/submit/route.ts`, and the Kubernetes environment wiring in `k8s/deployment.yaml`. Document the exact callback URLs, required scopes, env vars, and observed failure behaviors, then establish a lightweight load/performance expectation for invite opens and submissions—e.g. responsive render and submission handling under a small burst of concurrent traffic. Acceptance criteria: execute and record an end-to-end staging test covering valid invite open, LinkedIn login callback, manual fallback path, successful delivery, and one induced failure case; confirm measured behavior stays within the stated expectation; and attach the verification notes so third-party contract assumptions are proven rather than implied."
+    },
+    {
+      "id": "011",
+      "slug": "prepare-deployment-manifests-feature-flag-rollout-and-rollback-controls",
+      "name": "Prepare deployment manifests, feature-flag rollout, and rollback controls",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "profile": "balanced",
+      "thinking": "medium",
+      "agent": "worker",
+      "depends": [
+        "008",
+        "010"
+      ],
+      "description": "Update deployment assets such as `k8s/deployment.yaml`, `k8s/kustomization.yaml`, relevant sealed secrets, and `.github/workflows/deploy.yaml` if necessary so the review-link feature can be enabled in production behind `FEATURE_REVIEW_LINKS` with the new LinkedIn and signing-secret configuration. The task is complete when there is a documented canary-style rollout order, configuration validation in deployment manifests, and an immediate rollback path that consists of switching the feature flag off and confirming the route returns a controlled disabled state."
+    },
+    {
+      "id": "012",
+      "slug": "publish-operator-runbook-and-execute-final-production-validation",
+      "name": "Publish operator runbook and execute final production validation",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "agent": "reviewer",
+      "depends": [
+        "011"
+      ],
+      "description": "Create an operator-facing runbook such as `docs/review-links-runbook.md` that explains invite generation, required environment variables, feature-flag enablement, expected logs/metrics, common failure modes, and the exact rollback procedure. Final validation is done only when a reviewer can follow the runbook to test a real deep link end-to-end in staging or production-like conditions, verify the feature-off rollback, and confirm that no review submission is persisted in application storage."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "003",
+  "name": "extend-nextauth-with-linkedin-oauth-for-public-review-identity-enrichment",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-04-17T14:35:37.866Z",
+  "completedAt": "2026-04-17T14:37:56.628Z",
+  "duration": 138762,
+  "retries": 0,
+  "pid": 115137,
+  "error": null,
+  "usage": {
+    "inputTokens": 34,
+    "outputTokens": 7353
+  },
+  "latestProgressAt": "2026-04-17T14:37:56.146Z",
+  "latestProgressMessage": "All changes are complete. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/auth.ts`\n- Added `Li"
+}

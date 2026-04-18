@@ -1,0 +1,26 @@
+{
+  "id": "006",
+  "name": "add-user-facing-error-handling-privacy-disclosures-and-legal-copy-for-the-review-flow",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "004",
+    "005"
+  ],
+  "startedAt": "2026-04-17T14:52:38.068Z",
+  "completedAt": "2026-04-17T14:58:14.706Z",
+  "duration": 336638,
+  "retries": 0,
+  "pid": 123453,
+  "error": null,
+  "usage": {
+    "inputTokens": 38,
+    "outputTokens": 21488
+  },
+  "latestProgressAt": "2026-04-17T14:58:14.382Z",
+  "latestProgressMessage": "All changes are complete and tests pass. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/src/m"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "002",
+  "name": "design-and-implement-signed-personalized-review-link-tokens-plus-feature-flag-controls",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-04-17T14:35:37.861Z",
+  "completedAt": "2026-04-17T14:39:54.199Z",
+  "duration": 256338,
+  "retries": 0,
+  "pid": 115135,
+  "error": null,
+  "usage": {
+    "inputTokens": 28,
+    "outputTokens": 14718
+  },
+  "latestProgressAt": "2026-04-17T14:39:53.818Z",
+  "latestProgressMessage": "Here's a summary of everything that was implemented:\n\n---\n\n## What was delivered\n\n### `apps/web/src/lib/review-links.ts`"
+}

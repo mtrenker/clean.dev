@@ -1,0 +1,27 @@
+{
+  "id": "007",
+  "name": "harden-the-public-endpoint-against-abuse-replay-and-callback-misuse",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "002",
+    "003",
+    "005"
+  ],
+  "startedAt": "2026-04-17T14:52:38.074Z",
+  "completedAt": "2026-04-17T15:03:03.140Z",
+  "duration": 625066,
+  "retries": 0,
+  "pid": 123455,
+  "error": null,
+  "usage": {
+    "inputTokens": 50,
+    "outputTokens": 38281
+  },
+  "latestProgressAt": "2026-04-17T15:03:02.199Z",
+  "latestProgressMessage": "All work is complete. Here's a summary of everything implemented:\n\n---\n\n## Summary\n\n### New files\n\n**`src/lib/rate-limit"
+}

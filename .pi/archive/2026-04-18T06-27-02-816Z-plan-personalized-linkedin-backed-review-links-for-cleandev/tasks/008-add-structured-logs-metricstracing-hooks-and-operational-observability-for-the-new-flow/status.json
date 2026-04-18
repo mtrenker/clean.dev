@@ -1,0 +1,26 @@
+{
+  "id": "008",
+  "name": "add-structured-logs-metricstracing-hooks-and-operational-observability-for-the-new-flow",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "005",
+    "007"
+  ],
+  "startedAt": "2026-04-17T15:03:03.148Z",
+  "completedAt": "2026-04-17T15:09:29.094Z",
+  "duration": 385946,
+  "retries": 0,
+  "pid": 128261,
+  "error": null,
+  "usage": {
+    "inputTokens": 49,
+    "outputTokens": 24334
+  },
+  "latestProgressAt": "2026-04-17T15:09:28.765Z",
+  "latestProgressMessage": "Here's a summary of everything delivered for task 008:\n\n## Deliverables\n\n### New files\n\n**`apps/web/src/lib/logger.ts`**"
+}
