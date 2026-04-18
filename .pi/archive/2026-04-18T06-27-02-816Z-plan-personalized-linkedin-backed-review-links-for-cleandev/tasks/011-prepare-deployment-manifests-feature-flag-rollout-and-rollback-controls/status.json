@@ -1,0 +1,26 @@
+{
+  "id": "011",
+  "name": "prepare-deployment-manifests-feature-flag-rollout-and-rollback-controls",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.3-codex",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "008",
+    "010"
+  ],
+  "startedAt": "2026-04-17T15:12:47.809Z",
+  "completedAt": "2026-04-17T15:16:39.162Z",
+  "duration": 231353,
+  "retries": 0,
+  "pid": 133074,
+  "error": null,
+  "usage": {
+    "inputTokens": 1051161,
+    "outputTokens": 10477
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

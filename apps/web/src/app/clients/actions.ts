@@ -1,11 +1,11 @@
 'use server';
 
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import type { CreateClient, UpdateClient } from '@cleandev/pm';
 import { revalidatePath } from 'next/cache';
+import { requireAdminSession } from '@/lib/authz';
 
 export interface ClientFormData {
   name: string;
@@ -21,9 +21,7 @@ export interface ClientFormData {
 
 export async function createClientAction(formData: ClientFormData) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/clients');
 
   const { email, orderNumber, department, name, address, vatId, paymentDueDays, earlyPaymentDiscountRate, earlyPaymentDueDays } = formData;
   const customFields: Record<string, unknown> = {};
@@ -55,9 +53,7 @@ export async function createClientAction(formData: ClientFormData) {
 
 export async function updateClientAction(id: string, formData: ClientFormData) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/clients');
 
   const { email, orderNumber, department, name, address, vatId, paymentDueDays, earlyPaymentDiscountRate, earlyPaymentDueDays } = formData;
   const customFields: Record<string, unknown> = {};
@@ -89,9 +85,7 @@ export async function updateClientAction(id: string, formData: ClientFormData) {
 
 export async function deleteClientAction(id: string) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/clients');
 
   try {
     const pool = getPool();

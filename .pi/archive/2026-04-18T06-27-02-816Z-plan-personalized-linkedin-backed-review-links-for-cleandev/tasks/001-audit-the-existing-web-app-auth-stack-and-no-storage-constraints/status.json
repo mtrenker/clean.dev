@@ -1,0 +1,23 @@
+{
+  "id": "001",
+  "name": "audit-the-existing-web-app-auth-stack-and-no-storage-constraints",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [],
+  "startedAt": "2026-04-17T14:32:54.653Z",
+  "completedAt": "2026-04-17T14:35:37.852Z",
+  "duration": 163199,
+  "retries": 0,
+  "pid": 114296,
+  "error": null,
+  "usage": {
+    "inputTokens": 15,
+    "outputTokens": 7963
+  },
+  "latestProgressAt": "2026-04-17T14:35:37.268Z",
+  "latestProgressMessage": "The audit is complete. Here is a summary of what I found and documented in `.pi/tasks/001-audit-the-existing-web-app-aut"
+}

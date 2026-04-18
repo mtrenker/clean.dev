@@ -1,5 +1,6 @@
 import { auth } from 'auth';
 import { NextResponse } from 'next/server';
+import { isAdminSession } from '@/lib/authz';
 import { getPool } from '@/lib/db';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
@@ -14,6 +15,13 @@ export async function POST(): Promise<NextResponse> {
       return NextResponse.json(
         { error: 'Nicht authentifiziert' },
         { status: 401 }
+      );
+    }
+
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { error: 'Keine Admin-Berechtigung' },
+        { status: 403 }
       );
     }
 

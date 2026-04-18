@@ -1,16 +1,14 @@
 'use server';
 
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import type { UpdateSettings } from '@cleandev/pm';
+import { requireAdminSession } from '@/lib/authz';
 
 export async function updateSettingsAction(data: UpdateSettings) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/settings');
 
   const pool = getPool();
   const adapter = createAdapter('postgres', pool);

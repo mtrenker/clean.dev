@@ -11,6 +11,7 @@ resources:
 - postgres-cluster.yaml
 - nextauth-secrets-sealed.yaml
 - smtp-secrets-sealed.yaml
+- review-link-secrets-sealed.yaml
 
 namespace: clean-dev
 

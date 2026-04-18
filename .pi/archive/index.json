@@ -36,6 +36,38 @@
         "totalInputTokens": 10175152,
         "totalOutputTokens": 326678
       }
+    },
+    {
+      "id": "2026-04-18T06-27-02-816Z-plan-personalized-linkedin-backed-review-links-for-cleandev",
+      "archivedAt": "2026-04-18T06:27:02.816Z",
+      "reason": "manual",
+      "title": "Plan: Personalized LinkedIn-backed review links for clean.dev",
+      "taskCount": 12,
+      "archivePath": ".pi/archive/2026-04-18T06-27-02-816Z-plan-personalized-linkedin-backed-review-links-for-cleandev",
+      "taskFolders": [
+        "001-audit-the-existing-web-app-auth-stack-and-no-storage-constraints",
+        "002-design-and-implement-signed-personalized-review-link-tokens-plus-feature-flag-controls",
+        "003-extend-nextauth-with-linkedin-oauth-for-public-review-identity-enrichment",
+        "004-build-the-public-deep-linked-review-page-and-form-flow",
+        "005-implement-the-server-side-review-submission-path-without-persistent-storage",
+        "006-add-user-facing-error-handling-privacy-disclosures-and-legal-copy-for-the-review-flow",
+        "007-harden-the-public-endpoint-against-abuse-replay-and-callback-misuse",
+        "008-add-structured-logs-metricstracing-hooks-and-operational-observability-for-the-new-flow",
+        "009-write-automated-tests-for-token-validation-oauth-integration-points-and-review-submission",
+        "010-verify-external-contracts-in-staging-and-define-performance-expectations",
+        "011-prepare-deployment-manifests-feature-flag-rollout-and-rollback-controls",
+        "012-publish-operator-runbook-and-execute-final-production-validation"
+      ],
+      "summary": {
+        "total": 12,
+        "pending": 0,
+        "running": 0,
+        "done": 12,
+        "failed": 0,
+        "retrying": 0,
+        "totalInputTokens": 3763122,
+        "totalOutputTokens": 203631
+      }
     }
   ]
 }

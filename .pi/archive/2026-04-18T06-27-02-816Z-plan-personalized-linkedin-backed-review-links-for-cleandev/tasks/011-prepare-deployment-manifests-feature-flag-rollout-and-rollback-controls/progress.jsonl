@@ -1,0 +1,7 @@
+{"ts":"2026-04-17T15:13:06Z","step":"Reviewed task requirements and identified target deployment files","status":"done"}
+{"ts":"2026-04-17T15:13:22Z","step":"Audited existing feature-flag and review-link runtime usage across app and manifests","status":"done"}
+{"ts":"2026-04-17T15:13:41Z","step":"Confirmed disabled-state behavior in review route and API token verification path","status":"done"}
+{"ts":"2026-04-17T15:14:22Z","step":"Started implementation of manifest validation, rollout, and rollback controls","status":"running"}
+{"ts":"2026-04-17T15:15:41Z","step":"Updated deployment, sealed secret, workflow, and added rollout/rollback documentation","status":"done"}
+{"ts":"2026-04-17T15:15:52Z","step":"Validated rendered Kubernetes manifests with kubectl kustomize and confirmed new config keys are present","status":"done"}
+{"ts":"2026-04-17T15:16:11Z","step":"Completed deployment rollout/rollback manifest updates for review-links feature flag","status":"done"}

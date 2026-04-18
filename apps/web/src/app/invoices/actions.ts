@@ -1,17 +1,15 @@
 'use server';
 
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { getPool } from '@/lib/db';
 import { createAdapter } from '@cleandev/pm';
 import type { CreateInvoice } from '@cleandev/pm';
 import { revalidatePath } from 'next/cache';
+import { requireAdminSession } from '@/lib/authz';
 
 export async function createInvoiceAction(data: Omit<CreateInvoice, 'invoiceDate'> & { date: string }) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   try {
     const pool = getPool();
@@ -33,9 +31,7 @@ export async function createInvoiceAction(data: Omit<CreateInvoice, 'invoiceDate
 
 export async function deleteInvoiceAction(id: string) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   try {
     const pool = getPool();
@@ -51,9 +47,7 @@ export async function deleteInvoiceAction(id: string) {
 
 export async function getUninvoicedEntriesAction(options?: { clientId?: string; fromDate?: string; toDate?: string }) {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   try {
     const pool = getPool();
@@ -71,9 +65,7 @@ export async function getUninvoicedEntriesAction(options?: { clientId?: string; 
 
 export async function getNextInvoiceNumberAction(date: string): Promise<string> {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   try {
     const pool = getPool();
@@ -87,9 +79,7 @@ export async function getNextInvoiceNumberAction(date: string): Promise<string> 
 
 export async function sendInvoiceAction(id: string): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   try {
     const pool = getPool();

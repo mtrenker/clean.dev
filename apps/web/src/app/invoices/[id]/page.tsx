@@ -1,5 +1,4 @@
 import { auth } from 'auth';
-import { redirect } from 'next/navigation';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { getPool } from '@/lib/db';
@@ -8,6 +7,7 @@ import { InvoicePDFViewer } from '@/components/invoice-pdf-viewer';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { requireAdminSession } from '@/lib/authz';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,9 +16,7 @@ interface PageProps {
 const InvoicePage = async ({ params }: PageProps) => {
   const session = await auth();
 
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  requireAdminSession(session, '/invoices');
 
   const { id } = await params;
   const pool = getPool();

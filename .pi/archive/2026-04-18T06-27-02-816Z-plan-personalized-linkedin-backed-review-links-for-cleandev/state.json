@@ -1,0 +1,231 @@
+{
+  "updatedAt": "2026-04-17T15:22:18.186Z",
+  "tasks": [
+    {
+      "id": "001",
+      "name": "audit-the-existing-web-app-auth-stack-and-no-storage-constraints",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:32:54.653Z",
+      "completedAt": "2026-04-17T14:35:37.852Z",
+      "latestProgressAt": "2026-04-17T14:35:37.268Z",
+      "latestProgressMessage": "The audit is complete. Here is a summary of what I found and documented in `.pi/tasks/001-audit-the-existing-web-app-aut",
+      "lastProgress": "The audit is complete. Here is a summary of what I found and documented in `.pi/tasks/001-audit-the-existing-web-app-aut",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 15,
+        "outputTokens": 7963
+      }
+    },
+    {
+      "id": "002",
+      "name": "design-and-implement-signed-personalized-review-link-tokens-plus-feature-flag-controls",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:35:37.861Z",
+      "completedAt": "2026-04-17T14:39:54.199Z",
+      "latestProgressAt": "2026-04-17T14:39:53.818Z",
+      "latestProgressMessage": "Here's a summary of everything that was implemented:\n\n---\n\n## What was delivered\n\n### `apps/web/src/lib/review-links.ts`",
+      "lastProgress": "Here's a summary of everything that was implemented:\n\n---\n\n## What was delivered\n\n### `apps/web/src/lib/review-links.ts`",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 28,
+        "outputTokens": 14718
+      }
+    },
+    {
+      "id": "003",
+      "name": "extend-nextauth-with-linkedin-oauth-for-public-review-identity-enrichment",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:35:37.866Z",
+      "completedAt": "2026-04-17T14:37:56.628Z",
+      "latestProgressAt": "2026-04-17T14:37:56.146Z",
+      "latestProgressMessage": "All changes are complete. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/auth.ts`\n- Added `Li",
+      "lastProgress": "All changes are complete. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/auth.ts`\n- Added `Li",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 34,
+        "outputTokens": 7353
+      }
+    },
+    {
+      "id": "004",
+      "name": "build-the-public-deep-linked-review-page-and-form-flow",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T14:39:54.207Z",
+      "completedAt": "2026-04-17T14:45:54.749Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2030862,
+        "outputTokens": 15388
+      }
+    },
+    {
+      "id": "005",
+      "name": "implement-the-server-side-review-submission-path-without-persistent-storage",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:45:54.757Z",
+      "completedAt": "2026-04-17T14:52:38.060Z",
+      "latestProgressAt": "2026-04-17T14:52:37.618Z",
+      "latestProgressMessage": "Here's a summary of everything implemented:\n\n---\n\n## Implementation Summary\n\n### New files created\n\n**`apps/web/src/lib/",
+      "lastProgress": "Here's a summary of everything implemented:\n\n---\n\n## Implementation Summary\n\n### New files created\n\n**`apps/web/src/lib/",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 50,
+        "outputTokens": 27788
+      }
+    },
+    {
+      "id": "006",
+      "name": "add-user-facing-error-handling-privacy-disclosures-and-legal-copy-for-the-review-flow",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:52:38.068Z",
+      "completedAt": "2026-04-17T14:58:14.706Z",
+      "latestProgressAt": "2026-04-17T14:58:14.382Z",
+      "latestProgressMessage": "All changes are complete and tests pass. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/src/m",
+      "lastProgress": "All changes are complete and tests pass. Here's a summary of what was implemented:\n\n## Changes Made\n\n### `apps/web/src/m",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 38,
+        "outputTokens": 21488
+      }
+    },
+    {
+      "id": "007",
+      "name": "harden-the-public-endpoint-against-abuse-replay-and-callback-misuse",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T14:52:38.074Z",
+      "completedAt": "2026-04-17T15:03:03.140Z",
+      "latestProgressAt": "2026-04-17T15:03:02.199Z",
+      "latestProgressMessage": "All work is complete. Here's a summary of everything implemented:\n\n---\n\n## Summary\n\n### New files\n\n**`src/lib/rate-limit",
+      "lastProgress": "All work is complete. Here's a summary of everything implemented:\n\n---\n\n## Summary\n\n### New files\n\n**`src/lib/rate-limit",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 50,
+        "outputTokens": 38281
+      }
+    },
+    {
+      "id": "008",
+      "name": "add-structured-logs-metricstracing-hooks-and-operational-observability-for-the-new-flow",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T15:03:03.148Z",
+      "completedAt": "2026-04-17T15:09:29.094Z",
+      "latestProgressAt": "2026-04-17T15:09:28.765Z",
+      "latestProgressMessage": "Here's a summary of everything delivered for task 008:\n\n## Deliverables\n\n### New files\n\n**`apps/web/src/lib/logger.ts`**",
+      "lastProgress": "Here's a summary of everything delivered for task 008:\n\n## Deliverables\n\n### New files\n\n**`apps/web/src/lib/logger.ts`**",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 49,
+        "outputTokens": 24334
+      }
+    },
+    {
+      "id": "009",
+      "name": "write-automated-tests-for-token-validation-oauth-integration-points-and-review-submission",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T15:03:03.156Z",
+      "completedAt": "2026-04-17T15:06:27.771Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 680776,
+        "outputTokens": 8185
+      }
+    },
+    {
+      "id": "010",
+      "name": "verify-external-contracts-in-staging-and-define-performance-expectations",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T15:09:29.103Z",
+      "completedAt": "2026-04-17T15:12:47.801Z",
+      "latestProgressAt": "2026-04-17T15:12:47.417Z",
+      "latestProgressMessage": "## Review Complete\n\nThe verification report has been written to `.pi/tasks/010-verify-external-contracts-in-staging-and-",
+      "lastProgress": "## Review Complete\n\nThe verification report has been written to `.pi/tasks/010-verify-external-contracts-in-staging-and-",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 21,
+        "outputTokens": 9731
+      }
+    },
+    {
+      "id": "011",
+      "name": "prepare-deployment-manifests-feature-flag-rollout-and-rollback-controls",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.3-codex",
+      "status": "done",
+      "startedAt": "2026-04-17T15:12:47.809Z",
+      "completedAt": "2026-04-17T15:16:39.162Z",
+      "latestProgressAt": null,
+      "latestProgressMessage": null,
+      "lastProgress": null,
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 1051161,
+        "outputTokens": 10477
+      }
+    },
+    {
+      "id": "012",
+      "name": "publish-operator-runbook-and-execute-final-production-validation",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-04-17T15:16:39.168Z",
+      "completedAt": "2026-04-17T15:22:18.185Z",
+      "latestProgressAt": "2026-04-17T15:22:17.867Z",
+      "latestProgressMessage": "The review is complete and the runbook has been published. Here is a summary of my findings:\n\n---\n\n## Review Summary – T",
+      "lastProgress": "The review is complete and the runbook has been published. Here is a summary of my findings:\n\n---\n\n## Review Summary – T",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 38,
+        "outputTokens": 17925
+      }
+    }
+  ],
+  "summary": {
+    "total": 12,
+    "pending": 0,
+    "running": 0,
+    "done": 12,
+    "failed": 0,
+    "retrying": 0,
+    "totalInputTokens": 3763122,
+    "totalOutputTokens": 203631
+  }
+}

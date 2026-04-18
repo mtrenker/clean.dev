@@ -1,0 +1,25 @@
+{
+  "id": "012",
+  "name": "publish-operator-runbook-and-execute-final-production-validation",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "reviewer",
+  "depends": [
+    "011"
+  ],
+  "startedAt": "2026-04-17T15:16:39.168Z",
+  "completedAt": "2026-04-17T15:22:18.185Z",
+  "duration": 339017,
+  "retries": 0,
+  "pid": 134374,
+  "error": null,
+  "usage": {
+    "inputTokens": 38,
+    "outputTokens": 17925
+  },
+  "latestProgressAt": "2026-04-17T15:22:17.867Z",
+  "latestProgressMessage": "The review is complete and the runbook has been published. Here is a summary of my findings:\n\n---\n\n## Review Summary – T"
+}
