@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy'];
+const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
 
 const primaryPages = [
   { path: '/', heading: /inside the work/i },
   { path: '/work', heading: /martin trenker/i },
   { path: '/contact', heading: /contact/i },
+  { path: '/workflow-simulator', heading: /systems thinking playground/i },
 ];
 
 const primaryTapTargets = [

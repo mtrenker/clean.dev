@@ -65,7 +65,7 @@ export function WorkflowSimulator() {
           <p className="text-sm uppercase tracking-[0.25em] text-sky-300">Workflow simulation</p>
           <h2 className="text-2xl font-semibold text-white">Microservice flow under stress</h2>
           <p className="max-w-2xl text-sm text-slate-300">
-            Services, queues, outages, recovery and backlog pressure are ECS entities/components. The simulation and canvas rendering run in an OffscreenCanvas worker.
+            Services, queues, outages, recovery and backlog pressure are modelled as entities and components. The simulation and canvas rendering run in an OffscreenCanvas worker.
           </p>
         </div>
         <div className="text-xs text-slate-400">Zero-dependency engine package: <code>@cleandev/sim</code></div>
@@ -73,10 +73,10 @@ export function WorkflowSimulator() {
 
       {!supported ? (
         <div className="grid h-[520px] place-items-center rounded-sm bg-slate-900 text-slate-200">
-          This browser does not support OffscreenCanvas transfer. We can add a main-thread fallback next.
+          This browser does not support the live canvas simulation.
         </div>
       ) : (
-        <canvas ref={canvasRef} className="h-[520px] w-full rounded-sm bg-slate-900" />
+        <canvas ref={canvasRef} aria-label="Live microservice workflow simulation" className="h-[520px] w-full rounded-sm bg-slate-900" />
       )}
 
       <div className="mt-4 grid gap-4 md:grid-cols-3">
