@@ -46,12 +46,12 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
   const title =
     locale === 'de'
-      ? 'clean.dev — Software-Berater'
-      : 'clean.dev — Software Consultant';
+      ? 'clean.dev — Embedded Delivery Consulting'
+      : 'clean.dev — Embedded Delivery Consulting';
   const description =
     locale === 'de'
-      ? '20 Jahre Engineering-Exzellenz. Bessere Software durch Clean Code, echte Agile-Praktiken und strategische KI-Integration.'
-      : '20 years of engineering excellence. Building better software through clean code, authentic agile practices, and strategic AI integration.';
+      ? 'Hands-on Beratung für Softwareteams: klarere Delivery, bessere technische Entscheidungen und nützliche KI ohne Transformationstheater.'
+      : 'Hands-on consulting for software teams: sharper delivery, better technical decisions, and useful AI without transformation theater.';
 
   return {
     metadataBase: new URL('https://clean.dev'),
@@ -100,9 +100,9 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         <IntlProviderWrapper locale={locale} messages={messages}>
           <AppNavigation
             brand={(
-              <Link className="group flex items-center gap-3 font-serif text-2xl font-bold tracking-tight" href="/">
-                <span className="inline-block transition-transform group-hover:scale-110">cd</span>
-                <span className="hidden font-mono text-sm font-normal tracking-wider sm:inline-block">
+              <Link className="group flex items-center gap-3 font-mono text-sm font-semibold uppercase tracking-[0.18em]" href="/">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-accent/70 bg-accent/10 text-accent transition-transform group-hover:scale-110">cd</span>
+                <span className="hidden sm:inline-block">
                   clean.dev
                 </span>
               </Link>

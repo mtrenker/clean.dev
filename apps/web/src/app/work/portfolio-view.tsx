@@ -410,7 +410,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
                   <div className="mt-2 flex flex-wrap gap-1">
                     {project.technologies.map((technology) => (
                       <span
-                        className="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-[10px] text-background"
+                        className="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-xs text-background"
                         key={technology}
                       >
                         {technology}

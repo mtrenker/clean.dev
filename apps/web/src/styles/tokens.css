@@ -27,51 +27,51 @@
      * Or in raw CSS:  color: hsl(var(--foreground));
      * ────────────────────────────────────────────────────────────────────────── */
 
-    /* Surface */
-    --background:         39 10% 98%;     /* Page / app background */
-    --foreground:         24 10% 10%;     /* Primary text */
+    /* Surface — default brand theme: clean terminal, not black cave */
+    --background:        222 47% 7%;      /* Page / app background */
+    --foreground:        160 33% 94%;     /* Primary text */
 
     /* Muted / subtle */
-    --muted:              24  6% 90%;     /* Subtle surface, hover backgrounds */
-    --muted-foreground:   24  5% 40%;     /* Secondary / helper text */
+    --muted:             218 34% 14%;     /* Subtle surface, hover backgrounds */
+    --muted-foreground:  171 16% 68%;     /* Secondary / helper text */
 
     /* Accent / brand */
-    --accent:             32 95% 44%;     /* Amber-700 — brand accent */
-    --accent-foreground:  24 10% 10%;     /* Text rendered on accent surfaces */
+    --accent:            162 90% 48%;     /* Vibrant terminal mint */
+    --accent-foreground: 222 47% 7%;      /* Text rendered on accent surfaces */
 
     /* Border */
-    --border:             24 10% 10%;     /* Default border color */
+    --border:            170 45% 82%;     /* Default border color */
 
     /* Card */
-    --card:                0  0% 100%;    /* Card and panel surfaces */
-    --card-foreground:    24 10% 10%;     /* Text inside cards */
+    --card:              221 41% 10%;     /* Card and panel surfaces */
+    --card-foreground:   160 33% 94%;     /* Text inside cards */
 
     /* Popover / overlay surfaces */
-    --popover:             0  0% 100%;    /* Dropdown, tooltip, dialog surfaces */
-    --popover-foreground: 24 10% 10%;     /* Text inside popovers */
+    --popover:           221 41% 10%;     /* Dropdown, tooltip, dialog surfaces */
+    --popover-foreground:160 33% 94%;     /* Text inside popovers */
 
     /* Form inputs */
-    --input:              24  6% 90%;     /* Input field background */
-    --input-border:       24 10% 70%;     /* Input field border */
+    --input:             218 34% 14%;     /* Input field background */
+    --input-border:      170 24% 38%;     /* Input field border */
 
     /* Focus ring */
-    --ring:               32 95% 44%;     /* Focus ring color (matches accent) */
+    --ring:              162 90% 48%;     /* Focus ring color (matches accent) */
 
     /* Status — Success */
     --success:            142 71% 45%;    /* Positive / success state */
     --success-foreground:   0  0% 100%;   /* Text on success surfaces */
 
     /* Status — Warning */
-    --warning:             38 92% 50%;    /* Cautionary / warning state */
-    --warning-foreground:  24 10% 10%;    /* Text on warning surfaces */
+    --warning:             38 92% 56%;    /* Cautionary / warning state */
+    --warning-foreground: 222 47% 7%;     /* Text on warning surfaces */
 
     /* Status — Destructive / Error */
-    --destructive:          0 72% 51%;    /* Error / destructive action */
-    --destructive-foreground: 0  0% 100%; /* Text on destructive surfaces */
+    --destructive:        340 86% 62%;    /* Error / destructive action */
+    --destructive-foreground: 222 47% 7%; /* Text on destructive surfaces */
 
     /* Status — Info */
-    --info:               217 91% 60%;    /* Informational state */
-    --info-foreground:      0  0% 100%;   /* Text on info surfaces */
+    --info:               199 95% 55%;    /* Informational state */
+    --info-foreground:    222 47% 7%;     /* Text on info surfaces */
 
 
     /* ── TYPOGRAPHY ────────────────────────────────────────────────────────────
@@ -170,26 +170,26 @@
      * ────────────────────────────────────────────────────────────────────────── */
 
     --shadow-sm:
-      0 1px 2px 0 hsl(var(--foreground) / 0.05);
+      0 1px 2px 0 hsl(0 0% 0% / 0.30);
 
     --shadow-base:
-      0 1px 3px 0   hsl(var(--foreground) / 0.10),
-      0 1px 2px -1px hsl(var(--foreground) / 0.10);
+      0 1px 3px 0    hsl(0 0% 0% / 0.35),
+      0 1px 2px -1px hsl(0 0% 0% / 0.35);
 
     --shadow-md:
-      0 4px 6px -1px hsl(var(--foreground) / 0.10),
-      0 2px 4px -2px hsl(var(--foreground) / 0.10);
+      0 4px 6px -1px hsl(0 0% 0% / 0.38),
+      0 2px 4px -2px hsl(0 0% 0% / 0.38);
 
     --shadow-lg:
-      0 10px 15px -3px hsl(var(--foreground) / 0.10),
-      0  4px  6px -4px hsl(var(--foreground) / 0.10);
+      0 10px 15px -3px hsl(0 0% 0% / 0.42),
+      0  4px  6px -4px hsl(0 0% 0% / 0.42);
 
     --shadow-xl:
-      0 20px 25px  -5px hsl(var(--foreground) / 0.10),
-      0  8px 10px  -6px hsl(var(--foreground) / 0.10);
+      0 20px 25px  -5px hsl(0 0% 0% / 0.45),
+      0  8px 10px  -6px hsl(0 0% 0% / 0.45);
 
     --shadow-inner:
-      inset 0 2px 4px 0 hsl(var(--foreground) / 0.05);
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.05);
 
 
     /* ── INTERACTION STATES & MOTION ───────────────────────────────────────────
@@ -201,7 +201,7 @@
     --ring-offset: 2px;
 
     /* Border width */
-    --border-width: 2px;
+    --border-width: 1px;
 
     /* Transition timing */
     --transition-base: 150ms ease-in-out;   /* Hover, active state changes */
@@ -231,7 +231,7 @@
 
     /* Accent — unchanged; amber reads well on dark surfaces */
     --accent:             32 95% 44%;
-    --accent-foreground:  39 10% 98%;   /* zinc-50 */
+    --accent-foreground:  24 10% 10%;   /* readable on amber */
 
     /* Border */
     --border:             39 10% 98%;   /* zinc-50 */
