@@ -80,7 +80,7 @@ const ContactPage = async () => {
 
               {/* Divider + direct contact */}
               <div className="border-t border-border pt-6">
-                <p className="text-label text-xs text-muted-foreground/60">
+                <p className="text-label text-xs text-muted-foreground">
                   {locale === 'de' ? 'Direktkontakt' : 'Direct'}
                 </p>
                 <a

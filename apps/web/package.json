@@ -12,7 +12,10 @@
     "storybook": "pnpm run storybook:internal",
     "storybook:internal": "storybook dev -p 6006 --no-open",
     "build-storybook": "pnpm run build-storybook:internal",
-    "build-storybook:internal": "storybook build"
+    "build-storybook:internal": "storybook build",
+    "test:e2e": "playwright test",
+    "test:e2e:a11y": "playwright test --grep \"accessibility\"",
+    "test:e2e:ux": "playwright test --grep \"mobile friendliness|semantic UX\""
   },
   "dependencies": {
     "@cleandev/pm": "workspace:*",
@@ -55,14 +58,16 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
     "@cleandev/eslint-config": "workspace:*",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
+    "@playwright/test": "^1.59.1",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-vitest": "^10.3.5",
     "@storybook/nextjs-vite": "^10.3.5",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/d3": "^7.4.3",
     "@types/node": "20.5.7",
     "@types/pg": "^8.16.0",

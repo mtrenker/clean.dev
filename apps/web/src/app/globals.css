@@ -103,6 +103,11 @@
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
+  /* Inline links need a non-colour cue because accent and muted text are close by design. */
+  main p a:not([class*="btn"]) {
+    @apply underline underline-offset-2;
+  }
+
   /* ── Animation / scroll-reveal classes ────────────────────────────────────── */
 
   .observe {
