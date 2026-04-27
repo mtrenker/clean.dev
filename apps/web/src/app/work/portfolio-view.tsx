@@ -8,6 +8,7 @@ import { Section } from '@/components/ui/section';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
 import { Badge } from '@/components/ui/badge';
+import { CliPanel } from '@/components/ui/cli-panel';
 import { Link } from '@/components/ui/link';
 import { type Project } from '../projects';
 import { type Locale } from '@/lib/locale';
@@ -32,20 +33,22 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, hero
   const endYear = new Date(project.endDate).getFullYear();
   const yearRange = startYear === endYear ? `${startYear}` : `${startYear} – ${endYear}`;
 
-  return (
-    <article
-      className={clsx(
-        'observe group relative flex flex-col gap-4 overflow-hidden border-border bg-card p-6',
-        'border-[length:var(--border-width)]',
-        'transition-[opacity,transform,border-color,box-shadow]',
-        'hover:border-accent hover:shadow-[4px_4px_0px_0px_hsl(var(--accent))]',
-        hero ? 'md:col-span-2 md:flex-row md:gap-10' : 'col-span-1',
-      )}
-    >
-      {/* Decorative corner accent */}
-      <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-16 w-16 -translate-y-1/2 translate-x-1/2 rotate-45 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
+  const caseName = (project.company ?? project.industry?.[lang] ?? project.id)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 
-      <div className={clsx('flex flex-col gap-3', hero ? 'md:w-2/3' : '')}>
+  return (
+    <CliPanel
+      title={`case.${caseName}`}
+      command="inspect --proof"
+      className={clsx(
+        'observe group transition-[opacity,transform,border-color,box-shadow] hover:border-accent hover:shadow-[4px_4px_0px_0px_hsl(var(--accent))]',
+        hero ? 'md:col-span-2' : 'col-span-1',
+      )}
+      bodyClassName={clsx('flex flex-col gap-6', hero ? 'md:grid md:grid-cols-[minmax(0,1.55fr)_minmax(14rem,0.75fr)] md:gap-10' : '')}
+    >
+      <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <h3 className="m-0 font-serif text-2xl font-bold leading-tight text-foreground">
             {project.company ?? project.industry?.[lang]}
@@ -64,31 +67,49 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ project, lang, intl, hero
         </p>
 
         {project.highlights[lang].length > 0 && (
-          <ul className="m-0 space-y-1 pl-4">
+          <ul className="m-0 space-y-1 pl-0">
             {project.highlights[lang].slice(0, hero ? 4 : 2).map((h) => (
-              <li key={h} className="text-sm leading-relaxed text-muted-foreground before:mr-2 before:text-accent before:content-['→']">
-                {h}
+              <li key={h} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-relaxed text-muted-foreground">
+                <span aria-hidden="true" className="font-mono text-accent">›</span>
+                <span>{h}</span>
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      {project.technologies.length > 0 && (
-        <div className={clsx('flex flex-col justify-end gap-3', hero ? 'md:w-1/3' : '')}>
-          <p className="text-label m-0 text-xs text-muted-foreground/60">
-            {intl.formatMessage({ id: 'work.projects.technologies' })}
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {project.technologies.map((t) => (
-              <Badge key={t} variant="muted" className="font-mono">
-                {t}
-              </Badge>
-            ))}
+      <aside className="flex flex-col justify-between gap-5 border-t border-border/50 pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+        <dl className="grid gap-3 font-mono text-xs">
+          <div>
+            <dt className="uppercase tracking-[0.18em] text-accent">mode</dt>
+            <dd className="mt-1 text-muted-foreground">embedded / hands-on</dd>
           </div>
-        </div>
-      )}
-    </article>
+          <div>
+            <dt className="uppercase tracking-[0.18em] text-accent">context</dt>
+            <dd className="mt-1 text-muted-foreground">{project.city}</dd>
+          </div>
+          <div>
+            <dt className="uppercase tracking-[0.18em] text-accent">signal</dt>
+            <dd className="mt-1 text-muted-foreground">{project.industry?.[lang] ?? project.title[lang]}</dd>
+          </div>
+        </dl>
+
+        {project.technologies.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <p className="text-label m-0 text-xs text-muted-foreground">
+              {intl.formatMessage({ id: 'work.projects.technologies' })}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {project.technologies.slice(0, hero ? 12 : 7).map((t) => (
+                <Badge key={t} variant="muted" className="font-mono">
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+    </CliPanel>
   );
 };
 

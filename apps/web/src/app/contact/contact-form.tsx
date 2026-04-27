@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Link from 'next/link';
-import { Card } from '@/components/ui/card';
+import { CliPanel } from '@/components/ui/cli-panel';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,19 +18,19 @@ export const ContactForm: React.FC = () => {
 
   if (state.success) {
     return (
-      <Card>
+      <CliPanel title="message.status" command="send --complete">
         <div className="space-y-2 py-4 text-center">
           <p className="text-lg font-medium text-foreground">{intl.formatMessage({ id: 'contact.success.heading' })}</p>
           <p className="text-sm text-muted-foreground">
             {intl.formatMessage({ id: 'contact.success.body' })}
           </p>
         </div>
-      </Card>
+      </CliPanel>
     );
   }
 
   return (
-    <Card>
+    <CliPanel title="contact.sh" command="open-channel --fit-check">
       <form action={action} noValidate className="space-y-6">
         {/* Honeypot — hidden from real users, bots fill it in */}
         <input
@@ -115,6 +115,6 @@ export const ContactForm: React.FC = () => {
           </p>
         </div>
       </form>
-    </Card>
+    </CliPanel>
   );
 };

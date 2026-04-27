@@ -4,7 +4,7 @@ import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
-import { Card } from '@/components/ui/card';
+import { CliPanel } from '@/components/ui/cli-panel';
 import { getLocale, loadMessages } from '@/lib/locale';
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -47,7 +47,7 @@ const PrivacyPage = async () => {
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.controller.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.controller" command="whoami --controller">
               <div className="space-y-1 text-muted-foreground">
                 <p className="font-semibold text-foreground">Martin Trenker</p>
                 <address className="not-italic">
@@ -64,14 +64,14 @@ const PrivacyPage = async () => {
                   </a>
                 </p>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.contactForm.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.contact-form" command="cat contact-form.md">
               <div className="space-y-3 leading-relaxed text-muted-foreground">
                 <p>
                   {intl.formatMessage({ id: 'privacy.contactForm.p1.beforeLink' })}{' '}
@@ -103,14 +103,14 @@ const PrivacyPage = async () => {
                   {intl.formatMessage({ id: 'privacy.contactForm.retentionValue' })}
                 </p>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.reviewFlow.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.review-flow" command="cat review-flow.md">
               <div className="space-y-3 leading-relaxed text-muted-foreground">
                 <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p1' })}</p>
                 <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p2' })}</p>
@@ -138,14 +138,14 @@ const PrivacyPage = async () => {
                 </p>
                 <p className="text-xs">{intl.formatMessage({ id: 'privacy.reviewFlow.linkedinNote' })}</p>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.hosting.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.hosting" command="dig hosting">
               <div className="space-y-3 leading-relaxed text-muted-foreground">
                 <p>
                   {intl.formatMessage(
@@ -171,14 +171,14 @@ const PrivacyPage = async () => {
                   {intl.formatMessage({ id: 'privacy.hosting.legalBasisValue' })}
                 </p>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.rights.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.rights" command="list rights --gdpr">
               <div className="space-y-3 leading-relaxed text-muted-foreground">
                 <p>{intl.formatMessage({ id: 'privacy.rights.intro' })}</p>
                 <ul className="ml-4 list-disc space-y-1">
@@ -196,14 +196,14 @@ const PrivacyPage = async () => {
                   </a>
                 </p>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'privacy.authority.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="privacy.authority" command="resolve authority">
               <div className="space-y-3 leading-relaxed text-muted-foreground">
                 <p>{intl.formatMessage({ id: 'privacy.authority.p1' })}</p>
                 <address className="not-italic">
@@ -224,7 +224,7 @@ const PrivacyPage = async () => {
                   </p>
                 </address>
               </div>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="border-t border-border pt-4">

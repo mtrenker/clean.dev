@@ -4,7 +4,7 @@ import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { Container } from '@/components/ui/container';
 import { Heading } from '@/components/ui/heading';
-import { Card } from '@/components/ui/card';
+import { CliPanel } from '@/components/ui/cli-panel';
 import { getLocale, loadMessages } from '@/lib/locale';
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -47,21 +47,21 @@ const ImprintPage = async () => {
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.serviceProvider.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.entity" command="whoami">
               <address className="space-y-1 not-italic text-muted-foreground">
                 <p className="font-semibold text-foreground">Martin Trenker</p>
                 <p>Philipp-Loewenfeld-Str. 63</p>
                 <p>80339 München</p>
                 <p>{intl.formatMessage({ id: 'imprint.country' })}</p>
               </address>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.contact.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.contact" command="cat channels.txt">
               <address className="space-y-2 not-italic text-muted-foreground">
                 <p>
                   <span className="font-medium text-foreground">
@@ -80,14 +80,14 @@ const ImprintPage = async () => {
                   </Link>
                 </p>
               </address>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.vat.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.tax" command="print vat-id">
               <p className="text-muted-foreground">
                 <span className="font-medium text-foreground">
                   {intl.formatMessage({ id: 'imprint.vat.label' })}
@@ -95,14 +95,14 @@ const ImprintPage = async () => {
                 <br />
                 <span className="font-mono text-lg">DE262621028</span>
               </p>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.responsible.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.responsible" command="cat owner.txt">
               <p className="text-muted-foreground">
                 <span className="font-medium text-foreground">
                   {intl.formatMessage({ id: 'imprint.responsible.label' })}
@@ -114,14 +114,14 @@ const ImprintPage = async () => {
                 <br />
                 80339 München
               </p>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.eu.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.eu" command="resolve odr">
               <p className="leading-relaxed text-muted-foreground">
                 {intl.formatMessage({ id: 'imprint.eu.body' })}{' '}
                 <a
@@ -138,18 +138,18 @@ const ImprintPage = async () => {
                   info@clean.dev
                 </a>
               </p>
-            </Card>
+            </CliPanel>
           </section>
 
           <section className="space-y-4">
             <Heading as="h2" variant="section" className="text-2xl text-foreground">
               {intl.formatMessage({ id: 'imprint.consumer.heading' })}
             </Heading>
-            <Card>
+            <CliPanel title="legal.dispute" command="status consumer-dispute">
               <p className="leading-relaxed text-muted-foreground">
                 {intl.formatMessage({ id: 'imprint.consumer.body' })}
               </p>
-            </Card>
+            </CliPanel>
           </section>
         </div>
       </Container>

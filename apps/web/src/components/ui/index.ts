@@ -4,6 +4,7 @@ export { Heading } from './heading';
 export { Button } from './button';
 export { Link } from './link';
 export { Card } from './card';
+export { CliPanel } from './cli-panel';
 export { Badge } from './badge';
 export { Input } from './input';
 export { Textarea } from './textarea';
