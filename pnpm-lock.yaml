@@ -67,6 +67,9 @@ importers:
       '@cleandev/pm':
         specifier: workspace:*
         version: link:../../packages/pm
+      '@cleandev/sim':
+        specifier: workspace:*
+        version: link:../../packages/sim
       '@headlessui/react':
         specifier: ^1.7.17
         version: 1.7.19(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -279,6 +282,15 @@ importers:
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/sim:
+    devDependencies:
+      '@cleandev/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
       typescript:
         specifier: ^5.7.2
         version: 5.9.3

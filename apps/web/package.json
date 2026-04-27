@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@cleandev/pm": "workspace:*",
+    "@cleandev/sim": "workspace:*",
     "@headlessui/react": "^1.7.17",
     "@react-pdf/renderer": "^4.2.0",
     "@react-spring/web": "^9.7.3",
