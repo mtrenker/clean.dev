@@ -6,22 +6,31 @@ exports[`shared shell integration > hides social section fallback when no social
     class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm print:hidden"
   >
     <div
-      class="mx-auto max-w-7xl flex items-center justify-between px-6 py-4 md:px-12 lg:px-24"
+      class="mx-auto max-w-7xl px-6 py-4 md:px-12 lg:px-24"
     >
-      <div>
-        <a
-          class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-foreground hover:text-accent"
-          href="/"
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div
+          class="min-w-0"
         >
-          clean.dev
-        </a>
+          <a
+            class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-foreground hover:text-accent"
+            href="/"
+          >
+            clean.dev
+          </a>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-2 md:gap-3"
+        />
       </div>
       <nav
         aria-label="Main navigation"
-        class="flex flex-wrap items-center gap-4 md:gap-6"
+        class="mt-4 md:mt-3"
       >
         <ul
-          class="flex flex-wrap gap-4 md:gap-8"
+          class="flex min-w-0 flex-wrap gap-x-4 gap-y-2 md:gap-8"
           role="list"
         >
           <li>
@@ -57,14 +66,18 @@ exports[`shared shell integration > hides social section fallback when no social
       </p>
       <nav
         aria-label="Footer navigation"
-        class="flex items-center gap-6"
+        class="flex flex-col items-center gap-4 md:items-end md:gap-5"
       >
-        <a
-          class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-muted-foreground hover:text-accent text-label text-xs"
-          href="/imprint"
+        <div
+          class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-end"
         >
-          Legal
-        </a>
+          <a
+            class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-muted-foreground hover:text-accent text-label text-xs"
+            href="/imprint"
+          >
+            Legal
+          </a>
+        </div>
       </nav>
     </div>
   </footer>

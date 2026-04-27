@@ -4,7 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ReviewTokenError } from '@/lib/review-links';
 import ReviewPage from './page';
 
-const { headersMock, cookiesMock, verifyReviewTokenMock } = vi.hoisted(() => ({
+const { authMock, headersMock, cookiesMock, verifyReviewTokenMock } = vi.hoisted(() => ({
+  authMock: vi.fn(),
   headersMock: vi.fn(),
   cookiesMock: vi.fn(),
   verifyReviewTokenMock: vi.fn(),
@@ -13,6 +14,10 @@ const { headersMock, cookiesMock, verifyReviewTokenMock } = vi.hoisted(() => ({
 vi.mock('next/headers', () => ({
   headers: headersMock,
   cookies: cookiesMock,
+}));
+
+vi.mock('auth', () => ({
+  auth: authMock,
 }));
 
 vi.mock('@/lib/review-links', async () => {
@@ -41,6 +46,7 @@ vi.mock('./review-form', () => ({
 
 describe('review page integration', () => {
   beforeEach(() => {
+    authMock.mockResolvedValue(null);
     headersMock.mockResolvedValue({ get: vi.fn(() => null) });
     cookiesMock.mockResolvedValue({ get: vi.fn(() => undefined) });
     verifyReviewTokenMock.mockReset();
