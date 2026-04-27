@@ -6,3 +6,6 @@ node_modules
 
 .pi/tasks
 .pi/*.jsonl
+
+# package build output
+/packages/*/dist

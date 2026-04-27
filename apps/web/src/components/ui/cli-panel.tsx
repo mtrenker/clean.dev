@@ -14,7 +14,7 @@ interface CliPanelProps {
  * CliPanel gives content boxes a restrained terminal/shell treatment.
  *
  * Use it for public content panels where the clean.dev technical brand should
- * show through without turning every page into ASCII cosplay.
+ * show through without turning every page into a full terminal emulator.
  */
 export const CliPanel: React.FC<CliPanelProps> = ({
   children,
