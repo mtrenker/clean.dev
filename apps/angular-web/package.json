@@ -1,0 +1,10 @@
+{
+  "name": "@cleandev/angular-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Angular dev server not configured yet'",
+    "build": "echo 'Angular build not configured yet'",
+    "lint": "echo 'Angular lint not configured yet'"
+  }
+}
