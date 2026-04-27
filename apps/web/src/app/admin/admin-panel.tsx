@@ -71,12 +71,12 @@ export const AdminPanel: React.FC = () => {
         </Button>
 
         {result && (
-          <div className="mt-5 rounded-lg border border-border bg-muted/20 p-4">
+          <div className="mt-5 rounded-sm border border-border bg-muted/20 p-4">
             <Badge variant={result.success ? 'success' : 'destructive'}>
               {result.message}
             </Badge>
             {result.error && (
-              <pre className="mt-3 overflow-x-auto rounded bg-card p-3 text-sm font-mono text-muted-foreground">
+              <pre className="mt-3 overflow-x-auto rounded-sm bg-card p-3 text-sm font-mono text-muted-foreground">
                 {result.error}
               </pre>
             )}

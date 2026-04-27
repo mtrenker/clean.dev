@@ -13,7 +13,7 @@ export const ExampleCard: React.FC<{
   link?: string;
 }> = ({ title, description, link }) => {
   return (
-    <article className="observe group rounded-lg border border-border bg-card p-6 transition-all hover:shadow-lg">
+    <article className="observe group rounded-sm border border-border bg-card p-6 transition-all hover:shadow-lg">
       <h3 className="heading-section mb-4 text-2xl text-card-foreground">
         {title}
       </h3>
@@ -103,7 +103,7 @@ export const ExampleForm: React.FC = () => {
         <input
           type="text"
           id="name"
-          className="w-full rounded border border-border bg-background px-4 py-2 text-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+          className="w-full rounded-sm border border-border bg-background px-4 py-2 text-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           placeholder="Enter your name"
         />
       </div>
@@ -118,7 +118,7 @@ export const ExampleForm: React.FC = () => {
         <input
           type="email"
           id="email"
-          className="w-full rounded border border-border bg-background px-4 py-2 text-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+          className="w-full rounded-sm border border-border bg-background px-4 py-2 text-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           placeholder="you@example.com"
         />
       </div>

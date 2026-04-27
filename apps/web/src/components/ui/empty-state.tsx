@@ -15,7 +15,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center', className)}>
+    <div className={clsx('rounded-sm border border-dashed border-border bg-muted/20 p-6 text-center', className)}>
       <h3 className="font-serif text-xl font-semibold text-foreground">{title}</h3>
       {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
       {action && <div className="mt-4">{action}</div>}

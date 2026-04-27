@@ -44,7 +44,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({
                     <Link
                       href={item.href}
                       ariaLabel={item.ariaLabel}
-                      className="inline-flex items-center justify-center rounded-full border border-border p-2 transition-colors hover:border-accent hover:text-accent"
+                      className="inline-flex items-center justify-center rounded-sm border border-border p-2 transition-colors hover:border-accent hover:text-accent"
                       external
                       variant="muted"
                     >

@@ -268,7 +268,7 @@ export const InvoicesManagement: React.FC<InvoicesManagementProps> = ({ invoices
             </div>
 
             {uninvoicedEntries.length > 0 && (
-              <div className="rounded-lg border border-border bg-card p-4">
+              <div className="rounded-sm border border-border bg-card p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="font-medium text-foreground">{intl.formatMessage({ id: 'invoices.form.entries.heading' })}</h3>
                   <button

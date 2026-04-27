@@ -59,7 +59,7 @@ export function WorkflowSimulator() {
   };
 
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-950 p-4 shadow-2xl shadow-slate-950/40">
+    <section className="rounded-sm border border-slate-800 bg-slate-950 p-4 shadow-2xl shadow-slate-950/40">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.25em] text-sky-300">Workflow simulation</p>
@@ -72,11 +72,11 @@ export function WorkflowSimulator() {
       </div>
 
       {!supported ? (
-        <div className="grid h-[520px] place-items-center rounded-2xl bg-slate-900 text-slate-200">
+        <div className="grid h-[520px] place-items-center rounded-sm bg-slate-900 text-slate-200">
           This browser does not support OffscreenCanvas transfer. We can add a main-thread fallback next.
         </div>
       ) : (
-        <canvas ref={canvasRef} className="h-[520px] w-full rounded-2xl bg-slate-900" />
+        <canvas ref={canvasRef} className="h-[520px] w-full rounded-sm bg-slate-900" />
       )}
 
       <div className="mt-4 grid gap-4 md:grid-cols-3">
@@ -90,7 +90,7 @@ export function WorkflowSimulator() {
 
 function Slider({ label, value, min, max, step, onChange }: SliderProps) {
   return (
-    <label className="rounded-2xl border border-slate-800 bg-slate-900/70 p-3 text-sm text-slate-200">
+    <label className="rounded-sm border border-slate-800 bg-slate-900/70 p-3 text-sm text-slate-200">
       <span className="mb-2 flex justify-between gap-3">
         <span>{label}</span>
         <span className="font-mono text-sky-300">{value.toFixed(2)}×</span>

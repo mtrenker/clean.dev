@@ -26,7 +26,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
         <PDFDownloadLink
-          className="rounded bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700"
+          className="rounded-sm bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700"
           document={document}
           fileName={`Rechnung_${invoice.invoiceNumber}.pdf`}
         >
@@ -40,7 +40,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
         {({ url, loading, error }) => {
           if (loading) {
             return (
-              <div className="flex h-[80vh] items-center justify-center rounded border bg-gray-50">
+              <div className="flex h-[80vh] items-center justify-center rounded-sm border bg-gray-50">
                 <p className="text-gray-500">{intl.formatMessage({ id: 'pdf.loading2' })}</p>
               </div>
             );
@@ -48,7 +48,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
 
           if (error) {
             return (
-              <div className="flex h-[80vh] items-center justify-center rounded border bg-red-50">
+              <div className="flex h-[80vh] items-center justify-center rounded-sm border bg-red-50">
                 <p className="text-red-600">{intl.formatMessage({ id: 'pdf.error' }, { message: error.message })}</p>
               </div>
             );
@@ -60,7 +60,7 @@ export const InvoicePDFViewer: React.FC<InvoicePDFViewerProps> = ({ invoice, set
 
           return (
             <iframe
-              className="h-[80vh] w-full rounded border"
+              className="h-[80vh] w-full rounded-sm border"
               src={url}
               title={`Rechnung ${invoice.invoiceNumber}`}
             />

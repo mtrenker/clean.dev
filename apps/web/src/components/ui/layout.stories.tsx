@@ -64,13 +64,13 @@ export const SectionAndContainer: Story = {
 export const ContainerSizes: Story = {
   render: () => (
     <div className="space-y-6">
-      <Container size="narrow" className="rounded border border-border p-4">
+      <Container size="narrow" className="rounded-sm border border-border p-4">
         <p className="text-label">Narrow (forms/articles)</p>
       </Container>
-      <Container className="rounded border border-border p-4">
+      <Container className="rounded-sm border border-border p-4">
         <p className="text-label">Default (content sections)</p>
       </Container>
-      <Container size="wide" className="rounded border border-border p-4">
+      <Container size="wide" className="rounded-sm border border-border p-4">
         <p className="text-label">Wide (dashboards/data-dense pages)</p>
       </Container>
     </div>

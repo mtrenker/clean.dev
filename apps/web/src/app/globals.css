@@ -26,7 +26,7 @@
   /* ── Button components ─────────────────────────────────────────────────────── */
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-full px-7 py-4 font-mono text-sm font-semibold uppercase tracking-[0.16em] transition-all;
+    @apply inline-flex items-center justify-center rounded-sm px-7 py-4 font-mono text-sm font-semibold uppercase tracking-[0.16em] transition-all;
     transition-duration: var(--transition-base);
   }
 
@@ -74,7 +74,7 @@
   }
 
   .terminal-card {
-    @apply rounded-2xl border border-border/60 bg-card/80 shadow-xl backdrop-blur;
+    @apply rounded-sm border border-border/60 bg-card/80 shadow-xl backdrop-blur;
     box-shadow:
       0 0 0 1px hsl(var(--accent) / 0.08),
       0 24px 80px hsl(0 0% 0% / 0.35),

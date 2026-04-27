@@ -137,7 +137,7 @@ export const TimeTracking: React.FC<TimeTrackingProps> = ({ clients, timeEntries
             {timeEntries.map((entry) => {
               const client = clients.find((c) => c.id === entry.clientId);
               return (
-                <div key={entry.id} className="flex items-center justify-between rounded border border-border bg-background p-4">
+                <div key={entry.id} className="flex items-center justify-between rounded-sm border border-border bg-background p-4">
                   <div className="flex-1">
                     <p className="font-semibold text-foreground">{client?.name}</p>
                     <p className="text-sm text-foreground/70">{formatDate(entry.date)}</p>

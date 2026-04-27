@@ -15,8 +15,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={clsx(
           isBooleanInput
-            ? 'rounded border font-sans transition-colors'
-            : 'w-full rounded-md border px-4 py-2 font-sans transition-colors',
+            ? 'rounded-sm border font-sans transition-colors'
+            : 'w-full rounded-sm border px-4 py-2 font-sans transition-colors',
           'border-border bg-background text-foreground',
           'placeholder:text-muted-foreground',
           'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20',

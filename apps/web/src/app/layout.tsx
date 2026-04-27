@@ -93,7 +93,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} font-sans antialiased`}>
         <a
           href="#main-content"
-          className="fixed left-2 top-2 z-[9999] -translate-y-20 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-lg transition-transform focus:translate-y-0"
+          className="fixed left-2 top-2 z-[9999] -translate-y-20 rounded-sm bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-lg transition-transform focus:translate-y-0"
         >
           {intl.formatMessage({ id: 'nav.skipToMain' })}
         </a>
@@ -101,7 +101,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
           <AppNavigation
             brand={(
               <Link className="group flex items-center gap-3 font-mono text-sm font-semibold uppercase tracking-[0.18em]" href="/">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-accent/70 bg-accent/10 text-accent transition-transform group-hover:scale-110">cd</span>
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-accent/70 bg-accent/10 text-accent transition-transform group-hover:scale-110">cd</span>
                 <span className="hidden sm:inline-block">
                   clean.dev
                 </span>

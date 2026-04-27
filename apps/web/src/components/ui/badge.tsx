@@ -25,7 +25,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={clsx(
-        'inline-flex items-center rounded border px-2 py-1 text-xs font-medium',
+        'inline-flex items-center rounded-sm border px-2 py-1 text-xs font-medium',
         variantClasses[variant],
         className
       )}

@@ -209,15 +209,15 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
             <p className="text-sm text-muted-foreground">
               {intl.formatMessage({ id: 'review.form.linkedin.connected' })}
             </p>
-            <div className="flex items-center gap-3 rounded-md border border-accent/30 bg-background/70 p-3">
+            <div className="flex items-center gap-3 rounded-sm border border-accent/30 bg-background/70 p-3">
               {linkedInUser.image ? (
                 <img
                   src={linkedInUser.image}
                   alt={linkedInUser.name ?? 'LinkedIn profile'}
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="h-10 w-10 rounded-sm object-cover"
                 />
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background">
+                <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-foreground text-sm font-semibold text-background">
                   {(linkedInUser.name ?? initialName ?? 'L').slice(0, 1).toUpperCase()}
                 </div>
               )}
@@ -359,7 +359,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
                 type="checkbox"
                 checked={values.consent}
                 onChange={handleChange('consent')}
-                className="mt-0.5 !h-4 !w-4 shrink-0 rounded border-border p-0"
+                className="mt-0.5 !h-4 !w-4 shrink-0 rounded-sm border-border p-0"
                 hasError={!!errors.consent}
               />
               <span>{intl.formatMessage({ id: 'review.form.consent' })}</span>

@@ -107,7 +107,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ project, lang }) => {
   return (
     <li className="observe flex items-start gap-6">
       <div aria-hidden="true" className="flex shrink-0 flex-col items-center gap-1">
-        <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent" />
+        <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-sm bg-accent" />
       </div>
       <div className="flex flex-1 flex-wrap items-baseline gap-x-4 gap-y-0.5 pb-6">
         <span className="font-mono text-xs text-accent">{yearRange}</span>

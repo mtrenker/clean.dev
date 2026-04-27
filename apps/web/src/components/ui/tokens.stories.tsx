@@ -44,8 +44,8 @@ export const ColorPalette: Story = {
   render: () => (
     <div className="grid gap-4 md:grid-cols-3">
       {colorTokens.map((token) => (
-        <div key={token} className="rounded border border-border bg-card p-4 shadow-sm">
-          <div className="mb-3 h-16 rounded border border-border" style={{ backgroundColor: `hsl(var(--${token}))` }} />
+        <div key={token} className="rounded-sm border border-border bg-card p-4 shadow-sm">
+          <div className="mb-3 h-16 rounded-sm border border-border" style={{ backgroundColor: `hsl(var(--${token}))` }} />
           <p className="text-label text-xs">--{token}</p>
         </div>
       ))}
@@ -55,7 +55,7 @@ export const ColorPalette: Story = {
 
 export const TypographyScale: Story = {
   render: () => (
-    <div className="space-y-5 rounded border border-border bg-card p-6">
+    <div className="space-y-5 rounded-sm border border-border bg-card p-6">
       {typeTokens.map((token) => (
         <div key={token}>
           <p className="text-label mb-2 text-xs">--{token}</p>

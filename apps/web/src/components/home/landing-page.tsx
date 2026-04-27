@@ -41,9 +41,9 @@ const TerminalPanel = ({ intl }: { intl: IntlShape }) => {
     <div className="terminal-card observe delay-200 overflow-hidden">
       <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
         <div className="flex gap-2" aria-hidden="true">
-          <span className="h-3 w-3 rounded-full bg-destructive" />
-          <span className="h-3 w-3 rounded-full bg-warning" />
-          <span className="h-3 w-3 rounded-full bg-success" />
+          <span className="h-3 w-3 rounded-sm bg-destructive" />
+          <span className="h-3 w-3 rounded-sm bg-warning" />
+          <span className="h-3 w-3 rounded-sm bg-success" />
         </div>
         <span className="font-mono text-xs uppercase tracking-[0.24em] text-muted-foreground">
           clean.dev/diagnose
@@ -58,7 +58,7 @@ const TerminalPanel = ({ intl }: { intl: IntlShape }) => {
         </div>
         <div className="grid gap-3">
           {lines.map((line) => (
-            <div key={line} className="rounded-lg border border-border/70 bg-background/55 p-4 shadow-inner">
+            <div key={line} className="rounded-sm border border-border/70 bg-background/55 p-4 shadow-inner">
               <div className="mb-2 flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.18em]">
                 <span className="text-accent">signal/{line}</span>
                 <span className="text-muted-foreground">ok</span>
@@ -254,7 +254,7 @@ const ProfileLinks = ({ intl, socialLinks }: LandingPageProps) => (
         {socialLinks.map((profile) => (
           <Link
             key={profile.href}
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-sm border border-border bg-card text-foreground transition-colors hover:border-accent hover:text-accent"
             external
             href={profile.href}
             ariaLabel={profile.ariaLabel}

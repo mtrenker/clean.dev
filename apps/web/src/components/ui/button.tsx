@@ -32,7 +32,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={clsx(
-          'inline-flex items-center justify-center gap-2 rounded-md font-mono uppercase tracking-wider transition-colors',
+          'inline-flex items-center justify-center gap-2 rounded-sm font-mono uppercase tracking-wider transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           'disabled:cursor-not-allowed disabled:opacity-50',
           variantClasses[variant],

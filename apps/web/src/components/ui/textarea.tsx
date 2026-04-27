@@ -11,7 +11,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         ref={ref}
         className={clsx(
-          'w-full rounded-md border px-4 py-2 font-sans transition-colors',
+          'w-full rounded-sm border px-4 py-2 font-sans transition-colors',
           'border-border bg-background text-foreground',
           'placeholder:text-muted-foreground',
           'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20',

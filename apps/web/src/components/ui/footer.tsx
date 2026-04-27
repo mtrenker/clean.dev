@@ -49,7 +49,7 @@ export const AppFooter: React.FC<AppFooterProps> = ({
                   href={item.href}
                   key={item.href}
                   variant="muted"
-                  className="inline-flex items-center justify-center rounded-full border border-border p-2"
+                  className="inline-flex items-center justify-center rounded-sm border border-border p-2"
                   external
                 >
                   <SocialIcon profile={item.key} />
