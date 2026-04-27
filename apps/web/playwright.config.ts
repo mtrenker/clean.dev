@@ -30,8 +30,18 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 1000 } },
     },
     {
+      name: 'desktop-firefox',
+      use: { ...devices['Desktop Firefox'], viewport: { width: 1440, height: 1000 } },
+    },
+    {
       name: 'mobile-chromium',
       use: { ...devices['Pixel 7'] },
+    },
+    {
+      // Playwright cannot emulate real mobile Firefox, but this catches
+      // Firefox-specific layout/rendering issues at a narrow viewport.
+      name: 'narrow-firefox',
+      use: { ...devices['Desktop Firefox'], viewport: { width: 390, height: 844 } },
     },
   ],
 });
