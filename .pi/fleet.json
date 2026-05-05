@@ -54,7 +54,7 @@
         "thinking": "low"
       },
       "codex": {
-        "model": "gpt-5.3-codex-spark",
+        "model": "gpt-5.4-mini",
         "thinking": "low"
       }
     },
@@ -68,7 +68,7 @@
         "thinking": "medium"
       },
       "codex": {
-        "model": "gpt-5.3-codex",
+        "model": "gpt-5.4",
         "thinking": "medium"
       }
     },
