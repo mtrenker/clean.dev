@@ -20,6 +20,7 @@
   "include": [
     "custom-server.ts",
     "src/server/cockpit-ws.ts",
+    "src/lib/cockpit/projector.ts",
     "src/lib/cockpit-repo.ts",
     "src/lib/db.ts"
   ],

@@ -21,6 +21,7 @@ import { createServer } from 'node:http';
 import next from 'next';
 import { CockpitWsServer } from './src/server/cockpit-ws';
 import { getCockpitRepository } from './src/lib/cockpit-repo';
+import { CockpitProjector } from './src/lib/cockpit/projector';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME ?? '0.0.0.0';
@@ -37,8 +38,12 @@ async function main(): Promise<void> {
     void handle(req, res);
   });
 
+  const repo = getCockpitRepository();
+  const projector = new CockpitProjector(repo);
+  projector.start();
+  console.info('[server] Cockpit projector started');
+
   if (wsEnabled) {
-    const repo = getCockpitRepository();
     new CockpitWsServer(server, repo);
     console.info('[server] Cockpit WebSocket server attached on /api/cockpit/ws');
   } else {
@@ -54,6 +59,7 @@ async function main(): Promise<void> {
   for (const signal of signals) {
     process.once(signal, () => {
       console.info(`[server] ${signal} received, shutting down…`);
+      projector.stop();
       server.close(() => {
         console.info('[server] HTTP server closed');
         process.exit(0);

@@ -149,10 +149,14 @@ export class CockpitProjector {
    */
   start(pollIntervalMs: number = DEFAULT_POLL_INTERVAL_MS): void {
     if (this.pollTimer !== null) return;
-    this.pollTimer = setInterval(
-      () => void this.projectAll(),
-      pollIntervalMs,
-    );
+    this.pollTimer = setInterval(() => {
+      this.projectAll().catch((err) => {
+        logger.error({
+          event: 'cockpit.projector.cycle_error',
+          error: String(err),
+        });
+      });
+    }, pollIntervalMs);
     logger.info({
       event: 'cockpit.projector.started',
       debounce_ms: this.debounceMs,
