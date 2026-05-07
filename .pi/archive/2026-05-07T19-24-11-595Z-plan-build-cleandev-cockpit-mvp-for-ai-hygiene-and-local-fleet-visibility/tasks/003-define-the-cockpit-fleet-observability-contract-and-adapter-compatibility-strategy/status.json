@@ -1,0 +1,26 @@
+{
+  "id": "003",
+  "name": "define-the-cockpit-fleet-observability-contract-and-adapter-compatibility-strategy",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "001",
+    "002"
+  ],
+  "startedAt": "2026-05-05T20:04:03.126Z",
+  "completedAt": "2026-05-05T20:06:43.694Z",
+  "duration": 160568,
+  "retries": 0,
+  "pid": 312289,
+  "error": null,
+  "usage": {
+    "inputTokens": 11,
+    "outputTokens": 8484
+  },
+  "latestProgressAt": "2026-05-05T20:06:43.408Z",
+  "latestProgressMessage": "`docs/cockpit-fleet-contract.md` has been created. Here's what it covers:\n\n**Target contract (§1–§3) — the stable future"
+}

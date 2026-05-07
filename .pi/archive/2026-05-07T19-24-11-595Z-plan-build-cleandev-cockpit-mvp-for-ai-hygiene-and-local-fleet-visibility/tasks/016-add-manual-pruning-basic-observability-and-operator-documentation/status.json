@@ -1,0 +1,28 @@
+{
+  "id": "016",
+  "name": "add-manual-pruning-basic-observability-and-operator-documentation",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "004",
+    "006",
+    "007",
+    "014"
+  ],
+  "startedAt": "2026-05-05T21:19:04.847Z",
+  "completedAt": "2026-05-05T21:26:23.904Z",
+  "duration": 439057,
+  "retries": 0,
+  "pid": 385543,
+  "error": null,
+  "usage": {
+    "inputTokens": 1354,
+    "outputTokens": 24477
+  },
+  "latestProgressAt": "2026-05-05T21:26:23.574Z",
+  "latestProgressMessage": "Here is a summary of everything implemented for Task 016:\n\n## What was built\n\n### 1. Structured logging — `apps/web/src/"
+}

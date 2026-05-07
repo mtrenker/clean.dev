@@ -1,0 +1,27 @@
+{
+  "id": "006",
+  "name": "build-the-websocket-ingestion-endpoint-with-authentication-idempotency-and-acknowledgements",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "002",
+    "004",
+    "005"
+  ],
+  "startedAt": "2026-05-05T20:20:54.658Z",
+  "completedAt": "2026-05-05T20:55:09.270Z",
+  "duration": 2054612,
+  "retries": 0,
+  "pid": 319661,
+  "error": null,
+  "usage": {
+    "inputTokens": 1273,
+    "outputTokens": 111489
+  },
+  "latestProgressAt": "2026-05-05T20:55:08.849Z",
+  "latestProgressMessage": "All clean — 17 test files, 196 tests passing (the 1-test debug file is gone; the 21 new `cockpit-ws` integration tests a"
+}

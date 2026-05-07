@@ -1,0 +1,26 @@
+{
+  "id": "011",
+  "name": "implement-git-worktree-and-branch-hygiene-adapter-in-the-daemon",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.4",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "008",
+    "009"
+  ],
+  "startedAt": "2026-05-05T20:18:34.730Z",
+  "completedAt": "2026-05-05T20:26:21.230Z",
+  "duration": 466500,
+  "retries": 0,
+  "pid": 317856,
+  "error": null,
+  "usage": {
+    "inputTokens": 1463390,
+    "outputTokens": 19708
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

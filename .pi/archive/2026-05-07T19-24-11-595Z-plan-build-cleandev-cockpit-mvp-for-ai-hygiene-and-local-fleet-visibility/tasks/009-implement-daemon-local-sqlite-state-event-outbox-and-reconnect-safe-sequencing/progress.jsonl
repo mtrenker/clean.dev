@@ -1,0 +1,5 @@
+{"ts":"2026-05-05T22:13:09+02:00","step":"Inspecting Task 008 scaffold outputs and current daemon/protocol sources for SQLite state integration","status":"running"}
+{"ts":"2026-05-05T22:17:30+02:00","step":"Implemented SQLite-backed daemon state schema and wired CLI commands to initialize, sync, and report persisted local state","status":"done"}
+{"ts":"2026-05-05T22:17:33+02:00","step":"Added focused local-db tests for offline queue reuse and restart-safe ack deduplication","status":"done"}
+{"ts":"2026-05-05T22:17:49+02:00","step":"Build exposed DatabaseSync transaction API mismatch; switching local-db writes to explicit SQLite transactions and fixing row decoding types","status":"running"}
+{"ts":"2026-05-05T22:18:25+02:00","step":"Verified cockpit-daemon tests, build, and offline doctor flow with SQLite state initialization and restart-safe ack sequencing","status":"done"}

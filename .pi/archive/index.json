@@ -68,6 +68,46 @@
         "totalInputTokens": 3763122,
         "totalOutputTokens": 203631
       }
+    },
+    {
+      "id": "2026-05-07T19-24-11-595Z-plan-build-cleandev-cockpit-mvp-for-ai-hygiene-and-local-fleet-visibility",
+      "archivedAt": "2026-05-07T19:24:11.595Z",
+      "reason": "manual",
+      "title": "Plan: Build clean.dev Cockpit MVP for AI hygiene and local fleet visibility",
+      "taskCount": 17,
+      "archivePath": ".pi/archive/2026-05-07T19-24-11-595Z-plan-build-cleandev-cockpit-mvp-for-ai-hygiene-and-local-fleet-visibility",
+      "taskFolders": [
+        "001-audit-current-cleandev-runtime-auth-database-deployment-and-pifleet-file-shapes",
+        "002-add-shared-cockpit-protocol-package-with-validated-event-and-config-schemas",
+        "003-define-the-cockpit-fleet-observability-contract-and-adapter-compatibility-strategy",
+        "004-add-postgres-cockpit-tables-and-repository-functions",
+        "005-implement-cleandev-cockpit-project-management-and-device-pairing-apis",
+        "006-build-the-websocket-ingestion-endpoint-with-authentication-idempotency-and-acknowledgements",
+        "007-add-debounced-projection-from-raw-cockpit-events-to-current-project-state",
+        "008-scaffold-the-standalone-cockpit-daemon-cli-app",
+        "009-implement-daemon-local-sqlite-state-event-outbox-and-reconnect-safe-sequencing",
+        "010-implement-daemon-authentication-and-project-mapping-flow",
+        "011-implement-git-worktree-and-branch-hygiene-adapter-in-the-daemon",
+        "012-implement-pifleet-file-adapter-in-the-daemon",
+        "013-implement-daemon-websocket-client-batching-heartbeats-and-full-reconcile-loop",
+        "014-build-mobile-first-cockpit-overview-and-project-detail-ui",
+        "015-add-demo-mode-with-synthetic-or-sanitized-public-cockpit-streams",
+        "016-add-manual-pruning-basic-observability-and-operator-documentation",
+        "017-add-integration-tests-and-final-mvp-validation"
+      ],
+      "summary": {
+        "total": 17,
+        "pending": 0,
+        "running": 0,
+        "done": 17,
+        "failed": 0,
+        "retrying": 0,
+        "totalInputTokens": 11063813,
+        "totalOutputTokens": 606501,
+        "totalCacheCreationInputTokens": 0,
+        "totalCacheReadInputTokens": 0,
+        "totalTokens": 11670314
+      }
     }
   ]
 }

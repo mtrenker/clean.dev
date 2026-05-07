@@ -1,0 +1,26 @@
+{
+  "id": "014",
+  "name": "build-mobile-first-cockpit-overview-and-project-detail-ui",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "005",
+    "007"
+  ],
+  "startedAt": "2026-05-05T21:06:13.826Z",
+  "completedAt": "2026-05-05T21:13:33.058Z",
+  "duration": 439233,
+  "retries": 0,
+  "pid": 379071,
+  "error": null,
+  "usage": {
+    "inputTokens": 4573,
+    "outputTokens": 25034
+  },
+  "latestProgressAt": "2026-05-05T21:13:32.749Z",
+  "latestProgressMessage": "All done. Here's a summary of what was built:\n\n## Summary\n\n### New files created\n\n**Cockpit app pages (`apps/web/src/app"
+}

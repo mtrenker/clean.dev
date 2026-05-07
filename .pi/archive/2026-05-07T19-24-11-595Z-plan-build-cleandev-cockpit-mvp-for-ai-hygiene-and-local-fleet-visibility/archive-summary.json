@@ -1,0 +1,455 @@
+{
+  "version": 1,
+  "summarizedAt": "2026-05-07T19:24:11.594Z",
+  "plan": {
+    "title": "Plan: Build clean.dev Cockpit MVP for AI hygiene and local fleet visibility",
+    "overview": "This plan builds the first private clean.dev Cockpit: a mobile-friendly overview of configured local coding projects, git worktrees/branches, pi fleet plans, agents, and tasks. The selected depth is **Internal Tool**: the initial user is Martin, but the clean.dev backend is internet-reachable and handles private operational metadata, so the plan includes proper authentication, device pairing, access control, basic observability, and operator documentation without over-building for public multi-tenant scale.\n\nThe architecture is a monorepo implementation with a standalone local daemon in `apps/cockpit-daemon`, shared runtime-validated event schemas in `packages/cockpit-protocol`, and clean.dev backend/UI changes in `apps/web` plus the existing Drizzle/Postgres package under `packages/pm`. The local daemon observes configured projects, inspects git worktrees/branches, reads pi/fleet state files, stores local daemon state and an outbound event queue in SQLite, and streams semantic event batches to clean.dev over an outbound WebSocket after browser-approved device pairing.\n\nThe backend stores raw events in Postgres and projects them, with debouncing, into current cockpit state for a mobile-first dashboard. Projects are defined in the clean.dev UI first and mapped locally by project id; repo telemetry is conservative by default and configurable per project. Server-to-local executable commands, remote agent start/stop, issue integrations, background service installation, and full raw telemetry upload are explicitly out of scope for this MVP.",
+    "splitAt": "2026-05-05T19:46:45.293Z",
+    "taskCount": 17
+  },
+  "summary": {
+    "total": 17,
+    "pending": 0,
+    "running": 0,
+    "done": 17,
+    "failed": 0,
+    "retrying": 0,
+    "totalInputTokens": 11063813,
+    "totalOutputTokens": 606501,
+    "totalCacheCreationInputTokens": 0,
+    "totalCacheReadInputTokens": 0,
+    "totalTokens": 11670314
+  },
+  "tasks": [
+    {
+      "id": "001",
+      "name": "audit-current-cleandev-runtime-auth-database-deployment-and-pifleet-file-shapes",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [],
+      "retries": 0,
+      "startedAt": "2026-05-05T19:51:11.403Z",
+      "completedAt": "2026-05-05T19:56:28.795Z",
+      "duration": 317392,
+      "error": null,
+      "progressEntries": 60,
+      "lastProgress": "The audit is complete. Here is what was produced and the key findings:\n\n---\n\n## `docs/cockpit-audit.md` — Key Findings",
+      "usage": {
+        "inputTokens": 5335,
+        "outputTokens": 15259
+      }
+    },
+    {
+      "id": "002",
+      "name": "add-shared-cockpit-protocol-package-with-validated-event-and-config-schemas",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "001"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T19:56:28.802Z",
+      "completedAt": "2026-05-05T20:04:03.119Z",
+      "duration": 454317,
+      "error": null,
+      "progressEntries": 14,
+      "lastProgress": "Built @cleandev/cockpit-protocol, passed focused schema tests, and verified @cleandev/web can resolve the new workspace package",
+      "usage": {
+        "inputTokens": 2953712,
+        "outputTokens": 19305
+      }
+    },
+    {
+      "id": "003",
+      "name": "define-the-cockpit-fleet-observability-contract-and-adapter-compatibility-strategy",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "001",
+        "002"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:04:03.126Z",
+      "completedAt": "2026-05-05T20:06:43.694Z",
+      "duration": 160568,
+      "error": null,
+      "progressEntries": 17,
+      "lastProgress": "`docs/cockpit-fleet-contract.md` has been created. Here's what it covers:\n\n**Target contract (§1–§3) — the stable future",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 8484
+      }
+    },
+    {
+      "id": "004",
+      "name": "add-postgres-cockpit-tables-and-repository-functions",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "001",
+        "002"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:04:03.147Z",
+      "completedAt": "2026-05-05T20:12:52.788Z",
+      "duration": 529641,
+      "error": null,
+      "progressEntries": 6,
+      "lastProgress": "Generated Drizzle migration 0002 for cockpit tables and re-verified @cleandev/pm build/test after a final repository helper fix",
+      "usage": {
+        "inputTokens": 1411210,
+        "outputTokens": 26570
+      }
+    },
+    {
+      "id": "005",
+      "name": "implement-cleandev-cockpit-project-management-and-device-pairing-apis",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "004"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:12:52.793Z",
+      "completedAt": "2026-05-05T20:20:54.651Z",
+      "duration": 481858,
+      "error": null,
+      "progressEntries": 109,
+      "lastProgress": "Here's a summary of everything implemented:\n\n## Summary\n\n### New files created\n\n**Library modules (`apps/web/src/lib/`)*",
+      "usage": {
+        "inputTokens": 535,
+        "outputTokens": 25632
+      }
+    },
+    {
+      "id": "006",
+      "name": "build-the-websocket-ingestion-endpoint-with-authentication-idempotency-and-acknowledgements",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "002",
+        "004",
+        "005"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:20:54.658Z",
+      "completedAt": "2026-05-05T20:55:09.270Z",
+      "duration": 2054612,
+      "error": null,
+      "progressEntries": 153,
+      "lastProgress": "All clean — 17 test files, 196 tests passing (the 1-test debug file is gone; the 21 new `cockpit-ws` integration tests a",
+      "usage": {
+        "inputTokens": 1273,
+        "outputTokens": 111489
+      }
+    },
+    {
+      "id": "007",
+      "name": "add-debounced-projection-from-raw-cockpit-events-to-current-project-state",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "004",
+        "006"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:55:09.279Z",
+      "completedAt": "2026-05-05T21:06:13.818Z",
+      "duration": 664539,
+      "error": null,
+      "progressEntries": 99,
+      "lastProgress": "Here's a summary of everything implemented for Task 007:\n\n## What was built\n\n### 1. Pure fold function — `packages/pm/sr",
+      "usage": {
+        "inputTokens": 58,
+        "outputTokens": 47941
+      }
+    },
+    {
+      "id": "008",
+      "name": "scaffold-the-standalone-cockpit-daemon-cli-app",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "001",
+        "002"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:06:43.700Z",
+      "completedAt": "2026-05-05T20:12:47.023Z",
+      "duration": 363323,
+      "error": null,
+      "progressEntries": 10,
+      "lastProgress": "Verified @cleandev/cockpit-daemon builds, its focused tests pass, and the offline doctor command succeeds via pnpm start wrapper",
+      "usage": {
+        "inputTokens": 1713980,
+        "outputTokens": 17777
+      }
+    },
+    {
+      "id": "009",
+      "name": "implement-daemon-local-sqlite-state-event-outbox-and-reconnect-safe-sequencing",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "008"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:12:47.030Z",
+      "completedAt": "2026-05-05T20:18:34.716Z",
+      "duration": 347686,
+      "error": null,
+      "progressEntries": 5,
+      "lastProgress": "Verified cockpit-daemon tests, build, and offline doctor flow with SQLite state initialization and restart-safe ack sequencing",
+      "usage": {
+        "inputTokens": 1049422,
+        "outputTokens": 16887
+      }
+    },
+    {
+      "id": "010",
+      "name": "implement-daemon-authentication-and-project-mapping-flow",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "005",
+        "008",
+        "009"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:26:21.237Z",
+      "completedAt": "2026-05-05T20:39:03.934Z",
+      "duration": 762697,
+      "error": null,
+      "progressEntries": 95,
+      "lastProgress": "Here's a summary of everything implemented in this task:\n\n## Summary\n\n### New files created\n\n**Server-side** (`apps/web/",
+      "usage": {
+        "inputTokens": 1589,
+        "outputTokens": 36408
+      }
+    },
+    {
+      "id": "011",
+      "name": "implement-git-worktree-and-branch-hygiene-adapter-in-the-daemon",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "008",
+        "009"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:18:34.730Z",
+      "completedAt": "2026-05-05T20:26:21.230Z",
+      "duration": 466500,
+      "error": null,
+      "progressEntries": 5,
+      "lastProgress": "Verified cockpit-daemon tests and build with git worktree discovery, worktree event queuing, and preview hygiene output",
+      "usage": {
+        "inputTokens": 1463390,
+        "outputTokens": 19708
+      }
+    },
+    {
+      "id": "012",
+      "name": "implement-pifleet-file-adapter-in-the-daemon",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "003",
+        "009",
+        "011"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:39:03.953Z",
+      "completedAt": "2026-05-05T20:51:43.919Z",
+      "duration": 759966,
+      "error": null,
+      "progressEntries": 93,
+      "lastProgress": "All 44 tests pass. Here's a summary of everything implemented:\n\n---\n\n## Summary\n\n### New file: `apps/cockpit-daemon/src/",
+      "usage": {
+        "inputTokens": 8972,
+        "outputTokens": 55402
+      }
+    },
+    {
+      "id": "013",
+      "name": "implement-daemon-websocket-client-batching-heartbeats-and-full-reconcile-loop",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "006",
+        "009",
+        "011",
+        "012"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T20:55:09.294Z",
+      "completedAt": "2026-05-05T21:37:17.101Z",
+      "duration": 2527807,
+      "error": null,
+      "progressEntries": 173,
+      "lastProgress": "All deliverables are complete and verified:\n\n**What was implemented:**\n\n1. **`apps/cockpit-daemon/src/transport/websocke",
+      "usage": {
+        "inputTokens": 97,
+        "outputTokens": 124733
+      }
+    },
+    {
+      "id": "014",
+      "name": "build-mobile-first-cockpit-overview-and-project-detail-ui",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "005",
+        "007"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T21:06:13.826Z",
+      "completedAt": "2026-05-05T21:13:33.058Z",
+      "duration": 439233,
+      "error": null,
+      "progressEntries": 99,
+      "lastProgress": "All done. Here's a summary of what was built:\n\n## Summary\n\n### New files created\n\n**Cockpit app pages (`apps/web/src/app",
+      "usage": {
+        "inputTokens": 4573,
+        "outputTokens": 25034
+      }
+    },
+    {
+      "id": "015",
+      "name": "add-demo-mode-with-synthetic-or-sanitized-public-cockpit-streams",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "002",
+        "007",
+        "014"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T21:13:33.068Z",
+      "completedAt": "2026-05-05T21:19:04.835Z",
+      "duration": 331767,
+      "error": null,
+      "progressEntries": 4,
+      "lastProgress": "Verified demo mode with targeted web checks: demo + shared cockpit component tests passed (27 tests across 4 files) and pnpm --filter @cleandev/web exec tsc --noEmit completed cleanly",
+      "usage": {
+        "inputTokens": 2448271,
+        "outputTokens": 15256
+      }
+    },
+    {
+      "id": "016",
+      "name": "add-manual-pruning-basic-observability-and-operator-documentation",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "balanced",
+      "thinking": "medium",
+      "status": "done",
+      "depends": [
+        "004",
+        "006",
+        "007",
+        "014"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T21:19:04.847Z",
+      "completedAt": "2026-05-05T21:26:23.904Z",
+      "duration": 439057,
+      "error": null,
+      "progressEntries": 81,
+      "lastProgress": "Here is a summary of everything implemented for Task 016:\n\n## What was built\n\n### 1. Structured logging — `apps/web/src/",
+      "usage": {
+        "inputTokens": 1354,
+        "outputTokens": 24477
+      }
+    },
+    {
+      "id": "017",
+      "name": "add-integration-tests-and-final-mvp-validation",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "profile": "deep",
+      "thinking": "high",
+      "status": "done",
+      "depends": [
+        "010",
+        "013",
+        "014",
+        "015",
+        "016"
+      ],
+      "retries": 0,
+      "startedAt": "2026-05-05T21:37:17.107Z",
+      "completedAt": "2026-05-05T21:42:39.926Z",
+      "duration": 322819,
+      "error": null,
+      "progressEntries": 51,
+      "lastProgress": "---\n\n## Review Summary\n\n**All five upstream tasks are done and green.** The combined implementation is architecturally c",
+      "usage": {
+        "inputTokens": 31,
+        "outputTokens": 16139
+      }
+    }
+  ]
+}

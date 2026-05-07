@@ -1,0 +1,25 @@
+{
+  "id": "002",
+  "name": "add-shared-cockpit-protocol-package-with-validated-event-and-config-schemas",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.4",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-05-05T19:56:28.802Z",
+  "completedAt": "2026-05-05T20:04:03.119Z",
+  "duration": 454317,
+  "retries": 0,
+  "pid": 309690,
+  "error": null,
+  "usage": {
+    "inputTokens": 2953712,
+    "outputTokens": 19305
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "010",
+  "name": "implement-daemon-authentication-and-project-mapping-flow",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "005",
+    "008",
+    "009"
+  ],
+  "startedAt": "2026-05-05T20:26:21.237Z",
+  "completedAt": "2026-05-05T20:39:03.934Z",
+  "duration": 762697,
+  "retries": 0,
+  "pid": 321524,
+  "error": null,
+  "usage": {
+    "inputTokens": 1589,
+    "outputTokens": 36408
+  },
+  "latestProgressAt": "2026-05-05T20:39:03.575Z",
+  "latestProgressMessage": "Here's a summary of everything implemented in this task:\n\n## Summary\n\n### New files created\n\n**Server-side** (`apps/web/"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "009",
+  "name": "implement-daemon-local-sqlite-state-event-outbox-and-reconnect-safe-sequencing",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.4",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "008"
+  ],
+  "startedAt": "2026-05-05T20:12:47.030Z",
+  "completedAt": "2026-05-05T20:18:34.716Z",
+  "duration": 347686,
+  "retries": 0,
+  "pid": 315719,
+  "error": null,
+  "usage": {
+    "inputTokens": 1049422,
+    "outputTokens": 16887
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}
