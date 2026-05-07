@@ -21,7 +21,7 @@ export const proxy = auth((req) => {
   const pathname = req.nextUrl.pathname
 
   // Admin routes that require authentication
-  const adminRoutes = ['/admin', '/clients', '/time', '/invoices', '/settings', '/bill']
+  const adminRoutes = ['/admin', '/clients', '/time', '/invoices', '/settings', '/bill', '/cockpit']
   const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
 
   // Only protect admin routes

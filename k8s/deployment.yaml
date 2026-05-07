@@ -20,8 +20,8 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 1000
+        runAsUser: 1001
+        fsGroup: 1001
       initContainers:
         - name: review-links-config-preflight
           image: ghcr.io/mtrenker/clean-dev:main-abc1234 # Kustomize will replace this
@@ -115,6 +115,8 @@ spec:
             - name: AUTH_TRUST_HOST
               value: "true"
             - name: AUTH_URL
+              value: https://clean.dev
+            - name: NEXTAUTH_URL
               value: https://clean.dev
             - name: DB_USER
               valueFrom:

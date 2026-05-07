@@ -91,7 +91,7 @@ describe('auth configuration', () => {
 
       expect(result).toBe(true);
       expect(warnSpy).toHaveBeenCalledWith(
-        'ALLOWED_GITHUB_USERS not set - allowing all users',
+        'ALLOWED_GITHUB_USERS not set - allowing all GitHub users in non-production only',
       );
     });
 

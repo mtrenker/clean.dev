@@ -45,7 +45,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         process.env.ALLOWED_GITHUB_USERS?.split(",").map((u) => u.trim()) || []
 
       if (allowedUsers.length === 0) {
-        console.warn("ALLOWED_GITHUB_USERS not set - allowing all users")
+        if (process.env.NODE_ENV === "production") {
+          console.error("ALLOWED_GITHUB_USERS not set - denying GitHub admin sign-in in production")
+          return false
+        }
+
+        console.warn("ALLOWED_GITHUB_USERS not set - allowing all GitHub users in non-production only")
         return true
       }
 

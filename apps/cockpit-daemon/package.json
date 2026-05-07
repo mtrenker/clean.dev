@@ -1,0 +1,32 @@
+{
+  "name": "@cleandev/cockpit-daemon",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Standalone cockpit daemon CLI for clean.dev",
+  "main": "./dist/cli.js",
+  "types": "./dist/cli.d.ts",
+  "bin": {
+    "cockpit-daemon": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
+    "lint": "eslint .",
+    "test": "vitest run src/config.test.ts src/cli.test.ts src/local-db.test.ts src/git.test.ts src/adapters/pi-fleet.test.ts src/transport/websocket.test.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cleandev/cockpit-protocol": "workspace:*",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@cleandev/eslint-config": "workspace:*",
+    "@types/node": "^22",
+    "eslint": "^9.38.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^8.0.8",
+    "vitest": "^4.1.4"
+  }
+}

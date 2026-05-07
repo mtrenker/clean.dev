@@ -111,6 +111,11 @@
   /* ── Animation / scroll-reveal classes ────────────────────────────────────── */
 
   .observe {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .supports-scroll-reveal .observe {
     opacity: 0;
     transform: translateY(2rem);
     transition-property: opacity, transform;
@@ -118,7 +123,7 @@
     transition-duration: var(--animation-fade-in);
   }
 
-  .observe.animate-in {
+  .supports-scroll-reveal .observe.animate-in {
     opacity: 1;
     transform: translateY(0);
   }

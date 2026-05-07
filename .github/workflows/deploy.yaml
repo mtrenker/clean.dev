@@ -68,10 +68,28 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
+          load: ${{ github.event_name == 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Smoke test custom server image
+        if: github.event_name == 'pull_request'
+        run: |
+          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          docker run --rm \
+            --entrypoint node \
+            -e NODE_ENV=production \
+            -e AUTH_SECRET=test-secret-test-secret-test-secret-test-secret \
+            -e GITHUB_ID=dummy \
+            -e GITHUB_SECRET=dummy \
+            -e LINKEDIN_CLIENT_ID=dummy \
+            -e LINKEDIN_CLIENT_SECRET=dummy \
+            -e ALLOWED_GITHUB_USERS=mtrenker \
+            -e DATABASE_URL=postgresql://user:pass@127.0.0.1:5432/db \
+            "$IMAGE_TAG" \
+            -e "require('./apps/web/custom-server.js'); setTimeout(() => process.exit(0), 2500)"
 
       - name: Install Kustomize
         run: |
@@ -84,6 +102,7 @@ jobs:
           grep -q 'name: FEATURE_REVIEW_LINKS' k8s/deployment.yaml
           grep -q 'name: REVIEW_LINK_SECRET' k8s/deployment.yaml
           grep -q 'name: REVIEW_RECIPIENT_EMAIL' k8s/deployment.yaml
+          grep -q 'name: NEXTAUTH_URL' k8s/deployment.yaml
           grep -q 'name: review-links-config-preflight' k8s/deployment.yaml
 
       - name: Update Kustomize image tag

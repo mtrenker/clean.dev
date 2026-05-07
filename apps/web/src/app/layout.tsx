@@ -13,6 +13,7 @@ import { auth, signIn, signOut } from 'auth';
 import { UserMenu } from '@/components/user-menu';
 import { IntlProviderWrapper } from '@/components/intl-provider';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { RouteScrollReset } from '@/components/route-scroll-reset';
 import { AppFooter, AppNavigation, Link } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
 import { getPersonStructuredData, getSocialProfiles } from '@/lib/social-profiles';
@@ -91,6 +92,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         />
       </head>
       <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} font-sans antialiased`}>
+        <RouteScrollReset />
         <a
           href="#main-content"
           className="fixed left-2 top-2 z-[9999] -translate-y-20 rounded-sm bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-lg transition-transform focus:translate-y-0"

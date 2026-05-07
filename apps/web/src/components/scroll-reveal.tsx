@@ -22,9 +22,17 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Respect the user's reduced-motion preference: mark all elements visible immediately
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const elements = ref.current?.querySelectorAll('.observe') ?? [];
+    const elements = ref.current?.querySelectorAll('.observe') ?? [];
+
+    // Scroll reveal is progressive enhancement. Content is visible by default;
+    // this class opts into hidden-until-observed only after the client script runs.
+    document.documentElement.classList.add('supports-scroll-reveal');
+
+    // Respect reduced motion and older browsers by keeping everything visible.
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
       elements.forEach((el) => el.classList.add('animate-in'));
       return;
     }
@@ -41,7 +49,6 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className 
       { threshold: 0.08 }
     );
 
-    const elements = ref.current?.querySelectorAll('.observe') ?? [];
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();

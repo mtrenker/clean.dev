@@ -8,16 +8,22 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./db/schema": {
+      "types": "./dist/db/schema.d.ts",
+      "default": "./dist/db/schema.js"
     }
   },
   "scripts": {
     "build": "tsc",
     "lint": "eslint .",
+    "test": "tsx --test test/**/*.test.ts",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts"
   },
   "dependencies": {
+    "@cleandev/cockpit-protocol": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "nodemailer": "^8.0.5",
     "pg": "^8.13.1",
