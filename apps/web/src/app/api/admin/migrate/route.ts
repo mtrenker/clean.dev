@@ -4,6 +4,7 @@ import { isAdminSession } from '@/lib/authz';
 import { getPool } from '@/lib/db';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
+import { existsSync } from 'fs';
 import path from 'path';
 import * as schema from '@cleandev/pm';
 
@@ -37,8 +38,24 @@ export async function POST(): Promise<NextResponse> {
     const pool = getPool();
     const db = drizzle(pool, { schema });
 
-    // Resolve migrations folder path - go up from apps/web to workspace root, then to packages/pm/drizzle
-    const migrationsFolder = path.resolve(process.cwd(), '../..', 'packages/pm/drizzle');
+    const migrationCandidates = [
+      // Docker/custom-server runtime uses /app as cwd.
+      path.resolve(process.cwd(), 'packages/pm/drizzle'),
+      // Local Next dev can run from apps/web.
+      path.resolve(process.cwd(), '../..', 'packages/pm/drizzle'),
+    ];
+    const migrationsFolder = migrationCandidates.find((candidate) =>
+      existsSync(path.join(candidate, 'meta', '_journal.json')),
+    );
+
+    if (!migrationsFolder) {
+      return NextResponse.json(
+        {
+          error: `Migration metadata not found. Checked: ${migrationCandidates.join(', ')}`,
+        },
+        { status: 500 },
+      );
+    }
 
     console.log('Running migrations from:', migrationsFolder);
     await migrate(db, { migrationsFolder });

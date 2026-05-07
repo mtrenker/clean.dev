@@ -88,10 +88,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/package.js
 COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/dist ./node_modules/@cleandev/cockpit-store/dist
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/package.json ./node_modules/@cleandev/pm/package.json
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/dist ./node_modules/@cleandev/pm/dist
+COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/drizzle ./packages/pm/drizzle
 
 # Build-time smoke for custom-server-only modules that Next standalone tracing
 # does not validate. This catches missing explicit COPY entries before deploy.
-RUN node -e "require('./apps/web/src/server/cockpit-ws.js'); require('./apps/web/src/lib/cockpit-repo.js')"
+RUN node -e "require('./apps/web/src/server/cockpit-ws.js'); require('./apps/web/src/lib/cockpit-repo.js')" \
+  && test -f ./packages/pm/drizzle/meta/_journal.json
 
 USER nextjs
 
