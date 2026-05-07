@@ -196,9 +196,26 @@ export class CockpitProjector {
 
     // ── Step 1: Current projection record ────────────────────────────────────
     const record = await this.repo.getProjectedProjectStateRecord(projectId);
-    const afterSequence = record?.latestEventSequence ?? 0;
     const currentState =
       record?.state ?? emptyProjectedState(projectId);
+
+    // Recovery for early production builds: ingestion accidentally advanced the
+    // projection checkpoint before the projector folded events, leaving an empty
+    // state JSON with a high latestEventSequence. If the state has a lastEvent
+    // but no domain data, re-fold from the beginning once.
+    const hasProjectedDomainState =
+      Object.keys(currentState.tasks).length > 0 ||
+      Object.keys(currentState.plans).length > 0 ||
+      Object.keys(currentState.worktrees).length > 0;
+    const shouldRecoverSkippedBacklog =
+      Boolean(record?.dirty) &&
+      Boolean(currentState.lastEvent) &&
+      !hasProjectedDomainState &&
+      (record?.latestEventSequence ?? 0) > 0;
+
+    const afterSequence = shouldRecoverSkippedBacklog
+      ? 0
+      : (record?.latestEventSequence ?? 0);
 
     // ── Step 2: Load new events ───────────────────────────────────────────────
     const newEvents = await this.repo.listRawEventsSince(
@@ -235,6 +252,7 @@ export class CockpitProjector {
       projectId,
       new_events: newEvents.length,
       latest_sequence: latestSequence,
+      recovered_skipped_backlog: shouldRecoverSkippedBacklog,
       daemon_stale: projectedState.dirty,
     });
   }

@@ -318,6 +318,34 @@ describe('CockpitProjector', () => {
       expect(repo.listRawEventsSince).toHaveBeenCalledWith(projectId, 0, 10_000);
     });
 
+    it('recovers early empty projections whose checkpoint skipped the raw backlog', async () => {
+      const projectId = 'proj-recover';
+      const existingRecord = makeProjectedStateRecord(projectId, 99, {
+        lastEvent: {
+          eventId: 'evt-old',
+          sequence: 99,
+          occurredAt: NOW.toISOString(),
+          type: 'usage_reported',
+          deviceId: 'device-1',
+          sessionId: null,
+          runId: null,
+          source: 'live',
+        },
+      });
+      const event = makeProjectSeenEvent(projectId, 1);
+
+      const repo = makeMockRepo({
+        listDirtyProjects: vi.fn().mockResolvedValue([makeProjectRecord(projectId)]),
+        getProjectedProjectStateRecord: vi.fn().mockResolvedValue(existingRecord),
+        listRawEventsSince: vi.fn().mockResolvedValue([event]),
+      });
+
+      const projector = new CockpitProjector(repo);
+      await projector.projectAll();
+
+      expect(repo.listRawEventsSince).toHaveBeenCalledWith(projectId, 0, 10_000);
+    });
+
     it('keeps latestEventSequence from existing record when no new events arrive', async () => {
       const projectId = 'proj-noevents';
       const existingRecord = makeProjectedStateRecord(projectId, 7);

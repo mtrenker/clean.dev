@@ -601,8 +601,10 @@ export class PostgresCockpitRepository implements ICockpitRepository {
           .values({
             projectId: summary.projectId,
             schemaVersion: cockpitProtocolSchemaVersion,
-            latestEventId: summary.latestEventId,
-            latestEventSequence: summary.latestSequence,
+            // This is the projection checkpoint, not the raw ingestion
+            // checkpoint. New rows have not projected any raw events yet.
+            latestEventId: null,
+            latestEventSequence: 0,
             dirty: true,
             projectedAt: now,
             state: emptyProjectedState({
@@ -611,16 +613,6 @@ export class PostgresCockpitRepository implements ICockpitRepository {
               projectName: summary.projectName,
               localRootPath: summary.localRootPath,
               telemetry: summary.telemetry ?? DEFAULT_TELEMETRY,
-              latestEvent: {
-                eventId: summary.latestEventId,
-                sequence: summary.latestSequence,
-                occurredAt: summary.latestOccurredAt,
-                type: eventsById.get(summary.latestEventId)?.type ?? 'project_seen',
-                deviceId: eventsById.get(summary.latestEventId)?.deviceId ?? '',
-                sessionId: eventsById.get(summary.latestEventId)?.sessionId ?? null,
-                runId: eventsById.get(summary.latestEventId)?.runId ?? null,
-                source: eventsById.get(summary.latestEventId)?.source ?? 'live',
-              },
             }),
             createdAt: now,
             updatedAt: now,
@@ -630,8 +622,8 @@ export class PostgresCockpitRepository implements ICockpitRepository {
         await tx
           .update(schema.cockpitProjectedProjectState)
           .set({
-            latestEventId: summary.latestEventId,
-            latestEventSequence: summary.latestSequence,
+            // Do not advance latestEventSequence here. The background
+            // projector advances it only after folding raw events into state.
             dirty: true,
             updatedAt: now,
           })

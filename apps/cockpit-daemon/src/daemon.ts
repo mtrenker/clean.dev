@@ -16,7 +16,10 @@
 
 import { randomUUID } from 'node:crypto';
 
-import type { DaemonConfig } from '@cleandev/cockpit-protocol';
+import {
+  cockpitProtocolSchemaVersion,
+  type DaemonConfig,
+} from '@cleandev/cockpit-protocol';
 
 import { loadDaemonConfig } from './config';
 import type { DaemonPaths } from './config';
@@ -146,13 +149,53 @@ const reconcileAll = async (
       }
 
       // Pi-fleet (task/plan) events
+      let activePlanId: string | null = null;
+      let activeTaskCount = 0;
       try {
-        await scanProjectPiFleet(db, project, deviceId);
+        const piFleet = await scanProjectPiFleet(db, project, deviceId);
+        activePlanId = piFleet.planId;
+        activeTaskCount = piFleet.activeTaskCount;
       } catch (err) {
         logger.error(
           `[daemon] pi-fleet scan failed for project ${project.projectId}: ${String(err)}`,
         );
       }
+
+      // Project metadata + heartbeat. Heartbeats are intentionally emitted on
+      // every reconcile so the server can distinguish an idle daemon from an
+      // offline one even when no git/task files changed.
+      const occurredAt = new Date().toISOString();
+      db.queueEvent({
+        event: {
+          schemaVersion: cockpitProtocolSchemaVersion,
+          eventId: randomUUID(),
+          occurredAt,
+          source: 'live',
+          projectId: project.projectId,
+          deviceId,
+          type: 'project_seen',
+          payload: {
+            projectName: project.projectName ?? null,
+            telemetry: project.telemetry,
+            localRootPath: project.localRootPath,
+          },
+        },
+      });
+      db.queueEvent({
+        event: {
+          schemaVersion: cockpitProtocolSchemaVersion,
+          eventId: randomUUID(),
+          occurredAt,
+          source: 'live',
+          projectId: project.projectId,
+          deviceId,
+          type: 'project_heartbeat',
+          payload: {
+            activePlanId,
+            activeTaskCount,
+          },
+        },
+      });
     }),
   );
 };
