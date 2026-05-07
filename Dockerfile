@@ -60,6 +60,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/custom-server.js ./apps/
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/src/server/cockpit-ws.js ./apps/web/src/server/
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/src/lib/cockpit-repo.js ./apps/web/src/lib/
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/src/lib/db.js ./apps/web/src/lib/
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/src/lib/logger.js ./apps/web/src/lib/
 # Runtime modules used only by the custom server may not be included in the
 # Next standalone trace. Copy them explicitly so custom-server.js can resolve
 # cockpit WS/repository dependencies at startup.
@@ -87,6 +88,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/package.js
 COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/dist ./node_modules/@cleandev/cockpit-store/dist
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/package.json ./node_modules/@cleandev/pm/package.json
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/dist ./node_modules/@cleandev/pm/dist
+
+# Build-time smoke for custom-server-only modules that Next standalone tracing
+# does not validate. This catches missing explicit COPY entries before deploy.
+RUN node -e "require('./apps/web/src/server/cockpit-ws.js'); require('./apps/web/src/lib/cockpit-repo.js')"
 
 USER nextjs
 
