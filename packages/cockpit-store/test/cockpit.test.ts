@@ -80,6 +80,8 @@ test('summarizeProjectsFromEvents keeps the latest per-project metadata from pro
     latestOccurredAt: '2026-05-05T20:01:00.000Z',
     projectName: 'Clean Dev',
     localRootPath: '.',
+    worktreeRootPath: null,
+    observation: undefined,
     telemetry: {
       worktreePath: 'relative',
       repoRootPath: 'off',

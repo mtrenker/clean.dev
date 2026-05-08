@@ -12,6 +12,8 @@ function makeProject(): CockpitProjectRecord {
     projectSlug: 'atlas-site-refresh',
     projectName: 'Atlas Site Refresh',
     localRootPath: '/demo/workspaces/atlas-site-refresh',
+    worktreeRootPath: null,
+    observation: null,
     telemetry: null,
     latestEventSequence: 12,
     latestEventAt: NOW,
@@ -38,9 +40,17 @@ function makeState(): CockpitProjectedProjectState {
       activePlanId: 'plan-atlas-ux',
       activeTaskCount: 1,
     },
+    devices: {},
     worktrees: {},
+    worktreeGroups: {},
     plans: {},
+    archivedPlanIds: [],
     tasks: {},
+    archivedTaskIds: [],
+    activeFleet: [],
+    engineUsage: {},
+    modelUsage: {},
+    profileUsage: {},
   };
 }
 

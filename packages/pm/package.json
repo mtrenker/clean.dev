@@ -18,12 +18,11 @@
     "build": "tsc",
     "lint": "eslint .",
     "test": "tsx --test test/**/*.test.ts",
-    "type-check": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/db/migrate.ts"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@cleandev/cockpit-protocol": "workspace:*",
+    "@cleandev/db": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "nodemailer": "^8.0.5",
     "pg": "^8.13.1",
@@ -33,7 +32,6 @@
     "@cleandev/eslint-config": "workspace:*",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.30.2",
     "eslint": "^9.18.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"

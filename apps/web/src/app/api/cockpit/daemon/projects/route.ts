@@ -44,6 +44,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         projectSlug: p.projectSlug ?? null,
         projectName: p.projectName ?? null,
         localRootPath: p.localRootPath ?? null,
+        worktreeRootPath: p.worktreeRootPath ?? null,
+        observation: p.observation ?? null,
+        telemetry: p.telemetry ?? null,
         createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : p.createdAt,
       })),
     });

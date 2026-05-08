@@ -5,15 +5,21 @@
   "description": "Standalone cockpit daemon CLI for clean.dev",
   "main": "./dist/cli.js",
   "types": "./dist/cli.d.ts",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "bin": {
     "cockpit-daemon": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
+    "build:bundle": "pnpm exec esbuild src/cli.ts --bundle --platform=node --target=node22 --format=cjs --external:node:* --outfile=dist/bundle/cockpit-daemon.cjs",
+    "build:package": "pnpm run build:bundle && tsx ./scripts/package-local-dist.ts",
+    "install:local": "pnpm run build:package && tsx ./scripts/install-local-dist.ts",
     "start": "node dist/cli.js",
     "dev": "tsx src/cli.ts",
     "lint": "eslint .",
-    "test": "vitest run src/config.test.ts src/cli.test.ts src/local-db.test.ts src/git.test.ts src/adapters/pi-fleet.test.ts src/transport/websocket.test.ts",
+    "test": "vitest run src/config.test.ts src/cli.test.ts src/local-db.test.ts src/git.test.ts src/cost.test.ts src/distribution.test.ts src/adapters/pi-fleet.test.ts src/transport/websocket.test.ts",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

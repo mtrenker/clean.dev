@@ -431,6 +431,8 @@ function buildDemoProject(
     projectSlug: definition.slug,
     projectName: definition.name,
     localRootPath: definition.localRootPath,
+    worktreeRootPath: null,
+    observation: null,
     telemetry: definition.telemetry,
     latestEventSequence: state.lastEvent?.sequence ?? 0,
     latestEventAt: state.lastEvent?.occurredAt ? new Date(state.lastEvent.occurredAt) : null,

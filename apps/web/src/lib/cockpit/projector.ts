@@ -121,20 +121,27 @@ export class CockpitProjector {
         await this.projectOne(project.projectId);
         projected++;
       } catch (err) {
+        // Log with enough detail to distinguish:
+        //   - DB transient errors (retry safe)
+        //   - Event-fold bugs (need dev fix)
+        //   - State corruption (needs force-reproject)
         logger.error({
           event: 'cockpit.projector.project_error',
           projectId: project.projectId,
           error: String(err),
+          // Hint: if this recurs, use forceReprojectAction to reset the checkpoint.
+          recovery_hint: 'POST /api/cockpit/projects/{projectId}/reproject',
         });
         skipped++;
       }
     }
 
-    if (projected > 0) {
+    if (projected > 0 || skipped > 0) {
       logger.info({
         event: 'cockpit.projector.cycle_complete',
         projected,
         skipped,
+        dirty_projects_found: dirtyProjects.length,
       });
     }
 
@@ -199,6 +206,8 @@ export class CockpitProjector {
     const currentState =
       record?.state ?? emptyProjectedState(projectId);
 
+    const previousSequence = record?.latestEventSequence ?? 0;
+
     // Recovery for early production builds: ingestion accidentally advanced the
     // projection checkpoint before the projector folded events, leaving an empty
     // state JSON with a high latestEventSequence. If the state has a lastEvent
@@ -211,11 +220,21 @@ export class CockpitProjector {
       Boolean(record?.dirty) &&
       Boolean(currentState.lastEvent) &&
       !hasProjectedDomainState &&
-      (record?.latestEventSequence ?? 0) > 0;
+      previousSequence > 0;
 
-    const afterSequence = shouldRecoverSkippedBacklog
-      ? 0
-      : (record?.latestEventSequence ?? 0);
+    const afterSequence = shouldRecoverSkippedBacklog ? 0 : previousSequence;
+
+    if (shouldRecoverSkippedBacklog) {
+      logger.warn({
+        event: 'cockpit.projector.skipped_backlog_recovery',
+        projectId,
+        // This indicates the checkpoint was advanced without a corresponding
+        // fold — likely a bug in an early production build.  Re-folding from 0
+        // corrects the state.  See recovery_hint for the admin path.
+        previous_sequence: previousSequence,
+        recovery_hint: 'POST /api/cockpit/projects/{projectId}/reproject',
+      });
+    }
 
     // ── Step 2: Load new events ───────────────────────────────────────────────
     const newEvents = await this.repo.listRawEventsSince(
@@ -223,6 +242,8 @@ export class CockpitProjector {
       afterSequence,
       this.eventBatchLimit,
     );
+
+    const hitBatchLimit = newEvents.length === this.eventBatchLimit;
 
     // ── Step 3: Fold ──────────────────────────────────────────────────────────
     const projectedState = foldEventsIntoState(
@@ -247,13 +268,34 @@ export class CockpitProjector {
       projectedAt: now,
     });
 
-    logger.debug({
+    // Emit a richer log so operators can distinguish:
+    //   - daemon_stale=true  → daemon hasn't heartbeated recently (offline?)
+    //   - hit_batch_limit=true → more events remain; projector will catch up
+    //   - new_events=0 → dirty flag was set but no new events found (idempotent run)
+    logger.info({
       event: 'cockpit.projector.projected',
       projectId,
       new_events: newEvents.length,
+      after_sequence: afterSequence,
       latest_sequence: latestSequence,
+      sequence_advance: latestSequence - previousSequence,
       recovered_skipped_backlog: shouldRecoverSkippedBacklog,
+      hit_batch_limit: hitBatchLimit,
       daemon_stale: projectedState.dirty,
     });
+
+    if (hitBatchLimit) {
+      // The project still has more events to process.  The projector will pick
+      // it up again on the next cycle because the project remains dirty until
+      // all events are folded and upsertProjectedProjectState clears the flag.
+      logger.warn({
+        event: 'cockpit.projector.batch_limit_hit',
+        projectId,
+        batch_limit: this.eventBatchLimit,
+        latest_sequence: latestSequence,
+        // Operators can confirm lag via: GET /api/cockpit/projects/{projectId}/status
+        status_hint: 'GET /api/cockpit/projects/{projectId}/status',
+      });
+    }
   }
 }

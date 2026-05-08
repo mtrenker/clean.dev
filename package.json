@@ -9,6 +9,9 @@
     "export": "turbo run export",
     "build": "dotenv -- turbo run build",
     "cockpit-daemon:build": "pnpm --filter @cleandev/cockpit-daemon build",
+    "cockpit-daemon:bundle": "pnpm --filter @cleandev/cockpit-daemon build:bundle",
+    "cockpit-daemon:package": "pnpm --filter @cleandev/cockpit-daemon build:package",
+    "cockpit-daemon:install-local": "pnpm --filter @cleandev/cockpit-daemon install:local",
     "cockpit-daemon:start": "pnpm --filter @cleandev/cockpit-daemon start",
     "cockpit-daemon:doctor": "pnpm --filter @cleandev/cockpit-daemon start -- doctor",
     "build:open": "dotenv -- turbo build:open",
@@ -16,8 +19,8 @@
     "build:storybook": "turbo run build-storybook --filter=@cleandev/web",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "db:generate": "dotenv -- pnpm --filter @cleandev/pm db:generate",
-    "db:migrate": "dotenv -- pnpm --filter @cleandev/pm db:migrate"
+    "db:generate": "dotenv -- pnpm --filter @cleandev/db db:generate",
+    "db:migrate": "dotenv -- pnpm --filter @cleandev/db db:migrate"
   },
   "repository": {
     "type": "git",

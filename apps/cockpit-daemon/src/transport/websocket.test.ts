@@ -217,11 +217,11 @@ async function makeTempDb() {
 const silentLogger = createLogger({ stdout: () => {}, stderr: () => {} });
 
 /** Queue one or more minimal events into the DB outbox. */
-function queueTestEvent(db: LocalDaemonDb, n = 1) {
+function queueTestEvent(db: LocalDaemonDb, n = 1, schemaVersion: 1 | 2 = 1) {
   for (let i = 0; i < n; i++) {
     db.queueEvent({
       event: {
-        schemaVersion: 1,
+        schemaVersion,
         eventId: randomUUID(),
         occurredAt: new Date().toISOString(),
         source: 'live',
@@ -243,6 +243,26 @@ function queueTestEvent(db: LocalDaemonDb, n = 1) {
       },
     });
   }
+}
+
+function queueV2OnlyEvent(db: LocalDaemonDb) {
+  db.queueEvent({
+    event: {
+      schemaVersion: 2,
+      eventId: randomUUID(),
+      occurredAt: new Date().toISOString(),
+      source: 'live',
+      projectId: 'proj-1',
+      deviceId: 'device-1',
+      type: 'task_handoff_seen',
+      payload: {
+        planId: 'plan-1',
+        taskId: 'task-1',
+        taskName: 'Task 1',
+        handoffContent: 'done',
+      },
+    },
+  });
 }
 
 /**
@@ -279,6 +299,18 @@ function waitForConnection(server: TestServer): Promise<{ ws: WebSocket; mq: Mes
   });
 }
 
+function sendServerHello(ws: WebSocket, schemaVersion: 1 | 2 = 1) {
+  ws.send(
+    JSON.stringify({
+      type: 'server_hello',
+      schemaVersion,
+      connectionId: randomUUID(),
+      serverTime: new Date().toISOString(),
+      heartbeatIntervalMs: 30_000,
+    }),
+  );
+}
+
 // ── buildWsUrl ─────────────────────────────────────────────────────────────────
 
 describe('buildWsUrl', () => {
@@ -302,14 +334,16 @@ describe('buildWsUrl', () => {
 // ── client_hello ───────────────────────────────────────────────────────────────
 
 describe('client_hello', () => {
-  it('sends client_hello immediately after connecting', async () => {
+  it('sends client_hello after receiving server_hello', async () => {
     const server = await startTestServer();
     const { db } = await makeTempDb();
 
     const connPromise = waitForConnection(server);
     makeTransport(server, db);
 
-    const { mq } = await connPromise;
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
     const msg = (await mq.waitForType('client_hello')) as {
       type: string;
       sessionId: string;
@@ -331,7 +365,7 @@ describe('client_hello', () => {
 // ── event_batch ────────────────────────────────────────────────────────────────
 
 describe('event_batch', () => {
-  it('sends pending outbox events as event_batch after connecting', async () => {
+  it('sends pending outbox events as event_batch after server_hello', async () => {
     const server = await startTestServer();
     const { db } = await makeTempDb();
     queueTestEvent(db, 3);
@@ -339,7 +373,9 @@ describe('event_batch', () => {
     const connPromise = waitForConnection(server);
     makeTransport(server, db);
 
-    const { mq } = await connPromise;
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
     const batchMsg = (await mq.waitForType('event_batch')) as {
       type: string;
       payload: { batchId: string; events: unknown[] };
@@ -357,7 +393,8 @@ describe('event_batch', () => {
     const connPromise = waitForConnection(server);
     makeTransport(server, db);
 
-    const { mq } = await connPromise;
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
     // Collect messages for 100 ms – should only see client_hello
     const msgs = await mq.collectFor(100);
     const types = (msgs as Array<Record<string, unknown>>).map((m) => m.type);
@@ -374,12 +411,55 @@ describe('event_batch', () => {
     const connPromise = waitForConnection(server);
     makeTransport(server, db, { batchSize: 3 });
 
-    const { mq } = await connPromise;
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
     const batchMsg = (await mq.waitForType('event_batch')) as {
       payload: { events: unknown[] };
     };
 
     expect(batchMsg.payload.events).toHaveLength(3);
+  });
+
+  it('uses the server_hello protocol version for outbound batches and queued events', async () => {
+    const server = await startTestServer();
+    const { db } = await makeTempDb();
+    queueTestEvent(db, 1, 2);
+
+    const connPromise = waitForConnection(server);
+    makeTransport(server, db);
+
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
+    const helloMsg = (await mq.waitForType('client_hello')) as { schemaVersion: number };
+    const batchMsg = (await mq.waitForType('event_batch')) as {
+      schemaVersion: number;
+      payload: { events: Array<{ schemaVersion: number }> };
+    };
+
+    expect(helloMsg.schemaVersion).toBe(1);
+    expect(batchMsg.schemaVersion).toBe(1);
+    expect(batchMsg.payload.events[0]?.schemaVersion).toBe(1);
+  });
+
+  it('locally drops v2-only events when connected to a v1 server', async () => {
+    const server = await startTestServer();
+    const { db } = await makeTempDb();
+    queueV2OnlyEvent(db);
+
+    const connPromise = waitForConnection(server);
+    makeTransport(server, db);
+
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
+    await mq.waitForType('client_hello');
+    const msgs = await mq.collectFor(100);
+    const types = (msgs as Array<Record<string, unknown>>).map((m) => m.type);
+
+    expect(types).not.toContain('event_batch');
+    expect(db.getState().pendingEventCount).toBe(0);
   });
 });
 
@@ -395,6 +475,8 @@ describe('event_batch_ack', () => {
     makeTransport(server, db);
 
     const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
     const batchMsg = (await mq.waitForType('event_batch')) as {
       payload: { batchId: string; events: Array<{ sequence: number }> };
     };
@@ -434,6 +516,7 @@ describe('event_batch_ack', () => {
     makeTransport(server, db, { batchSize: 3 });
 
     const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
 
     // First batch
     const batch1 = (await mq.waitForType('event_batch')) as {
@@ -478,8 +561,6 @@ describe('client_heartbeat', () => {
 
     const { ws: serverWs, mq } = await connPromise;
 
-    // Wait for client_hello, then send server_hello with a short heartbeat interval
-    await mq.waitForType('client_hello');
     serverWs.send(
       JSON.stringify({
         type: 'server_hello',
@@ -489,6 +570,7 @@ describe('client_heartbeat', () => {
         heartbeatIntervalMs: 80,
       }),
     );
+    await mq.waitForType('client_hello');
 
     // Should receive a heartbeat within a few intervals
     const hb = (await mq.waitForType('client_heartbeat')) as {
@@ -615,7 +697,8 @@ describe('flush', () => {
     const connPromise = waitForConnection(server);
     const transport = makeTransport(server, db);
 
-    const { mq } = await connPromise;
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
     // Consume client_hello so it doesn't interfere
     await mq.waitForType('client_hello');
 
@@ -652,6 +735,7 @@ describe('server_error', () => {
     makeTransport(server, db, { logger: testLogger });
 
     const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
     await mq.waitForType('client_hello');
 
     serverWs.send(

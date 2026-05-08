@@ -101,6 +101,9 @@ importers:
       '@cleandev/cockpit-store':
         specifier: workspace:*
         version: link:../../packages/cockpit-store
+      '@cleandev/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@cleandev/pm':
         specifier: workspace:*
         version: link:../../packages/pm
@@ -316,9 +319,9 @@ importers:
       '@cleandev/cockpit-protocol':
         specifier: workspace:*
         version: link:../cockpit-protocol
-      '@cleandev/pm':
+      '@cleandev/db':
         specifier: workspace:*
-        version: link:../pm
+        version: link:../db
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@types/pg@8.16.0)(gel@2.2.0)(pg@8.17.2)
@@ -329,6 +332,40 @@ importers:
       '@types/pg':
         specifier: ^8.11.10
         version: 8.16.0
+      tsx:
+        specifier: ^4.19.2
+        version: 4.21.0
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/db:
+    dependencies:
+      '@cleandev/cockpit-protocol':
+        specifier: workspace:*
+        version: link:../cockpit-protocol
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(@types/pg@8.16.0)(gel@2.2.0)(pg@8.17.2)
+      pg:
+        specifier: ^8.13.1
+        version: 8.17.2
+    devDependencies:
+      '@cleandev/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@types/node':
+        specifier: ^22
+        version: 22.18.12
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.16.0
+      drizzle-kit:
+        specifier: ^0.30.2
+        version: 0.30.6
+      eslint:
+        specifier: ^9.18.0
+        version: 9.39.4(jiti@1.21.7)
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
@@ -350,6 +387,9 @@ importers:
       '@cleandev/cockpit-protocol':
         specifier: workspace:*
         version: link:../cockpit-protocol
+      '@cleandev/db':
+        specifier: workspace:*
+        version: link:../db
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@types/pg@8.16.0)(gel@2.2.0)(pg@8.17.2)
@@ -372,9 +412,6 @@ importers:
       '@types/pg':
         specifier: ^8.11.10
         version: 8.16.0
-      drizzle-kit:
-        specifier: ^0.30.2
-        version: 0.30.6
       eslint:
         specifier: ^9.18.0
         version: 9.39.2(jiti@1.21.7)
@@ -10045,7 +10082,7 @@ snapshots:
       '@petamoriken/float16': 3.9.3
       debug: 4.4.3
       env-paths: 3.0.0
-      semver: 7.7.3
+      semver: 7.7.4
       shell-quote: 1.8.3
       which: 4.0.0
     transitivePeerDependencies:

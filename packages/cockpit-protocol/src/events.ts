@@ -2,10 +2,12 @@ import { z } from 'zod';
 
 import {
   cockpitProtocolSchemaVersion,
-  cockpitProtocolSchemaVersionSchema,
+  supportedCockpitProtocolSchemaVersionSchema,
   identifierSchema,
   isoDateTimeSchema,
   longTextSchema,
+  projectObservationConfigSchema,
+  relativeFilePathSchema,
   shortTextSchema,
   telemetryProfileSchema,
 } from './config';
@@ -13,6 +15,33 @@ import {
 export const taskLifecycleStatusSchema = z.enum(['pending', 'running', 'done', 'failed', 'retrying']);
 export const progressEntryStatusSchema = z.enum(['running', 'done', 'error']);
 export const eventSourceSchema = z.enum(['live', 'archive']);
+export const archiveReviewStatusSchema = z.enum(['pending', 'reviewed', 'dismissed']);
+
+const contentHashSchema = z.string().regex(/^[0-9a-f]{64}$/i);
+const hexShaSchema = z.string().regex(/^[0-9a-f]{7,40}$/i);
+const usdAmountSchema = z.number().nonnegative();
+
+export const branchUpstreamSchema = z.object({
+  remoteName: shortTextSchema.nullable().optional(),
+  remoteBranch: shortTextSchema.nullable().optional(),
+  trackingBranch: shortTextSchema.nullable().optional(),
+  aheadCount: z.number().int().nonnegative().nullable().optional(),
+  behindCount: z.number().int().nonnegative().nullable().optional(),
+  lastFetchedAt: isoDateTimeSchema.nullable().optional(),
+});
+
+export type BranchUpstream = z.infer<typeof branchUpstreamSchema>;
+
+export const deviceObservationMetadataSchema = z.object({
+  deviceName: shortTextSchema.nullable().optional(),
+  instanceName: shortTextSchema.nullable().optional(),
+  hostname: shortTextSchema.nullable().optional(),
+  platform: shortTextSchema.nullable().optional(),
+  appVersion: shortTextSchema.nullable().optional(),
+  labels: z.array(shortTextSchema).max(20).default([]),
+});
+
+export type DeviceObservationMetadata = z.infer<typeof deviceObservationMetadataSchema>;
 
 export const tokenUsageSchema = z.object({
   inputTokens: z.number().int().nonnegative().default(0),
@@ -32,12 +61,37 @@ export const taskExecutionSchema = z.object({
 
 export type TaskExecution = z.infer<typeof taskExecutionSchema>;
 
+export const usageCostEstimateSchema = z.object({
+  currency: z.literal('USD').default('USD'),
+  inputCost: usdAmountSchema.default(0),
+  outputCost: usdAmountSchema.default(0),
+  totalCost: usdAmountSchema.default(0),
+  pricingSource: shortTextSchema.nullable().optional(),
+});
+
+export type UsageCostEstimate = z.infer<typeof usageCostEstimateSchema>;
+
+export const archiveMetadataSchema = z.object({
+  archiveId: identifierSchema.nullable().optional(),
+  archivePath: relativeFilePathSchema.nullable().optional(),
+  archivedAt: isoDateTimeSchema.nullable().optional(),
+  reviewStatus: archiveReviewStatusSchema.optional(),
+  reviewNotes: z.string().max(4_000).nullable().optional(),
+  reviewedAt: isoDateTimeSchema.nullable().optional(),
+  runId: identifierSchema.nullable().optional(),
+});
+
+export type ArchiveMetadata = z.infer<typeof archiveMetadataSchema>;
+
 export const worktreeSnapshotSchema = z.object({
   worktreeId: identifierSchema,
   repoRootPath: z.string().min(1).max(2_000).nullable().optional(),
   worktreePath: z.string().min(1).max(2_000).nullable().optional(),
+  displayName: shortTextSchema.nullable().optional(),
+  groupName: shortTextSchema.nullable().optional(),
   branch: shortTextSchema.nullable().optional(),
-  headSha: z.string().regex(/^[0-9a-f]{7,40}$/i).nullable().optional(),
+  branchUpstream: branchUpstreamSchema.nullable().optional(),
+  headSha: hexShaSchema.nullable().optional(),
   isDirty: z.boolean(),
   untrackedCount: z.number().int().nonnegative().default(0),
   aheadCount: z.number().int().nonnegative().nullable().optional(),
@@ -51,14 +105,19 @@ export const planTaskSummarySchema = z.object({
   taskId: identifierSchema,
   slug: identifierSchema.optional(),
   name: shortTextSchema,
+  status: taskLifecycleStatusSchema.optional(),
+  source: eventSourceSchema.optional(),
   dependsOn: z.array(identifierSchema).max(100).default([]),
   description: longTextSchema.nullable().optional(),
+  usage: tokenUsageSchema.optional(),
+  costEstimate: usageCostEstimateSchema.optional(),
+  archive: archiveMetadataSchema.nullable().optional(),
 }).merge(taskExecutionSchema);
 
 export type PlanTaskSummary = z.infer<typeof planTaskSummarySchema>;
 
 const eventMetadataSchema = z.object({
-  schemaVersion: cockpitProtocolSchemaVersionSchema.default(cockpitProtocolSchemaVersion),
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema.default(cockpitProtocolSchemaVersion),
   eventId: identifierSchema,
   sequence: z.number().int().nonnegative(),
   occurredAt: isoDateTimeSchema,
@@ -82,12 +141,17 @@ export const projectSeenEventSchema = buildEventSchema('project_seen', {
   projectName: shortTextSchema.nullable().optional(),
   telemetry: telemetryProfileSchema,
   localRootPath: z.string().min(1).max(2_000).nullable().optional(),
+  worktreeRootPath: z.string().min(1).max(2_000).nullable().optional(),
+  observation: projectObservationConfigSchema.optional(),
 });
 
 export const projectHeartbeatEventSchema = buildEventSchema('project_heartbeat', {
   daemonVersion: shortTextSchema.nullable().optional(),
   activePlanId: identifierSchema.nullable().optional(),
   activeTaskCount: z.number().int().nonnegative().default(0),
+  device: deviceObservationMetadataSchema.optional(),
+  projectUsage: tokenUsageSchema.optional(),
+  projectCostEstimate: usageCostEstimateSchema.optional(),
 });
 
 export const worktreeSeenEventSchema = buildEventSchema('worktree_seen', {
@@ -96,7 +160,7 @@ export const worktreeSeenEventSchema = buildEventSchema('worktree_seen', {
 
 export const worktreeChangedEventSchema = buildEventSchema('worktree_changed', {
   worktree: worktreeSnapshotSchema,
-  previousHeadSha: z.string().regex(/^[0-9a-f]{7,40}$/i).nullable().optional(),
+  previousHeadSha: hexShaSchema.nullable().optional(),
 });
 
 export const planSeenEventSchema = buildEventSchema('plan_seen', {
@@ -107,6 +171,9 @@ export const planSeenEventSchema = buildEventSchema('plan_seen', {
   splitAt: isoDateTimeSchema.nullable().optional(),
   taskCount: z.number().int().nonnegative(),
   tasks: z.array(planTaskSummarySchema).max(500).default([]),
+  archive: archiveMetadataSchema.nullable().optional(),
+  usage: tokenUsageSchema.optional(),
+  costEstimate: usageCostEstimateSchema.optional(),
 });
 
 export const taskSeenEventSchema = buildEventSchema('task_seen', {
@@ -117,6 +184,9 @@ export const taskSeenEventSchema = buildEventSchema('task_seen', {
   dependsOn: z.array(identifierSchema).max(100).default([]),
   description: longTextSchema.nullable().optional(),
   execution: taskExecutionSchema,
+  detailPath: relativeFilePathSchema.nullable().optional(),
+  detailContent: z.string().max(12_000).nullable().optional(),
+  archive: archiveMetadataSchema.nullable().optional(),
 });
 
 export const taskStartedEventSchema = buildEventSchema('task_started', {
@@ -127,6 +197,7 @@ export const taskStartedEventSchema = buildEventSchema('task_started', {
   startedAt: isoDateTimeSchema,
   worktreeId: identifierSchema.nullable().optional(),
   execution: taskExecutionSchema,
+  archive: archiveMetadataSchema.nullable().optional(),
 });
 
 export const taskProgressedEventSchema = buildEventSchema('task_progressed', {
@@ -150,6 +221,8 @@ export const taskCompletedEventSchema = buildEventSchema('task_completed', {
   durationMs: z.number().int().nonnegative().nullable().optional(),
   retries: z.number().int().nonnegative().default(0),
   usage: tokenUsageSchema.optional(),
+  costEstimate: usageCostEstimateSchema.optional(),
+  archive: archiveMetadataSchema.nullable().optional(),
 });
 
 export const taskFailedEventSchema = buildEventSchema('task_failed', {
@@ -163,6 +236,8 @@ export const taskFailedEventSchema = buildEventSchema('task_failed', {
   retries: z.number().int().nonnegative().default(0),
   error: longTextSchema,
   usage: tokenUsageSchema.optional(),
+  costEstimate: usageCostEstimateSchema.optional(),
+  archive: archiveMetadataSchema.nullable().optional(),
 });
 
 export const usageReportedEventSchema = buildEventSchema('usage_reported', {
@@ -170,6 +245,24 @@ export const usageReportedEventSchema = buildEventSchema('usage_reported', {
   taskId: identifierSchema.nullable().optional(),
   status: taskLifecycleStatusSchema.optional(),
   usage: tokenUsageSchema,
+  costEstimate: usageCostEstimateSchema.optional(),
+  archive: archiveMetadataSchema.nullable().optional(),
+});
+
+export const taskHandoffSeenEventSchema = buildEventSchema('task_handoff_seen', {
+  planId: identifierSchema,
+  taskId: identifierSchema,
+  taskName: shortTextSchema,
+  handoffContent: z.string().max(8_000).nullable().optional(),
+  contentHash: contentHashSchema.nullable().optional(),
+});
+
+export const taskOutputSeenEventSchema = buildEventSchema('task_output_seen', {
+  planId: identifierSchema,
+  taskId: identifierSchema,
+  taskName: shortTextSchema,
+  outputTail: z.string().max(4_000).nullable().optional(),
+  contentHash: contentHashSchema.nullable().optional(),
 });
 
 export const cockpitEventSchema = z.discriminatedUnion('type', [
@@ -184,6 +277,8 @@ export const cockpitEventSchema = z.discriminatedUnion('type', [
   taskCompletedEventSchema,
   taskFailedEventSchema,
   usageReportedEventSchema,
+  taskHandoffSeenEventSchema,
+  taskOutputSeenEventSchema,
 ]);
 
 export type CockpitEvent = z.infer<typeof cockpitEventSchema>;
@@ -198,3 +293,5 @@ export type TaskProgressedEvent = z.infer<typeof taskProgressedEventSchema>;
 export type TaskCompletedEvent = z.infer<typeof taskCompletedEventSchema>;
 export type TaskFailedEvent = z.infer<typeof taskFailedEventSchema>;
 export type UsageReportedEvent = z.infer<typeof usageReportedEventSchema>;
+export type TaskHandoffSeenEvent = z.infer<typeof taskHandoffSeenEventSchema>;
+export type TaskOutputSeenEvent = z.infer<typeof taskOutputSeenEventSchema>;

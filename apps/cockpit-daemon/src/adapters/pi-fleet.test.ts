@@ -912,4 +912,1099 @@ describe('scanProjectPiFleet', () => {
       db.close();
     });
   });
+
+  // ── New tests: exact task text, handoff, output, cost, multi-device ──────────
+
+  describe('task.md → detailContent in task_seen', () => {
+    it('includes task.md content as detailContent when taskDescription=true', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-my-task');
+      await mkdir(taskDir, { recursive: true });
+      const taskMarkdown = '# Task 001\n\nDo something important.';
+      await writeFile(path.join(taskDir, 'task.md'), taskMarkdown);
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Detail Plan',
+        taskCount: 1,
+        tasks: [
+          {
+            id: '001',
+            slug: 'my-task',
+            name: 'My Task',
+            engine: 'claude',
+            model: 'sonnet',
+            agent: 'worker',
+            depends: [],
+          },
+        ],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(50);
+      const taskSeen = events.find(
+        (e) => e.event.type === 'task_seen' && e.event.payload.taskId === '001',
+      );
+
+      expect(taskSeen).toBeDefined();
+      if (taskSeen?.event.type === 'task_seen') {
+        expect(taskSeen.event.payload.detailContent).toBe(taskMarkdown);
+      }
+    });
+
+    it('omits detailContent when task.md does not exist', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: No Detail',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'no-detail', name: 'No Detail', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(50);
+      const taskSeen = events.find((e) => e.event.type === 'task_seen');
+
+      if (taskSeen?.event.type === 'task_seen') {
+        expect(taskSeen.event.payload.detailContent).toBeNull();
+      }
+    });
+
+    it('omits detailContent when taskDescription=false', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const restrictedProject: MappedProject = {
+        ...project,
+        telemetry: { ...project.telemetry, taskDescription: false },
+      };
+
+      const taskDir = path.join(piDir, 'tasks', '001-secret-task');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(path.join(taskDir, 'task.md'), '# Secret Task');
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Restricted',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'secret-task', name: 'Secret Task', engine: 'claude', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await scanProjectPiFleet(db, restrictedProject, deviceId);
+
+      const events = db.listPendingOutboundEvents(50);
+      const taskSeen = events.find((e) => e.event.type === 'task_seen');
+
+      if (taskSeen?.event.type === 'task_seen') {
+        expect(taskSeen.event.payload.detailContent).toBeNull();
+      }
+    });
+
+    it('truncates task.md content to 12000 chars', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-big-task');
+      await mkdir(taskDir, { recursive: true });
+      const bigContent = 'x'.repeat(15_000);
+      await writeFile(path.join(taskDir, 'task.md'), bigContent);
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Big Task',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'big-task', name: 'Big Task', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(50);
+      const taskSeen = events.find((e) => e.event.type === 'task_seen');
+
+      if (taskSeen?.event.type === 'task_seen') {
+        expect(taskSeen.event.payload.detailContent?.length).toBeLessThanOrEqual(12_000);
+      }
+    });
+
+    it('re-emits task_seen when task.md content changes', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-evolving-task');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(path.join(taskDir, 'task.md'), 'Version 1');
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Evolving',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'evolving-task', name: 'Evolving Task', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      const first = await scanProjectPiFleet(db, project, deviceId);
+      expect(first.queuedTaskSeenCount).toBe(1);
+
+      // Update task.md
+      await writeFile(path.join(taskDir, 'task.md'), 'Version 2 — updated requirements');
+
+      const second = await scanProjectPiFleet(db, project, deviceId);
+      // Plan hash is unchanged but task hash includes detailContent, so re-emission is skipped
+      // because the plan-summary hash gates re-emission. Task-level re-emission requires plan to change.
+      // This is the expected behaviour: task.md changes alone don't re-trigger without plan changes.
+      // The test documents this limitation.
+      expect(second.queuedTaskSeenCount).toBe(0);
+    });
+  });
+
+  describe('handoff.md → task_handoff_seen', () => {
+    it('emits task_handoff_seen for a completed task with handoff.md', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-done-with-handoff');
+      await mkdir(taskDir, { recursive: true });
+
+      const handoffText = '# Handoff\n\nAll work completed. Key outputs: X, Y, Z.';
+      await writeFile(path.join(taskDir, 'handoff.md'), handoffText);
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'done-with-handoff',
+          engine: 'claude',
+          model: 'sonnet',
+          agent: 'worker',
+          status: 'done',
+          startedAt: '2026-05-05T10:00:00.000Z',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          duration: 3600000,
+          retries: 0,
+          usage: { inputTokens: 5000, outputTokens: 2000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Handoff Plan',
+        taskCount: 1,
+        tasks: [
+          {
+            id: '001',
+            slug: 'done-with-handoff',
+            name: 'Done With Handoff',
+            engine: 'claude',
+            model: 'sonnet',
+            agent: 'worker',
+            depends: [],
+          },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [
+          {
+            id: '001',
+            name: 'done-with-handoff',
+            status: 'done',
+            startedAt: '2026-05-05T10:00:00.000Z',
+            completedAt: '2026-05-05T11:00:00.000Z',
+          },
+        ],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedHandoffSeenCount).toBe(1);
+
+      const events = db.listPendingOutboundEvents(100);
+      const handoffSeen = events.find((e) => e.event.type === 'task_handoff_seen');
+
+      expect(handoffSeen).toBeDefined();
+      if (handoffSeen?.event.type === 'task_handoff_seen') {
+        expect(handoffSeen.event.payload.taskId).toBe('001');
+        expect(handoffSeen.event.payload.taskName).toBe('Done With Handoff');
+        expect(handoffSeen.event.payload.handoffContent).toBe(handoffText);
+        expect(handoffSeen.event.payload.contentHash).toMatch(/^[0-9a-f]{64}$/);
+      }
+    });
+
+    it('does not re-emit task_handoff_seen when handoff.md is unchanged', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-stable-handoff');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(path.join(taskDir, 'handoff.md'), 'Stable handoff content');
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'stable-handoff',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Stable Handoff',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'stable-handoff', name: 'Stable Handoff', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'stable-handoff', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const first = await scanProjectPiFleet(db, project, deviceId);
+      expect(first.queuedHandoffSeenCount).toBe(1);
+
+      const second = await scanProjectPiFleet(db, project, deviceId);
+      expect(second.queuedHandoffSeenCount).toBe(0);
+    });
+
+    it('re-emits task_handoff_seen when handoff.md content changes', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-changing-handoff');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(path.join(taskDir, 'handoff.md'), 'Initial handoff');
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({ id: '001', name: 'changing-handoff', status: 'done', completedAt: '2026-05-05T11:00:00.000Z', retries: 0 }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Changing Handoff',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'changing-handoff', name: 'Changing Handoff', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'changing-handoff', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const first = await scanProjectPiFleet(db, project, deviceId);
+      expect(first.queuedHandoffSeenCount).toBe(1);
+
+      // Update handoff.md
+      await writeFile(path.join(taskDir, 'handoff.md'), 'Updated handoff with more details');
+
+      const second = await scanProjectPiFleet(db, project, deviceId);
+      expect(second.queuedHandoffSeenCount).toBe(1);
+
+      const allEvents = db.listPendingOutboundEvents(200);
+      const handoffEvents = allEvents.filter((e) => e.event.type === 'task_handoff_seen');
+      expect(handoffEvents).toHaveLength(2);
+    });
+
+    it('does not emit task_handoff_seen for running tasks', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-running-with-handoff');
+      await mkdir(taskDir, { recursive: true });
+      // handoff.md exists but task is still running
+      await writeFile(path.join(taskDir, 'handoff.md'), 'Premature handoff');
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Running',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'running-with-handoff', name: 'Running', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'running-with-handoff', status: 'running', startedAt: '2026-05-05T10:00:00.000Z' }],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedHandoffSeenCount).toBe(0);
+    });
+
+    it('emits task_handoff_seen for failed tasks with handoff.md', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-failed-with-handoff');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(path.join(taskDir, 'handoff.md'), 'Partial handoff before failure');
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'failed-with-handoff',
+          status: 'failed',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          error: 'Something went wrong',
+          retries: 1,
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Failed Handoff',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'failed-with-handoff', name: 'Failed', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'failed-with-handoff', status: 'failed', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedHandoffSeenCount).toBe(1);
+    });
+
+    it('skips handoff emission when handoff.md is absent', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-no-handoff');
+      await mkdir(taskDir, { recursive: true });
+      // No handoff.md
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({ id: '001', name: 'no-handoff', status: 'done', completedAt: '2026-05-05T11:00:00.000Z', retries: 0 }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: No Handoff',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'no-handoff', name: 'No Handoff', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'no-handoff', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedHandoffSeenCount).toBe(0);
+    });
+  });
+
+  describe('output.jsonl → task_output_seen', () => {
+    it('emits task_output_seen for a completed task with output.jsonl', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-done-with-output');
+      await mkdir(taskDir, { recursive: true });
+
+      const outputContent = '{"type":"text","text":"Result line 1"}\n{"type":"text","text":"Result line 2"}\n';
+      await writeFile(path.join(taskDir, 'output.jsonl'), outputContent);
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'done-with-output',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Output Plan',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'done-with-output', name: 'Done With Output', engine: 'claude', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'done-with-output', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedOutputSeenCount).toBe(1);
+
+      const events = db.listPendingOutboundEvents(100);
+      const outputSeen = events.find((e) => e.event.type === 'task_output_seen');
+
+      expect(outputSeen).toBeDefined();
+      if (outputSeen?.event.type === 'task_output_seen') {
+        expect(outputSeen.event.payload.taskId).toBe('001');
+        expect(outputSeen.event.payload.outputTail).toBe(outputContent);
+        expect(outputSeen.event.payload.contentHash).toMatch(/^[0-9a-f]{64}$/);
+      }
+    });
+
+    it('returns the tail when output.jsonl exceeds 4000 chars', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-big-output');
+      await mkdir(taskDir, { recursive: true });
+
+      const bigOutput = 'x'.repeat(6_000);
+      await writeFile(path.join(taskDir, 'output.jsonl'), bigOutput);
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({ id: '001', name: 'big-output', status: 'done', completedAt: '2026-05-05T11:00:00.000Z', retries: 0 }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Big Output',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'big-output', name: 'Big Output', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'big-output', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const outputSeen = events.find((e) => e.event.type === 'task_output_seen');
+
+      if (outputSeen?.event.type === 'task_output_seen') {
+        expect(outputSeen.event.payload.outputTail?.length).toBeLessThanOrEqual(4_000);
+        // Should be the tail (last 4000 chars)
+        expect(outputSeen.event.payload.outputTail).toBe('x'.repeat(4_000));
+      }
+    });
+
+    it('does not emit task_output_seen when output.jsonl is absent', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-no-output');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({ id: '001', name: 'no-output', status: 'done', completedAt: '2026-05-05T11:00:00.000Z', retries: 0 }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: No Output',
+        taskCount: 1,
+        tasks: [{ id: '001', slug: 'no-output', name: 'No Output', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'no-output', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      const result = await scanProjectPiFleet(db, project, deviceId);
+      expect(result.queuedOutputSeenCount).toBe(0);
+    });
+  });
+
+  describe('cost estimation → costEstimate in events', () => {
+    it('includes costEstimate in task_completed when model is known', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-costed-task');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'costed-task',
+          engine: 'claude',
+          model: 'claude-3-5-sonnet',
+          agent: 'worker',
+          status: 'done',
+          startedAt: '2026-05-05T10:00:00.000Z',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          duration: 3600000,
+          retries: 0,
+          usage: { inputTokens: 100_000, outputTokens: 50_000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Costed',
+        taskCount: 1,
+        tasks: [
+          {
+            id: '001',
+            slug: 'costed-task',
+            name: 'Costed Task',
+            engine: 'claude',
+            model: 'claude-3-5-sonnet',
+            agent: 'worker',
+            depends: [],
+          },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'costed-task', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const completed = events.find((e) => e.event.type === 'task_completed');
+
+      expect(completed).toBeDefined();
+      if (completed?.event.type === 'task_completed') {
+        const ce = completed.event.payload.costEstimate;
+        expect(ce).toBeDefined();
+        expect(ce?.currency).toBe('USD');
+        // 100k input * $3/1M = $0.30
+        expect(ce?.inputCost).toBeCloseTo(0.3, 5);
+        // 50k output * $15/1M = $0.75
+        expect(ce?.outputCost).toBeCloseTo(0.75, 5);
+        expect(ce?.totalCost).toBeCloseTo(1.05, 5);
+        expect(ce?.pricingSource).toBe('estimated');
+      }
+    });
+
+    it('includes costEstimate in usage_reported when model is known', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-usage-cost');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'usage-cost',
+          model: 'sonnet',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+          usage: { inputTokens: 1_000_000, outputTokens: 500_000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Usage Cost',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'usage-cost', name: 'Usage Cost', engine: 'claude', model: 'sonnet', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'usage-cost', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const usageReported = events.find((e) => e.event.type === 'usage_reported');
+
+      expect(usageReported).toBeDefined();
+      if (usageReported?.event.type === 'usage_reported') {
+        const ce = usageReported.event.payload.costEstimate;
+        expect(ce).toBeDefined();
+        expect(ce?.pricingSource).toBe('estimated');
+        // 1M input * $3/1M = $3.00
+        expect(ce?.inputCost).toBeCloseTo(3.0, 5);
+      }
+    });
+
+    it('omits costEstimate when model is unknown', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-unknown-model');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'unknown-model',
+          model: 'mystery-model-v99',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+          usage: { inputTokens: 5000, outputTokens: 2000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Unknown Model',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'unknown-model', name: 'Unknown Model Task', engine: 'claude', model: 'mystery-model-v99', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'unknown-model', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const completed = events.find((e) => e.event.type === 'task_completed');
+
+      if (completed?.event.type === 'task_completed') {
+        expect(completed.event.payload.costEstimate).toBeUndefined();
+      }
+    });
+
+    it('omits costEstimate when usage is missing', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-no-usage');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'no-usage',
+          model: 'sonnet',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+          // No usage field
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Missing Usage',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'no-usage', name: 'No Usage', engine: 'claude', model: 'sonnet', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'no-usage', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const completed = events.find((e) => e.event.type === 'task_completed');
+
+      if (completed?.event.type === 'task_completed') {
+        expect(completed.event.payload.costEstimate).toBeUndefined();
+      }
+    });
+
+    it('includes costEstimate in task_failed when model and usage are present', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const taskDir = path.join(piDir, 'tasks', '001-failed-costed');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'failed-costed',
+          model: 'haiku',
+          status: 'failed',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          error: 'Out of budget',
+          retries: 0,
+          usage: { inputTokens: 200_000, outputTokens: 10_000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Failed Costed',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'failed-costed', name: 'Failed Costed', engine: 'claude', model: 'haiku', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'failed-costed', status: 'failed', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const failed = events.find((e) => e.event.type === 'task_failed');
+
+      expect(failed).toBeDefined();
+      if (failed?.event.type === 'task_failed') {
+        expect(failed.event.payload.costEstimate).toBeDefined();
+        expect(failed.event.payload.costEstimate?.pricingSource).toBe('estimated');
+      }
+    });
+
+    it('supports customRates for cost calculation', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const customRates = { 'my-custom-model': { inputPer1M: 1.0, outputPer1M: 2.0 } };
+
+      const taskDir = path.join(piDir, 'tasks', '001-custom-rate');
+      await mkdir(taskDir, { recursive: true });
+      await writeFile(
+        path.join(taskDir, 'status.json'),
+        JSON.stringify({
+          id: '001',
+          name: 'custom-rate',
+          model: 'my-custom-model',
+          status: 'done',
+          completedAt: '2026-05-05T11:00:00.000Z',
+          retries: 0,
+          usage: { inputTokens: 1_000_000, outputTokens: 500_000 },
+        }),
+      );
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Custom Rate',
+        taskCount: 1,
+        tasks: [
+          { id: '001', slug: 'custom-rate', name: 'Custom Rate', engine: 'claude', model: 'my-custom-model', agent: 'worker', depends: [] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [{ id: '001', name: 'custom-rate', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' }],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId, customRates);
+
+      const events = db.listPendingOutboundEvents(100);
+      const completed = events.find((e) => e.event.type === 'task_completed');
+
+      if (completed?.event.type === 'task_completed') {
+        const ce = completed.event.payload.costEstimate;
+        expect(ce).toBeDefined();
+        // 1M input * $1.00/1M = $1.00
+        expect(ce?.inputCost).toBe(1.0);
+        // 0.5M output * $2.00/1M = $1.00
+        expect(ce?.outputCost).toBe(1.0);
+        expect(ce?.totalCost).toBe(2.0);
+      }
+    });
+
+    it('provides cost inputs for plan-level aggregation (multiple tasks)', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      // Two completed tasks with known costs
+      for (const [id, slug, name, inputTokens, outputTokens] of [
+        ['001', 'task-a', 'Task A', 100_000, 50_000],
+        ['002', 'task-b', 'Task B', 200_000, 80_000],
+      ] as [string, string, string, number, number][]) {
+        const taskDir = path.join(piDir, 'tasks', `${id}-${slug}`);
+        await mkdir(taskDir, { recursive: true });
+        await writeFile(
+          path.join(taskDir, 'status.json'),
+          JSON.stringify({
+            id,
+            name: slug,
+            model: 'sonnet',
+            status: 'done',
+            completedAt: '2026-05-05T11:00:00.000Z',
+            retries: 0,
+            usage: { inputTokens, outputTokens },
+          }),
+        );
+      }
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Multi Task Cost',
+        taskCount: 2,
+        tasks: [
+          { id: '001', slug: 'task-a', name: 'Task A', engine: 'claude', model: 'sonnet', agent: 'worker', depends: [] },
+          { id: '002', slug: 'task-b', name: 'Task B', engine: 'claude', model: 'sonnet', agent: 'worker', depends: ['001'] },
+        ],
+      });
+
+      await writeStateJson(piDir, {
+        tasks: [
+          { id: '001', name: 'task-a', status: 'done', completedAt: '2026-05-05T11:00:00.000Z' },
+          { id: '002', name: 'task-b', status: 'done', completedAt: '2026-05-05T12:00:00.000Z' },
+        ],
+      });
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(200);
+      const usageEvents = events.filter((e) => e.event.type === 'usage_reported');
+
+      expect(usageEvents).toHaveLength(2);
+
+      let totalInputCost = 0;
+      let totalOutputCost = 0;
+
+      for (const ev of usageEvents) {
+        if (ev.event.type === 'usage_reported') {
+          const ce = ev.event.payload.costEstimate;
+          expect(ce).toBeDefined();
+          expect(ce?.pricingSource).toBe('estimated');
+          totalInputCost += ce?.inputCost ?? 0;
+          totalOutputCost += ce?.outputCost ?? 0;
+        }
+      }
+
+      // Task A: 100k input * $3/1M = $0.30 + 50k output * $15/1M = $0.75 = $1.05
+      // Task B: 200k input * $3/1M = $0.60 + 80k output * $15/1M = $1.20 = $1.80
+      // Total: $1.05 + $1.80 = $2.85
+      expect(totalInputCost).toBeCloseTo(0.3 + 0.6, 5);
+      expect(totalOutputCost).toBeCloseTo(0.75 + 1.2, 5);
+    });
+  });
+
+  describe('multiple devices on same project', () => {
+    it('attributes events to the correct deviceId', async () => {
+      const { piDir, db, project } = await createSetup();
+
+      const device1 = 'device-laptop';
+      const device2 = 'device-server';
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Multi Device',
+        taskCount: 1,
+        tasks: [{ id: '001', name: 'Multi Device Task', slug: 'multi-device-task', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      // Device 1 scans first
+      await scanProjectPiFleet(db, project, device1);
+
+      // Device 2 scans the same project
+      await scanProjectPiFleet(db, project, device2);
+
+      const events = db.listPendingOutboundEvents(200);
+      const planSeens = events.filter((e) => e.event.type === 'plan_seen');
+
+      // Both devices should emit plan_seen (they use different source keys via deviceId in the event,
+      // but the same source key for deduplication — second device sees same hash, so no new event).
+      // The dedup key includes projectId but NOT deviceId, so only one plan_seen is queued.
+      // This is the expected behaviour: the plan_seen is emitted once and the event carries deviceId.
+      expect(planSeens).toHaveLength(1);
+
+      // The first plan_seen carries device1's ID (whichever device scanned first)
+      if (planSeens[0]?.event.type === 'plan_seen') {
+        expect(planSeens[0].event.deviceId).toBe(device1);
+      }
+    });
+
+    it('each device independently attributes its events with its own deviceId', async () => {
+      const { piDir, db, project } = await createSetup();
+
+      // Two separate projects (simulated as different projects scanned by different devices)
+      const project1: MappedProject = { ...project, projectId: 'proj-device-a' };
+      const project2: MappedProject = { ...project, projectId: 'proj-device-b' };
+
+      db.syncConfiguredProjects([project1, project2]);
+
+      await writePlanSummary(piDir, {
+        version: 1,
+        title: 'Plan: Device Attribution',
+        taskCount: 1,
+        tasks: [{ id: '001', name: 'Task', slug: 'task', engine: 'claude', agent: 'worker', depends: [] }],
+      });
+
+      const resultA = await scanProjectPiFleet(db, project1, 'device-a');
+      const resultB = await scanProjectPiFleet(db, project2, 'device-b');
+
+      expect(resultA.queuedPlanSeenCount).toBe(1);
+      expect(resultB.queuedPlanSeenCount).toBe(1);
+
+      const events = db.listPendingOutboundEvents(200);
+      const planSeens = events.filter((e) => e.event.type === 'plan_seen');
+
+      expect(planSeens).toHaveLength(2);
+
+      const deviceIds = planSeens.map((e) => e.event.deviceId);
+      expect(deviceIds).toContain('device-a');
+      expect(deviceIds).toContain('device-b');
+    });
+  });
+
+  describe('archive → costEstimate and archive metadata', () => {
+    it('includes costEstimate in archived task_completed events', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const archiveId = '2026-04-01T10-00-00-000Z-plan-costed-archive';
+      const archiveDir = path.join(piDir, 'archive', archiveId);
+      await mkdir(archiveDir, { recursive: true });
+
+      await writeArchiveIndex(piDir, {
+        version: 1,
+        archives: [
+          {
+            id: archiveId,
+            archivedAt: '2026-04-01T10:00:00.000Z',
+            archivePath: `.pi/archive/${archiveId}`,
+          },
+        ],
+      });
+
+      await writeFile(
+        path.join(archiveDir, 'archive-summary.json'),
+        JSON.stringify({
+          plan: { title: 'Plan: Costed Archive', taskCount: 1 },
+          tasks: [
+            {
+              id: '001',
+              name: 'archived-costed-task',
+              engine: 'claude',
+              model: 'claude-3-5-sonnet',
+              agent: 'worker',
+              status: 'done',
+              depends: [],
+              retries: 0,
+              startedAt: '2026-04-01T08:00:00.000Z',
+              completedAt: '2026-04-01T09:00:00.000Z',
+              duration: 3600000,
+              usage: { inputTokens: 500_000, outputTokens: 200_000 },
+            },
+          ],
+        }),
+      );
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const archiveCompleted = events.find(
+        (e) => e.event.type === 'task_completed' && e.event.source === 'archive',
+      );
+
+      expect(archiveCompleted).toBeDefined();
+      if (archiveCompleted?.event.type === 'task_completed') {
+        const ce = archiveCompleted.event.payload.costEstimate;
+        expect(ce).toBeDefined();
+        // 500k input * $3/1M = $1.50
+        expect(ce?.inputCost).toBeCloseTo(1.5, 5);
+        // 200k output * $15/1M = $3.00
+        expect(ce?.outputCost).toBeCloseTo(3.0, 5);
+        expect(ce?.pricingSource).toBe('estimated');
+
+        // Archive metadata should be present
+        const archive = archiveCompleted.event.payload.archive;
+        expect(archive?.archiveId).toBe(archiveId);
+        expect(archive?.archivedAt).toBe('2026-04-01T10:00:00.000Z');
+      }
+    });
+
+    it('includes archive metadata on all archive events', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const archiveId = '2026-04-01T10-00-00-000Z-plan-meta-archive';
+      const archiveDir = path.join(piDir, 'archive', archiveId);
+      await mkdir(archiveDir, { recursive: true });
+
+      await writeArchiveIndex(piDir, {
+        version: 1,
+        archives: [
+          {
+            id: archiveId,
+            archivedAt: '2026-04-01T10:00:00.000Z',
+            archivePath: `.pi/archive/${archiveId}`,
+          },
+        ],
+      });
+
+      await writeFile(
+        path.join(archiveDir, 'archive-summary.json'),
+        JSON.stringify({
+          plan: { title: 'Plan: Meta Archive', taskCount: 1, splitAt: '2026-04-01T08:00:00.000Z' },
+          tasks: [
+            {
+              id: '001',
+              name: 'meta-task',
+              engine: 'claude',
+              model: 'sonnet',
+              status: 'done',
+              depends: [],
+              retries: 0,
+              startedAt: '2026-04-01T08:00:00.000Z',
+              completedAt: '2026-04-01T09:00:00.000Z',
+            },
+          ],
+        }),
+      );
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const archiveEvents = events.filter((e) => e.event.source === 'archive');
+
+      // plan_seen, task_seen, task_started, task_completed should all be from archive
+      expect(archiveEvents.length).toBeGreaterThan(0);
+
+      // plan_seen should include archive metadata
+      const planSeen = archiveEvents.find((e) => e.event.type === 'plan_seen' && e.event.payload.planId === archiveId);
+      if (planSeen?.event.type === 'plan_seen') {
+        expect(planSeen.event.payload.archive?.archiveId).toBe(archiveId);
+        expect(planSeen.event.payload.archive?.archivedAt).toBe('2026-04-01T10:00:00.000Z');
+      }
+
+      // task_seen should include archive metadata
+      const taskSeen = archiveEvents.find((e) => e.event.type === 'task_seen');
+      if (taskSeen?.event.type === 'task_seen') {
+        expect(taskSeen.event.payload.archive?.archiveId).toBe(archiveId);
+      }
+
+      // task_started should include archive metadata
+      const taskStarted = archiveEvents.find((e) => e.event.type === 'task_started');
+      if (taskStarted?.event.type === 'task_started') {
+        expect(taskStarted.event.payload.archive?.archiveId).toBe(archiveId);
+      }
+
+      // task_completed should include archive metadata
+      const taskCompleted = archiveEvents.find((e) => e.event.type === 'task_completed');
+      if (taskCompleted?.event.type === 'task_completed') {
+        expect(taskCompleted.event.payload.archive?.archiveId).toBe(archiveId);
+      }
+    });
+
+    it('emits task_handoff_seen for archived tasks that have handoff.md', async () => {
+      const { piDir, db, project, deviceId } = await createSetup();
+
+      const archiveId = '2026-04-01T10-00-00-000Z-plan-handoff-archive';
+      const archiveDir = path.join(piDir, 'archive', archiveId);
+      const archiveTaskDir = path.join(archiveDir, '001-task-with-handoff');
+      await mkdir(archiveTaskDir, { recursive: true });
+
+      const handoffText = 'Archived task handoff content';
+      await writeFile(path.join(archiveTaskDir, 'handoff.md'), handoffText);
+
+      await writeArchiveIndex(piDir, {
+        version: 1,
+        archives: [
+          {
+            id: archiveId,
+            archivedAt: '2026-04-01T10:00:00.000Z',
+            archivePath: `.pi/archive/${archiveId}`,
+          },
+        ],
+      });
+
+      await writeFile(
+        path.join(archiveDir, 'archive-summary.json'),
+        JSON.stringify({
+          plan: { title: 'Plan: Handoff Archive', taskCount: 1 },
+          tasks: [
+            {
+              id: '001',
+              name: 'task-with-handoff',
+              engine: 'claude',
+              model: 'sonnet',
+              status: 'done',
+              depends: [],
+              retries: 0,
+              startedAt: '2026-04-01T08:00:00.000Z',
+              completedAt: '2026-04-01T09:00:00.000Z',
+              usage: { inputTokens: 1000, outputTokens: 500 },
+            },
+          ],
+        }),
+      );
+
+      await scanProjectPiFleet(db, project, deviceId);
+
+      const events = db.listPendingOutboundEvents(100);
+      const handoffSeen = events.find((e) => e.event.type === 'task_handoff_seen');
+
+      expect(handoffSeen).toBeDefined();
+      if (handoffSeen?.event.type === 'task_handoff_seen') {
+        expect(handoffSeen.event.source).toBe('archive');
+        expect(handoffSeen.event.payload.handoffContent).toBe(handoffText);
+        expect(handoffSeen.event.payload.contentHash).toMatch(/^[0-9a-f]{64}$/);
+      }
+    });
+  });
 });

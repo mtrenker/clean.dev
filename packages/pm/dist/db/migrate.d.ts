@@ -1,3 +1,8 @@
-import { Pool } from 'pg';
-export declare function runMigrations(pool: Pool): Promise<void>;
+/**
+ * Migration runner delegate.
+ *
+ * The migration infrastructure has moved to @cleandev/db.
+ * This module re-exports runMigrations for backward compatibility.
+ */
+export { runMigrations } from '@cleandev/db';
 //# sourceMappingURL=migrate.d.ts.map

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
@@ -8,6 +9,7 @@ import {
 } from '@cleandev/cockpit-protocol';
 
 import { type LocalDaemonDb, hashSnapshot } from '../local-db';
+import { estimateCost, type ModelPricingRate } from '../cost';
 
 // ── Raw .pi file types ─────────────────────────────────────────────────────────
 
@@ -147,6 +149,8 @@ export interface ProjectPiFleetScanResult {
   queuedTaskCompletedCount: number;
   queuedTaskFailedCount: number;
   queuedUsageReportedCount: number;
+  queuedHandoffSeenCount: number;
+  queuedOutputSeenCount: number;
   queuedArchiveEventCount: number;
 }
 
@@ -155,17 +159,22 @@ export interface ProjectPiFleetScanResult {
 /**
  * Scans .pi files in a project directory, emitting semantic cockpit events
  * (plan_seen, task_seen, task_started, task_progressed, task_completed,
- * task_failed, usage_reported) into the local outbox.
+ * task_failed, usage_reported, task_handoff_seen, task_output_seen) into the
+ * local outbox.
  *
  * All event emission is idempotent: events are deduplicated against already-
  * queued outbox entries by source key + snapshot hash. Progress JSONL files are
  * tailed from the stored byte offset so events are never re-emitted after
  * daemon restart.
+ *
+ * Cost fields on emitted events are ESTIMATES only (pricingSource: 'estimated').
+ * Do not use them for billing or financial reporting.
  */
 export const scanProjectPiFleet = async (
   db: LocalDaemonDb,
   project: MappedProject,
   deviceId: string,
+  customRates?: Record<string, ModelPricingRate>,
 ): Promise<ProjectPiFleetScanResult> => {
   const piDir = path.join(project.localRootPath, '.pi');
   const result: ProjectPiFleetScanResult = {
@@ -180,6 +189,8 @@ export const scanProjectPiFleet = async (
     queuedTaskCompletedCount: 0,
     queuedTaskFailedCount: 0,
     queuedUsageReportedCount: 0,
+    queuedHandoffSeenCount: 0,
+    queuedOutputSeenCount: 0,
     queuedArchiveEventCount: 0,
   };
 
@@ -242,7 +253,16 @@ export const scanProjectPiFleet = async (
 
       // Also emit task_seen for each task when the plan changes
       for (const task of planSummary.tasks ?? []) {
-        const taskHash = hashSnapshot(JSON.stringify(task));
+        const taskSlug = task.slug ?? task.name ?? task.id;
+        const taskDir = resolveTaskDir(piDir, task.id, taskSlug);
+
+        // Read task.md for detailContent (if telemetry allows and file exists)
+        const detailContent = project.telemetry.taskDescription && taskDir
+          ? await readTextFile(path.join(taskDir, 'task.md'), 12_000)
+          : null;
+
+        // Hash includes detailContent so a change to task.md triggers re-emission
+        const taskHash = hashSnapshot(JSON.stringify(task) + (detailContent ?? ''));
         const taskSourceKey = `pi-fleet:${project.projectId}:task-seen:${planId}:${task.id}`;
         const existingTask = db.getObservedFile(project.projectId, taskSourceKey);
 
@@ -265,6 +285,7 @@ export const scanProjectPiFleet = async (
                 description: project.telemetry.taskDescription
                   ? (task.description ?? null)
                   : null,
+                detailContent,
                 execution: buildTaskExecution(task),
               },
             },
@@ -293,6 +314,9 @@ export const scanProjectPiFleet = async (
 
       // Build taskName: prefer plan-summary human-readable name, fallback to state slug
       const taskName = planTask?.name ?? stateTask.name ?? stateTask.id;
+
+      // Resolve model for cost estimation: prefer status.json (set later), fallback to plan/state
+      const taskModel = planTask?.model ?? stateTask.model ?? null;
 
       if (stateTask.status === 'running') {
         const startedAt = stateTask.startedAt ?? now;
@@ -357,6 +381,7 @@ export const scanProjectPiFleet = async (
           : null;
 
         const completedAt = statusJson?.completedAt ?? stateTask.completedAt ?? now;
+        const resolvedModel = statusJson?.model ?? taskModel;
         const statusHash = hashSnapshot(
           JSON.stringify({
             id: stateTask.id,
@@ -378,6 +403,16 @@ export const scanProjectPiFleet = async (
                   }
                 : undefined;
 
+            const costEstimate =
+              usage && resolvedModel
+                ? (estimateCost(
+                    resolvedModel,
+                    usage.inputTokens,
+                    usage.outputTokens,
+                    customRates,
+                  ) ?? undefined)
+                : undefined;
+
             db.queueEvent({
               event: {
                 schemaVersion: cockpitProtocolSchemaVersion,
@@ -397,6 +432,7 @@ export const scanProjectPiFleet = async (
                   durationMs: statusJson?.duration ?? null,
                   retries: statusJson?.retries ?? 0,
                   usage,
+                  costEstimate,
                 },
               },
               source: {
@@ -413,6 +449,19 @@ export const scanProjectPiFleet = async (
               const existingUsage = db.getObservedFile(project.projectId, usageKey);
 
               if (existingUsage?.snapshotHash !== statusHash) {
+                const usageTokens = {
+                  inputTokens: statusJson.usage.inputTokens ?? 0,
+                  outputTokens: statusJson.usage.outputTokens ?? 0,
+                };
+                const usageCostEstimate = resolvedModel
+                  ? (estimateCost(
+                      resolvedModel,
+                      usageTokens.inputTokens,
+                      usageTokens.outputTokens,
+                      customRates,
+                    ) ?? undefined)
+                  : undefined;
+
                 db.queueEvent({
                   event: {
                     schemaVersion: cockpitProtocolSchemaVersion,
@@ -426,10 +475,8 @@ export const scanProjectPiFleet = async (
                       planId: activePlanId,
                       taskId: stateTask.id,
                       status: 'done',
-                      usage: {
-                        inputTokens: statusJson.usage.inputTokens ?? 0,
-                        outputTokens: statusJson.usage.outputTokens ?? 0,
-                      },
+                      usage: usageTokens,
+                      costEstimate: usageCostEstimate,
                     },
                   },
                   source: {
@@ -455,6 +502,16 @@ export const scanProjectPiFleet = async (
                   }
                 : undefined;
 
+            const costEstimate =
+              usage && resolvedModel
+                ? (estimateCost(
+                    resolvedModel,
+                    usage.inputTokens,
+                    usage.outputTokens,
+                    customRates,
+                  ) ?? undefined)
+                : undefined;
+
             db.queueEvent({
               event: {
                 schemaVersion: cockpitProtocolSchemaVersion,
@@ -475,6 +532,7 @@ export const scanProjectPiFleet = async (
                   retries: statusJson?.retries ?? 0,
                   error: statusJson?.error ?? 'unknown error',
                   usage,
+                  costEstimate,
                 },
               },
               source: {
@@ -491,6 +549,19 @@ export const scanProjectPiFleet = async (
               const existingUsage = db.getObservedFile(project.projectId, usageKey);
 
               if (existingUsage?.snapshotHash !== statusHash) {
+                const usageTokens = {
+                  inputTokens: statusJson.usage.inputTokens ?? 0,
+                  outputTokens: statusJson.usage.outputTokens ?? 0,
+                };
+                const usageCostEstimate = resolvedModel
+                  ? (estimateCost(
+                      resolvedModel,
+                      usageTokens.inputTokens,
+                      usageTokens.outputTokens,
+                      customRates,
+                    ) ?? undefined)
+                  : undefined;
+
                 db.queueEvent({
                   event: {
                     schemaVersion: cockpitProtocolSchemaVersion,
@@ -504,10 +575,8 @@ export const scanProjectPiFleet = async (
                       planId: activePlanId,
                       taskId: stateTask.id,
                       status: 'failed',
-                      usage: {
-                        inputTokens: statusJson.usage.inputTokens ?? 0,
-                        outputTokens: statusJson.usage.outputTokens ?? 0,
-                      },
+                      usage: usageTokens,
+                      costEstimate: usageCostEstimate,
                     },
                   },
                   source: {
@@ -520,6 +589,33 @@ export const scanProjectPiFleet = async (
               }
             }
           }
+        }
+
+        // ── Handoff + Output seen for completed/failed tasks ─────────────────
+        if (taskDir) {
+          const handoffCount = await emitHandoffSeen(
+            db,
+            project,
+            deviceId,
+            activePlanId,
+            stateTask.id,
+            taskName,
+            taskDir,
+            'live',
+          );
+          result.queuedHandoffSeenCount += handoffCount;
+
+          const outputCount = await emitOutputSeen(
+            db,
+            project,
+            deviceId,
+            activePlanId,
+            stateTask.id,
+            taskName,
+            taskDir,
+            'live',
+          );
+          result.queuedOutputSeenCount += outputCount;
         }
       }
     }
@@ -553,6 +649,11 @@ export const scanProjectPiFleet = async (
 
       const archivePlanId = archiveEntry.id;
       const archiveOccurredAt = archiveEntry.archivedAt;
+      const archiveMeta = {
+        archiveId: archivePlanId,
+        archivePath: archiveEntry.archivePath ?? null,
+        archivedAt: archiveOccurredAt,
+      };
       let archiveEventsCount = 0;
 
       // Emit plan_seen for the archived plan
@@ -591,6 +692,7 @@ export const scanProjectPiFleet = async (
                 profile: t.profile ?? null,
                 thinking: t.thinking ?? null,
               })),
+              archive: archiveMeta,
             },
           },
           source: {
@@ -610,6 +712,12 @@ export const scanProjectPiFleet = async (
         // task_seen
         const archiveTaskSeenKey = `pi-fleet:${project.projectId}:archive:${archiveEntry.id}:task-seen:${task.id}`;
         if (!db.getObservedFile(project.projectId, archiveTaskSeenKey)) {
+          // Try to read task.md from the archive task folder
+          const archiveTaskDir = resolveArchiveTaskDir(archiveDir, task.id, task.name);
+          const detailContent = project.telemetry.taskDescription && archiveTaskDir
+            ? await readTextFile(path.join(archiveTaskDir, 'task.md'), 12_000)
+            : null;
+
           db.queueEvent({
             event: {
               schemaVersion: cockpitProtocolSchemaVersion,
@@ -626,7 +734,9 @@ export const scanProjectPiFleet = async (
                 slug: task.name,
                 dependsOn: task.depends ?? [],
                 description: null,
+                detailContent,
                 execution: buildTaskExecution(task),
+                archive: archiveMeta,
               },
             },
             source: {
@@ -659,6 +769,7 @@ export const scanProjectPiFleet = async (
                   startedAt: task.startedAt,
                   worktreeId: null,
                   execution: buildTaskExecution(task),
+                  archive: archiveMeta,
                 },
               },
               source: {
@@ -683,6 +794,12 @@ export const scanProjectPiFleet = async (
                   }
                 : undefined;
 
+            const costEstimate =
+              usage && task.model
+                ? (estimateCost(task.model, usage.inputTokens, usage.outputTokens, customRates) ??
+                  undefined)
+                : undefined;
+
             db.queueEvent({
               event: {
                 schemaVersion: cockpitProtocolSchemaVersion,
@@ -702,6 +819,8 @@ export const scanProjectPiFleet = async (
                   durationMs: task.duration ?? null,
                   retries: task.retries ?? 0,
                   usage,
+                  costEstimate,
+                  archive: archiveMeta,
                 },
               },
               source: {
@@ -715,6 +834,19 @@ export const scanProjectPiFleet = async (
             if (project.telemetry.usage && task.usage) {
               const usageKey = `pi-fleet:${project.projectId}:archive:${archiveEntry.id}:usage-reported:${task.id}`;
               if (!db.getObservedFile(project.projectId, usageKey)) {
+                const usageTokens = {
+                  inputTokens: task.usage.inputTokens ?? 0,
+                  outputTokens: task.usage.outputTokens ?? 0,
+                };
+                const usageCostEstimate = task.model
+                  ? (estimateCost(
+                      task.model,
+                      usageTokens.inputTokens,
+                      usageTokens.outputTokens,
+                      customRates,
+                    ) ?? undefined)
+                  : undefined;
+
                 db.queueEvent({
                   event: {
                     schemaVersion: cockpitProtocolSchemaVersion,
@@ -728,10 +860,9 @@ export const scanProjectPiFleet = async (
                       planId: archivePlanId,
                       taskId: task.id,
                       status: 'done',
-                      usage: {
-                        inputTokens: task.usage.inputTokens ?? 0,
-                        outputTokens: task.usage.outputTokens ?? 0,
-                      },
+                      usage: usageTokens,
+                      costEstimate: usageCostEstimate,
+                      archive: archiveMeta,
                     },
                   },
                   source: {
@@ -741,6 +872,80 @@ export const scanProjectPiFleet = async (
                   },
                 });
                 archiveEventsCount += 1;
+              }
+            }
+
+            // Handoff + output seen for archived completed tasks
+            const archiveTaskDir = resolveArchiveTaskDir(archiveDir, task.id, task.name);
+            if (archiveTaskDir) {
+              const handoffKey = `pi-fleet:${project.projectId}:archive:${archiveEntry.id}:handoff:${task.id}`;
+              if (!db.getObservedFile(project.projectId, handoffKey)) {
+                const handoffContent = await readTextFile(
+                  path.join(archiveTaskDir, 'handoff.md'),
+                  8_000,
+                );
+                if (handoffContent !== null) {
+                  const contentHash = sha256Hex(handoffContent);
+                  db.queueEvent({
+                    event: {
+                      schemaVersion: cockpitProtocolSchemaVersion,
+                      eventId: randomUUID(),
+                      occurredAt: taskOccurredAt,
+                      source: 'archive',
+                      projectId: project.projectId,
+                      deviceId,
+                      type: 'task_handoff_seen',
+                      payload: {
+                        planId: archivePlanId,
+                        taskId: task.id,
+                        taskName: task.name,
+                        handoffContent,
+                        contentHash,
+                      },
+                    },
+                    source: {
+                      filePath: handoffKey,
+                      offset: 0,
+                      snapshotHash: '1',
+                    },
+                  });
+                  archiveEventsCount += 1;
+                }
+              }
+
+              const outputKey = `pi-fleet:${project.projectId}:archive:${archiveEntry.id}:output:${task.id}`;
+              if (!db.getObservedFile(project.projectId, outputKey)) {
+                const outputTail = await readFileTail(
+                  path.join(archiveTaskDir, 'output.jsonl'),
+                  4_000,
+                );
+                if (outputTail !== null) {
+                  const contentHash = sha256Hex(outputTail);
+                  db.queueEvent({
+                    event: {
+                      schemaVersion: cockpitProtocolSchemaVersion,
+                      eventId: randomUUID(),
+                      occurredAt: taskOccurredAt,
+                      source: 'archive',
+                      projectId: project.projectId,
+                      deviceId,
+                      type: 'task_output_seen',
+                      payload: {
+                        planId: archivePlanId,
+                        taskId: task.id,
+                        taskName: task.name,
+                        outputTail,
+                        contentHash,
+                      },
+                    },
+                    source: {
+                      filePath: outputKey,
+                      offset: 0,
+                      snapshotHash: '1',
+                    },
+                  });
+                  archiveEventsCount += 1;
+                }
               }
             }
           }
@@ -753,6 +958,12 @@ export const scanProjectPiFleet = async (
                     inputTokens: task.usage.inputTokens ?? 0,
                     outputTokens: task.usage.outputTokens ?? 0,
                   }
+                : undefined;
+
+            const costEstimate =
+              usage && task.model
+                ? (estimateCost(task.model, usage.inputTokens, usage.outputTokens, customRates) ??
+                  undefined)
                 : undefined;
 
             db.queueEvent({
@@ -775,6 +986,8 @@ export const scanProjectPiFleet = async (
                   retries: task.retries ?? 0,
                   error: task.error ?? 'unknown error',
                   usage,
+                  costEstimate,
+                  archive: archiveMeta,
                 },
               },
               source: {
@@ -788,6 +1001,19 @@ export const scanProjectPiFleet = async (
             if (project.telemetry.usage && task.usage) {
               const usageKey = `pi-fleet:${project.projectId}:archive:${archiveEntry.id}:usage-reported:${task.id}`;
               if (!db.getObservedFile(project.projectId, usageKey)) {
+                const usageTokens = {
+                  inputTokens: task.usage.inputTokens ?? 0,
+                  outputTokens: task.usage.outputTokens ?? 0,
+                };
+                const usageCostEstimate = task.model
+                  ? (estimateCost(
+                      task.model,
+                      usageTokens.inputTokens,
+                      usageTokens.outputTokens,
+                      customRates,
+                    ) ?? undefined)
+                  : undefined;
+
                 db.queueEvent({
                   event: {
                     schemaVersion: cockpitProtocolSchemaVersion,
@@ -801,10 +1027,9 @@ export const scanProjectPiFleet = async (
                       planId: archivePlanId,
                       taskId: task.id,
                       status: 'failed',
-                      usage: {
-                        inputTokens: task.usage.inputTokens ?? 0,
-                        outputTokens: task.usage.outputTokens ?? 0,
-                      },
+                      usage: usageTokens,
+                      costEstimate: usageCostEstimate,
+                      archive: archiveMeta,
                     },
                   },
                   source: {
@@ -857,6 +1082,110 @@ export const scanProjectPiFleet = async (
   }
 
   return result;
+};
+
+// ── Handoff + Output event helpers ────────────────────────────────────────────
+
+/**
+ * Emits a task_handoff_seen event if handoff.md exists and has changed since
+ * last seen. Returns the number of newly queued events (0 or 1).
+ */
+const emitHandoffSeen = async (
+  db: LocalDaemonDb,
+  project: MappedProject,
+  deviceId: string,
+  planId: string,
+  taskId: string,
+  taskName: string,
+  taskDir: string,
+  source: 'live' | 'archive',
+): Promise<number> => {
+  const handoffPath = path.join(taskDir, 'handoff.md');
+  const handoffContent = await readTextFile(handoffPath, 8_000);
+  if (handoffContent === null) return 0;
+
+  const contentHash = sha256Hex(handoffContent);
+  const handoffKey = `pi-fleet:${project.projectId}:handoff:${planId}:${taskId}`;
+  const existing = db.getObservedFile(project.projectId, handoffKey);
+
+  // Re-emit only if content changed
+  if (existing?.snapshotHash === contentHash) return 0;
+
+  db.queueEvent({
+    event: {
+      schemaVersion: cockpitProtocolSchemaVersion,
+      eventId: randomUUID(),
+      occurredAt: new Date().toISOString(),
+      source,
+      projectId: project.projectId,
+      deviceId,
+      type: 'task_handoff_seen',
+      payload: {
+        planId,
+        taskId,
+        taskName,
+        handoffContent,
+        contentHash,
+      },
+    },
+    source: {
+      filePath: handoffKey,
+      offset: 0,
+      snapshotHash: contentHash,
+    },
+  });
+  return 1;
+};
+
+/**
+ * Emits a task_output_seen event if output.jsonl exists and its tail has changed.
+ * Returns the number of newly queued events (0 or 1).
+ */
+const emitOutputSeen = async (
+  db: LocalDaemonDb,
+  project: MappedProject,
+  deviceId: string,
+  planId: string,
+  taskId: string,
+  taskName: string,
+  taskDir: string,
+  source: 'live' | 'archive',
+): Promise<number> => {
+  const outputPath = path.join(taskDir, 'output.jsonl');
+  const outputTail = await readFileTail(outputPath, 4_000);
+  if (outputTail === null) return 0;
+
+  const contentHash = sha256Hex(outputTail);
+  const outputKey = `pi-fleet:${project.projectId}:output:${planId}:${taskId}`;
+  const existing = db.getObservedFile(project.projectId, outputKey);
+
+  // Re-emit only if content changed
+  if (existing?.snapshotHash === contentHash) return 0;
+
+  db.queueEvent({
+    event: {
+      schemaVersion: cockpitProtocolSchemaVersion,
+      eventId: randomUUID(),
+      occurredAt: new Date().toISOString(),
+      source,
+      projectId: project.projectId,
+      deviceId,
+      type: 'task_output_seen',
+      payload: {
+        planId,
+        taskId,
+        taskName,
+        outputTail,
+        contentHash,
+      },
+    },
+    source: {
+      filePath: outputKey,
+      offset: 0,
+      snapshotHash: contentHash,
+    },
+  });
+  return 1;
 };
 
 // ── Progress JSONL tailing ─────────────────────────────────────────────────────
@@ -1027,6 +1356,47 @@ const readJsonFile = async <T>(filePath: string): Promise<T | null> => {
 };
 
 /**
+ * Reads a text file, returning at most `maxChars` characters.
+ * Returns null on ENOENT or read failure.
+ */
+const readTextFile = async (
+  filePath: string,
+  maxChars: number,
+): Promise<string | null> => {
+  try {
+    const raw = await readFile(filePath, 'utf8');
+    return raw.length > maxChars ? raw.slice(0, maxChars) : raw;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Reads the last `maxChars` characters from a file.
+ * Returns null on ENOENT or read failure. Returns null for empty files.
+ */
+const readFileTail = async (
+  filePath: string,
+  maxChars: number,
+): Promise<string | null> => {
+  let raw: string;
+  try {
+    raw = await readFile(filePath, 'utf8');
+  } catch {
+    return null;
+  }
+  if (raw.length === 0) return null;
+  return raw.length > maxChars ? raw.slice(raw.length - maxChars) : raw;
+};
+
+/**
+ * Computes the SHA-256 hex digest of a string. Used as contentHash for
+ * handoff and output events (protocol expects a 64-char lowercase hex string).
+ */
+const sha256Hex = (content: string): string =>
+  createHash('sha256').update(content, 'utf8').digest('hex');
+
+/**
  * Resolves the directory for a task folder under `.pi/tasks/`.
  * The folder is named `{id}-{slug}` (e.g. "001-audit-...") or just `{slug}`.
  * Falls back to `{id}` if no slug is available.
@@ -1042,6 +1412,23 @@ const resolveTaskDir = (
     return path.join(piDir, 'tasks', `${taskId}-${taskSlug}`);
   }
   return path.join(piDir, 'tasks', taskSlug);
+};
+
+/**
+ * Resolves a task folder inside an archive directory.
+ * Archive task folders may be stored as `{id}-{name}` or just `{name}`.
+ * Returns null if the name is missing.
+ */
+const resolveArchiveTaskDir = (
+  archiveDir: string,
+  taskId: string,
+  taskName: string | null | undefined,
+): string | null => {
+  if (!taskName) return null;
+  if (!taskName.startsWith(`${taskId}-`)) {
+    return path.join(archiveDir, `${taskId}-${taskName}`);
+  }
+  return path.join(archiveDir, taskName);
 };
 
 interface TaskExecutionFields {

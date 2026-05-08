@@ -22,6 +22,7 @@
   "dependencies": {
     "@cleandev/cockpit-protocol": "workspace:*",
     "@cleandev/cockpit-store": "workspace:*",
+    "@cleandev/db": "workspace:*",
     "@cleandev/pm": "workspace:*",
     "@cleandev/sim": "workspace:*",
     "@headlessui/react": "^1.7.17",

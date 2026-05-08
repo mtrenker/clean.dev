@@ -9,3 +9,8 @@ node_modules
 
 # package build output
 /packages/*/dist
+/apps/cockpit-daemon/dist
+
+# generated custom-server output
+/apps/web/custom-server.js
+/apps/web/src/**/*.js

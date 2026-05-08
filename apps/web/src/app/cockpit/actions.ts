@@ -10,6 +10,12 @@
  */
 
 import { auth } from 'auth';
+import {
+  projectObservationConfigSchema,
+  telemetryProfileSchema,
+  type ProjectObservationConfig,
+  type TelemetryProfile,
+} from '@cleandev/cockpit-protocol';
 import { requireAdminSession } from '@/lib/authz';
 import { getCockpitRepository } from '@/lib/cockpit-repo';
 import { logger } from '@/lib/logger';
@@ -42,6 +48,71 @@ export async function listProjectsAction() {
 
   const repo = getCockpitRepository();
   return repo.listProjects();
+}
+
+export async function getProjectAction(projectId: string) {
+  const session = await auth();
+  requireAdminSession(session, '/cockpit');
+
+  const repo = getCockpitRepository();
+  return repo.getProject(projectId);
+}
+
+export interface UpdateProjectConfigInput {
+  projectId: string;
+  observation?: ProjectObservationConfig | null;
+  telemetry?: TelemetryProfile | null;
+  worktreeRootPath?: string | null;
+}
+
+export async function updateProjectConfigAction(input: UpdateProjectConfigInput) {
+  const session = await auth();
+  requireAdminSession(session, '/cockpit');
+
+  // Validate observation if provided
+  let observation: ProjectObservationConfig | null | undefined;
+  if (input.observation !== undefined) {
+    if (input.observation === null) {
+      observation = null;
+    } else {
+      const result = projectObservationConfigSchema.safeParse(input.observation);
+      if (!result.success) {
+        throw new Error(`Invalid observation config: ${result.error.message}`);
+      }
+      observation = result.data;
+    }
+  }
+
+  // Validate telemetry if provided
+  let telemetry: TelemetryProfile | null | undefined;
+  if (input.telemetry !== undefined) {
+    if (input.telemetry === null) {
+      telemetry = null;
+    } else {
+      const result = telemetryProfileSchema.safeParse(input.telemetry);
+      if (!result.success) {
+        throw new Error(`Invalid telemetry config: ${result.error.message}`);
+      }
+      telemetry = result.data;
+    }
+  }
+
+  const repo = getCockpitRepository();
+
+  logger.info({
+    event: 'cockpit.project.config.updated',
+    projectId: input.projectId,
+    hasObservation: observation !== undefined,
+    hasTelemetry: telemetry !== undefined,
+    hasWorktreeRootPath: input.worktreeRootPath !== undefined,
+  });
+
+  return repo.updateProjectConfig({
+    projectId: input.projectId,
+    observation,
+    telemetry,
+    worktreeRootPath: input.worktreeRootPath,
+  });
 }
 
 // ── Devices ────────────────────────────────────────────────────────────────────
@@ -113,6 +184,165 @@ export async function revokeDeviceAction(input: RevokeDeviceInput) {
   });
 
   return device;
+}
+
+// ── Projection recovery ────────────────────────────────────────────────────────
+
+export interface ForceReprojectResult {
+  projectId: string;
+  triggeredAt: string;
+}
+
+/**
+ * Forces a full re-projection of a project from sequence 0.
+ *
+ * Resets the projection checkpoint so the background projector will fold every
+ * raw event again on its next cycle.  This is the first recovery step when the
+ * UI state looks stale or inconsistent.
+ *
+ * ## When to use
+ * - The dashboard shows stale data but the daemon is connected (raw sequence >
+ *   projected sequence).
+ * - After a projection error that left the snapshot in a bad state.
+ * - After restoring raw events from a backup.
+ *
+ * ## Safety
+ * Safe to run while the daemon is streaming — the operation does not delete any
+ * events and is fully idempotent.  The next projection cycle will re-fold all
+ * events and write a correct snapshot.
+ */
+export async function forceReprojectAction(
+  projectId: string,
+): Promise<ForceReprojectResult> {
+  const session = await auth();
+  requireAdminSession(session, '/cockpit');
+
+  const repo = getCockpitRepository();
+
+  // Verify the project exists before resetting.
+  const project = await repo.getProject(projectId);
+  if (!project) {
+    throw new Error(`Project not found: ${projectId}`);
+  }
+
+  await repo.resetProjectionCheckpoint(projectId, session?.user?.email ?? null);
+
+  logger.info({
+    event: 'cockpit.projection.force_reproject',
+    projectId,
+    requestedBy: session?.user?.email ?? null,
+  });
+
+  return {
+    projectId,
+    triggeredAt: new Date().toISOString(),
+  };
+}
+
+// ── Archive review ─────────────────────────────────────────────────────────────
+
+export interface SetTaskArchiveReviewInput {
+  projectId: string;
+  taskId: string;
+  reviewStatus: 'pending' | 'reviewed' | 'dismissed';
+  reviewNotes?: string | null;
+}
+
+/**
+ * Records an admin verdict on an archived task ("reviewed" / "dismissed" /
+ * back to "pending").  Persists to `cockpit_task_details` and patches the
+ * projected state so the cockpit UI reflects the change immediately.
+ *
+ * Admin-only — guarded by `requireAdminSession`.
+ */
+export async function setTaskArchiveReviewAction(
+  input: SetTaskArchiveReviewInput,
+): Promise<void> {
+  const session = await auth();
+  requireAdminSession(session, '/cockpit');
+
+  if (!input.projectId || !input.taskId) {
+    throw new Error('projectId and taskId are required');
+  }
+  if (
+    input.reviewStatus !== 'pending' &&
+    input.reviewStatus !== 'reviewed' &&
+    input.reviewStatus !== 'dismissed'
+  ) {
+    throw new Error(`Invalid review status: ${input.reviewStatus}`);
+  }
+  if (input.reviewNotes != null && input.reviewNotes.length > 4_000) {
+    throw new Error('reviewNotes must be at most 4000 characters');
+  }
+
+  const repo = getCockpitRepository();
+  await repo.setTaskArchiveReview({
+    projectId: input.projectId,
+    taskId: input.taskId,
+    reviewStatus: input.reviewStatus,
+    reviewNotes: input.reviewNotes ?? null,
+    reviewedBy: session?.user?.email ?? null,
+    source: 'archive',
+  });
+
+  logger.info({
+    event: 'cockpit.archive.task.reviewed',
+    projectId: input.projectId,
+    taskId: input.taskId,
+    reviewStatus: input.reviewStatus,
+    reviewedBy: session?.user?.email ?? null,
+  });
+}
+
+export interface SetPlanArchiveReviewInput {
+  projectId: string;
+  planId: string;
+  reviewStatus: 'pending' | 'reviewed' | 'dismissed';
+  reviewNotes?: string | null;
+}
+
+/**
+ * Records an admin verdict on an archived plan.  Plans don't have a dedicated
+ * persistence table — the verdict is mirrored into the projected state JSON.
+ *
+ * Admin-only — guarded by `requireAdminSession`.
+ */
+export async function setPlanArchiveReviewAction(
+  input: SetPlanArchiveReviewInput,
+): Promise<void> {
+  const session = await auth();
+  requireAdminSession(session, '/cockpit');
+
+  if (!input.projectId || !input.planId) {
+    throw new Error('projectId and planId are required');
+  }
+  if (
+    input.reviewStatus !== 'pending' &&
+    input.reviewStatus !== 'reviewed' &&
+    input.reviewStatus !== 'dismissed'
+  ) {
+    throw new Error(`Invalid review status: ${input.reviewStatus}`);
+  }
+  if (input.reviewNotes != null && input.reviewNotes.length > 4_000) {
+    throw new Error('reviewNotes must be at most 4000 characters');
+  }
+
+  const repo = getCockpitRepository();
+  await repo.setPlanArchiveReview({
+    projectId: input.projectId,
+    planId: input.planId,
+    reviewStatus: input.reviewStatus,
+    reviewNotes: input.reviewNotes ?? null,
+    reviewedBy: session?.user?.email ?? null,
+  });
+
+  logger.info({
+    event: 'cockpit.archive.plan.reviewed',
+    projectId: input.projectId,
+    planId: input.planId,
+    reviewStatus: input.reviewStatus,
+    reviewedBy: session?.user?.email ?? null,
+  });
 }
 
 // ── Raw-event pruning ──────────────────────────────────────────────────────────

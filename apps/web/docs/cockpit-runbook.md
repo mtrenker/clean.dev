@@ -11,6 +11,7 @@ system should be able to follow it from start to finish.
 
 1. [Overview](#1-overview)
 2. [Prerequisites](#2-prerequisites)
+- [Installing the daemon locally](#installing-the-daemon-locally)
 3. [Creating a project](#3-creating-a-project)
 4. [Pairing a daemon device](#4-pairing-a-daemon-device)
 5. [Configuring telemetry conservatively](#5-configuring-telemetry-conservatively)
@@ -20,6 +21,7 @@ system should be able to follow it from start to finish.
 9. [Revoking a device](#9-revoking-a-device)
 10. [Observability — structured logs](#10-observability--structured-logs)
 11. [Failure modes and remedies](#11-failure-modes-and-remedies)
+12. [Rollback procedures](#12-rollback-procedures)
 
 ---
 
@@ -55,7 +57,7 @@ Key components:
 | Custom server | `apps/web/custom-server.ts` | HTTP + WebSocket entry point |
 | WS handler | `apps/web/src/server/cockpit-ws.ts` | Auth, sessions, event ingestion |
 | Projector | `apps/web/src/lib/cockpit/projector.ts` | Debounced projection from raw events |
-| Repository | `packages/pm/src/cockpit/repository.ts` | All DB operations |
+| Repository | `packages/cockpit-store/src/repository.ts` | All DB operations |
 | UI pages | `apps/web/src/app/cockpit/` | Browser dashboard |
 | Server actions | `apps/web/src/app/cockpit/actions.ts` | Authenticated mutations |
 
@@ -91,6 +93,61 @@ node apps/web/custom-server.js   # production build
 # or in development
 pnpm --filter @cleandev/web dev
 ```
+
+---
+
+## Installing the daemon locally
+
+The daemon now ships as a local binary-style package: an esbuild bundle plus a
+host-matched Node 22 runtime wrapper.  After installation, operators invoke
+`cockpit-daemon` directly; `pnpm` is only needed when building or rebuilding
+the package.
+
+### Martin target first
+
+- Primary supported artifact: `darwin-arm64` for Martin's Apple Silicon Mac.
+- Also built and smoke-tested in CI: `linux-x64`.
+- Not yet supported or tested: `win32-*`, `linux-arm64`, `darwin-x64`.
+- Node 22.5+ is a hard requirement because the daemon uses `node:sqlite`.
+
+### Build and install from the repo
+
+```bash
+pnpm cockpit-daemon:install-local
+```
+
+That command bundles the CLI, packages it under
+`apps/cockpit-daemon/dist/release/`, and installs a `cockpit-daemon` launcher
+into `~/.local/bin`.
+
+### Build a release artifact for a matching host
+
+```bash
+pnpm cockpit-daemon:package -- --target=darwin-arm64
+# or on Linux x64
+pnpm cockpit-daemon:package -- --target=linux-x64
+```
+
+Each build produces:
+
+- `apps/cockpit-daemon/dist/release/<target>/cockpit-daemon/`
+- `apps/cockpit-daemon/dist/release/cockpit-daemon-v<version>-<target>.tar.gz`
+
+To install from an unpacked artifact directory:
+
+```bash
+./install.sh
+```
+
+Open a fresh shell after installation, then verify the command path:
+
+```bash
+cockpit-daemon status
+cockpit-daemon login --device-id martin-mbp-01 --device-name "Martin's MacBook Pro" --token <token>
+cockpit-daemon daemon
+```
+
+If the shell cannot find `cockpit-daemon`, add `~/.local/bin` to `PATH`.
 
 ---
 
@@ -567,6 +624,7 @@ domain-specific fields.
 | `cockpit.ws.batch_ingested` | info | `batchId`, `accepted_count`, `duplicate_count`, `acked_through_sequence` | Event batch stored |
 | `cockpit.ws.batch_insert_error` | error | `connectionId`, `error` | DB error inserting events |
 | `cockpit.ws.touch_session_error` | error | `connectionId`, `context`, `error` | DB error updating session |
+| `cockpit.ws.client_heartbeat` | debug | `connectionId`, `latest_sequence` | WS transport heartbeat received from daemon |
 
 #### Projector (`cockpit.projector.*`)
 
@@ -576,14 +634,20 @@ domain-specific fields.
 | `cockpit.projector.stopped` | info | — | `stop()` called |
 | `cockpit.projector.cycle_complete` | info | `projected`, `skipped` | Cycle with ≥1 projections |
 | `cockpit.projector.project_error` | error | `projectId`, `error` | Single-project projection failed |
-| `cockpit.projector.projected` | debug | `projectId`, `new_events`, `latest_sequence`, `daemon_stale` | One project projected |
+| `cockpit.projector.projected` | info | `projectId`, `new_events`, `after_sequence`, `sequence_advance`, `hit_batch_limit`, `daemon_stale` | One project projected |
+| `cockpit.projector.skipped_backlog_recovery` | warn | `projectId` | Checkpoint-ahead-of-fold recovery triggered |
+| `cockpit.projector.batch_limit_hit` | warn | `projectId`, `batch_limit` | More events remain after batch limit; projector will catch up over multiple cycles |
 
-#### Operator actions (`cockpit.device.*`, `cockpit.prune.*`)
+#### Operator actions (`cockpit.device.*`, `cockpit.prune.*`, `cockpit.projection.*`, `cockpit.archive.*`)
 
 | Event | Level | Key fields | Trigger |
 |-------|-------|-----------|---------|
 | `cockpit.device.revoked` | info | `deviceId`, `reason` | Operator revoked a device |
 | `cockpit.prune.completed` | info | `project_id`, `deleted_event_count`, `projects_affected`, `prune_run_id` | Operator pruned events |
+| `cockpit.projection.force_reproject` | info | `projectId`, `requestedBy`, `raw_max_sequence_before`, `sequence_lag_before` | Admin triggered force re-projection via UI or API |
+| `cockpit.projection.checkpoint_reset` | stdout JSON | `projectId`, `requestedBy` | Low-level checkpoint reset in repository layer |
+| `cockpit.archive.task.reviewed` | info | `projectId`, `taskId`, `reviewStatus`, `reviewNotes` | Admin set archive-review verdict for a task |
+| `cockpit.archive.plan.reviewed` | info | `projectId`, `planId`, `reviewStatus`, `reviewNotes` | Admin set archive-review verdict for a plan |
 
 ### Querying logs (example — Loki / Grafana)
 
@@ -614,3 +678,88 @@ count_over_time({app="web"} | json | event = "cockpit.ws.connected" [5m])
 | Prune action fails with "Provide throughSequence or occurredBefore" | Both fields left blank | Set at least one prune criterion |
 | Prune deleted 0 events | No events matched the criteria | Verify the project ID and adjust the cutoff |
 | UI shows "No projection data" | Project exists but no events yet | Send a preview batch (§6) |
+| `batch_limit_hit` log entries | Project raw-event backlog > 10 000 | Normal multi-cycle catch-up; monitor `sequenceLag` with `GET /status` endpoint |
+
+---
+
+## 12. Rollback procedures
+
+### 12.1 Rolling back the DB extraction (`@cleandev/db`)
+
+The schema and migrations were moved from `packages/pm` to `packages/db` in the
+`@cleandev/db` package.  The data model **did not change** — only the owning
+package moved.  No new columns or tables were added by this extraction, so
+there is no database rollback required.
+
+If the deployment fails after the code change but before migrations run:
+
+1. Revert to the previous commit (restore `packages/pm` as the schema owner).
+2. Restore `packages/pm/drizzle.config.ts` and `packages/pm/drizzle/` from git.
+3. Remove the `@cleandev/db` workspace: delete `packages/db/` and remove it
+   from `pnpm-workspace.yaml`.
+4. Revert `packages/cockpit-store/package.json` to depend on `@cleandev/pm`.
+5. Run `pnpm install` to regenerate `pnpm-lock.yaml`.
+6. Revert `apps/web/package.json` and `Dockerfile` to their pre-extraction state.
+7. Run the build to confirm (`pnpm build`).
+
+**Drizzle migration state** is tracked in the `_drizzle_migrations` table.
+Because no new migrations were added during the extraction, the migration
+journal is identical in both the old and new locations.  Rolling back the
+package move does not require any SQL operations.
+
+### 12.2 Rolling back the archive UI and projection tooling
+
+The archive UI, device management pages, and projection-status panel are all
+additive: they add new routes and new columns in the projected-state JSON, but
+they do not modify existing schema or remove existing API endpoints.
+
+**If a broken deploy must be reverted:**
+
+1. Revert the affected commit(s).
+2. Run the build (`pnpm --filter @cleandev/web build`).
+3. Redeploy.
+
+No database migration rollback is needed — the new routes only read from
+existing tables.
+
+**Graceful degradation:** If the `/archive`, `/runs`, and `/plans/[planId]`
+routes are removed, existing `/cockpit/[projectId]` project-detail pages
+continue to function. The `ProjectionStatusPanel` component can be removed from
+`apps/web/src/app/cockpit/[projectId]/page.tsx` without affecting event
+ingestion or projection.
+
+### 12.3 Rolling back device management enhancements
+
+`listDevicesWithDetails` was added to `ICockpitRepository`.  The old
+`listDevices` method is still in place.  To roll back:
+
+1. Revert `apps/web/src/app/cockpit/devices/` pages and
+   `apps/web/src/app/api/cockpit/devices/route.ts` to the version before
+   Task 012.
+2. Remove `listDevicesWithDetails` from `ICockpitRepository` in
+   `packages/cockpit-store/src/types.ts` and the matching implementation in
+   `packages/cockpit-store/src/repository.ts`.
+3. The `DevicesManagementPanel` component can be deleted from
+   `apps/web/src/components/cockpit/`.
+
+No database migrations are required to roll back — `listDevicesWithDetails`
+only reads existing columns using a raw SQL `DISTINCT ON` query.
+
+### 12.4 Rolling back the daemon binary packaging
+
+The daemon packaging adds new scripts and a CI workflow.  It does not touch the
+web server or the database.
+
+1. Remove `apps/cockpit-daemon/scripts/package-local-dist.ts`,
+   `apps/cockpit-daemon/scripts/install-local-dist.ts`, and
+   `apps/cockpit-daemon/src/distribution.ts`.
+2. Revert `apps/cockpit-daemon/package.json` to remove the `build:package` and
+   `install-local` scripts.
+3. Delete `.github/workflows/cockpit-daemon-release.yml`.
+4. Previously installed daemon binaries under `~/.local/share/cockpit-daemon/`
+   are not removed automatically — operators must unlink them manually:
+
+   ```bash
+   rm -f ~/.local/bin/cockpit-daemon
+   rm -rf ~/.local/share/cockpit-daemon/
+   ```

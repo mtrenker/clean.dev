@@ -1,13 +1,19 @@
 import { z } from 'zod';
 
-export const cockpitProtocolSchemaVersion = 1 as const;
+export const cockpitProtocolSchemaVersion = 2 as const;
 export const cockpitProtocolSchemaVersionSchema = z.literal(cockpitProtocolSchemaVersion);
+export const supportedCockpitProtocolSchemaVersions = [1, cockpitProtocolSchemaVersion] as const;
+export const supportedCockpitProtocolSchemaVersionSchema = z.union([
+  z.literal(1),
+  cockpitProtocolSchemaVersionSchema,
+]);
 
 export const isoDateTimeSchema = z.string().datetime({ offset: true });
 export const identifierSchema = z.string().min(1).max(160);
 export const shortTextSchema = z.string().min(1).max(512);
 export const longTextSchema = z.string().min(1).max(10_000);
 export const relativeFilePathSchema = z.string().min(1).max(2_000);
+export const templateTextSchema = z.string().min(1).max(256);
 
 export const telemetryPathModeSchema = z.enum(['off', 'basename', 'relative', 'full']);
 export const telemetryGitModeSchema = z.enum(['off', 'branch-only', 'full']);
@@ -26,6 +32,30 @@ export type TelemetryProfile = z.infer<typeof telemetryProfileSchema>;
 
 export const telemetryProfileNameSchema = z.enum(['minimal', 'balanced', 'full']);
 export type TelemetryProfileName = z.infer<typeof telemetryProfileNameSchema>;
+
+export const worktreeGroupingModeSchema = z.enum(['branch', 'directory', 'device', 'custom']);
+export type WorktreeGroupingMode = z.infer<typeof worktreeGroupingModeSchema>;
+
+export const worktreeObservationPatternSchema = z.object({
+  nameTemplate: templateTextSchema.default('{branch}'),
+  groupBy: worktreeGroupingModeSchema.default('branch'),
+  groupNameTemplate: templateTextSchema.default('{group}'),
+});
+
+export type WorktreeObservationPattern = z.infer<typeof worktreeObservationPatternSchema>;
+
+export const projectObservationConfigSchema = z.object({
+  alias: shortTextSchema.nullable().optional(),
+  staleAfterMs: z.number().int().positive().max(86_400_000).default(60_000),
+  includeArchived: z.boolean().default(true),
+  worktrees: worktreeObservationPatternSchema.default({
+    nameTemplate: '{branch}',
+    groupBy: 'branch',
+    groupNameTemplate: '{group}',
+  }),
+});
+
+export type ProjectObservationConfig = z.infer<typeof projectObservationConfigSchema>;
 
 export const telemetryProfilePresets: Record<TelemetryProfileName, TelemetryProfile> = {
   minimal: {
@@ -63,6 +93,15 @@ export const mappedProjectSchema = z.object({
   projectName: shortTextSchema.optional(),
   localRootPath: z.string().min(1).max(2_000),
   worktreeRootPath: z.string().min(1).max(2_000).optional(),
+  observation: projectObservationConfigSchema.default({
+    staleAfterMs: 60_000,
+    includeArchived: true,
+    worktrees: {
+      nameTemplate: '{branch}',
+      groupBy: 'branch',
+      groupNameTemplate: '{group}',
+    },
+  }),
   telemetry: telemetryProfileSchema.default(telemetryProfilePresets.balanced),
 });
 

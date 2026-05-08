@@ -28,6 +28,9 @@ const CockpitLayout = async ({ children }: PropsWithChildren) => {
             <Link href="/cockpit" variant="nav" className="text-xs">
               Overview
             </Link>
+            <Link href="/cockpit/devices" variant="nav" className="text-xs">
+              Devices
+            </Link>
           </nav>
         </Container>
       </div>

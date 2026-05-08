@@ -28,11 +28,17 @@ import { createLogger, type LoggerSink } from './logging';
 import { runDaemon } from './daemon';
 import {
   ApiError,
+  fetchRemoteProjectConfig,
   findRemoteProject,
   listRemoteProjects,
   pairDevice,
   pollExchange,
 } from './api-client';
+import {
+  mergeProjectConfig,
+  resolveProjectObservation,
+  resolveProjectTelemetry,
+} from './config';
 
 export interface CliIo extends LoggerSink {
   /** Write a line and wait for the user to press Enter (optional – only used in interactive commands). */
@@ -264,7 +270,8 @@ const handleProjects = async (paths: DaemonPaths, args: string[], io: CliIo) => 
     for (const project of remoteProjects) {
       const slug = project.projectSlug ?? '-';
       const name = project.projectName ?? '-';
-      io.stdout(`${project.projectId}\t${slug}\t${name}\n`);
+      const hasObs = project.observation ? 'obs:yes' : 'obs:default';
+      io.stdout(`${project.projectId}\t${slug}\t${name}\t${hasObs}\n`);
     }
 
     return 0;
@@ -311,6 +318,8 @@ const handleMap = async (paths: DaemonPaths, args: string[], io: CliIo) => {
   const loaded = await loadDaemonConfig(paths);
   let projectSlug = optionValue(parsed.options, 'project-slug');
   let projectName = optionValue(parsed.options, 'project-name');
+  let serverObservation: import('@cleandev/cockpit-protocol').ProjectObservationConfig | null | undefined;
+  let serverWorktreeRootPath: string | null | undefined;
 
   // ── Remote validation ───────────────────────────────────────────────────
   if (loaded.config.credential) {
@@ -336,6 +345,8 @@ const handleMap = async (paths: DaemonPaths, args: string[], io: CliIo) => {
     // Auto-populate metadata from remote unless caller overrides.
     projectSlug ??= remoteProject.projectSlug ?? undefined;
     projectName ??= remoteProject.projectName ?? undefined;
+    serverObservation = remoteProject.observation ?? null;
+    serverWorktreeRootPath = remoteProject.worktreeRootPath ?? null;
   }
 
   // ── Telemetry default ──────────────────────────────────────────────────
@@ -349,6 +360,8 @@ const handleMap = async (paths: DaemonPaths, args: string[], io: CliIo) => {
     projectSlug,
     projectName,
     telemetryPreset: effectiveTelemetryPreset,
+    serverObservation,
+    serverWorktreeRootPath,
   });
 
   await saveDaemonConfig(paths, nextConfig);
@@ -394,9 +407,11 @@ const handleStatus = async (paths: DaemonPaths, args: string[], io: CliIo) => {
     io.stdout(`projectCount: ${state.configuredProjectCount}\n`);
     // List each mapped project (path only, not internal token)
     for (const project of loaded.config.projects) {
+      const obs = resolveProjectObservation(project.observation);
       io.stdout(
         `project: ${project.projectId}\t${project.localRootPath}\t` +
-          `${project.projectSlug ?? '-'}\t${project.projectName ?? '-'}\n`,
+          `${project.projectSlug ?? '-'}\t${project.projectName ?? '-'}\t` +
+          `staleAfterMs:${obs.staleAfterMs}\tgroupBy:${obs.worktrees.groupBy}\n`,
       );
     }
     io.stdout(`observedWorktreeCount: ${state.observedWorktreeCount}\n`);
@@ -444,13 +459,21 @@ const handlePreview = async (paths: DaemonPaths, args: string[], io: CliIo) => {
       scanProjectGitWorktrees(db, project, deviceId),
       scanProjectPiFleet(db, project, deviceId),
     ]);
+    const effectiveObservation = resolveProjectObservation(project.observation);
+    const effectiveTelemetry = resolveProjectTelemetry(project.telemetry);
     const projectPreview = {
       ...preview,
       project: {
         projectId: project.projectId,
         projectSlug: project.projectSlug ?? null,
         projectName: project.projectName ?? null,
-        telemetry: project.telemetry,
+        worktreeRootPath: project.worktreeRootPath ?? null,
+        // Show effective (merged) config, not just the locally stored value
+        effectiveObservation,
+        effectiveTelemetry,
+        // Raw stored config for debugging (local value only)
+        storedObservation: project.observation ?? null,
+        storedTelemetry: project.telemetry ?? null,
       },
       worktrees: scan.worktrees.map((worktree) => ({
         worktree: worktree.eventSnapshot,

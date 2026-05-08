@@ -6,7 +6,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { existsSync } from 'fs';
 import path from 'path';
-import * as schema from '@cleandev/pm';
+import * as schema from '@cleandev/db';
 
 export async function POST(): Promise<NextResponse> {
   try {
@@ -40,9 +40,9 @@ export async function POST(): Promise<NextResponse> {
 
     const migrationCandidates = [
       // Docker/custom-server runtime uses /app as cwd.
-      path.resolve(process.cwd(), 'packages/pm/drizzle'),
+      path.resolve(process.cwd(), 'packages/db/drizzle'),
       // Local Next dev can run from apps/web.
-      path.resolve(process.cwd(), '../..', 'packages/pm/drizzle'),
+      path.resolve(process.cwd(), '../..', 'packages/db/drizzle'),
     ];
     const migrationsFolder = migrationCandidates.find((candidate) =>
       existsSync(path.join(candidate, 'meta', '_journal.json')),

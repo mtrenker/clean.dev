@@ -1,0 +1,78 @@
+name: Cockpit Daemon Artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "apps/cockpit-daemon/**"
+      - "packages/cockpit-protocol/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/cockpit-daemon-release.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/cockpit-daemon/**"
+      - "packages/cockpit-protocol/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/cockpit-daemon-release.yml"
+
+jobs:
+  build-artifact:
+    name: Build ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-latest
+          - target: darwin-arm64
+            runner: macos-14
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22.22.1
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.1
+          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build cockpit-daemon distribution
+        run: pnpm --filter @cleandev/cockpit-daemon build:package -- --target=${{ matrix.target }}
+
+      - name: Smoke test installed command
+        shell: bash
+        run: |
+          set -euo pipefail
+          temp_home="$(mktemp -d)"
+          package_dir="$PWD/apps/cockpit-daemon/dist/release/${{ matrix.target }}/cockpit-daemon"
+          PREFIX="$temp_home/.local" sh "$package_dir/install.sh"
+          export PATH="$temp_home/.local/bin:$PATH"
+          config_path="$temp_home/daemon-config.json"
+
+          cockpit-daemon --config "$config_path" status
+          cockpit-daemon --config "$config_path" login --device-id "ci-${{ matrix.target }}" --device-name "CI ${{ matrix.target }}" --token "ci-token"
+
+          daemon_output="$(timeout 3 cockpit-daemon --config "$config_path" daemon 2>&1 || true)"
+          echo "$daemon_output"
+          echo "$daemon_output" | grep -q "No projects mapped"
+          echo "$daemon_output" | grep -q "\\[daemon\\] Starting"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cockpit-daemon-${{ matrix.target }}
+          path: apps/cockpit-daemon/dist/release/cockpit-daemon-v*-${{ matrix.target }}.tar.gz

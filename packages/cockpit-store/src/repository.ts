@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, isNull, lte, lt, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, isNull, lte, lt, max, or, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import type { Pool } from 'pg';
 
@@ -9,13 +9,16 @@ import {
   telemetryProfilePresets,
   type CockpitEvent,
   type EventBatchAck,
+  type ProjectObservationConfig,
 } from '@cleandev/cockpit-protocol';
 
-import * as schema from '@cleandev/pm';
-import type { CockpitProjectedProjectState } from '@cleandev/pm';
+import * as schema from '@cleandev/db';
+import type { CockpitProjectedProjectState } from '@cleandev/db';
 import type {
   ApproveCockpitDevicePairingInput,
+  CockpitDeviceWithDetails,
   CockpitProjectEventSummary,
+  CockpitProjectionStatus,
   CreateCockpitDeviceInput,
   CreateCockpitDevicePairingInput,
   CreateCockpitDeviceResult,
@@ -30,6 +33,10 @@ import type {
   PruneCockpitRawEventsInput,
   PruneCockpitRawEventsResult,
   RevokeCockpitDeviceInput,
+  SetPlanArchiveReviewInput,
+  SetTaskArchiveReviewInput,
+  TaskArchiveReviewRecord,
+  UpdateCockpitProjectConfigInput,
   UpsertProjectedProjectStateInput,
 } from './types';
 
@@ -52,7 +59,9 @@ const emptyProjectedState = (summary: {
   projectSlug?: string;
   projectName?: string | null;
   localRootPath?: string | null;
+  worktreeRootPath?: string | null;
   telemetry?: typeof DEFAULT_TELEMETRY;
+  observation?: ProjectObservationConfig;
   dirty?: boolean;
   latestEvent?: CockpitProjectedProjectState['lastEvent'];
 }): CockpitProjectedProjectState => ({
@@ -61,13 +70,25 @@ const emptyProjectedState = (summary: {
   projectSlug: summary.projectSlug,
   projectName: summary.projectName ?? null,
   localRootPath: summary.localRootPath ?? null,
+  worktreeRootPath: summary.worktreeRootPath ?? null,
   telemetry: summary.telemetry ?? DEFAULT_TELEMETRY,
+  observation: summary.observation ?? null,
   dirty: summary.dirty ?? true,
   lastEvent: summary.latestEvent ?? null,
   lastHeartbeat: null,
+  devices: {},
   worktrees: {},
+  worktreeGroups: {},
   plans: {},
+  archivedPlanIds: [],
   tasks: {},
+  archivedTaskIds: [],
+  activeFleet: [],
+  engineUsage: {},
+  modelUsage: {},
+  profileUsage: {},
+  projectUsage: { inputTokens: 0, outputTokens: 0 },
+  projectCostEstimate: { currency: 'USD', inputCost: 0, outputCost: 0, totalCost: 0 },
 });
 
 export const summarizeProjectsFromEvents = (events: CockpitEvent[]): CockpitProjectEventSummary[] => {
@@ -90,7 +111,9 @@ export const summarizeProjectsFromEvents = (events: CockpitEvent[]): CockpitProj
     if (event.type === 'project_seen' && event.sequence >= (summary.metadataSequence ?? -1)) {
       summary.projectName = event.payload.projectName ?? summary.projectName ?? null;
       summary.localRootPath = event.payload.localRootPath ?? summary.localRootPath ?? null;
+      summary.worktreeRootPath = event.payload.worktreeRootPath ?? summary.worktreeRootPath ?? null;
       summary.telemetry = event.payload.telemetry;
+      summary.observation = event.payload.observation ?? summary.observation;
       summary.metadataSequence = event.sequence;
     }
 
@@ -117,7 +140,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
         projectSlug: input.projectSlug,
         projectName: input.projectName,
         localRootPath: input.localRootPath,
+        worktreeRootPath: input.worktreeRootPath,
         telemetry: input.telemetry ?? DEFAULT_TELEMETRY,
+        observation: input.observation ?? null,
         createdAt: now,
         updatedAt: now,
       })
@@ -127,7 +152,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
           projectSlug: input.projectSlug,
           projectName: input.projectName,
           localRootPath: input.localRootPath,
+          worktreeRootPath: input.worktreeRootPath,
           telemetry: input.telemetry ?? DEFAULT_TELEMETRY,
+          observation: input.observation ?? null,
           updatedAt: now,
         },
       })
@@ -143,6 +170,35 @@ export class PostgresCockpitRepository implements ICockpitRepository {
     );
   }
 
+  async getProject(projectId: string) {
+    const [project] = await this.db
+      .select()
+      .from(schema.cockpitProjects)
+      .where(eq(schema.cockpitProjects.projectId, projectId))
+      .limit(1);
+    return project ?? null;
+  }
+
+  async updateProjectConfig(input: UpdateCockpitProjectConfigInput) {
+    const now = new Date();
+    const [project] = await this.db
+      .update(schema.cockpitProjects)
+      .set({
+        ...(input.observation !== undefined ? { observation: input.observation } : {}),
+        ...(input.telemetry !== undefined ? { telemetry: input.telemetry } : {}),
+        ...(input.worktreeRootPath !== undefined ? { worktreeRootPath: input.worktreeRootPath } : {}),
+        updatedAt: now,
+      })
+      .where(eq(schema.cockpitProjects.projectId, input.projectId))
+      .returning();
+
+    if (!project) {
+      throw new Error(`Cannot update config: no project found with id ${input.projectId}`);
+    }
+
+    return project;
+  }
+
   async createDevice(input: CreateCockpitDeviceInput): Promise<CreateCockpitDeviceResult> {
     const now = new Date();
 
@@ -153,6 +209,7 @@ export class PostgresCockpitRepository implements ICockpitRepository {
           deviceId: input.deviceId,
           deviceName: input.deviceName,
           instanceName: input.instanceName ?? null,
+          metadata: input.metadata ?? null,
           pairedAt: now,
           createdAt: now,
           updatedAt: now,
@@ -164,6 +221,7 @@ export class PostgresCockpitRepository implements ICockpitRepository {
           set: {
             deviceName: input.deviceName,
             instanceName: input.instanceName ?? null,
+            metadata: input.metadata ?? null,
             pairedAt: now,
             revokedAt: null,
             revokedReason: null,
@@ -217,6 +275,86 @@ export class PostgresCockpitRepository implements ICockpitRepository {
       .from(schema.cockpitPairedDevices)
       .where(isNull(schema.cockpitPairedDevices.revokedAt))
       .orderBy(desc(schema.cockpitPairedDevices.pairedAt));
+  }
+
+  async listDevicesWithDetails(input?: ListCockpitDevicesInput): Promise<CockpitDeviceWithDetails[]> {
+    const devices = await this.listDevices(input);
+    if (devices.length === 0) return [];
+
+    const deviceIds = devices.map((d) => d.deviceId);
+
+    // ── Active session counts ──────────────────────────────────────────────────
+    const sessionCountRows = await this.db
+      .select({
+        deviceId: schema.cockpitDeviceSessions.deviceId,
+        count: sql<string>`cast(count(*) as text)`.as('count'),
+      })
+      .from(schema.cockpitDeviceSessions)
+      .where(and(
+        inArray(schema.cockpitDeviceSessions.deviceId, deviceIds),
+        isNull(schema.cockpitDeviceSessions.endedAt),
+      ))
+      .groupBy(schema.cockpitDeviceSessions.deviceId);
+
+    const sessionCountMap = new Map<string, number>(
+      sessionCountRows.map((r) => [r.deviceId, parseInt(r.count, 10)]),
+    );
+
+    // ── Latest token per device (no hash exposed) ──────────────────────────────
+    // Fetch ordered rows via Drizzle's `inArray` helper instead of raw ANY($1)
+    // array SQL so node-postgres receives a real parameter list. tokenHash is
+    // intentionally excluded — it must never leave the server.
+    const latestTokenRows = await this.db
+      .select({
+        tokenId: schema.cockpitDeviceTokens.tokenId,
+        deviceId: schema.cockpitDeviceTokens.deviceId,
+        tokenLabel: schema.cockpitDeviceTokens.tokenLabel,
+        issuedAt: schema.cockpitDeviceTokens.issuedAt,
+        expiresAt: schema.cockpitDeviceTokens.expiresAt,
+        lastUsedAt: schema.cockpitDeviceTokens.lastUsedAt,
+        revokedAt: schema.cockpitDeviceTokens.revokedAt,
+        revokedReason: schema.cockpitDeviceTokens.revokedReason,
+      })
+      .from(schema.cockpitDeviceTokens)
+      .where(inArray(schema.cockpitDeviceTokens.deviceId, deviceIds))
+      .orderBy(schema.cockpitDeviceTokens.deviceId, desc(schema.cockpitDeviceTokens.issuedAt));
+
+    const latestTokenMap = new Map<string, CockpitDeviceWithDetails['latestToken']>();
+    for (const row of latestTokenRows) {
+      if (latestTokenMap.has(row.deviceId)) continue;
+      latestTokenMap.set(row.deviceId, {
+        tokenId: row.tokenId,
+        tokenLabel: row.tokenLabel,
+        issuedAt: row.issuedAt instanceof Date ? row.issuedAt : new Date(row.issuedAt as unknown as string),
+        expiresAt: row.expiresAt ? (row.expiresAt instanceof Date ? row.expiresAt : new Date(row.expiresAt as unknown as string)) : null,
+        lastUsedAt: row.lastUsedAt ? (row.lastUsedAt instanceof Date ? row.lastUsedAt : new Date(row.lastUsedAt as unknown as string)) : null,
+        revokedAt: row.revokedAt ? (row.revokedAt instanceof Date ? row.revokedAt : new Date(row.revokedAt as unknown as string)) : null,
+        revokedReason: row.revokedReason ?? null,
+      });
+    }
+
+    // ── Max raw-event sequence per device ──────────────────────────────────────
+    const maxSeqRows = await this.db
+      .select({
+        deviceId: schema.cockpitRawEvents.deviceId,
+        maxSeq: max(schema.cockpitRawEvents.sequence).as('max_seq'),
+      })
+      .from(schema.cockpitRawEvents)
+      .where(inArray(schema.cockpitRawEvents.deviceId, deviceIds))
+      .groupBy(schema.cockpitRawEvents.deviceId);
+
+    const maxSeqMap = new Map<string, number>(
+      maxSeqRows
+        .filter((r) => r.maxSeq !== null)
+        .map((r) => [r.deviceId, r.maxSeq as number]),
+    );
+
+    return devices.map((device) => ({
+      ...device,
+      activeSessionCount: sessionCountMap.get(device.deviceId) ?? 0,
+      latestToken: latestTokenMap.get(device.deviceId) ?? null,
+      maxEventSequence: maxSeqMap.get(device.deviceId) ?? null,
+    }));
   }
 
   async revokeDevice(input: RevokeCockpitDeviceInput) {
@@ -651,7 +789,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
       projectSlug: input.projectSlug,
       projectName: input.projectName,
       localRootPath: input.localRootPath,
+      worktreeRootPath: input.worktreeRootPath,
       telemetry: input.telemetry,
+      observation: input.observation,
     });
 
     await this.db
@@ -668,7 +808,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
           projectSlug: input.projectSlug,
           projectName: input.projectName,
           localRootPath: input.localRootPath,
+          worktreeRootPath: input.worktreeRootPath,
           telemetry: input.telemetry ?? DEFAULT_TELEMETRY,
+          observation: input.observation ?? undefined,
         }),
         createdAt: now,
         updatedAt: now,
@@ -681,7 +823,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
         projectSlug: input.projectSlug,
         projectName: input.projectName,
         localRootPath: input.localRootPath,
+        worktreeRootPath: input.worktreeRootPath,
         telemetry: input.telemetry ?? DEFAULT_TELEMETRY,
+        observation: input.observation ?? null,
         latestEventSequence: input.latestEventSequence ?? sql`${schema.cockpitProjects.latestEventSequence}`,
         projectionDirty: true,
         dirtyMarkedAt: now,
@@ -731,7 +875,9 @@ export class PostgresCockpitRepository implements ICockpitRepository {
       projectSlug: input.state.projectSlug ?? undefined,
       projectName: input.state.projectName ?? undefined,
       localRootPath: input.state.localRootPath ?? undefined,
+      worktreeRootPath: input.state.worktreeRootPath ?? undefined,
       telemetry: input.state.telemetry ?? DEFAULT_TELEMETRY,
+      observation: input.state.observation ?? undefined,
     });
 
     const [record] = await this.db
@@ -863,6 +1009,208 @@ export class PostgresCockpitRepository implements ICockpitRepository {
       .limit(limit);
 
     return rows.map((row) => row.event);
+  }
+
+  async getProjectionStatus(projectId: string): Promise<CockpitProjectionStatus | null> {
+    // Load the project row (existence check + dirty state)
+    const project = await this.getProject(projectId);
+    if (!project) return null;
+
+    // Load the projected-state record for projectedSequence + projectedAt
+    const stateRecord = await this.getProjectedProjectStateRecord(projectId);
+
+    // Load the highest raw-event sequence for this project
+    const [maxSeqRow] = await this.db
+      .select({ maxSeq: max(schema.cockpitRawEvents.sequence).as('max_seq') })
+      .from(schema.cockpitRawEvents)
+      .where(eq(schema.cockpitRawEvents.projectId, projectId));
+
+    const rawMaxSequence = maxSeqRow?.maxSeq ?? null;
+    const projectedSequence = stateRecord?.latestEventSequence ?? 0;
+    const sequenceLag =
+      rawMaxSequence !== null ? rawMaxSequence - projectedSequence : null;
+
+    return {
+      projectId,
+      rawMaxSequence,
+      projectedSequence,
+      isDirty: project.projectionDirty ?? false,
+      dirtyMarkedAt: project.dirtyMarkedAt ?? null,
+      projectedAt: stateRecord?.projectedAt ?? null,
+      sequenceLag,
+    };
+  }
+
+  async resetProjectionCheckpoint(projectId: string, requestedBy?: string | null): Promise<void> {
+    const now = new Date();
+
+    // Reset the projection sequence to 0 — the next projection cycle will
+    // fold all events from the beginning of the log.
+    await this.db
+      .update(schema.cockpitProjectedProjectState)
+      .set({
+        latestEventSequence: 0,
+        latestEventId: null,
+        dirty: true,
+        updatedAt: now,
+      })
+      .where(eq(schema.cockpitProjectedProjectState.projectId, projectId));
+
+    // Mark the project dirty so the background projector schedules it.
+    await this.db
+      .update(schema.cockpitProjects)
+      .set({
+        projectionDirty: true,
+        dirtyMarkedAt: now,
+        updatedAt: now,
+      })
+      .where(eq(schema.cockpitProjects.projectId, projectId));
+
+    // Structured log entry: stored in the server process stdout. This record
+    // is intentionally minimal — the full audit trail is the projector log.
+    const logEntry = {
+      ts: now.toISOString(),
+      event: 'cockpit.projection.checkpoint_reset',
+      projectId,
+      requestedBy: requestedBy ?? null,
+    };
+    process.stdout.write(JSON.stringify(logEntry) + '\n');
+  }
+
+  async setTaskArchiveReview(input: SetTaskArchiveReviewInput): Promise<void> {
+    const now = new Date();
+    const source = input.source ?? 'archive';
+
+    return this.db.transaction(async (tx) => {
+      // 1. Find existing detail row for this (project, source, task).
+      const [detail] = await tx
+        .select()
+        .from(schema.cockpitTaskDetails)
+        .where(
+          and(
+            eq(schema.cockpitTaskDetails.projectId, input.projectId),
+            eq(schema.cockpitTaskDetails.source, source),
+            eq(schema.cockpitTaskDetails.taskId, input.taskId),
+          ),
+        )
+        .limit(1);
+
+      // 2. Look up the projected state so we can both patch it and
+      //    discover the planId for new task-detail rows.
+      const [stateRow] = await tx
+        .select()
+        .from(schema.cockpitProjectedProjectState)
+        .where(eq(schema.cockpitProjectedProjectState.projectId, input.projectId))
+        .limit(1);
+      const state = stateRow?.state as CockpitProjectedProjectState | undefined;
+      const projectedTask = state?.tasks?.[input.taskId];
+      const planId = detail?.planId ?? projectedTask?.planId ?? '';
+
+      if (detail) {
+        await tx
+          .update(schema.cockpitTaskDetails)
+          .set({
+            archiveReviewStatus: input.reviewStatus,
+            archiveReviewNotes: input.reviewNotes ?? null,
+            archiveReviewedAt: now,
+            updatedAt: now,
+          })
+          .where(eq(schema.cockpitTaskDetails.taskDetailId, detail.taskDetailId));
+      } else {
+        await tx.insert(schema.cockpitTaskDetails).values({
+          projectId: input.projectId,
+          planId,
+          taskId: input.taskId,
+          source,
+          archiveReviewStatus: input.reviewStatus,
+          archiveReviewNotes: input.reviewNotes ?? null,
+          archiveReviewedAt: now,
+          createdAt: now,
+          updatedAt: now,
+          state: {},
+        });
+      }
+
+      // 3. Mirror the verdict into the projected state JSON so subsequent
+      //    reads see the new status without waiting for re-projection.
+      if (state && projectedTask) {
+        const nextArchive = {
+          ...(projectedTask.archive ?? {}),
+          reviewStatus: input.reviewStatus,
+          reviewNotes: input.reviewNotes ?? null,
+          reviewedAt: now.toISOString(),
+        };
+        const nextTask = { ...projectedTask, archive: nextArchive };
+        const nextState: CockpitProjectedProjectState = {
+          ...state,
+          tasks: {
+            ...(state.tasks ?? {}),
+            [input.taskId]: nextTask,
+          },
+        };
+        await tx
+          .update(schema.cockpitProjectedProjectState)
+          .set({ state: nextState, updatedAt: now })
+          .where(eq(schema.cockpitProjectedProjectState.projectId, input.projectId));
+      }
+    });
+  }
+
+  async setPlanArchiveReview(input: SetPlanArchiveReviewInput): Promise<void> {
+    const now = new Date();
+
+    return this.db.transaction(async (tx) => {
+      const [stateRow] = await tx
+        .select()
+        .from(schema.cockpitProjectedProjectState)
+        .where(eq(schema.cockpitProjectedProjectState.projectId, input.projectId))
+        .limit(1);
+      const state = stateRow?.state as CockpitProjectedProjectState | undefined;
+      if (!state) return;
+
+      const plan = state.plans?.[input.planId];
+      if (!plan) return;
+
+      const nextArchive = {
+        ...(plan.archive ?? {}),
+        reviewStatus: input.reviewStatus,
+        reviewNotes: input.reviewNotes ?? null,
+        reviewedAt: now.toISOString(),
+      };
+      const nextPlan = { ...plan, archive: nextArchive };
+      const nextState: CockpitProjectedProjectState = {
+        ...state,
+        plans: {
+          ...(state.plans ?? {}),
+          [input.planId]: nextPlan,
+        },
+      };
+      await tx
+        .update(schema.cockpitProjectedProjectState)
+        .set({ state: nextState, updatedAt: now })
+        .where(eq(schema.cockpitProjectedProjectState.projectId, input.projectId));
+    });
+  }
+
+  async listTaskArchiveReviews(projectId: string): Promise<TaskArchiveReviewRecord[]> {
+    const rows = await this.db
+      .select({
+        taskId: schema.cockpitTaskDetails.taskId,
+        source: schema.cockpitTaskDetails.source,
+        archiveReviewStatus: schema.cockpitTaskDetails.archiveReviewStatus,
+        archiveReviewNotes: schema.cockpitTaskDetails.archiveReviewNotes,
+        archiveReviewedAt: schema.cockpitTaskDetails.archiveReviewedAt,
+      })
+      .from(schema.cockpitTaskDetails)
+      .where(eq(schema.cockpitTaskDetails.projectId, projectId));
+
+    return rows.map((row) => ({
+      taskId: row.taskId,
+      source: row.source ?? 'archive',
+      reviewStatus: row.archiveReviewStatus ?? null,
+      reviewNotes: row.archiveReviewNotes ?? null,
+      reviewedAt: row.archiveReviewedAt ?? null,
+    }));
   }
 }
 

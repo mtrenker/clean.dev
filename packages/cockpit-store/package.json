@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@cleandev/cockpit-protocol": "workspace:*",
-    "@cleandev/pm": "workspace:*",
+    "@cleandev/db": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "pg": "^8.13.1"
   },

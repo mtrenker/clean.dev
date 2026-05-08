@@ -17,10 +17,11 @@ import { cockpitProtocolSchemaVersion } from '@cleandev/cockpit-protocol';
 import type { CockpitEvent } from '@cleandev/cockpit-protocol';
 
 import type {
+  CockpitActiveFleetEntry,
   CockpitProjectedPlanState,
   CockpitProjectedProjectState,
   CockpitProjectedTaskState,
-} from '@cleandev/pm';
+} from '@cleandev/db';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -45,15 +46,146 @@ export function emptyProjectedState(
     projectName: null,
     projectSlug: null,
     localRootPath: null,
+    worktreeRootPath: null,
     telemetry: null,
+    observation: null,
     dirty: true,
     lastEvent: null,
     lastHeartbeat: null,
+    devices: {},
     worktrees: {},
+    worktreeGroups: {},
     plans: {},
+    archivedPlanIds: [],
     tasks: {},
+    archivedTaskIds: [],
+    activeFleet: [],
+    engineUsage: {},
+    modelUsage: {},
+    profileUsage: {},
+    projectUsage: { inputTokens: 0, outputTokens: 0 },
+    projectCostEstimate: { currency: 'USD', inputCost: 0, outputCost: 0, totalCost: 0 },
   };
 }
+
+const emptyUsage = () => ({ inputTokens: 0, outputTokens: 0 });
+const emptyCost = () => ({ currency: 'USD' as const, inputCost: 0, outputCost: 0, totalCost: 0 });
+
+const appendProgressHistory = (
+  history: NonNullable<CockpitProjectedTaskState['progressHistory']> | undefined,
+  entry: NonNullable<CockpitProjectedTaskState['latestProgress']>,
+) => ([...(history ?? []), entry]).slice(-50);
+
+const addUsage = (
+  map: Record<string, { inputTokens: number; outputTokens: number }>,
+  key: string | null | undefined,
+  usage: { inputTokens: number; outputTokens: number },
+): void => {
+  if (!key) return;
+  const prev = map[key] ?? { inputTokens: 0, outputTokens: 0 };
+  map[key] = {
+    inputTokens: prev.inputTokens + usage.inputTokens,
+    outputTokens: prev.outputTokens + usage.outputTokens,
+  };
+};
+
+/**
+ * Recomputes all derived views from the canonical maps (worktrees, plans, tasks, devices).
+ *
+ * Called once at the end of every fold pass so that derived state is always
+ * consistent with the canonical state regardless of event ordering.
+ */
+const recomputeDerivedViews = (
+  state: CockpitProjectedProjectState,
+): CockpitProjectedProjectState => {
+  // ── 1. worktreeGroups ────────────────────────────────────────────────────────
+  const worktreeGroups: Record<string, string[]> = {};
+  for (const wt of Object.values(state.worktrees)) {
+    const group = wt.groupName ?? 'default';
+    if (!worktreeGroups[group]) worktreeGroups[group] = [];
+    worktreeGroups[group].push(wt.worktreeId);
+  }
+
+  // ── 2. archivedPlanIds ───────────────────────────────────────────────────────
+  const archivedPlanIds = Object.values(state.plans)
+    .filter((p) => p.source === 'archive')
+    .map((p) => p.planId);
+
+  // ── 3. archivedTaskIds ───────────────────────────────────────────────────────
+  const archivedTaskIds = Object.values(state.tasks)
+    .filter((t) => t.source === 'archive')
+    .map((t) => t.taskId);
+
+  // ── 4. activeFleet ───────────────────────────────────────────────────────────
+  const activeFleet: CockpitActiveFleetEntry[] = [];
+  for (const device of Object.values(state.devices)) {
+    const hb = device.lastHeartbeat;
+    if (hb && hb.activeTaskCount > 0) {
+      activeFleet.push({
+        deviceId: device.deviceId,
+        deviceName: device.deviceName ?? null,
+        instanceName: device.instanceName ?? null,
+        activeTaskCount: hb.activeTaskCount,
+        activePlanId: hb.activePlanId ?? null,
+        lastHeartbeatAt: hb.occurredAt,
+      });
+    }
+  }
+
+  // ── 5. engine/model/profile usage ────────────────────────────────────────────
+  const engineUsage: Record<string, { inputTokens: number; outputTokens: number }> = {};
+  const modelUsage: Record<string, { inputTokens: number; outputTokens: number }> = {};
+  const profileUsage: Record<string, { inputTokens: number; outputTokens: number }> = {};
+
+  for (const task of Object.values(state.tasks)) {
+    const usage = task.usage;
+    if (!usage || (usage.inputTokens === 0 && usage.outputTokens === 0)) continue;
+    const exec = task.execution;
+    if (exec) {
+      addUsage(engineUsage, exec.engine, usage);
+      addUsage(modelUsage, exec.model, usage);
+      addUsage(profileUsage, exec.profile, usage);
+    }
+  }
+
+  // ── 6. plan/project usage & cost ─────────────────────────────────────────────
+  const newPlans = { ...state.plans };
+  const projectUsage = emptyUsage();
+  const projectCost = emptyCost();
+
+  for (const planId of Object.keys(newPlans)) {
+    const planUsage = emptyUsage();
+    const planCost = emptyCost();
+    for (const task of Object.values(state.tasks)) {
+      if (task.planId !== planId) continue;
+      planUsage.inputTokens += task.usage?.inputTokens ?? 0;
+      planUsage.outputTokens += task.usage?.outputTokens ?? 0;
+      planCost.inputCost += task.costEstimate?.inputCost ?? 0;
+      planCost.outputCost += task.costEstimate?.outputCost ?? 0;
+      planCost.totalCost += task.costEstimate?.totalCost ?? 0;
+    }
+    newPlans[planId] = { ...newPlans[planId], usage: planUsage, costEstimate: planCost };
+    projectUsage.inputTokens += planUsage.inputTokens;
+    projectUsage.outputTokens += planUsage.outputTokens;
+    projectCost.inputCost += planCost.inputCost;
+    projectCost.outputCost += planCost.outputCost;
+    projectCost.totalCost += planCost.totalCost;
+  }
+
+  return {
+    ...state,
+    plans: newPlans,
+    projectUsage,
+    projectCostEstimate: projectCost,
+    worktreeGroups,
+    archivedPlanIds,
+    archivedTaskIds,
+    activeFleet,
+    engineUsage,
+    modelUsage,
+    profileUsage,
+  };
+};
 
 // ── Core fold ──────────────────────────────────────────────────────────────────
 
@@ -83,12 +215,37 @@ export function foldEventsIntoState(
   // them without touching the input.
   let s: CockpitProjectedProjectState = {
     ...state,
+    devices: { ...state.devices },
     worktrees: { ...state.worktrees },
+    worktreeGroups: { ...(state.worktreeGroups ?? {}) },
     plans: { ...state.plans },
+    archivedPlanIds: [...(state.archivedPlanIds ?? [])],
     tasks: { ...state.tasks },
+    archivedTaskIds: [...(state.archivedTaskIds ?? [])],
+    activeFleet: [...(state.activeFleet ?? [])],
+    engineUsage: { ...(state.engineUsage ?? {}) },
+    modelUsage: { ...(state.modelUsage ?? {}) },
+    profileUsage: { ...(state.profileUsage ?? {}) },
   };
 
   for (const event of sorted) {
+    const existingDevice = s.devices[event.deviceId];
+    s = {
+      ...s,
+      devices: {
+        ...s.devices,
+        [event.deviceId]: {
+          ...(existingDevice ?? {}),
+          deviceId: event.deviceId,
+          deviceName: existingDevice?.deviceName ?? null,
+          instanceName: existingDevice?.instanceName ?? null,
+          lastEventAt: event.occurredAt,
+          lastEventType: event.type,
+          source: event.source,
+        },
+      },
+    };
+
     // Track the most-recent event (by sequence).
     if (!s.lastEvent || event.sequence > s.lastEvent.sequence) {
       s = {
@@ -113,13 +270,16 @@ export function foldEventsIntoState(
           ...s,
           projectName: event.payload.projectName ?? s.projectName ?? null,
           localRootPath: event.payload.localRootPath ?? s.localRootPath ?? null,
+          worktreeRootPath: event.payload.worktreeRootPath ?? s.worktreeRootPath ?? null,
           telemetry: event.payload.telemetry ?? s.telemetry ?? null,
+          observation: event.payload.observation ?? s.observation ?? null,
         };
         break;
       }
 
       // ── Daemon heartbeat ───────────────────────────────────────────────────
       case 'project_heartbeat': {
+        const currentDevice = s.devices[event.deviceId];
         s = {
           ...s,
           lastHeartbeat: {
@@ -127,6 +287,24 @@ export function foldEventsIntoState(
             daemonVersion: event.payload.daemonVersion ?? null,
             activePlanId: event.payload.activePlanId ?? null,
             activeTaskCount: event.payload.activeTaskCount,
+          },
+          devices: {
+            ...s.devices,
+            [event.deviceId]: {
+              ...(currentDevice ?? {
+                deviceId: event.deviceId,
+                lastEventAt: event.occurredAt,
+                lastEventType: event.type,
+                source: event.source,
+              }),
+              ...event.payload.device,
+              lastHeartbeat: {
+                occurredAt: event.occurredAt,
+                daemonVersion: event.payload.daemonVersion ?? null,
+                activePlanId: event.payload.activePlanId ?? null,
+                activeTaskCount: event.payload.activeTaskCount,
+              },
+            },
           },
         };
         break;
@@ -156,6 +334,10 @@ export function foldEventsIntoState(
           taskCount: event.payload.taskCount,
           tasks: event.payload.tasks,
           lastSeenAt: event.occurredAt,
+          source: event.source,
+          usage: event.payload.usage ?? s.plans[event.payload.planId]?.usage ?? emptyUsage(),
+          costEstimate: event.payload.costEstimate ?? s.plans[event.payload.planId]?.costEstimate ?? emptyCost(),
+          archive: event.payload.archive ?? s.plans[event.payload.planId]?.archive ?? null,
         };
         s = { ...s, plans: { ...s.plans, [plan.planId]: plan } };
         break;
@@ -173,7 +355,11 @@ export function foldEventsIntoState(
           status: existing?.status ?? 'pending',
           dependsOn: event.payload.dependsOn,
           description: event.payload.description ?? null,
+          detailPath: event.payload.detailPath ?? existing?.detailPath ?? null,
+          detailContent: event.payload.detailContent ?? existing?.detailContent ?? null,
           execution: event.payload.execution,
+          source: event.source,
+          archive: event.payload.archive ?? existing?.archive ?? null,
         };
         s = { ...s, tasks: { ...s.tasks, [task.taskId]: task } };
         break;
@@ -190,6 +376,9 @@ export function foldEventsIntoState(
           status: 'running',
           startedAt: event.payload.startedAt,
           execution: event.payload.execution,
+          source: event.source,
+          archive: event.payload.archive ?? existing?.archive ?? null,
+          worktreeId: event.payload.worktreeId ?? existing?.worktreeId ?? null,
         };
         s = { ...s, tasks: { ...s.tasks, [task.taskId]: task } };
         break;
@@ -198,19 +387,21 @@ export function foldEventsIntoState(
       case 'task_progressed': {
         const existing = s.tasks[event.payload.taskId];
         if (existing) {
+          const latestProgress = {
+            progressStatus: event.payload.progressStatus,
+            step: event.payload.step ?? null,
+            progressVisible: event.payload.progressVisible,
+            progressAt: event.payload.progressAt,
+            latestProgressAt: event.payload.latestProgressAt ?? null,
+          };
           s = {
             ...s,
             tasks: {
               ...s.tasks,
               [event.payload.taskId]: {
                 ...existing,
-                latestProgress: {
-                  progressStatus: event.payload.progressStatus,
-                  step: event.payload.step ?? null,
-                  progressVisible: event.payload.progressVisible,
-                  progressAt: event.payload.progressAt,
-                  latestProgressAt: event.payload.latestProgressAt ?? null,
-                },
+                latestProgress,
+                progressHistory: appendProgressHistory(existing.progressHistory, latestProgress),
               },
             },
           };
@@ -231,7 +422,10 @@ export function foldEventsIntoState(
           completedAt: event.payload.completedAt,
           durationMs: event.payload.durationMs ?? null,
           retries: event.payload.retries,
-          usage: event.payload.usage,
+          usage: event.payload.usage ?? existing?.usage,
+          costEstimate: event.payload.costEstimate ?? existing?.costEstimate,
+          source: event.source,
+          archive: event.payload.archive ?? existing?.archive ?? null,
         };
         s = { ...s, tasks: { ...s.tasks, [task.taskId]: task } };
         break;
@@ -251,7 +445,10 @@ export function foldEventsIntoState(
           durationMs: event.payload.durationMs ?? null,
           retries: event.payload.retries,
           error: event.payload.error,
-          usage: event.payload.usage,
+          usage: event.payload.usage ?? existing?.usage,
+          costEstimate: event.payload.costEstimate ?? existing?.costEstimate,
+          source: event.source,
+          archive: event.payload.archive ?? existing?.archive ?? null,
         };
         s = { ...s, tasks: { ...s.tasks, [task.taskId]: task } };
         break;
@@ -272,6 +469,8 @@ export function foldEventsIntoState(
                     inputTokens: prev.inputTokens + event.payload.usage.inputTokens,
                     outputTokens: prev.outputTokens + event.payload.usage.outputTokens,
                   },
+                  costEstimate: event.payload.costEstimate ?? existing.costEstimate,
+                  archive: event.payload.archive ?? existing.archive ?? null,
                 },
               },
             };
@@ -279,8 +478,52 @@ export function foldEventsIntoState(
         }
         break;
       }
+
+      case 'task_handoff_seen': {
+        const existing = s.tasks[event.payload.taskId];
+        if (existing) {
+          s = {
+            ...s,
+            tasks: {
+              ...s.tasks,
+              [event.payload.taskId]: {
+                ...existing,
+                handoffSummary: event.payload.handoffContent ?? null,
+                handoffContentHash: event.payload.contentHash ?? null,
+              },
+            },
+          };
+        }
+        break;
+      }
+
+      case 'task_output_seen': {
+        const existing = s.tasks[event.payload.taskId];
+        if (existing) {
+          s = {
+            ...s,
+            tasks: {
+              ...s.tasks,
+              [event.payload.taskId]: {
+                ...existing,
+                outputSummary: event.payload.outputTail ?? null,
+                outputContentHash: event.payload.contentHash ?? null,
+              },
+            },
+          };
+        }
+        break;
+      }
     }
   }
+
+  // ── Derived views ──────────────────────────────────────────────────────────
+  //
+  // Recompute all derived/aggregated fields (worktreeGroups, archivedPlanIds,
+  // archivedTaskIds, activeFleet, engine/model/profileUsage, plan/project usage)
+  // from the canonical maps.  This is done once after all events are applied so
+  // derived state is always consistent and the fold remains idempotent.
+  s = recomputeDerivedViews(s);
 
   // ── Staleness check ────────────────────────────────────────────────────────
   //

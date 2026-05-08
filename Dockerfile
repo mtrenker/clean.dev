@@ -12,6 +12,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc* ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
+COPY packages/db/package.json ./packages/db/
 COPY packages/pm/package.json ./packages/pm/
 
 RUN corepack enable pnpm && pnpm i --frozen-lockfile
@@ -87,14 +88,16 @@ COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-protocol/package
 COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-protocol/dist ./node_modules/@cleandev/cockpit-protocol/dist
 COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/package.json ./node_modules/@cleandev/cockpit-store/package.json
 COPY --from=builder --chown=nextjs:nodejs /app/packages/cockpit-store/dist ./node_modules/@cleandev/cockpit-store/dist
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/package.json ./node_modules/@cleandev/db/package.json
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/dist ./node_modules/@cleandev/db/dist
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/package.json ./node_modules/@cleandev/pm/package.json
 COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/dist ./node_modules/@cleandev/pm/dist
-COPY --from=builder --chown=nextjs:nodejs /app/packages/pm/drizzle ./packages/pm/drizzle
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/drizzle ./packages/db/drizzle
 
 # Build-time smoke for custom-server-only modules that Next standalone tracing
 # does not validate. This catches missing explicit COPY entries before deploy.
 RUN node -e "require('./apps/web/src/server/cockpit-ws.js'); require('./apps/web/src/lib/cockpit-repo.js'); require('./apps/web/src/lib/cockpit/projector.js')" \
-  && test -f ./packages/pm/drizzle/meta/_journal.json
+  && test -f ./packages/db/drizzle/meta/_journal.json
 
 USER nextjs
 

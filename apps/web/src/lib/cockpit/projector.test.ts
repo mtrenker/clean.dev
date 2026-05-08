@@ -51,6 +51,8 @@ function makeProjectRecord(
     projectSlug: null,
     projectName: null,
     localRootPath: null,
+    worktreeRootPath: null,
+    observation: null,
     telemetry: null,
     latestEventSequence: 0,
     latestEventAt: null,
@@ -77,9 +79,17 @@ function makeProjectedStateRecord(
     dirty: true,
     lastEvent: null,
     lastHeartbeat: null,
+    devices: {},
     worktrees: {},
+    worktreeGroups: {},
     plans: {},
+    archivedPlanIds: [],
     tasks: {},
+    archivedTaskIds: [],
+    activeFleet: [],
+    engineUsage: {},
+    modelUsage: {},
+    profileUsage: {},
     ...(state ?? {}),
   };
   return {
@@ -146,9 +156,12 @@ function makeMockRepo(overrides: Partial<ICockpitRepository> = {}): MockRepo {
 
   const base: ICockpitRepository = {
     createProject: vi.fn(),
+    getProject: vi.fn().mockResolvedValue(null),
     listProjects: vi.fn().mockResolvedValue([]),
+    updateProjectConfig: vi.fn(),
     createDevice: vi.fn(),
     listDevices: vi.fn().mockResolvedValue([]),
+    listDevicesWithDetails: vi.fn().mockResolvedValue([]),
     revokeDevice: vi.fn(),
     createDevicePairing: vi.fn(),
     findDevicePairingByUserCode: vi.fn().mockResolvedValue(null),
@@ -171,6 +184,11 @@ function makeMockRepo(overrides: Partial<ICockpitRepository> = {}): MockRepo {
     pruneRawEvents: vi.fn(),
     listDirtyProjects: vi.fn().mockResolvedValue([]),
     listRawEventsSince: vi.fn().mockResolvedValue([]),
+    getProjectionStatus: vi.fn().mockResolvedValue(null),
+    resetProjectionCheckpoint: vi.fn().mockResolvedValue(undefined),
+    setTaskArchiveReview: vi.fn().mockResolvedValue(undefined),
+    setPlanArchiveReview: vi.fn().mockResolvedValue(undefined),
+    listTaskArchiveReviews: vi.fn().mockResolvedValue([]),
     ...overrides,
   };
 
@@ -550,6 +568,64 @@ describe('CockpitProjector', () => {
       } finally {
         vi.useRealTimers();
       }
+    });
+  });
+
+  // ── Observability: batch limit and error recovery hints ───────────────────
+
+  describe('batch limit and cycle reporting', () => {
+    it('returns skipped count when a project errors during projection', async () => {
+      const projectId = 'proj-error';
+      const repo = makeMockRepo({
+        listDirtyProjects: vi.fn().mockResolvedValue([makeProjectRecord(projectId)]),
+        getProjectedProjectStateRecord: vi.fn().mockRejectedValue(new Error('DB error')),
+      });
+
+      const projector = new CockpitProjector(repo);
+      const result = await projector.projectAll();
+
+      expect(result.skipped).toBe(1);
+      expect(result.projected).toBe(0);
+    });
+
+    it('projects multiple dirty projects and reports both counts', async () => {
+      const repo = makeMockRepo({
+        listDirtyProjects: vi.fn().mockResolvedValue([
+          makeProjectRecord('proj-a'),
+          makeProjectRecord('proj-b'),
+        ]),
+        getProjectedProjectStateRecord: vi.fn().mockResolvedValue(null),
+        listRawEventsSince: vi.fn().mockResolvedValue([]),
+      });
+
+      const projector = new CockpitProjector(repo);
+      const result = await projector.projectAll();
+
+      expect(result.projected).toBe(2);
+      expect(result.skipped).toBe(0);
+    });
+
+    it('projects up to the event batch limit without error', async () => {
+      const projectId = 'proj-big';
+      const batchLimit = 5;
+      const manyEvents = Array.from({ length: batchLimit }, (_, i) =>
+        makeProjectSeenEvent(projectId, i + 1),
+      );
+
+      const repo = makeMockRepo({
+        listDirtyProjects: vi.fn().mockResolvedValue([makeProjectRecord(projectId)]),
+        getProjectedProjectStateRecord: vi.fn().mockResolvedValue(null),
+        listRawEventsSince: vi.fn().mockResolvedValue(manyEvents),
+      });
+
+      const projector = new CockpitProjector(repo, { eventBatchLimit: batchLimit });
+      const result = await projector.projectAll();
+
+      expect(result.projected).toBe(1);
+      expect(result.skipped).toBe(0);
+      // The upsert was called with the latest sequence from the batch.
+      const upsertCall = (repo as MockRepo)._upsertCalls[0];
+      expect(upsertCall?.latestEventSequence).toBe(batchLimit);
     });
   });
 });

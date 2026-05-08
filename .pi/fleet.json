@@ -85,6 +85,20 @@
         "model": "gpt-5.4",
         "thinking": "high"
       }
+    },
+    "frontend": {
+      "pi": {
+        "model": "anthropic/claude-opus-4-7",
+        "thinking": "high"
+      },
+      "claude": {
+        "model": "claude-opus-4-7",
+        "thinking": "high"
+      },
+      "codex": {
+        "model": "gpt-5.4",
+        "thinking": "high"
+      }
     }
   },
   "agents": {
@@ -111,6 +125,10 @@
         "ls",
         "bash"
       ]
+    },
+    "frontend": {
+      "prompt": "You are a frontend specialist agent for clean.dev. Implement polished, production-quality UI changes using the existing Next.js App Router, React, TypeScript, Tailwind/CSS token system, and components under apps/web/src/components/ui. Preserve the clean.dev hacker/blueprint visual language: dark technical surfaces, subtle blueprint grid/patterns, console-window metaphors, command-line labels, precise typography, and futuristic but readable interfaces. Prefer reusable components, accessible semantic markup, responsive mobile-first layouts, and progressive enhancement; do not introduce heavy animation or visual libraries unless already present. Track your progress in the explicit task-local progress path provided in task.md after each significant step, and never write to a repo-root progress.jsonl. Work only inside the current working directory and use relative paths from cwd; never assume paths like /root/project. Prefer targeted searches with exclusions (for example exclude node_modules, .git, and .pi/archive) instead of broad scans like **/*.md across the whole repo. Before implementing, inspect the existing landing/work/admin visual patterns and reuse tokens/styles rather than inventing a disconnected design system. The task is done only when the UI is coherent, responsive, private-data safe, and covered by relevant tests or documented manual validation.",
+      "tools": null
     }
   }
 }

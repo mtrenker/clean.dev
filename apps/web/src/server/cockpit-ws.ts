@@ -81,9 +81,16 @@ export function extractBearerToken(request: IncomingMessage): string | null {
   return token || null;
 }
 
+const truncateServerMessage = (message: string) =>
+  message.length <= 512 ? message : `${message.slice(0, 509)}...`;
+
 function sendMessage(ws: WebSocket, message: CockpitServerMessage): void {
+  const safeMessage = message.type === 'server_error'
+    ? { ...message, message: truncateServerMessage(message.message) }
+    : message;
+
   if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify(message));
+    ws.send(JSON.stringify(safeMessage));
   }
 }
 
@@ -402,13 +409,24 @@ export class CockpitWsServer {
         .catch((err) => logger.error({ event: 'cockpit.ws.touch_session_error', connectionId, error: String(err) }));
     }
 
+    // Structured log captures ingestion throughput and duplicate rate so
+    // operators can detect:
+    //   - ingestion stopped: accepted_count stalls at 0 over multiple batches
+    //   - daemon replay: duplicate_count > 0 (reconnect after disconnect)
+    //   - sequence gap: acked_through_sequence jumping unexpectedly
     logger.info({
       event: 'cockpit.ws.batch_ingested',
       connectionId,
+      deviceId: state.deviceId,
+      sessionId: state.sessionId,
       batchId: message.payload.batchId,
+      event_count: message.payload.events.length,
       accepted_count: ack.acceptedCount,
       duplicate_count: ack.duplicateCount,
+      rejected_count: ack.rejected?.length ?? 0,
       acked_through_sequence: ack.ackedThroughSequence,
+      // Project IDs involved in this batch (for cross-referencing projection lag).
+      project_ids: [...new Set(message.payload.events.map((e) => e.projectId))],
     });
 
     sendMessage(state.ws, {
@@ -426,6 +444,18 @@ export class CockpitWsServer {
   ): Promise<void> {
     const state = this.connections.get(connectionId);
     if (!state || !state.sessionId) return;
+
+    // Log heartbeat receipt so operators can confirm daemon liveness.
+    // daemon_stale detection in the projector uses the most-recent heartbeat
+    // event in the raw-event log (not this WS heartbeat) — this is a
+    // transport-level liveness check.
+    logger.debug({
+      event: 'cockpit.ws.client_heartbeat',
+      connectionId,
+      deviceId: state.deviceId,
+      sessionId: state.sessionId,
+      latest_sequence: message.latestSequence,
+    });
 
     this.repo
       .touchSession(state.sessionId, message.latestSequence)
@@ -454,11 +484,18 @@ export class CockpitWsServer {
     clearInterval(state.heartbeatTimer);
     this.connections.delete(connectionId);
 
+    // Log with session_id so operators can correlate against the projected
+    // state's device map.  After disconnect the projected state's `dirty` flag
+    // will flip to true once the daemon heartbeat window expires.
     logger.info({
       event: 'cockpit.ws.disconnected',
       connectionId,
       deviceId: state.deviceId,
+      sessionId: state.sessionId,
       last_acked_sequence: state.lastAckedSequence,
+      // Hint: if the daemon reconnects quickly this is a transient drop.
+      // If it doesn't reconnect, check the device's lastHeartbeatAt in /cockpit/devices.
+      remaining_connections: this.connections.size,
     });
 
     // Persist final acked sequence.

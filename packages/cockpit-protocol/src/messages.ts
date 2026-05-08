@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
-import { identifierSchema, isoDateTimeSchema, cockpitProtocolSchemaVersionSchema, shortTextSchema } from './config';
-import { cockpitEventSchema } from './events';
+import {
+  identifierSchema,
+  isoDateTimeSchema,
+  shortTextSchema,
+  supportedCockpitProtocolSchemaVersionSchema,
+} from './config';
+import { cockpitEventSchema, deviceObservationMetadataSchema, tokenUsageSchema, usageCostEstimateSchema } from './events';
 
 export const rejectedEventSchema = z.object({
   eventId: identifierSchema,
@@ -32,26 +37,30 @@ export type EventBatchAck = z.infer<typeof eventBatchAckSchema>;
 
 export const clientHelloMessageSchema = z.object({
   type: z.literal('client_hello'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   sessionId: identifierSchema,
   deviceId: identifierSchema,
   deviceName: shortTextSchema,
   instanceName: shortTextSchema,
   lastAckedSequence: z.number().int().nonnegative().default(0),
+  deviceMetadata: deviceObservationMetadataSchema.optional(),
 });
 
 export const clientEventBatchMessageSchema = z.object({
   type: z.literal('event_batch'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   payload: eventBatchSchema,
 });
 
 export const clientHeartbeatMessageSchema = z.object({
   type: z.literal('client_heartbeat'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   sentAt: isoDateTimeSchema,
   latestSequence: z.number().int().nonnegative(),
   activeProjectIds: z.array(identifierSchema).max(500).default([]),
+  deviceMetadata: deviceObservationMetadataSchema.optional(),
+  usage: tokenUsageSchema.optional(),
+  costEstimate: usageCostEstimateSchema.optional(),
 });
 
 export const cockpitClientMessageSchema = z.discriminatedUnion('type', [
@@ -64,7 +73,7 @@ export type CockpitClientMessage = z.infer<typeof cockpitClientMessageSchema>;
 
 export const serverHelloMessageSchema = z.object({
   type: z.literal('server_hello'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   connectionId: identifierSchema,
   serverTime: isoDateTimeSchema,
   heartbeatIntervalMs: z.number().int().positive(),
@@ -72,7 +81,7 @@ export const serverHelloMessageSchema = z.object({
 
 export const serverAckMessageSchema = z.object({
   type: z.literal('event_batch_ack'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   payload: eventBatchAckSchema,
 });
 
@@ -85,7 +94,7 @@ export const serverErrorCodeSchema = z.enum([
 
 export const serverErrorMessageSchema = z.object({
   type: z.literal('server_error'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   code: serverErrorCodeSchema,
   message: shortTextSchema,
   retryable: z.boolean().default(false),
@@ -93,7 +102,7 @@ export const serverErrorMessageSchema = z.object({
 
 export const serverPingMessageSchema = z.object({
   type: z.literal('server_ping'),
-  schemaVersion: cockpitProtocolSchemaVersionSchema,
+  schemaVersion: supportedCockpitProtocolSchemaVersionSchema,
   sentAt: isoDateTimeSchema,
 });
 

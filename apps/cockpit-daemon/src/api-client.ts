@@ -23,12 +23,26 @@ export interface ExchangeDeviceResponse {
   deviceId?: string;
 }
 
+import type { ProjectObservationConfig, TelemetryProfile } from '@cleandev/cockpit-protocol';
+
 export interface RemoteProject {
   projectId: string;
   projectSlug: string | null;
   projectName: string | null;
   localRootPath: string | null;
+  worktreeRootPath: string | null;
+  observation: ProjectObservationConfig | null;
+  telemetry: TelemetryProfile | null;
   createdAt: string;
+}
+
+export interface RemoteProjectConfig {
+  projectId: string;
+  projectSlug: string | null;
+  projectName: string | null;
+  worktreeRootPath: string | null;
+  observation: ProjectObservationConfig | null;
+  telemetry: TelemetryProfile | null;
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -201,6 +215,32 @@ export async function findRemoteProject(
 ): Promise<RemoteProject | null> {
   const projects = await listRemoteProjects(serverUrl, token);
   return projects.find((p) => p.projectId === projectId) ?? null;
+}
+
+/**
+ * Fetch the server-defined observation and telemetry config for a single project.
+ *
+ * Calls GET /api/cockpit/daemon/projects/[projectId]/config with a daemon bearer token.
+ * Returns null if the project does not exist on the server (404).
+ */
+export async function fetchRemoteProjectConfig(
+  serverUrl: string,
+  token: string,
+  projectId: string,
+): Promise<RemoteProjectConfig | null> {
+  const url = `${serverUrl.replace(/\/$/, '')}/api/cockpit/daemon/projects/${encodeURIComponent(projectId)}/config`;
+  try {
+    const result = await apiFetch<RemoteProjectConfig>(url, {
+      method: 'GET',
+      bearerToken: token,
+    });
+    return result;
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) {
+      return null;
+    }
+    throw err;
+  }
 }
 
 // Re-export ApiError so callers can instanceof-check it.

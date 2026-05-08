@@ -29,7 +29,7 @@ import {
   cockpitProtocolSchemaVersion,
   cockpitServerMessageSchema,
 } from '@cleandev/cockpit-protocol';
-import type { CockpitClientMessage } from '@cleandev/cockpit-protocol';
+import type { CockpitClientMessage, CockpitEvent } from '@cleandev/cockpit-protocol';
 
 import type { LocalDaemonDb } from '../local-db';
 import type { Logger } from '../logging';
@@ -70,6 +70,8 @@ export class DaemonTransport {
   private lifecycleState: TransportLifecycleState = 'idle';
   private heartbeatIntervalMs: number;
   private reconnectAttempts = 0;
+  private protocolSchemaVersion: 1 | typeof cockpitProtocolSchemaVersion = cockpitProtocolSchemaVersion;
+  private serverHelloReceived = false;
 
   private readonly serverUrl: string;
   private readonly token: string;
@@ -167,9 +169,8 @@ export class DaemonTransport {
     this.logger.info('[transport] Connection established');
     this.lifecycleState = 'connected';
     this.reconnectAttempts = 0;
-    this.sendClientHello();
-    this.scheduleHeartbeat();
-    this.flushPendingEvents();
+    this.protocolSchemaVersion = cockpitProtocolSchemaVersion;
+    this.serverHelloReceived = false;
   }
 
   private onMessage(data: Buffer | ArrayBuffer | Buffer[]): void {
@@ -197,11 +198,12 @@ export class DaemonTransport {
           `[transport] server_hello received: connectionId=${msg.connectionId} ` +
             `heartbeatIntervalMs=${msg.heartbeatIntervalMs}`,
         );
+        this.protocolSchemaVersion = msg.schemaVersion;
         this.heartbeatIntervalMs = msg.heartbeatIntervalMs;
-        // Reschedule heartbeat with the server-specified interval
-        if (this.heartbeatTimer !== null) {
-          this.scheduleHeartbeat();
-        }
+        this.serverHelloReceived = true;
+        this.sendClientHello();
+        this.scheduleHeartbeat();
+        this.flushPendingEvents();
         break;
 
       case 'event_batch_ack':
@@ -240,6 +242,7 @@ export class DaemonTransport {
     this.logger.info(`[transport] Disconnected (code=${code} reason=${reasonText})`);
     this.clearHeartbeatTimer();
     this.ws = null;
+    this.serverHelloReceived = false;
 
     if (this.lifecycleState !== 'stopped') {
       this.lifecycleState = 'connecting';
@@ -258,7 +261,7 @@ export class DaemonTransport {
     const state = this.db.getState();
     this.send({
       type: 'client_hello',
-      schemaVersion: cockpitProtocolSchemaVersion,
+      schemaVersion: this.protocolSchemaVersion,
       sessionId: this.sessionId,
       deviceId: this.deviceId,
       deviceName: this.deviceName,
@@ -268,14 +271,14 @@ export class DaemonTransport {
   }
 
   private sendHeartbeat(): void {
-    if (this.lifecycleState !== 'connected' || this.ws === null) return;
+    if (this.lifecycleState !== 'connected' || this.ws === null || !this.serverHelloReceived) return;
 
     const state = this.db.getState();
     const projects = this.db.listConfiguredProjects();
 
     this.send({
       type: 'client_heartbeat',
-      schemaVersion: cockpitProtocolSchemaVersion,
+      schemaVersion: this.protocolSchemaVersion,
       sentAt: new Date().toISOString(),
       // latestSequence is the highest sequence we've ever emitted
       latestSequence: Math.max(0, state.nextSequence - 1),
@@ -284,23 +287,49 @@ export class DaemonTransport {
   }
 
   private flushPendingEvents(): void {
-    if (this.ws === null || this.ws.readyState !== WebSocket.OPEN) return;
+    if (this.ws === null || this.ws.readyState !== WebSocket.OPEN || !this.serverHelloReceived) return;
 
     const pending = this.db.listPendingOutboundEvents(this.batchSize);
     if (pending.length === 0) return;
 
+    const events = pending
+      .map((r) => normalizeEventForProtocol(r.event, this.protocolSchemaVersion))
+      .filter((event): event is CockpitEvent => event !== null);
+
+    if (events.length === 0) {
+      const lastDropped = pending[pending.length - 1];
+      if (!lastDropped) return;
+      this.logger.warn(
+        `[transport] Dropping ${pending.length} event(s) unsupported by protocol v${this.protocolSchemaVersion}`,
+      );
+      this.db.acknowledgeBatch({
+        batchId: `local-drop-${randomUUID()}`,
+        ackedThroughSequence: lastDropped.sequence,
+        acceptedCount: 0,
+        duplicateCount: 0,
+        rejected: pending.map((record) => ({
+          eventId: record.eventId,
+          sequence: record.sequence,
+          reason: `Event type ${record.event.type} is unsupported by protocol v${this.protocolSchemaVersion}`,
+        })),
+        serverTime: new Date().toISOString(),
+      });
+      this.flushPendingEvents();
+      return;
+    }
+
     const batchId = randomUUID();
     this.logger.info(
-      `[transport] Sending event_batch: batchId=${batchId} eventCount=${pending.length}`,
+      `[transport] Sending event_batch: batchId=${batchId} eventCount=${events.length}`,
     );
 
     this.send({
       type: 'event_batch',
-      schemaVersion: cockpitProtocolSchemaVersion,
+      schemaVersion: this.protocolSchemaVersion,
       payload: {
         batchId,
         sentAt: new Date().toISOString(),
-        events: pending.map((r) => r.event),
+        events,
       },
     });
   }
@@ -355,6 +384,29 @@ export class DaemonTransport {
       this.reconnectTimer = null;
     }
   }
+}
+
+const protocolV1EventTypes = new Set<CockpitEvent['type']>([
+  'project_seen',
+  'project_heartbeat',
+  'worktree_seen',
+  'worktree_changed',
+  'plan_seen',
+  'task_seen',
+  'task_started',
+  'task_progressed',
+  'task_completed',
+  'task_failed',
+  'usage_reported',
+]);
+
+function normalizeEventForProtocol(
+  event: CockpitEvent,
+  schemaVersion: 1 | typeof cockpitProtocolSchemaVersion,
+): CockpitEvent | null {
+  if (schemaVersion === 1 && !protocolV1EventTypes.has(event.type)) return null;
+  if (event.schemaVersion === schemaVersion) return event;
+  return { ...event, schemaVersion } as CockpitEvent;
 }
 
 // ── URL helper ─────────────────────────────────────────────────────────────────

@@ -29,6 +29,13 @@
       "when": 1778051949313,
       "tag": "0003_wealthy_kronos",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778183683911,
+      "tag": "0004_gray_cassandra_nova",
+      "breakpoints": true
     }
   ]
 }
