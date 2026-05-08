@@ -1,0 +1,25 @@
+{
+  "id": "001",
+  "name": "audit-current-cockpit-data-flow-ui-gaps-daemon-packaging-options-and-db-ownership",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [],
+  "startedAt": "2026-05-07T19:33:30.467Z",
+  "completedAt": "2026-05-07T19:39:17.911Z",
+  "duration": 347444,
+  "retries": 0,
+  "pid": 768038,
+  "error": null,
+  "usage": {
+    "inputTokens": 72,
+    "outputTokens": 16921,
+    "cacheCreationInputTokens": 422942,
+    "cacheReadInputTokens": 5301546
+  },
+  "latestProgressAt": "2026-05-07T19:39:16.793Z",
+  "latestProgressMessage": "The audit is complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-followup-audit.md"
+}

@@ -1,0 +1,312 @@
+{
+  "updatedAt": "2026-05-08T06:57:48.483Z",
+  "tasks": [
+    {
+      "id": "001",
+      "name": "audit-current-cockpit-data-flow-ui-gaps-daemon-packaging-options-and-db-ownership",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T19:33:30.467Z",
+      "completedAt": "2026-05-07T19:39:17.911Z",
+      "latestProgressAt": "2026-05-07T19:39:16.793Z",
+      "latestProgressMessage": "The audit is complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-followup-audit.md",
+      "lastProgress": "The audit is complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-followup-audit.md",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 72,
+        "outputTokens": 16921,
+        "cacheCreationInputTokens": 422942,
+        "cacheReadInputTokens": 5301546
+      }
+    },
+    {
+      "id": "002",
+      "name": "define-the-project-overview-information-architecture-and-state-contract",
+      "agent": "scout",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T19:39:17.920Z",
+      "completedAt": "2026-05-07T19:46:03.922Z",
+      "latestProgressAt": "2026-05-07T19:46:03.629Z",
+      "latestProgressMessage": "Task complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-overview-model.md` (new,",
+      "lastProgress": "Task complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-overview-model.md` (new,",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 37,
+        "outputTokens": 26336,
+        "cacheCreationInputTokens": 170237,
+        "cacheReadInputTokens": 884805
+      }
+    },
+    {
+      "id": "003",
+      "name": "extract-shared-drizzle-schema-migrations-and-migration-runner-into-packagesdb",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T19:39:17.936Z",
+      "completedAt": "2026-05-07T19:47:15.773Z",
+      "latestProgressAt": "2026-05-07T19:47:15.429Z",
+      "latestProgressMessage": "The task is complete. Here's a summary of what was done:\n\n## What was accomplished\n\n### New `packages/db` package (`@cle",
+      "lastProgress": "The task is complete. Here's a summary of what was done:\n\n## What was accomplished\n\n### New `packages/db` package (`@cle",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 11229,
+        "outputTokens": 31085,
+        "cacheCreationInputTokens": 212722,
+        "cacheReadInputTokens": 6889524
+      }
+    },
+    {
+      "id": "004",
+      "name": "extend-protocol-and-database-schema-for-project-config-devices-branches-worktrees-and-usagecosts",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "status": "done",
+      "startedAt": "2026-05-07T19:47:15.782Z",
+      "completedAt": "2026-05-07T19:56:52.018Z",
+      "latestProgressAt": "2026-05-07T21:56:43+02:00",
+      "latestProgressMessage": "Task complete",
+      "lastProgress": "Task complete",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 4230315,
+        "outputTokens": 27269
+      }
+    },
+    {
+      "id": "005",
+      "name": "implement-project-observation-configuration-apis-and-local-config-sync",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T19:56:52.039Z",
+      "completedAt": "2026-05-07T20:04:27.201Z",
+      "latestProgressAt": "2026-05-07T20:04:26.868Z",
+      "latestProgressMessage": "The implementation is complete. Here's a summary of what was done:\n\n## Summary\n\n### Repository Layer\nAdded `getProject(p",
+      "lastProgress": "The implementation is complete. Here's a summary of what was done:\n\n## Summary\n\n### Repository Layer\nAdded `getProject(p",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 136,
+        "outputTokens": 28586,
+        "cacheCreationInputTokens": 199148,
+        "cacheReadInputTokens": 7747228
+      }
+    },
+    {
+      "id": "006",
+      "name": "upgrade-daemon-git-inventory-to-branchworktree-intelligence-v2",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "status": "done",
+      "startedAt": "2026-05-07T20:04:27.209Z",
+      "completedAt": "2026-05-07T20:13:04.797Z",
+      "latestProgressAt": "2026-05-07T20:12:58Z",
+      "latestProgressMessage": "Re-ran daemon build and full test suite after final adapter tweak",
+      "lastProgress": "Re-ran daemon build and full test suite after final adapter tweak",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2348246,
+        "outputTokens": 24711
+      }
+    },
+    {
+      "id": "007",
+      "name": "add-daemon-side-fleet-runtime-agent-and-approximate-cost-attribution",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T20:04:27.225Z",
+      "completedAt": "2026-05-07T20:16:44.394Z",
+      "latestProgressAt": "2026-05-07T20:16:44.083Z",
+      "latestProgressMessage": "All 109 tests pass and the build is clean. Here's a summary of what was implemented:\n\n---\n\n## Summary\n\n### New: `apps/co",
+      "lastProgress": "All 109 tests pass and the build is clean. Here's a summary of what was implemented:\n\n---\n\n## Summary\n\n### New: `apps/co",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 73,
+        "outputTokens": 50567,
+        "cacheCreationInputTokens": 290994,
+        "cacheReadInputTokens": 5108969
+      }
+    },
+    {
+      "id": "008",
+      "name": "rework-projection-for-per-device-project-state-branchworktree-inventory-and-usage-summaries",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-07T20:16:44.403Z",
+      "completedAt": "2026-05-07T20:24:20.017Z",
+      "latestProgressAt": "2026-05-07T20:24:19.644Z",
+      "latestProgressMessage": "The task is complete. Here's a summary of what was done:\n\n## Summary\n\n**Task 008** reworked the cockpit projection layer",
+      "lastProgress": "The task is complete. Here's a summary of what was done:\n\n## Summary\n\n**Task 008** reworked the cockpit projection layer",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 77,
+        "outputTokens": 34407,
+        "cacheCreationInputTokens": 241418,
+        "cacheReadInputTokens": 4282464
+      }
+    },
+    {
+      "id": "009",
+      "name": "redesign-the-cockpit-overview-ui-around-projects-branches-devices-agents-and-costs",
+      "agent": "frontend",
+      "engine": "claude",
+      "model": "claude-opus-4-7",
+      "status": "done",
+      "startedAt": "2026-05-08T06:04:55.901Z",
+      "completedAt": "2026-05-08T06:18:30.511Z",
+      "latestProgressAt": "2026-05-08T06:18:30.101Z",
+      "latestProgressMessage": "Cockpit overview UI redesigned end-to-end.\n\n## Summary\n\n**Changed `apps/web/src/app/cockpit/page.tsx`** from a flat proj",
+      "lastProgress": "Cockpit overview UI redesigned end-to-end.\n\n## Summary\n\n**Changed `apps/web/src/app/cockpit/page.tsx`** from a flat proj",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 173,
+        "outputTokens": 61841,
+        "cacheCreationInputTokens": 496968,
+        "cacheReadInputTokens": 12836282
+      }
+    },
+    {
+      "id": "010",
+      "name": "add-project-detail-drilldowns-and-configuration-screens",
+      "agent": "frontend",
+      "engine": "claude",
+      "model": "claude-opus-4-7",
+      "status": "done",
+      "startedAt": "2026-05-08T06:18:30.519Z",
+      "completedAt": "2026-05-08T06:32:52.038Z",
+      "latestProgressAt": "2026-05-08T06:32:51.156Z",
+      "latestProgressMessage": "Task 010 complete. Summary:\n\n**Deliverable**: Rewrote `/cockpit/[projectId]` and added two new sub-routes (`/tasks/[task",
+      "lastProgress": "Task 010 complete. Summary:\n\n**Deliverable**: Rewrote `/cockpit/[projectId]` and added two new sub-routes (`/tasks/[task",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 150,
+        "outputTokens": 70640,
+        "cacheCreationInputTokens": 567631,
+        "cacheReadInputTokens": 16365598
+      }
+    },
+    {
+      "id": "011",
+      "name": "build-archived-fleet-review-and-taskhandover-detail-ui",
+      "agent": "frontend",
+      "engine": "claude",
+      "model": "claude-opus-4-7",
+      "status": "done",
+      "startedAt": "2026-05-08T06:32:52.049Z",
+      "completedAt": "2026-05-08T06:52:19.881Z",
+      "latestProgressAt": "2026-05-08T06:52:19.477Z",
+      "latestProgressMessage": "Task complete. Summary of what was built:\n\n**New routes** under `/cockpit/[projectId]/`:\n- `/archive` — archive index (p",
+      "lastProgress": "Task complete. Summary of what was built:\n\n**New routes** under `/cockpit/[projectId]/`:\n- `/archive` — archive index (p",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 190,
+        "outputTokens": 82724,
+        "cacheCreationInputTokens": 315491,
+        "cacheReadInputTokens": 22494713
+      }
+    },
+    {
+      "id": "012",
+      "name": "improve-device-and-token-management-for-multi-device-operation",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-08T06:18:30.530Z",
+      "completedAt": "2026-05-08T06:28:41.321Z",
+      "latestProgressAt": "2026-05-08T06:28:40.947Z",
+      "latestProgressMessage": "Here's a summary of what was implemented for this task:\n\n## What was built\n\n### Repository layer (`packages/cockpit-stor",
+      "lastProgress": "Here's a summary of what was implemented for this task:\n\n## What was built\n\n### Repository layer (`packages/cockpit-stor",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 24872,
+        "outputTokens": 34449,
+        "cacheCreationInputTokens": 245227,
+        "cacheReadInputTokens": 8071119
+      }
+    },
+    {
+      "id": "013",
+      "name": "package-the-daemon-as-a-simple-local-binary-distribution",
+      "agent": "worker",
+      "engine": "codex",
+      "model": "gpt-5.4",
+      "status": "done",
+      "startedAt": "2026-05-07T20:16:44.421Z",
+      "completedAt": "2026-05-07T20:25:42.482Z",
+      "latestProgressAt": "2026-05-07T20:25:30Z",
+      "latestProgressMessage": "Wrote the downstream handoff documenting the distribution artifact contract, CI build workflow, verification steps, and remaining platform limitations",
+      "lastProgress": "Wrote the downstream handoff documenting the distribution artifact contract, CI build workflow, verification steps, and remaining platform limitations",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 2991522,
+        "outputTokens": 23974
+      }
+    },
+    {
+      "id": "014",
+      "name": "add-observability-recovery-and-manual-re-projection-tooling",
+      "agent": "worker",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-08T06:28:41.332Z",
+      "completedAt": "2026-05-08T06:43:30.930Z",
+      "latestProgressAt": "2026-05-08T06:43:30.581Z",
+      "latestProgressMessage": "All deliverables are complete. Here's a summary of what was implemented:\n\n## Task 014 — Observability, Recovery, and Man",
+      "lastProgress": "All deliverables are complete. Here's a summary of what was implemented:\n\n## Task 014 — Observability, Recovery, and Man",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 20992,
+        "outputTokens": 35027,
+        "cacheCreationInputTokens": 267130,
+        "cacheReadInputTokens": 11433647
+      }
+    },
+    {
+      "id": "015",
+      "name": "validate-migration-multi-device-behaviour-archive-review-binary-packaging-and-production-rollout",
+      "agent": "reviewer",
+      "engine": "claude",
+      "model": "sonnet",
+      "status": "done",
+      "startedAt": "2026-05-08T06:52:19.890Z",
+      "completedAt": "2026-05-08T06:57:48.482Z",
+      "latestProgressAt": "2026-05-08T06:57:47.999Z",
+      "latestProgressMessage": "Here is a summary of the review work completed:\n\n---\n\n## Review Summary\n\nAll five upstream tasks (003, 011, 012, 013, 01",
+      "lastProgress": "Here is a summary of the review work completed:\n\n---\n\n## Review Summary\n\nAll five upstream tasks (003, 011, 012, 013, 01",
+      "blockedBy": null,
+      "usage": {
+        "inputTokens": 336,
+        "outputTokens": 16628,
+        "cacheCreationInputTokens": 524710,
+        "cacheReadInputTokens": 5900724
+      }
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "pending": 0,
+    "running": 0,
+    "done": 15,
+    "failed": 0,
+    "retrying": 0,
+    "totalInputTokens": 9628420,
+    "totalOutputTokens": 565165,
+    "totalCacheCreationInputTokens": 3954618,
+    "totalCacheReadInputTokens": 107316619,
+    "totalTokens": 121464822
+  }
+}

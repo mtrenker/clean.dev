@@ -1,0 +1,29 @@
+{
+  "id": "008",
+  "name": "rework-projection-for-per-device-project-state-branchworktree-inventory-and-usage-summaries",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "worker",
+  "depends": [
+    "004",
+    "006",
+    "007"
+  ],
+  "startedAt": "2026-05-07T20:16:44.403Z",
+  "completedAt": "2026-05-07T20:24:20.017Z",
+  "duration": 455614,
+  "retries": 0,
+  "pid": 794565,
+  "error": null,
+  "usage": {
+    "inputTokens": 77,
+    "outputTokens": 34407,
+    "cacheCreationInputTokens": 241418,
+    "cacheReadInputTokens": 4282464
+  },
+  "latestProgressAt": "2026-05-07T20:24:19.644Z",
+  "latestProgressMessage": "The task is complete. Here's a summary of what was done:\n\n## Summary\n\n**Task 008** reworked the cockpit projection layer"
+}

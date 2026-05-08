@@ -1,0 +1,27 @@
+{
+  "id": "002",
+  "name": "define-the-project-overview-information-architecture-and-state-contract",
+  "status": "done",
+  "engine": "claude",
+  "model": "sonnet",
+  "profile": "deep",
+  "thinking": "high",
+  "agent": "scout",
+  "depends": [
+    "001"
+  ],
+  "startedAt": "2026-05-07T19:39:17.920Z",
+  "completedAt": "2026-05-07T19:46:03.922Z",
+  "duration": 406002,
+  "retries": 0,
+  "pid": 770671,
+  "error": null,
+  "usage": {
+    "inputTokens": 37,
+    "outputTokens": 26336,
+    "cacheCreationInputTokens": 170237,
+    "cacheReadInputTokens": 884805
+  },
+  "latestProgressAt": "2026-05-07T19:46:03.629Z",
+  "latestProgressMessage": "Task complete. Here's a summary of what was produced:\n\n---\n\n## Deliverables\n\n### `docs/cockpit-overview-model.md` (new,"
+}

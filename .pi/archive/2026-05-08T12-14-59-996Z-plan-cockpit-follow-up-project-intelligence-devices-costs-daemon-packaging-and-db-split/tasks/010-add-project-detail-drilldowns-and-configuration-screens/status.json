@@ -1,0 +1,29 @@
+{
+  "id": "010",
+  "name": "add-project-detail-drilldowns-and-configuration-screens",
+  "status": "done",
+  "engine": "claude",
+  "model": "claude-opus-4-7",
+  "profile": "frontend",
+  "thinking": "high",
+  "agent": "frontend",
+  "depends": [
+    "005",
+    "008",
+    "009"
+  ],
+  "startedAt": "2026-05-08T06:18:30.519Z",
+  "completedAt": "2026-05-08T06:32:52.038Z",
+  "duration": 861519,
+  "retries": 0,
+  "pid": 840900,
+  "error": null,
+  "usage": {
+    "inputTokens": 150,
+    "outputTokens": 70640,
+    "cacheCreationInputTokens": 567631,
+    "cacheReadInputTokens": 16365598
+  },
+  "latestProgressAt": "2026-05-08T06:32:51.156Z",
+  "latestProgressMessage": "Task 010 complete. Summary:\n\n**Deliverable**: Rewrote `/cockpit/[projectId]` and added two new sub-routes (`/tasks/[task"
+}

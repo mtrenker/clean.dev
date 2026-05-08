@@ -1,0 +1,28 @@
+{
+  "id": "009",
+  "name": "redesign-the-cockpit-overview-ui-around-projects-branches-devices-agents-and-costs",
+  "status": "done",
+  "engine": "claude",
+  "model": "claude-opus-4-7",
+  "profile": "frontend",
+  "thinking": "high",
+  "agent": "frontend",
+  "depends": [
+    "002",
+    "008"
+  ],
+  "startedAt": "2026-05-08T06:04:55.901Z",
+  "completedAt": "2026-05-08T06:18:30.511Z",
+  "duration": 814610,
+  "retries": 1,
+  "pid": 834571,
+  "error": null,
+  "usage": {
+    "inputTokens": 173,
+    "outputTokens": 61841,
+    "cacheCreationInputTokens": 496968,
+    "cacheReadInputTokens": 12836282
+  },
+  "latestProgressAt": "2026-05-08T06:18:30.101Z",
+  "latestProgressMessage": "Cockpit overview UI redesigned end-to-end.\n\n## Summary\n\n**Changed `apps/web/src/app/cockpit/page.tsx`** from a flat proj"
+}

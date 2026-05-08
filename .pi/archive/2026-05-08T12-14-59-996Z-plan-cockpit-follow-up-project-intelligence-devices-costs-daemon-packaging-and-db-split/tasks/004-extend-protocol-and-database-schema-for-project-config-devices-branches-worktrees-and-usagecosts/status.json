@@ -1,0 +1,26 @@
+{
+  "id": "004",
+  "name": "extend-protocol-and-database-schema-for-project-config-devices-branches-worktrees-and-usagecosts",
+  "status": "done",
+  "engine": "codex",
+  "model": "gpt-5.4",
+  "profile": "balanced",
+  "thinking": "medium",
+  "agent": "worker",
+  "depends": [
+    "002",
+    "003"
+  ],
+  "startedAt": "2026-05-07T19:47:15.782Z",
+  "completedAt": "2026-05-07T19:56:52.018Z",
+  "duration": 576236,
+  "retries": 0,
+  "pid": 774832,
+  "error": null,
+  "usage": {
+    "inputTokens": 4230315,
+    "outputTokens": 27269
+  },
+  "latestProgressAt": null,
+  "latestProgressMessage": null
+}
