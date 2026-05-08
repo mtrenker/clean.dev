@@ -292,16 +292,26 @@ export class DaemonTransport {
     const pending = this.db.listPendingOutboundEvents(this.batchSize);
     if (pending.length === 0) return;
 
-    const events = pending
-      .map((r) => normalizeEventForProtocol(r.event, this.protocolSchemaVersion))
-      .filter((event): event is CockpitEvent => event !== null);
+    const sendable = pending
+      .map((record) => ({
+        record,
+        event: normalizeEventForProtocol(record.event, this.protocolSchemaVersion),
+      }))
+      .filter(({ event }) => event !== null && event.deviceId === this.deviceId) as Array<{
+        record: typeof pending[number];
+        event: CockpitEvent;
+      }>;
 
-    if (events.length === 0) {
+    if (sendable.length < pending.length) {
+      this.logger.warn(
+        `[transport] Skipping ${pending.length - sendable.length} queued event(s) not sendable ` +
+          `(device mismatch or protocol v${this.protocolSchemaVersion} incompatibility)`,
+      );
+    }
+
+    if (sendable.length === 0) {
       const lastDropped = pending[pending.length - 1];
       if (!lastDropped) return;
-      this.logger.warn(
-        `[transport] Dropping ${pending.length} event(s) unsupported by protocol v${this.protocolSchemaVersion}`,
-      );
       this.db.acknowledgeBatch({
         batchId: `local-drop-${randomUUID()}`,
         ackedThroughSequence: lastDropped.sequence,
@@ -310,13 +320,17 @@ export class DaemonTransport {
         rejected: pending.map((record) => ({
           eventId: record.eventId,
           sequence: record.sequence,
-          reason: `Event type ${record.event.type} is unsupported by protocol v${this.protocolSchemaVersion}`,
+          reason: record.event.deviceId !== this.deviceId
+            ? `Event device ${record.event.deviceId} does not match authenticated device ${this.deviceId}`
+            : `Event type ${record.event.type} is unsupported by protocol v${this.protocolSchemaVersion}`,
         })),
         serverTime: new Date().toISOString(),
       });
       this.flushPendingEvents();
       return;
     }
+
+    const events = sendable.map(({ event }) => event);
 
     const batchId = randomUUID();
     this.logger.info(

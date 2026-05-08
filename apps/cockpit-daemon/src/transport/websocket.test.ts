@@ -217,7 +217,7 @@ async function makeTempDb() {
 const silentLogger = createLogger({ stdout: () => {}, stderr: () => {} });
 
 /** Queue one or more minimal events into the DB outbox. */
-function queueTestEvent(db: LocalDaemonDb, n = 1, schemaVersion: 1 | 2 = 1) {
+function queueTestEvent(db: LocalDaemonDb, n = 1, schemaVersion: 1 | 2 = 1, deviceId = 'device-test') {
   for (let i = 0; i < n; i++) {
     db.queueEvent({
       event: {
@@ -226,7 +226,7 @@ function queueTestEvent(db: LocalDaemonDb, n = 1, schemaVersion: 1 | 2 = 1) {
         occurredAt: new Date().toISOString(),
         source: 'live',
         projectId: 'proj-1',
-        deviceId: 'device-1',
+        deviceId,
         type: 'project_seen',
         payload: {
           projectName: 'Test',
@@ -253,7 +253,7 @@ function queueV2OnlyEvent(db: LocalDaemonDb) {
       occurredAt: new Date().toISOString(),
       source: 'live',
       projectId: 'proj-1',
-      deviceId: 'device-1',
+      deviceId: 'device-test',
       type: 'task_handoff_seen',
       payload: {
         planId: 'plan-1',
@@ -450,6 +450,25 @@ describe('event_batch', () => {
 
     const connPromise = waitForConnection(server);
     makeTransport(server, db);
+
+    const { ws: serverWs, mq } = await connPromise;
+    sendServerHello(serverWs, 1);
+
+    await mq.waitForType('client_hello');
+    const msgs = await mq.collectFor(100);
+    const types = (msgs as Array<Record<string, unknown>>).map((m) => m.type);
+
+    expect(types).not.toContain('event_batch');
+    expect(db.getState().pendingEventCount).toBe(0);
+  });
+
+  it('locally drops queued events from a previously paired device', async () => {
+    const server = await startTestServer();
+    const { db } = await makeTempDb();
+    queueTestEvent(db, 2, 1, 'old-device');
+
+    const connPromise = waitForConnection(server);
+    makeTransport(server, db, { deviceId: 'new-device' });
 
     const { ws: serverWs, mq } = await connPromise;
     sendServerHello(serverWs, 1);
