@@ -59,8 +59,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,prefix={{branch}}-
+            type=sha,prefix=sha-
             type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
 
       - name: Build and push Docker image
@@ -74,12 +75,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Smoke test custom server image
+      - name: Smoke test Docker image
         if: github.event_name == 'pull_request'
         run: |
           IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-          docker run --rm \
-            --entrypoint node \
+          CONTAINER_ID=$(docker run -d \
+            -p 3000:3000 \
             -e NODE_ENV=production \
             -e AUTH_SECRET=test-secret-test-secret-test-secret-test-secret \
             -e GITHUB_ID=dummy \
@@ -88,8 +89,10 @@ jobs:
             -e LINKEDIN_CLIENT_SECRET=dummy \
             -e ALLOWED_GITHUB_USERS=mtrenker \
             -e DATABASE_URL=postgresql://user:pass@127.0.0.1:5432/db \
-            "$IMAGE_TAG" \
-            -e "require('./apps/web/custom-server.js'); setTimeout(() => process.exit(0), 2500)"
+            "$IMAGE_TAG")
+          trap 'docker logs "$CONTAINER_ID"; docker rm -f "$CONTAINER_ID"' EXIT
+          sleep 3
+          curl --fail --silent --show-error http://127.0.0.1:3000/api/health
 
       - name: Install Kustomize
         run: |
@@ -109,8 +112,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           cd k8s
-          # Extract the SHA-based tag (second tag with format: main-<sha>)
-          NEW_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep -E 'main-[a-f0-9]+' | head -n1 | cut -d':' -f2)
+          # Extract the immutable SHA-based tag (format: sha-<sha>)
+          NEW_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep -E 'sha-[a-f0-9]+' | head -n1 | cut -d':' -f2)
           kustomize edit set image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${NEW_TAG}
           cat kustomization.yaml
 
