@@ -39,7 +39,7 @@ export async function POST(): Promise<NextResponse> {
     const db = drizzle(pool, { schema });
 
     const migrationCandidates = [
-      // Docker/custom-server runtime uses /app as cwd.
+      // Docker standalone runtime uses /app as cwd.
       path.resolve(process.cwd(), 'packages/db/drizzle'),
       // Local Next dev can run from apps/web.
       path.resolve(process.cwd(), '../..', 'packages/db/drizzle'),

@@ -21,7 +21,6 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@cleandev/cockpit-protocol": "workspace:*",
     "@cleandev/db": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "nodemailer": "^8.0.5",
