@@ -16,9 +16,9 @@
     @apply bg-background text-foreground font-sans antialiased;
     min-height: 100lvh;
     background-image:
-      radial-gradient(circle at 12% 8%, hsl(var(--accent) / 0.16), transparent 28rem),
-      radial-gradient(circle at 88% 18%, hsl(var(--info) / 0.12), transparent 30rem),
-      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)) 45%, hsl(222 48% 5%));
+      radial-gradient(circle at 14% 8%, hsl(var(--accent) / 0.10), transparent 30rem),
+      radial-gradient(circle at 88% 22%, hsl(var(--warning) / 0.07), transparent 28rem),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)) 50%, hsl(45 16% 5%));
   }
 }
 
@@ -71,14 +71,6 @@
 
   .text-label {
     @apply font-mono text-sm font-semibold uppercase tracking-[0.22em];
-  }
-
-  .terminal-card {
-    @apply rounded-sm border border-border/60 bg-card/80 shadow-xl backdrop-blur;
-    box-shadow:
-      0 0 0 1px hsl(var(--accent) / 0.08),
-      0 24px 80px hsl(0 0% 0% / 0.35),
-      inset 0 1px 0 hsl(var(--foreground) / 0.06);
   }
 
   .tech-grid {

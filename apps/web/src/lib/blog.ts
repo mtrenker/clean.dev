@@ -77,8 +77,8 @@ export const getPostBySlug = (slug: string): Post | null => {
   };
 };
 
-export const formatPostDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-GB', {
+export const formatPostDate = (dateString: string, locale: 'en' | 'de' = 'en'): string => {
+  return new Date(dateString).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

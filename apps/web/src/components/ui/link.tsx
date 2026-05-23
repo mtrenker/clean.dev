@@ -7,9 +7,10 @@ interface LinkProps {
   href: string;
   className?: string;
   style?: React.CSSProperties;
-  variant?: 'default' | 'muted' | 'nav' | 'inline';
+  variant?: 'default' | 'muted' | 'nav' | 'inline' | 'unstyled';
   external?: boolean;
   ariaLabel?: string;
+  ariaCurrent?: React.AriaAttributes['aria-current'];
 }
 
 export const Link: React.FC<LinkProps> = ({
@@ -20,12 +21,14 @@ export const Link: React.FC<LinkProps> = ({
   variant = 'default',
   external = false,
   ariaLabel,
+  ariaCurrent,
 }) => {
   const variantClasses = {
     default: 'text-foreground hover:text-accent',
     muted: 'text-muted-foreground hover:text-accent',
     nav: 'text-label text-foreground hover:text-accent',
     inline: 'font-medium text-accent underline-offset-4 hover:underline',
+    unstyled: '',
   };
 
   const isButtonLike = className?.split(/\s+/).some((token) => token.startsWith('btn')) ?? false;
@@ -40,6 +43,7 @@ export const Link: React.FC<LinkProps> = ({
       href={href}
       style={style}
       aria-label={ariaLabel}
+      aria-current={ariaCurrent}
       rel={external ? 'noreferrer noopener' : undefined}
       target={external ? '_blank' : undefined}
     >

@@ -47,8 +47,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
   const title =
     locale === 'de'
-      ? 'clean.dev — Embedded Delivery Consulting'
-      : 'clean.dev — Embedded Delivery Consulting';
+      ? 'clean.dev | Embedded Delivery Consulting'
+      : 'clean.dev | Embedded Delivery Consulting';
   const description =
     locale === 'de'
       ? 'Hands-on Beratung für Softwareteams: klarere Delivery, bessere technische Entscheidungen und nützliche KI ohne Transformationstheater.'
@@ -91,7 +91,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
           }}
         />
       </head>
-      <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} font-sans antialiased`}>
+      <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} pb-20 font-sans antialiased md:pb-0`}>
         <RouteScrollReset />
         <a
           href="#main-content"
@@ -102,18 +102,18 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         <IntlProviderWrapper locale={locale} messages={messages}>
           <AppNavigation
             brand={(
-              <Link className="group flex items-center gap-3 font-mono text-sm font-semibold uppercase tracking-[0.18em]" href="/">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-accent/70 bg-accent/10 text-accent transition-transform group-hover:scale-110">cd</span>
-                <span className="hidden sm:inline-block">
+              <Link className="group flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.14em]" href="/">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-[3px] border border-[#8b3f24] bg-[#d96e3f]/10 text-[#d96e3f] transition group-hover:bg-[#d96e3f] group-hover:text-[#14130f]">/</span>
+                <span className="hidden sm:inline-block text-[#ede7d4]">
                   clean.dev
                 </span>
               </Link>
             )}
             items={[
+              { href: '/blog', label: intl.formatMessage({ id: 'nav.blog' }) },
               { href: '/work', label: intl.formatMessage({ id: 'nav.portfolio' }) },
               { href: '/contact', label: intl.formatMessage({ id: 'nav.contact' }) },
             ]}
-            socialItems={socialLinks}
             rightSlot={(
               <>
                 <LanguageSwitcher currentLocale={locale} />

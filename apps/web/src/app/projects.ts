@@ -129,8 +129,8 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler',
     },
     description: {
-      en: 'Owned a full-stack auction platform used for a company-wide annual charity event — from database schema to frontend, soup to nuts.',
-      de: 'Vollständige Eigenverantwortung für eine Full-Stack-Auktionsplattform für die jährliche firmenweite Wohltätigkeitsveranstaltung – von der Datenbankstruktur bis zum Frontend.',
+      en: 'Owned a full-stack auction platform used for a company-wide annual charity event, from database schema to frontend, soup to nuts.',
+      de: 'Vollständige Eigenverantwortung für eine Full-Stack-Auktionsplattform für die jährliche firmenweite Wohltätigkeitsveranstaltung, von der Datenbankstruktur bis zum Frontend.',
     },
     city: 'Munich',
     highlights: {
@@ -200,13 +200,13 @@ export const projects: Project[] = [
     city: 'Munich',
     highlights: {
       en: [
-        'hierarchical evaluation model: store → local → regional → country — each level saw exactly the data their role required',
-        'first AngularJS application — adopted before the framework was mainstream in enterprise contexts',
+        'hierarchical evaluation model: store → local → regional → country, each level saw exactly the data their role required',
+        'first AngularJS application, adopted before the framework was mainstream in enterprise contexts',
         'multi-region, multi-language rollout across BMW\'s global dealer network',
       ],
       de: [
-        'hierarchisches Bewertungsmodell: Filiale → lokal → regional → Land – jede Ebene sah exakt die Daten, die ihrer Rolle entsprachen',
-        'erste AngularJS-Anwendung – eingesetzt bevor das Framework in Unternehmensumgebungen verbreitet war',
+        'hierarchisches Bewertungsmodell: Filiale → lokal → regional → Land, jede Ebene sah exakt die Daten, die ihrer Rolle entsprachen',
+        'erste AngularJS-Anwendung, eingesetzt bevor das Framework in Unternehmensumgebungen verbreitet war',
         'mehrsprachiger Rollout über das globale BMW-Händlernetz',
       ],
     },
@@ -236,13 +236,13 @@ export const projects: Project[] = [
       de: 'Technischer Leiter',
     },
     description: {
-      en: 'Rearchitected a legacy migration tool from scratch — moved to Symfony + React with CQRS-backed data structures, significantly improving maintainability and auditability.',
-      de: 'Neuarchitektur eines Legacy-Migrationstools von Grund auf – Migration zu Symfony + React mit CQRS-basierten Datenstrukturen für deutlich bessere Wartbarkeit und Nachvollziehbarkeit.',
+      en: 'Rearchitected a legacy migration tool from scratch, moved to Symfony + React with CQRS-backed data structures, significantly improving maintainability and auditability.',
+      de: 'Neuarchitektur eines Legacy-Migrationstools von Grund auf, Migration zu Symfony + React mit CQRS-basierten Datenstrukturen für deutlich bessere Wartbarkeit und Nachvollziehbarkeit.',
     },
     city: 'Munich',
     highlights: {
-      en: ['introduced CQRS — a rare pattern in PHP shops at the time'],
-      de: ['Einführung von CQRS – damals ein seltenes Muster in PHP-Projekten'],
+      en: ['introduced CQRS, a rare pattern in PHP shops at the time'],
+      de: ['Einführung von CQRS, damals ein seltenes Muster in PHP-Projekten'],
     },
     technologies: [
       'symfony',
@@ -330,7 +330,7 @@ export const projects: Project[] = [
     },
     description: {
       en: 'Built real-time monitoring dashboards served directly on industrial machines, using native web components years before they went mainstream.',
-      de: 'Entwicklung von Echtzeit-Monitoring-Dashboards direkt auf Industriemaschinen, mit nativen Webkomponenten – Jahre bevor diese zum Standard wurden.',
+      de: 'Entwicklung von Echtzeit-Monitoring-Dashboards direkt auf Industriemaschinen, mit nativen Webkomponenten, Jahre bevor diese zum Standard wurden.',
     },
     city: 'Siegsdorf',
     highlights: {
@@ -493,11 +493,11 @@ export const projects: Project[] = [
     highlights: {
       en: [
         'doubled as agile coach, introducing practices that noticeably reduced sprint friction',
-        'first production WebRTC integration — shipped without third-party SDK'
+        'first production WebRTC integration, shipped without third-party SDK'
       ],
       de: [
         'zusätzliche Rolle als Agile Coach mit messbarer Reduktion von Sprint-Reibung',
-        'erste produktive WebRTC-Integration – ohne Drittanbieter-SDK ausgeliefert'
+        'erste produktive WebRTC-Integration, ohne Drittanbieter-SDK ausgeliefert'
       ],
     },
     technologies: [
@@ -526,17 +526,17 @@ export const projects: Project[] = [
     },
     description: {
       en: 'Rewrote a complex AngularJS optometry workflow app in TypeScript/React, replacing ad-hoc state logic with XState-driven form architecture for in-store staff.',
-      de: 'Neuentwicklung einer komplexen AngularJS-Optometrie-Workflow-App in TypeScript/React – Ad-hoc-Zustandslogik wurde durch eine XState-gesteuerte Formulararchitektur für das Filial-Personal ersetzt.',
+      de: 'Neuentwicklung einer komplexen AngularJS-Optometrie-Workflow-App in TypeScript/React, Ad-hoc-Zustandslogik wurde durch eine XState-gesteuerte Formulararchitektur für das Filial-Personal ersetzt.',
     },
     city: 'Munich',
     highlights: {
       en: [
-        'daily pair-programming as the main knowledge transfer strategy — worked exceptionally well',
+        'daily pair-programming as the main knowledge transfer strategy, worked exceptionally well',
         'state-machine driven multi-step form architecture built for extensibility',
         'custom on-screen keyboards tailored to in-store workflows'
       ],
       de: [
-        'tägliches Pair-Programming als zentrale Wissenstransferstrategie – außerordentlich effektiv',
+        'tägliches Pair-Programming als zentrale Wissenstransferstrategie, außerordentlich effektiv',
         'zustandsmaschinengesteuerte Multi-Schritt-Formulararchitektur für maximale Erweiterbarkeit',
         'maßgeschneiderte Bildschirmtastaturen für Filial-Workflows'
       ],
@@ -567,12 +567,12 @@ export const projects: Project[] = [
     city: 'Munich',
     highlights: {
       en: [
-        'daily pair-programming with two juniors — both grew into independent contributors within weeks',
+        'daily pair-programming with two juniors, both grew into independent contributors within weeks',
         'tracked down and resolved chronic render-cycle bottlenecks, cutting page interaction time noticeably'
       ],
       de: [
-        'tägliches Pair-Programming mit zwei Junioren – beide wurden innerhalb weniger Wochen zu selbstständigen Entwicklern',
-        'chronische Render-Zyklen-Engpässe identifiziert und beseitigt – spürbar schnellere Seiteninteraktion'
+        'tägliches Pair-Programming mit zwei Junioren, beide wurden innerhalb weniger Wochen zu selbstständigen Entwicklern',
+        'chronische Render-Zyklen-Engpässe identifiziert und beseitigt, spürbar schnellere Seiteninteraktion'
       ],
     },
     technologies: [
@@ -596,8 +596,8 @@ export const projects: Project[] = [
       de: 'Lösungsarchitekt',
     },
     description: {
-      en: 'Managed the handover of a Next.js platform from an external agency to a newly formed in-house team — audited the codebase, merged two products, and got the team up to speed.',
-      de: 'Steuerung der Übergabe einer Next.js-Plattform von einer externen Agentur an ein neu gebildetes internes Team – Codebase-Audit, Zusammenführung zweier Produkte und schnelles Onboarding des Teams.',
+      en: 'Managed the handover of a Next.js platform from an external agency to a newly formed in-house team, audited the codebase, merged two products, and got the team up to speed.',
+      de: 'Steuerung der Übergabe einer Next.js-Plattform von einer externen Agentur an ein neu gebildetes internes Team, Codebase-Audit, Zusammenführung zweier Produkte und schnelles Onboarding des Teams.',
     },
     city: 'Berlin',
     highlights: {
@@ -641,8 +641,8 @@ export const projects: Project[] = [
       de: 'Berater & Technischer Leiter',
     },
     description: {
-      en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the rewrite of a business-critical CRM integration from a legacy implementation to a maintainable React architecture — shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
-      de: 'Als React-Experte und Berater engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Neuentwicklung einer geschäftskritischen CRM-Integration von einer Legacy-Implementierung zu einer wartbaren React-Architektur – in unter einem Jahr ausgeliefert. Verantwortlich auch für die Customer-Care-App (Angular, Wartung) sowie neue Eigenentwicklungen.',
+      en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the rewrite of a business-critical CRM integration from a legacy implementation to a maintainable React architecture, shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
+      de: 'Als React-Experte und Berater engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Neuentwicklung einer geschäftskritischen CRM-Integration von einer Legacy-Implementierung zu einer wartbaren React-Architektur, in unter einem Jahr ausgeliefert. Verantwortlich auch für die Customer-Care-App (Angular, Wartung) sowie neue Eigenentwicklungen.',
     },
     city: 'Düsseldorf',
     highlights: {
@@ -651,18 +651,18 @@ export const projects: Project[] = [
         'software runs on every cash register in ~1,800 stores across 26 European countries',
         'moved from after-hours deployment windows toward hot deploys at any time through resilience, observability, and self-healing patterns',
         'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
-        'introduced "Full Stack Fridays" — team-driven learning sessions covering Figma prototyping, GraphQL/C#/.NET, and more',
+        'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL/C#/.NET, and more',
         'built an in-house shortlink and QR service in Next.js + .NET in weeks, replacing a third-party SaaS that no longer met business needs',
-        'led responsible AI adoption across the team — tooling, practices, and guardrails',
+        'led responsible AI adoption across the team, tooling, practices, and guardrails',
       ],
       de: [
         'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, stärkeren Tests und besserer Dokumentation',
         'Software läuft auf jedem Kassenterminal in ~1.800 Filialen in 26 europäischen Ländern',
         'von After-Hours-Deploymentfenstern zu jederzeit möglichen Hot Deployments durch Resilienz, Observability und Self-Healing-Muster',
-        '1 Senior und 2 Junior-Entwickler eingearbeitet – alle innerhalb weniger Wochen produktive Beitragende',
-        '"Full Stack Fridays" eingeführt – teamgetriebene Lernsessions zu Figma, GraphQL/C#/.NET und mehr',
-        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut – als SaaS-Ersatz',
-        'verantwortungsvolle KI-Nutzung im Team eingeführt – Tooling, Praktiken und Leitplanken',
+        '1 Senior und 2 Junior-Entwickler eingearbeitet, alle innerhalb weniger Wochen produktive Beitragende',
+        '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL/C#/.NET und mehr',
+        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als SaaS-Ersatz',
+        'verantwortungsvolle KI-Nutzung im Team eingeführt, Tooling, Praktiken und Leitplanken',
       ],
     },
     technologies: [

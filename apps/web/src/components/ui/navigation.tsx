@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Container } from './container';
 import { Link } from './link';
+import { NavigationLinks } from './navigation-links';
 import { SocialIcon } from './social-icon';
 
 export interface NavigationItem {
@@ -32,23 +32,29 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({
   className,
 }) => {
   return (
-    <header className={clsx('sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm print:hidden', className)}>
-      <Container className="px-6 py-4 md:px-12 lg:px-24">
-        <div className="flex items-center justify-between gap-4">
-          <div className="min-w-0">{brand}</div>
-          <div className="flex shrink-0 items-center gap-2 md:gap-3">
+    <>
+      <header className={clsx('sticky top-0 z-50 border-b border-[#2c2924] bg-[#14130f]/92 backdrop-blur-md print:hidden', className)}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#d96e3f]/40 to-transparent" aria-hidden="true" />
+        <div className="mx-auto grid max-w-[90rem] grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-2.5 md:px-14">
+          <div className="min-w-0 shrink-0">{brand}</div>
+
+          <nav aria-label="Main navigation" className="hidden justify-self-center md:block">
+            <NavigationLinks items={items} variant="desktop" />
+          </nav>
+
+          <div className="flex shrink-0 items-center justify-end gap-2 md:gap-3">
             {socialItems && socialItems.length > 0 ? (
-              <ul className="hidden shrink-0 items-center gap-3 md:flex" role="list" aria-label="Social links">
+              <ul className="hidden shrink-0 items-center gap-2 lg:flex" role="list" aria-label="Social links">
                 {socialItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
                       ariaLabel={item.ariaLabel}
-                      className="inline-flex items-center justify-center rounded-sm border border-border p-2 transition-colors hover:border-accent hover:text-accent"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[#2c2924] transition-colors hover:border-[#d96e3f] hover:text-[#d96e3f]"
                       external
                       variant="muted"
                     >
-                      <SocialIcon profile={item.key} />
+                      <SocialIcon profile={item.key} className="h-4 w-4" />
                       <span className="sr-only">{item.label}</span>
                     </Link>
                   </li>
@@ -58,18 +64,11 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({
             {rightSlot ? <div className="flex shrink-0 items-center gap-2">{rightSlot}</div> : null}
           </div>
         </div>
-        <nav aria-label="Main navigation" className="mt-4 md:mt-3">
-          <ul className="flex min-w-0 flex-wrap gap-x-4 gap-y-2 md:gap-8" role="list">
-            {items.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} variant="nav">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </Container>
-    </header>
+      </header>
+
+      <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 md:hidden print:hidden">
+        <NavigationLinks items={items} variant="mobile" />
+      </nav>
+    </>
   );
 };

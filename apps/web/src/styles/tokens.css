@@ -27,35 +27,35 @@
      * Or in raw CSS:  color: hsl(var(--foreground));
      * ────────────────────────────────────────────────────────────────────────── */
 
-    /* Surface — default brand theme: clean terminal, not black cave */
-    --background:        222 47% 7%;      /* Page / app background */
-    --foreground:        160 33% 94%;     /* Primary text */
+    /* Surface: warm public-site brand theme */
+    --background:        45 14% 7%;       /* Page / app background */
+    --foreground:        45 36% 88%;      /* Primary text */
 
     /* Muted / subtle */
-    --muted:             218 34% 14%;     /* Subtle surface, hover backgrounds */
-    --muted-foreground:  171 16% 68%;     /* Secondary / helper text */
+    --muted:             38 12% 12%;      /* Subtle surface, hover backgrounds */
+    --muted-foreground:  44 12% 62%;      /* Secondary / helper text */
 
     /* Accent / brand */
-    --accent:            162 90% 48%;     /* Vibrant terminal mint */
-    --accent-foreground: 222 47% 7%;      /* Text rendered on accent surfaces */
+    --accent:            17 67% 55%;      /* Rust annotation accent */
+    --accent-foreground: 45 14% 7%;       /* Text rendered on accent surfaces */
 
     /* Border */
-    --border:            170 45% 82%;     /* Default border color */
+    --border:            38 10% 16%;      /* Default border color */
 
     /* Card */
-    --card:              221 41% 10%;     /* Card and panel surfaces */
-    --card-foreground:   160 33% 94%;     /* Text inside cards */
+    --card:              38 12% 10%;      /* Card and panel surfaces */
+    --card-foreground:   45 36% 88%;      /* Text inside cards */
 
     /* Popover / overlay surfaces */
-    --popover:           221 41% 10%;     /* Dropdown, tooltip, dialog surfaces */
-    --popover-foreground:160 33% 94%;     /* Text inside popovers */
+    --popover:           38 12% 10%;      /* Dropdown, tooltip, dialog surfaces */
+    --popover-foreground:45 36% 88%;      /* Text inside popovers */
 
     /* Form inputs */
-    --input:             218 34% 14%;     /* Input field background */
-    --input-border:      170 24% 38%;     /* Input field border */
+    --input:             38 12% 12%;      /* Input field background */
+    --input-border:      38 10% 28%;      /* Input field border */
 
     /* Focus ring */
-    --ring:              162 90% 48%;     /* Focus ring color (matches accent) */
+    --ring:              17 67% 55%;      /* Focus ring color (matches accent) */
 
     /* Status — Success */
     --success:            142 71% 45%;    /* Positive / success state */

@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
-import { Container } from '@/components/ui/container';
-import { Heading } from '@/components/ui/heading';
-import { CliPanel } from '@/components/ui/cli-panel';
+import { LegalCard, PageHero, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { getLocale, loadMessages } from '@/lib/locale';
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -17,9 +15,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return {
     title: intl.formatMessage({ id: 'imprint.metadata.title' }),
     description: intl.formatMessage({ id: 'imprint.metadata.description' }),
-    alternates: {
-      canonical: '/imprint',
-    },
+    alternates: { canonical: '/imprint' },
   };
 };
 
@@ -31,129 +27,69 @@ const ImprintPage = async () => {
   const intl = createIntl({ locale, messages });
 
   return (
-    <main id="main-content" className="bg-background py-12 md:py-16">
-      <Container size="narrow" className="px-6">
-        <div className="space-y-8">
-          <header className="border-b border-border pb-6">
-            <Heading as="h1" variant="display" className="mb-2 text-5xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.heading' })}
-            </Heading>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {intl.formatMessage({ id: 'imprint.subtitle' })}
+    <SiteShell>
+      <PageHero
+        eyebrow={locale === 'de' ? 'Rechtliches' : 'Legal'}
+        title={intl.formatMessage({ id: 'imprint.heading' })}
+        lead={intl.formatMessage({ id: 'imprint.subtitle' })}
+      />
+
+      <SiteSection border={false}>
+        <SiteContainer narrow className="space-y-5">
+          <LegalCard title={intl.formatMessage({ id: 'imprint.serviceProvider.heading' })}>
+            <address className="space-y-1 not-italic">
+              <p className="font-semibold text-[#ede7d4]">Martin Trenker</p>
+              <p>Philipp-Loewenfeld-Str. 63</p>
+              <p>80339 München</p>
+              <p>{intl.formatMessage({ id: 'imprint.country' })}</p>
+            </address>
+          </LegalCard>
+
+          <LegalCard title={intl.formatMessage({ id: 'imprint.contact.heading' })}>
+            <address className="space-y-2 not-italic">
+              <p>
+                <strong>{intl.formatMessage({ id: 'imprint.contact.email' })}</strong>{' '}
+                <a href="mailto:info@clean.dev">info@clean.dev</a>
+              </p>
+              <p>
+                <strong>{intl.formatMessage({ id: 'imprint.contact.form' })}</strong>{' '}
+                <Link href="/contact">clean.dev/contact</Link>
+              </p>
+            </address>
+          </LegalCard>
+
+          <LegalCard title={intl.formatMessage({ id: 'imprint.vat.heading' })}>
+            <p>
+              <strong>{intl.formatMessage({ id: 'imprint.vat.label' })}</strong><br />
+              <span className="font-mono text-lg text-[#ede7d4]">DE262621028</span>
             </p>
-          </header>
+          </LegalCard>
 
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.serviceProvider.heading' })}
-            </Heading>
-            <CliPanel title="legal.entity" command="whoami">
-              <address className="space-y-1 not-italic text-muted-foreground">
-                <p className="font-semibold text-foreground">Martin Trenker</p>
-                <p>Philipp-Loewenfeld-Str. 63</p>
-                <p>80339 München</p>
-                <p>{intl.formatMessage({ id: 'imprint.country' })}</p>
-              </address>
-            </CliPanel>
-          </section>
+          <LegalCard title={intl.formatMessage({ id: 'imprint.responsible.heading' })}>
+            <p>
+              <strong>{intl.formatMessage({ id: 'imprint.responsible.label' })}</strong><br />
+              Martin Trenker<br />
+              Philipp-Loewenfeld-Str. 63<br />
+              80339 München
+            </p>
+          </LegalCard>
 
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.contact.heading' })}
-            </Heading>
-            <CliPanel title="legal.contact" command="cat channels.txt">
-              <address className="space-y-2 not-italic text-muted-foreground">
-                <p>
-                  <span className="font-medium text-foreground">
-                    {intl.formatMessage({ id: 'imprint.contact.email' })}
-                  </span>{' '}
-                  <a className="text-accent transition-colors hover:underline" href="mailto:info@clean.dev">
-                    info@clean.dev
-                  </a>
-                </p>
-                <p>
-                  <span className="font-medium text-foreground">
-                    {intl.formatMessage({ id: 'imprint.contact.form' })}
-                  </span>{' '}
-                  <Link className="text-accent transition-colors hover:underline" href="/contact">
-                    clean.dev/contact
-                  </Link>
-                </p>
-              </address>
-            </CliPanel>
-          </section>
+          <LegalCard title={intl.formatMessage({ id: 'imprint.eu.heading' })}>
+            <p>
+              {intl.formatMessage({ id: 'imprint.eu.body' })}{' '}
+              <a href="https://ec.europa.eu/consumers/odr" rel="noopener noreferrer" target="_blank">https://ec.europa.eu/consumers/odr</a>
+              <br />
+              {intl.formatMessage({ id: 'imprint.eu.email' })}{' '}
+              <a href="mailto:info@clean.dev">info@clean.dev</a>
+            </p>
+          </LegalCard>
 
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.vat.heading' })}
-            </Heading>
-            <CliPanel title="legal.tax" command="print vat-id">
-              <p className="text-muted-foreground">
-                <span className="font-medium text-foreground">
-                  {intl.formatMessage({ id: 'imprint.vat.label' })}
-                </span>
-                <br />
-                <span className="font-mono text-lg">DE262621028</span>
-              </p>
-            </CliPanel>
-          </section>
-
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.responsible.heading' })}
-            </Heading>
-            <CliPanel title="legal.responsible" command="cat owner.txt">
-              <p className="text-muted-foreground">
-                <span className="font-medium text-foreground">
-                  {intl.formatMessage({ id: 'imprint.responsible.label' })}
-                </span>
-                <br />
-                Martin Trenker
-                <br />
-                Philipp-Loewenfeld-Str. 63
-                <br />
-                80339 München
-              </p>
-            </CliPanel>
-          </section>
-
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.eu.heading' })}
-            </Heading>
-            <CliPanel title="legal.eu" command="resolve odr">
-              <p className="leading-relaxed text-muted-foreground">
-                {intl.formatMessage({ id: 'imprint.eu.body' })}{' '}
-                <a
-                  className="break-all text-accent transition-colors hover:underline"
-                  href="https://ec.europa.eu/consumers/odr"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  https://ec.europa.eu/consumers/odr
-                </a>
-                <br />
-                {intl.formatMessage({ id: 'imprint.eu.email' })}{' '}
-                <a className="text-accent transition-colors hover:underline" href="mailto:info@clean.dev">
-                  info@clean.dev
-                </a>
-              </p>
-            </CliPanel>
-          </section>
-
-          <section className="space-y-4">
-            <Heading as="h2" variant="section" className="text-2xl text-foreground">
-              {intl.formatMessage({ id: 'imprint.consumer.heading' })}
-            </Heading>
-            <CliPanel title="legal.dispute" command="status consumer-dispute">
-              <p className="leading-relaxed text-muted-foreground">
-                {intl.formatMessage({ id: 'imprint.consumer.body' })}
-              </p>
-            </CliPanel>
-          </section>
-        </div>
-      </Container>
-    </main>
+          <LegalCard title={intl.formatMessage({ id: 'imprint.consumer.heading' })}>
+            <p>{intl.formatMessage({ id: 'imprint.consumer.body' })}</p>
+          </LegalCard>
+        </SiteContainer>
+      </SiteSection>
+    </SiteShell>
   );
 };
 

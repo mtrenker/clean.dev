@@ -4,6 +4,7 @@ import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { ScrollReveal } from '@/components/scroll-reveal';
 import { LandingPage } from '@/components/home/landing-page';
+import { projects } from '@/app/projects';
 import { getLocale, loadMessages } from '@/lib/locale';
 import { getSocialProfiles } from '@/lib/social-profiles';
 
@@ -16,7 +17,7 @@ const Page: NextPage = async () => {
 
   return (
     <ScrollReveal>
-      <LandingPage intl={intl} socialLinks={socialLinks} />
+      <LandingPage intl={intl} locale={locale} projects={projects} socialLinks={socialLinks} />
     </ScrollReveal>
   );
 };

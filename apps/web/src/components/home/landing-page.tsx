@@ -1,20 +1,15 @@
-import React from 'react';
+import Image from 'next/image';
 import type { IntlShape } from 'react-intl';
-import { Container, Marquee, SocialIcon } from '@/components/ui';
+import { ButtonLink, Card, Eyebrow, PageHero, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { SocialIcon } from '@/components/ui';
 import { Link } from '@/components/ui/link';
+import type { Project } from '@/app/projects';
+import type { Locale } from '@/lib/locale';
 
-const SPOTLIGHT_COMPANIES = [
-  'Oetker Digital',
-  'Fielmann AG',
-  'Interhyp AG',
-  'ProSiebenSat.1',
-  'Lufthansa AG',
-  'BMW Group',
-  'McKinsey & Company',
-  'Siemens AG',
-  'UXMA GmbH',
-  'Brückner Group',
-];
+const PRACTICES = ['embed', 'system', 'ai'] as const;
+const TOPICS = ['cleanCode', 'agile', 'aiDelivery', 'leadership'] as const;
+const FIT = ['buyer', 'shape', 'mode', 'not'] as const;
+const WORKBENCH_ROWS = ['one', 'two', 'three', 'four'] as const;
 
 type SocialLink = {
   key: 'xing' | 'linkedin' | 'github';
@@ -25,257 +20,257 @@ type SocialLink = {
 
 interface LandingPageProps {
   intl: IntlShape;
+  locale: Locale;
+  projects: Project[];
   socialLinks: SocialLink[];
 }
 
+type EngagementProject = Project & { company: string };
+
 const msg = (intl: IntlShape, id: string) => intl.formatMessage({ id });
+const getYear = (date: string) => new Date(`${date}-01T00:00:00Z`).getUTCFullYear();
+const formatYearRange = (project: Project) => {
+  const startYear = getYear(project.startDate);
+  const endYear = getYear(project.endDate);
+  return startYear === endYear ? `${startYear}` : `${startYear}-${String(endYear).slice(2)}`;
+};
+const projectName = (project: Project, locale: Locale) => project.company ?? project.industry?.[locale] ?? project.id;
+const recentProjects = (projects: Project[]) =>
+  projects
+    .filter((project): project is EngagementProject => Boolean(project.company) && Boolean(project.featured))
+    .sort((a, b) => b.startDate.localeCompare(a.startDate))
+    .slice(0, 8);
+const projectSignal = (project: Project, locale: Locale) => project.highlights[locale][0] ?? project.description[locale];
 
-const Prompt = ({ children }: { children: React.ReactNode }) => (
-  <span className="font-mono text-sm text-accent">$ {children}</span>
-);
-
-const TerminalPanel = ({ intl }: { intl: IntlShape }) => {
-  const lines = ['01', '02', '03'] as const;
-
-  return (
-    <div className="terminal-card observe delay-200 overflow-hidden">
-      <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
-        <div className="flex gap-2" aria-hidden="true">
-          <span className="h-3 w-3 rounded-sm bg-destructive" />
-          <span className="h-3 w-3 rounded-sm bg-warning" />
-          <span className="h-3 w-3 rounded-sm bg-success" />
-        </div>
-        <span className="font-mono text-xs uppercase tracking-[0.24em] text-muted-foreground">
-          clean.dev/diagnose
-        </span>
-      </div>
-      <div className="space-y-5 p-5 md:p-6">
-        <div>
-          <Prompt>run embedded-delivery --with-ai --no-theater</Prompt>
-          <p className="mt-3 font-mono text-sm leading-6 text-muted-foreground">
-            {msg(intl, 'home.terminal.output')}
-          </p>
-        </div>
-        <div className="grid gap-3">
-          {lines.map((line) => (
-            <div key={line} className="rounded-sm border border-border/70 bg-background/55 p-4 shadow-inner">
-              <div className="mb-2 flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.18em]">
-                <span className="text-accent">signal/{line}</span>
-                <span className="text-muted-foreground">ok</span>
-              </div>
-              <p className="text-sm leading-6 text-foreground/90">
-                {msg(intl, `home.terminal.${line}`)}
-              </p>
-            </div>
-          ))}
-        </div>
+const ProfileCard = ({ intl }: { intl: IntlShape }) => (
+  <Card className="p-5">
+    <div className="flex gap-4">
+      <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={92} height={92} className="h-20 w-20 rounded-[4px] border border-[#2c2924] object-cover grayscale-[10%] md:h-[92px] md:w-[92px]" priority />
+      <div>
+        <p className="text-lg font-semibold tracking-[-0.01em] text-[#ede7d4]">Martin Trenker</p>
+        <p className="mt-1 font-mono text-[0.7rem] leading-6 tracking-[0.04em] text-[#8a8474]">
+          {msg(intl, 'home.profileCard.meta1')}<br />
+          {msg(intl, 'home.profileCard.meta2')}<br />
+          <span className="text-[#c4bda9]">{msg(intl, 'home.profileCard.meta3')}</span>
+        </p>
       </div>
     </div>
-  );
-};
+    <p className="mt-4 border-t border-dashed border-[#2c2924] pt-4 font-mono text-xs leading-6 text-[#c4bda9]">
+      {msg(intl, 'home.profileCard.note')}
+    </p>
+  </Card>
+);
 
-const MetricStrip = ({ intl }: { intl: IntlShape }) => {
-  const metrics = ['years', 'engagements', 'companies'] as const;
+const AvailabilityCard = ({ intl }: { intl: IntlShape }) => (
+  <Card className="border-l-4 border-l-[#d96e3f] p-5">
+    <div className="mb-4 flex items-center justify-between border-b border-[#2c2924] pb-3">
+      <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#8a8474]">{msg(intl, 'home.availability.label')}</span>
+      <Tag tone="amber">{msg(intl, 'home.availability.status')}</Tag>
+    </div>
+    <div className="grid grid-cols-2 gap-5">
+      <div>
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[#8a8474]">{msg(intl, 'home.availability.now.label')}</p>
+        <p className="mt-1 text-2xl font-medium tracking-[-0.02em] text-[#ede7d4]">{msg(intl, 'home.availability.now.value')}</p>
+      </div>
+      <div>
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[#8a8474]">{msg(intl, 'home.availability.next.label')}</p>
+        <p className="mt-1 text-2xl font-medium tracking-[-0.02em] text-[#7eaf6a]">{msg(intl, 'home.availability.next.value')}</p>
+      </div>
+    </div>
+  </Card>
+);
 
-  return (
-    <div className="grid gap-3 sm:grid-cols-3">
-      {metrics.map((metric, index) => (
-        <div
-          key={metric}
-          className="observe terminal-card p-5"
-          style={{ transitionDelay: `${index * 100 + 150}ms` }}
-        >
-          <div className="font-mono text-3xl font-semibold text-accent">
-            {msg(intl, `home.stats.${metric}.value`)}
-          </div>
-          <div className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {msg(intl, `home.stats.${metric}.label`)}
-          </div>
+const Hero = ({ intl }: { intl: IntlShape }) => (
+  <PageHero
+    eyebrow={msg(intl, 'home.hero.label')}
+    title={<>{msg(intl, 'home.hero.h1.part1')}<br /><span className="text-[#8a8474]">{msg(intl, 'home.hero.h1.part2')}</span><br /><span className="text-[#8a8474]">{msg(intl, 'home.hero.h1.part3')}</span></>}
+    lead={msg(intl, 'home.hero.lead')}
+    aside={<><ProfileCard intl={intl} /><AvailabilityCard intl={intl} /></>}
+  />
+);
+
+const Thesis = ({ intl }: { intl: IntlShape }) => (
+  <SiteSection>
+    <SiteContainer>
+      <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
+        <Eyebrow tone="amber">{msg(intl, 'home.hero.thesis.label')}</Eyebrow>
+        <p className="text-2xl font-medium leading-10 tracking-[-0.02em] text-[#ede7d4] md:text-4xl md:leading-tight">
+          {msg(intl, 'home.hero.thesis.body')}
+        </p>
+      </div>
+      <div className="mt-9 flex flex-wrap gap-3">
+        <ButtonLink href="/contact">{msg(intl, 'home.hero.cta.contact')}</ButtonLink>
+        <ButtonLink href="/work" variant="secondary">{msg(intl, 'home.hero.cta.portfolio')}</ButtonLink>
+        <ButtonLink href="/blog" variant="secondary">{msg(intl, 'home.hero.cta.writing')}</ButtonLink>
+      </div>
+    </SiteContainer>
+  </SiteSection>
+);
+
+const Position = ({ intl }: { intl: IntlShape }) => (
+  <SiteSection>
+    <SiteContainer>
+      <SectionHeader title={msg(intl, 'home.position.heading')} meta={msg(intl, 'home.position.meta')} />
+      <div className="grid overflow-hidden rounded-[6px] border border-[#2c2924] bg-[#1c1a16] lg:grid-cols-2">
+        <div className="p-6 md:p-8 lg:border-r lg:border-[#2c2924]">
+          <Tag tone="green">{msg(intl, 'home.position.is.label')}</Tag>
+          <ul className="mt-5 divide-y divide-[#2c2924]">
+            {['1', '2', '3', '4'].map((item) => (
+              <li key={item} className="flex gap-4 py-3 text-lg text-[#ede7d4]"><span className="font-mono text-[#7eaf6a]">+</span>{msg(intl, `home.position.is.${item}`)}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-[#221f1a] p-6 md:p-8">
+          <Tag tone="rust">{msg(intl, 'home.position.not.label')}</Tag>
+          <ul className="mt-5 divide-y divide-[#2c2924]">
+            {['1', '2', '3', '4'].map((item) => (
+              <li key={item} className="flex gap-4 py-3 text-lg text-[#8a8474]"><span className="font-mono text-[#d96e3f]">-</span>{msg(intl, `home.position.not.${item}`)}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </SiteContainer>
+  </SiteSection>
+);
+
+const WorkbenchCard = ({ intl }: { intl: IntlShape }) => (
+  <Card className="p-5">
+    <div className="mb-4 flex items-center justify-between border-b border-[#2c2924] pb-3">
+      <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#8a8474]">{msg(intl, 'home.workbench.label')}</span>
+      <Tag tone="amber">{msg(intl, 'home.workbench.status')}</Tag>
+    </div>
+    <div className="space-y-2 font-mono text-xs leading-6">
+      {WORKBENCH_ROWS.map((row) => (
+        <div key={row} className="grid grid-cols-[4.5rem_5rem_1fr] gap-2">
+          <span className="text-[#5a564b]">{msg(intl, `home.workbench.${row}.time`)}</span>
+          <span className="text-[#d96e3f]">{msg(intl, `home.workbench.${row}.verb`)}</span>
+          <span className="text-[#c4bda9]">{msg(intl, `home.workbench.${row}.text`)}</span>
         </div>
       ))}
     </div>
-  );
-};
-
-const Hero = ({ intl }: { intl: IntlShape }) => (
-  <section className="relative overflow-hidden px-6 py-20 md:px-12 md:py-28 lg:px-24 lg:py-32">
-    <div className="tech-grid" aria-hidden="true" />
-    <Container size="wide" className="relative grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)]">
-      <div>
-        <p className="observe text-label mb-5 text-accent">
-          {msg(intl, 'home.hero.label')}
-        </p>
-        <h1 className="observe max-w-5xl font-serif text-5xl font-black leading-[0.94] tracking-[-0.06em] text-foreground md:text-7xl lg:text-8xl">
-          {msg(intl, 'home.hero.h1.part1')}{' '}
-          <span className="text-gradient">{msg(intl, 'home.hero.h1.part2')}</span>{' '}
-          {msg(intl, 'home.hero.h1.part3')}
-        </h1>
-        <p className="observe delay-100 mt-8 max-w-3xl text-xl leading-8 text-muted-foreground md:text-2xl md:leading-9">
-          {msg(intl, 'home.hero.lead')}
-        </p>
-        <div className="observe delay-200 mt-10 flex flex-wrap gap-4">
-          <Link href="/contact" className="btn-primary">
-            {msg(intl, 'home.hero.cta.contact')}
-          </Link>
-          <Link href="/work" className="btn-secondary">
-            {msg(intl, 'home.hero.cta.portfolio')}
-          </Link>
-        </div>
-      </div>
-      <TerminalPanel intl={intl} />
-    </Container>
-  </section>
+  </Card>
 );
 
-const OperatingModel = ({ intl }: { intl: IntlShape }) => {
-  const levers = ['1', '2', '3'] as const;
-
-  return (
-    <section className="section section-border relative overflow-hidden bg-background text-foreground">
-      <Container>
-        <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-          <div>
-            <Prompt>{msg(intl, 'home.expertise.prompt')}</Prompt>
-            <h2 className="mt-4 font-serif text-4xl font-black leading-tight tracking-[-0.04em] md:text-6xl">
-              {msg(intl, 'home.expertise.heading')}
-            </h2>
-          </div>
-          <p className="text-lg leading-8 text-muted-foreground">
-            {msg(intl, 'home.expertise.lead')}
-          </p>
-        </div>
-        <div className="grid gap-5 lg:grid-cols-3">
-          {levers.map((num, index) => (
-            <article
-              key={num}
-              className="observe terminal-card group p-6"
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              <div className="mb-8 flex items-center justify-between">
-                <span className="font-mono text-sm text-accent">0{num}</span>
-                <span className="h-px flex-1 bg-border/60 ml-4 transition-colors group-hover:bg-accent" />
-              </div>
-              <h3 className="mb-4 font-serif text-2xl font-bold tracking-[-0.02em]">
-                {msg(intl, `home.expertise.${num}.title`)}
-              </h3>
-              <p className="leading-7 text-muted-foreground">
-                {msg(intl, `home.expertise.${num}.description`)}
-              </p>
-            </article>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-};
-
-const Proof = ({ intl }: { intl: IntlShape }) => (
-  <section className="section section-border bg-muted/30 text-foreground">
-    <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-      <div className="observe">
-        <Prompt>{msg(intl, 'home.proof.prompt')}</Prompt>
-        <h2 className="mt-4 font-serif text-4xl font-black leading-tight tracking-[-0.04em] md:text-6xl">
-          {msg(intl, 'home.proof.heading')}
-        </h2>
+const OperatingModel = ({ intl }: { intl: IntlShape }) => (
+  <SiteSection>
+    <SiteContainer>
+      <SectionHeader title={msg(intl, 'home.operating.heading')} meta={msg(intl, 'home.operating.meta')} />
+      <div className="grid gap-4 xl:grid-cols-[repeat(3,minmax(0,1fr))_24rem]">
+        {PRACTICES.map((practice) => (
+          <Card key={practice} className="p-6">
+            <Tag>{msg(intl, 'home.operating.practice')}</Tag>
+            <h3 className="mt-5 text-2xl font-medium tracking-[-0.02em] text-[#ede7d4]">{msg(intl, `home.operating.${practice}.title`)}</h3>
+            <p className="mt-3 leading-7 text-[#c4bda9]">{msg(intl, `home.operating.${practice}.body`)}</p>
+            <div className="mt-5 border-t border-dashed border-[#2c2924] pt-4 font-mono text-xs leading-6 text-[#8a8474]">
+              {msg(intl, `home.operating.${practice}.measure`)}
+            </div>
+          </Card>
+        ))}
+        <WorkbenchCard intl={intl} />
       </div>
-      <div className="space-y-5">
-        <MetricStrip intl={intl} />
-        <div className="observe terminal-card p-6">
-          <p className="mb-5 font-mono text-sm text-accent">{msg(intl, 'home.proof.case.label')}</p>
-          <p className="text-xl leading-8 text-foreground">
-            {msg(intl, 'home.proof.case.body')}
-          </p>
-        </div>
-      </div>
-    </Container>
-  </section>
+    </SiteContainer>
+  </SiteSection>
 );
 
-const TrustedBy = ({ intl }: { intl: IntlShape }) => (
-  <section className="overflow-hidden border-t border-border bg-background py-12">
-    <p className="text-label mb-8 text-center text-muted-foreground/80">
-      {msg(intl, 'home.trustedBy.label')}
-    </p>
-    <Marquee items={SPOTLIGHT_COMPANIES} speed="slow" />
-  </section>
-);
-
-const Philosophy = ({ intl }: { intl: IntlShape }) => (
-  <section className="section section-border bg-background text-foreground">
-    <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
-      <div className="observe">
-        <Prompt>{msg(intl, 'home.philosophy.prompt')}</Prompt>
-        <h2 className="mt-4 font-serif text-4xl font-black leading-tight tracking-[-0.04em] md:text-6xl">
-          {msg(intl, 'home.philosophy.heading')}
-        </h2>
-      </div>
-      <div className="observe delay-100 space-y-6 text-lg leading-8 text-muted-foreground">
-        <p>{msg(intl, 'home.philosophy.p1')}</p>
-        <p>{msg(intl, 'home.philosophy.p2')}</p>
-        <blockquote className="terminal-card border-accent/80 p-6 text-foreground">
-          <p className="font-serif text-2xl font-bold leading-8 tracking-[-0.02em]">
-            “{msg(intl, 'home.philosophy.quote')}”
-          </p>
-        </blockquote>
-      </div>
-    </Container>
-  </section>
-);
-
-const Cta = ({ intl }: { intl: IntlShape }) => (
-  <section className="section section-border relative overflow-hidden bg-foreground text-background">
-    <div className="tech-grid opacity-20" aria-hidden="true" />
-    <Container className="relative text-center">
-      <Prompt>{msg(intl, 'home.cta.prompt')}</Prompt>
-      <h2 className="observe mx-auto mt-4 max-w-4xl font-serif text-4xl font-black leading-tight tracking-[-0.04em] md:text-6xl">
-        {msg(intl, 'home.cta.heading')}
-      </h2>
-      <p className="observe delay-100 mx-auto mt-6 max-w-3xl text-xl leading-8 text-background/75">
-        {msg(intl, 'home.cta.lead')}
-      </p>
-      <div className="observe delay-200 mt-10 flex flex-wrap justify-center gap-4">
-        <Link href="/contact" className="btn bg-accent text-accent-foreground hover:bg-background hover:text-foreground">
-          {msg(intl, 'home.cta.contact')}
-        </Link>
-        <Link href="/work" className="btn border border-background/40 text-background hover:border-accent hover:text-accent">
-          {msg(intl, 'home.cta.portfolio')}
-        </Link>
-      </div>
-    </Container>
-  </section>
-);
-
-const ProfileLinks = ({ intl, socialLinks }: LandingPageProps) => (
-  <section className="section section-border bg-background text-foreground">
-    <Container className="text-center">
-      <p className="text-label mb-3 text-accent">{msg(intl, 'home.profile.heading')}</p>
-      <p className="mx-auto mb-8 max-w-xl text-muted-foreground">{msg(intl, 'home.profile.lead')}</p>
-      <div className="flex flex-wrap justify-center gap-4">
-        {socialLinks.map((profile) => (
-          <Link
-            key={profile.href}
-            className="inline-flex h-12 w-12 items-center justify-center rounded-sm border border-border bg-card text-foreground transition-colors hover:border-accent hover:text-accent"
-            external
-            href={profile.href}
-            ariaLabel={profile.ariaLabel}
-          >
-            <span className="sr-only">{profile.label}</span>
-            <SocialIcon profile={profile.key} className="h-5 w-5" />
+const Topics = ({ intl }: { intl: IntlShape }) => (
+  <SiteSection>
+    <SiteContainer>
+      <SectionHeader title={msg(intl, 'home.topics.heading')} meta={msg(intl, 'home.topics.meta')} />
+      <div className="grid gap-4 md:grid-cols-2">
+        {TOPICS.map((topic) => (
+          <Link key={topic} href="/blog" className="group rounded-[6px] border border-[#2c2924] bg-[#1c1a16] p-6 no-underline transition hover:border-[#d96e3f]">
+            <Tag tone={topic === 'aiDelivery' ? 'amber' : 'green'}>{msg(intl, `home.topics.${topic}.status`)}</Tag>
+            <h3 className="mt-5 text-2xl font-medium tracking-[-0.02em] text-[#ede7d4] group-hover:text-[#d96e3f]">{msg(intl, `home.topics.${topic}.title`)}</h3>
+            <p className="mt-3 leading-7 text-[#c4bda9]">{msg(intl, `home.topics.${topic}.body`)}</p>
+            <div className="mt-5 flex justify-between border-t border-[#2c2924] pt-4 font-mono text-xs text-[#8a8474]">
+              <span>{msg(intl, `home.topics.${topic}.count`)}</span>
+              <span className="font-semibold text-[#ede7d4]">{msg(intl, 'home.topics.read')}</span>
+            </div>
           </Link>
         ))}
       </div>
-    </Container>
-  </section>
+    </SiteContainer>
+  </SiteSection>
 );
 
-export const LandingPage = ({ intl, socialLinks }: LandingPageProps) => (
-  <main id="main-content" className="min-h-screen bg-background text-foreground">
+const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
+  const engagementProjects = recentProjects(projects);
+  return (
+    <SiteSection>
+      <SiteContainer>
+        <SectionHeader title={msg(intl, 'home.engagements.heading')} meta={msg(intl, 'home.engagements.meta')} />
+        <div className="overflow-hidden rounded-[6px] border border-[#2c2924] bg-[#1c1a16]">
+          <div className="hidden grid-cols-[8rem_13rem_1fr_12rem] bg-[#0e0d0a] px-5 py-3 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[#8a8474] md:grid">
+            <span>{msg(intl, 'home.engagements.year')}</span>
+            <span>{msg(intl, 'home.engagements.org')}</span>
+            <span>{msg(intl, 'home.engagements.context')}</span>
+            <span>{msg(intl, 'home.engagements.role')}</span>
+          </div>
+          {engagementProjects.map((project) => (
+            <Link key={project.id} href="/work" className="grid gap-1 border-t border-[#2c2924] px-5 py-4 no-underline transition hover:bg-[#221f1a] md:grid-cols-[8rem_13rem_1fr_12rem] md:items-center md:gap-0">
+              <span className="font-mono text-xs tracking-[0.04em] text-[#8a8474]">{formatYearRange(project)}</span>
+              <span className="font-mono text-sm font-semibold text-[#ede7d4]">{projectName(project, locale)}</span>
+              <span className="pr-6 text-sm leading-6 text-[#c4bda9]">{projectSignal(project, locale)}</span>
+              <span className="font-mono text-xs text-[#d96e3f]">{project.title[locale]}</span>
+            </Link>
+          ))}
+        </div>
+      </SiteContainer>
+    </SiteSection>
+  );
+};
+
+const FitAndContact = ({ intl, socialLinks }: Pick<LandingPageProps, 'intl' | 'socialLinks'>) => (
+  <SiteSection border={false} className="bg-[#0e0d0a] md:py-20">
+    <SiteContainer className="grid gap-12 lg:grid-cols-[1fr_24rem]">
+      <div>
+        <SectionHeader title={msg(intl, 'home.contact.heading')} meta={msg(intl, 'home.contact.meta')} />
+        <p className="max-w-4xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[#ede7d4] md:text-5xl">
+          {msg(intl, 'home.contact.lead')}
+        </p>
+        <div className="mt-8 grid overflow-hidden rounded-[6px] border border-[#2c2924] bg-[#1c1a16] md:grid-cols-2">
+          {FIT.map((fit, index) => (
+            <div key={fit} className={`p-5 ${index % 2 === 0 ? 'md:border-r md:border-[#2c2924]' : ''} ${index > 1 ? 'border-t border-[#2c2924]' : index > 0 ? 'border-t border-[#2c2924] md:border-t-0' : ''}`}>
+              <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[#8a8474]">{msg(intl, `home.fit.${fit}.label`)}</p>
+              <p className="mt-2 leading-7 text-[#ede7d4]">{msg(intl, `home.fit.${fit}.body`)}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <ButtonLink href="/contact">{msg(intl, 'home.contact.cta')}</ButtonLink>
+          <span className="font-mono text-xs leading-6 tracking-[0.04em] text-[#8a8474]">{msg(intl, 'home.contact.note')}</span>
+        </div>
+      </div>
+      <aside className="space-y-4">
+        <AvailabilityCard intl={intl} />
+        <ProfileCard intl={intl} />
+        <div className="flex flex-wrap gap-3">
+          {socialLinks.map((profile) => (
+            <Link key={profile.href} className="inline-flex h-11 w-11 items-center justify-center rounded-[3px] border border-[#2c2924] bg-[#1c1a16] text-[#ede7d4] transition hover:border-[#d96e3f] hover:text-[#d96e3f]" external href={profile.href} ariaLabel={profile.ariaLabel}>
+              <span className="sr-only">{profile.label}</span>
+              <SocialIcon profile={profile.key} className="h-5 w-5" />
+            </Link>
+          ))}
+        </div>
+      </aside>
+    </SiteContainer>
+  </SiteSection>
+);
+
+export const LandingPage = ({ intl, locale, projects, socialLinks }: LandingPageProps) => (
+  <SiteShell>
     <Hero intl={intl} />
+    <Thesis intl={intl} />
+    <StatStrip stats={[
+      { value: '20+', label: msg(intl, 'home.stats.years.label') },
+      { value: String(projects.length), label: msg(intl, 'home.stats.engagements.label') },
+      { value: String(new Set(projects.map((project) => projectName(project, locale))).size), label: msg(intl, 'home.stats.companies.label') },
+      { value: String(Math.min(...projects.map((project) => getYear(project.startDate)))), label: msg(intl, 'work.stats.since.label') },
+    ]} />
+    <Position intl={intl} />
     <OperatingModel intl={intl} />
-    <Proof intl={intl} />
-    <TrustedBy intl={intl} />
-    <Philosophy intl={intl} />
-    <Cta intl={intl} />
-    <ProfileLinks intl={intl} socialLinks={socialLinks} />
-  </main>
+    <Topics intl={intl} />
+    <EngagementLog intl={intl} locale={locale} projects={projects} />
+    <FitAndContact intl={intl} socialLinks={socialLinks} />
+  </SiteShell>
 );
