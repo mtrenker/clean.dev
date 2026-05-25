@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { sendContactEmail, type ContactFormState } from './actions';
 
 const initialState: ContactFormState = {};
-const fieldClass = 'border-[#2c2924] bg-[#14130f] text-[#ede7d4] focus:border-[#d96e3f] focus:ring-[#d96e3f]/20';
+const fieldClass = 'border-[var(--site-rule)] bg-[var(--site-bg)] text-[var(--site-ink)] focus:border-[var(--site-rust)] focus:ring-[var(--site-rust)]';
 
 export const ContactForm: React.FC = () => {
   const intl = useIntl();
@@ -19,8 +19,8 @@ export const ContactForm: React.FC = () => {
   if (state.success) {
     return (
       <Card className="p-8 text-center">
-        <p className="text-2xl font-medium text-[#ede7d4]">{intl.formatMessage({ id: 'contact.success.heading' })}</p>
-        <p className="mt-3 text-sm leading-6 text-[#c4bda9]">
+        <p className="text-2xl font-medium text-[var(--site-ink)]">{intl.formatMessage({ id: 'contact.success.heading' })}</p>
+        <p className="mt-3 text-sm leading-6 text-[var(--site-ink-sec)]">
           {intl.formatMessage({ id: 'contact.success.body' })}
         </p>
       </Card>
@@ -97,18 +97,18 @@ export const ContactForm: React.FC = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center justify-center rounded-[3px] bg-[#d96e3f] px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[#0e0d0a] transition hover:bg-[#ede7d4] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-[3px] bg-[var(--site-rust)] px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[var(--site-panel-deep)] transition hover:bg-[var(--site-ink)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? intl.formatMessage({ id: 'contact.form.submitting' }) : intl.formatMessage({ id: 'contact.form.submit' })}
           </button>
-          <p className="text-xs leading-6 text-[#8a8474]">
+          <p className="text-xs leading-6 text-[var(--site-ink-mute)]">
             <FormattedMessage
               id="contact.form.privacy"
               values={{
                 link: (
                   <Link
                     href="/privacy"
-                    className="text-[#d96e3f] underline underline-offset-2 transition-colors hover:text-[#ede7d4]"
+                    className="text-[var(--site-rust)] underline underline-offset-2 transition-colors hover:text-[var(--site-ink)]"
                   >
                     {intl.formatMessage({ id: 'contact.form.privacy.link' })}
                   </Link>

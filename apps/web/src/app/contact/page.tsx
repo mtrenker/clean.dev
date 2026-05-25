@@ -41,13 +41,13 @@ const ContactPage = async () => {
         <SiteContainer className="grid gap-10 lg:grid-cols-[24rem_1fr]">
           <aside className="space-y-4">
             <Card className="p-6">
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#d96e3f]">
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-rust)]">
                 {intl.formatMessage({ id: 'contact.context.heading' })}
               </p>
               <ol className="mt-5 space-y-5">
                 {contextItems.map((item, index) => (
-                  <li key={item} className="grid grid-cols-[2rem_1fr] gap-3 text-sm leading-6 text-[#c4bda9]">
-                    <span className="font-mono text-xs text-[#7eaf6a]">0{index + 1}</span>
+                  <li key={item} className="grid grid-cols-[2rem_1fr] gap-3 text-sm leading-6 text-[var(--site-ink-sec)]">
+                    <span className="font-mono text-xs text-[var(--site-green)]">0{index + 1}</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -55,10 +55,10 @@ const ContactPage = async () => {
             </Card>
 
             <Card className="p-6">
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#8a8474]">
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
                 {locale === 'de' ? 'Direkt' : 'Direct'}
               </p>
-              <a href="mailto:info@clean.dev" className="mt-3 block text-lg font-medium text-[#ede7d4] transition hover:text-[#d96e3f]">
+              <a href="mailto:info@clean.dev" className="mt-3 block text-lg font-medium text-[var(--site-ink)] transition hover:text-[var(--site-rust)]">
                 info@clean.dev
               </a>
             </Card>

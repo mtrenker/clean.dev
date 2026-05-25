@@ -129,7 +129,7 @@ export const projects: Project[] = [
       de: 'Fullstack-Entwickler',
     },
     description: {
-      en: 'Owned a full-stack auction platform used for a company-wide annual charity event, from database schema to frontend, soup to nuts.',
+      en: 'Owned a full-stack auction platform used for a company-wide annual charity event, covering database schema, backend, and frontend.',
       de: 'Vollständige Eigenverantwortung für eine Full-Stack-Auktionsplattform für die jährliche firmenweite Wohltätigkeitsveranstaltung, von der Datenbankstruktur bis zum Frontend.',
     },
     city: 'Munich',
@@ -236,13 +236,13 @@ export const projects: Project[] = [
       de: 'Technischer Leiter',
     },
     description: {
-      en: 'Rearchitected a legacy migration tool from scratch, moved to Symfony + React with CQRS-backed data structures, significantly improving maintainability and auditability.',
-      de: 'Neuarchitektur eines Legacy-Migrationstools von Grund auf, Migration zu Symfony + React mit CQRS-basierten Datenstrukturen für deutlich bessere Wartbarkeit und Nachvollziehbarkeit.',
+      en: 'Rearchitected a legacy migration tool, moved to Symfony + React with CQRS-backed data structures, and made changes easier to trace and review.',
+      de: 'Neuarchitektur eines Legacy-Migrationstools, Migration zu Symfony + React mit CQRS-basierten Datenstrukturen. Änderungen wurden leichter nachvollziehbar und prüfbar.',
     },
     city: 'Munich',
     highlights: {
-      en: ['introduced CQRS, a rare pattern in PHP shops at the time'],
-      de: ['Einführung von CQRS, damals ein seltenes Muster in PHP-Projekten'],
+      en: ['introduced CQRS in a PHP project at a time when the pattern was still uncommon there'],
+      de: ['Einführung von CQRS in einem PHP-Projekt, damals dort noch ein ungewohntes Muster'],
     },
     technologies: [
       'symfony',
@@ -397,8 +397,8 @@ export const projects: Project[] = [
     },
     city: 'Munich',
     highlights: {
-      en: ['adopted Contentful as headless CMS before the pattern became industry standard'],
-      de: ['Einsatz von Contentful als Headless-CMS, bevor das Muster zum Branchenstandard wurde'],
+      en: ['early use of Contentful as a headless CMS'],
+      de: ['früher Einsatz von Contentful als Headless-CMS'],
     },
     technologies: [
       'typescript',
@@ -531,13 +531,13 @@ export const projects: Project[] = [
     city: 'Munich',
     highlights: {
       en: [
-        'daily pair-programming as the main knowledge transfer strategy, worked exceptionally well',
-        'state-machine driven multi-step form architecture built for extensibility',
+        'daily pair-programming as the main knowledge transfer strategy',
+        'state-machine driven multi-step form architecture built to make changes safer',
         'custom on-screen keyboards tailored to in-store workflows'
       ],
       de: [
-        'tägliches Pair-Programming als zentrale Wissenstransferstrategie, außerordentlich effektiv',
-        'zustandsmaschinengesteuerte Multi-Schritt-Formulararchitektur für maximale Erweiterbarkeit',
+        'tägliches Pair-Programming als zentrale Wissenstransferstrategie',
+        'zustandsmaschinengesteuerte Multi-Schritt-Formulararchitektur für sicherere Änderungen',
         'maßgeschneiderte Bildschirmtastaturen für Filial-Workflows'
       ],
     },
@@ -568,11 +568,11 @@ export const projects: Project[] = [
     highlights: {
       en: [
         'daily pair-programming with two juniors, both grew into independent contributors within weeks',
-        'tracked down and resolved chronic render-cycle bottlenecks, cutting page interaction time noticeably'
+        'tracked down and resolved chronic render-cycle bottlenecks, reducing page interaction delays'
       ],
       de: [
         'tägliches Pair-Programming mit zwei Junioren, beide wurden innerhalb weniger Wochen zu selbstständigen Entwicklern',
-        'chronische Render-Zyklen-Engpässe identifiziert und beseitigt, spürbar schnellere Seiteninteraktion'
+        'chronische Render-Zyklen-Engpässe identifiziert und beseitigt, Seiteninteraktionen reagierten schneller'
       ],
     },
     technologies: [
@@ -602,13 +602,13 @@ export const projects: Project[] = [
     city: 'Berlin',
     highlights: {
       en: [
-        'audited and raised code quality across the full stack: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
+        'audited the codebase and improved quality across the stack: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
         'consolidated two separate web products into a single codebase without disrupting active development',
         'onboarded four new hires in parallel while keeping delivery on track',
         'introduced lightweight agile practices that the team still uses'
       ],
       de: [
-        'Codequalität über den gesamten Stack verbessert: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
+        'Codebase geprüft und Qualität über den Stack verbessert: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
         'zwei separate Webprodukte ohne Unterbrechung der laufenden Entwicklung zu einer gemeinsamen Codebasis zusammengeführt',
         'vier neue Mitarbeiter parallel eingearbeitet und Lieferung trotzdem im Zeitplan gehalten',
         'schlanke agile Praktiken eingeführt, die das Team noch heute nutzt'
@@ -647,22 +647,22 @@ export const projects: Project[] = [
     city: 'Düsseldorf',
     highlights: {
       en: [
-        'rewrote the CRM/POS integration in under a year with clearer architecture, stronger tests, and better documentation',
+        'rewrote the CRM/POS integration in under a year with clearer architecture, more test coverage, and updated documentation',
         'software runs on every cash register in ~1,800 stores across 26 European countries',
-        'moved from after-hours deployment windows toward hot deploys at any time through resilience, observability, and self-healing patterns',
+        'moved from after-hours deployment windows toward safer deployments during business hours through better error handling, observability, and recovery paths',
         'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
         'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL/C#/.NET, and more',
         'built an in-house shortlink and QR service in Next.js + .NET in weeks, replacing a third-party SaaS that no longer met business needs',
-        'led responsible AI adoption across the team, tooling, practices, and guardrails',
+        'introduced practical AI usage for coding, review, documentation, and team guardrails',
       ],
       de: [
-        'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, stärkeren Tests und besserer Dokumentation',
+        'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, mehr Testabdeckung und aktualisierter Dokumentation',
         'Software läuft auf jedem Kassenterminal in ~1.800 Filialen in 26 europäischen Ländern',
-        'von After-Hours-Deploymentfenstern zu jederzeit möglichen Hot Deployments durch Resilienz, Observability und Self-Healing-Muster',
+        'von After-Hours-Deploymentfenstern zu sichereren Deployments im laufenden Betrieb durch bessere Fehlerbehandlung, Observability und klare Recovery-Pfade',
         '1 Senior und 2 Junior-Entwickler eingearbeitet, alle innerhalb weniger Wochen produktive Beitragende',
         '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL/C#/.NET und mehr',
         'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als SaaS-Ersatz',
-        'verantwortungsvolle KI-Nutzung im Team eingeführt, Tooling, Praktiken und Leitplanken',
+        'praktische KI-Nutzung für Entwicklung, Reviews, Dokumentation und Team-Leitplanken eingeführt',
       ],
     },
     technologies: [

@@ -22,8 +22,8 @@ export const NavigationLinks = ({ items, variant }: NavigationLinksProps) => {
     <ul
       className={clsx(
         'flex items-center',
-        variant === 'desktop' && 'gap-1 rounded-full border border-[#2c2924] bg-[#1c1a16]/90 p-1 shadow-[0_12px_40px_rgba(0,0,0,0.22)]',
-        variant === 'mobile' && 'gap-1 rounded-full border border-[#2c2924] bg-[#1c1a16]/95 p-1.5 shadow-[0_18px_70px_rgba(0,0,0,0.42)] backdrop-blur-md',
+        variant === 'desktop' && 'gap-1 rounded-full border border-[var(--site-rule)] bg-[var(--site-panel)] p-1 shadow-[0_12px_40px_rgba(0,0,0,0.22)]',
+        variant === 'mobile' && 'gap-1 rounded-full border border-[var(--site-rule)] bg-[var(--site-panel)] p-1.5 shadow-[0_18px_70px_rgba(0,0,0,0.42)] backdrop-blur-md',
       )}
       role="list"
     >
@@ -39,12 +39,12 @@ export const NavigationLinks = ({ items, variant }: NavigationLinksProps) => {
               ariaCurrent={active ? 'page' : undefined}
               className={clsx(
                 'relative inline-flex items-center justify-center rounded-full font-mono font-bold uppercase transition-all duration-200',
-                'focus-visible:ring-[#d96e3f] focus-visible:ring-offset-[#14130f]',
+                'focus-visible:ring-[var(--site-rust)] focus-visible:ring-offset-[var(--site-bg)]',
                 variant === 'desktop' && 'px-4 py-2 text-[0.68rem] tracking-[0.18em]',
                 variant === 'mobile' && 'min-w-[5.4rem] px-3 py-3 text-[0.66rem] tracking-[0.13em]',
                 active
-                  ? 'bg-[#d96e3f] !text-[#14130f] shadow-[0_0_0_1px_rgba(217,110,63,0.34),0_8px_22px_rgba(217,110,63,0.24)] hover:!text-[#14130f]'
-                  : 'text-[#c4bda9] hover:bg-[#2c2924] hover:text-[#ede7d4]',
+                  ? 'bg-[var(--site-rust)] !text-[var(--site-bg)] shadow-[0_0_0_1px_rgba(217,110,63,0.34),0_8px_22px_rgba(217,110,63,0.24)] hover:!text-[var(--site-bg)]'
+                  : 'text-[var(--site-ink-sec)] hover:bg-[var(--site-rule)] hover:text-[var(--site-ink)]',
               )}
             >
               {active ? (

@@ -8,6 +8,42 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+    --site-bg: #14130f;
+    --site-panel: #1c1a16;
+    --site-panel-alt: #221f1a;
+    --site-panel-deep: #0e0d0a;
+    --site-rule: #2c2924;
+    --site-rule-soft: #1f1c17;
+    --site-ink: #ede7d4;
+    --site-ink-sec: #c4bda9;
+    --site-ink-mute: #8a8474;
+    --site-ink-faint: #5a564b;
+    --site-rust: #d96e3f;
+    --site-rust-soft: #8b3f24;
+    --site-green: #7eaf6a;
+    --site-amber: #d0a04a;
+  }
+
+  :root[data-site-theme='light'] {
+    color-scheme: light;
+    --site-bg: #f4f0e6;
+    --site-panel: #fbf8f0;
+    --site-panel-alt: #ebe6d4;
+    --site-panel-deep: #1a1714;
+    --site-rule: #d4cebe;
+    --site-rule-soft: #e4dfce;
+    --site-ink: #1a1714;
+    --site-ink-sec: #454039;
+    --site-ink-mute: #75705f;
+    --site-ink-faint: #a8a395;
+    --site-rust: #a8472a;
+    --site-rust-soft: #d6b8a3;
+    --site-green: #3d7a4e;
+    --site-amber: #9c7322;
+  }
+
   * {
     @apply border-border;
   }

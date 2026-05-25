@@ -33,8 +33,8 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({
 }) => {
   return (
     <>
-      <header className={clsx('sticky top-0 z-50 border-b border-[#2c2924] bg-[#14130f]/92 backdrop-blur-md print:hidden', className)}>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#d96e3f]/40 to-transparent" aria-hidden="true" />
+      <header className={clsx('sticky top-0 z-50 border-b border-[var(--site-rule)] bg-[var(--site-bg)] backdrop-blur-md print:hidden', className)}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--site-rust)] to-transparent" aria-hidden="true" />
         <div className="mx-auto grid max-w-[90rem] grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-2.5 md:px-14">
           <div className="min-w-0 shrink-0">{brand}</div>
 
@@ -50,7 +50,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({
                     <Link
                       href={item.href}
                       ariaLabel={item.ariaLabel}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[#2c2924] transition-colors hover:border-[#d96e3f] hover:text-[#d96e3f]"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[var(--site-rule)] transition-colors hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
                       external
                       variant="muted"
                     >

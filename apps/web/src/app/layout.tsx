@@ -14,6 +14,7 @@ import { UserMenu } from '@/components/user-menu';
 import { IntlProviderWrapper } from '@/components/intl-provider';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { RouteScrollReset } from '@/components/route-scroll-reset';
+import { ThemeToggle } from '@/components/site/theme-toggle';
 import { AppFooter, AppNavigation, Link } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
 import { getPersonStructuredData, getSocialProfiles } from '@/lib/social-profiles';
@@ -85,6 +86,11 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
     <html lang={locale}>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('clean.dev.site-theme');var p=t==='light'||t==='dark'?t:'system';var m=matchMedia('(prefers-color-scheme: light)').matches;document.documentElement.dataset.siteTheme=p==='system'?(m?'light':'dark'):p;document.documentElement.dataset.siteThemePreference=p}catch(e){document.documentElement.dataset.siteTheme='dark';document.documentElement.dataset.siteThemePreference='system'}`,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(getPersonStructuredData()),
@@ -103,8 +109,8 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
           <AppNavigation
             brand={(
               <Link className="group flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.14em]" href="/">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-[3px] border border-[#8b3f24] bg-[#d96e3f]/10 text-[#d96e3f] transition group-hover:bg-[#d96e3f] group-hover:text-[#14130f]">/</span>
-                <span className="hidden sm:inline-block text-[#ede7d4]">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-[3px] border border-[var(--site-rust-soft)] bg-transparent text-[var(--site-rust)] transition group-hover:bg-[var(--site-rust)] group-hover:text-[var(--site-bg)]">/</span>
+                <span className="hidden sm:inline-block text-[var(--site-ink)]">
                   clean.dev
                 </span>
               </Link>
@@ -116,6 +122,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
             ]}
             rightSlot={(
               <>
+                <ThemeToggle />
                 <LanguageSwitcher currentLocale={locale} />
                 {session && isAdminSession(session) && <UserMenu session={session} />}
               </>

@@ -39,16 +39,16 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
     <SiteShell>
       <SiteSection>
         <SiteContainer narrow>
-          <Link href="/blog" className="mb-8 inline-flex font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#8a8474] transition hover:text-[#d96e3f]">
+          <Link href="/blog" className="mb-8 inline-flex font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-ink-mute)] transition hover:text-[var(--site-rust)]">
             ← {intl.formatMessage({ id: 'blog.back' })}
           </Link>
-          <time className="block font-mono text-xs uppercase tracking-[0.16em] text-[#8a8474]" dateTime={post.frontmatter.date}>
+          <time className="block font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-mute)]" dateTime={post.frontmatter.date}>
             {formatPostDate(post.frontmatter.date, locale)}
           </time>
-          <h1 className="mt-5 text-[clamp(2.7rem,7vw,5.4rem)] font-medium leading-[0.96] tracking-[-0.055em] text-[#ede7d4]">
+          <h1 className="mt-5 text-[clamp(2.7rem,7vw,5.4rem)] font-medium leading-[0.96] tracking-[-0.055em] text-[var(--site-ink)]">
             {post.frontmatter.title}
           </h1>
-          <p className="mt-7 max-w-3xl text-xl leading-8 text-[#c4bda9] md:text-2xl md:leading-9">
+          <p className="mt-7 max-w-3xl text-xl leading-8 text-[var(--site-ink-sec)] md:text-2xl md:leading-9">
             {post.frontmatter.description}
           </p>
           {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
@@ -65,16 +65,16 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
             <div
               className={[
                 'prose prose-invert max-w-none',
-                'prose-headings:font-sans prose-headings:tracking-tight prose-headings:text-[#ede7d4]',
+                'prose-headings:font-sans prose-headings:tracking-tight prose-headings:text-[var(--site-ink)]',
                 'prose-h2:mt-12 prose-h2:text-3xl',
                 'prose-h3:mt-8 prose-h3:text-xl',
-                'prose-p:leading-8 prose-p:text-[#c4bda9]',
-                'prose-li:text-[#c4bda9]',
-                'prose-a:text-[#d96e3f] prose-a:no-underline hover:prose-a:underline',
-                'prose-strong:text-[#ede7d4] prose-strong:font-semibold',
-                'prose-code:font-mono prose-code:text-sm prose-code:text-[#d0a04a]',
+                'prose-p:leading-8 prose-p:text-[var(--site-ink-sec)]',
+                'prose-li:text-[var(--site-ink-sec)]',
+                'prose-a:text-[var(--site-rust)] prose-a:no-underline hover:prose-a:underline',
+                'prose-strong:text-[var(--site-ink)] prose-strong:font-semibold',
+                'prose-code:font-mono prose-code:text-sm prose-code:text-[var(--site-amber)]',
                 'prose-code:before:content-none prose-code:after:content-none',
-                'prose-pre:border prose-pre:border-[#2c2924] prose-pre:bg-[#0e0d0a]',
+                'prose-pre:border prose-pre:border-[var(--site-rule)] prose-pre:bg-[var(--site-panel-deep)]',
               ].join(' ')}
             >
               <MDXRemote source={post.content} />
@@ -85,7 +85,7 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
 
       <SiteSection border={false}>
         <SiteContainer narrow className="flex flex-wrap items-center justify-between gap-4">
-          <Link href="/blog" className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#8a8474] transition hover:text-[#d96e3f]">
+          <Link href="/blog" className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-ink-mute)] transition hover:text-[var(--site-rust)]">
             ← {intl.formatMessage({ id: 'blog.back' })}
           </Link>
           <ButtonLink href="/contact">{intl.formatMessage({ id: 'blog.cta' })}</ButtonLink>
