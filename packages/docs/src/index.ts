@@ -16,6 +16,12 @@ export type { DocumentEditorProps } from './components/DocumentEditor';
 export { PageCanvas } from './components/PageCanvas';
 export type { DocumentMode } from './components/PageCanvas';
 export { DocumentToolbar } from './components/Toolbar';
+export { DocumentFloatingToolbar } from './components/FloatingToolbar';
+export type { DocumentFloatingToolbarProps } from './components/FloatingToolbar';
+export { InlineMarkButtons } from './components/InlineMarks';
+export type { InlineMarkButtonsProps } from './components/InlineMarks';
+export { ToolbarButton, ToolbarSeparator } from './components/ToolbarButton';
+export type { ToolbarButtonProps } from './components/ToolbarButton';
 
 /* Plugins & render components (extension points) */
 export {
@@ -66,6 +72,8 @@ export {
 export type {
   DocElementType,
   DocMarkType,
+  TextAlign,
+  TextBlockProps,
   CalloutVariant,
   DocumentValue,
   CalloutElement,
@@ -89,6 +97,9 @@ export {
   currentBlockType,
   isBlockType,
   setBlockType,
+  currentTextAlign,
+  isTextAlign,
+  setTextAlign,
   insertBlock,
 } from './utils/transforms';
 

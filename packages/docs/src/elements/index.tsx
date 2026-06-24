@@ -14,7 +14,15 @@ import type {
   CardElement,
   ColumnElement,
   KeyValueItemElement,
+  TextAlign,
 } from '../types';
+
+type AlignableElement = { align?: TextAlign };
+
+const textAlignStyle = (element: unknown): React.CSSProperties | undefined => {
+  const align = (element as AlignableElement).align;
+  return align ? { textAlign: align } : undefined;
+};
 
 /* ----------------------------- Cover / header ----------------------------- */
 
@@ -25,19 +33,19 @@ export const CoverElementComponent = (props: PlateElementProps): React.ReactElem
 );
 
 export const EyebrowElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="p" className="pdoc-eyebrow">
+  <PlateElement {...props} as="p" className="pdoc-eyebrow" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const DocTitleElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="h1" className="pdoc-doc-title">
+  <PlateElement {...props} as="h1" className="pdoc-doc-title" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const DocSubtitleElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="p" className="pdoc-doc-subtitle">
+  <PlateElement {...props} as="p" className="pdoc-doc-subtitle" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
@@ -53,31 +61,31 @@ export const SectionElementComponent = (props: PlateElementProps): React.ReactEl
 /* -------------------------------- Headings ------------------------------- */
 
 export const H1ElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="h1" className="pdoc-h1">
+  <PlateElement {...props} as="h1" className="pdoc-h1" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const H2ElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="h2" className="pdoc-h2">
+  <PlateElement {...props} as="h2" className="pdoc-h2" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const H3ElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="h3" className="pdoc-h3">
+  <PlateElement {...props} as="h3" className="pdoc-h3" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const ParagraphElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="p" className="pdoc-p">
+  <PlateElement {...props} as="p" className="pdoc-p" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
 
 export const BlockquoteElementComponent = (props: PlateElementProps): React.ReactElement => (
-  <PlateElement {...props} as="blockquote" className="pdoc-blockquote">
+  <PlateElement {...props} as="blockquote" className="pdoc-blockquote" style={textAlignStyle(props.element)}>
     {props.children}
   </PlateElement>
 );
@@ -100,6 +108,7 @@ export const CalloutElementComponent = (props: PlateElementProps): React.ReactEl
     <PlateElement
       {...props}
       className={`pdoc-callout pdoc-callout--${variant}`}
+      style={textAlignStyle(element)}
     >
       {element.title ? (
         <div className="pdoc-callout__title" contentEditable={false}>
@@ -138,7 +147,7 @@ export const CardElementComponent = (props: PlateElementProps): React.ReactEleme
   const element = props.element as CardElement;
   const tags = element.tags ?? [];
   return (
-    <PlateElement {...props} as="article" className="pdoc-card">
+    <PlateElement {...props} as="article" className="pdoc-card" style={textAlignStyle(element)}>
       {element.aside ? (
         <div className="pdoc-card__aside" contentEditable={false}>
           {element.aside}
@@ -185,7 +194,7 @@ export const KeyValueItemElementComponent = (props: PlateElementProps): React.Re
       <span className="pdoc-kv__label" contentEditable={false}>
         {element.label}
       </span>
-      <span className="pdoc-kv__value">{props.children}</span>
+      <span className="pdoc-kv__value" style={textAlignStyle(element)}>{props.children}</span>
     </PlateElement>
   );
 };

@@ -31,6 +31,7 @@ export function DocumentPlayground() {
   const [mode, setMode] = useState<DocumentMode>('page');
   const [size, setSize] = useState<PageSizeName>('A4');
   const [readOnly, setReadOnly] = useState(false);
+  const [floatingToolbar, setFloatingToolbar] = useState(true);
   const [, setValue] = useState<DocumentValue | null>(null);
 
   // Re-mount the editor when the sample changes so the initial value resets.
@@ -106,6 +107,17 @@ export function DocumentPlayground() {
           <span className="text-muted-foreground">Preview (read-only)</span>
         </label>
 
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={floatingToolbar}
+            onChange={(event) => {
+              setFloatingToolbar(event.target.checked);
+            }}
+          />
+          <span className="text-muted-foreground">Floating toolbar</span>
+        </label>
+
         <button
           type="button"
           className="ml-auto rounded-md border border-input bg-background px-3 py-1 hover:border-accent"
@@ -124,6 +136,7 @@ export function DocumentPlayground() {
           mode={mode}
           page={{ size }}
           readOnly={readOnly}
+          floatingToolbar={floatingToolbar}
           onChange={setValue}
         />
       </div>

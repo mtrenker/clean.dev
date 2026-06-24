@@ -21,7 +21,11 @@ any host application.
   cover/header, document title & subtitle, eyebrow, section, callout/aside,
   two-column block, project/card block, key-value/metadata block, and an
   explicit page break — plus the usual headings, paragraphs, blockquote, rule,
-  and marks.
+  text alignment, and marks.
+- **Refined editing chrome** — a compact, squared block toolbar for structure
+  (headings, quote, callout, columns, card, page break) plus a **floating inline
+  toolbar** that appears at the text selection for marks (bold, italic,
+  underline, strikethrough, code, highlight). Both are optional and replaceable.
 - **Print/PDF-ready** — `@page` rules, `break-before`/`break-inside`
   management, and a print stylesheet that strips chrome for clean "Print → Save
   as PDF" output.
@@ -176,10 +180,33 @@ const doc = [
   via `extend`. The shipped element components are exported under `elements.*` if
   you want to wrap or restyle them.
 
-- **Custom toolbar/UI** — build on the exported transform helpers
-  (`toggleMark`, `setBlockType`, `insertBlock`, `isMarkActive`, `isBlockType`,
-  `currentBlockType`) and Plate's `useEditorRef`. Pass `toolbar={<MyToolbar />}`
-  or `toolbar={false}`.
+- **Toolbars** — there are two, controlled independently and both shown by
+  default (and both auto-hidden in `readOnly` mode):
+
+  ```tsx
+  <DocumentEditor
+    toolbar          // block/structure chrome: true | false | <MyToolbar/>
+    floatingToolbar  // inline marks at the selection: true | false | <MyFloating/>
+  />
+  ```
+
+  - `toolbar` — the sticky **block toolbar** (`DocumentToolbar`) for headings,
+    text alignment (left/center/right/justify), quote, and inserting layout
+    blocks. `false` hides it; pass a node to replace.
+  - `floatingToolbar` — the **inline toolbar** (`DocumentFloatingToolbar`) that
+    floats just above the current text selection with mark toggles. It is
+    positioned from the live DOM selection rect (no extra dependency), keeps the
+    selection on click, and repositions on scroll/resize. `false` disables it;
+    pass a node to replace.
+
+  Build your own on the exported primitives — the transform helpers
+  (`toggleMark`, `setBlockType`, `setTextAlign`, `insertBlock`, `isMarkActive`,
+  `isBlockType`, `currentBlockType`, `currentTextAlign`, `isTextAlign`), the
+  ready-made `InlineMarkButtons`, the `ToolbarButton` /
+  `ToolbarSeparator` controls, and Plate's `useEditorRef`. `DocumentToolbar` and
+  `DocumentFloatingToolbar` are exported too, so you can wrap or restyle them.
+  Both toolbars expose `role="toolbar"`, `aria-label`, and per-button
+  `aria-pressed` / keyboard focus states.
 
 - **Access the editor** — `onReady={(editor) => …}` exposes the Plate editor
   instance (useful for future export integrations).
@@ -190,16 +217,17 @@ const doc = [
 
 ```ts
 // Components
-DocumentEditor, PageCanvas, DocumentToolbar
+DocumentEditor, PageCanvas, DocumentToolbar, DocumentFloatingToolbar,
+InlineMarkButtons, ToolbarButton, ToolbarSeparator
 // Plugins
 createDocumentPlugins, basicPlugins, documentLayoutPlugins, <ElementName>Plugin…
 // Config
 PAGE_SIZES, defaultPageConfig, defaultTheme, resolvePageConfig, resolveTheme,
 resolvePageSize, effectiveDimensions, pageCssVariables
 // Types
-DocElement, DocMark, DocElementType, DocMarkType, CalloutVariant, DocumentValue, …
+DocElement, DocMark, DocElementType, DocMarkType, TextAlign, CalloutVariant, DocumentValue, …
 // Authoring & transforms
-b, createEmptyDocument, toggleMark, setBlockType, insertBlock, isMarkActive, …
+b, createEmptyDocument, toggleMark, setBlockType, setTextAlign, insertBlock, isMarkActive, …
 // Samples (demos/tests only)
 samples, sampleProfile, sampleReport, sampleProposal, sampleBlogPost
 ```

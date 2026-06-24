@@ -1,49 +1,44 @@
 /**
- * A small, dependency-free formatting toolbar.
+ * The block / structural toolbar — sticky top chrome for the editor.
  *
- * It is intentionally minimal — the editor works without it, and consumers can
- * build their own UI on top of the exported transform helpers. Pass
- * `toolbar={false}` to {@link DocumentEditor} to hide it, or `toolbar={<Custom/>}`
- * to supply your own.
+ * Handles document structure (paragraph ⇄ heading, quote) and inserting the
+ * package's layout blocks (callout, columns, card, page break). Inline text
+ * marks live here too, but are also surfaced contextually by the
+ * {@link DocumentFloatingToolbar} near the selection.
+ *
+ * It is intentionally self-contained — the editor works without it, and
+ * consumers can build their own UI on top of the exported transform helpers.
+ * Pass `toolbar={false}` to {@link DocumentEditor} to hide it, or
+ * `toolbar={<Custom/>}` to supply your own.
  */
 import * as React from 'react';
 import { useEditorRef, useEditorVersion } from 'platejs/react';
 
 import { b } from '../builders';
-import { DocElement, DocMark } from '../types';
+import { DocElement, type TextAlign } from '../types';
 import {
   insertBlock,
   isBlockType,
-  isMarkActive,
+  isTextAlign,
   setBlockType,
-  toggleMark,
+  setTextAlign,
 } from '../utils/transforms';
+import {
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  QuoteIcon,
+} from './icons';
+import { InlineMarkButtons } from './InlineMarks';
+import { ToolbarButton, ToolbarSeparator } from './ToolbarButton';
 
-interface BtnProps {
-  label: string;
-  title: string;
-  active?: boolean;
-  onAction: () => void;
-}
-
-const ToolbarButton = ({ label, title, active, onAction }: BtnProps): React.ReactElement => (
-  <button
-    type="button"
-    className={`pdoc-tb__btn${active ? ' pdoc-tb__btn--active' : ''}`}
-    title={title}
-    aria-label={title}
-    aria-pressed={active}
-    // Keep the editor selection while clicking the toolbar.
-    onMouseDown={(event) => {
-      event.preventDefault();
-    }}
-    onClick={onAction}
-  >
-    {label}
-  </button>
-);
-
-const Divider = (): React.ReactElement => <span className="pdoc-tb__divider" aria-hidden />;
+const ALIGN_BUTTONS: { align: TextAlign; title: string; icon: React.ReactElement }[] = [
+  { align: 'left', title: 'Align left', icon: <AlignLeftIcon /> },
+  { align: 'center', title: 'Align center', icon: <AlignCenterIcon /> },
+  { align: 'right', title: 'Align right', icon: <AlignRightIcon /> },
+  { align: 'justify', title: 'Justify', icon: <AlignJustifyIcon /> },
+];
 
 export const DocumentToolbar = (): React.ReactElement => {
   const editor = useEditorRef();
@@ -51,121 +46,124 @@ export const DocumentToolbar = (): React.ReactElement => {
   useEditorVersion();
 
   return (
-    <div className="pdoc-tb" role="toolbar" aria-label="Formatting">
+    <div className="pdoc-tb" role="toolbar" aria-label="Document formatting">
       <div className="pdoc-tb__group">
         <ToolbarButton
-          label="H1"
           title="Heading 1"
+          text
           active={isBlockType(editor, DocElement.H1)}
           onAction={() => {
             setBlockType(editor, DocElement.H1);
           }}
-        />
+        >
+          H1
+        </ToolbarButton>
         <ToolbarButton
-          label="H2"
           title="Heading 2"
+          text
           active={isBlockType(editor, DocElement.H2)}
           onAction={() => {
             setBlockType(editor, DocElement.H2);
           }}
-        />
+        >
+          H2
+        </ToolbarButton>
         <ToolbarButton
-          label="H3"
           title="Heading 3"
+          text
           active={isBlockType(editor, DocElement.H3)}
           onAction={() => {
             setBlockType(editor, DocElement.H3);
           }}
-        />
+        >
+          H3
+        </ToolbarButton>
         <ToolbarButton
-          label="¶"
           title="Paragraph"
+          text
           active={isBlockType(editor, DocElement.Paragraph)}
           onAction={() => {
             setBlockType(editor, DocElement.Paragraph);
           }}
-        />
+        >
+          ¶
+        </ToolbarButton>
       </div>
 
-      <Divider />
+      <ToolbarSeparator />
+
+      <div className="pdoc-tb__group">
+        <InlineMarkButtons />
+      </div>
+
+      <ToolbarSeparator />
+
+      <div className="pdoc-tb__group" aria-label="Text alignment">
+        {ALIGN_BUTTONS.map(({ align, title, icon }) => (
+          <ToolbarButton
+            key={align}
+            title={title}
+            active={isTextAlign(editor, align)}
+            onAction={() => {
+              setTextAlign(editor, align);
+            }}
+          >
+            {icon}
+          </ToolbarButton>
+        ))}
+      </div>
+
+      <ToolbarSeparator />
 
       <div className="pdoc-tb__group">
         <ToolbarButton
-          label="B"
-          title="Bold"
-          active={isMarkActive(editor, DocMark.Bold)}
-          onAction={() => {
-            toggleMark(editor, DocMark.Bold);
-          }}
-        />
-        <ToolbarButton
-          label="I"
-          title="Italic"
-          active={isMarkActive(editor, DocMark.Italic)}
-          onAction={() => {
-            toggleMark(editor, DocMark.Italic);
-          }}
-        />
-        <ToolbarButton
-          label="U"
-          title="Underline"
-          active={isMarkActive(editor, DocMark.Underline)}
-          onAction={() => {
-            toggleMark(editor, DocMark.Underline);
-          }}
-        />
-        <ToolbarButton
-          label="</>"
-          title="Inline code"
-          active={isMarkActive(editor, DocMark.Code)}
-          onAction={() => {
-            toggleMark(editor, DocMark.Code);
-          }}
-        />
-      </div>
-
-      <Divider />
-
-      <div className="pdoc-tb__group">
-        <ToolbarButton
-          label="❝"
           title="Quote"
           active={isBlockType(editor, DocElement.Blockquote)}
           onAction={() => {
             setBlockType(editor, DocElement.Blockquote);
           }}
-        />
+        >
+          <QuoteIcon />
+        </ToolbarButton>
         <ToolbarButton
-          label="Callout"
           title="Insert callout"
+          text
           onAction={() => {
             insertBlock(editor, b.callout([b.p('')], { variant: 'info' }));
           }}
-        />
+        >
+          Callout
+        </ToolbarButton>
         <ToolbarButton
-          label="Columns"
           title="Insert two columns"
+          text
           onAction={() => {
             insertBlock(
               editor,
               b.columns([b.column([b.p('')]), b.column([b.p('')])]),
             );
           }}
-        />
+        >
+          Columns
+        </ToolbarButton>
         <ToolbarButton
-          label="Card"
           title="Insert card"
+          text
           onAction={() => {
             insertBlock(editor, b.card([b.p('')], { title: 'Title', aside: '2024' }));
           }}
-        />
+        >
+          Card
+        </ToolbarButton>
         <ToolbarButton
-          label="Break"
           title="Insert page break"
+          text
           onAction={() => {
             insertBlock(editor, b.pageBreak());
           }}
-        />
+        >
+          Break
+        </ToolbarButton>
       </div>
     </div>
   );

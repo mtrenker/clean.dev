@@ -45,6 +45,14 @@ export const DocMark = {
 
 export type DocMarkType = (typeof DocMark)[keyof typeof DocMark];
 
+/** Block-level text alignment used by printable text/layout elements. */
+export type TextAlign = 'left' | 'center' | 'right' | 'justify';
+
+/** Common props supported by text-like blocks. */
+export interface TextBlockProps {
+  align?: TextAlign;
+}
+
 /** Callout visual variants. Generic, not tied to any document kind. */
 export type CalloutVariant = 'note' | 'info' | 'success' | 'warning' | 'accent';
 
@@ -55,7 +63,7 @@ export type CalloutVariant = 'note' | 'info' | 'success' | 'warning' | 'accent';
  * use the `b.*` builder helpers exported from the package.
  * ------------------------------------------------------------------ */
 
-export interface CalloutElement extends TElement {
+export interface CalloutElement extends TElement, TextBlockProps {
   type: typeof DocElement.Callout;
   variant?: CalloutVariant;
   title?: string;
@@ -72,7 +80,7 @@ export interface ColumnsElement extends TElement {
   children: ColumnElement[];
 }
 
-export interface CardElement extends TElement {
+export interface CardElement extends TElement, TextBlockProps {
   type: typeof DocElement.Card;
   /** Short marginal label, e.g. a year, a step number, a status. */
   aside?: string;
@@ -84,7 +92,7 @@ export interface CardElement extends TElement {
   tags?: string[];
 }
 
-export interface KeyValueItemElement extends TElement {
+export interface KeyValueItemElement extends TElement, TextBlockProps {
   type: typeof DocElement.KeyValueItem;
   label?: string;
 }

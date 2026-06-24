@@ -32,6 +32,7 @@ import { createEmptyDocument } from '../builders';
 import type { DocumentValue } from '../types';
 import { PageCanvas, type DocumentMode } from './PageCanvas';
 import { DocumentToolbar } from './Toolbar';
+import { DocumentFloatingToolbar } from './FloatingToolbar';
 
 export interface DocumentEditorProps {
   /** Initial document value (a Plate value). Defaults to an empty paragraph. */
@@ -54,8 +55,14 @@ export interface DocumentEditorProps {
   plugins?: AnyPlatePlugin[];
   /** Extra plugins appended to the defaults (ignored if `plugins` is set). */
   extendPlugins?: AnyPlatePlugin[];
-  /** `true` (default) shows the built-in toolbar; pass a node for a custom one. */
+  /** `true` (default) shows the built-in block toolbar; pass a node for a custom one. */
   toolbar?: boolean | React.ReactNode;
+  /**
+   * Contextual inline toolbar that floats near the text selection.
+   * `true` (default) shows the built-in one; pass a node for a custom one, or
+   * `false` to disable. Always hidden in `readOnly` mode.
+   */
+  floatingToolbar?: boolean | React.ReactNode;
   /** Placeholder shown when the document is empty. */
   placeholder?: string;
   /** Preview zoom factor in page mode (1 = 100%). */
@@ -76,6 +83,7 @@ export const DocumentEditor = ({
   plugins,
   extendPlugins,
   toolbar = true,
+  floatingToolbar = true,
   placeholder = 'Start writing…',
   zoom = 1,
   className,
@@ -114,6 +122,13 @@ export const DocumentEditor = ({
       toolbar
     );
 
+  const floatingToolbarNode =
+    floatingToolbar === false || readOnly ? null : floatingToolbar === true ? (
+      <DocumentFloatingToolbar />
+    ) : (
+      floatingToolbar
+    );
+
   return (
     <div
       className={`pdoc pdoc--${mode}${className ? ` ${className}` : ''}`}
@@ -137,6 +152,7 @@ export const DocumentEditor = ({
             aria-label="Document content"
           />
         </PageCanvas>
+        {floatingToolbarNode}
       </Plate>
     </div>
   );

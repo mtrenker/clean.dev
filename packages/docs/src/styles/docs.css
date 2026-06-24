@@ -402,7 +402,72 @@
   text-transform: uppercase;
 }
 
-/* -------------------------------- Toolbar -------------------------------- */
+/* ============================== Toolbars ================================= *
+ * Two surfaces share the `.pdoc-tbtn` button primitive:
+ *   .pdoc-tb   — sticky block/structure toolbar (top chrome)
+ *   .pdoc-ftb  — floating inline toolbar near the selection
+ * Refined, compact, squared controls — no pills, restrained active states.
+ * ========================================================================= */
+
+/* --- shared button primitive --- */
+
+.pdoc-tbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-family: var(--pdoc-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--pdoc-ink-soft);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.pdoc-tbtn--text {
+  width: auto;
+  min-width: 28px;
+  padding: 0 8px;
+  letter-spacing: 0.01em;
+}
+
+.pdoc-tbtn svg {
+  display: block;
+}
+
+.pdoc-tbtn:hover {
+  color: var(--pdoc-ink);
+  background: color-mix(in srgb, var(--pdoc-ink) 7%, transparent);
+}
+
+.pdoc-tbtn:focus-visible {
+  outline: 2px solid var(--pdoc-accent);
+  outline-offset: 1px;
+}
+
+.pdoc-tbtn--active,
+.pdoc-tbtn--active:hover {
+  color: var(--pdoc-accent);
+  background: color-mix(in srgb, var(--pdoc-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--pdoc-accent) 32%, transparent);
+}
+
+/* --- shared separator --- */
+
+.pdoc-tb__sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 2px;
+  background: var(--pdoc-border);
+}
+
+/* --- block toolbar (sticky top chrome) --- */
 
 .pdoc-tb {
   position: sticky;
@@ -410,48 +475,73 @@
   z-index: 5;
   display: flex;
   align-items: center;
-  gap: 0.6em;
+  gap: 6px;
   flex-wrap: wrap;
-  padding: 8px 12px;
-  background: color-mix(in srgb, var(--pdoc-canvas) 60%, #fff);
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--pdoc-paper) 78%, var(--pdoc-canvas));
   border-bottom: 1px solid var(--pdoc-border);
-  backdrop-filter: saturate(1.1) blur(4px);
+  backdrop-filter: saturate(1.05) blur(6px);
 }
 
 .pdoc-tb__group {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 2px;
 }
 
-.pdoc-tb__divider {
-  width: 1px;
-  align-self: stretch;
-  background: var(--pdoc-border);
-}
+/* --- floating inline toolbar --- */
 
-.pdoc-tb__btn {
-  min-width: 30px;
-  height: 30px;
-  padding: 0 9px;
-  font-family: var(--pdoc-font-mono);
-  font-size: 12px;
-  color: var(--pdoc-ink-soft);
-  background: #fff;
+.pdoc-ftb {
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  background: var(--pdoc-paper);
   border: 1px solid var(--pdoc-border);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 2px rgba(20, 24, 29, 0.08),
+    0 8px 24px rgba(20, 24, 29, 0.16);
+  /* A subtle entrance; honours reduced-motion below. */
+  animation: pdoc-ftb-in 0.1s ease-out;
 }
 
-.pdoc-tb__btn:hover {
-  border-color: var(--pdoc-accent);
-  color: var(--pdoc-accent);
+.pdoc-ftb .pdoc-tbtn {
+  width: 26px;
+  height: 26px;
 }
 
-.pdoc-tb__btn--active {
-  background: var(--pdoc-accent);
-  border-color: var(--pdoc-accent);
-  color: #fff;
+@keyframes pdoc-ftb-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pdoc-ftb--below {
+  animation-name: pdoc-ftb-in-below;
+}
+
+@keyframes pdoc-ftb-in-below {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdoc-ftb {
+    animation: none;
+  }
 }
 
 /* --------------------------------- Print --------------------------------- */
@@ -462,6 +552,7 @@
 
 @media print {
   .pdoc-tb,
+  .pdoc-ftb,
   .pdoc-page-break__label {
     display: none !important;
   }

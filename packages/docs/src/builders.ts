@@ -11,9 +11,15 @@
  *   b.section([b.h2('Summary'), b.p('…')]),
  * ];
  */
-import { DocElement, type CalloutVariant, type TElement } from './types';
+import {
+  DocElement,
+  type CalloutVariant,
+  type TElement,
+  type TextAlign,
+} from './types';
 
 type Inline = string | TElement;
+type TextBlockOptions = { align?: TextAlign };
 
 const text = (value: string): { text: string } => ({ text: value });
 
@@ -28,24 +34,29 @@ function asChildren(content: Inline | Inline[]): TElement['children'] {
 
 export const b = {
   /* Basic blocks */
-  p: (content: Inline | Inline[] = ''): TElement => ({
+  p: (content: Inline | Inline[] = '', opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.Paragraph,
+    align: opts.align,
     children: asChildren(content),
   }),
-  h1: (content: Inline | Inline[]): TElement => ({
+  h1: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.H1,
+    align: opts.align,
     children: asChildren(content),
   }),
-  h2: (content: Inline | Inline[]): TElement => ({
+  h2: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.H2,
+    align: opts.align,
     children: asChildren(content),
   }),
-  h3: (content: Inline | Inline[]): TElement => ({
+  h3: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.H3,
+    align: opts.align,
     children: asChildren(content),
   }),
-  blockquote: (content: Inline | Inline[]): TElement => ({
+  blockquote: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.Blockquote,
+    align: opts.align,
     children: asChildren(content),
   }),
   hr: (): TElement => ({ type: DocElement.Hr, children: [text('')] }),
@@ -55,16 +66,19 @@ export const b = {
     type: DocElement.Cover,
     children,
   }),
-  eyebrow: (content: Inline | Inline[]): TElement => ({
+  eyebrow: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.Eyebrow,
+    align: opts.align,
     children: asChildren(content),
   }),
-  docTitle: (content: Inline | Inline[]): TElement => ({
+  docTitle: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.DocTitle,
+    align: opts.align,
     children: asChildren(content),
   }),
-  docSubtitle: (content: Inline | Inline[]): TElement => ({
+  docSubtitle: (content: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.DocSubtitle,
+    align: opts.align,
     children: asChildren(content),
   }),
   section: (children: TElement[]): TElement => ({
@@ -73,11 +87,12 @@ export const b = {
   }),
   callout: (
     content: TElement[],
-    opts: { variant?: CalloutVariant; title?: string } = {},
+    opts: { variant?: CalloutVariant; title?: string; align?: TextAlign } = {},
   ): TElement => ({
     type: DocElement.Callout,
     variant: opts.variant,
     title: opts.title,
+    align: opts.align,
     children: content,
   }),
   columns: (columns: TElement[]): TElement => ({
@@ -96,6 +111,7 @@ export const b = {
       title?: string;
       meta?: string;
       tags?: string[];
+      align?: TextAlign;
     } = {},
   ): TElement => ({
     type: DocElement.Card,
@@ -103,15 +119,17 @@ export const b = {
     title: opts.title,
     meta: opts.meta,
     tags: opts.tags,
+    align: opts.align,
     children: children.length > 0 ? children : [b.p('')],
   }),
   keyValue: (items: TElement[]): TElement => ({
     type: DocElement.KeyValue,
     children: items,
   }),
-  kv: (label: string, value: Inline | Inline[]): TElement => ({
+  kv: (label: string, value: Inline | Inline[], opts: TextBlockOptions = {}): TElement => ({
     type: DocElement.KeyValueItem,
     label,
+    align: opts.align,
     children: asChildren(value),
   }),
   pageBreak: (): TElement => ({
