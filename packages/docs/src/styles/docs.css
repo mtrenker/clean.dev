@@ -1,0 +1,499 @@
+/* =========================================================================
+ * @cleandev/docs — document editor styles
+ *
+ * Self-contained: no Tailwind, no app tokens. Everything is driven by the
+ * `--pdoc-*` custom properties set by <DocumentEditor /> (see pageCssVariables).
+ * Class names are prefixed `pdoc-` to avoid collisions in any host app.
+ *
+ * Webfonts for the default theme (load in the host app for the full look):
+ *   Space Grotesk (display) · IBM Plex Sans (body) · IBM Plex Mono (labels)
+ * ========================================================================= */
+
+/* ------------------------------- Root scope ------------------------------ */
+
+.pdoc {
+  --pdoc-zoom: 1;
+  color: var(--pdoc-ink);
+  font-family: var(--pdoc-font-body);
+  font-size: var(--pdoc-font-size);
+  line-height: 1.62;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pdoc *,
+.pdoc *::before,
+.pdoc *::after {
+  box-sizing: border-box;
+}
+
+.pdoc ::selection {
+  background: color-mix(in srgb, var(--pdoc-accent) 26%, transparent);
+}
+
+/* ------------------------------ Page canvas ------------------------------ */
+
+.pdoc-canvas {
+  background: var(--pdoc-canvas);
+  padding: var(--pdoc-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.pdoc-sheet {
+  position: relative;
+  width: var(--pdoc-page-width);
+  min-height: var(--pdoc-page-height);
+  max-width: 100%;
+  padding: var(--pdoc-margin-top) var(--pdoc-margin-right)
+    var(--pdoc-margin-bottom) var(--pdoc-margin-left);
+  background: var(--pdoc-paper);
+  box-shadow: var(--pdoc-shadow);
+  zoom: var(--pdoc-zoom);
+}
+
+/* Page-boundary guides: a faint hairline at every page height. */
+.pdoc-sheet[data-guides] {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--pdoc-page-height) - 1px),
+    color-mix(in srgb, var(--pdoc-accent) 35%, transparent)
+      calc(var(--pdoc-page-height) - 1px),
+    color-mix(in srgb, var(--pdoc-accent) 35%, transparent) var(--pdoc-page-height)
+  );
+  background-repeat: repeat-y;
+  background-attachment: local;
+}
+
+/* ------------------------------- Flow mode ------------------------------- */
+
+.pdoc-flow {
+  background: var(--pdoc-paper);
+  display: flex;
+  justify-content: center;
+  padding: var(--pdoc-gutter);
+}
+
+.pdoc-flow .pdoc-content {
+  width: 100%;
+  max-width: 72ch;
+}
+
+/* ------------------------------- Editable -------------------------------- */
+
+.pdoc-content {
+  outline: none;
+}
+
+.pdoc-content [data-slate-placeholder] {
+  color: var(--pdoc-ink-muted);
+  opacity: 1 !important;
+}
+
+/* ------------------------------ Typography ------------------------------- */
+
+.pdoc-p {
+  margin: 0 0 0.72em;
+  color: var(--pdoc-ink-soft);
+  text-wrap: pretty;
+}
+
+.pdoc-h1 {
+  margin: 0.2em 0 0.4em;
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 1.95em;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--pdoc-ink);
+}
+
+.pdoc-h2 {
+  margin: 1.4em 0 0.6em;
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 1.36em;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--pdoc-ink);
+}
+
+.pdoc-h3 {
+  margin: 1.2em 0 0.4em;
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 1.08em;
+  color: var(--pdoc-ink);
+}
+
+.pdoc-blockquote {
+  margin: 1em 0;
+  padding: 0.1em 0 0.1em 18px;
+  border-left: 2px solid var(--pdoc-accent);
+  font-family: var(--pdoc-font-display);
+  font-size: 1.02em;
+  line-height: 1.5;
+  color: var(--pdoc-ink);
+  text-wrap: pretty;
+}
+
+.pdoc-hr-wrap {
+  margin: 1.4em 0;
+}
+
+.pdoc-hr {
+  border: 0;
+  border-top: 1px solid var(--pdoc-border);
+}
+
+/* Inline marks */
+.pdoc-code {
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.86em;
+  background: var(--pdoc-surface);
+  border: 1px solid var(--pdoc-border);
+  border-radius: 3px;
+  padding: 0.08em 0.36em;
+}
+
+.pdoc-mark {
+  background: color-mix(in srgb, var(--pdoc-accent) 22%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 0.1em;
+}
+
+/* --------------------------- Cover / document head ------------------------ */
+
+.pdoc-cover {
+  margin: 0 0 1.8em;
+  padding-bottom: 1.4em;
+  border-bottom: 2px solid var(--pdoc-rule);
+}
+
+.pdoc-eyebrow {
+  margin: 0 0 0.7em;
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.78em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pdoc-accent);
+}
+
+.pdoc-doc-title {
+  margin: 0;
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 2.7em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--pdoc-ink);
+}
+
+.pdoc-doc-subtitle {
+  margin: 0.5em 0 0;
+  font-family: var(--pdoc-font-display);
+  font-weight: 500;
+  font-size: 1.2em;
+  color: var(--pdoc-ink-soft);
+}
+
+/* -------------------------------- Section -------------------------------- */
+
+.pdoc-section {
+  margin: 1.9em 0;
+}
+
+.pdoc-section + .pdoc-section {
+  padding-top: 1.7em;
+  border-top: 1px solid var(--pdoc-border);
+}
+
+/* -------------------------------- Callout -------------------------------- */
+
+.pdoc-callout {
+  margin: 1.1em 0;
+  padding: 0.95em 1.1em;
+  border-radius: 8px;
+  border: 1px solid var(--pdoc-border);
+  border-left-width: 3px;
+  background: var(--pdoc-surface);
+  break-inside: avoid;
+}
+
+.pdoc-callout__title {
+  margin-bottom: 0.35em;
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.74em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pdoc-ink-muted);
+}
+
+.pdoc-callout__body > :last-child {
+  margin-bottom: 0;
+}
+
+.pdoc-callout--note {
+  border-left-color: var(--pdoc-ink-muted);
+}
+.pdoc-callout--info {
+  border-left-color: var(--pdoc-accent);
+  background: color-mix(in srgb, var(--pdoc-accent) 8%, var(--pdoc-paper));
+}
+.pdoc-callout--accent {
+  border-left-color: var(--pdoc-accent);
+  background: color-mix(in srgb, var(--pdoc-accent) 14%, var(--pdoc-paper));
+}
+.pdoc-callout--success {
+  border-left-color: #2f8f5b;
+  background: color-mix(in srgb, #2f8f5b 8%, var(--pdoc-paper));
+}
+.pdoc-callout--warning {
+  border-left-color: #b08a4a;
+  background: color-mix(in srgb, #b08a4a 9%, var(--pdoc-paper));
+}
+
+/* -------------------------------- Columns -------------------------------- */
+
+.pdoc-columns {
+  display: flex;
+  gap: 2.4em;
+  margin: 1.1em 0;
+}
+
+.pdoc-column {
+  min-width: 0;
+}
+
+.pdoc-column > :first-child {
+  margin-top: 0;
+}
+
+/* --------------------------------- Card ---------------------------------- */
+
+.pdoc-card {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 1.4em;
+  padding: 1.15em 0;
+  border-top: 1px solid var(--pdoc-border);
+  break-inside: avoid;
+}
+
+.pdoc-card__aside {
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.82em;
+  color: var(--pdoc-accent);
+  padding-top: 0.15em;
+}
+
+.pdoc-card__main {
+  min-width: 0;
+}
+
+.pdoc-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8em;
+  flex-wrap: wrap;
+  margin-bottom: 0.45em;
+}
+
+.pdoc-card__title {
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 1.06em;
+  color: var(--pdoc-ink);
+}
+
+.pdoc-card__meta {
+  font-size: 0.9em;
+  font-style: italic;
+  color: var(--pdoc-ink-soft);
+}
+
+.pdoc-card__body > :last-child {
+  margin-bottom: 0;
+}
+
+.pdoc-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.7em;
+}
+
+.pdoc-chip {
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.72em;
+  color: var(--pdoc-ink-soft);
+  background: var(--pdoc-surface);
+  border: 1px solid var(--pdoc-border);
+  border-radius: 3px;
+  padding: 2px 7px;
+}
+
+/* ------------------------------ Key / value ------------------------------ */
+
+.pdoc-kv {
+  margin: 1.1em 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85em;
+}
+
+.pdoc-kv__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  padding-bottom: 0.55em;
+  border-bottom: 1px solid var(--pdoc-border);
+  break-inside: avoid;
+}
+
+.pdoc-kv__label {
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.72em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pdoc-ink-muted);
+  flex: none;
+}
+
+.pdoc-kv__value {
+  font-family: var(--pdoc-font-display);
+  font-weight: 600;
+  font-size: 1.02em;
+  text-align: right;
+  color: var(--pdoc-ink);
+}
+
+/* ------------------------------- Page break ------------------------------ */
+
+.pdoc-page-break {
+  margin: 1.4em 0;
+}
+
+.pdoc-page-break__rule {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  color: var(--pdoc-ink-muted);
+  user-select: none;
+}
+
+.pdoc-page-break__rule::before,
+.pdoc-page-break__rule::after {
+  content: '';
+  flex: 1;
+  border-top: 1px dashed var(--pdoc-border);
+}
+
+.pdoc-page-break__label {
+  font-family: var(--pdoc-font-mono);
+  font-size: 0.66em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* -------------------------------- Toolbar -------------------------------- */
+
+.pdoc-tb {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--pdoc-canvas) 60%, #fff);
+  border-bottom: 1px solid var(--pdoc-border);
+  backdrop-filter: saturate(1.1) blur(4px);
+}
+
+.pdoc-tb__group {
+  display: flex;
+  gap: 4px;
+}
+
+.pdoc-tb__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--pdoc-border);
+}
+
+.pdoc-tb__btn {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 9px;
+  font-family: var(--pdoc-font-mono);
+  font-size: 12px;
+  color: var(--pdoc-ink-soft);
+  background: #fff;
+  border: 1px solid var(--pdoc-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.pdoc-tb__btn:hover {
+  border-color: var(--pdoc-accent);
+  color: var(--pdoc-accent);
+}
+
+.pdoc-tb__btn--active {
+  background: var(--pdoc-accent);
+  border-color: var(--pdoc-accent);
+  color: #fff;
+}
+
+/* --------------------------------- Print --------------------------------- */
+
+@page {
+  margin: 0;
+}
+
+@media print {
+  .pdoc-tb,
+  .pdoc-page-break__label {
+    display: none !important;
+  }
+
+  .pdoc-canvas {
+    background: #fff;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .pdoc-sheet {
+    box-shadow: none !important;
+    background: #fff !important;
+    background-image: none !important;
+    zoom: 1 !important;
+    min-height: auto;
+  }
+
+  .pdoc-page-break {
+    break-before: page;
+    margin: 0;
+  }
+
+  .pdoc-page-break__rule::before,
+  .pdoc-page-break__rule::after {
+    border: 0;
+  }
+
+  .pdoc-card,
+  .pdoc-callout,
+  .pdoc-kv__row,
+  .pdoc-blockquote {
+    break-inside: avoid;
+  }
+}

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  transpilePackages: ['@cleandev/sim'],
+  transpilePackages: ['@cleandev/sim', '@cleandev/docs'],
   serverExternalPackages: ['pg'],
   images: {
     // Serve modern formats: AVIF first, WebP as fallback

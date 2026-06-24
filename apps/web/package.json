@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@cleandev/db": "workspace:*",
+    "@cleandev/docs": "workspace:*",
     "@cleandev/pm": "workspace:*",
     "@cleandev/sim": "workspace:*",
     "@headlessui/react": "^1.7.17",

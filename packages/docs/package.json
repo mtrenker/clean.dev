@@ -1,0 +1,45 @@
+{
+  "name": "@cleandev/docs",
+  "version": "0.1.0",
+  "description": "Reusable Plate.js document-writing editor with a paginated Page Mode and generic PDF-oriented layout elements (reports, offers, CVs, blog posts).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./styles.css": "./src/styles/docs.css"
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@platejs/basic-nodes": "^53.0.0",
+    "platejs": "^53.2.1"
+  },
+  "devDependencies": {
+    "@cleandev/eslint-config": "workspace:*",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "react": "^19",
+    "react-dom": "^19",
+    "typescript": "^5.7.2"
+  }
+}
