@@ -1,5 +1,0 @@
-{"ts":"2026-05-05T22:19:04+02:00","step":"Inspecting Task 008/009 outputs and current daemon/protocol sources for git worktree adapter integration","status":"running"}
-{"ts":"2026-05-05T22:20:55+02:00","step":"Implementing git worktree adapter, SQLite observation state, and preview/daemon integration for worktree hygiene events","status":"running"}
-{"ts":"2026-05-05T22:25:20+02:00","step":"Implemented git worktree adapter, SQLite observation state, preview/daemon wiring, and focused regression coverage","status":"done"}
-{"ts":"2026-05-05T22:25:35+02:00","step":"Running final cockpit-daemon build and verification after git worktree adapter changes","status":"running"}
-{"ts":"2026-05-05T22:25:47+02:00","step":"Verified cockpit-daemon tests and build with git worktree discovery, worktree event queuing, and preview hygiene output","status":"done"}

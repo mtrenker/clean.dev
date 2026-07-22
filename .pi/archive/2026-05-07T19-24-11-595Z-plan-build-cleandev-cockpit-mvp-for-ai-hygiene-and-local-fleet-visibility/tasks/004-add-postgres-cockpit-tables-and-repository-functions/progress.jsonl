@@ -1,6 +1,0 @@
-{"ts":"2026-05-05T20:04:37.000Z","step":"Read Tasks 001 and 002 artifacts; adopting audit constraints and cockpit-protocol schemas as authoritative inputs for PM schema/repository work","status":"done"}
-{"ts":"2026-05-05T20:05:01.000Z","step":"Read PM adapter, Drizzle config, and cockpit audit/protocol sources to map required cockpit tables and repository operations onto existing package patterns","status":"done"}
-{"ts":"2026-05-05T20:10:54.000Z","step":"Patched PM schema, added cockpit repository module/exports, and added a focused package-local test; starting build verification","status":"done"}
-{"ts":"2026-05-05T20:11:31.000Z","step":"Build exposed missing workspace linkage for @cleandev/cockpit-protocol and repository typing issues; patched typings and starting install/build retry","status":"running"}
-{"ts":"2026-05-05T20:11:55.000Z","step":"Verified @cleandev/pm build and focused cockpit repository test; generating Drizzle migration artifacts for the new cockpit tables","status":"done"}
-{"ts":"2026-05-05T20:12:39.000Z","step":"Generated Drizzle migration 0002 for cockpit tables and re-verified @cleandev/pm build/test after a final repository helper fix","status":"done"}
