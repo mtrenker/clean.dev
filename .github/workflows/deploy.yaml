@@ -83,6 +83,8 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          # No DATABASE_URL: /api/health deliberately skips the database check
+          # when it is unset, which is what an isolated container can satisfy.
           CONTAINER_ID=$(docker run -d \
             -p 3000:3000 \
             -e NODE_ENV=production \
@@ -92,11 +94,17 @@ jobs:
             -e LINKEDIN_CLIENT_ID=dummy \
             -e LINKEDIN_CLIENT_SECRET=dummy \
             -e ALLOWED_GITHUB_USERS=mtrenker \
-            -e DATABASE_URL=postgresql://user:pass@127.0.0.1:5432/db \
             "$IMAGE_TAG")
           trap 'docker logs "$CONTAINER_ID"; docker rm -f "$CONTAINER_ID"' EXIT
-          sleep 3
-          curl --fail --silent --show-error http://127.0.0.1:3000/api/health
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/api/health; then
+              echo; echo "healthy after ${attempt} attempt(s)"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "server did not become healthy within 30s" >&2
+          exit 1
 
       - name: Install Kustomize
         run: |

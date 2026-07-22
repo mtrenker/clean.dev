@@ -416,30 +416,29 @@ import { Card } from "@/components/ui";
 
 ## Print Styles (Portfolio Page)
 
-The portfolio page (`/work`) includes special print styles for CV generation:
+The portfolio page (`/work`) ships a dedicated print-only CV composition
+instead of restyling the screen DOM:
 
-```tsx
-// Screen: Centered with ring
-className = "rounded-full ring-2 ring-border print:rounded-none print:ring-0";
-
-// Print: Left-aligned without decorative elements
-className = "text-center print:text-start";
-
-// Print: Show sidebar
-className = "hidden print:flex";
-
-// Print: Page break before
-className = "break-before-page";
-
-// Print: Avoid break inside
-className = "break-inside-avoid";
-```
+- `apps/web/src/app/work/print-cv.tsx` renders the print document
+  (`hidden print:block`), marked with `data-print-document`.
+- `apps/web/src/app/work/print-cv-data.ts` prepares a render-ready model from
+  the shared `projects.ts` data and the localized messages.
+- `globals.css` contains a generic `@media print` block: when a page provides
+  `[data-print-document]`, every other body-level region (navigation, skip
+  link, screen layout, footer) is suppressed via `:has()`, and the document
+  uses fixed `--print-*` ink colors that are independent of the site theme.
+- Project entries use `break-inside-avoid`; the history section starts on a
+  fresh sheet via `break-before-page`. No meaning is carried by backgrounds,
+  so grayscale and backgrounds-disabled printing stay legible.
 
 **To print the CV:**
 
 1. Navigate to `/work`
-2. Use browser print (Ctrl/Cmd + P)
-3. The page automatically adjusts for print layout
+2. Use browser print (Ctrl/Cmd + P) or "Save as PDF"
+3. The dedicated CV document replaces the screen layout in the print output
+
+`apps/web/e2e/work-print-cv.spec.ts` verifies the print DOM for both locales
+and generates A4 PDF artifacts with `page.pdf()` (desktop Chromium project).
 
 ## Future Enhancements
 

@@ -89,13 +89,13 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
 
   return (
-    <SiteShell className="print:bg-white print:text-black">
+    <SiteShell className="print:hidden">
       <PageHero
         eyebrow={msg(intl, 'work.hero.label')}
         title={msg(intl, 'work.hero.heading')}
         lead={msg(intl, 'work.hero.lead')}
         aside={(
-          <Card className="p-5 print:hidden">
+          <Card className="p-5">
             <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={280} height={320} className="h-64 w-full rounded-[4px] border border-[var(--site-rule)] object-cover object-[50%_24%] grayscale-[10%]" priority />
             <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
               <p className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">Martin Trenker</p>
@@ -139,17 +139,17 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </SiteContainer>
       </SiteSection>
 
-      <SiteSection border={false} className="print:p-0">
-        <SiteContainer className="print:max-w-none print:px-0">
+      <SiteSection border={false}>
+        <SiteContainer>
           <SectionHeader title={msg(intl, 'work.timeline.heading')} meta={msg(intl, 'work.timeline.meta')} />
-          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)] print:border-black print:bg-white">
+          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)]">
             {timelineProjects.map((project) => (
               <TimelineEntry key={project.id} project={project} lang={lang} />
             ))}
           </ol>
           <button
             aria-expanded={timelineExpanded}
-            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)] print:hidden"
+            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
             onClick={() => setTimelineExpanded((value) => !value)}
             type="button"
           >
@@ -160,7 +160,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         </SiteContainer>
       </SiteSection>
 
-      <SiteSection border={false} className="bg-[var(--site-panel-deep)] md:py-20 print:hidden">
+      <SiteSection border={false} className="bg-[var(--site-panel-deep)] md:py-20">
         <SiteContainer>
           <Card className="p-8 md:p-10">
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[var(--site-ink)] md:text-5xl">
