@@ -238,6 +238,43 @@
   margin: 1.5cm 1.8cm;
 }
 
+/* Dedicated print documents.
+ * A page can provide a purpose-built print composition by rendering an element
+ * with [data-print-document] (hidden on screen). When present, it becomes the
+ * sole printed content: every other body-level region (navigation, skip link,
+ * screen layout, footer) is suppressed, and the document renders on plain
+ * white paper with a fixed, theme-independent ink palette. Essential content
+ * never relies on backgrounds, so output survives grayscale and
+ * "print backgrounds" being disabled. */
+@media print {
+  html:has([data-print-document]),
+  body:has([data-print-document]) {
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: #fff !important;
+    background-image: none !important;
+  }
+
+  body:has([data-print-document]) > *:not([data-print-document]):not(:has([data-print-document])) {
+    display: none !important;
+  }
+
+  [data-print-document] {
+    display: block;
+    --print-ink: #1a1714;
+    --print-ink-sec: #454039;
+    --print-ink-mute: #6f695c;
+    --print-rule: #cfc9ba;
+    --print-rust: #a8472a;
+  }
+
+  [data-print-document] p,
+  [data-print-document] li {
+    orphans: 3;
+    widows: 3;
+  }
+}
+
 /* ── Keyframes ───────────────────────────────────────────────────────────────── */
 
 @keyframes marqueeScroll {
