@@ -18,7 +18,7 @@ namespace: clean-dev
 # Image configuration - this is what CI updates
 images:
 - name: ghcr.io/mtrenker/clean-dev
-  newTag: sha-7dd5934
+  newTag: sha-6827439
 
 # Common labels applied to all resources
 commonLabels:
