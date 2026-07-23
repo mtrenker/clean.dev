@@ -33,7 +33,9 @@ const PrintHistoryEntry = ({ entry }: { entry: PrintCvEntry }) => (
       ))}
     </div>
     <div>
-      <p className="font-mono text-[7pt] font-semibold uppercase tracking-[0.14em] text-[var(--print-rust)]">{entry.role}</p>
+      {entry.role.length > 0 && (
+        <p className="font-mono text-[7pt] font-semibold uppercase tracking-[0.14em] text-[var(--print-rust)]">{entry.role}</p>
+      )}
       <h3 className="mt-[0.6mm] text-[11pt] font-semibold leading-[1.2] text-[var(--print-ink)]">{entry.name}</h3>
       <p className="mt-[1.2mm] text-[9pt] leading-[1.4] text-[var(--print-ink-sec)] hyphens-auto">{entry.description}</p>
       {entry.highlights.length > 0 && (
@@ -106,8 +108,14 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
         </aside>
       </section>
 
+      {/* Availability */}
+      <section className="mt-[6mm] flex break-inside-avoid items-baseline gap-[4mm] border border-[var(--print-rule)] px-[4mm] py-[2.5mm]">
+        <PrintLabel>{cv.availabilityLabel}</PrintLabel>
+        <p className="text-[9pt] leading-[1.4] text-[var(--print-ink)]">{cv.availabilityText}</p>
+      </section>
+
       {/* Evidence strip */}
-      <section className="mt-[9mm] grid break-inside-avoid grid-cols-4 divide-x divide-[var(--print-rule)] border-y border-[var(--print-ink)]">
+      <section className="mt-[6mm] grid break-inside-avoid grid-cols-4 divide-x divide-[var(--print-rule)] border-y border-[var(--print-ink)]">
         {cv.stats.map((stat) => (
           <div key={stat.label} className="py-[4mm] pl-[4mm] first:pl-0">
             <p className="text-[16pt] font-medium leading-none tracking-[-0.02em] text-[var(--print-ink)]">{stat.value}</p>
@@ -142,6 +150,21 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
             <PrintHistoryEntry key={entry.id} entry={entry} />
           ))}
         </div>
+      </section>
+
+      {/* Lab — self-funded production proof */}
+      <section className="mt-[9mm] break-inside-avoid">
+        <div className="break-after-avoid">
+          <PrintSectionHeader meta={cv.labMeta} title={cv.labHeading} />
+        </div>
+        <div className="mt-[1mm]">
+          {cv.labEntries.map((entry) => (
+            <PrintHistoryEntry key={entry.id} entry={entry} />
+          ))}
+        </div>
+        <p className="mt-[3mm] border-t border-[var(--print-rule)] pt-[2mm] font-mono text-[7.5pt] leading-[1.45] text-[var(--print-ink-mute)]">
+          {cv.certsNote}
+        </p>
       </section>
     </div>
   );

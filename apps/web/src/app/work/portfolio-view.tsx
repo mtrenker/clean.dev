@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { createIntl } from 'react-intl';
 import { ButtonLink, Card, DefinitionList, PageHero, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
 import { type Locale } from '@/lib/locale';
+import { labItems } from '../lab';
 import { type Project } from '../projects';
 
 interface PortfolioViewProps {
@@ -112,6 +113,16 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         { value: String(firstYear), label: msg(intl, 'work.stats.since.label') },
       ]} />
 
+      <SiteSection border={false} className="py-6 md:py-6">
+        <SiteContainer>
+          <Card className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-5">
+            <span className="inline-block h-2 w-2 shrink-0 self-center rounded-full bg-[var(--site-green)]" aria-hidden />
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.availability.label')}</span>
+            <span className="text-sm leading-6 text-[var(--site-ink)]">{msg(intl, 'work.availability.text')}</span>
+          </Card>
+        </SiteContainer>
+      </SiteSection>
+
       <SiteSection>
         <SiteContainer>
           <SectionHeader title={msg(intl, 'work.focus.heading')} meta={msg(intl, 'work.focus.meta')} />
@@ -157,6 +168,42 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               ? msg(intl, 'work.timeline.collapse')
               : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
           </button>
+        </SiteContainer>
+      </SiteSection>
+
+      <SiteSection>
+        <SiteContainer>
+          <SectionHeader title={msg(intl, 'work.lab.heading')} meta={msg(intl, 'work.lab.meta')} />
+          <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.lab.lead')}</p>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {labItems.map((item, index) => (
+              <Card key={item.id} as="article" className={`p-6 ${index === 0 ? 'lg:col-span-2' : ''}`}>
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <h3 className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">{item.title[lang]}</h3>
+                  <Tag tone="amber">{item.period[lang]}</Tag>
+                </div>
+                <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{item.description[lang]}</p>
+                {item.highlights[lang].length > 0 && (
+                  <ul className="mt-4 space-y-2">
+                    {item.highlights[lang].map((highlight) => (
+                      <li key={highlight} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
+                        <span className="font-mono text-[var(--site-green)]">+</span>
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="mt-5 flex flex-wrap gap-1.5 border-t border-dashed border-[var(--site-rule)] pt-4">
+                  {item.technologies.map((technology) => (
+                    <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-[0.65rem] text-[var(--site-ink-mute)]">
+                      {technology}
+                    </span>
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+          <p className="mt-6 font-mono text-xs text-[var(--site-ink-mute)]">{msg(intl, 'work.certs.note')}</p>
         </SiteContainer>
       </SiteSection>
 

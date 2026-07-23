@@ -15,7 +15,9 @@ describe('buildPrintCv', () => {
 
     expect(cv.entries).toHaveLength(projects.length);
     expect(cv.entries[0].name).toBe('Douglas GmbH');
-    expect(cv.entries[0].period).toBe('2024 – 2026');
+    expect(cv.entries[0].period).toBe('2025 – 2026');
+    expect(cv.entries[1].name).toBe('Douglas GmbH');
+    expect(cv.entries[1].period).toBe('2024 – 2025');
     expect(cv.entries.at(-1)?.name).toBe('Siemens AG');
     expect(cv.entries.at(-1)?.period).toBe('2008 – 2009');
 
@@ -33,6 +35,8 @@ describe('buildPrintCv', () => {
         cv.docLabel, cv.updatedLabel, cv.name, cv.subtitle, cv.photoAlt,
         cv.contactHeading, cv.focusHeading, cv.focusMeta,
         cv.technologiesHeading, cv.historyHeading, cv.historyMeta,
+        cv.availabilityLabel, cv.availabilityText,
+        cv.labHeading, cv.labMeta, cv.certsNote,
         ...cv.about,
         ...cv.stats.map((stat) => stat.label),
         ...cv.focusItems.flatMap((item) => [item.heading, item.body]),
@@ -48,7 +52,7 @@ describe('buildPrintCv', () => {
   it('localizes project fields and city names', () => {
     const cv = buildPrintCv(projects, 'de', intlFor('de'));
     const douglas = cv.entries[0];
-    expect(douglas.role).toBe('Berater & Technischer Leiter');
+    expect(douglas.role).toBe('Lösungsarchitekt');
     expect(douglas.context).toContain('Düsseldorf');
     const munichEntry = cv.entries.find((entry) => entry.context[0] === 'München');
     expect(munichEntry).toBeDefined();
@@ -69,6 +73,6 @@ describe('recentTechnologies', () => {
     const technologies = recentTechnologies(projects);
     expect(technologies).toHaveLength(14);
     expect(new Set(technologies).size).toBe(technologies.length);
-    expect(technologies.slice(0, 3)).toEqual(['react', 'typescript', 'next.js']);
+    expect(technologies.slice(0, 3)).toEqual(['dotnet', 'csharp', 'graphql']);
   });
 });

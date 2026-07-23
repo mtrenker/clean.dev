@@ -1,6 +1,7 @@
 import type { IntlShape } from 'react-intl';
 import { SOCIAL_PROFILES } from '@/lib/social-profiles';
 import { type Locale } from '@/lib/locale';
+import { labItems } from '../lab';
 import { type Project } from '../projects';
 
 export interface PrintCvEntry {
@@ -32,6 +33,12 @@ export interface PrintCvModel {
   historyHeading: string;
   historyMeta: string;
   entries: PrintCvEntry[];
+  availabilityLabel: string;
+  availabilityText: string;
+  labHeading: string;
+  labMeta: string;
+  labEntries: PrintCvEntry[];
+  certsNote: string;
 }
 
 const CONTACT_EMAIL = 'info@clean.dev';
@@ -120,5 +127,20 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
     historyHeading: msg('work.print.history.heading'),
     historyMeta: msg('work.timeline.meta'),
     entries,
+    availabilityLabel: msg('work.availability.label'),
+    availabilityText: msg('work.availability.text'),
+    labHeading: msg('work.lab.heading'),
+    labMeta: msg('work.lab.meta'),
+    labEntries: labItems.map((item) => ({
+      id: item.id,
+      period: item.period[locale],
+      name: item.title[locale],
+      role: '',
+      context: [],
+      description: item.description[locale],
+      highlights: item.highlights[locale],
+      technologies: item.technologies.join(' · '),
+    })),
+    certsNote: msg('work.certs.note'),
   };
 };

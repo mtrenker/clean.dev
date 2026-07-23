@@ -201,12 +201,12 @@ export const projects: Project[] = [
     highlights: {
       en: [
         'hierarchical evaluation model: store → local → regional → country, each level saw exactly the data their role required',
-        'first AngularJS application, adopted before the framework was mainstream in enterprise contexts',
+        'adopted AngularJS before the framework was mainstream in enterprise contexts',
         'multi-region, multi-language rollout across BMW\'s global dealer network',
       ],
       de: [
         'hierarchisches Bewertungsmodell: Filiale → lokal → regional → Land, jede Ebene sah exakt die Daten, die ihrer Rolle entsprachen',
-        'erste AngularJS-Anwendung, eingesetzt bevor das Framework in Unternehmensumgebungen verbreitet war',
+        'AngularJS eingesetzt, bevor das Framework in Unternehmensumgebungen verbreitet war',
         'mehrsprachiger Rollout über das globale BMW-Händlernetz',
       ],
     },
@@ -397,8 +397,8 @@ export const projects: Project[] = [
     },
     city: 'Munich',
     highlights: {
-      en: ['early use of Contentful as a headless CMS'],
-      de: ['früher Einsatz von Contentful als Headless-CMS'],
+      en: [],
+      de: [],
     },
     technologies: [
       'typescript',
@@ -492,11 +492,11 @@ export const projects: Project[] = [
     city: 'Munich',
     highlights: {
       en: [
-        'doubled as agile coach, introducing practices that noticeably reduced sprint friction',
+        'took on agile coaching alongside development, reducing sprint friction',
         'first production WebRTC integration, shipped without third-party SDK'
       ],
       de: [
-        'zusätzliche Rolle als Agile Coach mit messbarer Reduktion von Sprint-Reibung',
+        'zusätzlich als Agile Coach aktiv, spürbar weniger Reibung in den Sprints',
         'erste produktive WebRTC-Integration, ohne Drittanbieter-SDK ausgeliefert'
       ],
     },
@@ -605,13 +605,13 @@ export const projects: Project[] = [
         'audited the codebase and improved quality across the stack: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
         'consolidated two separate web products into a single codebase without disrupting active development',
         'onboarded four new hires in parallel while keeping delivery on track',
-        'introduced lightweight agile practices that the team still uses'
+        'introduced lightweight agile practices that the team adopted'
       ],
       de: [
         'Codebase geprüft und Qualität über den Stack verbessert: Next.js, TypeScript, GraphQL, Apollo, Cypress, Storybook, Tailwind',
         'zwei separate Webprodukte ohne Unterbrechung der laufenden Entwicklung zu einer gemeinsamen Codebasis zusammengeführt',
         'vier neue Mitarbeiter parallel eingearbeitet und Lieferung trotzdem im Zeitplan gehalten',
-        'schlanke agile Praktiken eingeführt, die das Team noch heute nutzt'
+        'schlanke agile Praktiken eingeführt, die das Team übernommen hat'
       ],
     },
     technologies: [
@@ -637,12 +637,12 @@ export const projects: Project[] = [
       de: 'Einzelhandel',
     },
     title: {
-      en: 'Consultant & Technical Lead',
-      de: 'Berater & Technischer Leiter',
+      en: 'Technical Lead',
+      de: 'Technischer Leiter',
     },
     description: {
-      en: 'Engaged as React expert and consultant to modernise the POS software running in ~1,800 Douglas stores across 26 European countries. Led the rewrite of a business-critical CRM integration from a legacy implementation to a maintainable React architecture, shipped in under a year. Also responsible for the customer care app (Angular, maintenance) and greenfield tooling.',
-      de: 'Als React-Experte und Berater engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Neuentwicklung einer geschäftskritischen CRM-Integration von einer Legacy-Implementierung zu einer wartbaren React-Architektur, in unter einem Jahr ausgeliefert. Verantwortlich auch für die Customer-Care-App (Angular, Wartung) sowie neue Eigenentwicklungen.',
+      en: 'Engaged as React expert to modernise the POS software used in ~1,800 Douglas stores across 26 European countries. Led the transition from a legacy Angular implementation to a maintainable React architecture and shipped the business-critical CRM integration in under a year.',
+      de: 'Als React-Experte engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Leitung der Ablösung einer Legacy-Angular-Implementierung durch eine wartbare React-Architektur – die geschäftskritische CRM-Integration ging in unter einem Jahr live.',
     },
     city: 'Düsseldorf',
     highlights: {
@@ -651,35 +651,89 @@ export const projects: Project[] = [
         'software runs on every cash register in ~1,800 stores across 26 European countries',
         'moved from after-hours deployment windows toward safer deployments during business hours through better error handling, observability, and recovery paths',
         'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
-        'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL/C#/.NET, and more',
+        'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL, C#/.NET, and more',
         'built an in-house shortlink and QR service in Next.js + .NET in weeks, replacing a third-party SaaS that no longer met business needs',
-        'introduced practical AI usage for coding, review, documentation, and team guardrails',
       ],
       de: [
         'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, mehr Testabdeckung und aktualisierter Dokumentation',
         'Software läuft auf jedem Kassenterminal in ~1.800 Filialen in 26 europäischen Ländern',
         'von After-Hours-Deploymentfenstern zu sichereren Deployments im laufenden Betrieb durch bessere Fehlerbehandlung, Observability und klare Recovery-Pfade',
         '1 Senior und 2 Junior-Entwickler eingearbeitet, alle innerhalb weniger Wochen produktive Beitragende',
-        '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL/C#/.NET und mehr',
-        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als SaaS-Ersatz',
-        'praktische KI-Nutzung für Entwicklung, Reviews, Dokumentation und Team-Leitplanken eingeführt',
+        '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL, C#/.NET und mehr',
+        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als Ersatz für einen Drittanbieter-SaaS',
       ],
     },
     technologies: [
       'react',
       'typescript',
+      'angular',
       'next.js',
       'dotnet',
       'csharp',
       'mongodb',
       'kubernetes',
       'azure-devops',
-      'entra-id',
       'instana',
       'grafana',
     ],
     startDate: '2024-01',
-    endDate: '2026-02',
+    endDate: '2025-10',
+    featured: true,
+    spotlight: true,
+  },
+  {
+    id: '20',
+    company: 'Douglas GmbH',
+    industry: {
+      en: 'Retail',
+      de: 'Einzelhandel',
+    },
+    title: {
+      en: 'Solutions Architect',
+      de: 'Lösungsarchitekt',
+    },
+    description: {
+      en: 'Contract extended with broader scope: unify the CRM API landscape and modernise how the team works. Designed and built a unified API gateway (REST + GraphQL) replacing direct frontend access to upstream services, and introduced governed AI tooling for daily delivery work.',
+      de: 'Vertragsverlängerung mit erweitertem Scope: Vereinheitlichung der CRM-API-Landschaft und Modernisierung der Arbeitsweise im Team. Konzeption und Bau eines API-Gateways (REST + GraphQL) als einheitliche Schnittstelle statt Direktzugriff auf Upstream-Services, dazu KI-Tooling mit klaren Leitplanken für die tägliche Arbeit.',
+    },
+    city: 'Düsseldorf',
+    highlights: {
+      en: [
+        'designed a unified CRM API (REST + GraphQL), ending business logic duplicated across multiple frontends',
+        'picked up C#/.NET during the engagement — with AI assistance and architecture patterns that transfer across stacks — to design and ship the API myself',
+        'replaced static code-level mandator configuration with dynamic runtime config served by the API — config changes no longer require a release',
+        'built a TypeScript agent CLI giving AI agents governed access to Jira, Confluence, Azure DevOps, and internal tooling, with human review of all output',
+        'developed an internal delivery platform that grew from a team page into a blog, planning, and configuration hub',
+        'supported the team\'s migration to an improved Jira workflow',
+        'identity and access management throughout: Entra ID, OAuth flows, API permissions, group management',
+      ],
+      de: [
+        'einheitliche CRM-API (REST + GraphQL) konzipiert – Schluss mit duplizierter Businesslogik in mehreren Frontends',
+        'C#/.NET im laufenden Projekt gelernt – mit KI-Unterstützung und Architekturmustern, die über Stacks hinweg tragen – um das API-Gateway selbst zu konzipieren und umzusetzen',
+        'statische Mandantenkonfiguration im Code durch dynamische Runtime-Konfiguration über die API ersetzt – Konfigurationsänderungen brauchen kein Release mehr',
+        'TypeScript-Agent-CLI gebaut, das KI-Agenten kontrollierten Zugriff auf Jira, Confluence, Azure DevOps und interne Tools gibt – mit menschlichem Review aller Ergebnisse',
+        'interne Delivery-Plattform entwickelt, die von einer Teamseite zu Blog-, Planungs- und Konfigurations-Hub gewachsen ist',
+        'Team bei der Migration auf einen verbesserten Jira-Workflow unterstützt',
+        'durchgängig Identity & Access Management: Entra ID, OAuth-Flows, API-Berechtigungen, Gruppenverwaltung',
+      ],
+    },
+    technologies: [
+      'dotnet',
+      'csharp',
+      'graphql',
+      'rest',
+      'typescript',
+      'react',
+      'next.js',
+      'mongodb',
+      'kubernetes',
+      'azure-devops',
+      'entra-id',
+      'oauth',
+      'grafana',
+    ],
+    startDate: '2025-10',
+    endDate: '2026-07',
     featured: true,
     spotlight: true,
   }
