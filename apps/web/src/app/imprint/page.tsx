@@ -4,19 +4,11 @@ import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { Card, Eyebrow, LegalCard, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { buildRouteMetadata } from '@/lib/site-metadata';
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const headerStore = await headers();
-  const cookieStore = await cookies();
-  const locale = getLocale(headerStore, cookieStore);
-  const messages = await loadMessages(locale);
-  const intl = createIntl({ locale, messages });
-
-  return {
-    title: intl.formatMessage({ id: 'imprint.metadata.title' }),
-    description: intl.formatMessage({ id: 'imprint.metadata.description' }),
-    alternates: { canonical: '/imprint' },
-  };
+  const locale = getLocale(await headers(), await cookies());
+  return buildRouteMetadata('imprint', locale);
 };
 
 const ImprintPage = async () => {

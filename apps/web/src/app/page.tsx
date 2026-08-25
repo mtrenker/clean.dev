@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import type { Metadata, NextPage } from 'next';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { ScrollReveal } from '@/components/scroll-reveal';
@@ -7,6 +7,12 @@ import { LandingPage } from '@/components/home/landing-page';
 import { projects } from '@/app/projects';
 import { getLocale, loadMessages } from '@/lib/locale';
 import { getSocialProfiles } from '@/lib/social-profiles';
+import { buildRouteMetadata } from '@/lib/site-metadata';
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const locale = getLocale(await headers(), await cookies());
+  return buildRouteMetadata('home', locale);
+};
 
 const Page: NextPage = async () => {
   const [headerStore, cookieStore] = await Promise.all([headers(), cookies()]);

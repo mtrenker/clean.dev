@@ -4,18 +4,13 @@ import { createIntl } from 'react-intl';
 import { ButtonLink, Card, PageHero, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { ContactForm } from './contact-form';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { buildRouteMetadata } from '@/lib/site-metadata';
 
 export const PROTON_BOOKING_URL = 'https://calendar.proton.me/bookings#gr6YDfkOKjAMY1niO0UPh2HmFBm4FnVWYJaeshmt0IM=';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const locale = getLocale(await headers(), await cookies());
-  return {
-    title: locale === 'de' ? 'Projektanfrage | clean.dev' : 'Project enquiry | clean.dev',
-    description:
-      locale === 'de'
-        ? 'Senden Sie Martin Trenker den Kontext zu Ihrem Projekt oder buchen Sie ein Erstgespräch.'
-        : 'Send Martin Trenker your project context or book an introductory call.',
-  };
+  return buildRouteMetadata('contact', locale);
 };
 
 const ContactPage = async () => {

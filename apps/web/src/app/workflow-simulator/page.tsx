@@ -4,6 +4,7 @@ import { WorkflowSimulator } from '@/components/sim/workflow-simulator';
 export const metadata: Metadata = {
   title: 'Workflow Simulator | clean.dev',
   description: 'A clean.dev lab for exploring delivery-system flow with a small browser-based simulation.',
+  robots: { index: false, follow: false },
 };
 
 export default function WorkflowSimulatorPage() {

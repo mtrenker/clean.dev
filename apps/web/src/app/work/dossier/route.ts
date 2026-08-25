@@ -19,6 +19,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       'Content-Language': locale,
       'Content-Type': 'text/markdown; charset=utf-8',
       'X-Content-Type-Options': 'nosniff',
+      'X-Robots-Tag': 'noindex',
     },
   });
 };

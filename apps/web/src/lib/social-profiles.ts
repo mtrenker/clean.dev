@@ -45,12 +45,3 @@ export const getSocialProfiles = (intl: Pick<IntlShape, 'formatMessage'>): Socia
     ariaLabel: intl.formatMessage({ id: profile.ariaMessageId }),
   }));
 };
-
-export const getPersonStructuredData = () => ({
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Martin Trenker',
-  jobTitle: 'Software Consultant',
-  url: 'https://clean.dev',
-  sameAs: SOCIAL_PROFILES.map((profile) => profile.href),
-});

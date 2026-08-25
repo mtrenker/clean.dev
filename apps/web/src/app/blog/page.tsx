@@ -6,15 +6,22 @@ import { Card, PageHero, SiteContainer, SiteSection, SiteShell, Tag } from '@/co
 import { Link } from '@/components/ui/link';
 import { getAllPosts, formatPostDate } from '@/lib/blog';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { buildRouteMetadata, SITE_URL } from '@/lib/site-metadata';
 
-export const generateMetadata = (): Metadata => {
+export const generateMetadata = async (): Promise<Metadata> => {
+  const locale = getLocale(await headers(), await cookies());
   const hasPosts = getAllPosts().length > 0;
+  const metadata = buildRouteMetadata('blog', locale);
 
   return {
-    title: 'Articles | clean.dev',
-    description:
-      'Essays on embedded delivery, software architecture, agile transformation, and useful AI by Martin Trenker.',
-    robots: hasPosts ? undefined : { index: false, follow: false },
+    ...metadata,
+    robots: hasPosts ? undefined : metadata.robots,
+    alternates: {
+      ...metadata.alternates,
+      ...(hasPosts
+        ? { types: { 'application/rss+xml': `${SITE_URL}/blog/rss.xml` } }
+        : {}),
+    },
   };
 };
 

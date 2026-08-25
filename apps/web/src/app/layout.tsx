@@ -17,7 +17,8 @@ import { RouteScrollReset } from '@/components/route-scroll-reset';
 import { ThemeToggle } from '@/components/site/theme-toggle';
 import { AppFooter, AppNavigation, Link } from '@/components/ui';
 import { getLocale, loadMessages } from '@/lib/locale';
-import { getPersonStructuredData, getSocialProfiles } from '@/lib/social-profiles';
+import { getSocialProfiles } from '@/lib/social-profiles';
+import { getSiteStructuredData, serializeStructuredData } from '@/lib/structured-data';
 import { isAdminSession } from '@/lib/authz';
 
 const fontSans = Source_Sans_3({
@@ -62,10 +63,12 @@ export const generateMetadata = async (): Promise<Metadata> => {
     openGraph: {
       title,
       description,
-      url: 'https://clean.dev',
       siteName: 'clean.dev',
       type: 'website',
       locale: locale === 'de' ? 'de_DE' : 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
     },
   };
 };
@@ -93,7 +96,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(getPersonStructuredData()),
+            __html: serializeStructuredData(getSiteStructuredData()),
           }}
         />
       </head>
