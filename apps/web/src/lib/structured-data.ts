@@ -44,7 +44,6 @@ export const getSiteStructuredData = (): Record<string, unknown> => ({
       url: `${SITE_URL}/`,
       description: 'Technical Lead and Solutions Architect for teams in Munich and remote DACH: architecture modernisation, delivery reliability, and governed AI workflows.',
       founder: personReference,
-      provider: personReference,
       email: 'mailto:info@clean.dev',
       vatID: 'DE262621028',
       address: {
@@ -57,7 +56,7 @@ export const getSiteStructuredData = (): Record<string, unknown> => ({
         { '@type': 'Country', name: 'Austria' },
         { '@type': 'Country', name: 'Switzerland' },
       ],
-      availableLanguage: ['de', 'en'],
+      knowsLanguage: ['de', 'en'],
       makesOffer: [
         {
           '@type': 'Offer',
@@ -65,6 +64,8 @@ export const getSiteStructuredData = (): Record<string, unknown> => ({
             '@type': 'Service',
             name: enMessages['home.formats.embedded.title'],
             serviceType: 'Embedded technical leadership',
+            provider: personReference,
+            availableLanguage: ['de', 'en'],
           },
         },
         {
@@ -73,6 +74,8 @@ export const getSiteStructuredData = (): Record<string, unknown> => ({
             '@type': 'Service',
             name: enMessages['home.formats.assessment.title'],
             serviceType: 'Architecture and delivery assessment',
+            provider: personReference,
+            availableLanguage: ['de', 'en'],
           },
         },
         {
@@ -81,6 +84,8 @@ export const getSiteStructuredData = (): Record<string, unknown> => ({
             '@type': 'Service',
             name: enMessages['home.formats.advisory.title'],
             serviceType: 'AI-enabled engineering advisory',
+            provider: personReference,
+            availableLanguage: ['de', 'en'],
           },
         },
       ],

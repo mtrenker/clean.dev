@@ -50,13 +50,24 @@ test('sitemap.xml lists exactly the public routes', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
   const body = await response.text();
   const locations = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  const expectedLocations = [
+    ...publicRoutes
+      .filter(({ path }) => path !== '/blog')
+      .map(({ canonical }) => canonical),
+    ...(posts.length > 0
+      ? [
+          'https://clean.dev/blog',
+          ...posts.map((post) => `https://clean.dev/blog/${post.slug}`),
+        ]
+      : []),
+  ];
 
   expect(response.status()).toBe(200);
   expect(response.headers()['content-type']).toContain('xml');
-  expect(locations).toEqual(publicRoutes.filter(({ path }) => path !== '/blog').map(({ canonical }) => canonical));
+  expect(locations).toEqual(expectedLocations);
   expect(body).not.toContain('<changefreq>');
   expect(body).not.toContain('<priority>');
-  expect(body).not.toContain('<lastmod>');
+  expect([...body.matchAll(/<lastmod>/g)]).toHaveLength(posts.length);
 });
 
 test('public routes carry correct canonical and Open Graph URLs', async ({ page }) => {
@@ -107,9 +118,20 @@ test('the shared social image renders at the required size', async ({ page, requ
 });
 
 test('the empty blog stays out of the index', async ({ page }) => {
+  test.skip(posts.length > 0, 'Only applies while the blog is empty.');
   await page.goto('/blog');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   await expect(page.locator('link[type="application/rss+xml"]')).toHaveCount(0);
+});
+
+test('a populated blog is indexable and advertises its feed', async ({ page }) => {
+  test.skip(posts.length === 0, 'Activates when the first article is published.');
+  await page.goto('/blog');
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+  await expect(page.locator('link[type="application/rss+xml"]')).toHaveAttribute(
+    'href',
+    'https://clean.dev/blog/rss.xml',
+  );
 });
 
 test('an unknown article slug returns a noindex 404', async ({ page }) => {

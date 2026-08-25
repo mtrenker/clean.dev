@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { getAllPosts } from '../src/lib/blog';
 
+const posts = getAllPosts();
 const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
 const siteThemes = ['dark', 'light'] as const;
 const protonBookingUrl = 'https://calendar.proton.me/bookings#gr6YDfkOKjAMY1niO0UPh2HmFBm4FnVWYJaeshmt0IM=';
@@ -108,6 +110,45 @@ test.describe('public site mobile friendliness', () => {
         await page.evaluate(() => window.innerHeight),
       );
     }
+  });
+
+  test('profile role renders safely at the narrowest supported width', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto('/');
+
+    const expectWrappedProfileRole = async (role: string) => {
+      const profileMeta = page.locator('p').filter({ hasText: role }).first();
+      await expect(profileMeta).toBeVisible();
+      const layout = await profileMeta.evaluate((element, expectedRole) => {
+        const textNode = Array.from(element.childNodes).find((node) => (
+          node.nodeType === Node.TEXT_NODE && node.textContent?.includes(expectedRole)
+        ));
+        if (!textNode?.textContent) return null;
+
+        const start = textNode.textContent.indexOf(expectedRole);
+        const range = document.createRange();
+        range.setStart(textNode, start);
+        range.setEnd(textNode, start + expectedRole.length);
+        const rects = Array.from(range.getClientRects());
+
+        return {
+          documentWidth: document.documentElement.scrollWidth,
+          lineCount: new Set(rects.map((rect) => Math.round(rect.top))).size,
+          right: Math.max(...rects.map((rect) => rect.right)),
+          viewportWidth: window.innerWidth,
+        };
+      }, role);
+
+      expect(layout).not.toBeNull();
+      expect(layout!.lineCount).toBeGreaterThanOrEqual(1);
+      expect(layout!.right).toBeLessThanOrEqual(layout!.viewportWidth);
+      expect(layout!.documentWidth).toBeLessThanOrEqual(layout!.viewportWidth);
+    };
+
+    await expectWrappedProfileRole('technical lead and solutions architect');
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+    await expectWrappedProfileRole('Technical Lead und Solutions Architect');
   });
 
   test('homepage leads with verified project evidence and does not promote an empty blog', async ({ page }) => {
@@ -328,6 +369,7 @@ test.describe('public site semantic UX', () => {
   });
 
   test('the empty blog is excluded from search indexing', async ({ page }) => {
+    test.skip(posts.length > 0, 'Only applies while the blog is empty.');
     await page.goto('/blog');
 
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
