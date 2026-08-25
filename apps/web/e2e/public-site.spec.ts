@@ -132,15 +132,24 @@ test.describe('public site mobile friendliness', () => {
         const rects = Array.from(range.getClientRects());
 
         return {
+          bottom: Math.max(...rects.map((rect) => rect.bottom)),
           documentWidth: document.documentElement.scrollWidth,
-          lineCount: new Set(rects.map((rect) => Math.round(rect.top))).size,
+          left: Math.min(...rects.map((rect) => rect.left)),
           right: Math.max(...rects.map((rect) => rect.right)),
+          top: Math.min(...rects.map((rect) => rect.top)),
           viewportWidth: window.innerWidth,
         };
       }, role);
 
+      const profileCard = profileMeta.locator('xpath=ancestor::div[contains(@class, "rounded-[6px]")][1]');
+      const cardBox = await profileCard.boundingBox();
+
       expect(layout).not.toBeNull();
-      expect(layout!.lineCount).toBeGreaterThanOrEqual(1);
+      expect(cardBox).not.toBeNull();
+      expect(layout!.left).toBeGreaterThanOrEqual(cardBox!.x);
+      expect(layout!.right).toBeLessThanOrEqual(cardBox!.x + cardBox!.width);
+      expect(layout!.top).toBeGreaterThanOrEqual(cardBox!.y);
+      expect(layout!.bottom).toBeLessThanOrEqual(cardBox!.y + cardBox!.height);
       expect(layout!.right).toBeLessThanOrEqual(layout!.viewportWidth);
       expect(layout!.documentWidth).toBeLessThanOrEqual(layout!.viewportWidth);
     };

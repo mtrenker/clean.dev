@@ -71,24 +71,35 @@ jobs:
       - name: Check public-site types
         run: pnpm --filter @cleandev/web exec tsc --noEmit
 
-      - name: Run accessibility unit and integration tests
+      - name: Run focused unit and integration tests
         working-directory: apps/web
         run: >-
           pnpm exec vitest run --config vitest.config.ts
           src/test/a11y-design-tokens.test.ts
+          src/app/blog/page.test.ts
           src/app/contact/page.integration.test.tsx
           src/app/legal-pages.integration.test.tsx
+          src/app/robots.test.ts
+          src/app/sitemap.test.ts
           src/components/site/public-design.integration.test.tsx
           src/components/ui/form-field.integration.test.tsx
+          src/lib/site-metadata.test.ts
+          src/lib/structured-data.test.ts
 
       - name: Install Chromium
         run: pnpm --filter @cleandev/web exec playwright install --with-deps chromium
 
-      - name: Run contact browser accessibility checks
+      - name: Run focused public-site browser checks
         working-directory: apps/web
         run: >-
           pnpm exec playwright test e2e/public-site.spec.ts
-          --grep "contact accessibility"
+          --grep "contact accessibility|profile role renders safely"
+          --project=desktop-chromium
+
+      - name: Run search and social browser checks
+        working-directory: apps/web
+        run: >-
+          pnpm exec playwright test e2e/search-social.spec.ts
           --project=desktop-chromium
 
   build-and-deploy:

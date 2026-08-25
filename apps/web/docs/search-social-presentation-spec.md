@@ -466,7 +466,7 @@ element and carries #91's "strongest verified proof".
 | Band | `y 440` to `y 630`, height 190, background `#1c1a16`, horizontal padding 56 px |
 | Top border | 1 px `#2c2924`, full width |
 | Cells | three, 362 px each, separated by 1 px `#2c2924` vertical rules naturally landing at `x = 418` and `x = 780` |
-| Cell padding | vertical only: top 30, bottom 32 (30 + 52 value + 12 gap + 64 label + 32 = 190) |
+| Cell padding | top 30, bottom 32; cell 1 has 0 horizontal padding, cells 2 and 3 have exactly 32 px left padding. With the 1 px dividers this yields 33/32 px post-divider gutters (30 + 52 value + 12 gap + 64 label + 32 = 190) |
 | Value type | Source Sans 3 600, 52 / 52, tracking −1.56 px (−0.03em), `#ede7d4` |
 | Label type | IBM Plex Mono 600, 24 / 32, uppercase, tracking 3.84 px (0.16em), `#c4bda9`, `maxWidth: 360px` |
 | Value-to-label gap | 12 px |
@@ -483,8 +483,9 @@ Sources, all three cells lifted from the homepage proof strip in
 `~1,800 / 26` is `home.proof.enterprise.value`, labelled by `home.proof.enterprise`, and traces to
 project `19` in `projects.ts`. The homepage's third proof cell (the role progression) is omitted here
 because block 4 already states the role. The 56 px band safe area and three 362 px cells preserve the
-approved wraps while keeping every label clear of the canvas edge. Martin explicitly declined the
-optional brand-line polish from the post-merge review, so it is not part of this correction.
+approved wraps. Cell 1 remains flush to the inset; cells 2 and 3 use 32 px left padding, producing
+33/32 px post-divider gutters and a 63 px right margin. The optional brand-line polish was not
+approved and remains out of scope.
 
 ### 7.7 Decorative grammar and what is forbidden
 
@@ -1230,11 +1231,15 @@ Three forks were put to Martin in the #105 session on 25 August 2026 and decided
 | 2 | Whether the shared social image includes Martin's portrait | **Typographic only.** A portrait would push the proof-strip labels below legibility at LinkedIn's render width | Section 7 |
 | 3 | Homepage `<title>` length | **Full, 80 characters**, carrying name, both roles, Munich, and remote DACH, accepting SERP truncation of the location tail | Section 5.1 |
 
-After PR #107 merged, an independent Opus review identified three corrections. Martin approved all
-three: the proof band uses the safe-area geometry in section 7.6 without the optional brand-line
-polish; `home.profileCard.meta1` uses the exact EN/DE role copy recorded in section 12.3; and the
-schema.org property placement follows section 10.5. This approval is the scope waiver for the image,
-message-catalog, rendered-copy, and specification edits in the correction commit.
+After PR #107 merged, an independent Opus review identified the schema.org property correction and
+two decisions requiring Martin's judgment. Martin approved the safe-area correction and the narrow
+`home.profileCard.meta1` EN/DE copy scope waiver; the property placement follows schema.org's domain
+model as recorded in section 10.5. A subsequent Opus review of PR #108 found the remaining band-rhythm
+defect. The 0/32/32 px cell-left-padding, 33/32 px post-divider gutters, and 63 px right margin are
+the Opus-directed implementation refinement required to realise the approved safe-area and rhythm
+intent, not a separate Martin approval. The optional brand-line polish was not approved and remains
+out of scope. Martin's approvals are the scope waiver for the image, message-catalog, rendered-copy,
+and specification edits in the correction commits.
 
 Everything else in this document is a design decision taken under the authority of #105. The
 remaining points most worth an explicit yes or no before implementation starts:
