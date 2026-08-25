@@ -166,7 +166,7 @@ const OpenGraphImage = () => new ImageResponse(
               width: 362,
               height: 190,
               boxSizing: 'border-box',
-              padding: '30px 0 32px',
+              padding: index === 0 ? '30px 0 32px' : '30px 0 32px 32px',
               ...(index === 0 ? {} : { borderLeft: '1px solid #2c2924' }),
             }}
           >
