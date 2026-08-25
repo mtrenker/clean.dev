@@ -16,8 +16,27 @@ export const SiteContainer = ({ children, className, narrow = false }: { childre
   </div>
 );
 
-export const SiteSection = ({ children, className, border = true }: { children: ReactNode; className?: string; border?: boolean }) => (
-  <section className={clsx('py-12 md:py-16', border && 'border-b border-[var(--site-rule)]', className)}>
+export const SiteSection = ({
+  children,
+  className,
+  border = true,
+  id,
+  ariaLabelledBy,
+  tabIndex,
+}: {
+  children: ReactNode;
+  className?: string;
+  border?: boolean;
+  id?: string;
+  ariaLabelledBy?: string;
+  tabIndex?: number;
+}) => (
+  <section
+    id={id}
+    aria-labelledby={ariaLabelledBy}
+    tabIndex={tabIndex}
+    className={clsx('py-12 md:py-16', border && 'border-b border-[var(--site-rule)]', className)}
+  >
     {children}
   </section>
 );
@@ -55,9 +74,9 @@ export const PageHero = ({ eyebrow, title, lead, aside }: { eyebrow: ReactNode; 
   </SiteSection>
 );
 
-export const SectionHeader = ({ title, meta }: { title: ReactNode; meta?: ReactNode }) => (
+export const SectionHeader = ({ title, meta, titleId }: { title: ReactNode; meta?: ReactNode; titleId?: string }) => (
   <div className="mb-8 flex items-end justify-between gap-6 border-b border-[var(--site-ink)] pb-4 md:mb-10">
-    <h2 className="max-w-4xl text-3xl font-medium leading-none tracking-[-0.035em] text-[var(--site-ink)] md:text-5xl">
+    <h2 id={titleId} className="max-w-4xl text-3xl font-medium leading-none tracking-[-0.035em] text-[var(--site-ink)] md:text-5xl">
       {title}
     </h2>
     {meta ? (

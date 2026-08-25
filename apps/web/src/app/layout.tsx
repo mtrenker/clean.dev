@@ -97,7 +97,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
           }}
         />
       </head>
-      <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} pb-20 font-sans antialiased md:pb-0`}>
+      <body className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} pb-20 font-sans antialiased lg:pb-0`}>
         <RouteScrollReset />
         <a
           href="#main-content"
@@ -117,6 +117,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
             )}
             items={[
               { href: '/work', label: intl.formatMessage({ id: 'nav.work' }) },
+              { href: '/#how-i-help', label: intl.formatMessage({ id: 'nav.howIHelp' }) },
               { href: '/contact', label: intl.formatMessage({ id: 'nav.contact' }) },
             ]}
             rightSlot={(

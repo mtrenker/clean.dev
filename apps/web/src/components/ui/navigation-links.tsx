@@ -41,7 +41,7 @@ export const NavigationLinks = ({ items, variant }: NavigationLinksProps) => {
                 'relative inline-flex items-center justify-center rounded-full font-mono font-bold uppercase transition-all duration-200',
                 'focus-visible:ring-[var(--site-rust)] focus-visible:ring-offset-[var(--site-bg)]',
                 variant === 'desktop' && 'px-4 py-2 text-[0.68rem] tracking-[0.18em]',
-                variant === 'mobile' && 'min-w-[5.4rem] px-3 py-3 text-[0.66rem] tracking-[0.13em]',
+                variant === 'mobile' && 'min-w-[5.4rem] px-3 py-3 text-[0.66rem] tracking-[0.13em] max-[359px]:min-w-0 max-[359px]:px-2.5',
                 active
                   ? 'bg-[var(--site-rust)] !text-[var(--site-bg)] shadow-[0_0_0_1px_rgba(217,110,63,0.34),0_8px_22px_rgba(217,110,63,0.24)] hover:!text-[var(--site-bg)]'
                   : 'text-[var(--site-ink-sec)] hover:bg-[var(--site-rule)] hover:text-[var(--site-ink)]',
