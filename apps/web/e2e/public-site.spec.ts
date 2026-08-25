@@ -72,6 +72,29 @@ test.describe('public site mobile friendliness', () => {
     }
   });
 
+  test('the three-item navigation fits the narrowest supported width', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto('/');
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    const layout = await page.evaluate(() => {
+      const documentElement = document.documentElement;
+      const mobileNavigation = document.querySelector<HTMLElement>('nav.fixed[aria-label="Main navigation"] > ul');
+      const navigationBox = mobileNavigation?.getBoundingClientRect();
+
+      return {
+        overflow: documentElement.scrollWidth - documentElement.clientWidth,
+        navigationWidth: navigationBox?.width,
+        availableWidth: documentElement.clientWidth - 24,
+      };
+    });
+
+    expect(layout.overflow).toBeLessThanOrEqual(1);
+    expect(layout.navigationWidth).toBeDefined();
+    expect(layout.navigationWidth!).toBeLessThanOrEqual(layout.availableWidth);
+  });
+
   test('primary homepage actions are visible without scrolling and have comfortable targets', async ({ page }) => {
     await page.goto('/');
 
@@ -110,6 +133,135 @@ test.describe('public site semantic UX', () => {
       await expect(page.getByRole('contentinfo')).toBeVisible();
     });
   }
+
+  test('homepage presents the approved lower-page sections in order', async ({ page }) => {
+    await page.goto('/');
+
+    const headings = await page.getByRole('main').getByRole('heading', { level: 2 }).allTextContents();
+    expect(headings).toEqual([
+      'Verified enterprise outcomes',
+      'Bring me in when',
+      'How I help',
+      'Ways to work together',
+      'How I work',
+      'Questions I get asked',
+      'Engagement log',
+      "Let's talk",
+    ]);
+  });
+
+  test('How I help is reachable from every public route with pointer and keyboard', async ({ page }) => {
+    for (const route of ['/', '/work', '/contact']) {
+      await page.goto(route);
+      await page.getByRole('link', { name: 'How I help', exact: true }).click();
+      await expect(page).toHaveURL(/\/#how-i-help$/);
+
+      const pointerResult = await page.locator('#how-i-help').evaluate((section) => ({
+        top: section.getBoundingClientRect().top,
+        activeElementId: document.activeElement?.id,
+        focusVisible: section.matches(':focus-visible'),
+      }));
+      expect(pointerResult.top).toBeCloseTo(96, 0);
+      expect(pointerResult.activeElementId).toBe('how-i-help');
+      expect(pointerResult.focusVisible).toBe(false);
+
+      await page.goto(route);
+      const navigationLink = page.getByRole('link', { name: 'How I help', exact: true });
+      await navigationLink.focus();
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(/\/#how-i-help$/);
+
+      const keyboardResult = await page.locator('#how-i-help').evaluate((section) => ({
+        top: section.getBoundingClientRect().top,
+        activeElementId: document.activeElement?.id,
+        focusVisible: section.matches(':focus-visible'),
+      }));
+      expect(keyboardResult.top).toBeCloseTo(96, 0);
+      expect(keyboardResult.activeElementId).toBe('how-i-help');
+      expect(keyboardResult.focusVisible).toBe(true);
+    }
+
+    await page.goto('/#how-i-help');
+    const directEntryResult = await page.locator('#how-i-help').evaluate((section) => ({
+      top: section.getBoundingClientRect().top,
+      activeElementId: document.activeElement?.id,
+      focusVisible: section.matches(':focus-visible'),
+    }));
+    expect(directEntryResult.top).toBeCloseTo(96, 0);
+    expect(directEntryResult.activeElementId).toBe('how-i-help');
+    expect(directEntryResult.focusVisible).toBe(true);
+  });
+
+  test('browser back after How I help restores the previous view', async ({ page }) => {
+    await page.goto('/work');
+    await page.evaluate(() => window.scrollTo(0, 320));
+    await page.getByRole('link', { name: 'How I help', exact: true }).click();
+    await expect(page).toHaveURL(/\/#how-i-help$/);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/work$/);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, 320));
+    await page.getByRole('link', { name: 'How I help', exact: true }).click();
+    await expect(page).toHaveURL(/\/#how-i-help$/);
+    await page.goBack();
+    await expect.poll(() => page.evaluate(() => window.location.hash)).toBe('');
+  });
+
+  test('engagement formats state cadence without promising availability', async ({ page }) => {
+    await page.goto('/');
+
+    for (const text of [
+      'Embedded Technical Lead or Solutions Architect',
+      '3–5 days per week · typically 3–9 months',
+      'Architecture and Delivery Assessment',
+      'usually 5–10 working days',
+      'AI-enabled Engineering Advisory',
+      'usually 1 day per week or a fixed-scope package',
+      'Cadence and duration are agreed per engagement and depend on current availability.',
+    ]) {
+      await expect(page.getByRole('main').getByText(text, { exact: true })).toBeVisible();
+    }
+  });
+
+  test('AI trust content states client-approved and reviewable use', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 3, name: 'How do you use AI in client work?' })).toBeVisible();
+    await expect(page.getByText(/only within the client's approved security and data-handling constraints.*keep important actions reviewable/i)).toBeVisible();
+
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+    await expect(page.getByRole('heading', { level: 3, name: 'Wie setzen Sie KI in Kundenprojekten ein?' })).toBeVisible();
+    await expect(page.getByText(/nur innerhalb der freigegebenen sicherheits- und datenschutzvorgaben.*halte wichtige aktionen überprüfbar/i)).toBeVisible();
+  });
+
+  test('German lower homepage matches the approved copy', async ({ page }) => {
+    await page.goto('/');
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    const headings = await page.getByRole('main').getByRole('heading', { level: 2 }).allTextContents();
+    expect(headings).toEqual([
+      'Belegte Enterprise-Ergebnisse',
+      'Wann Sie mich dazuholen sollten',
+      'Wie ich helfe',
+      'Formen der Zusammenarbeit',
+      'Wie ich arbeite',
+      'Häufige Fragen',
+      'Projektauszug',
+      'Lassen Sie uns reden',
+    ]);
+    await expect(page.getByText('Kein Transformationstheater, keine praxisfernen Foliensätze, keine KI-Einführung als Selbstzweck.', { exact: true })).toBeVisible();
+
+    for (const title of [
+      'Embedded Technical Lead oder Solutions Architect',
+      'Architektur- und Delivery-Assessment',
+      'KI-Beratung für Engineering-Teams',
+    ]) {
+      await expect(page.getByRole('heading', { level: 3, name: title })).toBeVisible();
+    }
+  });
 
   test('work page supports recruiter scanning and localized dossier download', async ({ page }) => {
     await page.goto('/work');
