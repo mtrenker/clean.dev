@@ -11,16 +11,16 @@ const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
 };
 
 const primaryPages = [
-  { path: '/', heading: /inside the work/i },
-  { path: '/work', heading: /martin trenker/i },
-  { path: '/contact', heading: /contact/i },
+  { path: '/', heading: /hands-on technical leadership/i },
+  { path: '/work', heading: /project history from inside real teams/i },
+  { path: '/contact', heading: /discuss a project/i },
   { path: '/workflow-simulator', heading: /systems thinking playground/i },
 ];
 
 const primaryTapTargets = [
-  /selected work/i,
-  /let's talk/i,
-  /portfolio/i,
+  /discuss a project/i,
+  /see relevant work/i,
+  /work/i,
   /contact/i,
 ];
 
@@ -64,25 +64,37 @@ test.describe('public site mobile friendliness', () => {
 
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByRole('navigation', { name: /main/i })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 1, name: /inside the work/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /hands-on technical leadership/i })).toBeVisible();
 
     for (const name of primaryTapTargets) {
       await expect(page.getByRole('link', { name }).first()).toBeVisible();
     }
   });
 
-  test('primary homepage actions are comfortable tap targets', async ({ page, isMobile }) => {
-    test.skip(!isMobile, 'mobile-specific UX check');
-
+  test('primary homepage actions are visible without scrolling and have comfortable targets', async ({ page }) => {
     await page.goto('/');
 
-    for (const name of [/selected work/i, /let's talk/i]) {
+    for (const name of [/discuss a project/i, /see relevant work/i]) {
       const target = page.getByRole('link', { name }).first();
       const box = await target.boundingBox();
       expect(box, `${name} should be visible and measurable`).not.toBeNull();
       expect(box!.height, `${name} should be at least 44px tall`).toBeGreaterThanOrEqual(44);
       expect(box!.width, `${name} should be at least 44px wide`).toBeGreaterThanOrEqual(44);
+      expect(box!.y + box!.height, `${name} should be visible without scrolling`).toBeLessThanOrEqual(
+        await page.evaluate(() => window.innerHeight),
+      );
     }
+  });
+
+  test('homepage leads with verified project evidence and does not promote an empty blog', async ({ page }) => {
+    await page.goto('/');
+
+    const main = page.getByRole('main');
+    await expect(main.getByText('20', { exact: true }).first()).toBeVisible();
+    await expect(main.getByText(/technical lead \/ solutions architect/i).first()).toBeVisible();
+    await expect(main.getByText(/1,800 stores across 26 european countries/i).first()).toBeVisible();
+    await expect(page.getByRole('banner').getByRole('link', { name: /articles/i })).toHaveCount(0);
+    await expect(main.getByRole('link', { name: /read articles/i })).toHaveCount(0);
   });
 });
 
@@ -97,6 +109,29 @@ test.describe('public site semantic UX', () => {
       await expect(page.getByRole('contentinfo')).toBeVisible();
     });
   }
+
+  test('the empty blog is excluded from search indexing', async ({ page }) => {
+    await page.goto('/blog');
+
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+
+  test('German positioning preserves the approved commercial facts', async ({ page }) => {
+    await page.goto('/');
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    await expect(page.getByRole('heading', { level: 1, name: /technische führung mit hands-on-mentalität/i })).toBeVisible();
+    await expect(page.getByText(/verfügbar ab september 2026 · 2–5 tage\/woche · deutsch und englisch/i).first()).toBeVisible();
+
+    for (const name of [/projekt besprechen/i, /projekte ansehen/i]) {
+      const action = page.getByRole('link', { name }).first();
+      await expect(action).toBeVisible();
+      const box = await action.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.y + box!.height).toBeLessThanOrEqual(await page.evaluate(() => window.innerHeight));
+    }
+  });
 
   test('skip link moves keyboard users to the main content', async ({ page }) => {
     await page.goto('/');

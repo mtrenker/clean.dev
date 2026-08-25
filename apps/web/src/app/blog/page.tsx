@@ -7,10 +7,15 @@ import { Link } from '@/components/ui/link';
 import { getAllPosts, formatPostDate } from '@/lib/blog';
 import { getLocale, loadMessages } from '@/lib/locale';
 
-export const metadata: Metadata = {
-  title: 'Articles | clean.dev',
-  description:
-    'Essays on embedded delivery, software architecture, agile transformation, and useful AI by Martin Trenker.',
+export const generateMetadata = (): Metadata => {
+  const hasPosts = getAllPosts().length > 0;
+
+  return {
+    title: 'Articles | clean.dev',
+    description:
+      'Essays on embedded delivery, software architecture, agile transformation, and useful AI by Martin Trenker.',
+    robots: hasPosts ? undefined : { index: false, follow: false },
+  };
 };
 
 const BlogPage: React.FC = async () => {

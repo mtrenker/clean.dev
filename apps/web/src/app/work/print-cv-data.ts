@@ -1,4 +1,5 @@
 import type { IntlShape } from 'react-intl';
+import { getConsultingAvailability } from '@/lib/availability';
 import { SOCIAL_PROFILES } from '@/lib/social-profiles';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
@@ -81,6 +82,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
   const sorted = [...projects].sort((a, b) => b.startDate.localeCompare(a.startDate));
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const companies = new Set(projects.map((project) => projectName(project, locale))).size;
+  const availability = getConsultingAvailability(locale);
 
   const entries: PrintCvEntry[] = sorted.map((project) => ({
     id: project.id,
@@ -127,8 +129,8 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
     historyHeading: msg('work.print.history.heading'),
     historyMeta: msg('work.timeline.meta'),
     entries,
-    availabilityLabel: msg('work.availability.label'),
-    availabilityText: msg('work.availability.text'),
+    availabilityLabel: availability.label,
+    availabilityText: availability.dossierSummary,
     labHeading: msg('work.lab.heading'),
     labMeta: msg('work.lab.meta'),
     labEntries: labItems.map((item) => ({

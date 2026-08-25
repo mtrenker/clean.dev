@@ -32,7 +32,7 @@ const ContactPage = async () => {
   return (
     <SiteShell>
       <PageHero
-        eyebrow={intl.formatMessage({ id: 'home.hero.label' })}
+        eyebrow={intl.formatMessage({ id: 'contact.eyebrow' })}
         title={intl.formatMessage({ id: 'contact.heading' })}
         lead={intl.formatMessage({ id: 'contact.lead' })}
       />

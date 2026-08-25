@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import type { IntlShape } from 'react-intl';
-import { ButtonLink, Card, Eyebrow, PageHero, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { ButtonLink, Card, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, Tag } from '@/components/site/public-design';
 import { SocialIcon } from '@/components/ui';
 import { Link } from '@/components/ui/link';
 import type { Project } from '@/app/projects';
+import { getConsultingAvailability } from '@/lib/availability';
 import type { Locale } from '@/lib/locale';
 
 const PRACTICES = ['embed', 'system', 'ai'] as const;
@@ -42,52 +43,114 @@ const recentProjects = (projects: Project[]) =>
     .slice(0, 8);
 const projectSignal = (project: Project, locale: Locale) => project.highlights[locale][0] ?? project.description[locale];
 
-const ProfileCard = ({ intl }: { intl: IntlShape }) => (
-  <Card className="p-5">
-    <div className="flex gap-4">
-      <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={92} height={92} className="h-20 w-20 rounded-[4px] border border-[var(--site-rule)] object-cover grayscale-[10%] md:h-[92px] md:w-[92px]" priority />
-      <div>
-        <p className="text-lg font-semibold tracking-[-0.01em] text-[var(--site-ink)]">Martin Trenker</p>
-        <p className="mt-1 font-mono text-[0.7rem] leading-6 tracking-[0.04em] text-[var(--site-ink-mute)]">
-          {msg(intl, 'home.profileCard.meta1')}<br />
-          {msg(intl, 'home.profileCard.meta2')}<br />
-          <span className="text-[var(--site-ink-sec)]">{msg(intl, 'home.profileCard.meta3')}</span>
+const ProfileCard = ({ intl, locale }: Pick<LandingPageProps, 'intl' | 'locale'>) => {
+  const availability = getConsultingAvailability(locale);
+
+  return (
+    <Card className="p-5">
+      <div className="flex gap-4">
+        <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={92} height={92} className="h-20 w-20 rounded-[4px] border border-[var(--site-rule)] object-cover grayscale-[10%] md:h-[92px] md:w-[92px]" priority />
+        <div>
+          <p className="text-lg font-semibold tracking-[-0.01em] text-[var(--site-ink)]">Martin Trenker</p>
+          <p className="mt-1 font-mono text-[0.7rem] leading-6 tracking-[0.04em] text-[var(--site-ink-mute)]">
+            {msg(intl, 'home.profileCard.meta1')}<br />
+            {availability.location} / {availability.languages}<br />
+            <span className="text-[var(--site-ink-sec)]">{msg(intl, 'home.profileCard.meta3')}</span>
+          </p>
+        </div>
+      </div>
+      <p className="mt-4 border-t border-dashed border-[var(--site-rule)] pt-4 font-mono text-xs leading-6 text-[var(--site-ink-sec)]">
+        {msg(intl, 'home.profileCard.note')}
+      </p>
+    </Card>
+  );
+};
+
+const AvailabilityCard = ({ locale }: { locale: Locale }) => {
+  const availability = getConsultingAvailability(locale);
+
+  return (
+    <Card className="border-l-4 border-l-[var(--site-rust)] p-5">
+      <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{availability.label}</p>
+      <p className="mt-3 text-sm leading-6 text-[var(--site-ink)]">{availability.dossierSummary}</p>
+    </Card>
+  );
+};
+
+const Hero = ({ intl, locale }: Pick<LandingPageProps, 'intl' | 'locale'>) => {
+  const availability = getConsultingAvailability(locale);
+
+  return (
+    <SiteSection className="py-8 md:py-16 lg:py-20">
+      <SiteContainer>
+        <Eyebrow>{availability.eyebrow}</Eyebrow>
+        <h1 className="mt-4 max-w-[72rem] text-[clamp(2.25rem,6.2vw,5.75rem)] font-medium leading-[0.98] tracking-[-0.05em] text-[var(--site-ink)] md:mt-7">
+          {msg(intl, 'home.hero.heading')}
+        </h1>
+        <p className="mt-4 max-w-4xl text-[0.95rem] leading-[1.45] text-[var(--site-ink-sec)] sm:text-base md:mt-7 md:text-xl md:leading-8">
+          {msg(intl, 'home.hero.lead')}
         </p>
-      </div>
-    </div>
-    <p className="mt-4 border-t border-dashed border-[var(--site-rule)] pt-4 font-mono text-xs leading-6 text-[var(--site-ink-sec)]">
-      {msg(intl, 'home.profileCard.note')}
-    </p>
-  </Card>
-);
+        <p className="mt-3 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-[var(--site-green)] md:mt-5 md:text-sm">
+          {msg(intl, 'home.hero.supporting')}
+        </p>
+        <p className="mt-3 max-w-4xl text-sm font-semibold leading-6 text-[var(--site-ink)] md:mt-5 md:text-base">
+          {availability.summary}
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3 md:mt-7">
+          <ButtonLink href="/contact" className="min-h-[44px] px-4 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm">{msg(intl, 'home.hero.cta.contact')}</ButtonLink>
+          <ButtonLink href="/work" variant="secondary" className="min-h-[44px] px-4 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm">{msg(intl, 'home.hero.cta.work')}</ButtonLink>
+        </div>
+      </SiteContainer>
+    </SiteSection>
+  );
+};
 
-const AvailabilityCard = ({ intl }: { intl: IntlShape }) => (
-  <Card className="border-l-4 border-l-[var(--site-rust)] p-5">
-    <div className="mb-4 flex items-center justify-between border-b border-[var(--site-rule)] pb-3">
-      <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'home.availability.label')}</span>
-      <Tag tone="amber">{msg(intl, 'home.availability.status')}</Tag>
-    </div>
-    <div className="grid grid-cols-2 gap-5">
-      <div>
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-ink-mute)]">{msg(intl, 'home.availability.now.label')}</p>
-        <p className="mt-1 text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">{msg(intl, 'home.availability.now.value')}</p>
-      </div>
-      <div>
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-ink-mute)]">{msg(intl, 'home.availability.next.label')}</p>
-        <p className="mt-1 text-2xl font-medium tracking-[-0.02em] text-[var(--site-green)]">{msg(intl, 'home.availability.next.value')}</p>
-      </div>
-    </div>
-  </Card>
-);
+const EvidenceStrip = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
+  const douglasProjects = projects.filter((project) => project.company === 'Douglas GmbH');
+  const roles = [...new Set(douglasProjects.map((project) => project.title[locale]))].join(' / ');
+  const technicalLead = douglasProjects.find((project) => project.title.en === 'Technical Lead');
+  const solutionsArchitect = douglasProjects.find((project) => project.title.en === 'Solutions Architect');
+  const outcomes = [
+    technicalLead?.highlights[locale][1],
+    technicalLead?.highlights[locale][0],
+    solutionsArchitect?.highlights[locale][0],
+    solutionsArchitect?.highlights[locale][3],
+  ].filter((outcome): outcome is string => Boolean(outcome));
 
-const Hero = ({ intl }: { intl: IntlShape }) => (
-  <PageHero
-    eyebrow={msg(intl, 'home.hero.label')}
-    title={<>{msg(intl, 'home.hero.h1.part1')}<br /><span className="text-[var(--site-ink-mute)]">{msg(intl, 'home.hero.h1.part2')}</span><br /><span className="text-[var(--site-ink-mute)]">{msg(intl, 'home.hero.h1.part3')}</span></>}
-    lead={msg(intl, 'home.hero.lead')}
-    aside={<><ProfileCard intl={intl} /><AvailabilityCard intl={intl} /></>}
-  />
-);
+  return (
+    <section aria-labelledby="home-proof-heading" className="border-b border-[var(--site-rule)] bg-[var(--site-panel)]">
+      <div className="grid border-b border-[var(--site-rule)] md:grid-cols-4">
+        {[
+          { value: '20+', label: msg(intl, 'home.proof.years') },
+          { value: String(projects.length), label: msg(intl, 'home.proof.engagements') },
+          { value: roles, label: msg(intl, 'home.proof.roles') },
+          { value: msg(intl, 'home.proof.enterprise.value'), label: msg(intl, 'home.proof.enterprise') },
+        ].map((proof) => (
+          <div key={proof.label} className="border-b border-r border-[var(--site-rule)] px-5 py-6 md:border-b-0 md:px-8">
+            <p className="text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)] md:text-3xl">{proof.value}</p>
+            <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-sec)]">{proof.label}</p>
+          </div>
+        ))}
+      </div>
+      <SiteContainer className="py-8 md:py-10">
+        <div className="grid gap-5 lg:grid-cols-[15rem_1fr]">
+          <div>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink)]">Douglas</p>
+            <h2 id="home-proof-heading" className="mt-4 text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{msg(intl, 'home.proof.heading')}</h2>
+          </div>
+          <ul className="grid gap-x-8 gap-y-3 md:grid-cols-2">
+            {outcomes.map((outcome) => (
+              <li key={outcome} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
+                <span className="font-mono text-[var(--site-ink)]">+</span>
+                <span>{outcome}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SiteContainer>
+    </section>
+  );
+};
 
 const Thesis = ({ intl }: { intl: IntlShape }) => (
   <SiteSection>
@@ -105,10 +168,8 @@ const Thesis = ({ intl }: { intl: IntlShape }) => (
             {msg(intl, 'home.hero.thesis.body')}
           </p>
         </div>
-        <div className="mt-9 flex flex-wrap gap-3 lg:ml-[15rem]">
+        <div className="mt-9 lg:ml-[15rem]">
           <ButtonLink href="/contact">{msg(intl, 'home.hero.cta.contact')}</ButtonLink>
-          <ButtonLink href="/work" variant="secondary">{msg(intl, 'home.hero.cta.portfolio')}</ButtonLink>
-          <ButtonLink href="/blog" variant="secondary">{msg(intl, 'home.hero.cta.writing')}</ButtonLink>
         </div>
       </Card>
     </SiteContainer>
@@ -186,15 +247,14 @@ const Topics = ({ intl }: { intl: IntlShape }) => (
       <SectionHeader title={msg(intl, 'home.topics.heading')} meta={msg(intl, 'home.topics.meta')} />
       <div className="grid gap-4 md:grid-cols-2">
         {TOPICS.map((topic) => (
-          <Link key={topic} href="/blog" className="group rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)] p-6 no-underline transition hover:border-[var(--site-rust)]">
+          <Card key={topic} className="p-6">
             <Tag tone={topic === 'aiDelivery' ? 'amber' : 'green'}>{msg(intl, `home.topics.${topic}.status`)}</Tag>
-            <h3 className="mt-5 text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)] group-hover:text-[var(--site-rust)]">{msg(intl, `home.topics.${topic}.title`)}</h3>
+            <h3 className="mt-5 text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">{msg(intl, `home.topics.${topic}.title`)}</h3>
             <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{msg(intl, `home.topics.${topic}.body`)}</p>
-            <div className="mt-5 flex justify-between border-t border-[var(--site-rule)] pt-4 font-mono text-xs text-[var(--site-ink-mute)]">
-              <span>{msg(intl, `home.topics.${topic}.count`)}</span>
-              <span className="font-semibold text-[var(--site-ink)]">{msg(intl, 'home.topics.read')}</span>
-            </div>
-          </Link>
+            <p className="mt-5 border-t border-[var(--site-rule)] pt-4 font-mono text-xs text-[var(--site-ink-mute)]">
+              {msg(intl, `home.topics.${topic}.count`)}
+            </p>
+          </Card>
         ))}
       </div>
     </SiteContainer>
@@ -228,7 +288,7 @@ const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl'
   );
 };
 
-const FitAndContact = ({ intl, socialLinks }: Pick<LandingPageProps, 'intl' | 'socialLinks'>) => (
+const FitAndContact = ({ intl, locale, socialLinks }: Pick<LandingPageProps, 'intl' | 'locale' | 'socialLinks'>) => (
   <SiteSection border={false} className="bg-[var(--site-panel-deep)] md:py-20">
     <SiteContainer className="grid gap-12 lg:grid-cols-[1fr_24rem]">
       <div>
@@ -250,8 +310,8 @@ const FitAndContact = ({ intl, socialLinks }: Pick<LandingPageProps, 'intl' | 's
         </div>
       </div>
       <aside className="space-y-4">
-        <AvailabilityCard intl={intl} />
-        <ProfileCard intl={intl} />
+        <AvailabilityCard locale={locale} />
+        <ProfileCard intl={intl} locale={locale} />
         <div className="flex flex-wrap gap-3">
           {socialLinks.map((profile) => (
             <Link key={profile.href} className="inline-flex h-11 w-11 items-center justify-center rounded-[3px] border border-[var(--site-rule)] bg-[var(--site-panel)] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]" external href={profile.href} ariaLabel={profile.ariaLabel}>
@@ -267,18 +327,13 @@ const FitAndContact = ({ intl, socialLinks }: Pick<LandingPageProps, 'intl' | 's
 
 export const LandingPage = ({ intl, locale, projects, socialLinks }: LandingPageProps) => (
   <SiteShell>
-    <Hero intl={intl} />
+    <Hero intl={intl} locale={locale} />
+    <EvidenceStrip intl={intl} locale={locale} projects={projects} />
     <Thesis intl={intl} />
-    <StatStrip stats={[
-      { value: '20+', label: msg(intl, 'home.stats.years.label') },
-      { value: String(projects.length), label: msg(intl, 'home.stats.engagements.label') },
-      { value: String(new Set(projects.map((project) => projectName(project, locale))).size), label: msg(intl, 'home.stats.companies.label') },
-      { value: String(Math.min(...projects.map((project) => getYear(project.startDate)))), label: msg(intl, 'work.stats.since.label') },
-    ]} />
     <Position intl={intl} />
     <OperatingModel intl={intl} />
     <Topics intl={intl} />
     <EngagementLog intl={intl} locale={locale} projects={projects} />
-    <FitAndContact intl={intl} socialLinks={socialLinks} />
+    <FitAndContact intl={intl} locale={locale} socialLinks={socialLinks} />
   </SiteShell>
 );

@@ -116,8 +116,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
               </Link>
             )}
             items={[
-              { href: '/blog', label: intl.formatMessage({ id: 'nav.blog' }) },
-              { href: '/work', label: intl.formatMessage({ id: 'nav.portfolio' }) },
+              { href: '/work', label: intl.formatMessage({ id: 'nav.work' }) },
               { href: '/contact', label: intl.formatMessage({ id: 'nav.contact' }) },
             ]}
             rightSlot={(
