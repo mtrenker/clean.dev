@@ -3,12 +3,14 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { createIntl } from 'react-intl';
-import { ButtonLink, Card, DefinitionList, PageHero, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { ButtonLink, Card, DefinitionList, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
 import { getConsultingAvailability } from '@/lib/availability';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
-import { buildDouglasWorkCase, type DouglasWorkCase, formatMonthPeriod, isDouglasProject } from './douglas-case';
+import { buildDouglasWorkCase, type DouglasWorkCase, formatMonthPeriod } from './douglas-case';
+import { buildFeaturedProjectCases, type CaseEvidence, type FeaturedProjectCase } from './featured-cases';
+import { recentTechnologies } from './print-cv-data';
 
 interface PortfolioViewProps {
   projects: Project[];
@@ -29,48 +31,6 @@ const projectName = (project: Project, lang: Locale) => project.company ?? proje
 const cityName = (city: string, lang: Locale) => (lang === 'de' && city === 'Munich' ? 'München' : city);
 const uniqueCompanies = (projects: Project[], lang: Locale) => new Set(projects.map((project) => projectName(project, lang))).size;
 
-const ProjectCard = ({ project, lang, hero = false, intl }: { project: Project; lang: Locale; hero?: boolean; intl: ReturnType<typeof createIntl> }) => (
-  <Card as="article" className={`p-6 transition hover:border-[var(--site-rust)] ${hero ? 'lg:col-span-2' : ''}`}>
-    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--site-rule)] pb-4">
-      <div>
-        <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-rust)]">{project.title[lang]}</p>
-        <h3 className="mt-2 text-3xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{projectName(project, lang)}</h3>
-      </div>
-      <Tag tone="amber">{formatYearRange(project, true)}</Tag>
-    </div>
-
-    <div className={hero ? 'mt-5 grid gap-6 md:grid-cols-[1.4fr_0.8fr]' : 'mt-5 space-y-5'}>
-      <div>
-        <p className="leading-7 text-[var(--site-ink-sec)]">{project.description[lang]}</p>
-        {project.highlights[lang].length > 0 && (
-          <ul className="mt-5 space-y-2">
-            {project.highlights[lang].slice(0, hero ? 5 : 3).map((highlight) => (
-              <li key={highlight} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
-                <span className="font-mono text-[var(--site-green)]">+</span>
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <aside className="space-y-5 border-t border-dashed border-[var(--site-rule)] pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
-        <DefinitionList items={[
-          { label: msg(intl, 'work.project.context'), value: `${cityName(project.city, lang)}${project.industry ? ` / ${project.industry[lang]}` : ''}` },
-          { label: msg(intl, 'work.project.period'), value: formatYearRange(project) },
-        ]} />
-        <div className="flex flex-wrap gap-1.5">
-          {project.technologies.slice(0, hero ? 14 : 9).map((technology) => (
-            <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-[0.65rem] text-[var(--site-ink-mute)]">
-              {technology}
-            </span>
-          ))}
-        </div>
-      </aside>
-    </div>
-  </Card>
-);
-
 const CaseOutcomeList = ({ outcomes }: { outcomes: string[] }) => (
   <ul className="mt-4 space-y-2">
     {outcomes.map((outcome) => (
@@ -82,8 +42,71 @@ const CaseOutcomeList = ({ outcomes }: { outcomes: string[] }) => (
   </ul>
 );
 
+const CaseEvidenceList = ({ evidence, intl }: { evidence: CaseEvidence[]; intl: ReturnType<typeof createIntl> }) => (
+  <ul className="mt-4 space-y-3">
+    {evidence.map((item) => (
+      <li key={item.text} className="text-sm leading-6 text-[var(--site-ink-sec)]">
+        <Tag tone={item.kind === 'measured' ? 'green' : 'amber'}>
+          {msg(intl, item.kind === 'measured' ? 'work.case.measured' : 'work.case.observed')}
+        </Tag>
+        <p className="mt-2">{item.text}</p>
+      </li>
+    ))}
+  </ul>
+);
+
+const FeaturedProjectCaseCard = ({ workCase, intl, lang }: { workCase: FeaturedProjectCase; intl: ReturnType<typeof createIntl>; lang: Locale }) => (
+  <Card as="article" className="scroll-mt-24 p-6 transition hover:border-[var(--site-rust)]">
+    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--site-rule)] pb-4">
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-rust)]">{workCase.role}</p>
+        <h3 className="mt-2 text-3xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{workCase.company}</h3>
+      </div>
+      <Tag tone="amber">{formatMonthPeriod(workCase.startDate, workCase.endDate, lang)}</Tag>
+    </div>
+
+    <div className="mt-6 grid gap-6 md:grid-cols-2">
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.case.situation')}</h4>
+        <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{workCase.situation}</p>
+      </section>
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.case.mandate')}</h4>
+        <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{workCase.mandate}</p>
+      </section>
+    </div>
+
+    <div className="mt-7 grid gap-6 border-t border-[var(--site-rule)] pt-6 md:grid-cols-2">
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.case.personalOwnership')}</h4>
+        <CaseOutcomeList outcomes={workCase.personalOwnership} />
+      </section>
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.case.outcomes')}</h4>
+        <CaseEvidenceList evidence={workCase.outcomes} intl={intl} />
+      </section>
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.case.teamContribution')}</h4>
+        <CaseOutcomeList outcomes={workCase.teamContribution} />
+      </section>
+      <aside>
+        <DefinitionList items={[
+          { label: msg(intl, 'work.project.context'), value: `${cityName(workCase.city, lang)} / ${workCase.industry}` },
+          { label: msg(intl, 'work.project.period'), value: formatMonthPeriod(workCase.startDate, workCase.endDate, lang) },
+        ]} />
+        <p className="mt-5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.projects.technologies')}</p>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {workCase.technologies.map((technology) => (
+            <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-xs text-[var(--site-ink-mute)]">{technology}</span>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </Card>
+);
+
 const DouglasCaseCard = ({ workCase, intl, lang }: { workCase: DouglasWorkCase; intl: ReturnType<typeof createIntl>; lang: Locale }) => (
-  <article id={workCase.id} className="scroll-mt-24 rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)] p-6 transition hover:border-[var(--site-rust)] lg:col-span-3">
+  <article id={workCase.id} className="scroll-mt-24 rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)] p-6 transition hover:border-[var(--site-rust)] lg:col-span-2">
     <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--site-rule)] pb-4">
       <div>
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-rust)]">{workCase.role}</p>
@@ -122,6 +145,13 @@ const DouglasCaseCard = ({ workCase, intl, lang }: { workCase: DouglasWorkCase; 
           </li>
         ))}
       </ol>
+    </section>
+
+    <section className="mt-7 border-t border-[var(--site-rule)] pt-6">
+      <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+        {msg(intl, 'work.case.outcomes')}
+      </h4>
+      <CaseEvidenceList evidence={workCase.outcomes} intl={intl} />
     </section>
 
     <div className="mt-7 grid gap-6 border-t border-[var(--site-rule)] pt-6 lg:grid-cols-[1fr_1fr_0.7fr]">
@@ -171,27 +201,70 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
 
   const sortedProjects = [...projects].sort((a, b) => b.startDate.localeCompare(a.startDate));
   const douglasCase = buildDouglasWorkCase(projects, lang);
-  const spotlightProjects = sortedProjects.filter((project) => project.spotlight && !isDouglasProject(project));
+  const featuredProjectCases = buildFeaturedProjectCases(projects, lang);
   const timelineProjects = timelineExpanded ? sortedProjects : sortedProjects.slice(0, 10);
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const availability = getConsultingAvailability(locale);
+  const coreTechnologies = recentTechnologies(projects, 9);
 
   return (
     <SiteShell className="print:hidden">
-      <PageHero
-        eyebrow={msg(intl, 'work.hero.label')}
-        title={msg(intl, 'work.hero.heading')}
-        lead={msg(intl, 'work.hero.lead')}
-        aside={(
-          <Card className="p-5">
-            <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={280} height={320} className="h-64 w-full rounded-[4px] border border-[var(--site-rule)] object-cover object-[50%_24%] grayscale-[10%]" priority />
-            <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
-              <p className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">Martin Trenker</p>
-              <p className="mt-2 font-mono text-xs leading-6 text-[var(--site-ink-mute)]">{msg(intl, 'work.subtitle')}</p>
+      <SiteSection className="py-10 md:py-14">
+        <SiteContainer>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-12">
+            <div>
+              <Eyebrow>{msg(intl, 'work.hero.label')}</Eyebrow>
+              <h1 className="mt-6 max-w-5xl text-[clamp(2.8rem,6.5vw,5.6rem)] font-medium leading-[0.95] tracking-[-0.055em] text-[var(--site-ink)]">
+                {msg(intl, 'work.hero.heading')}
+              </h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--site-ink-sec)] md:text-xl">
+                {msg(intl, 'work.hero.lead')}
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <ButtonLink href="/contact">{msg(intl, 'work.cta.button')}</ButtonLink>
+                <ButtonLink
+                  ariaLabel={msg(intl, 'work.hero.downloadAria')}
+                  href={`/work/dossier?locale=${locale}`}
+                  variant="secondary"
+                >
+                  {msg(intl, 'work.hero.download')}
+                </ButtonLink>
+              </div>
+              <Card className="mt-7 grid gap-5 p-5 md:grid-cols-2">
+                <div>
+                  <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+                    <span className="inline-block h-2 w-2 rounded-full bg-[var(--site-green)]" aria-hidden />
+                    {availability.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--site-ink)]">{availability.dossierSummary}</p>
+                </div>
+                <div className="border-t border-dashed border-[var(--site-rule)] pt-4 md:border-l md:border-t-0 md:pl-5 md:pt-0">
+                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.focus.heading')}</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--site-ink)]">{msg(intl, 'work.hero.projectTypes')}</p>
+                </div>
+              </Card>
             </div>
-          </Card>
-        )}
-      />
+
+            <Card className="p-5">
+              <div className="flex items-center gap-4 lg:block">
+                <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={280} height={220} className="h-24 w-24 rounded-[4px] border border-[var(--site-rule)] object-cover object-[50%_24%] grayscale-[10%] lg:h-48 lg:w-full" priority />
+                <div className="lg:mt-4">
+                  <p className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">Martin Trenker</p>
+                  <p className="mt-1 font-mono text-xs leading-6 text-[var(--site-rust)]">{msg(intl, 'work.subtitle')}</p>
+                </div>
+              </div>
+              <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.hero.coreStack')}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {coreTechnologies.map((technology) => (
+                    <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-xs text-[var(--site-ink-mute)]">{technology}</span>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </div>
+        </SiteContainer>
+      </SiteSection>
 
       <StatStrip stats={[
         { value: '20+', label: msg(intl, 'work.stats.years.label') },
@@ -200,39 +273,15 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         { value: String(firstYear), label: msg(intl, 'work.stats.since.label') },
       ]} />
 
-      <SiteSection border={false} className="py-6 md:py-6">
-        <SiteContainer>
-          <Card className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-5">
-            <span className="inline-block h-2 w-2 shrink-0 self-center rounded-full bg-[var(--site-green)]" aria-hidden />
-            <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{availability.label}</span>
-            <span className="text-sm leading-6 text-[var(--site-ink)]">{availability.dossierSummary}</span>
-          </Card>
-        </SiteContainer>
-      </SiteSection>
-
-      <SiteSection>
-        <SiteContainer>
-          <SectionHeader title={msg(intl, 'work.focus.heading')} meta={msg(intl, 'work.focus.meta')} />
-          <div className="grid gap-4 md:grid-cols-3">
-            {(['cleanAgile', 'learner', 'automation'] as const).map((section, index) => (
-              <Card key={section} className="p-6">
-                <p className="font-mono text-3xl font-medium text-[var(--site-rust)]">0{index + 1}</p>
-                <h2 className="mt-5 text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">{msg(intl, `work.section.${section}.heading`)}</h2>
-                <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{msg(intl, `work.section.${section}.p`)}</p>
-              </Card>
-            ))}
-          </div>
-        </SiteContainer>
-      </SiteSection>
-
       <SiteSection>
         <SiteContainer>
           <SectionHeader title={msg(intl, 'work.spotlight.heading')} meta={msg(intl, 'work.spotlight.meta')} />
-          <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.spotlight.lead')}</p>
-          <div className="grid gap-4 lg:grid-cols-3">
+          <p className="max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.spotlight.lead')}</p>
+          <p className="mt-3 max-w-4xl font-mono text-xs leading-6 text-[var(--site-ink-sec)]">{msg(intl, 'work.case.evidenceNote')}</p>
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
             <DouglasCaseCard workCase={douglasCase} intl={intl} lang={lang} />
-            {spotlightProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} lang={lang} intl={intl} />
+            {featuredProjectCases.map((workCase) => (
+              <FeaturedProjectCaseCard key={workCase.id} workCase={workCase} lang={lang} intl={intl} />
             ))}
           </div>
         </SiteContainer>
@@ -264,13 +313,31 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           <SectionHeader title={msg(intl, 'work.lab.heading')} meta={msg(intl, 'work.lab.meta')} />
           <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.lab.lead')}</p>
           <div className="grid gap-4 lg:grid-cols-3">
-            {labItems.map((item, index) => (
-              <Card key={item.id} as="article" className={`p-6 ${index === 0 ? 'lg:col-span-2' : ''}`}>
+            {labItems.map((item) => (
+              <Card key={item.id} as="article" className="p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <h3 className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">{item.title[lang]}</h3>
                   <Tag tone="amber">{item.period[lang]}</Tag>
                 </div>
                 <p className="mt-3 leading-7 text-[var(--site-ink-sec)]">{item.description[lang]}</p>
+                <dl className="mt-5 space-y-4 border-t border-dashed border-[var(--site-rule)] pt-5">
+                  {[
+                    { label: msg(intl, 'work.lab.ownership'), value: item.ownership[lang] },
+                    { label: msg(intl, 'work.lab.relevance'), value: item.clientRelevance[lang] },
+                    { label: msg(intl, 'work.lab.operations'), value: item.operations[lang] },
+                  ].map((detail) => (
+                    <div key={detail.label}>
+                      <dt className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-ink-mute)]">{detail.label}</dt>
+                      <dd className="mt-1 text-sm leading-6 text-[var(--site-ink-sec)]">{detail.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {item.workflowExample ? (
+                  <div className="mt-5 border-l-2 border-[var(--site-green)] bg-[var(--site-panel-alt)] p-4">
+                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-ink-sec)]">{msg(intl, 'work.lab.workflow')}</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--site-ink)]">{item.workflowExample[lang]}</p>
+                  </div>
+                ) : null}
                 {item.highlights[lang].length > 0 && (
                   <ul className="mt-4 space-y-2">
                     {item.highlights[lang].map((highlight) => (
@@ -283,7 +350,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
                 )}
                 <div className="mt-5 flex flex-wrap gap-1.5 border-t border-dashed border-[var(--site-rule)] pt-4">
                   {item.technologies.map((technology) => (
-                    <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-[0.65rem] text-[var(--site-ink-mute)]">
+                    <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-xs text-[var(--site-ink-mute)]">
                       {technology}
                     </span>
                   ))}
@@ -291,13 +358,18 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               </Card>
             ))}
           </div>
-          <p className="mt-6 font-mono text-xs text-[var(--site-ink-mute)]">{msg(intl, 'work.certs.note')}</p>
+          <p className="mt-6 font-mono text-xs text-[var(--site-ink-sec)]">{msg(intl, 'work.certs.note')}</p>
         </SiteContainer>
       </SiteSection>
 
       <SiteSection border={false} className="bg-[var(--site-panel-deep)] md:py-20">
         <SiteContainer>
           <Card className="p-8 md:p-10">
+            <div className="mb-8 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-dashed border-[var(--site-rule)] pb-6">
+              <span className="inline-block h-2 w-2 shrink-0 self-center rounded-full bg-[var(--site-green)]" aria-hidden />
+              <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{availability.label}</span>
+              <span className="text-sm leading-6 text-[var(--site-ink)]">{availability.dossierSummary}</span>
+            </div>
             <h2 className="max-w-4xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[var(--site-ink)] md:text-5xl">
               {msg(intl, 'work.cta.heading')}
             </h2>

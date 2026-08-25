@@ -29,7 +29,11 @@ describe('buildDouglasWorkCase', () => {
         .filter((project) => workCase.sourceProjectIds.includes(project.id))
         .flatMap((project) => project.highlights[locale]);
 
-      for (const outcome of [...workCase.personalOwnership, ...workCase.teamContribution]) {
+      for (const outcome of [
+        ...workCase.personalOwnership,
+        ...workCase.outcomes.map((item) => item.text),
+        ...workCase.teamContribution,
+      ]) {
         expect(sourceHighlights).toContain(outcome);
       }
     }
