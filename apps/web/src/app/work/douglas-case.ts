@@ -1,5 +1,6 @@
 import type { Locale } from '@/lib/locale';
 import type { Project } from '../projects';
+import type { CaseEvidence } from './featured-cases';
 
 export const DOUGLAS_CASE_ID = 'douglas';
 const DOUGLAS_PROJECT_IDS = ['19', '20'] as const;
@@ -60,6 +61,7 @@ export interface DouglasWorkCase {
   mandate: string;
   progression: Array<LocalizedProgressionStep & { number: string }>;
   personalOwnership: string[];
+  outcomes: CaseEvidence[];
   teamContribution: string[];
   technologies: string[];
   startDate: string;
@@ -103,11 +105,14 @@ export const buildDouglasWorkCase = (projects: Project[], locale: Locale): Dougl
       solutionsArchitect.highlights[locale][2],
       solutionsArchitect.highlights[locale][3],
     ],
+    outcomes: [
+      { kind: 'measured', text: technicalLead.highlights[locale][1] },
+      { kind: 'measured', text: technicalLead.highlights[locale][0] },
+      { kind: 'observed', text: technicalLead.highlights[locale][2] },
+    ],
     teamContribution: [
-      technicalLead.highlights[locale][1],
-      technicalLead.highlights[locale][0],
-      technicalLead.highlights[locale][2],
       technicalLead.highlights[locale][3],
+      technicalLead.highlights[locale][4],
     ],
     technologies: [...new Set([technicalLead, solutionsArchitect].flatMap((project) => project.technologies))],
     startDate: technicalLead.startDate,

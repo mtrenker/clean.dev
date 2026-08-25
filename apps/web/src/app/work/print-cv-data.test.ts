@@ -20,6 +20,7 @@ describe('buildPrintCv', () => {
     expect(cv.entries[0].highlightGroups?.map((group) => group.heading)).toEqual([
       'Role progression',
       'Personal ownership',
+      'Outcomes and evidence',
       'Team delivery and contribution',
     ]);
     expect(cv.entries.filter((entry) => entry.name === 'Douglas GmbH')).toHaveLength(1);

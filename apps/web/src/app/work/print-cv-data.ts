@@ -110,6 +110,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
             highlights: douglasCase.progression.map((step) => `${step.number} · ${step.role}: ${step.body}`),
           },
           { heading: msg('work.case.personalOwnership'), highlights: douglasCase.personalOwnership },
+          { heading: msg('work.case.outcomes'), highlights: douglasCase.outcomes.map((outcome) => outcome.text) },
           { heading: msg('work.case.teamContribution'), highlights: douglasCase.teamContribution },
         ],
         technologies: douglasCase.technologies.join(' · '),
@@ -176,6 +177,14 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
       context: [],
       description: item.description[locale],
       highlights: item.highlights[locale],
+      highlightGroups: [
+        { heading: msg('work.lab.ownership'), highlights: [item.ownership[locale]] },
+        { heading: msg('work.lab.relevance'), highlights: [item.clientRelevance[locale]] },
+        { heading: msg('work.lab.operations'), highlights: [item.operations[locale]] },
+        ...(item.workflowExample
+          ? [{ heading: msg('work.lab.workflow'), highlights: [item.workflowExample[locale]] }]
+          : []),
+      ],
       technologies: item.technologies.join(' · '),
     })),
     certsNote: msg('work.certs.note'),

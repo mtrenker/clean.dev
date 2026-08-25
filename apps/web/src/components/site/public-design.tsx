@@ -25,11 +25,11 @@ export const SiteSection = ({ children, className, border = true }: { children: 
 export const Eyebrow = ({ children, tone = 'rust' }: { children: ReactNode; tone?: 'rust' | 'green' | 'amber' | 'muted' }) => (
   <span
     className={clsx(
-      'inline-flex rounded-[2px] border px-3 py-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em]',
+      'inline-flex rounded-[2px] border px-3 py-2 font-mono text-xs font-semibold uppercase tracking-[0.16em]',
       tone === 'rust' && 'border-[var(--site-rust-soft)] text-[var(--site-rust)]',
       tone === 'green' && 'border-[var(--site-green)] text-[var(--site-green)]',
-      tone === 'amber' && 'border-[var(--site-amber)] text-[var(--site-amber)]',
-      tone === 'muted' && 'border-[var(--site-ink-faint)] text-[var(--site-ink-mute)]',
+      tone === 'amber' && 'border-[var(--site-amber)] text-[var(--site-ink)]',
+      tone === 'muted' && 'border-[var(--site-ink-faint)] text-[var(--site-ink-sec)]',
     )}
   >
     {children}
@@ -61,7 +61,7 @@ export const SectionHeader = ({ title, meta }: { title: ReactNode; meta?: ReactN
       {title}
     </h2>
     {meta ? (
-      <p className="hidden shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-ink-mute)] md:block">
+      <p className="hidden shrink-0 font-mono text-xs uppercase tracking-[0.14em] text-[var(--site-ink-sec)] md:block">
         {meta}
       </p>
     ) : null}
@@ -77,11 +77,11 @@ export const Card = ({ children, className, as: Component = 'div' }: { children:
 export const Tag = ({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'rust' | 'green' | 'amber' }) => (
   <span
     className={clsx(
-      'inline-flex rounded-[2px] border px-2 py-1 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.16em]',
-      tone === 'muted' && 'border-[var(--site-ink-faint)] text-[var(--site-ink-mute)]',
+      'inline-flex rounded-[2px] border px-2 py-1 font-mono text-xs font-semibold uppercase tracking-[0.16em]',
+      tone === 'muted' && 'border-[var(--site-ink-faint)] text-[var(--site-ink-sec)]',
       tone === 'rust' && 'border-[var(--site-rust-soft)] text-[var(--site-rust)]',
       tone === 'green' && 'border-[var(--site-green)] text-[var(--site-green)]',
-      tone === 'amber' && 'border-[var(--site-amber)] text-[var(--site-amber)]',
+      tone === 'amber' && 'border-[var(--site-amber)] text-[var(--site-ink)]',
     )}
   >
     {children}
@@ -124,7 +124,7 @@ export const StatStrip = ({ stats }: { stats: Array<{ value: ReactNode; label: R
     {stats.map((stat) => (
       <div key={String(stat.label)} className="border-b border-r border-[var(--site-rule)] px-5 py-7 md:border-b-0 md:px-8">
         <p className="text-5xl font-medium tracking-[-0.04em] text-[var(--site-ink)]">{stat.value}</p>
-        <p className="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{stat.label}</p>
+        <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-sec)]">{stat.label}</p>
       </div>
     ))}
   </section>
@@ -134,7 +134,7 @@ export const DefinitionList = ({ items }: { items: Array<{ label: ReactNode; val
   <dl className="grid gap-3 font-mono text-xs">
     {items.map((item) => (
       <div key={String(item.label)}>
-        <dt className="uppercase tracking-[0.18em] text-[var(--site-ink-mute)]">{item.label}</dt>
+        <dt className="uppercase tracking-[0.18em] text-[var(--site-ink-sec)]">{item.label}</dt>
         <dd className="mt-1 text-[var(--site-ink)]">{item.value}</dd>
       </div>
     ))}

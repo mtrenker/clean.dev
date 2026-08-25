@@ -13,7 +13,7 @@ const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
 
 const primaryPages = [
   { path: '/', heading: /hands-on technical leadership/i },
-  { path: '/work', heading: /project history from inside real teams/i },
+  { path: '/work', heading: /technical lead and solutions architect/i },
   { path: '/contact', heading: /discuss a project/i },
   { path: '/workflow-simulator', heading: /systems thinking playground/i },
 ];
@@ -110,6 +110,44 @@ test.describe('public site semantic UX', () => {
       await expect(page.getByRole('contentinfo')).toBeVisible();
     });
   }
+
+  test('work page supports recruiter scanning and localized dossier download', async ({ page }) => {
+    await page.goto('/work');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead and Solutions Architect.' })).toBeVisible();
+    await expect(page.getByText(/available from september 2026 · 2–5 days\/week · munich and remote dach · german and english/i).first()).toBeVisible();
+    await expect(page.getByText(/architecture modernisation · delivery reliability · governed ai workflows/i)).toBeVisible();
+    await expect(page.getByText('dotnet', { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Discuss a project' }).first()).toBeVisible();
+
+    const downloadLink = page.getByRole('link', { name: 'Download the English project dossier as Markdown' });
+    await expect(downloadLink).toHaveAttribute('href', '/work/dossier?locale=en');
+    const englishResponse = await page.request.get('/work/dossier?locale=en');
+    expect(englishResponse.headers()['content-type']).toBe('text/markdown; charset=utf-8');
+    expect(englishResponse.headers()['content-disposition']).toContain('martin-trenker-project-dossier-en.md');
+    const englishDossier = await englishResponse.text();
+    expect(englishDossier).toContain('# Project dossier: Martin Trenker');
+    expect(englishDossier).toContain('## Recent projects');
+
+    const selectedProjectsSection = page.getByRole('heading', { level: 2, name: 'Selected projects' }).locator('xpath=ancestor::section[1]');
+    const selectedCompanies = await selectedProjectsSection.getByRole('heading', { level: 3 }).allTextContents();
+    expect(selectedCompanies).toEqual(['Douglas GmbH', 'Oetker Digital GmbH', 'Fielmann AG']);
+    await expect(selectedProjectsSection.getByText('Measured fact').first()).toBeVisible();
+    await expect(selectedProjectsSection.getByText('Unmeasured observation').first()).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Current hands-on systems' })).toBeVisible();
+    await expect(page.getByText(/issue-scoped agent → isolated worktree → deterministic test and build gates → human-reviewed pull request/i).first()).toBeVisible();
+
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead und Solutions Architect.' })).toBeVisible();
+    await expect(page.getByText(/verfügbar ab september 2026 · 2–5 tage\/woche · münchen und remote im dach-raum · deutsch und englisch/i).first()).toBeVisible();
+    const germanDownload = page.getByRole('link', { name: 'Deutsches Projektdossier als Markdown herunterladen' });
+    await expect(germanDownload).toHaveAttribute('href', '/work/dossier?locale=de');
+    const germanResponse = await page.request.get('/work/dossier?locale=de');
+    expect(germanResponse.headers()['content-language']).toBe('de');
+    expect(await germanResponse.text()).toContain('# Projektdossier: Martin Trenker');
+  });
 
   test('contact offers the localized Proton booking action without replacing the form', async ({ page }) => {
     await page.goto('/contact');
