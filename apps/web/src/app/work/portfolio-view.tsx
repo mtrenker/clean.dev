@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { createIntl } from 'react-intl';
 import { ButtonLink, Card, DefinitionList, PageHero, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { getConsultingAvailability } from '@/lib/availability';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
@@ -88,6 +89,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   const spotlightProjects = sortedProjects.filter((project) => project.spotlight);
   const timelineProjects = timelineExpanded ? sortedProjects : sortedProjects.slice(0, 10);
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
+  const availability = getConsultingAvailability(locale);
 
   return (
     <SiteShell className="print:hidden">
@@ -117,8 +119,8 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <SiteContainer>
           <Card className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-5">
             <span className="inline-block h-2 w-2 shrink-0 self-center rounded-full bg-[var(--site-green)]" aria-hidden />
-            <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.availability.label')}</span>
-            <span className="text-sm leading-6 text-[var(--site-ink)]">{msg(intl, 'work.availability.text')}</span>
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{availability.label}</span>
+            <span className="text-sm leading-6 text-[var(--site-ink)]">{availability.dossierSummary}</span>
           </Card>
         </SiteContainer>
       </SiteSection>
