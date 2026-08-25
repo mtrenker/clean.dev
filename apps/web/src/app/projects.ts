@@ -700,7 +700,7 @@ export const projects: Project[] = [
     highlights: {
       en: [
         'designed a unified CRM API (REST + GraphQL), ending business logic duplicated across multiple frontends',
-        'picked up C#/.NET during the engagement — with AI assistance and architecture patterns that transfer across stacks — to design and ship the API myself',
+        'extended the solution into C#/.NET and personally designed and shipped the unified API, applying architecture patterns across stacks and using AI tooling as part of a reviewable engineering workflow',
         'replaced static code-level mandator configuration with dynamic runtime config served by the API — config changes no longer require a release',
         'built a TypeScript agent CLI giving AI agents governed access to Jira, Confluence, Azure DevOps, and internal tooling, with human review of all output',
         'developed an internal delivery platform that grew from a team page into a blog, planning, and configuration hub',
@@ -709,7 +709,7 @@ export const projects: Project[] = [
       ],
       de: [
         'einheitliche CRM-API (REST + GraphQL) konzipiert – Schluss mit duplizierter Businesslogik in mehreren Frontends',
-        'C#/.NET im laufenden Projekt gelernt – mit KI-Unterstützung und Architekturmustern, die über Stacks hinweg tragen – um das API-Gateway selbst zu konzipieren und umzusetzen',
+        'die Lösung auf C#/.NET erweitert und die einheitliche API persönlich konzipiert und umgesetzt; dabei Architekturprinzipien stackübergreifend angewandt und KI-Tooling als Teil eines überprüfbaren Engineering-Workflows eingesetzt',
         'statische Mandantenkonfiguration im Code durch dynamische Runtime-Konfiguration über die API ersetzt – Konfigurationsänderungen brauchen kein Release mehr',
         'TypeScript-Agent-CLI gebaut, das KI-Agenten kontrollierten Zugriff auf Jira, Confluence, Azure DevOps und interne Tools gibt – mit menschlichem Review aller Ergebnisse',
         'interne Delivery-Plattform entwickelt, die von einer Teamseite zu Blog-, Planungs- und Konfigurations-Hub gewachsen ist',

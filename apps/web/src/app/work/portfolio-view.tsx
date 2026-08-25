@@ -8,6 +8,7 @@ import { getConsultingAvailability } from '@/lib/availability';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
+import { buildDouglasWorkCase, type DouglasWorkCase, formatMonthPeriod, isDouglasProject } from './douglas-case';
 
 interface PortfolioViewProps {
   projects: Project[];
@@ -17,12 +18,13 @@ interface PortfolioViewProps {
 
 const msg = (intl: ReturnType<typeof createIntl>, id: string) => intl.formatMessage({ id });
 const getYear = (date: string) => new Date(`${date}-01T00:00:00Z`).getUTCFullYear();
-const formatYearRange = (project: Project, compact = false) => {
-  const startYear = getYear(project.startDate);
-  const endYear = getYear(project.endDate);
+const formatDateRange = (startDate: string, endDate: string, compact = false) => {
+  const startYear = getYear(startDate);
+  const endYear = getYear(endDate);
   if (startYear === endYear) return `${startYear}`;
   return compact ? `${startYear}-${String(endYear).slice(2)}` : `${startYear} - ${endYear}`;
 };
+const formatYearRange = (project: Project, compact = false) => formatDateRange(project.startDate, project.endDate, compact);
 const projectName = (project: Project, lang: Locale) => project.company ?? project.industry?.[lang] ?? project.id;
 const cityName = (city: string, lang: Locale) => (lang === 'de' && city === 'Munich' ? 'München' : city);
 const uniqueCompanies = (projects: Project[], lang: Locale) => new Set(projects.map((project) => projectName(project, lang))).size;
@@ -69,6 +71,88 @@ const ProjectCard = ({ project, lang, hero = false, intl }: { project: Project; 
   </Card>
 );
 
+const CaseOutcomeList = ({ outcomes }: { outcomes: string[] }) => (
+  <ul className="mt-4 space-y-2">
+    {outcomes.map((outcome) => (
+      <li key={outcome} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
+        <span className="font-mono text-[var(--site-green)]">+</span>
+        <span>{outcome}</span>
+      </li>
+    ))}
+  </ul>
+);
+
+const DouglasCaseCard = ({ workCase, intl, lang }: { workCase: DouglasWorkCase; intl: ReturnType<typeof createIntl>; lang: Locale }) => (
+  <article id={workCase.id} className="scroll-mt-24 rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)] p-6 transition hover:border-[var(--site-rust)] lg:col-span-3">
+    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--site-rule)] pb-4">
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-rust)]">{workCase.role}</p>
+        <h3 className="mt-2 text-3xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{workCase.company}</h3>
+      </div>
+      <span className="rounded-[2px] border border-[var(--site-rust-soft)] px-2 py-1 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-rust)]">
+        {formatMonthPeriod(workCase.startDate, workCase.endDate, lang)}
+      </span>
+    </div>
+
+    <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(15rem,0.5fr)]">
+      <div>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+          {msg(intl, 'work.case.mandate')}
+        </h4>
+        <p className="mt-3 max-w-4xl leading-7 text-[var(--site-ink-sec)]">{workCase.mandate}</p>
+      </div>
+      <aside className="border-t border-dashed border-[var(--site-rule)] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+        <DefinitionList items={[
+          { label: msg(intl, 'work.project.context'), value: `${cityName(workCase.city, lang)} / ${workCase.industry}` },
+          { label: msg(intl, 'work.project.period'), value: formatMonthPeriod(workCase.startDate, workCase.endDate, lang) },
+        ]} />
+      </aside>
+    </div>
+
+    <section aria-labelledby="douglas-progression-heading" className="mt-7 border-t border-[var(--site-rule)] pt-6">
+      <h4 id="douglas-progression-heading" className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+        {msg(intl, 'work.case.progression')}
+      </h4>
+      <ol className="mt-4 grid overflow-hidden rounded-[4px] border border-[var(--site-rule)] md:grid-cols-3 md:divide-x md:divide-[var(--site-rule)]">
+        {workCase.progression.map((step) => (
+          <li key={step.number} className="border-t border-[var(--site-rule)] p-5 first:border-t-0 md:border-t-0">
+            <p className="font-mono text-2xl text-[var(--site-rust)]">{step.number}</p>
+            <h5 className="mt-3 text-lg font-semibold text-[var(--site-ink)]">{step.role}</h5>
+            <p className="mt-2 text-sm leading-6 text-[var(--site-ink-sec)]">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <div className="mt-7 grid gap-6 border-t border-[var(--site-rule)] pt-6 lg:grid-cols-[1fr_1fr_0.7fr]">
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+          {msg(intl, 'work.case.personalOwnership')}
+        </h4>
+        <CaseOutcomeList outcomes={workCase.personalOwnership} />
+      </section>
+      <section>
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+          {msg(intl, 'work.case.teamContribution')}
+        </h4>
+        <CaseOutcomeList outcomes={workCase.teamContribution} />
+      </section>
+      <aside className="border-t border-dashed border-[var(--site-rule)] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+          {msg(intl, 'work.projects.technologies')}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {workCase.technologies.map((technology) => (
+            <span key={technology} className="rounded-[2px] border border-[var(--site-rule)] px-2 py-1 font-mono text-xs text-[var(--site-ink-mute)]">
+              {technology}
+            </span>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </article>
+);
+
 const TimelineEntry = ({ project, lang }: { project: Project; lang: Locale }) => (
   <li className="grid gap-2 border-t border-[var(--site-rule)] px-5 py-4 first:border-t-0 md:grid-cols-[8rem_14rem_13rem_1fr] md:items-start md:gap-4">
     <time className="font-mono text-xs tracking-[0.04em] text-[var(--site-ink-mute)]" dateTime={`${getYear(project.startDate)}`}>
@@ -86,7 +170,8 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   const [timelineExpanded, setTimelineExpanded] = useState(false);
 
   const sortedProjects = [...projects].sort((a, b) => b.startDate.localeCompare(a.startDate));
-  const spotlightProjects = sortedProjects.filter((project) => project.spotlight);
+  const douglasCase = buildDouglasWorkCase(projects, lang);
+  const spotlightProjects = sortedProjects.filter((project) => project.spotlight && !isDouglasProject(project));
   const timelineProjects = timelineExpanded ? sortedProjects : sortedProjects.slice(0, 10);
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const availability = getConsultingAvailability(locale);
@@ -145,8 +230,9 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           <SectionHeader title={msg(intl, 'work.spotlight.heading')} meta={msg(intl, 'work.spotlight.meta')} />
           <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.spotlight.lead')}</p>
           <div className="grid gap-4 lg:grid-cols-3">
-            {spotlightProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} lang={lang} intl={intl} hero={index === 0} />
+            <DouglasCaseCard workCase={douglasCase} intl={intl} lang={lang} />
+            {spotlightProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} lang={lang} intl={intl} />
             ))}
           </div>
         </SiteContainer>
