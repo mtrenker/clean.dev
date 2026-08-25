@@ -43,6 +43,7 @@ describe('legal page integration', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Privacy Policy' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'contact form' }).getAttribute('href')).toBe('/contact');
+    expect(screen.getByText(/company, desired start date, expected days per week, onsite model, engagement type, and budget or rate range/i)).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: 'Booking through Proton Calendar' })).toBeTruthy();
     expect(screen.getByText(/no data is sent to proton through this website/i)).toBeTruthy();
     expect(screen.getByRole('link', { name: 'privacy policy' }).getAttribute('href')).toBe('https://proton.me/legal/privacy');
