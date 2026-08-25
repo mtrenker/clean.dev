@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   required?: boolean;
@@ -13,10 +14,10 @@ export const Label: React.FC<LabelProps> = ({
 }) => {
   return (
     <label
-      className={clsx(
+      className={twMerge(clsx(
         'block text-sm font-medium text-foreground',
         className
-      )}
+      ))}
       {...props}
     >
       {children}

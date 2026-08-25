@@ -1,7 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
+const siteThemes = ['dark', 'light'] as const;
+
+const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
+  await page.addInitScript((siteTheme) => {
+    window.localStorage.setItem('clean.dev.site-theme', siteTheme);
+  }, theme);
+};
 
 const primaryPages = [
   { path: '/', heading: /inside the work/i },
@@ -11,8 +18,8 @@ const primaryPages = [
 ];
 
 const primaryTapTargets = [
-  /start a diagnostic/i,
-  /inspect the proof/i,
+  /selected work/i,
+  /let's talk/i,
   /portfolio/i,
   /contact/i,
 ];
@@ -69,7 +76,7 @@ test.describe('public site mobile friendliness', () => {
 
     await page.goto('/');
 
-    for (const name of [/start a diagnostic/i, /inspect the proof/i]) {
+    for (const name of [/selected work/i, /let's talk/i]) {
       const target = page.getByRole('link', { name }).first();
       const box = await target.boundingBox();
       expect(box, `${name} should be visible and measurable`).not.toBeNull();
@@ -102,21 +109,85 @@ test.describe('public site semantic UX', () => {
     await expect(page).toHaveURL(/#main-content$/);
   });
 
-  test('contact page exposes a usable, labelled form without knowing component internals', async ({ page }) => {
-    await page.goto('/contact');
+  for (const theme of siteThemes) {
+    test(`contact accessibility, presentation, and keyboard focus remain intact in ${theme} theme`, async ({ page }) => {
+      await useSiteTheme(page, theme);
+      await page.goto('/contact');
 
-    await expect(page.getByRole('textbox', { name: /name/i })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: /email/i })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: /message/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /send message/i })).toBeVisible();
+      const name = page.getByRole('textbox', { name: /name/i });
+      const email = page.getByRole('textbox', { name: /email/i });
+      const message = page.getByRole('textbox', { name: /message/i });
+      const submit = page.getByRole('button', { name: /send message/i });
+      const controls = [name, email, message, submit];
 
-    await page.getByRole('textbox', { name: /name/i }).fill('A11y Tester');
-    await page.getByRole('textbox', { name: /email/i }).fill('tester@example.com');
-    await page.getByRole('textbox', { name: /message/i }).fill('Checking the form semantics from a real browser.');
+      for (const field of [name, email, message]) {
+        await expect(field).toBeVisible();
+        await expect(field).toHaveAttribute('required', '');
+      }
+      await expect(submit).toBeVisible();
 
-    await expect(page.getByRole('textbox', { name: /name/i })).toHaveValue('A11y Tester');
-    await expect(page.getByRole('textbox', { name: /email/i })).toHaveValue('tester@example.com');
-    await expect(page.getByRole('textbox', { name: /message/i })).toHaveValue(/real browser/);
-    await expect(page.getByRole('main').getByRole('link', { name: /privacy policy/i })).toBeVisible();
-  });
+      const presentation = await page.evaluate(() => {
+        const rootStyles = getComputedStyle(document.documentElement);
+        const resolveColour = (property: string) => {
+          const probe = document.createElement('span');
+          probe.style.color = `var(${property})`;
+          document.body.append(probe);
+          const colour = getComputedStyle(probe).color;
+          probe.remove();
+          return colour;
+        };
+        const firstField = document.querySelector<HTMLInputElement>('#name')!;
+        const firstLabel = document.querySelector<HTMLLabelElement>('label[for="name"]')!;
+        const button = document.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+        return {
+          theme: document.documentElement.dataset.siteTheme,
+          fieldBackground: getComputedStyle(firstField).backgroundColor,
+          fieldText: getComputedStyle(firstField).color,
+          labelText: getComputedStyle(firstLabel).color,
+          buttonBackground: getComputedStyle(button).backgroundColor,
+          buttonText: getComputedStyle(button).color,
+          siteBackground: resolveColour('--site-bg'),
+          siteInk: resolveColour('--site-ink'),
+          siteRust: resolveColour('--site-rust'),
+          colourScheme: rootStyles.colorScheme,
+        };
+      });
+
+      expect(presentation).toMatchObject({
+        theme,
+        fieldBackground: presentation.siteBackground,
+        fieldText: presentation.siteInk,
+        labelText: presentation.siteInk,
+        buttonBackground: presentation.siteRust,
+        buttonText: presentation.siteBackground,
+        colourScheme: theme,
+      });
+
+      const axeResults = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .disableRules(['landmark-unique'])
+        .analyze();
+      expect(axeResults.violations).toEqual([]);
+
+      for (const control of controls) {
+        for (let attempt = 0; attempt < 20; attempt += 1) {
+          if (await control.evaluate((element) => document.activeElement === element)) break;
+          await page.keyboard.press('Tab');
+        }
+        await expect(control).toBeFocused();
+        await expect.poll(() => control.evaluate((element) => getComputedStyle(element).boxShadow))
+          .not.toBe('none');
+      }
+
+      await name.fill('A11y Tester');
+      await email.fill('tester@example.com');
+      await message.fill('Checking the form semantics from a real browser.');
+
+      await expect(name).toHaveValue('A11y Tester');
+      await expect(email).toHaveValue('tester@example.com');
+      await expect(message).toHaveValue(/real browser/);
+      await expect(page.getByRole('main').getByRole('link', { name: /privacy policy/i })).toBeVisible();
+    });
+  }
 });

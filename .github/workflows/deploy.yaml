@@ -33,10 +33,67 @@ env:
   IMAGE_NAME: mtrenker/clean-dev
 
 jobs:
+  quality-gate:
+    # This is a public repository. Do not execute untrusted fork PR code.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      AUTH_SECRET: test-secret-test-secret-test-secret-test-secret
+      GITHUB_ID: dummy
+      GITHUB_SECRET: dummy
+      LINKEDIN_CLIENT_ID: dummy
+      LINKEDIN_CLIENT_SECRET: dummy
+      ALLOWED_GITHUB_USERS: mtrenker
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build public-site workspace dependencies
+        run: pnpm --filter @cleandev/db build
+
+      - name: Check public-site types
+        run: pnpm --filter @cleandev/web exec tsc --noEmit
+
+      - name: Run accessibility unit and integration tests
+        working-directory: apps/web
+        run: >-
+          pnpm exec vitest run --config vitest.config.ts
+          src/test/a11y-design-tokens.test.ts
+          src/components/site/public-design.integration.test.tsx
+          src/components/ui/form-field.integration.test.tsx
+
+      - name: Install Chromium
+        run: pnpm --filter @cleandev/web exec playwright install --with-deps chromium
+
+      - name: Run contact browser accessibility checks
+        working-directory: apps/web
+        run: >-
+          pnpm exec playwright test e2e/public-site.spec.ts
+          --grep "contact accessibility"
+          --project=desktop-chromium
+
   build-and-deploy:
     # This is a public repository. Do not run build/deploy jobs for fork PRs:
     # PR code is untrusted and Docker builds execute repository-controlled scripts.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: quality-gate
     runs-on: ubuntu-latest
     permissions:
       contents: write

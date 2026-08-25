@@ -91,8 +91,9 @@ export const Tag = ({ children, tone = 'muted' }: { children: ReactNode; tone?: 
 export const ButtonLink = ({ href, children, variant = 'primary', className }: { href: string; children: ReactNode; variant?: 'primary' | 'secondary'; className?: string }) => (
   <Link
     href={href}
+    variant="unstyled"
     className={clsx(
-      'inline-flex items-center justify-center rounded-[3px] px-6 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] transition',
+      'inline-flex items-center justify-center rounded-[3px] px-6 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] transition focus-visible:ring-[var(--site-rust)] focus-visible:ring-offset-[var(--site-bg)]',
       variant === 'primary' && 'bg-[var(--site-rust)] text-[var(--site-bg)] hover:bg-[var(--site-ink)]',
       variant === 'secondary' && 'border border-[var(--site-rule)] text-[var(--site-ink)] hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]',
       className,
