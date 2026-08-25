@@ -14,7 +14,7 @@ const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
 const primaryPages = [
   { path: '/', heading: /hands-on technical leadership/i },
   { path: '/work', heading: /technical lead and solutions architect/i },
-  { path: '/contact', heading: /discuss a project/i },
+  { path: '/contact', heading: /tell me what needs to change/i },
   { path: '/workflow-simulator', heading: /systems thinking playground/i },
 ];
 
@@ -310,7 +310,9 @@ test.describe('public site semantic UX', () => {
     await expect(englishBooking).toBeVisible();
     await expect(englishBooking).toHaveAttribute('href', protonBookingUrl);
     await expect(englishBooking).toHaveAttribute('target', '_blank');
-    await expect(page.getByRole('button', { name: 'Send message' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Send project context' })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Engagement type (optional)' })).toBeVisible();
+    await expect(page.getByRole('option', { name: 'Not sure yet' })).toHaveCount(1);
 
     await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
     await page.reload();
@@ -320,7 +322,9 @@ test.describe('public site semantic UX', () => {
     });
     await expect(germanBooking).toBeVisible();
     await expect(germanBooking).toHaveAttribute('href', protonBookingUrl);
-    await expect(page.getByRole('button', { name: 'Nachricht senden' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Projektkontext senden' })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Engagement-Art (optional)' })).toBeVisible();
+    await expect(page.getByRole('option', { name: 'Noch nicht sicher' })).toHaveCount(1);
   });
 
   test('the empty blog is excluded from search indexing', async ({ page }) => {
@@ -405,8 +409,26 @@ test.describe('public site semantic UX', () => {
       const name = page.getByRole('textbox', { name: /name/i });
       const email = page.getByRole('textbox', { name: /email/i });
       const message = page.getByRole('textbox', { name: /message/i });
-      const submit = page.getByRole('button', { name: /send message/i });
-      const controls = [booking, name, email, message, submit];
+      const company = page.getByRole('textbox', { name: /company \(optional\)/i });
+      const desiredStart = page.getByLabel(/desired start date \(optional\)/i);
+      const expectedDays = page.getByRole('textbox', { name: /expected days per week \(optional\)/i });
+      const onsiteModel = page.getByRole('textbox', { name: /onsite model \(optional\)/i });
+      const engagementType = page.getByRole('combobox', { name: /engagement type \(optional\)/i });
+      const budgetRange = page.getByRole('textbox', { name: /budget or rate range \(optional\)/i });
+      const submit = page.getByRole('button', { name: /send project context/i });
+      const controls = [
+        booking,
+        name,
+        email,
+        message,
+        company,
+        desiredStart,
+        expectedDays,
+        onsiteModel,
+        engagementType,
+        budgetRange,
+        submit,
+      ];
 
       for (const field of [name, email, message]) {
         await expect(field).toBeVisible();

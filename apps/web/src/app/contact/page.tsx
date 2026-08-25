@@ -10,11 +10,11 @@ export const PROTON_BOOKING_URL = 'https://calendar.proton.me/bookings#gr6YDfkOK
 export const generateMetadata = async (): Promise<Metadata> => {
   const locale = getLocale(await headers(), await cookies());
   return {
-    title: locale === 'de' ? 'Kontakt | clean.dev' : 'Contact | clean.dev',
+    title: locale === 'de' ? 'Projektanfrage | clean.dev' : 'Project enquiry | clean.dev',
     description:
       locale === 'de'
-        ? 'Schreiben Sie Martin Trenker eine Nachricht.'
-        : 'Send a message to Martin Trenker.',
+        ? 'Senden Sie Martin Trenker den Kontext zu Ihrem Projekt oder buchen Sie ein Erstgespräch.'
+        : 'Send Martin Trenker your project context or book an introductory call.',
   };
 };
 
@@ -51,6 +51,7 @@ const ContactPage = async () => {
               </p>
               <ButtonLink
                 href={PROTON_BOOKING_URL}
+                variant="secondary"
                 external
                 ariaLabel={intl.formatMessage({ id: 'contact.booking.ariaLabel' })}
                 className="mt-5 w-full"

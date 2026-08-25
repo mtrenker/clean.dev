@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { FormField } from './form-field';
 import { Input } from './input';
 import { Label } from './label';
+import { Select } from './select';
 import { Textarea } from './textarea';
 
 describe('form primitives', () => {
@@ -18,6 +19,12 @@ describe('form primitives', () => {
           aria-label="Message"
           className="bg-[var(--site-bg)] text-[var(--site-ink)]"
         />
+        <Select
+          aria-label="Engagement type"
+          className="bg-[var(--site-bg)] text-[var(--site-ink)]"
+        >
+          <option>Embedded Technical Lead</option>
+        </Select>
       </>
     );
 
@@ -28,6 +35,7 @@ describe('form primitives', () => {
     for (const control of [
       screen.getByRole('textbox', { name: 'Name' }),
       screen.getByRole('textbox', { name: 'Message' }),
+      screen.getByRole('combobox', { name: 'Engagement type' }),
     ]) {
       expect(control.classList.contains('bg-[var(--site-bg)]')).toBe(true);
       expect(control.classList.contains('text-[var(--site-ink)]')).toBe(true);
