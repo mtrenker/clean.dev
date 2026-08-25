@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'Document Editor | clean.dev',
   description:
     'Demo of the reusable @cleandev/docs Plate.js document editor with page mode — reports, proposals, profiles, and blog posts.',
+  robots: { index: false, follow: false },
 };
 
 export default function DocsEditorPage() {

@@ -4,21 +4,13 @@ import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { Card, Eyebrow, LegalCard, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { buildRouteMetadata } from '@/lib/site-metadata';
 
 const PROTON_PRIVACY_URL = 'https://proton.me/legal/privacy';
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const headerStore = await headers();
-  const cookieStore = await cookies();
-  const locale = getLocale(headerStore, cookieStore);
-  const messages = await loadMessages(locale);
-  const intl = createIntl({ locale, messages });
-
-  return {
-    title: intl.formatMessage({ id: 'privacy.metadata.title' }),
-    description: intl.formatMessage({ id: 'privacy.metadata.description' }),
-    alternates: { canonical: '/privacy' },
-  };
+  const locale = getLocale(await headers(), await cookies());
+  return buildRouteMetadata('privacy', locale);
 };
 
 const PrivacyPage = async () => {

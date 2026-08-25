@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
 import { Container, EmptyState, Heading, Link, Section } from '@/components/ui';
@@ -12,6 +13,10 @@ type ReviewPageState = 'valid' | 'invalid' | 'expired' | 'disabled';
 interface ReviewPageProps {
   params: Promise<{ token: string }>;
 }
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const getPageStateFromError = (error: unknown): Exclude<ReviewPageState, 'valid'> => {
   if (error instanceof ReviewTokenError) {

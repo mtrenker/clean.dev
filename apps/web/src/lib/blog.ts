@@ -23,6 +23,7 @@ export type PostFrontmatter = {
   date: string;
   description: string;
   tags?: string[];
+  updated?: string;
 };
 
 export type Post = {

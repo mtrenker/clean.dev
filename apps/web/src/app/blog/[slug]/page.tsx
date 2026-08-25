@@ -8,21 +8,21 @@ import { ButtonLink, Card, SiteContainer, SiteSection, SiteShell, Tag } from '@/
 import { Link } from '@/components/ui/link';
 import { getAllPosts, getPostBySlug, formatPostDate } from '@/lib/blog';
 import { getLocale, loadMessages } from '@/lib/locale';
+import { buildArticleMetadata } from '@/lib/site-metadata';
+import { getArticleStructuredData, serializeStructuredData } from '@/lib/structured-data';
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
+export const dynamicParams = false;
 export const generateStaticParams = () => getAllPosts().map((post) => ({ slug: post.slug }));
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
-  return {
-    title: `${post.frontmatter.title} | clean.dev`,
-    description: post.frontmatter.description,
-  };
+  return buildArticleMetadata(post);
 };
 
 const BlogPostPage: React.FC<Props> = async ({ params }) => {
@@ -37,6 +37,12 @@ const BlogPostPage: React.FC<Props> = async ({ params }) => {
 
   return (
     <SiteShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeStructuredData(getArticleStructuredData(post)),
+        }}
+      />
       <SiteSection>
         <SiteContainer narrow>
           <Link href="/blog" className="mb-8 inline-flex font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-ink-mute)] transition hover:text-[var(--site-rust)]">
