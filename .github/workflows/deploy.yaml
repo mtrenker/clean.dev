@@ -76,6 +76,8 @@ jobs:
         run: >-
           pnpm exec vitest run --config vitest.config.ts
           src/test/a11y-design-tokens.test.ts
+          src/app/contact/page.integration.test.tsx
+          src/app/legal-pages.integration.test.tsx
           src/components/site/public-design.integration.test.tsx
           src/components/ui/form-field.integration.test.tsx
 

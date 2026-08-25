@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { headers, cookies } from 'next/headers';
 import { createIntl } from 'react-intl';
-import { Card, PageHero, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
+import { ButtonLink, Card, PageHero, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { ContactForm } from './contact-form';
 import { getLocale, loadMessages } from '@/lib/locale';
+
+export const PROTON_BOOKING_URL = 'https://calendar.proton.me/bookings#gr6YDfkOKjAMY1niO0UPh2HmFBm4FnVWYJaeshmt0IM=';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const locale = getLocale(await headers(), await cookies());
@@ -40,10 +42,30 @@ const ContactPage = async () => {
       <SiteSection border={false}>
         <SiteContainer className="grid gap-10 lg:grid-cols-[24rem_1fr]">
           <aside className="space-y-4">
-            <Card className="p-6">
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-rust)]">
-                {intl.formatMessage({ id: 'contact.context.heading' })}
+            <Card as="section" className="border-l-4 border-l-[var(--site-rust)] p-6">
+              <h2 className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-rust)]">
+                {intl.formatMessage({ id: 'contact.booking.heading' })}
+              </h2>
+              <p className="mt-4 text-sm leading-6 text-[var(--site-ink-sec)]">
+                {intl.formatMessage({ id: 'contact.booking.body' })}
               </p>
+              <ButtonLink
+                href={PROTON_BOOKING_URL}
+                external
+                ariaLabel={intl.formatMessage({ id: 'contact.booking.ariaLabel' })}
+                className="mt-5 w-full"
+              >
+                {intl.formatMessage({ id: 'contact.booking.cta' })}
+              </ButtonLink>
+              <p className="mt-3 text-xs leading-5 text-[var(--site-ink-mute)]">
+                {intl.formatMessage({ id: 'contact.booking.externalNote' })}
+              </p>
+            </Card>
+
+            <Card as="section" className="p-6">
+              <h2 className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--site-rust)]">
+                {intl.formatMessage({ id: 'contact.context.heading' })}
+              </h2>
               <ol className="mt-5 space-y-5">
                 {contextItems.map((item, index) => (
                   <li key={item} className="grid grid-cols-[2rem_1fr] gap-3 text-sm leading-6 text-[var(--site-ink-sec)]">

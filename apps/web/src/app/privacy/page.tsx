@@ -5,6 +5,8 @@ import { createIntl } from 'react-intl';
 import { Card, Eyebrow, LegalCard, SiteContainer, SiteSection, SiteShell } from '@/components/site/public-design';
 import { getLocale, loadMessages } from '@/lib/locale';
 
+const PROTON_PRIVACY_URL = 'https://proton.me/legal/privacy';
+
 export const generateMetadata = async (): Promise<Metadata> => {
   const headerStore = await headers();
   const cookieStore = await cookies();
@@ -34,11 +36,12 @@ const PrivacyPage = async () => {
   const contentLabel = isGerman ? 'Inhalt' : 'Contents';
   const relatedLabel = isGerman ? 'Auch relevant' : 'Related';
   const noCookies = isGerman ? 'keine Tracking-Cookies' : 'no tracking cookies';
-  const emailOnly = isGerman ? 'Kontakt per E-Mail' : 'contact by email';
+  const externalBooking = isGerman ? 'externe Terminbuchung' : 'external appointment booking';
 
   const sections = [
     intl.formatMessage({ id: 'privacy.controller.heading' }),
     intl.formatMessage({ id: 'privacy.contactForm.heading' }),
+    intl.formatMessage({ id: 'privacy.booking.heading' }),
     intl.formatMessage({ id: 'privacy.reviewFlow.heading' }),
     intl.formatMessage({ id: 'privacy.hosting.heading' }),
     intl.formatMessage({ id: 'privacy.rights.heading' }),
@@ -65,7 +68,7 @@ const PrivacyPage = async () => {
             <dl className="mt-5 grid gap-3 border-t border-dashed border-[var(--site-rule)] pt-4 font-mono text-xs leading-6">
               <div>
                 <dt className="uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{updatedLabel}</dt>
-                <dd className="text-[var(--site-ink)]">April 2026</dd>
+                <dd className="text-[var(--site-ink)]">August 2026</dd>
               </div>
               <div>
                 <dt className="uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{controllerLabel}</dt>
@@ -74,7 +77,7 @@ const PrivacyPage = async () => {
             </dl>
             <div className="mt-4 flex flex-wrap gap-2 border-t border-dashed border-[var(--site-rule)] pt-4">
               <span className="rounded-[2px] border border-[var(--site-green)] px-2 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-green)]">{noCookies}</span>
-              <span className="rounded-[2px] border border-[var(--site-ink-faint)] px-2 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-ink-mute)]">{emailOnly}</span>
+              <span className="rounded-[2px] border border-[var(--site-ink-faint)] px-2 py-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--site-ink-mute)]">{externalBooking}</span>
             </div>
           </Card>
         </SiteContainer>
@@ -132,7 +135,21 @@ const PrivacyPage = async () => {
               </div>
             </LegalCard>
 
-            <LegalCard meta="03" title={intl.formatMessage({ id: 'privacy.reviewFlow.heading' })}>
+            <LegalCard meta="03" title={intl.formatMessage({ id: 'privacy.booking.heading' })}>
+              <div className="space-y-3">
+                <p>{intl.formatMessage({ id: 'privacy.booking.p1' })}</p>
+                <p>{intl.formatMessage({ id: 'privacy.booking.p2' })}</p>
+                <p>
+                  {intl.formatMessage({ id: 'privacy.booking.moreInfo' }, {
+                    link: (chunks) => (
+                      <a href={PROTON_PRIVACY_URL} rel="noopener noreferrer" target="_blank">{chunks}</a>
+                    ),
+                  })}
+                </p>
+              </div>
+            </LegalCard>
+
+            <LegalCard meta="04" title={intl.formatMessage({ id: 'privacy.reviewFlow.heading' })}>
               <div className="space-y-3">
                 <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p1' })}</p>
                 <p>{intl.formatMessage({ id: 'privacy.reviewFlow.p2' })}</p>
@@ -144,7 +161,7 @@ const PrivacyPage = async () => {
               </div>
             </LegalCard>
 
-            <LegalCard meta="04" title={intl.formatMessage({ id: 'privacy.hosting.heading' })}>
+            <LegalCard meta="05" title={intl.formatMessage({ id: 'privacy.hosting.heading' })}>
               <div className="space-y-3">
                 <p>{intl.formatMessage({ id: 'privacy.hosting.p1' }, { provider: intl.formatMessage({ id: 'privacy.hosting.providerPlaceholder' }) })}</p>
                 <p>{intl.formatMessage({ id: 'privacy.hosting.p2' })}</p>
@@ -153,7 +170,7 @@ const PrivacyPage = async () => {
               </div>
             </LegalCard>
 
-            <LegalCard meta="05" title={intl.formatMessage({ id: 'privacy.rights.heading' })}>
+            <LegalCard meta="06" title={intl.formatMessage({ id: 'privacy.rights.heading' })}>
               <div className="space-y-3">
                 <p>{intl.formatMessage({ id: 'privacy.rights.intro' })}</p>
                 <ul className="ml-4 list-disc space-y-1">
@@ -168,7 +185,7 @@ const PrivacyPage = async () => {
               </div>
             </LegalCard>
 
-            <LegalCard meta="06" title={intl.formatMessage({ id: 'privacy.authority.heading' })}>
+            <LegalCard meta="07" title={intl.formatMessage({ id: 'privacy.authority.heading' })}>
               <div className="space-y-3">
                 <p>{intl.formatMessage({ id: 'privacy.authority.p1' })}</p>
                 <address className="not-italic">

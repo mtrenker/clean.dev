@@ -88,10 +88,26 @@ export const Tag = ({ children, tone = 'muted' }: { children: ReactNode; tone?: 
   </span>
 );
 
-export const ButtonLink = ({ href, children, variant = 'primary', className }: { href: string; children: ReactNode; variant?: 'primary' | 'secondary'; className?: string }) => (
+export const ButtonLink = ({
+  href,
+  children,
+  variant = 'primary',
+  className,
+  external = false,
+  ariaLabel,
+}: {
+  href: string;
+  children: ReactNode;
+  variant?: 'primary' | 'secondary';
+  className?: string;
+  external?: boolean;
+  ariaLabel?: string;
+}) => (
   <Link
     href={href}
     variant="unstyled"
+    external={external}
+    ariaLabel={ariaLabel}
     className={clsx(
       'inline-flex items-center justify-center rounded-[3px] px-6 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] transition focus-visible:ring-[var(--site-rust)] focus-visible:ring-offset-[var(--site-bg)]',
       variant === 'primary' && 'bg-[var(--site-rust)] text-[var(--site-bg)] hover:bg-[var(--site-ink)]',
