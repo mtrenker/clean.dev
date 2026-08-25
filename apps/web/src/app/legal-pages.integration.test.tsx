@@ -38,11 +38,14 @@ describe('legal page integration', () => {
     expect(emailLinks[0]?.getAttribute('href')).toBe('mailto:info@clean.dev');
   });
 
-  it('renders privacy page in default locale fallback and links to contact/imprint', async () => {
+  it('renders privacy page in default locale fallback and discloses external booking', async () => {
     render(await PrivacyPage());
 
     expect(screen.getByRole('heading', { level: 1, name: 'Privacy Policy' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'contact form' }).getAttribute('href')).toBe('/contact');
-    expect(screen.getByRole('link', { name: 'Imprint' }).getAttribute('href')).toBe('/imprint');
+    expect(screen.getByRole('heading', { level: 2, name: 'Booking through Proton Calendar' })).toBeTruthy();
+    expect(screen.getByText(/no data is sent to proton through this website/i)).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'privacy policy' }).getAttribute('href')).toBe('https://proton.me/legal/privacy');
+    expect(screen.getAllByRole('link', { name: 'Imprint' }).every((link) => link.getAttribute('href') === '/imprint')).toBe(true);
   });
 });

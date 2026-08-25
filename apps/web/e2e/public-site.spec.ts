@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
 const siteThemes = ['dark', 'light'] as const;
+const protonBookingUrl = 'https://calendar.proton.me/bookings#gr6YDfkOKjAMY1niO0UPh2HmFBm4FnVWYJaeshmt0IM=';
 
 const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
   await page.addInitScript((siteTheme) => {
@@ -110,6 +111,28 @@ test.describe('public site semantic UX', () => {
     });
   }
 
+  test('contact offers the localized Proton booking action without replacing the form', async ({ page }) => {
+    await page.goto('/contact');
+
+    const englishBooking = page.getByRole('link', {
+      name: 'Book an introductory call in Proton Calendar (opens in a new tab)',
+    });
+    await expect(englishBooking).toBeVisible();
+    await expect(englishBooking).toHaveAttribute('href', protonBookingUrl);
+    await expect(englishBooking).toHaveAttribute('target', '_blank');
+    await expect(page.getByRole('button', { name: 'Send message' })).toBeVisible();
+
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    const germanBooking = page.getByRole('link', {
+      name: 'Erstgespräch in Proton Calendar buchen (öffnet in einem neuen Tab)',
+    });
+    await expect(germanBooking).toBeVisible();
+    await expect(germanBooking).toHaveAttribute('href', protonBookingUrl);
+    await expect(page.getByRole('button', { name: 'Nachricht senden' })).toBeVisible();
+  });
+
   test('the empty blog is excluded from search indexing', async ({ page }) => {
     await page.goto('/blog');
 
@@ -149,11 +172,12 @@ test.describe('public site semantic UX', () => {
       await useSiteTheme(page, theme);
       await page.goto('/contact');
 
+      const booking = page.getByRole('link', { name: /book an introductory call in proton calendar/i });
       const name = page.getByRole('textbox', { name: /name/i });
       const email = page.getByRole('textbox', { name: /email/i });
       const message = page.getByRole('textbox', { name: /message/i });
       const submit = page.getByRole('button', { name: /send message/i });
-      const controls = [name, email, message, submit];
+      const controls = [booking, name, email, message, submit];
 
       for (const field of [name, email, message]) {
         await expect(field).toBeVisible();
