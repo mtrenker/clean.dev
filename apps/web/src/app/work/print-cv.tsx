@@ -24,6 +24,17 @@ const PrintSectionHeader = ({ title, meta }: { title: string; meta?: string }) =
   </div>
 );
 
+const PrintHighlights = ({ highlights }: { highlights: string[] }) => (
+  <ul className="mt-[1.5mm] space-y-[0.7mm]">
+    {highlights.map((highlight) => (
+      <li key={highlight} className="grid grid-cols-[3.5mm_1fr] text-[8.5pt] leading-[1.35] text-[var(--print-ink-sec)]">
+        <span aria-hidden="true" className="font-mono text-[var(--print-rust)]">+</span>
+        <span className="hyphens-auto">{highlight}</span>
+      </li>
+    ))}
+  </ul>
+);
+
 const PrintHistoryEntry = ({ entry }: { entry: PrintCvEntry }) => (
   <article className="grid break-inside-avoid grid-cols-[26mm_1fr] gap-[6mm] border-t border-[var(--print-rule)] py-[2.8mm] first:border-t-0">
     <div>
@@ -38,16 +49,13 @@ const PrintHistoryEntry = ({ entry }: { entry: PrintCvEntry }) => (
       )}
       <h3 className="mt-[0.6mm] text-[11pt] font-semibold leading-[1.2] text-[var(--print-ink)]">{entry.name}</h3>
       <p className="mt-[1.2mm] text-[9pt] leading-[1.4] text-[var(--print-ink-sec)] hyphens-auto">{entry.description}</p>
-      {entry.highlights.length > 0 && (
-        <ul className="mt-[1.5mm] space-y-[0.7mm]">
-          {entry.highlights.map((highlight) => (
-            <li key={highlight} className="grid grid-cols-[3.5mm_1fr] text-[8.5pt] leading-[1.35] text-[var(--print-ink-sec)]">
-              <span aria-hidden="true" className="font-mono text-[var(--print-rust)]">+</span>
-              <span className="hyphens-auto">{highlight}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {entry.highlights.length > 0 && <PrintHighlights highlights={entry.highlights} />}
+      {entry.highlightGroups?.map((group) => (
+        <section key={group.heading} className="mt-[2mm]">
+          <h4 className="font-mono text-[7pt] font-semibold uppercase tracking-[0.12em] text-[var(--print-ink-mute)]">{group.heading}</h4>
+          <PrintHighlights highlights={group.highlights} />
+        </section>
+      ))}
       <p className="mt-[1.5mm] font-mono text-[7.5pt] leading-[1.45] text-[var(--print-ink-mute)]">{entry.technologies}</p>
     </div>
   </article>

@@ -13,11 +13,16 @@ describe('buildPrintCv', () => {
   it('includes every project, newest first, with render-ready fields', () => {
     const cv = buildPrintCv(projects, 'en', intlFor('en'));
 
-    expect(cv.entries).toHaveLength(projects.length);
+    expect(cv.entries).toHaveLength(projects.length - 1);
     expect(cv.entries[0].name).toBe('Douglas GmbH');
-    expect(cv.entries[0].period).toBe('2025 – 2026');
-    expect(cv.entries[1].name).toBe('Douglas GmbH');
-    expect(cv.entries[1].period).toBe('2024 – 2025');
+    expect(cv.entries[0].period).toBe('Jan 2024 – Jul 2026');
+    expect(cv.entries[0].role).toBe('React Expert → Technical Lead → Solutions Architect');
+    expect(cv.entries[0].highlightGroups?.map((group) => group.heading)).toEqual([
+      'Role progression',
+      'Personal ownership',
+      'Team delivery and contribution',
+    ]);
+    expect(cv.entries.filter((entry) => entry.name === 'Douglas GmbH')).toHaveLength(1);
     expect(cv.entries.at(-1)?.name).toBe('Siemens AG');
     expect(cv.entries.at(-1)?.period).toBe('2008 – 2009');
     expect(cv.availabilityText).toBe(
@@ -55,7 +60,7 @@ describe('buildPrintCv', () => {
   it('localizes project fields and city names', () => {
     const cv = buildPrintCv(projects, 'de', intlFor('de'));
     const douglas = cv.entries[0];
-    expect(douglas.role).toBe('Lösungsarchitekt');
+    expect(douglas.role).toBe('React-Experte → Technical Lead → Solutions Architect');
     expect(douglas.context).toContain('Düsseldorf');
     const munichEntry = cv.entries.find((entry) => entry.context[0] === 'München');
     expect(munichEntry).toBeDefined();

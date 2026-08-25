@@ -4,6 +4,12 @@ import { SOCIAL_PROFILES } from '@/lib/social-profiles';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
+import { buildDouglasWorkCase, formatMonthPeriod } from './douglas-case';
+
+export interface PrintCvHighlightGroup {
+  heading: string;
+  highlights: string[];
+}
 
 export interface PrintCvEntry {
   id: string;
@@ -13,6 +19,7 @@ export interface PrintCvEntry {
   context: string[];
   description: string;
   highlights: string[];
+  highlightGroups?: PrintCvHighlightGroup[];
   technologies: string;
 }
 
@@ -47,11 +54,12 @@ const SITE_URL = 'https://clean.dev';
 const RECENT_TECHNOLOGY_LIMIT = 14;
 
 const getYear = (date: string) => Number(date.slice(0, 4));
-const formatPeriod = (project: Project) => {
-  const startYear = getYear(project.startDate);
-  const endYear = getYear(project.endDate);
+const formatDatePeriod = (startDate: string, endDate: string) => {
+  const startYear = getYear(startDate);
+  const endYear = getYear(endDate);
   return startYear === endYear ? `${startYear}` : `${startYear} – ${endYear}`;
 };
+const formatPeriod = (project: Project) => formatDatePeriod(project.startDate, project.endDate);
 const projectName = (project: Project, lang: Locale) => project.company ?? project.industry?.[lang] ?? project.id;
 const cityName = (city: string, lang: Locale) => (lang === 'de' && city === 'Munich' ? 'München' : city);
 const displayUrl = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
@@ -83,17 +91,44 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
   const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const companies = new Set(projects.map((project) => projectName(project, locale))).size;
   const availability = getConsultingAvailability(locale);
+  const douglasCase = buildDouglasWorkCase(projects, locale);
+  const newestDouglasProjectId = douglasCase.sourceProjectIds.at(-1);
 
-  const entries: PrintCvEntry[] = sorted.map((project) => ({
-    id: project.id,
-    period: formatPeriod(project),
-    name: projectName(project, locale),
-    role: project.title[locale],
-    context: [cityName(project.city, locale), project.industry?.[locale]].filter((value): value is string => Boolean(value)),
-    description: project.description[locale],
-    highlights: project.highlights[locale],
-    technologies: project.technologies.join(' · '),
-  }));
+  const entries: PrintCvEntry[] = sorted.flatMap((project) => {
+    if (project.id === newestDouglasProjectId) {
+      return [{
+        id: douglasCase.id,
+        period: formatMonthPeriod(douglasCase.startDate, douglasCase.endDate, locale),
+        name: douglasCase.company,
+        role: douglasCase.role,
+        context: [cityName(douglasCase.city, locale), douglasCase.industry],
+        description: douglasCase.mandate,
+        highlights: [],
+        highlightGroups: [
+          {
+            heading: msg('work.case.progression'),
+            highlights: douglasCase.progression.map((step) => `${step.number} · ${step.role}: ${step.body}`),
+          },
+          { heading: msg('work.case.personalOwnership'), highlights: douglasCase.personalOwnership },
+          { heading: msg('work.case.teamContribution'), highlights: douglasCase.teamContribution },
+        ],
+        technologies: douglasCase.technologies.join(' · '),
+      }];
+    }
+
+    if (douglasCase.sourceProjectIds.includes(project.id)) return [];
+
+    return [{
+      id: project.id,
+      period: formatPeriod(project),
+      name: projectName(project, locale),
+      role: project.title[locale],
+      context: [cityName(project.city, locale), project.industry?.[locale]].filter((value): value is string => Boolean(value)),
+      description: project.description[locale],
+      highlights: project.highlights[locale],
+      technologies: project.technologies.join(' · '),
+    }];
+  });
 
   return {
     docLabel: msg('work.print.doc.label'),

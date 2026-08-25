@@ -4,6 +4,7 @@ import { ButtonLink, Card, Eyebrow, SectionHeader, SiteContainer, SiteSection, S
 import { SocialIcon } from '@/components/ui';
 import { Link } from '@/components/ui/link';
 import type { Project } from '@/app/projects';
+import { buildDouglasWorkCase, isDouglasProject } from '@/app/work/douglas-case';
 import { getConsultingAvailability } from '@/lib/availability';
 import type { Locale } from '@/lib/locale';
 
@@ -30,17 +31,17 @@ type EngagementProject = Project & { company: string };
 
 const msg = (intl: IntlShape, id: string) => intl.formatMessage({ id });
 const getYear = (date: string) => new Date(`${date}-01T00:00:00Z`).getUTCFullYear();
-const formatYearRange = (project: Project) => {
-  const startYear = getYear(project.startDate);
-  const endYear = getYear(project.endDate);
+const formatDateRange = (startDate: string, endDate: string) => {
+  const startYear = getYear(startDate);
+  const endYear = getYear(endDate);
   return startYear === endYear ? `${startYear}` : `${startYear}-${String(endYear).slice(2)}`;
 };
+const formatYearRange = (project: Project) => formatDateRange(project.startDate, project.endDate);
 const projectName = (project: Project, locale: Locale) => project.company ?? project.industry?.[locale] ?? project.id;
 const recentProjects = (projects: Project[]) =>
   projects
     .filter((project): project is EngagementProject => Boolean(project.company) && Boolean(project.featured))
-    .sort((a, b) => b.startDate.localeCompare(a.startDate))
-    .slice(0, 8);
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
 const projectSignal = (project: Project, locale: Locale) => project.highlights[locale][0] ?? project.description[locale];
 
 const ProfileCard = ({ intl, locale }: Pick<LandingPageProps, 'intl' | 'locale'>) => {
@@ -106,16 +107,13 @@ const Hero = ({ intl, locale }: Pick<LandingPageProps, 'intl' | 'locale'>) => {
 };
 
 const EvidenceStrip = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
-  const douglasProjects = projects.filter((project) => project.company === 'Douglas GmbH');
-  const roles = [...new Set(douglasProjects.map((project) => project.title[locale]))].join(' / ');
-  const technicalLead = douglasProjects.find((project) => project.title.en === 'Technical Lead');
-  const solutionsArchitect = douglasProjects.find((project) => project.title.en === 'Solutions Architect');
+  const douglasCase = buildDouglasWorkCase(projects, locale);
   const outcomes = [
-    technicalLead?.highlights[locale][1],
-    technicalLead?.highlights[locale][0],
-    solutionsArchitect?.highlights[locale][0],
-    solutionsArchitect?.highlights[locale][3],
-  ].filter((outcome): outcome is string => Boolean(outcome));
+    douglasCase.teamContribution[0],
+    douglasCase.teamContribution[1],
+    douglasCase.personalOwnership[0],
+    douglasCase.personalOwnership[2],
+  ];
 
   return (
     <section aria-labelledby="home-proof-heading" className="border-b border-[var(--site-rule)] bg-[var(--site-panel)]">
@@ -123,7 +121,7 @@ const EvidenceStrip = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl'
         {[
           { value: '20+', label: msg(intl, 'home.proof.years') },
           { value: String(projects.length), label: msg(intl, 'home.proof.engagements') },
-          { value: roles, label: msg(intl, 'home.proof.roles') },
+          { value: douglasCase.role, label: msg(intl, 'home.proof.roles') },
           { value: msg(intl, 'home.proof.enterprise.value'), label: msg(intl, 'home.proof.enterprise') },
         ].map((proof) => (
           <div key={proof.label} className="border-b border-r border-[var(--site-rule)] px-5 py-6 md:border-b-0 md:px-8">
@@ -135,7 +133,9 @@ const EvidenceStrip = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl'
       <SiteContainer className="py-8 md:py-10">
         <div className="grid gap-5 lg:grid-cols-[15rem_1fr]">
           <div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink)]">Douglas</p>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em]">
+              <Link href="/work#douglas" className="text-[var(--site-ink)] no-underline hover:text-[var(--site-rust)]">Douglas</Link>
+            </p>
             <h2 id="home-proof-heading" className="mt-4 text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{msg(intl, 'home.proof.heading')}</h2>
           </div>
           <ul className="grid gap-x-8 gap-y-3 md:grid-cols-2">
@@ -262,7 +262,12 @@ const Topics = ({ intl }: { intl: IntlShape }) => (
 );
 
 const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
-  const engagementProjects = recentProjects(projects);
+  const douglasCase = buildDouglasWorkCase(projects, locale);
+  const newestDouglasProjectId = douglasCase.sourceProjectIds.at(-1);
+  const engagementProjects = recentProjects(projects)
+    .filter((project) => !isDouglasProject(project) || project.id === newestDouglasProjectId)
+    .slice(0, 8);
+
   return (
     <SiteSection>
       <SiteContainer>
@@ -274,14 +279,21 @@ const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl'
             <span>{msg(intl, 'home.engagements.context')}</span>
             <span>{msg(intl, 'home.engagements.role')}</span>
           </div>
-          {engagementProjects.map((project) => (
-            <Link key={project.id} href="/work" className="grid gap-1 border-t border-[var(--site-rule)] px-5 py-4 no-underline transition hover:bg-[var(--site-panel-alt)] md:grid-cols-[8rem_13rem_1fr_12rem] md:items-center md:gap-0">
-              <span className="font-mono text-xs tracking-[0.04em] text-[var(--site-ink-mute)]">{formatYearRange(project)}</span>
-              <span className="font-mono text-sm font-semibold text-[var(--site-ink)]">{projectName(project, locale)}</span>
-              <span className="pr-6 text-sm leading-6 text-[var(--site-ink-sec)]">{projectSignal(project, locale)}</span>
-              <span className="font-mono text-xs text-[var(--site-rust)]">{project.title[locale]}</span>
-            </Link>
-          ))}
+          {engagementProjects.map((project) => {
+            const isDouglas = isDouglasProject(project);
+            return (
+              <Link key={project.id} href={isDouglas ? '/work#douglas' : '/work'} className="grid gap-1 border-t border-[var(--site-rule)] px-5 py-4 no-underline transition hover:bg-[var(--site-panel-alt)] md:grid-cols-[8rem_13rem_1fr_12rem] md:items-center md:gap-0">
+                <span className="font-mono text-xs tracking-[0.04em] text-[var(--site-ink-mute)]">
+                  {isDouglas ? formatDateRange(douglasCase.startDate, douglasCase.endDate) : formatYearRange(project)}
+                </span>
+                <span className="font-mono text-sm font-semibold text-[var(--site-ink)]">{projectName(project, locale)}</span>
+                <span className="pr-6 text-sm leading-6 text-[var(--site-ink-sec)]">
+                  {isDouglas ? douglasCase.teamContribution[1] : projectSignal(project, locale)}
+                </span>
+                <span className="font-mono text-xs text-[var(--site-rust)]">{isDouglas ? douglasCase.role : project.title[locale]}</span>
+              </Link>
+            );
+          })}
         </div>
       </SiteContainer>
     </SiteSection>

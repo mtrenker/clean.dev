@@ -92,7 +92,7 @@ test.describe('public site mobile friendliness', () => {
 
     const main = page.getByRole('main');
     await expect(main.getByText('20', { exact: true }).first()).toBeVisible();
-    await expect(main.getByText(/technical lead \/ solutions architect/i).first()).toBeVisible();
+    await expect(main.getByText(/react expert → technical lead → solutions architect/i).first()).toBeVisible();
     await expect(main.getByText(/1,800 stores across 26 european countries/i).first()).toBeVisible();
     await expect(page.getByRole('banner').getByRole('link', { name: /articles/i })).toHaveCount(0);
     await expect(main.getByRole('link', { name: /read articles/i })).toHaveCount(0);
@@ -137,6 +137,45 @@ test.describe('public site semantic UX', () => {
     await page.goto('/blog');
 
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+
+  test('Douglas is one targetable progression case in English and German', async ({ page }) => {
+    await page.goto('/');
+    const douglasLink = page.getByRole('link', { name: 'Douglas', exact: true }).first();
+    await expect(douglasLink).toHaveAttribute('href', '/work#douglas');
+    await douglasLink.click();
+    await expect(page).toHaveURL(/\/work#douglas$/);
+
+    const workCase = page.locator('#douglas');
+    await expect(workCase).toHaveCount(1);
+    const [caseBox, headerBox] = await Promise.all([workCase.boundingBox(), page.getByRole('banner').boundingBox()]);
+    expect(caseBox).not.toBeNull();
+    expect(headerBox).not.toBeNull();
+    expect(caseBox!.y).toBeGreaterThanOrEqual(headerBox!.y + headerBox!.height);
+    await expect(workCase.getByRole('heading', { level: 3, name: 'Douglas GmbH' })).toBeVisible();
+    await expect(workCase.getByText('React Expert → Technical Lead → Solutions Architect', { exact: true })).toBeVisible();
+    await expect(workCase.getByRole('heading', { name: 'Role progression' })).toBeVisible();
+    await expect(workCase.getByRole('heading', { name: 'Personal ownership' })).toBeVisible();
+    await expect(workCase.getByRole('heading', { name: 'Team delivery and contribution' })).toBeVisible();
+    await expect(workCase.getByText(/1,800 stores across 26 european countries/i).first()).toBeVisible();
+    await expect(workCase.getByText(/personally designed and shipped the unified api/i)).toBeVisible();
+    await expect(workCase.getByText(/governed access to jira, confluence, azure devops/i)).toBeVisible();
+    await expect(workCase.getByText(/picked up c#\/\.net/i)).toHaveCount(0);
+
+    const caseAxeResults = await new AxeBuilder({ page })
+      .include('#douglas')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(caseAxeResults.violations).toEqual([]);
+
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
+    await page.reload();
+
+    await expect(workCase.getByText('React-Experte → Technical Lead → Solutions Architect', { exact: true })).toBeVisible();
+    await expect(workCase.getByRole('heading', { name: 'Rollenentwicklung' })).toBeVisible();
+    await expect(workCase.getByRole('heading', { name: 'Persönliche Verantwortung' })).toBeVisible();
+    await expect(workCase.getByText(/einheitliche API persönlich konzipiert und umgesetzt/i)).toBeVisible();
+    await expect(workCase.getByText(/C#\/\.NET im laufenden Projekt gelernt/i)).toHaveCount(0);
   });
 
   test('German positioning preserves the approved commercial facts', async ({ page }) => {
