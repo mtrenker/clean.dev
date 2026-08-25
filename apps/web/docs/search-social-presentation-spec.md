@@ -463,12 +463,12 @@ element and carries #91's "strongest verified proof".
 
 | Property | Value |
 | --- | --- |
-| Band | `y 440` to `y 630`, height 190, background `#1c1a16` |
+| Band | `y 440` to `y 630`, height 190, background `#1c1a16`, horizontal padding 56 px |
 | Top border | 1 px `#2c2924`, full width |
-| Cells | three, 400 px each, separated by 1 px `#2c2924` vertical rules at `x = 400` and `x = 800` |
-| Cell padding | left 56, top 30, bottom 32 (30 + 52 value + 12 gap + 64 label + 32 = 190) |
+| Cells | three, 362 px each, separated by 1 px `#2c2924` vertical rules naturally landing at `x = 418` and `x = 780` |
+| Cell padding | vertical only: top 30, bottom 32 (30 + 52 value + 12 gap + 64 label + 32 = 190) |
 | Value type | Source Sans 3 600, 52 / 52, tracking −1.56 px (−0.03em), `#ede7d4` |
-| Label type | IBM Plex Mono 600, 24 / 32, uppercase, tracking 3.84 px (0.16em), `#c4bda9`, `maxWidth: 344px` |
+| Label type | IBM Plex Mono 600, 24 / 32, uppercase, tracking 3.84 px (0.16em), `#c4bda9`, `maxWidth: 360px` |
 | Value-to-label gap | 12 px |
 
 | Cell | Value | Label | Expected wrap |
@@ -482,8 +482,9 @@ Sources, all three cells lifted from the homepage proof strip in
 `home.proof.years`; `20` is `projects.length`, labelled by `home.proof.engagements`;
 `~1,800 / 26` is `home.proof.enterprise.value`, labelled by `home.proof.enterprise`, and traces to
 project `19` in `projects.ts`. The homepage's third proof cell (the role progression) is omitted here
-because block 4 already states the role; three cells of 400 px keep the labels above the legibility
-floor where four cells of 300 px would not.
+because block 4 already states the role. The 56 px band safe area and three 362 px cells preserve the
+approved wraps while keeping every label clear of the canvas edge. Martin explicitly declined the
+optional brand-line polish from the post-merge review, so it is not part of this correction.
 
 ### 7.7 Decorative grammar and what is forbidden
 
@@ -796,12 +797,11 @@ today, so adding a profile updates the graph automatically.
 | `url` | `https://clean.dev/` | — |
 | `description` | `Technical Lead and Solutions Architect for teams in Munich and remote DACH: architecture modernisation, delivery reliability, and governed AI workflows.` | Composed from `work.hero.lead` and `work.hero.projectTypes`; 152 chars |
 | `founder` | `{ "@id": "https://clean.dev/#martin-trenker" }` | — |
-| `provider` | `{ "@id": "https://clean.dev/#martin-trenker" }` | The service is delivered personally; this is the honest relationship for a one-person practice |
 | `email` | `mailto:info@clean.dev` | `/imprint` |
 | `vatID` | `DE262621028` | `/imprint`, § 27a UStG disclosure |
 | `address` | `{ "@type": "PostalAddress", "addressLocality": "München", "addressCountry": "DE" }` | `/imprint`, **locality and country only** |
 | `areaServed` | `[{ "@type": "Country", "name": "Germany" }, { "@type": "Country", "name": "Austria" }, { "@type": "Country", "name": "Switzerland" }]` | "remote DACH" in `availability.ts`; DACH is exactly D/A/CH |
-| `availableLanguage` | `["de", "en"]` | `availability.ts` |
+| `knowsLanguage` | `["de", "en"]` | `availability.ts` |
 | `makesOffer` | three `Offer` nodes, see below | `home.formats.*` |
 
 `makesOffer` (no prices, no durations, no availability dates):
@@ -810,18 +810,27 @@ today, so adding a profile updates the graph automatically.
 [
   { "@type": "Offer", "itemOffered": { "@type": "Service",
       "name": "Embedded Technical Lead or Solutions Architect",
-      "serviceType": "Embedded technical leadership" } },
+      "serviceType": "Embedded technical leadership",
+      "provider": { "@id": "https://clean.dev/#martin-trenker" },
+      "availableLanguage": ["de", "en"] } },
   { "@type": "Offer", "itemOffered": { "@type": "Service",
       "name": "Architecture and Delivery Assessment",
-      "serviceType": "Architecture and delivery assessment" } },
+      "serviceType": "Architecture and delivery assessment",
+      "provider": { "@id": "https://clean.dev/#martin-trenker" },
+      "availableLanguage": ["de", "en"] } },
   { "@type": "Offer", "itemOffered": { "@type": "Service",
       "name": "AI-enabled Engineering Advisory",
-      "serviceType": "AI-enabled engineering advisory" } }
+      "serviceType": "AI-enabled engineering advisory",
+      "provider": { "@id": "https://clean.dev/#martin-trenker" },
+      "availableLanguage": ["de", "en"] } }
 ]
 ```
 
 The three `name` values are `home.formats.embedded.title`, `home.formats.assessment.title`, and
 `home.formats.advisory.title` verbatim, so the graph and the rendered homepage cannot drift apart.
+`provider` and `availableLanguage` belong on each offered `Service` in the schema.org domain model;
+they are not emitted on `ProfessionalService`. The organisation-level language fact uses
+`knowsLanguage` instead.
 
 **The full street address is deliberately omitted.** Martin decided this in the #105 session
 (section 16): the imprint carries the legally required version in HTML, and structured data would
@@ -989,15 +998,15 @@ would appear on the live site and reintroduce exactly the trust leak #89 removed
 `src/styles/**`, `proxy.ts`, `auth.ts`, `src/lib/locale.ts`, `content/posts/**`,
 `DESIGN_SYSTEM.md`, `apps/web/docs/homepage-positioning-spec.md`.
 
-Message catalogs: `src/messages/en.json` and `de.json` are **not** edited by #91. Every new string in
-section 5 lives in `site-metadata.ts`; the two routes that already own catalog keys keep them. This
-keeps #91 out of the file most likely to conflict with #84 and with any other open branch.
+Message catalogs were originally outside #91. Martin granted a narrow post-merge scope waiver for
+`home.profileCard.meta1` only: English is exactly `technical lead and solutions architect`; German is
+exactly `Technical Lead und Solutions Architect`. No other catalog key or rendered page copy changes.
 
 ### 12.4 Rendered page content
 
-#91 changes no visible page content. If any acceptance check in section 13 appears to require a copy
-change inside a page body, the check has been misread: stop and escalate rather than editing a
-component.
+The original #91 implementation changed no visible page content. The approved post-merge correction
+changes only `home.profileCard.meta1` to align the profile card with the canonical positioning. Any
+other body-copy change still requires escalation.
 
 ---
 
@@ -1092,7 +1101,7 @@ A cold agent can treat this as the definition of done.
 | File | Assertions |
 | --- | --- |
 | `src/lib/site-metadata.test.ts` | Iterate `ROUTES` × `['en','de']`: exact `title`, `description`, `openGraph.title`, `alternates.canonical`, `openGraph.url === alternates.canonical`, `openGraph.type`, `twitter.card === 'summary_large_image'`, `alternates?.languages === undefined`. Assert the six literal canonicals. Assert no description contains a digit followed by `days` or a month name, enforcing the availability rule of section 5.3 |
-| `src/lib/structured-data.test.ts` | `getSiteStructuredData()` has `@graph.length === 2`; the `@id` constants; `jobTitle`; `sameAs` deep-equals `SOCIAL_PROFILES.map(p => p.href)`; `address` has exactly the keys `@type`, `addressLocality`, `addressCountry`; `makesOffer.length === 3` with the three exact `name` values; no `priceRange`, `streetAddress`, `telephone`, or `postalCode` key anywhere in the serialized JSON. `getArticleStructuredData(fixture)` has `author`/`publisher` objects whose only key is `@id`, and the serialized string contains neither `"sameAs"` nor `"jobTitle"`. A `headline` longer than 110 chars is truncated at a word boundary |
+| `src/lib/structured-data.test.ts` | `getSiteStructuredData()` has `@graph.length === 2`; the `@id` constants; `jobTitle`; `sameAs` deep-equals `SOCIAL_PROFILES.map(p => p.href)`; `address` has exactly the keys `@type`, `addressLocality`, `addressCountry`; `ProfessionalService` has `knowsLanguage` and no `provider` or `availableLanguage`; each offered `Service` has the Person `provider` reference and `availableLanguage`; `makesOffer.length === 3` with the three exact `name` values; no `priceRange`, `streetAddress`, `telephone`, or `postalCode` key anywhere in the serialized JSON. `getArticleStructuredData(fixture)` has `author`/`publisher` objects whose only key is `@id`, and the serialized string contains neither `"sameAs"` nor `"jobTitle"`. A `headline` longer than 110 chars is truncated at a word boundary |
 | `src/app/robots.test.ts` | The returned object produces the exact rule set of section 9.1; `sitemap` is `https://clean.dev/sitemap.xml`; `/blog`, `/reviews`, `/docs-editor`, `/workflow-simulator` are **not** disallowed |
 | `src/app/sitemap.test.ts` | With `@/lib/blog` mocked to return `[]`: exactly five entries in the documented order, none with `changeFrequency`, `priority`, or `lastModified`. With one mocked post: seven entries, `/blog` present, the post entry carries `lastModified` from `updated ?? date` |
 | extend `src/app/legal-pages.integration.test.tsx` | Unchanged assertions must still pass after imprint and privacy route through `buildRouteMetadata` |
@@ -1109,7 +1118,7 @@ manual review instead.
 | Test | Assertion |
 | --- | --- |
 | `robots.txt is a valid production response` | 200, `text/plain`, body contains `Sitemap: https://clean.dev/sitemap.xml`, contains `Disallow: /api/`, does not contain `Disallow: /blog` |
-| `sitemap.xml lists exactly the public routes` | 200, XML content type, the `<loc>` set equals the five URLs, no `<changefreq>`, no `<priority>` |
+| `sitemap.xml lists exactly the public routes` | 200, XML content type, the `<loc>` sequence derives from `getAllPosts()`: five static URLs while empty, then `/blog` and one URL per post; no `<changefreq>` or `<priority>`; `<lastmod>` count equals post count |
 | `public routes carry correct canonical and Open Graph URLs` | For each of the six routes: one canonical, `og:url` equal to it, `og:image` absolute, `twitter:card` = `summary_large_image`, zero `link[rel=alternate][hreflang]` |
 | `German pages carry the approved German metadata` | With `NEXT_LOCALE=de`: the exact German titles and descriptions of section 5 on `/`, `/work`, `/contact`, `/blog` |
 | `crawlers without a locale cookie receive English` | `Accept-Language: de-DE`, no cookie, on `/`: English title |
@@ -1220,6 +1229,12 @@ Three forks were put to Martin in the #105 session on 25 August 2026 and decided
 | 1 | How much of the imprint address the `ProfessionalService` graph publishes | **City and country only**, with `areaServed` covering DE/AT/CH. The street address stays in the HTML imprint and out of structured data | Section 10.5 |
 | 2 | Whether the shared social image includes Martin's portrait | **Typographic only.** A portrait would push the proof-strip labels below legibility at LinkedIn's render width | Section 7 |
 | 3 | Homepage `<title>` length | **Full, 80 characters**, carrying name, both roles, Munich, and remote DACH, accepting SERP truncation of the location tail | Section 5.1 |
+
+After PR #107 merged, an independent Opus review identified three corrections. Martin approved all
+three: the proof band uses the safe-area geometry in section 7.6 without the optional brand-line
+polish; `home.profileCard.meta1` uses the exact EN/DE role copy recorded in section 12.3; and the
+schema.org property placement follows section 10.5. This approval is the scope waiver for the image,
+message-catalog, rendered-copy, and specification edits in the correction commit.
 
 Everything else in this document is a design decision taken under the authority of #105. The
 remaining points most worth an explicit yes or no before implementation starts:

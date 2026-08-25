@@ -28,13 +28,21 @@ describe('structured data', () => {
     expect(person.jobTitle).toBe('Technical Lead and Solutions Architect');
     expect(person.sameAs).toEqual(SOCIAL_PROFILES.map((profile) => profile.href));
     expect(service['@id']).toBe(ORGANIZATION_ID);
+    expect(service.knowsLanguage).toEqual(['de', 'en']);
+    expect(service).not.toHaveProperty('provider');
+    expect(service).not.toHaveProperty('availableLanguage');
     expect(Object.keys(address)).toEqual(['@type', 'addressLocality', 'addressCountry']);
     expect(offers).toHaveLength(3);
-    expect(offers.map((offer) => (offer.itemOffered as Record<string, unknown>).name)).toEqual([
+    const offeredServices = offers.map((offer) => offer.itemOffered as Record<string, unknown>);
+    expect(offeredServices.map((offeredService) => offeredService.name)).toEqual([
       'Embedded Technical Lead or Solutions Architect',
       'Architecture and Delivery Assessment',
       'AI-enabled Engineering Advisory',
     ]);
+    for (const offeredService of offeredServices) {
+      expect(offeredService.provider).toEqual({ '@id': PERSON_ID });
+      expect(offeredService.availableLanguage).toEqual(['de', 'en']);
+    }
 
     const serialized = JSON.stringify(structuredData);
     for (const forbidden of ['priceRange', 'streetAddress', 'telephone', 'postalCode']) {

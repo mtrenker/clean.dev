@@ -147,6 +147,8 @@ const OpenGraphImage = () => new ImageResponse(
           top: 440,
           width: 1200,
           height: 190,
+          boxSizing: 'border-box',
+          padding: '0 56px',
           background: '#1c1a16',
           borderTop: '1px solid #2c2924',
         }}
@@ -161,9 +163,10 @@ const OpenGraphImage = () => new ImageResponse(
             style={{
               display: 'flex',
               flexDirection: 'column',
-              width: 400,
+              width: 362,
               height: 190,
-              padding: '30px 0 32px 56px',
+              boxSizing: 'border-box',
+              padding: '30px 0 32px',
               ...(index === 0 ? {} : { borderLeft: '1px solid #2c2924' }),
             }}
           >
@@ -185,7 +188,7 @@ const OpenGraphImage = () => new ImageResponse(
                 display: 'flex',
                 flexDirection: 'column',
                 marginTop: 12,
-                maxWidth: 344,
+                maxWidth: 360,
                 color: '#c4bda9',
                 fontFamily: mono,
                 fontSize: 24,
