@@ -10,7 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { sendContactEmail, type ContactFormState } from './actions';
 
 const initialState: ContactFormState = {};
-const fieldClass = 'border-[var(--site-rule)] bg-[var(--site-bg)] text-[var(--site-ink)] focus:border-[var(--site-rust)] focus:ring-[var(--site-rust)]';
+const fieldClass = 'border-[var(--site-rule)] bg-[var(--site-bg)] text-[var(--site-ink)] focus:border-[var(--site-rust)] focus:ring-[var(--site-rust)] disabled:bg-[var(--site-panel-alt)]';
+const labelClass = 'text-[var(--site-ink)]';
 
 export const ContactForm: React.FC = () => {
   const intl = useIntl();
@@ -44,12 +45,14 @@ export const ContactForm: React.FC = () => {
           htmlFor="name"
           required
           error={state.fieldErrors?.name}
+          labelClassName={labelClass}
         >
           <Input
             id="name"
             name="name"
             type="text"
             autoComplete="name"
+            required
             hasError={!!state.fieldErrors?.name}
             disabled={isPending}
             className={fieldClass}
@@ -61,12 +64,14 @@ export const ContactForm: React.FC = () => {
           htmlFor="email"
           required
           error={state.fieldErrors?.email}
+          labelClassName={labelClass}
         >
           <Input
             id="email"
             name="email"
             type="email"
             autoComplete="email"
+            required
             hasError={!!state.fieldErrors?.email}
             disabled={isPending}
             className={fieldClass}
@@ -78,11 +83,13 @@ export const ContactForm: React.FC = () => {
           htmlFor="message"
           required
           error={state.fieldErrors?.message}
+          labelClassName={labelClass}
         >
           <Textarea
             id="message"
             name="message"
             rows={7}
+            required
             hasError={!!state.fieldErrors?.message}
             disabled={isPending}
             className={fieldClass}
@@ -97,7 +104,7 @@ export const ContactForm: React.FC = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center justify-center rounded-[3px] bg-[var(--site-rust)] px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[var(--site-panel-deep)] transition hover:bg-[var(--site-ink)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-[3px] bg-[var(--site-rust)] px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[var(--site-bg)] transition hover:bg-[var(--site-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-rust)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-bg)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? intl.formatMessage({ id: 'contact.form.submitting' }) : intl.formatMessage({ id: 'contact.form.submit' })}
           </button>

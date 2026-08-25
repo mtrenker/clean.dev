@@ -3,9 +3,12 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 type Hsl = { h: number; s: number; l: number };
+type Rgb = [number, number, number];
 
 const TOKENS_PATH = path.resolve(__dirname, '../styles/tokens.css');
+const GLOBALS_PATH = path.resolve(__dirname, '../app/globals.css');
 const tokensCss = fs.readFileSync(TOKENS_PATH, 'utf8');
+const globalsCss = fs.readFileSync(GLOBALS_PATH, 'utf8');
 
 const extractBlock = (selector: string) => {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -30,7 +33,7 @@ const extractHslTokens = (block: string) => {
   return tokens;
 };
 
-const hslToRgb = ({ h, s, l }: Hsl) => {
+const hslToRgb = ({ h, s, l }: Hsl): Rgb => {
   const saturation = s / 100;
   const lightness = l / 100;
   const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
@@ -46,11 +49,17 @@ const hslToRgb = ({ h, s, l }: Hsl) => {
     : hue >= 4 && hue < 5 ? [x, 0, chroma]
     : [chroma, 0, x];
 
-  return [r1 + m, g1 + m, b1 + m].map((channel) => Math.round(channel * 255));
+  return [r1 + m, g1 + m, b1 + m].map((channel) => Math.round(channel * 255)) as Rgb;
 };
 
-const relativeLuminance = (hsl: Hsl) => {
-  const [r, g, b] = hslToRgb(hsl).map((channel) => {
+const hexToRgb = (hex: string): Rgb => {
+  const channels = hex.match(/[a-f\d]{2}/gi);
+  if (!channels || channels.length !== 3) throw new Error(`Invalid hex colour: ${hex}`);
+  return channels.map((channel) => Number.parseInt(channel, 16)) as Rgb;
+};
+
+const relativeLuminance = (rgb: Rgb) => {
+  const [r, g, b] = rgb.map((channel) => {
     const normalized = channel / 255;
     return normalized <= 0.03928
       ? normalized / 12.92
@@ -60,7 +69,7 @@ const relativeLuminance = (hsl: Hsl) => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-const contrastRatio = (foreground: Hsl, background: Hsl) => {
+const contrastRatio = (foreground: Rgb, background: Rgb) => {
   const l1 = relativeLuminance(foreground);
   const l2 = relativeLuminance(background);
   const lighter = Math.max(l1, l2);
@@ -74,8 +83,30 @@ const getToken = (tokens: Map<string, Hsl>, name: string) => {
   return token;
 };
 
+const extractSiteHexTokens = (selector: string) => {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = globalsCss.match(new RegExp(`${escaped}\\s*\\{([\\s\\S]*?)\\n\\s*\\}`));
+  if (!match) throw new Error(`Could not find public-site CSS token block: ${selector}`);
+
+  return new Map(
+    [...match[1].matchAll(/--(site-[a-z-]+):\s*(#[a-f\d]{6})\s*;/gi)]
+      .map((tokenMatch) => [tokenMatch[1], tokenMatch[2]] as const)
+  );
+};
+
+const getSiteToken = (tokens: Map<string, string>, name: string) => {
+  const token = tokens.get(name);
+  if (!token) throw new Error(`Missing public-site CSS token: --${name}`);
+  return token;
+};
+
 const rootTokens = extractHslTokens(extractBlock(':root'));
 const darkTokens = new Map([...rootTokens, ...extractHslTokens(extractBlock('.dark'))]);
+const darkSiteTokens = extractSiteHexTokens(':root');
+const lightSiteTokens = new Map([
+  ...darkSiteTokens,
+  ...extractSiteHexTokens(":root[data-site-theme='light']"),
+]);
 
 const contrastPairs = [
   ['foreground', 'background', 4.5],
@@ -90,12 +121,24 @@ const contrastPairs = [
 
 describe('design token accessibility', () => {
   it.each(contrastPairs)('keeps :root --%s readable on --%s', (foreground, background, minimum) => {
-    const ratio = contrastRatio(getToken(rootTokens, foreground), getToken(rootTokens, background));
+    const ratio = contrastRatio(hslToRgb(getToken(rootTokens, foreground)), hslToRgb(getToken(rootTokens, background)));
     expect(ratio, `--${foreground} on --${background} contrast`).toBeGreaterThanOrEqual(minimum);
   });
 
   it.each(contrastPairs)('keeps .dark --%s readable on --%s', (foreground, background, minimum) => {
-    const ratio = contrastRatio(getToken(darkTokens, foreground), getToken(darkTokens, background));
+    const ratio = contrastRatio(hslToRgb(getToken(darkTokens, foreground)), hslToRgb(getToken(darkTokens, background)));
     expect(ratio, `.dark --${foreground} on --${background} contrast`).toBeGreaterThanOrEqual(minimum);
+  });
+
+  it.each([
+    ['dark', darkSiteTokens],
+    ['light', lightSiteTokens],
+  ] as const)('keeps %s public primary actions at WCAG AA contrast', (theme, tokens) => {
+    const ratio = contrastRatio(
+      hexToRgb(getSiteToken(tokens, 'site-bg')),
+      hexToRgb(getSiteToken(tokens, 'site-rust'))
+    );
+
+    expect(ratio, `${theme} --site-bg on --site-rust contrast`).toBeGreaterThanOrEqual(4.5);
   });
 });

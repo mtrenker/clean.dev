@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean;
@@ -13,7 +14,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         type={type}
-        className={clsx(
+        className={twMerge(clsx(
           isBooleanInput
             ? 'rounded-sm border font-sans transition-colors'
             : 'w-full rounded-sm border px-4 py-2 font-sans transition-colors',
@@ -21,9 +22,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           'placeholder:text-muted-foreground',
           'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          hasError && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
-          className
-        )}
+          className,
+          hasError && 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+        ))}
         {...props}
       />
     );

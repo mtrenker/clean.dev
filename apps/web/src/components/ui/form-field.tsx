@@ -8,6 +8,7 @@ interface FormFieldProps {
   error?: string;
   children: React.ReactNode;
   className?: string;
+  labelClassName?: string;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
@@ -17,6 +18,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   error,
   children,
   className,
+  labelClassName,
 }) => {
   const errorId = error ? `${htmlFor}-error` : undefined;
 
@@ -35,7 +37,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 
   return (
     <div className={className}>
-      <Label htmlFor={htmlFor} required={required}>
+      <Label className={labelClassName} htmlFor={htmlFor} required={required}>
         {label}
       </Label>
       <div className="mt-1">{childWithAria}</div>

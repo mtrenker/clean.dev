@@ -1,6 +1,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 interface LinkProps {
   children: React.ReactNode;
@@ -35,11 +36,11 @@ export const Link: React.FC<LinkProps> = ({
 
   return (
     <NextLink
-      className={clsx(
+      className={twMerge(clsx(
         'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         !isButtonLike && variantClasses[variant],
         className
-      )}
+      ))}
       href={href}
       style={style}
       aria-label={ariaLabel}
