@@ -46,6 +46,33 @@ test.describe('public site accessibility', () => {
   }
 });
 
+test.describe('public site branding', () => {
+  test('serves clean.dev favicon metadata and assets', async ({ page }) => {
+    await page.goto('/');
+
+    const iconLinks = await page.locator('link[rel="icon"]').evaluateAll((links) => (
+      links.map((link) => new URL((link as HTMLLinkElement).href).pathname)
+    ));
+    const appleIconLinks = await page.locator('link[rel="apple-touch-icon"]').evaluateAll((links) => (
+      links.map((link) => new URL((link as HTMLLinkElement).href).pathname)
+    ));
+
+    expect(iconLinks).toContain('/favicon.ico');
+    expect(iconLinks).toContain('/icon.svg');
+    expect(appleIconLinks).toContain('/apple-icon.png');
+
+    for (const asset of [
+      { path: '/favicon.ico', contentType: /^image\/(?:x-icon|vnd\.microsoft\.icon)$/ },
+      { path: '/icon.svg', contentType: /^image\/svg\+xml/ },
+      { path: '/apple-icon.png', contentType: /^image\/png/ },
+    ]) {
+      const response = await page.request.get(asset.path);
+      expect(response.ok(), `${asset.path} should return a successful response`).toBe(true);
+      expect(response.headers()['content-type']).toMatch(asset.contentType);
+    }
+  });
+});
+
 test.describe('public site mobile friendliness', () => {
   for (const route of publicRoutes) {
     test(`${route} does not create horizontal scrolling`, async ({ page }) => {
