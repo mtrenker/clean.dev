@@ -8,8 +8,8 @@ const expected = {
     de: ['Martin Trenker · Technical Lead und Solutions Architect · München und remote im DACH-Raum', 'Technical Lead und Solutions Architect in München und remote im DACH-Raum. Ich modernisiere Architektur, verbessere Delivery und halte KI-Workflows überprüfbar.', 'Martin Trenker · Technical Lead und Solutions Architect'],
   },
   work: {
-    en: ['Selected work and project history | clean.dev', '20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across ~1,800 stores.', 'Selected work and project history'],
-    de: ['Ausgewählte Projekte und Projekthistorie | clean.dev', '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in ~1.800 Filialen.', 'Ausgewählte Projekte und Projekthistorie'],
+    en: ['Selected work and project history | clean.dev', '20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across 1,200+ stores.', 'Selected work and project history'],
+    de: ['Ausgewählte Projekte und Projekthistorie | clean.dev', '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in über 1.200 Filialen.', 'Ausgewählte Projekte und Projekthistorie'],
   },
   contact: {
     en: ['Project enquiry | clean.dev', 'Send Martin Trenker the context of your project, or book an introductory call. You get a direct answer about fit, in German or English, not a pitch.', 'Project enquiry'],

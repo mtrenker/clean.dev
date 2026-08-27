@@ -21,7 +21,7 @@ const germanMetadata = [
   {
     path: '/work',
     title: 'Ausgewählte Projekte und Projekthistorie | clean.dev',
-    description: '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in ~1.800 Filialen.',
+    description: '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in über 1.200 Filialen.',
   },
   {
     path: '/contact',

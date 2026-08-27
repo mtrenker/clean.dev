@@ -641,14 +641,14 @@ export const projects: Project[] = [
       de: 'Technischer Leiter',
     },
     description: {
-      en: 'Engaged as React expert to modernise the POS software used in ~1,800 Douglas stores across 26 European countries. Led the transition from a legacy Angular implementation to a maintainable React architecture and shipped the business-critical CRM integration in under a year.',
-      de: 'Als React-Experte engagiert, um die POS-Software in ~1.800 Douglas-Filialen in 26 europäischen Ländern zu modernisieren. Leitung der Ablösung einer Legacy-Angular-Implementierung durch eine wartbare React-Architektur – die geschäftskritische CRM-Integration ging in unter einem Jahr live.',
+      en: 'Engaged as React expert to modernise the POS software used in more than 1,200 Douglas stores across 14 European countries. Led the transition from a legacy Angular implementation to a maintainable React architecture and shipped the business-critical CRM integration in under a year.',
+      de: 'Als React-Experte engagiert, um die POS-Software in über 1.200 Douglas-Filialen in 14 europäischen Ländern zu modernisieren. Leitung der Ablösung einer Legacy-Angular-Implementierung durch eine wartbare React-Architektur – die geschäftskritische CRM-Integration ging in unter einem Jahr live.',
     },
     city: 'Düsseldorf',
     highlights: {
       en: [
         'rewrote the CRM/POS integration in under a year with clearer architecture, more test coverage, and updated documentation',
-        'software runs on every cash register in ~1,800 stores across 26 European countries',
+        'software runs on every cash register in more than 1,200 stores across 14 European countries',
         'moved from after-hours deployment windows toward safer deployments during business hours through better error handling, observability, and recovery paths',
         'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
         'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL, C#/.NET, and more',
@@ -656,7 +656,7 @@ export const projects: Project[] = [
       ],
       de: [
         'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, mehr Testabdeckung und aktualisierter Dokumentation',
-        'Software läuft auf jedem Kassenterminal in ~1.800 Filialen in 26 europäischen Ländern',
+        'Software läuft auf jedem Kassenterminal in über 1.200 Filialen in 14 europäischen Ländern',
         'von After-Hours-Deploymentfenstern zu sichereren Deployments im laufenden Betrieb durch bessere Fehlerbehandlung, Observability und klare Recovery-Pfade',
         '1 Senior und 2 Junior-Entwickler eingearbeitet, alle innerhalb weniger Wochen produktive Beitragende',
         '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL, C#/.NET und mehr',

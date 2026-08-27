@@ -21,7 +21,7 @@ const caseCopy: Record<Locale, {
     progression: [
       {
         role: 'React Expert',
-        body: 'Joined to modernise the POS software used in ~1,800 stores across 26 European countries.',
+        body: 'Joined to modernise the POS software used in more than 1,200 stores across 14 European countries.',
       },
       {
         role: 'Technical Lead',
@@ -39,7 +39,7 @@ const caseCopy: Record<Locale, {
     progression: [
       {
         role: 'React-Experte',
-        body: 'Einstieg zur Modernisierung der POS-Software, die in ~1.800 Filialen in 26 europäischen Ländern eingesetzt wird.',
+        body: 'Einstieg zur Modernisierung der POS-Software, die in über 1.200 Filialen in 14 europäischen Ländern eingesetzt wird.',
       },
       {
         role: 'Technical Lead',

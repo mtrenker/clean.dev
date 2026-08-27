@@ -59,12 +59,12 @@ export const ROUTES: Record<RouteKey, RouteDefinition> = {
     copy: {
       en: {
         title: 'Selected work and project history | clean.dev',
-        description: '20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across ~1,800 stores.',
+        description: '20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across 1,200+ stores.',
         ogTitle: 'Selected work and project history',
       },
       de: {
         title: 'Ausgewählte Projekte und Projekthistorie | clean.dev',
-        description: '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in ~1.800 Filialen.',
+        description: '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in über 1.200 Filialen.',
         ogTitle: 'Ausgewählte Projekte und Projekthistorie',
       },
     },

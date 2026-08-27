@@ -156,7 +156,7 @@ const OpenGraphImage = () => new ImageResponse(
         {[
           { value: '20+', label: ['YEARS IN SOFTWARE', 'DELIVERY'] },
           { value: '20', label: ['CLIENT ENGAGEMENTS'] },
-          { value: '~1,800 / 26', label: ['STORES / COUNTRIES'] },
+          { value: '1,200+ / 14', label: ['STORES / COUNTRIES'] },
         ].map((proof, index) => (
           <div
             key={proof.value}

@@ -65,7 +65,7 @@ middot separators (`·`), the non-breaking-free spacing, and the German umlauts.
 | Design tokens | `apps/web/src/app/globals.css` lines 13–44 | The complete `--site-*` dark and light palettes quoted in section 7 |
 | Fonts | `apps/web/src/app/layout.tsx` | Source Sans 3 (400/500/600), IBM Plex Mono (400/600), Newsreader (400/700/800), all via `next/font/google` |
 | Route protection | `apps/web/proxy.ts`, `apps/web/src/lib/authz.ts` | Next 16 `proxy.ts` guards `/admin`, `/clients`, `/time`, `/invoices`, `/settings`, `/bill`; pages additionally call `requireAdminSession` |
-| Verified facts | `apps/web/src/app/projects.ts`, `src/lib/availability.ts`, `src/app/work/douglas-case.ts`, `src/app/imprint/page.tsx` | 20 engagements, 16 unique companies, first project 2008, Douglas ~1,800 stores / 26 countries, September 2026 / 2–5 days per week / Munich and remote DACH / German and English, VAT `DE262621028`, `info@clean.dev` |
+| Verified facts | `apps/web/src/app/projects.ts`, `src/lib/availability.ts`, `src/app/work/douglas-case.ts`, `src/app/imprint/page.tsx` | 20 engagements, 16 unique companies, first project 2008, Douglas 1,200+ stores / 14 countries, September 2026 / 2–5 days per week / Munich and remote DACH / German and English, VAT `DE262621028`, `info@clean.dev` |
 | Rendered output | dev build, `http://localhost:3112`, EN and DE, dark and light | Section 3 |
 | Test baseline | `npx vitest run` in `apps/web`, 25 August 2026 | 25 files, 203 tests, 3 failing in 2 files (section 15) |
 
@@ -202,8 +202,8 @@ Copy sources: role from `work.subtitle` and `home.hero.lead` (#89); location and
 | --- | --- | --- | --- |
 | `title` | en | `Selected work and project history \| clean.dev` | 45 |
 | `title` | de | `Ausgewählte Projekte und Projekthistorie \| clean.dev` | 52 |
-| `description` | en | `20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across ~1,800 stores.` | 153 |
-| `description` | de | `20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in ~1.800 Filialen.` | 151 |
+| `description` | en | `20 client engagements, from React expert to Technical Lead and Solutions Architect, including the Douglas POS and CRM modernisation across 1,200+ stores.` | 153 |
+| `description` | de | `20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in über 1.200 Filialen.` | 155 |
 | `og:title` | en | `Selected work and project history` | 33 |
 | `og:title` | de | `Ausgewählte Projekte und Projekthistorie` | 40 |
 | `canonical` | both | `https://clean.dev/work` | — |
@@ -211,8 +211,8 @@ Copy sources: role from `work.subtitle` and `home.hero.lead` (#89); location and
 
 Copy sources: `20` is `projects.length` in `projects.ts`, verified as exactly 20 and already rendered
 by the proof strip as `home.proof.engagements`. The progression string is
-`douglas-case.ts` `caseCopy.<locale>.role` in prose form. `~1,800` and the POS/CRM framing come from
-`projects.ts` project `19`. German number formatting follows the site (`~1.800`, matching
+`douglas-case.ts` `caseCopy.<locale>.role` in prose form. `1,200+` and the POS/CRM framing come from
+`projects.ts` project `19`. German number formatting follows the site (`1.200+`, matching
 `home.proof.enterprise.value`).
 
 Do not compute `20` at runtime for the metadata string. The number is stable, the metadata is copy,
@@ -475,12 +475,12 @@ element and carries #91's "strongest verified proof".
 | --- | --- | --- | --- |
 | 1 | `20+` | `YEARS IN SOFTWARE DELIVERY` | two lines: `YEARS IN SOFTWARE` / `DELIVERY` |
 | 2 | `20` | `CLIENT ENGAGEMENTS` | one line |
-| 3 | `~1,800 / 26` | `STORES / COUNTRIES` | one line |
+| 3 | `1,200+ / 14` | `STORES / COUNTRIES` | one line |
 
 Sources, all three cells lifted from the homepage proof strip in
 `src/components/home/landing-page.tsx`: `20+` is the literal value there, labelled by
 `home.proof.years`; `20` is `projects.length`, labelled by `home.proof.engagements`;
-`~1,800 / 26` is `home.proof.enterprise.value`, labelled by `home.proof.enterprise`, and traces to
+`1,200+ / 14` is `home.proof.enterprise.value`, labelled by `home.proof.enterprise`, and traces to
 project `19` in `projects.ts`. The homepage's third proof cell (the role progression) is omitted here
 because block 4 already states the role. The 56 px band safe area and three 362 px cells preserve the
 approved wraps. Cell 1 remains flush to the inset; cells 2 and 3 use 32 px left padding, producing

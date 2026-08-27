@@ -193,7 +193,7 @@ test.describe('public site mobile friendliness', () => {
     const main = page.getByRole('main');
     await expect(main.getByText('20', { exact: true }).first()).toBeVisible();
     await expect(main.getByText(/react expert → technical lead → solutions architect/i).first()).toBeVisible();
-    await expect(main.getByText(/1,800 stores across 26 european countries/i).first()).toBeVisible();
+    await expect(main.getByText(/more than 1,200 stores across 14 european countries/i).first()).toBeVisible();
     await expect(page.getByRole('banner').getByRole('link', { name: /articles/i })).toHaveCount(0);
     await expect(main.getByRole('link', { name: /read articles/i })).toHaveCount(0);
   });
@@ -429,7 +429,7 @@ test.describe('public site semantic UX', () => {
     await expect(workCase.getByRole('heading', { name: 'Role progression' })).toBeVisible();
     await expect(workCase.getByRole('heading', { name: 'Personal ownership' })).toBeVisible();
     await expect(workCase.getByRole('heading', { name: 'Team delivery and contribution' })).toBeVisible();
-    await expect(workCase.getByText(/1,800 stores across 26 european countries/i).first()).toBeVisible();
+    await expect(workCase.getByText(/more than 1,200 stores across 14 european countries/i).first()).toBeVisible();
     await expect(workCase.getByText(/personally designed and shipped the unified api/i)).toBeVisible();
     await expect(workCase.getByText(/governed access to jira, confluence, azure devops/i)).toBeVisible();
     await expect(workCase.getByText(/picked up c#\/\.net/i)).toHaveCount(0);
