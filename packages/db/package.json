@@ -22,8 +22,8 @@
     "build": "tsc",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/migrate.ts"
+    "db:generate": "pass-cli run --env-file ../../apps/web/.env.pass -- dotenv -e ../../apps/web/.env -- drizzle-kit generate",
+    "db:migrate": "pass-cli run --env-file ../../apps/web/.env.pass -- dotenv -e ../../apps/web/.env -- tsx src/migrate.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",

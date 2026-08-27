@@ -1,7 +1,9 @@
 node_modules
-.env
 .turbo
 
+.env*
+!apps/web/.env
+!apps/web/.env.pass
 .envrc
 
 .pi/tasks
