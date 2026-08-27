@@ -16,16 +16,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Proton Pass secrets
 
-`apps/web/.env` contains non-secret defaults. `apps/web/.env.pass` contains secret references used by `pnpm dev`, `pnpm build`, and the database commands. Secret loading happens in the consuming workspace, so `pnpm dev` works from both the repository root and `apps/web`.
+`apps/web/.env` contains non-secret defaults. `apps/web/.env.pass` contains secret references used by `pnpm dev` and the database migration command. Secret loading happens in the consuming workspace, so `pnpm dev` works from both the repository root and `apps/web`.
 
-Creating the vault and logging `pass-cli` into an editor-scoped session are manual prerequisites. Then create and populate the item named by the committed references:
+Proton Pass setup requires `pass-cli` 2.3.3, a manually created vault, and an authenticated editor-scoped session. From the repository root, create and populate the item named by the committed references:
 
 ```bash
 pnpm pass:provision clean-dev-local web-development
 pnpm dev
 ```
 
-The provisioning command prompts without echo and sends the complete item to `pass-cli item create custom --from-template -` through stdin. Use a viewer-scoped session for normal development after provisioning.
+The provisioning command prompts without echo and sends the complete item to `pass-cli item create custom --from-template -` through stdin. Use a viewer-scoped session for normal development after provisioning. Contributors without vault access can run the public site with `pnpm --filter @cleandev/web dev:raw`; authenticated and database-backed features will not work.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

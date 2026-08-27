@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import { chmod, readFile, rename, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { dirname, resolve } from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
 const [vaultName, itemName] = process.argv.slice(2);
 
@@ -17,6 +19,9 @@ const runPass = (args, { input, sensitive = false } = {}) => {
     maxBuffer: 10 * 1024 * 1024,
   });
 
+  if (result.error?.code === "ENOENT") {
+    throw new Error("pass-cli not found; install pass-cli 2.3.3 before provisioning");
+  }
   if (result.error) throw result.error;
   if (result.status !== 0) {
     const detail = sensitive ? "output withheld because secret input was supplied" : result.stderr.trim();
@@ -71,17 +76,23 @@ const promptHidden = (label) => new Promise((resolve, reject) => {
 });
 
 const main = async () => {
-  const envPassPath = "apps/web/.env.pass";
+  const envPassDisplayPath = "apps/web/.env.pass";
+  const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  const envPassPath = resolve(repositoryRoot, envPassDisplayPath);
   const envPass = await readFile(envPassPath, "utf8");
   const fields = envPass
     .split(/\r?\n/)
     .map((line) => line.match(/^([A-Z][A-Z0-9_]*)=/)?.[1])
     .filter(Boolean);
 
-  if (fields.length === 0) throw new Error(`${envPassPath} contains no secret fields`);
+  if (fields.length === 0) throw new Error(`${envPassDisplayPath} contains no secret fields`);
+  const duplicateFields = [...new Set(fields.filter((field, index) => fields.indexOf(field) !== index))];
+  if (duplicateFields.length > 0) {
+    throw new Error(`${envPassDisplayPath} contains duplicate fields: ${duplicateFields.join(", ")}`);
+  }
 
   const listItems = () => parseRecords(runPass([
-    "item", "list", "--vault-name", vaultName, "--filter-type", "custom", "--output", "json",
+    "item", "list", "--vault-name", vaultName, "--output", "json",
   ]), "items");
   const titleOf = (item) => get(item, "title", "item_title", "itemTitle", "ItemTitle", "name", "Name");
   if (listItems().some((item) => titleOf(item) === itemName)) {
@@ -94,7 +105,14 @@ const main = async () => {
   }
 
   const values = [];
-  for (const field of fields) values.push([field, await promptHidden(field)]);
+  for (const field of fields) {
+    let value = "";
+    while (!value) {
+      value = await promptHidden(field);
+      if (!value) console.error(`${field} cannot be empty.`);
+    }
+    values.push([field, value]);
+  }
 
   const payload = {
     ...template,
@@ -118,7 +136,7 @@ const main = async () => {
   await rename(temporaryFile, envPassPath);
   await chmod(envPassPath, 0o644);
 
-  console.log(`Created ${vaultName}/${itemName} and updated ${envPassPath}.`);
+  console.log(`Created ${vaultName}/${itemName} and updated ${envPassDisplayPath}.`);
 };
 
 main().catch((error) => {

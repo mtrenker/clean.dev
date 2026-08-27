@@ -8,7 +8,6 @@
     "generate": "turbo run generate",
     "export": "turbo run export",
     "build": "turbo run build",
-    "build:open": "dotenv -- turbo build:open",
     "storybook": "turbo run storybook --filter=@cleandev/web",
     "build:storybook": "turbo run build-storybook --filter=@cleandev/web",
     "lint": "turbo run lint",

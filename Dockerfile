@@ -31,7 +31,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Reinstall to ensure workspace links are properly established (uses cache from deps stage)
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
-RUN pnpm --filter '@cleandev/web^...' build && pnpm --filter @cleandev/web build:raw
+RUN pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
