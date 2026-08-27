@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pass-cli run --env-file .env.pass -- next dev",
+    "dev:raw": "next dev",
+    "build": "pass-cli run --env-file .env.pass -- next build",
+    "build:raw": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run --config vitest.config.ts",

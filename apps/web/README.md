@@ -14,6 +14,19 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Proton Pass secrets
+
+`apps/web/.env` contains non-secret defaults. `apps/web/.env.pass` contains secret references used by `pnpm dev`, `pnpm build`, and the database commands. Secret loading happens in the consuming workspace, so `pnpm dev` works from both the repository root and `apps/web`.
+
+Creating the vault and logging `pass-cli` into an editor-scoped session are manual prerequisites. Then create and populate the item named by the committed references:
+
+```bash
+pnpm pass:provision clean-dev-local web-development
+pnpm dev
+```
+
+The provisioning command prompts without echo and sends the complete item to `pass-cli item create custom --from-template -` through stdin. Use a viewer-scoped session for normal development after provisioning.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.

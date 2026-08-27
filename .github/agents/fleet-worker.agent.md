@@ -54,9 +54,6 @@ existing patterns. Use absolute paths rooted at `$WORKTREE_DIR`:
 cat "$WORKTREE_DIR/apps/web/src/app/page.tsx"
 ```
 
-Follow the project conventions in `.github/copilot-instructions.md` — it's
-automatically loaded as workspace instructions.
-
 ### 3. Implement Changes
 
 Make all edits using **absolute paths within your worktree**. Never reference or
