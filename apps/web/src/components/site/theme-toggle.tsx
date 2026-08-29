@@ -73,8 +73,8 @@ export const ThemeToggle = () => {
       aria-label={`Theme: ${label}. Switch to ${nextPreference} mode`}
       title={`Theme: ${label}. Switch to ${nextPreference} mode`}
     >
-      <span aria-hidden="true" className="text-sm leading-none">{preference === 'system' ? '◐' : theme === 'dark' ? '☀' : '☾'}</span>
-      <span className="hidden sm:inline">{preference === 'system' ? 'system' : preference === 'dark' ? 'light' : 'dark'}</span>
+      <span aria-hidden="true" className="text-sm leading-none">{preference === 'system' ? '◐' : theme === 'dark' ? '☾' : '☀'}</span>
+      <span className="hidden sm:inline">{preference}</span>
     </button>
   );
 };
