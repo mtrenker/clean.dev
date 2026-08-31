@@ -247,7 +247,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
 
             <Card className="p-5">
               <div className="flex items-center gap-4 lg:block">
-                <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={280} height={220} className="h-24 w-24 rounded-[4px] border border-[var(--site-rule)] object-cover object-[50%_24%] grayscale-[10%] lg:h-48 lg:w-full" priority />
+                <Image src="/me.png" alt={msg(intl, 'work.img.alt')} width={641} height={641} className="h-24 w-24 rounded-[4px] border border-[var(--site-rule)] object-cover object-[50%_24%] grayscale-[10%] lg:h-64 lg:w-full" priority />
                 <div className="lg:mt-4">
                   <p className="text-2xl font-medium tracking-[-0.02em] text-[var(--site-ink)]">Martin Trenker</p>
                   <p className="mt-1 font-mono text-xs leading-6 text-[var(--site-rust)]">{msg(intl, 'work.subtitle')}</p>
