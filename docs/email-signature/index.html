@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Martin Trenker — email signatures</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f0e6;
+      --panel: #fbf8f0;
+      --ink: #1a1714;
+      --ink-secondary: #454039;
+      --muted: #75705f;
+      --rule: #d4cebe;
+      --rust: #a8472a;
+      --green: #3d7a4e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    button, textarea { font: inherit; }
+    a { color: var(--rust); }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0 80px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 18px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid #d6b8a3;
+      color: var(--rust);
+      font-family: Consolas, Menlo, monospace;
+      font-size: 20px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: .98; letter-spacing: -.045em; font-weight: 600; }
+    .lead { max-width: 700px; margin-bottom: 0; color: var(--ink-secondary); font-size: 18px; }
+    .eyebrow, .meta {
+      color: var(--rust);
+      font-family: Consolas, Menlo, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    section { padding-top: 48px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+    h2 { margin-bottom: 0; font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1.05; letter-spacing: -.035em; font-weight: 600; }
+    h3 { margin-bottom: 6px; font-size: 17px; }
+    .section-note { max-width: 680px; margin: -6px 0 24px; color: var(--ink-secondary); }
+
+    .ground-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .ground { min-height: 190px; padding: 18px; border: 1px solid var(--rule); overflow: auto; }
+    .ground-label { display: block; margin-bottom: 26px; color: #6f695c; font: 700 10px/1.3 Consolas, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .ground-white { background: #fff; }
+    .ground-paper { background: #f4f0e6; }
+    .ground-dark { background: #1b1b1b; border-color: #353535; }
+    .ground-dark .ground-label { color: #aaa; }
+    .ground-dark .signature-mount { filter: invert(1); }
+
+    .variant-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .variant-card { min-width: 0; border: 1px solid var(--rule); background: var(--panel); }
+    .variant-card:first-child { grid-column: 1 / -1; }
+    .variant-head { display: flex; align-items: start; justify-content: space-between; gap: 18px; padding: 18px; border-bottom: 1px solid var(--rule); }
+    .variant-head p { margin: 0; color: var(--ink-secondary); font-size: 13px; }
+    .signature-preview { min-height: 154px; overflow: auto; padding: 28px 20px; background: #fff; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+    button {
+      min-height: 40px;
+      border: 1px solid var(--ink);
+      border-radius: 2px;
+      padding: 9px 13px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: Consolas, Menlo, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    button:hover { border-color: var(--rust); color: var(--rust); }
+    button.primary { background: var(--rust); border-color: var(--rust); color: #fff; }
+    button.primary:hover { background: var(--ink); border-color: var(--ink); }
+    button:focus-visible, summary:focus-visible, textarea:focus-visible { outline: 3px solid #d6b8a3; outline-offset: 2px; }
+
+    details { border-top: 1px solid var(--rule); }
+    summary { padding: 13px 18px; cursor: pointer; color: var(--ink-secondary); font: 700 11px/1.4 Consolas, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; }
+    .source-wrap { padding: 0 18px 18px; }
+    textarea { width: 100%; min-height: 190px; resize: vertical; border: 1px solid var(--rule); border-radius: 2px; padding: 12px; background: #fff; color: var(--ink); font: 12px/1.5 Consolas, Menlo, monospace; }
+    .source-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; color: var(--muted); font: 11px/1.4 Consolas, Menlo, monospace; }
+
+    .mobile-row { display: grid; grid-template-columns: 320px minmax(0, 1fr); align-items: start; gap: 30px; }
+    .mobile-frame { width: 320px; max-width: 100%; overflow: auto; border: 1px solid var(--ink); background: #fff; }
+    .mobile-ruler { padding: 7px 10px; border-bottom: 1px solid var(--rule); color: var(--muted); font: 10px/1.3 Consolas, Menlo, monospace; letter-spacing: .1em; text-align: center; text-transform: uppercase; }
+    .mobile-mount { padding: 22px 12px; }
+    .pass { color: var(--green); }
+    .fail { color: #a12f22; }
+
+    .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+    .step { padding: 20px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .step p, .step li { color: var(--ink-secondary); font-size: 14px; }
+    .step p:last-child, .step ul:last-child { margin-bottom: 0; }
+
+    .plain-copy { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: start; }
+    .plain-copy textarea { min-height: 132px; }
+
+    .degradation { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .degradation th, .degradation td { padding: 13px 12px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+    .degradation th { color: var(--muted); font: 700 10px/1.4 Consolas, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+
+    .checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; padding: 0; list-style: none; }
+    .checklist label { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--ink-secondary); }
+    .checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--rust); }
+
+    .status { position: fixed; right: 18px; bottom: 18px; max-width: min(420px, calc(100% - 36px)); transform: translateY(120%); visibility: hidden; opacity: 0; pointer-events: none; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); padding: 12px 16px; transition: transform 160ms ease, opacity 160ms ease; font-size: 14px; }
+    .status.visible { transform: translateY(0); visibility: visible; opacity: 1; }
+    .copy-stage { position: fixed; left: -10000px; top: 0; }
+
+    @media (max-width: 780px) {
+      .ground-grid, .variant-grid, .steps, .checklist { grid-template-columns: 1fr; }
+      .variant-card:first-child { grid-column: auto; }
+      .mobile-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .shell { width: min(100% - 22px, 1120px); padding-top: 30px; }
+      header { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .ground { padding: 12px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { .status { transition: none; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand-mark" aria-hidden="true">/</div>
+      <div>
+        <p class="eyebrow">clean.dev / identity tool</p>
+        <h1>Martin's email signatures</h1>
+        <p class="lead">Paste-ready signatures for <strong>martin@pacabytes.io</strong>, carrying the clean.dev identity without making the different domains look accidental.</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="grounds-title">
+      <div class="section-head"><h2 id="grounds-title">The default signature</h2><span class="meta">fixed ink / zero images</span></div>
+      <p class="section-note">The dark panel simulates full client inversion. It is a warning, not a guarantee; verify a real sent message in your actual mail client and one mobile dark-mode client.</p>
+      <div class="ground-grid">
+        <div class="ground ground-white"><span class="ground-label">White</span><div class="signature-mount" data-mount="signature-default"></div></div>
+        <div class="ground ground-paper"><span class="ground-label">Warm paper</span><div class="signature-mount" data-mount="signature-default"></div></div>
+        <div class="ground ground-dark"><span class="ground-label">Dark-mode simulation</span><div class="signature-mount" data-mount="signature-default"></div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="variants-title">
+      <div class="section-head"><h2 id="variants-title">Choose a variant</h2><span class="meta">preview = clipboard source</span></div>
+      <p class="section-note">Use the default for daily mail. The other variants change only when the context needs more identity, less repetition, German copy, or legal details.</p>
+      <div id="variant-grid" class="variant-grid"></div>
+    </section>
+
+    <section aria-labelledby="mobile-title">
+      <div class="section-head"><h2 id="mobile-title">Mobile fit</h2><span class="meta">320 CSS px</span></div>
+      <div class="mobile-row">
+        <div class="mobile-frame">
+          <div class="mobile-ruler">320 px</div>
+          <div class="mobile-mount" data-mount="signature-default"></div>
+        </div>
+        <div>
+          <h3 id="overflow-result">Checking width…</h3>
+          <p>The table has no fixed outer width. The role line sets the natural measure; smaller clients may wrap at ordinary spaces without clipping the address.</p>
+          <p class="meta">Expected / no horizontal overflow</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="install-title">
+      <div class="section-head"><h2 id="install-title">Install it</h2><span class="meta">send a real test afterwards</span></div>
+      <div class="steps">
+        <article class="step"><h3>Proton Mail</h3><p>If Proton is your sending client: Settings → Identity and addresses → edit signature. Prefer the source/HTML view when available and paste the raw HTML. If your version has no source view, use <em>Copy rendered signature</em> and paste into the rich editor.</p></article>
+        <article class="step"><h3>Gmail web</h3><p>Settings → See all settings → General → Signature. Use <em>Copy rendered signature</em>, then paste. Gmail normalizes markup on save, so send a message and inspect that result.</p></article>
+        <article class="step"><h3>Outlook for Windows</h3><p>For classic Outlook, save a complete UTF-8 <code>.htm</code> file under <code>%APPDATA%\Microsoft\Signatures\</code>; editing there avoids Word mangling the table. New Outlook may require rendered paste instead.</p></article>
+        <article class="step"><h3>Outlook on the web</h3><p>Settings → Mail → Compose and reply. Use <em>Copy rendered signature</em> and paste into the signature editor.</p></article>
+        <article class="step"><h3>Apple Mail on macOS</h3><p>Mail → Settings → Signatures. Uncheck “Always match my default message font,” then paste rendered. If formatting is lost, use the known <code>*.mailsignature</code> edit-and-lock workaround.</p></article>
+        <article class="step"><h3>iOS Mail</h3><p>Settings → Apps → Mail → Signature. Paste rendered and remove any shake-to-undo formatting reset if prompted. iOS signatures do not reliably sync from macOS.</p></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="plain-title">
+      <div class="section-head"><h2 id="plain-title">Plain-text companion</h2><span class="meta">ASCII / no signature separator</span></div>
+      <p class="section-note">Set this wherever your client offers a separate plain-text signature. It avoids the conventional <code>-- </code> prefix because some clients trim everything after it.</p>
+      <div class="plain-copy">
+        <textarea id="plain-default" readonly aria-label="Plain-text signature">Martin Trenker
+Technical Lead and Solutions Architect
+clean.dev | Munich and remote DACH
+mail / martin@pacabytes.io</textarea>
+        <button type="button" data-copy-text="plain-default">Copy text</button>
+      </div>
+    </section>
+
+    <section aria-labelledby="degrade-title">
+      <div class="section-head"><h2 id="degrade-title">Intentional degradation</h2><span class="meta">do not “fix” these</span></div>
+      <table class="degradation">
+        <thead><tr><th>Client behavior</th><th>Expected result</th></tr></thead>
+        <tbody>
+          <tr><td>Outlook/Word drops border radius</td><td>The 30 px mark becomes a square. Nothing is lost.</td></tr>
+          <tr><td>Outlook drops letter spacing</td><td><code>MAIL /</code> becomes less tracked but remains clear.</td></tr>
+          <tr><td>Full-inversion dark mode</td><td>Rust may shift toward cyan and the hairline may fade. Both are cosmetic.</td></tr>
+          <tr><td>Gmail strips classes and comments</td><td>The copied block has neither; all required styles are inline.</td></tr>
+          <tr><td>Remote images are blocked</td><td>No change. The signature has no image or network request.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="check-title">
+      <div class="section-head"><h2 id="check-title">Acceptance check</h2><span class="meta">after saving / after sending</span></div>
+      <ul class="checklist">
+        <li><label><input type="checkbox">Name, role, clean.dev, and pacabytes.io are all present.</label></li>
+        <li><label><input type="checkbox">The From display name remains “Martin Trenker.”</label></li>
+        <li><label><input type="checkbox">No unexpected blue or purple link appears.</label></li>
+        <li><label><input type="checkbox">No Times New Roman fallback appears in Outlook.</label></li>
+        <li><label><input type="checkbox">The saved signature adds no more than one blank line.</label></li>
+        <li><label><input type="checkbox">A sent message looks correct in the actual sending client.</label></li>
+        <li><label><input type="checkbox">A mobile dark-mode client shows no light box or unreadable text.</label></li>
+        <li><label><input type="checkbox">At 320 px, no content clips or scrolls horizontally.</label></li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="copy-stage" class="copy-stage" aria-hidden="true"></div>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+
+  <template id="signature-default" data-label="Default" data-description="Daily English signature for new messages and normal replies.">
+    <table data-signature role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+      <tr>
+        <td aria-hidden="true" valign="top" width="44" style="width:44px;padding:2px 14px 0 0;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+            <tr><td align="center" valign="middle" width="30" height="30" style="width:30px;height:30px;border:1px solid #cf9a8a;border-radius:3px;font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:15px;line-height:28px;mso-line-height-rule:exactly;color:#a8472a;">/</td></tr>
+          </table>
+        </td>
+        <td valign="top">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+            <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;mso-line-height-rule:exactly;font-weight:600;letter-spacing:-0.2px;color:#1a1714;">Martin Trenker</td></tr>
+            <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;">Technical Lead and Solutions Architect</td></tr>
+            <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+            <tr><td height="1" style="height:1px;font-size:0;line-height:0;border-top:1px dashed #a8a395;">&nbsp;</td></tr>
+            <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+            <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;"><a href="https://clean.dev" style="color:#a8472a;text-decoration:underline;"><span style="color:#a8472a;">clean.dev</span></a> <span style="color:#75705f;">&#183;</span> Munich and remote DACH</td></tr>
+            <tr><td height="5" style="height:5px;font-size:0;line-height:0;">&nbsp;</td></tr>
+            <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><span style="letter-spacing:0.9px;">MAIL /</span> <a href="mailto:martin@pacabytes.io" style="color:#454039;text-decoration:underline;"><span style="color:#454039;">martin@pacabytes.io</span></a></td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <pre data-plain>Martin Trenker
+Technical Lead and Solutions Architect
+clean.dev | Munich and remote DACH
+mail / martin@pacabytes.io</pre>
+  </template>
+
+  <template id="signature-german" data-label="German" data-description="German body copy; the role names stay in their market form.">
+    <table data-signature role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+      <tr>
+        <td aria-hidden="true" valign="top" width="44" style="width:44px;padding:2px 14px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td align="center" valign="middle" width="30" height="30" style="width:30px;height:30px;border:1px solid #cf9a8a;border-radius:3px;font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:15px;line-height:28px;mso-line-height-rule:exactly;color:#a8472a;">/</td></tr></table></td>
+        <td valign="top"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;mso-line-height-rule:exactly;font-weight:600;letter-spacing:-0.2px;color:#1a1714;">Martin Trenker</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;">Technical Lead und Solutions Architect</td></tr>
+          <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr><tr><td height="1" style="height:1px;font-size:0;line-height:0;border-top:1px dashed #a8a395;">&nbsp;</td></tr><tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;"><a href="https://clean.dev" style="color:#a8472a;text-decoration:underline;"><span style="color:#a8472a;">clean.dev</span></a> <span style="color:#75705f;">&#183;</span> M&uuml;nchen und remote im DACH-Raum</td></tr>
+          <tr><td height="5" style="height:5px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><span style="letter-spacing:0.9px;">MAIL /</span> <a href="mailto:martin@pacabytes.io" style="color:#454039;text-decoration:underline;"><span style="color:#454039;">martin@pacabytes.io</span></a></td></tr>
+        </table></td>
+      </tr>
+    </table>
+    <pre data-plain>Martin Trenker
+Technical Lead und Solutions Architect
+clean.dev | Muenchen und remote im DACH-Raum
+mail / martin@pacabytes.io</pre>
+  </template>
+
+  <template id="signature-first-contact" data-label="First contact" data-description="Adds one verification path for outbound mail and first replies.">
+    <table data-signature role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+      <tr>
+        <td aria-hidden="true" valign="top" width="44" style="width:44px;padding:2px 14px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td align="center" valign="middle" width="30" height="30" style="width:30px;height:30px;border:1px solid #cf9a8a;border-radius:3px;font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:15px;line-height:28px;mso-line-height-rule:exactly;color:#a8472a;">/</td></tr></table></td>
+        <td valign="top"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;mso-line-height-rule:exactly;font-weight:600;letter-spacing:-0.2px;color:#1a1714;">Martin Trenker</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;">Technical Lead and Solutions Architect</td></tr>
+          <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr><tr><td height="1" style="height:1px;font-size:0;line-height:0;border-top:1px dashed #a8a395;">&nbsp;</td></tr><tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;"><a href="https://clean.dev" style="color:#a8472a;text-decoration:underline;"><span style="color:#a8472a;">clean.dev</span></a> <span style="color:#75705f;">&#183;</span> Munich and remote DACH</td></tr>
+          <tr><td height="5" style="height:5px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><span style="letter-spacing:0.9px;">MAIL /</span> <a href="mailto:martin@pacabytes.io" style="color:#454039;text-decoration:underline;"><span style="color:#454039;">martin@pacabytes.io</span></a></td></tr>
+          <tr><td height="3" style="height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><span style="letter-spacing:0.9px;">LINKEDIN /</span> <a href="https://www.linkedin.com/in/martin-trenker-193449291/" style="color:#454039;text-decoration:underline;"><span style="color:#454039;">martin-trenker</span></a></td></tr>
+        </table></td>
+      </tr>
+    </table>
+    <pre data-plain>Martin Trenker
+Technical Lead and Solutions Architect
+clean.dev | Munich and remote DACH
+mail / martin@pacabytes.io
+LinkedIn / linkedin.com/in/martin-trenker-193449291</pre>
+  </template>
+
+  <template id="signature-short" data-label="Short reply" data-description="For clients that support a separate reply signature.">
+    <table data-signature role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+      <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;"><span style="font-weight:600;color:#1a1714;">Martin Trenker</span> <span style="color:#75705f;">&#183;</span> Technical Lead and Solutions Architect</td></tr>
+      <tr><td height="3" style="height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><a href="https://clean.dev" style="color:#a8472a;text-decoration:underline;"><span style="color:#a8472a;">clean.dev</span></a></td></tr>
+    </table>
+    <pre data-plain>Martin Trenker | Technical Lead and Solutions Architect
+clean.dev</pre>
+  </template>
+
+  <template id="signature-formal" data-label="Formal" data-description="For contractual correspondence where legal details are useful.">
+    <table data-signature role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+      <tr>
+        <td aria-hidden="true" valign="top" width="44" style="width:44px;padding:2px 14px 0 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td align="center" valign="middle" width="30" height="30" style="width:30px;height:30px;border:1px solid #cf9a8a;border-radius:3px;font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:15px;line-height:28px;mso-line-height-rule:exactly;color:#a8472a;">/</td></tr></table></td>
+        <td valign="top"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;mso-line-height-rule:exactly;font-weight:600;letter-spacing:-0.2px;color:#1a1714;">Martin Trenker</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;">Technical Lead and Solutions Architect</td></tr>
+          <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr><tr><td height="1" style="height:1px;font-size:0;line-height:0;border-top:1px dashed #a8a395;">&nbsp;</td></tr><tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:18px;mso-line-height-rule:exactly;color:#454039;"><a href="https://clean.dev" style="color:#a8472a;text-decoration:underline;"><span style="color:#a8472a;">clean.dev</span></a> <span style="color:#75705f;">&#183;</span> Munich and remote DACH</td></tr>
+          <tr><td height="5" style="height:5px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#6f695c;"><span style="letter-spacing:0.9px;">MAIL /</span> <a href="mailto:martin@pacabytes.io" style="color:#454039;text-decoration:underline;"><span style="color:#454039;">martin@pacabytes.io</span></a></td></tr>
+          <tr><td height="7" style="height:7px;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',Consolas,'SFMono-Regular',Menlo,'Liberation Mono',monospace;font-size:10px;line-height:15px;mso-line-height-rule:exactly;color:#6f695c;">Martin Trenker <span style="color:#75705f;">&#183;</span> Philipp-Loewenfeld-Str. 63 <span style="color:#75705f;">&#183;</span> 80339 M&uuml;nchen <span style="color:#75705f;">&#183;</span> VAT DE262621028</td></tr>
+        </table></td>
+      </tr>
+    </table>
+    <pre data-plain>Martin Trenker
+Technical Lead and Solutions Architect
+clean.dev | Munich and remote DACH
+mail / martin@pacabytes.io
+Martin Trenker | Philipp-Loewenfeld-Str. 63 | 80339 Muenchen | VAT DE262621028</pre>
+  </template>
+
+  <script>
+    const variants = [
+      'signature-default',
+      'signature-german',
+      'signature-first-contact',
+      'signature-short',
+      'signature-formal'
+    ];
+
+    const status = document.getElementById('status');
+    let statusTimer;
+
+    function announce(message) {
+      status.textContent = message;
+      status.classList.add('visible');
+      clearTimeout(statusTimer);
+      statusTimer = setTimeout(() => status.classList.remove('visible'), 2600);
+    }
+
+    function templateParts(id) {
+      const template = document.getElementById(id);
+      return {
+        template,
+        signature: template.content.querySelector('[data-signature]'),
+        plain: template.content.querySelector('[data-plain]').textContent.trim()
+      };
+    }
+
+    function sourceFor(id) {
+      return templateParts(id).signature.outerHTML;
+    }
+
+    function mountSignatures() {
+      document.querySelectorAll('[data-mount]').forEach((mount) => {
+        const signature = templateParts(mount.dataset.mount).signature.cloneNode(true);
+        mount.replaceChildren(signature);
+      });
+    }
+
+    function createVariantCards() {
+      const grid = document.getElementById('variant-grid');
+      variants.forEach((id) => {
+        const template = document.getElementById(id);
+        const card = document.createElement('article');
+        card.className = 'variant-card';
+        card.innerHTML = `
+          <div class="variant-head">
+            <div><h3>${template.dataset.label}</h3><p>${template.dataset.description}</p></div>
+            <span class="meta">${id === 'signature-default' ? 'recommended' : 'optional'}</span>
+          </div>
+          <div class="signature-preview"><div class="signature-mount" data-card-mount="${id}"></div></div>
+          <div class="actions">
+            <button class="primary" type="button" data-copy-rich="${id}">Copy rendered signature</button>
+            <button type="button" data-copy-source="${id}">Copy HTML source</button>
+          </div>
+          <details>
+            <summary>Raw source <span data-count="${id}"></span></summary>
+            <div class="source-wrap">
+              <textarea readonly spellcheck="false" aria-label="Raw HTML for ${template.dataset.label}" data-source="${id}"></textarea>
+              <div class="source-meta"><span>Gmail limit: 10,000 characters</span><span data-size="${id}"></span></div>
+            </div>
+          </details>`;
+        grid.append(card);
+        card.querySelector('[data-card-mount]').append(templateParts(id).signature.cloneNode(true));
+        const source = sourceFor(id);
+        card.querySelector('[data-source]').value = source;
+        card.querySelector('[data-count]').textContent = `/ ${source.length.toLocaleString()} chars`;
+        card.querySelector('[data-size]').textContent = `${new Blob([source]).size.toLocaleString()} bytes`;
+      });
+    }
+
+    async function copyRich(id) {
+      const { signature, plain } = templateParts(id);
+      const html = signature.outerHTML;
+      if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
+        try {
+          await navigator.clipboard.write([new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'text/plain': new Blob([plain], { type: 'text/plain' })
+          })]);
+          announce('Rendered signature copied with a plain-text fallback.');
+          return;
+        } catch (error) {
+          // Fall through to the selection-based copy used by file:// previews.
+        }
+      }
+
+      const stage = document.getElementById('copy-stage');
+      stage.replaceChildren(signature.cloneNode(true));
+      const range = document.createRange();
+      range.selectNodeContents(stage);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      const copied = document.execCommand('copy');
+      selection.removeAllRanges();
+      stage.replaceChildren();
+      if (copied) announce('Rendered signature copied.');
+      else announce('Automatic copy was blocked. Open Raw source and copy it manually.');
+    }
+
+    async function copyText(value, fallbackField, message) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(value);
+          announce(message);
+          return;
+        } catch (error) {
+          // Fall through to selecting the visible field.
+        }
+      }
+      fallbackField.focus();
+      fallbackField.select();
+      const copied = document.execCommand('copy');
+      announce(copied ? message : 'Copy was blocked. The text is selected for manual copying.');
+    }
+
+    function wireActions() {
+      document.addEventListener('click', (event) => {
+        const richButton = event.target.closest('[data-copy-rich]');
+        if (richButton) copyRich(richButton.dataset.copyRich);
+
+        const sourceButton = event.target.closest('[data-copy-source]');
+        if (sourceButton) {
+          const field = document.querySelector(`[data-source="${sourceButton.dataset.copySource}"]`);
+          copyText(field.value, field, 'HTML source copied.');
+        }
+
+        const textButton = event.target.closest('[data-copy-text]');
+        if (textButton) {
+          const field = document.getElementById(textButton.dataset.copyText);
+          copyText(field.value, field, 'Plain-text signature copied.');
+        }
+      });
+    }
+
+    function checkMobileWidth() {
+      requestAnimationFrame(() => {
+        const frame = document.querySelector('.mobile-frame');
+        const result = document.getElementById('overflow-result');
+        const fits = frame.scrollWidth <= frame.clientWidth;
+        result.textContent = fits ? 'Pass — no horizontal overflow' : 'Review — content overflows';
+        result.className = fits ? 'pass' : 'fail';
+      });
+    }
+
+    createVariantCards();
+    mountSignatures();
+    wireActions();
+    checkMobileWidth();
+  </script>
+</body>
+</html>
