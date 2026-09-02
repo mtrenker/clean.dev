@@ -1,6 +1,7 @@
 # AI-assisted engineering practice brief: content, experience, and print specification
 
-Status: approved design, copy, information-architecture, print, and client-safety handoff for implementation issue #116.
+Status: approved. Martin approved this design, copy, information-architecture, print, and client-safety handoff
+on 2 September 2026, subject to the corrections recorded in section 16, which are applied here.
 Owner of this specification: Claude Opus 5 (product, copy, UX, interaction, visual, responsive, print, accessibility).
 Parent outcome: #87. Implements: #116.
 Date of specification: 2 September 2026.
@@ -22,7 +23,7 @@ Everything under "Copy" is **exact**. Copy it character for character. Do not pa
 
 1. Issue #116 is the scope contract. Where this document is silent, the issue governs. Where this document is
    explicit, it resolves the issue's open questions. Two deliberate deviations from the issue are recorded in
-   section 15 and require Martin's approval before implementation.
+   section 15 and were approved by Martin on 2 September 2026 (decisions D6 and D7).
 2. `apps/web/src/app/projects.ts`, `apps/web/src/app/lab.ts`, `apps/web/src/app/work/douglas-case.ts`, and
    `apps/web/src/lib/availability.ts` are the existing public factual record. **No sentence on this page may
    assert more than that record supports.** Where this page names a client outcome, it names one already
@@ -230,7 +231,7 @@ headings. Straight quotes. No em dashes. No exclamation marks. No rhetorical que
 
 Lead paragraph:
 
-> `I have spent the last two years using coding agents on real delivery work: first inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.`
+> `I use coding agents on real delivery work: first inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.`
 
 ### 6.2 Section 2, the working principle
 
@@ -328,8 +329,8 @@ stand alone and to fit roughly one printed line.
 2. `I designed both, reviewed every change, and stayed responsible for what shipped. Both appear in my project record as delivery outcomes, and I am not claiming that AI caused them.`
 
 **C8 · My own use · `Learning C# and .NET on the job, with help.`**
-1. `The unified API needed a stack I had not worked in, and I used agents to become productive in it faster.`
-2. `I say that plainly because it is a claim about learning speed, not about accumulated depth.`
+1. `The unified API needed a stack I had not worked in, and I used agents to learn it while delivering.`
+2. `I say that plainly as part of how the work happened, not as a claim of accumulated depth or measured speed.`
 
 **C9 · Proposed · `Deterministic workflows and generated documentation.`**
 1. `At handover I recommended repeatable agent workflows and product documentation generated from browser tests.`
@@ -340,7 +341,7 @@ Douglas block ends on the distinction between a demonstration and a rollout rath
 
 Section-closing line (rendered after the claim list, on screen and in print):
 
-> `In July 2026 I demonstrated my own agent setup and the workflow around it to the team's engineering leadership, so they could see where this could go after I left. That was a demonstration, not a rollout, and the labels above are deliberate about the difference.`
+> `In July 2026 I demonstrated my own agent setup and the workflow around it at Douglas. That was a demonstration, not a rollout, and the labels above are deliberate about the difference.`
 
 ### 6.5 Section 5, current independent practice
 
@@ -399,10 +400,9 @@ Six entries, rendered as a dated record list, never as logos or cards. Fields: `
 | `Pi` | `2026 · my own work` | `A deliberately small harness with four default tools and extensions written in TypeScript. It is where I learned what a harness actually contributes, and where a guard can intercept a call.` |
 | `Claude Code` | `2026 · my own work` | `What I use for design-owning and larger implementation work, with the design written down before any code and an explicit review pass afterwards.` |
 | `Codex` | `2026 · my own work` | `A second implementation and review model, so the one that wrote a change is not the only one that judges it.` |
-| `Local models` | `2026 · my own work` | `Run on my own machine for work that should not leave it, and to keep a first-hand sense of what a smaller private model can and cannot do. Not what I reach for on client delivery.` |
+| `Local models` | `2026 · my own work` | `Run on my own machine for privacy-sensitive experimentation and to evaluate what smaller local models can and cannot do. They are not what I reach for on client delivery.` |
 
-Optional evidence link, subject to Martin's approval (section 16, decision D5). If approved, render one line
-below the list, on screen only:
+Evidence link (approved, decision D5). Render one line below the list, on screen only:
 
 > `My own harness extensions are public: github.com/mtrenker/pi-clean`
 
@@ -432,7 +432,7 @@ Four items, each a label and one sentence. This block is rendered as a single bo
 | --- | --- |
 | `I am not an ML researcher.` | `I do not train, fine-tune, or evaluate models. I build software and use these tools to do it.` |
 | `I have no productivity number.` | `The teams I worked with did not measure one, and a percentage without a baseline is decoration.` |
-| `Nothing here ran unattended.` | `Every change went through deterministic checks and a person before it merged.` |
+| `Nothing here merged unattended.` | `Every change went through deterministic checks and a person before it merged.` |
 | `Adoption at Douglas was partial.` | `Some of this was daily team practice, some stayed a pilot, and some was mine alone. The labels above say which.` |
 
 ### 6.9 Colophon and close
@@ -640,8 +640,14 @@ Rules the module must satisfy, enforced by tests in section 12:
 - `workflow.stages` has exactly five entries; exactly one carries `gate: true`; it is `03`.
 - `tools.entries` has exactly six entries whose `name` values are, in order: GitHub Copilot, OpenCode, Pi,
   Claude Code, Codex, Local models.
-- No string in the serialised module matches `/\d+\s*%/`, `/\b\d+\s*x\b/i`, or the words `productivity`,
-  `faster than`, `time saved`, `efficiency gain`.
+- The module exports `APPROVED_DISCLAIMERS`, the exact sentences that are permitted to name a quantitative
+  concept in order to deny it. It contains exactly the two approved disclaimers:
+  `I have no productivity number.` and
+  `The teams I worked with did not measure one, and a percentage without a baseline is decoration.`
+- After those exact strings are removed, no remaining string in the serialised module matches `/\d+\s*%/`,
+  `/\b\d+\s*x\b/i`, or `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
+  Guarding assertions rather than vocabulary is what lets the page deny a productivity number without the
+  guard rejecting the denial. Adding a sentence to `APPROVED_DISCLAIMERS` is a deliberate, reviewable act.
 
 ---
 
@@ -880,8 +886,10 @@ enough, stop and return the density question to Martin rather than shrinking the
 - exactly five workflow stages; exactly one `gate`; it is stage `03`
 - six tools, names in the exact order given in section 6.6, each with a non-empty `role`
 - the four maturity definitions are present, each with a distinct `tone`
-- **quantitative-claim guard:** the JSON serialisation of `practiceBrief` matches none of `/\d+\s*%/`,
-  `/\b\d+\s*x\b/i`, `/productivity/i`, `/time saved/i`, `/efficiency gain/i`
+- **quantitative-claim guard:** every entry of `APPROVED_DISCLAIMERS` occurs verbatim in the serialised
+  `practiceBrief`; after removing those exact strings, the remainder matches none of `/\d+\s*%/`,
+  `/\b\d+\s*x\b/i`, `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
+  The guard therefore blocks an unsupported positive claim while leaving the approved denial expressible
 - **scale guard:** any store or country figure present is exactly `1,200` or `14`, matching `projects.ts`
 - the colophon contains neither `private`, `confidential`, `hidden`, nor `protected`
 
@@ -938,7 +946,7 @@ Library, following `apps/web/src/app/contact/page.integration.test.tsx`):
 
 | Issue criterion | Where it is satisfied |
 | --- | --- |
-| Martin approved the Opus specification before implementation | Section 16 approval packet, this file, and the `needs-human` pause |
+| Martin approved the Opus specification before implementation | Approved 2 September 2026; decisions and required corrections recorded in section 16 |
 | Stable shareable URL, identifies as an engineering brief | Section 7.1; eyebrow `Practice brief`, H1, section 6.1 |
 | 60-second scan reveals principle, Douglas, current workflow, review/ownership, tools | Section 4 scan path |
 | Douglas is lead evidence and visually and semantically separate | Section 10 order and the two-column print split; section 5 attribution discipline |
@@ -976,7 +984,7 @@ Library, following `apps/web/src/app/contact/page.integration.test.tsx`):
 
 ## 15. Chosen direction, alternatives rejected, tradeoffs
 
-### Deviations from the issue that need approval
+### Deviations from the issue, approved as D6 and D7
 
 **D-A. The workflow moves ahead of Douglas.** The issue's structure list places the compact workflow fourth,
 after the independent workflow section. This specification places it third, immediately after the principle,
@@ -1022,41 +1030,44 @@ makes the subset readable rather than truncated.
 
 ---
 
-## 16. Approval packet: decisions for Martin
+## 16. Decisions of record
 
-Implementation must not start until these are settled. Each has a recommendation.
+Martin settled every open decision on 2 September 2026. They are binding for implementation and for any later
+change to this page. Do not reopen one without him.
 
-**D1. Naming the client's API.** The issue text says it is safe to say agents supported work on the short-link
-platform and the "OneCRM API". The existing public record in `projects.ts` says "unified CRM API" and never uses
-an internal product name. *Recommendation: use "unified CRM API" throughout, matching the published record.*
-Approve, or authorise the internal name.
+| # | Decision | Settled outcome |
+| --- | --- | --- |
+| D1 | Naming the client's API | Use **"unified CRM API"** throughout, matching the published record in `projects.ts`. The internal product name is not used |
+| D2 | Pi's maturity at Douglas | Classified as **`My own use` plus a demonstration**, not team adoption, following the exit-report calibration over the private draft article |
+| D3 | The `Proposed` claim, C9 | **Kept.** A page with four maturity labels needs the fourth one to be real |
+| D4 | Local models | **Kept, with revised framing** (section 6.6): privacy-sensitive experimentation and evaluating what smaller local models can and cannot do, explicitly not reached for on client delivery |
+| D5 | Linking `github.com/mtrenker/pi-clean` | **Included.** It is a public MIT repository and the only externally verifiable evidence on the page |
+| D6 | The workflow moves ahead of Douglas (deviation D-A) | **Approved** |
+| D7 | Print renders headline plus first sentence (deviation D-B) | **Approved** |
+| D8 | The blunt colophon, "That is not privacy." | **Kept as written** |
 
-**D2. The Pi demonstration framing.** The private draft article describes Pi as the team's main harness from
-April 2026. The exit-report calibration says AI maturity was overstated and that the harness was demonstrated to
-client leadership, who then explored further. This specification follows the exit report: Pi is `My own use`,
-and the demonstration is stated as a demonstration. *Recommendation: keep the exit-report calibration.*
+### Corrections applied at approval
 
-**D3. The `Proposed` claim, C9.** It states that agent workflows as repeatable steps and generated product
-documentation from user-story-driven browser tests were recommended at handover and not adopted. It contains no
-client-specific detail, but it does describe a handover recommendation. *Recommendation: keep it; a page with
-four maturity labels needs the fourth one to be real.* Confirm you are comfortable publishing it.
+Martin required six corrections before implementation. All are applied in this document, and the copy in
+section 6 is the corrected copy.
 
-**D4. Local models.** The issue lists local LLMs among your tools. The copy claims only that you run them for
-work that should not leave the machine and to keep a sense of what a smaller model can do, and explicitly says
-they are not what you reach for on client delivery. *Recommendation: confirm this is accurate.* If it overstates,
-the entry should shrink to one sentence or be dropped, and the tool count becomes five.
-
-**D5. Linking `github.com/mtrenker/pi-clean`.** It is a public MIT repository and it is the only verifiable
-evidence on the page. Linking it lets a technical reader check the claims about worktrees, guardrails, and
-review discipline. It also points a reader at your working setup. *Recommendation: include the link.*
-
-**D6. The workflow moves ahead of Douglas** (deviation D-A above). *Recommendation: approve.*
-
-**D7. Print renders headline plus first sentence** (deviation D-B above). *Recommendation: approve.*
-
-**D8. The colophon wording.** "This page is not in the site navigation and asks search engines not to index it.
-That is not privacy." It is blunt on purpose. Confirm the tone, since it is the sentence a recruiter is most
-likely to quote back to you.
+1. **Status.** This document records approval on 2 September 2026 subject to these corrections, rather than
+   presenting itself as awaiting one.
+2. **The quantitative-claim guard no longer rejects the approved disclaimer.** The first draft banned the word
+   `productivity` outright, which would have made the exact sentence `I have no productivity number.`
+   impossible to ship. The guard now removes the exact strings in `APPROVED_DISCLAIMERS` before scanning, so it
+   blocks an unsupported positive or quantitative claim while leaving the denial expressible. See sections 9
+   and 12.1.
+3. **The lead no longer asserts a duration.** "I have spent the last two years" is replaced by "I use coding
+   agents on real delivery work", because the two-year figure was not supported by the record.
+4. **`Nothing here ran unattended.` became `Nothing here merged unattended.`** Agents do run without a human
+   watching every step; what never happens unattended is the merge. The explanatory sentence about
+   deterministic checks and a person before merge is unchanged.
+5. **The July 2026 demonstration drops the stakeholder detail.** It now reads "at Douglas" rather than naming
+   an audience within the client, and it no longer speculates about what they would see or do afterwards.
+6. **C8 drops the speed wording.** "become productive in it faster" became "learn it while delivering", and
+   the follow-up sentence now denies both accumulated depth and measured speed rather than asserting learning
+   speed.
 
 ### Claims omitted or softened, for the record
 
