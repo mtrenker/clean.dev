@@ -14,9 +14,11 @@ overrides:
   # ESLint 9 still resolves Ajv 6 through @eslint/eslintrc.
   ajv@<6.14.0: 6.14.0
   # minimatch 3 consumers still permit vulnerable brace-expansion 1 releases.
-  brace-expansion@<1.1.16: 1.1.16
+  brace-expansion@<1.1.18: 1.1.18
   # minimatch 10 consumers still permit vulnerable brace-expansion 5 releases.
-  brace-expansion@>=5.0.0 <5.0.7: 5.0.7
+  brace-expansion@>=5.0.0 <5.0.9: 5.0.9
+  # Babel and Autoprefixer still permit vulnerable Browserslist releases.
+  browserslist@<4.28.7: 4.28.7
   # tsx still permits esbuild releases below the patched version.
   esbuild@<0.28.1: 0.28.1
   # Ajv 8 consumers still permit vulnerable fast-uri releases.
@@ -24,9 +26,9 @@ overrides:
   # ESLint's cache still permits vulnerable flatted releases.
   flatted@<3.4.2: 3.4.2
   # gray-matter is pinned to the js-yaml 3 release line.
-  js-yaml@<3.15.0: 3.15.0
+  js-yaml@<3.15.1: 3.15.1
   # Storybook and other tooling still permit vulnerable js-yaml 4 releases.
-  js-yaml@>=4.0.0 <4.3.0: 4.3.0
+  js-yaml@>=4.0.0 <4.3.1: 4.3.1
   # Tooling still permits lodash 4.17, whose fix is only available in 4.18.
   lodash@<4.18.0: 4.18.0
   # Tooling on minimatch 9 still permits vulnerable patch releases.
@@ -34,9 +36,11 @@ overrides:
   # Tooling on minimatch 10 still permits vulnerable patch releases.
   minimatch@>=10.0.0 <10.2.3: 10.2.3
   # Next.js pins an older PostCSS range; keep this path-scoped until upstream updates it.
-  next>postcss: 8.5.22
+  next>postcss: 8.5.23
   # Next.js pins sharp below its patched range; keep this path-scoped until upstream updates it.
   next>sharp: 0.35.0
+  # Tailwind CSS still permits vulnerable postcss-selector-parser releases.
+  postcss-selector-parser@<6.1.3: 6.1.3
   # Drizzle's gel dependency still permits vulnerable shell-quote releases.
   shell-quote@<1.9.0: 1.9.0
   # jsdom and Storybook still permit vulnerable ws 8 releases.
