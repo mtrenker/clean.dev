@@ -113,7 +113,7 @@ export const PracticeBriefView: React.FC = () => {
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-sec)]">
               {brief.client.keyHeading}
             </p>
-            <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-4 grid gap-4 sm:grid-cols-3">
               {brief.client.maturities.map((maturity) => (
                 <div key={maturity.id}>
                   <dt>

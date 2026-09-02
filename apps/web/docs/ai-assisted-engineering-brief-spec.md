@@ -162,7 +162,7 @@ paragraph.
 | 0–5s | Eyebrow "Practice brief", H1, subtitle | This is an engineering brief, not an AI product page |
 | 5–15s | Lead paragraph, then the three principle labels: "Bounded, not autonomous", "Checkable, not trusted", "Owned, not delegated" | The working principle, in three phrases |
 | 15–30s | The five rail labels, left to right, and the rework loop | Bounded context, deterministic checks, human review, integration ownership |
-| 30–48s | The Douglas section heading and meta, then the tag column and the nine claim headlines | Douglas is the lead client evidence, and adoption is graded rather than asserted |
+| 30–48s | The Douglas section heading, the scope sentence, then the tag column and the eight claim headlines | Martin drove adoption inside one team, and each item is graded rather than asserted |
 | 48–55s | "How I work now" item labels | The practice continued and deepened after the client |
 | 55–60s | "What I don't claim" heading and its four opening phrases | Calibration, and permission to trust the rest |
 
@@ -195,11 +195,13 @@ These rules bind the implementation, the tests, the commit messages, the branch,
    countries". Larger figures exist in private notes. Do not use them.
 9. Any statement that this route is private, protected, hidden, or confidential.
 
-**Maturity discipline.** The Douglas exit-report calibration is explicit that early drafts overstated how mature
-and team-wide the AI work was. Its verified position is: the team ran regular experiments; a recurring team
-learning format supported adoption; Martin demonstrated his own agent setup and workflow to client leadership,
-who then explored further. Every Douglas claim on this page is therefore graded with one of four labels
-(section 6.4) and no claim may be upgraded without new evidence from Martin.
+**Maturity discipline.** The Douglas exit report warned that early drafts overstated how mature and team-wide
+the AI work was, and it could not settle the team's position. **Martin's firsthand account of 2 September 2026
+resolves that and is the source of truth** (decision D10): he drove the adoption inside his own team, and the
+team progressed through Copilot, OpenCode, and Pi, settled on Pi, and shipped two production systems with
+agents. Every Douglas claim is graded with one of the three labels in section 6.4, and no claim may be
+upgraded without new evidence from Martin. The scope boundary is the thing that must never soften: this was
+one team, not Douglas.
 
 **Attribution discipline.** Martin's current independent setup (his harness, his extensions, his GitHub
 workflow, his second-model review, his local models) is **his**. It must never be rendered inside the Douglas
@@ -224,14 +226,14 @@ headings. Straight quotes. No em dashes. No exclamation marks. No rhetorical que
 | --- | --- |
 | Eyebrow | `Practice brief` |
 | H1 | `AI-assisted engineering in practice` |
-| Subtitle | `From team adoption at Douglas to my daily agent workflow` |
+| Subtitle | `From driving team adoption at Douglas to my current multi-harness workflow` |
 | Meta line | `Martin Trenker · Technical Lead and Solutions Architect · September 2026` |
 | Print action label | `Print or save as PDF` |
 | Print action hint | `One A4 page.` |
 
 Lead paragraph:
 
-> `I use coding agents on real delivery work: first inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.`
+> `I use coding agents on real delivery work: first driving adoption inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.`
 
 ### 6.2 Section 2, the working principle
 
@@ -276,72 +278,74 @@ meaning is carried by the caption; the colour is redundant.
 
 ### 6.4 Section 4, Douglas
 
+**Superseded, 2 September 2026.** The first version of this section was calibrated from the Douglas
+exit report, which warned that early drafts overstated maturity and left the team's position unclear.
+Martin's firsthand account resolves that uncertainty and is now the source of truth: he drove the
+adoption inside his own team. Decisions D2 and D3 are superseded by D10 in section 16, the four-level
+maturity key is replaced by three truthful levels, and the claims below replace the earlier ones.
+This is a replacement, not an expansion: the section carries eight claims where it carried nine.
+
 Heading: `Client application: Douglas, 2024 to 2026`
 
-Meta (right of the heading on wide viewports, below it otherwise):
+Meta: `React expert to Technical Lead to Solutions Architect · POS and CRM platform`
 
-> `React expert to Technical Lead to Solutions Architect · POS and CRM platform`
+Intro. The scope boundary is stated in the opening paragraph and must never be softened:
 
-Intro:
+> `I joined Douglas to modernise the point-of-sale and CRM software used in more than 1,200 stores across 14 European countries, and stayed for two and a half years, ending as Solutions Architect. I drove the adoption of AI-assisted engineering inside my team: securing access, introducing terminal agents, setting up the weekly slot where we compared tools, and connecting all of it to what we shipped. That was my team, not Douglas as a whole, and this section is about what the team did rather than what the company did.`
 
-> `I joined Douglas to modernise the point-of-sale and CRM software used in more than 1,200 stores across 14 European countries, and stayed for two and a half years, ending as Solutions Architect. AI-assisted work grew inside that engagement. It started as editor assistance anyone could try and became shared tooling, guardrails, and a review habit. Adoption was real but uneven, so each item below says how far it actually got.`
+**Maturity key.** Three levels, because three are true. The earlier `My own use` and `Proposed`
+levels described a Martin-only demonstration and a handover proposal that the corrected account and
+Martin's removal instruction have both taken off the page; keeping them to preserve a four-label
+pattern would be decoration.
 
-**Maturity key** (rendered above the claim list, and repeated in print):
+| Label | Definition (exact) | Tone |
+| --- | --- | --- |
+| `Adopted` | `Settled into how the team worked.` | green |
+| `Tried` | `Tested deliberately in the weekly workshop. Not everything was kept.` | amber |
+| `Shipped` | `Went to production with the team accountable for it.` | rust |
 
-| Label | Definition (exact) |
-| --- | --- |
-| `Team practice` | `Part of how the team worked.` |
-| `Pilot` | `Tried deliberately for a period, never settled into a standard.` |
-| `My own use` | `How I worked. Not a team rollout.` |
-| `Proposed` | `Recommended at handover, not adopted before the engagement ended.` |
+**Eight claims.** Print renders the label and `sentences[0]` of the selected ones.
 
-**Nine claims.** Each has a `maturity`, a `headline`, and `sentences`. The **print composition renders the
-headline and `sentences[0]` only**; the screen renders all sentences. `sentences[0]` is therefore written to
-stand alone and to fit roughly one printed line.
+**C1 · Adopted · `I got the whole team access.`**
+1. `When Douglas announced its Copilot pilot I secured licences for every engineer on my team, and the product owner.`
+2. `Tooling that only some people have is not adoption. It stays a pocket of practice and it leaves when that person leaves.`
 
-**C1 · Team practice · `Editor assistance came first.`**
-1. `We joined the GitHub Copilot evaluation in mid-2025 and used it in VS Code and Neovim, where the team already worked.`
-2. `It was easy to adopt, and it made the ceiling obvious: approving every suggested edit keeps a person in the loop by turning them into a confirmation dialog.`
+**C2 · Adopted · `A weekly workshop is where adoption actually happened.`**
+1. `We kept two hours a week to compare tools, workflows, and whatever was new, together rather than alone.`
+2. `That standing slot is what turned scattered experiments into a shared way of working, and it is the first thing I would set up again.`
 
-**C2 · Team practice · `Shared agent resources, versioned like code.`**
-1. `Instructions, skills, and extensions lived in one versioned repository that several projects and tools could consume.`
-2. `The alternative was copying them into every repository and watching them drift apart, which is how a team ends up with five different definitions of how it works.`
+**C3 · Tried · `Out of the editor and into the terminal.`**
+1. `I introduced terminal agents, and we worked through Copilot in VS Code, then OpenCode, then Pi.`
+2. `Moving out of the editor changes review from approving each edit to judging the intent, the run, and the result. Not everything we tried in those sessions survived them.`
 
-**C3 · Team practice · `Controlled access, not open access.`**
-1. `I built a Node.js and TypeScript CLI that gave agents governed access to Jira, Confluence, and Azure DevOps.`
-2. `It covered only the delivery systems we were allowed to use, with one documented interface instead of ad hoc integrations, credentials handled outside the model, and human review of everything it produced.`
-3. `Guardrails sat alongside it: sensitive files and destructive shell commands are refused before a tool call runs, so autonomy inside a task never means autonomy over the machine.`
+**C4 · Adopted · `We settled on Pi for that period.`**
+1. `It was the most flexible of the three and the one that left us feeling we understood what we owned.`
+2. `A harness small enough to read is a harness a team can argue about, extend, and be responsible for.`
 
-**C4 · Team practice · `New practice went through a learning session first.`**
-1. `Full Stack Fridays, the team's recurring learning format, is where a change to how we worked was shown first.`
-2. `It was argued about there before it became routine, because tooling that arrives without that conversation gets used once and quietly abandoned.`
+**C5 · Adopted · `Shared agent resources, versioned like code.`** (unchanged)
 
-**C5 · Pilot · `Terminal agents, beyond the editor.`**
-1. `From early 2026 we tried terminal agents that work for longer stretches under a different kind of oversight.`
-2. `Review moves from each edit to the intent, the run, and the result. It changed how I work permanently, and across the team it stayed an experiment rather than a standard.`
+**C6 · Adopted · `Controlled access, not open access.`** (unchanged)
 
-**C6 · Pilot · `AI-assisted planning and task slicing.`**
-1. `We experimented with cutting work into slices an agent can finish and a person can still review honestly.`
-2. `Slicing for the agent alone is how a team loses its connection to its own codebase, so the slicing itself was something we walked through together.`
+**C7 · Shipped · `The short-link and QR service, in weeks.`**
+1. `The team used agents both to learn the ground and to build it, and it went from request to production in weeks.`
+2. `It replaced a third-party service that no longer fitted the business need. It is in my project record as a delivery outcome, not as an AI result.`
 
-**C7 · My own use · `Agent-supported delivery on two production systems.`**
-1. `Agents supported the work on the in-house short-link and QR service and on the unified CRM API.`
-2. `I designed both, reviewed every change, and stayed responsible for what shipped. Both appear in my project record as delivery outcomes, and I am not claiming that AI caused them.`
+**C8 · Shipped · `The unified CRM API, designed by the team.`**
+1. `The team designed the gateway that put the microservice landscape behind one REST and GraphQL interface.`
+2. `Agents wrote the implementation end to end. The architecture, the reviews, and the production result stayed with the team, which is the only arrangement I would put a system like this into production under.`
 
-**C8 · My own use · `Learning C# and .NET on the job, with help.`**
-1. `The unified API needed a stack I had not worked in, and I used agents to learn it while delivering.`
-2. `I say that plainly as part of how the work happened, not as a claim of accumulated depth or measured speed.`
+Section-closing line, which carries the scope boundary a second time and the personal learning that is
+no longer a claim of its own:
 
-**C9 · Proposed · `Deterministic workflows and generated documentation.`**
-1. `At handover I recommended repeatable agent workflows and product documentation generated from browser tests.`
-2. `The first replaces ad hoc prompting with defined steps; the second turns user-story-driven tests into living documentation. Neither was adopted before my engagement ended, which is exactly why they are listed here as proposals.`
+> `All of this happened inside my team rather than across Douglas. It is also where I learned C# and .NET with agent help while delivering the API, which I mention as part of how the work happened rather than as a claim of accumulated depth.`
 
-The July 2026 demonstration is deliberately **not** a tenth claim. It is the section's closing line, so the
-Douglas block ends on the distinction between a demonstration and a rollout rather than burying it in a list.
+**Replaced or removed.** `editor-first` and `learning-session` are replaced by C1 and C2, which say
+who acted rather than what happened. `terminal-agents` is rewritten to name Martin as the person who
+introduced them and to carry the full progression. `planning-slicing` is removed as generic
+experimentation. `agent-supported-delivery` is split into C7 and C8 so each production system carries
+its own concrete outcome. `learning-dotnet` moves into the closing line. `handover-proposals` is
+removed on Martin's instruction: it diluted the adoption and delivery story.
 
-Section-closing line (rendered after the claim list, on screen and in print):
-
-> `In July 2026 I demonstrated my own agent setup and the workflow around it at Douglas. That was a demonstration, not a rollout, and the labels above are deliberate about the difference.`
 
 ### 6.5 Section 5, current independent practice
 
@@ -371,9 +375,10 @@ Seven items, each a label and one or two sentences. **Print renders the label an
 1. `Agents run in visible terminal sessions I can focus, interrupt, and take over.`
 2. `An agent that is blocked is something to look at, not something to wait out.`
 
-**P5 · `The author is not the only reviewer.`**
-1. `A second, independent model reviews the change, and I make the call on what it found.`
-2. `The model that wrote a change is the worst available judge of whether it was a good idea.`
+**P5 · `More than one harness, on purpose.`** (replaces the earlier "The author is not the only
+reviewer", which presented a second model as a rule for every change. It is not one.)
+1. `Pi is the harness I extend, Claude Code does most of the coding, and Codex covers general work.`
+2. `When a change matters I have a different model look at it, because the one that wrote it is a poor judge of whether it was a good idea. That is a decision per change rather than a ritual.`
 
 **P6 · `Design has a named owner.`**
 1. `Product, interaction, and architecture decisions are written down before implementation starts.`
@@ -391,16 +396,18 @@ Intro:
 
 > `I have used these in real work rather than evaluated them for a comparison. Each one is here because it changed something, and each entry is dated because this landscape does not hold still.`
 
-Six entries, rendered as a dated record list, never as logos or cards. Fields: `name`, `context`, `role`.
+Six entries, rendered as a dated record list, never as logos or cards. Fields: `name`, `context`, and
+`sentences`; `+` in the table separates the sentences, and print renders the first as the tool's
+purpose, so every tool prints with a role rather than a name and a date.
 
 | Name | Context | Role (exact) |
 | --- | --- | --- |
-| `GitHub Copilot` | `2025 · client team` | `Where the team started, inside VS Code and Neovim. It made assistance normal, and it showed the limit of approving every edit by hand.` |
-| `OpenCode` | `2026 · client team` | `The first step out of the editor and into a terminal agent. It moved review from each edit to the intent, the run, and the result, and it raised the question of how to share agent resources across repositories and tools.` |
-| `Pi` | `2026 · my own work` | `A deliberately small harness with four default tools and extensions written in TypeScript. It is where I learned what a harness actually contributes, and where a guard can intercept a call.` |
-| `Claude Code` | `2026 · my own work` | `What I use for design-owning and larger implementation work, with the design written down before any code and an explicit review pass afterwards.` |
-| `Codex` | `2026 · my own work` | `A second implementation and review model, so the one that wrote a change is not the only one that judges it.` |
-| `Local models` | `2026 · my own work` | `Run on my own machine for privacy-sensitive experimentation and to evaluate what smaller local models can and cannot do. They are not what I reach for on client delivery.` |
+| `GitHub Copilot` | `2025 · client team` | `Where the team started, inside VS Code, after I had already been using it on my own projects.` + `It made assistance normal, and it showed the limit of approving every edit by hand.` |
+| `OpenCode` | `2026 · client team` | `The first step out of the editor and into a terminal agent.` + `It moved review from each edit to the intent, the run, and the result, and it raised the question of how to share agent resources across repositories and tools.` |
+| `Pi` | `2026 · client team, then mine` | `A deliberately small harness with four default tools and extensions written in TypeScript.` + `The team settled on it because it was the most flexible of the three, and it is still the harness I extend.` |
+| `Claude Code` | `2026 · my own work` | `My main coding agent, and where larger implementation work happens.` + `The design is written down before any code, with an explicit review pass afterwards.` |
+| `Codex` | `2026 · my own work` | `General work, and a second environment and model when a different angle helps.` + `Sometimes that angle is a review of something another agent wrote, which is a choice per change rather than a rule.` |
+| `Local models` | `2026 · my own work` | `Run on my own machine for privacy-sensitive experimentation and to evaluate what smaller local models can and cannot do.` + `They are not what I reach for on client delivery.` |
 
 Evidence link (approved, decision D5). Render one line below the list, on screen only:
 
@@ -433,7 +440,7 @@ Four items, each a label and one sentence. This block is rendered as a single bo
 | `I am not an ML researcher.` | `I do not train, fine-tune, or evaluate models. I build software and use these tools to do it.` |
 | `I have no productivity number.` | `The teams I worked with did not measure one, and a percentage without a baseline is decoration.` |
 | `Nothing here merged unattended.` | `Every change went through deterministic checks and a person before it merged.` |
-| `Adoption at Douglas was partial.` | `Some of this was daily team practice, some stayed a pilot, and some was mine alone. The labels above say which.` |
+| `This was one team, not Douglas.` | `I drove this inside my own team. Nothing here says the company adopted it, and the labels say how far each item got.` |
 
 ### 6.9 Colophon and close
 
@@ -633,7 +640,7 @@ export const practiceBrief: PracticeBrief = { … };
 
 Rules the module must satisfy, enforced by tests in section 12:
 
-- `client.claims` has nine entries and covers all four maturity values.
+- `client.claims` has eight entries and covers all three maturity values it declares.
 - Every `sentences[0]` in `client.claims`, `practice.items`, and `lessons.items` is at most **120 characters**,
   the print standalone budget.
 - The module exports `PRINT_SELECTION` (claim, practice, and lesson ids) and `buildPrintBrief`, which projects
@@ -867,36 +874,36 @@ renders must appear verbatim in `practiceBrief`.
 | --- | --- | --- |
 | Working principle | All 3, with sentences | Required on the page; it is the first thing a 60-second scan must yield |
 | Workflow rail | All 5 stages, with captions, plus the rework loop and loop note | The memory hook, and the only place bounded context, the deterministic gate, human review, and integration ownership appear together |
-| Douglas claims | 5 of 9 | See below |
+| Douglas claims | 5 of 8 | See below |
 | Current practice | 4 of 7 | The four the rail cannot already state |
 | Tools | All 6, each with a purpose | Issue requirement: a role, never names or contexts alone |
 | Lessons | 3 of 5 | The three that appear nowhere else on the sheet |
 | What I don't claim | All 4, labels only | The labels are the claim; the sentences elaborate and the screen carries them |
 | Colophon, subset note, contact | All | Honesty travels with the document |
 
-**The five client claims** are exactly the ones issue #116 names as the client-safe work to describe:
-shared versioned agent resources (C2), controlled access to approved delivery systems with TypeScript
-tooling, guardrails, and human review (C3), AI-assisted planning and task slicing (C6),
-agent-supported implementation (C7), and the handover proposals (C9). The team demonstration the
-issue also names is the section's closing line, which prints in full. Together they still cover all
-four maturity levels, so the grading survives the cut:
+**The five client claims** are the five moves the corrected adoption story turns on: securing access
+for the whole team (C1), the weekly learning loop (C2), introducing terminal agents and the
+progression through them (C3), and the two systems that reached production (C7, C8). They cover all
+three maturity levels:
 
 | Claim | Maturity |
 | --- | --- |
-| Shared agent resources, versioned like code | Team practice |
-| Controlled access, not open access | Team practice |
-| AI-assisted planning and task slicing | Pilot |
-| Agent-supported delivery on two production systems | My own use |
-| Deterministic workflows and generated documentation | Proposed |
+| I got the whole team access | Adopted |
+| A weekly workshop is where adoption actually happened | Adopted |
+| Out of the editor and into the terminal | Tried |
+| The short-link and QR service, in weeks | Shipped |
+| The unified CRM API, designed by the team | Shipped |
 
-Dropped from print, kept on screen: editor assistance came first (the tools row carries GitHub
-Copilot with its purpose), new practice went through a learning session first, terminal agents beyond
-the editor (the tools row carries OpenCode), and learning C# and .NET on the job.
+Dropped from print, kept on screen: `settled-on-pi`, whose substance is in C3's progression and in
+the Pi tools row; `shared-resources`; and `controlled-access`, whose guardrails half is carried by the
+practice column. The un-tagged closing line prints in full, so the scope boundary reaches the sheet
+twice, in the intro and at the close.
 
-**The four practice items** are `small-harness`, `guardrails`, `independent-review`, and
-`design-owner`. Dropped: `issue-worktree-pr`, which is rail stages 01 and 02; `visible-sessions`; and
-`nothing-irreversible`, whose substance is already in the loop note ("Agents do not merge, approve,
-or publish reviews").
+**The four practice items** are `multi-harness`, `small-harness`, `guardrails`, and `design-owner`.
+`multi-harness` replaced the earlier `independent-review` in the selection because Martin's current
+setup is the thing the subtitle now promises. Dropped: `issue-worktree-pr`, which is rail stages 01
+and 02; `visible-sessions`; and `nothing-irreversible`, whose substance is already in the loop note
+("Agents do not merge, approve, or publish reviews").
 
 **The three lessons** are `context`, `slicing`, and `ownership`. Dropped: `review-capacity`, stated
 verbatim in the principle band, and `deterministic-tooling`, which is rail stage 03.
@@ -909,22 +916,22 @@ right (current practice, then "What I don't claim"); tools in three columns by t
 three columns; footer. Grouping practice and the limits block in one column is editorial, not
 convenience: the left column is the client record and the right column is first-person present tense.
 
-Measured from the implemented composition at 174mm:
+Measured from the implemented composition at 174mm, after the 2 September content revision:
 
 | Block | Height |
 | --- | --- |
 | Masthead | 7.0mm |
-| Title, subtitle, lead | 22.5mm |
+| Title, subtitle, lead | 26.2mm |
 | Principle band | 21.3mm |
 | Workflow rail with captions, rework loop, loop note | 42.0mm |
-| Client record and current practice, two columns | 89.2mm |
+| Client record and current practice, two columns | 83.7mm |
 | Tools | 28.5mm |
 | Lessons | 17.4mm |
 | Footer | 11.4mm |
 | Seven 2.5mm section gaps | 17.5mm |
-| **Total** | **255.6mm** |
+| **Total** | **256.6mm** |
 | **A4 content height** | **267mm** |
-| **Slack** | **11.4mm** |
+| **Slack** | **10.4mm** |
 
 `page.pdf({ format: 'A4', printBackground: true })` produces **one page**, asserted by
 `apps/web/e2e/ai-practice-brief.spec.ts`.
@@ -932,6 +939,10 @@ Measured from the implemented composition at 174mm:
 Douglas remains the lead evidence: its column is 102.8mm of the 167mm evidence band, 62% of that
 band, it is the single largest block on the sheet, and it prints five claims against the practice
 column's four items.
+
+The revision removed one claim from the page and split another in two, so the evidence band lost
+5.5mm and the title block gained 3.7mm from the longer subtitle. Slack moved from 11.4mm to 10.4mm.
+Density did not increase and no type size changed.
 
 #### Type floor, revised
 
@@ -984,12 +995,12 @@ believing the paper version is complete.
 
 `apps/web/src/app/work/ai-assisted-engineering/practice-brief.test.ts`
 
-- nine claims; every `maturity` is one of the four values; all four values occur at least once
+- eight claims; every `maturity` is one of the three declared values; every declared value occurs at least once
 - every `sentences[0]` in claims, practice items, and lessons is ≤ 120 characters
 - exactly five workflow stages; exactly one `gate`; it is stage `03`
 - six tools, names in the exact order given in section 6.6, each with a non-empty `role`
-- the four maturity definitions are present, each with a distinct `tone`
-- **projection guard:** the print projection carries five claims covering all four maturity levels, four
+- the three maturity definitions are present, in order, each with a distinct `tone`
+- **projection guard:** the print projection carries five claims covering all three maturity levels, four
   practice items, three lessons, six tools each with a purpose, and four limit labels; every selected id exists;
   and every string the projection renders appears verbatim in the serialised `practiceBrief`
 - **quantitative-claim guard:** every entry of `APPROVED_DISCLAIMERS` occurs verbatim in the serialised
@@ -997,6 +1008,12 @@ believing the paper version is complete.
   `/\b\d+\s*x\b/i`, `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
   The guard therefore blocks an unsupported positive claim while leaving the approved denial expressible
 - **scale guard:** any store or country figure present is exactly `1,200` or `14`, matching `projects.ts`
+- **scope guard:** the source matches none of `company-wide`, `organisation-wide`, `organization-wide`,
+  `rolled out across`, `throughout Douglas`, `Douglas adopted`; the intro claims adoption inside Martin's team
+  and says it was not Douglas as a whole; the limits block carries `This was one team, not Douglas.`
+- **corrected-account guard:** both production outcomes are graded `shipped`, the API claim says the team
+  designed it and that architecture, reviews, and the production result stayed with the team, Pi's tool context
+  names the client team, and the multi-harness item does not present a second model as a rule
 - the colophon contains neither `private`, `confidential`, `hidden`, nor `protected`
 
 Do **not** write a test that lists forbidden client proper nouns. That would publish them. Proper-noun safety is
@@ -1058,7 +1075,7 @@ Library, following `apps/web/src/app/contact/page.integration.test.tsx`):
 | Stable shareable URL, identifies as an engineering brief | Section 7.1; eyebrow `Practice brief`, H1, section 6.1 |
 | 60-second scan reveals principle, Douglas, current workflow, review/ownership, tools | Section 4 scan path |
 | Douglas is lead evidence and visually and semantically separate | Section 10 order and the two-column print split; section 5 attribution discipline |
-| Every Douglas statement classified | Section 6.4, nine claims, four maturities, tested in 12.1 |
+| Every Douglas statement classified | Section 6.4, eight claims, three maturities, tested in 12.1 |
 | Six tools with concise real roles, not a logo strip | Section 6.6 record list; prohibition in section 3 |
 | Workflow shows bounded context, deterministic checks, human review, integration ownership | Section 6.3 stages 01, 03, 04, 05 |
 | No confidential material or unsupported quantitative claim in source, HTML, metadata, structured data, tests, or print | Section 5 rules; 12.1 guards; no JSON-LD (7.3) |
@@ -1146,14 +1163,15 @@ change to this page. Do not reopen one without him.
 | # | Decision | Settled outcome |
 | --- | --- | --- |
 | D1 | Naming the client's API | Use **"unified CRM API"** throughout, matching the published record in `projects.ts`. The internal product name is not used |
-| D2 | Pi's maturity at Douglas | Classified as **`My own use` plus a demonstration**, not team adoption, following the exit-report calibration over the private draft article |
-| D3 | The `Proposed` claim, C9 | **Kept.** A page with four maturity labels needs the fourth one to be real |
+| D2 | Pi's maturity at Douglas | ~~Classified as `My own use` plus a demonstration~~. **Superseded by D10:** Pi was part of the team's progression and the harness the team settled on for that period |
+| D3 | The `Proposed` claim, C9 | ~~Kept~~. **Superseded by D10:** removed from the page and the sheet because it diluted the adoption and delivery story |
 | D4 | Local models | **Kept, with revised framing** (section 6.6): privacy-sensitive experimentation and evaluating what smaller local models can and cannot do, explicitly not reached for on client delivery |
 | D5 | Linking `github.com/mtrenker/pi-clean` | **Included.** It is a public MIT repository and the only externally verifiable evidence on the page |
 | D6 | The workflow moves ahead of Douglas (deviation D-A) | **Approved** |
 | D7 | Print renders headline plus first sentence (deviation D-B) | **Approved** |
 | D8 | The blunt colophon, "That is not privacy." | **Kept as written** |
 | D9 | The print composition, after the one-page budget failed | **One A4 page kept as an acceptance criterion; the screen page stays complete; print carries a curated deterministic subset modelled in the shared source.** Settled 2 September 2026. See section 11 |
+| D10 | Douglas maturity, after Martin's firsthand account | **Supersedes D2 and D3.** Martin drove the adoption inside his own team, explicitly not across Douglas. Pi was part of the team's tool progression and the option the team settled on for that period, not a Martin-only demonstration. The handover proposal is removed from the page. The maturity key drops from four levels to the three that are true: Adopted, Tried, Shipped. Settled 2 September 2026 |
 
 ### Corrections applied at approval
 
@@ -1184,14 +1202,15 @@ section 6 is the corrected copy.
 | --- | --- |
 | Architecture and governance conflict, board decisions, named objections | Omitted entirely. Not a claim this page needs |
 | ~1,800 stores and 26 countries from private notes | Softened to the published 1,200 stores and 14 countries |
-| "Pi became our main harness in April 2026" | Softened to my own use plus a demonstration, per the exit report |
+| "Pi became our main harness in April 2026" | ~~Softened to my own use plus a demonstration~~. Restored as team practice per Martin's firsthand account (D10): the team progressed to Pi and settled on it for that period |
 | Internal repository, CLI, platform, board, and assistant names | Omitted; described by function only, matching `projects.ts` |
 | The client's own AI assistant rollout | Omitted entirely |
 | SaaS licence costs, approval dates, and the budget path for the short-link service | Omitted |
 | Contract length, contract reduction, and cost-cutting context | Omitted |
-| Individual team members, the engineering manager, the product owner, and their development | Omitted. Only "the team's engineering leadership" appears, unnamed, once |
+| Individual team members, the engineering manager, and their development | Omitted. The product owner appears once, unnamed and by role only, in the claim that licences reached the whole team, because who got access is the point of that claim |
 | Any productivity, speed, or quality percentage | Omitted, and guarded by a test |
-| Causation between AI use and the shipped outcomes | Explicitly disclaimed in C7 and in "What I don't claim" |
+| Causation between AI use and the shipped outcomes | C7 states the outcome is in the project record "as a delivery outcome, not as an AI result", and "What I don't claim" repeats that no productivity number exists |
+| Any adoption claim beyond Martin's team | Omitted and guarded by a test. The scope boundary appears in the section intro, the closing line, and the limits block |
 | The team's process-experimentation platform and pulse measurement | Omitted; client-internal product work, not this page's subject |
 
 ---

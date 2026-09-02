@@ -24,10 +24,10 @@ const printedItems: LabelledItem[] = [
 ];
 
 describe('practice brief content', () => {
-  it('grades every client claim and uses all four maturity levels', () => {
+  it('grades every client claim and uses every maturity level it declares', () => {
     const allowed = practiceBrief.client.maturities.map((maturity) => maturity.id);
 
-    expect(practiceBrief.client.claims).toHaveLength(9);
+    expect(practiceBrief.client.claims).toHaveLength(8);
     for (const claim of practiceBrief.client.claims) {
       expect(allowed).toContain(claim.maturity);
     }
@@ -36,12 +36,15 @@ describe('practice brief content', () => {
     }
   });
 
-  it('defines four maturity levels with distinct labels and tones', () => {
+  it('declares only maturity levels the account actually supports', () => {
     const { maturities } = practiceBrief.client;
 
-    expect(maturities).toHaveLength(4);
-    expect(new Set(maturities.map((maturity) => maturity.label)).size).toBe(4);
-    expect(new Set(maturities.map((maturity) => maturity.tone)).size).toBe(4);
+    // Martin's firsthand account is that this was team adoption throughout, so
+    // the earlier "Martin-only demonstration" and "future idea" levels describe
+    // nothing on the page and were removed rather than kept for symmetry.
+    expect(maturities.map((maturity) => maturity.id)).toEqual(['adopted', 'tried', 'shipped']);
+    expect(new Set(maturities.map((maturity) => maturity.label)).size).toBe(3);
+    expect(new Set(maturities.map((maturity) => maturity.tone)).size).toBe(3);
     for (const maturity of maturities) {
       expect(maturity.definition.length).toBeGreaterThan(0);
     }
@@ -134,10 +137,10 @@ describe('print projection', () => {
     expect(print.principle.items).toHaveLength(3);
   });
 
-  it('keeps all four maturity levels visible on the sheet', () => {
+  it('keeps every maturity level visible on the sheet', () => {
     const printed = new Set(print.client.claims.map((claim) => claim.maturityLabel));
 
-    expect(printed.size).toBe(4);
+    expect(printed.size).toBe(practiceBrief.client.maturities.length);
     for (const maturity of practiceBrief.client.maturities) {
       expect(printed).toContain(maturity.label);
     }
@@ -166,5 +169,49 @@ describe('print projection', () => {
     const invented = printStrings(print).filter((value) => !source.includes(JSON.stringify(value).slice(1, -1)));
 
     expect(invented).toEqual([]);
+  });
+});
+
+describe('the corrected Douglas account', () => {
+  it('claims team adoption and says plainly that it was not company-wide', () => {
+    const { intro, closing } = practiceBrief.client;
+
+    expect(intro).toContain('I drove the adoption of AI-assisted engineering inside my team');
+    expect(intro).toContain('not Douglas as a whole');
+    expect(closing).toContain('inside my team rather than across Douglas');
+  });
+
+  it('separates the two production outcomes and keeps ownership with the team', () => {
+    const byId = new Map(practiceBrief.client.claims.map((claim) => [claim.id, claim]));
+    const gateway = byId.get('api-gateway');
+
+    expect(byId.get('short-link-service')?.maturity).toBe('shipped');
+    expect(gateway?.maturity).toBe('shipped');
+    expect(gateway?.sentences[0]).toContain('The team designed');
+    expect(gateway?.sentences[1]).toContain('stayed with the team');
+  });
+
+  it('places Pi in the team progression rather than in Martin-only use', () => {
+    const pi = practiceBrief.tools.entries.find((entry) => entry.name === 'Pi');
+
+    expect(pi?.context).toContain('client team');
+    expect(pi?.sentences[1]).toContain('The team settled on it');
+  });
+
+  it('names the current multi-harness setup without inventing a mandatory reviewer', () => {
+    const item = practiceBrief.practice.items.find((candidate) => candidate.id === 'multi-harness');
+
+    expect(item?.sentences[0]).toContain('Claude Code does most of the coding');
+    expect(item?.sentences[1]).toContain('per change rather than a ritual');
+  });
+
+  it('makes no organisation-wide adoption claim, and says so in the limits block', () => {
+    // "across Douglas" appears only inside negations, so match the assertion
+    // shapes rather than the phrase.
+    expect(JSON.stringify(practiceBrief)).not.toMatch(/\b(company-wide|organisation-wide|organization-wide|rolled out across|throughout Douglas|Douglas adopted)\b/i);
+
+    const scope = practiceBrief.limits.items.find((item) => item.id === 'team-not-company');
+    expect(scope?.label).toBe('This was one team, not Douglas.');
+    expect(scope?.sentences[0]).toContain('Nothing here says the company adopted it');
   });
 });

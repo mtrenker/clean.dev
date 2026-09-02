@@ -17,7 +17,7 @@
  * maps, so the module does not pretend to a translation it does not have.
  */
 
-export type ClaimMaturity = 'team' | 'pilot' | 'mine' | 'proposed';
+export type ClaimMaturity = 'adopted' | 'tried' | 'shipped';
 
 /** Print budget for `sentences[0]`, in characters. Enforced by the module test. */
 export const PRINT_SENTENCE_BUDGET = 120;
@@ -107,17 +107,16 @@ export interface PracticeBrief {
  * print from drifting apart silently.
  *
  * Why these items, from `apps/web/docs/ai-assisted-engineering-brief-spec.md`
- * section 11: the five client claims are the ones issue #116 itself names as
- * the client-safe work to describe (shared versioned agent resources,
- * controlled access to approved delivery systems, AI-assisted planning and task
- * slicing, agent-supported implementation, plus the handover proposals), and
- * together they still cover all four maturity levels. The four practice items
- * are the ones the workflow rail cannot already state. The three lessons are
- * the ones that appear nowhere else on the sheet.
+ * section 11: the five client claims are the five moves the adoption story
+ * turns on, which is securing access, the weekly learning loop, the move to
+ * terminal agents and the progression through them, and the two systems that
+ * reached production. Together they cover all three maturity levels. The four
+ * practice items are the ones the workflow rail cannot already state. The three
+ * lessons are the ones that appear nowhere else on the sheet.
  */
 export const PRINT_SELECTION = {
-  claims: ['shared-resources', 'controlled-access', 'planning-slicing', 'agent-supported-delivery', 'handover-proposals'],
-  practice: ['small-harness', 'guardrails', 'independent-review', 'design-owner'],
+  claims: ['whole-team-access', 'weekly-workshop', 'terminal-agents', 'short-link-service', 'api-gateway'],
+  practice: ['multi-harness', 'small-harness', 'guardrails', 'design-owner'],
   lessons: ['context', 'slicing', 'ownership'],
 } as const;
 
@@ -226,8 +225,8 @@ export const buildPrintBrief = (brief: PracticeBrief = practiceBrief): PrintBrie
 export const practiceBrief: PracticeBrief = {
   eyebrow: 'Practice brief',
   title: 'AI-assisted engineering in practice',
-  subtitle: 'From team adoption at Douglas to my daily agent workflow',
-  lead: 'I use coding agents on real delivery work: first inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.',
+  subtitle: 'From driving team adoption at Douglas to my current multi-harness workflow',
+  lead: 'I use coding agents on real delivery work: first driving adoption inside a client team at Douglas, now as the normal way I build, investigate, and review software. This is a short account of what that looks like in practice, what a team adopted, what stayed an experiment, and what I still will not claim.',
   meta: 'Martin Trenker · Technical Lead and Solutions Architect · September 2026',
   print: {
     action: 'Print or save as PDF',
@@ -296,27 +295,53 @@ export const practiceBrief: PracticeBrief = {
   client: {
     heading: 'Client application: Douglas, 2024 to 2026',
     meta: 'React expert to Technical Lead to Solutions Architect · POS and CRM platform',
-    intro: 'I joined Douglas to modernise the point-of-sale and CRM software used in more than 1,200 stores across 14 European countries, and stayed for two and a half years, ending as Solutions Architect. AI-assisted work grew inside that engagement. It started as editor assistance anyone could try and became shared tooling, guardrails, and a review habit. Adoption was real but uneven, so each item below says how far it actually got.',
+    intro: 'I joined Douglas to modernise the point-of-sale and CRM software used in more than 1,200 stores across 14 European countries, and stayed for two and a half years, ending as Solutions Architect. I drove the adoption of AI-assisted engineering inside my team: securing access, introducing terminal agents, setting up the weekly slot where we compared tools, and connecting all of it to what we shipped. That was my team, not Douglas as a whole, and this section is about what the team did rather than what the company did.',
     keyHeading: 'How far each item got',
     maturities: [
-      { id: 'team', label: 'Team practice', definition: 'Part of how the team worked.', tone: 'green' },
-      { id: 'pilot', label: 'Pilot', definition: 'Tried deliberately for a period, never settled into a standard.', tone: 'amber' },
-      { id: 'mine', label: 'My own use', definition: 'How I worked. Not a team rollout.', tone: 'rust' },
-      { id: 'proposed', label: 'Proposed', definition: 'Recommended at handover, not adopted before the engagement ended.', tone: 'muted' },
+      { id: 'adopted', label: 'Adopted', definition: 'Settled into how the team worked.', tone: 'green' },
+      { id: 'tried', label: 'Tried', definition: 'Tested deliberately in the weekly workshop. Not everything was kept.', tone: 'amber' },
+      { id: 'shipped', label: 'Shipped', definition: 'Went to production with the team accountable for it.', tone: 'rust' },
     ],
     claims: [
       {
-        id: 'editor-first',
-        maturity: 'team',
-        label: 'Editor assistance came first.',
+        id: 'whole-team-access',
+        maturity: 'adopted',
+        label: 'I got the whole team access.',
         sentences: [
-          'We joined the GitHub Copilot evaluation in mid-2025 and used it in VS Code and Neovim, where the team already worked.',
-          'It was easy to adopt, and it made the ceiling obvious: approving every suggested edit keeps a person in the loop by turning them into a confirmation dialog.',
+          'When Douglas announced its Copilot pilot I secured licences for every engineer on my team, and the product owner.',
+          'Tooling that only some people have is not adoption. It stays a pocket of practice and it leaves when that person leaves.',
+        ],
+      },
+      {
+        id: 'weekly-workshop',
+        maturity: 'adopted',
+        label: 'A weekly workshop is where adoption actually happened.',
+        sentences: [
+          'We kept two hours a week to compare tools, workflows, and whatever was new, together rather than alone.',
+          'That standing slot is what turned scattered experiments into a shared way of working, and it is the first thing I would set up again.',
+        ],
+      },
+      {
+        id: 'terminal-agents',
+        maturity: 'tried',
+        label: 'Out of the editor and into the terminal.',
+        sentences: [
+          'I introduced terminal agents, and we worked through Copilot in VS Code, then OpenCode, then Pi.',
+          'Moving out of the editor changes review from approving each edit to judging the intent, the run, and the result. Not everything we tried in those sessions survived them.',
+        ],
+      },
+      {
+        id: 'settled-on-pi',
+        maturity: 'adopted',
+        label: 'We settled on Pi for that period.',
+        sentences: [
+          'It was the most flexible of the three and the one that left us feeling we understood what we owned.',
+          'A harness small enough to read is a harness a team can argue about, extend, and be responsible for.',
         ],
       },
       {
         id: 'shared-resources',
-        maturity: 'team',
+        maturity: 'adopted',
         label: 'Shared agent resources, versioned like code.',
         sentences: [
           'Instructions, skills, and extensions lived in one versioned repository that several projects and tools could consume.',
@@ -325,7 +350,7 @@ export const practiceBrief: PracticeBrief = {
       },
       {
         id: 'controlled-access',
-        maturity: 'team',
+        maturity: 'adopted',
         label: 'Controlled access, not open access.',
         sentences: [
           'I built a Node.js and TypeScript CLI that gave agents governed access to Jira, Confluence, and Azure DevOps.',
@@ -334,61 +359,25 @@ export const practiceBrief: PracticeBrief = {
         ],
       },
       {
-        id: 'learning-session',
-        maturity: 'team',
-        label: 'New practice went through a learning session first.',
+        id: 'short-link-service',
+        maturity: 'shipped',
+        label: 'The short-link and QR service, in weeks.',
         sentences: [
-          'Full Stack Fridays, the team\'s recurring learning format, is where a change to how we worked was shown first.',
-          'It was argued about there before it became routine, because tooling that arrives without that conversation gets used once and quietly abandoned.',
+          'The team used agents both to learn the ground and to build it, and it went from request to production in weeks.',
+          'It replaced a third-party service that no longer fitted the business need. It is in my project record as a delivery outcome, not as an AI result.',
         ],
       },
       {
-        id: 'terminal-agents',
-        maturity: 'pilot',
-        label: 'Terminal agents, beyond the editor.',
+        id: 'api-gateway',
+        maturity: 'shipped',
+        label: 'The unified CRM API, designed by the team.',
         sentences: [
-          'From early 2026 we tried terminal agents that work for longer stretches under a different kind of oversight.',
-          'Review moves from each edit to the intent, the run, and the result. It changed how I work permanently, and across the team it stayed an experiment rather than a standard.',
-        ],
-      },
-      {
-        id: 'planning-slicing',
-        maturity: 'pilot',
-        label: 'AI-assisted planning and task slicing.',
-        sentences: [
-          'We experimented with cutting work into slices an agent can finish and a person can still review honestly.',
-          'Slicing for the agent alone is how a team loses its connection to its own codebase, so the slicing itself was something we walked through together.',
-        ],
-      },
-      {
-        id: 'agent-supported-delivery',
-        maturity: 'mine',
-        label: 'Agent-supported delivery on two production systems.',
-        sentences: [
-          'Agents supported the work on the in-house short-link and QR service and on the unified CRM API.',
-          'I designed both, reviewed every change, and stayed responsible for what shipped. Both appear in my project record as delivery outcomes, and I am not claiming that AI caused them.',
-        ],
-      },
-      {
-        id: 'learning-dotnet',
-        maturity: 'mine',
-        label: 'Learning C# and .NET on the job, with help.',
-        sentences: [
-          'The unified API needed a stack I had not worked in, and I used agents to learn it while delivering.',
-          'I say that plainly as part of how the work happened, not as a claim of accumulated depth or measured speed.',
-        ],
-      },
-      {
-        id: 'handover-proposals',
-        maturity: 'proposed',
-        label: 'Deterministic workflows and generated documentation.',
-        sentences: [
-          'At handover I recommended repeatable agent workflows and product documentation generated from browser tests.',
-          'The first replaces ad hoc prompting with defined steps; the second turns user-story-driven tests into living documentation. Neither was adopted before my engagement ended, which is exactly why they are listed here as proposals.',
+          'The team designed the gateway that put the microservice landscape behind one REST and GraphQL interface.',
+          'Agents wrote the implementation end to end. The architecture, the reviews, and the production result stayed with the team, which is the only arrangement I would put a system like this into production under.',
         ],
       },
     ],
-    closing: 'In July 2026 I demonstrated my own agent setup and the workflow around it at Douglas. That was a demonstration, not a rollout, and the labels above are deliberate about the difference.',
+    closing: 'All of this happened inside my team rather than across Douglas. It is also where I learned C# and .NET with agent help while delivering the API, which I mention as part of how the work happened rather than as a claim of accumulated depth.',
   },
 
   practice: {
@@ -429,11 +418,11 @@ export const practiceBrief: PracticeBrief = {
         ],
       },
       {
-        id: 'independent-review',
-        label: 'The author is not the only reviewer.',
+        id: 'multi-harness',
+        label: 'More than one harness, on purpose.',
         sentences: [
-          'A second, independent model reviews the change, and I make the call on what it found.',
-          'The model that wrote a change is the worst available judge of whether it was a good idea.',
+          'Pi is the harness I extend, Claude Code does most of the coding, and Codex covers general work.',
+          'When a change matters I have a different model look at it, because the one that wrote it is a poor judge of whether it was a good idea. That is a decision per change rather than a ritual.',
         ],
       },
       {
@@ -464,7 +453,7 @@ export const practiceBrief: PracticeBrief = {
         name: 'GitHub Copilot',
         context: '2025 · client team',
         sentences: [
-          'Where the team started, inside VS Code and Neovim.',
+          'Where the team started, inside VS Code, after I had already been using it on my own projects.',
           'It made assistance normal, and it showed the limit of approving every edit by hand.',
         ],
       },
@@ -480,10 +469,10 @@ export const practiceBrief: PracticeBrief = {
       {
         id: 'pi',
         name: 'Pi',
-        context: '2026 · my own work',
+        context: '2026 · client team, then mine',
         sentences: [
           'A deliberately small harness with four default tools and extensions written in TypeScript.',
-          'It is where I learned what a harness actually contributes, and where a guard can intercept a call.',
+          'The team settled on it because it was the most flexible of the three, and it is still the harness I extend.',
         ],
       },
       {
@@ -491,7 +480,7 @@ export const practiceBrief: PracticeBrief = {
         name: 'Claude Code',
         context: '2026 · my own work',
         sentences: [
-          'What I use for design-owning and larger implementation work.',
+          'My main coding agent, and where larger implementation work happens.',
           'The design is written down before any code, with an explicit review pass afterwards.',
         ],
       },
@@ -500,8 +489,8 @@ export const practiceBrief: PracticeBrief = {
         name: 'Codex',
         context: '2026 · my own work',
         sentences: [
-          'A second implementation and review model.',
-          'The one that wrote a change is not the only one that judges it.',
+          'General work, and a second environment and model when a different angle helps.',
+          'Sometimes that angle is a review of something another agent wrote, which is a choice per change rather than a rule.',
         ],
       },
       {
@@ -585,9 +574,9 @@ export const practiceBrief: PracticeBrief = {
         sentences: ['Every change went through deterministic checks and a person before it merged.'],
       },
       {
-        id: 'partial-adoption',
-        label: 'Adoption at Douglas was partial.',
-        sentences: ['Some of this was daily team practice, some stayed a pilot, and some was mine alone. The labels above say which.'],
+        id: 'team-not-company',
+        label: 'This was one team, not Douglas.',
+        sentences: ['I drove this inside my own team. Nothing here says the company adopted it, and the labels say how far each item got.'],
       },
     ],
   },
