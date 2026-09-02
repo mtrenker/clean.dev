@@ -844,6 +844,54 @@ If the generated PDF exceeds one page, apply these trims **in this order** and r
 **Never** reduce type below 7pt, change `@page` margins, or use `break-before-page`. If five trims are not
 enough, stop and return the density question to Martin rather than shrinking the page.
 
+### Measured reality, 2 September 2026: the one-page budget does not hold
+
+The budget above was calibrated against the wrong width. It assumed roughly one printed line per
+sentence in the 96mm client column; at 8pt in 96mm a line holds about 62 characters, not 120, so
+every sentence wraps to two lines and every claim costs 14.9mm rather than 9.5mm.
+
+Measured from the implemented composition, laid out at the true A4 content width of 174mm
+(`page.setViewportSize({ width: 658 })` with `emulateMedia({ media: 'print' })`):
+
+| Block | Approved composition | Reduced to headlines only |
+| --- | --- | --- |
+| Masthead | 8.0mm | 8.0mm |
+| Title, subtitle, lead | 32.4mm | 32.4mm |
+| Principle band | 25.7mm | 25.7mm |
+| Workflow rail | 49.2mm | 35.4mm |
+| Douglas and current practice, two columns | 169.3mm | 97.9mm |
+| Tools | 15.6mm | 15.6mm |
+| Lessons | 51.1mm | 27.3mm |
+| What I don't claim | 22.8mm | 22.8mm |
+| Footer | 12.2mm | 12.2mm |
+| Eight 5mm section gaps | 39.0mm | 39.0mm |
+| **Total** | **425.3mm** | **316.2mm** |
+| **A4 content height** | **267mm** | **267mm** |
+
+The ordered trim list in this section does not close a 158mm gap, and neither does removing every
+sentence from the page. The approved content is roughly 1.6 A4 pages at readable sizes. This is a
+material design gap, so implementation stopped at this point rather than inventing a content cut.
+`apps/web/e2e/ai-practice-brief.spec.ts` still asserts one page and currently fails, deliberately:
+the assertion states the requirement, and weakening it would hide the gap.
+
+Three shapes are possible. The decision is Martin's because it is a content and acceptance-criteria
+decision, not a layout one.
+
+1. **Two A4 pages, everything kept.** The current output already prints on two sheets and reads
+   well; the only defect is that the two-column body splits across the break and leaves the right
+   column empty on sheet two. Fixing that means composing sheet one as masthead, title, lead,
+   principle, rail, and the Douglas evidence at full width, and sheet two as current practice,
+   tools, lessons, limits, and footer. Costs the issue's "exactly one A4 page" criterion.
+   **Recommended.**
+2. **One A4 page of labels only.** Headline-only for claims, practice items, and lessons; no rail
+   captions, no lead paragraph, no principle sentences, no limits sentences; 3mm section gaps.
+   Lands at roughly 268mm with nothing to spare. Keeps every item present, but the paper artifact
+   stops being a brief and becomes an index.
+3. **One A4 page by cutting the source content.** Measured: even five claims, four practice items,
+   and three lessons with their sentences reach about 290mm after every layout trim. A one-page
+   brief that keeps full sentences needs roughly a 60% content cut, which changes what the page
+   claims rather than how it is set.
+
 ### Print rules
 
 - Root: `<div data-print-document lang="en" className="hidden bg-white font-sans text-[var(--print-ink)] print:block">`.
