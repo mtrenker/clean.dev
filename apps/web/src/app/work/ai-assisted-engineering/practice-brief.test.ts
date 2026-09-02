@@ -187,7 +187,7 @@ describe('the corrected Douglas account', () => {
 
     expect(byId.get('short-link-service')?.maturity).toBe('shipped');
     expect(gateway?.maturity).toBe('shipped');
-    expect(gateway?.sentences[0]).toContain('The team designed');
+    expect(gateway?.sentences[0]).toContain('Our team designed');
     expect(gateway?.sentences[1]).toContain('stayed with the team');
   });
 
@@ -206,12 +206,17 @@ describe('the corrected Douglas account', () => {
   });
 
   it('makes no organisation-wide adoption claim, and says so in the limits block', () => {
-    // "across Douglas" appears only inside negations, so match the assertion
-    // shapes rather than the phrase.
-    expect(JSON.stringify(practiceBrief)).not.toMatch(/\b(company-wide|organisation-wide|organization-wide|rolled out across|throughout Douglas|Douglas adopted)\b/i);
+    // The scope limit names "company-wide" in order to rule it out, so strip
+    // the approved denials first and hold the remainder to the rule. "across
+    // Douglas" likewise appears only inside negations.
+    const asserted = APPROVED_DISCLAIMERS.reduce(
+      (text, disclaimer) => text.split(disclaimer).join(' '),
+      JSON.stringify(practiceBrief),
+    );
+    expect(asserted).not.toMatch(/\b(company-wide|organisation-wide|organization-wide|rolled out across|throughout Douglas|Douglas adopted)\b/i);
 
     const scope = practiceBrief.limits.items.find((item) => item.id === 'team-not-company');
-    expect(scope?.label).toBe('This was one team, not Douglas.');
-    expect(scope?.sentences[0]).toContain('Nothing here says the company adopted it');
+    expect(scope?.label).toBe('One team, not a company-wide rollout.');
+    expect(scope?.sentences[0]).toContain('Nothing here claims adoption across the wider organisation');
   });
 });

@@ -23,16 +23,19 @@ export type ClaimMaturity = 'adopted' | 'tried' | 'shipped';
 export const PRINT_SENTENCE_BUDGET = 120;
 
 /**
- * The only sentences allowed to name a quantitative concept, and they name it
- * in order to deny it. The module test removes these exact strings before
- * scanning for unsupported quantitative claims, so the page can refuse to give
- * a productivity number without the guard rejecting the refusal.
+ * The only strings allowed to name a quantitative or organisation-wide concept,
+ * and they name it in order to deny it. The module tests remove these exact
+ * strings before scanning, so the page can refuse to give a productivity number
+ * and can rule out a company-wide rollout without the guards rejecting the
+ * refusals themselves.
  *
  * Adding an entry here is a deliberate, reviewable act.
  */
 export const APPROVED_DISCLAIMERS = [
   'I have no productivity number.',
   'The teams I worked with did not measure one, and a percentage without a baseline is decoration.',
+  'One team, not a company-wide rollout.',
+  'I drove adoption within our Douglas team. Nothing here claims adoption across the wider organisation.',
 ] as const;
 
 export interface MaturityDefinition {
@@ -306,9 +309,9 @@ export const practiceBrief: PracticeBrief = {
       {
         id: 'whole-team-access',
         maturity: 'adopted',
-        label: 'I got the whole team access.',
+        label: 'I secured Copilot access for the whole team.',
         sentences: [
-          'When Douglas announced its Copilot pilot I secured licences for every engineer on my team, and the product owner.',
+          'When Douglas announced its Copilot pilot, I secured licences for everyone on my team, including the product owner.',
           'Tooling that only some people have is not adoption. It stays a pocket of practice and it leaves when that person leaves.',
         ],
       },
@@ -326,7 +329,7 @@ export const practiceBrief: PracticeBrief = {
         maturity: 'tried',
         label: 'Out of the editor and into the terminal.',
         sentences: [
-          'I introduced terminal agents, and we worked through Copilot in VS Code, then OpenCode, then Pi.',
+          'I introduced terminal agents; we moved from Copilot in VS Code to OpenCode, then settled on Pi for that period.',
           'Moving out of the editor changes review from approving each edit to judging the intent, the run, and the result. Not everything we tried in those sessions survived them.',
         ],
       },
@@ -363,17 +366,17 @@ export const practiceBrief: PracticeBrief = {
         maturity: 'shipped',
         label: 'The short-link and QR service, in weeks.',
         sentences: [
-          'The team used agents both to learn the ground and to build it, and it went from request to production in weeks.',
+          'We used agents to learn unfamiliar parts of the stack and take the service from request to production in weeks.',
           'It replaced a third-party service that no longer fitted the business need. It is in my project record as a delivery outcome, not as an AI result.',
         ],
       },
       {
         id: 'api-gateway',
         maturity: 'shipped',
-        label: 'The unified CRM API, designed by the team.',
+        label: 'A team-designed, agent-written CRM API.',
         sentences: [
-          'The team designed the gateway that put the microservice landscape behind one REST and GraphQL interface.',
-          'Agents wrote the implementation end to end. The architecture, the reviews, and the production result stayed with the team, which is the only arrangement I would put a system like this into production under.',
+          'Our team designed the REST and GraphQL gateway; agents wrote its implementation end to end.',
+          'It unified access to the microservices. Architecture, review, and production accountability stayed with the team.',
         ],
       },
     ],
@@ -561,7 +564,7 @@ export const practiceBrief: PracticeBrief = {
       {
         id: 'not-a-researcher',
         label: 'I am not an ML researcher.',
-        sentences: ['I do not train, fine-tune, or evaluate models. I build software and use these tools to do it.'],
+        sentences: ['I do not train or fine-tune models. I build software and evaluate how these tools fit engineering work.'],
       },
       {
         id: 'no-number',
@@ -575,8 +578,8 @@ export const practiceBrief: PracticeBrief = {
       },
       {
         id: 'team-not-company',
-        label: 'This was one team, not Douglas.',
-        sentences: ['I drove this inside my own team. Nothing here says the company adopted it, and the labels say how far each item got.'],
+        label: 'One team, not a company-wide rollout.',
+        sentences: ['I drove adoption within our Douglas team. Nothing here claims adoption across the wider organisation.'],
       },
     ],
   },

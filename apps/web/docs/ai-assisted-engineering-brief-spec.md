@@ -306,8 +306,8 @@ pattern would be decoration.
 
 **Eight claims.** Print renders the label and `sentences[0]` of the selected ones.
 
-**C1 · Adopted · `I got the whole team access.`**
-1. `When Douglas announced its Copilot pilot I secured licences for every engineer on my team, and the product owner.`
+**C1 · Adopted · `I secured Copilot access for the whole team.`**
+1. `When Douglas announced its Copilot pilot, I secured licences for everyone on my team, including the product owner.`
 2. `Tooling that only some people have is not adoption. It stays a pocket of practice and it leaves when that person leaves.`
 
 **C2 · Adopted · `A weekly workshop is where adoption actually happened.`**
@@ -315,7 +315,7 @@ pattern would be decoration.
 2. `That standing slot is what turned scattered experiments into a shared way of working, and it is the first thing I would set up again.`
 
 **C3 · Tried · `Out of the editor and into the terminal.`**
-1. `I introduced terminal agents, and we worked through Copilot in VS Code, then OpenCode, then Pi.`
+1. `I introduced terminal agents; we moved from Copilot in VS Code to OpenCode, then settled on Pi for that period.`
 2. `Moving out of the editor changes review from approving each edit to judging the intent, the run, and the result. Not everything we tried in those sessions survived them.`
 
 **C4 · Adopted · `We settled on Pi for that period.`**
@@ -327,12 +327,12 @@ pattern would be decoration.
 **C6 · Adopted · `Controlled access, not open access.`** (unchanged)
 
 **C7 · Shipped · `The short-link and QR service, in weeks.`**
-1. `The team used agents both to learn the ground and to build it, and it went from request to production in weeks.`
+1. `We used agents to learn unfamiliar parts of the stack and take the service from request to production in weeks.`
 2. `It replaced a third-party service that no longer fitted the business need. It is in my project record as a delivery outcome, not as an AI result.`
 
-**C8 · Shipped · `The unified CRM API, designed by the team.`**
-1. `The team designed the gateway that put the microservice landscape behind one REST and GraphQL interface.`
-2. `Agents wrote the implementation end to end. The architecture, the reviews, and the production result stayed with the team, which is the only arrangement I would put a system like this into production under.`
+**C8 · Shipped · `A team-designed, agent-written CRM API.`**
+1. `Our team designed the REST and GraphQL gateway; agents wrote its implementation end to end.`
+2. `It unified access to the microservices. Architecture, review, and production accountability stayed with the team.`
 
 Section-closing line, which carries the scope boundary a second time and the personal learning that is
 no longer a claim of its own:
@@ -437,10 +437,10 @@ Four items, each a label and one sentence. This block is rendered as a single bo
 
 | Label | Sentence |
 | --- | --- |
-| `I am not an ML researcher.` | `I do not train, fine-tune, or evaluate models. I build software and use these tools to do it.` |
+| `I am not an ML researcher.` | `I do not train or fine-tune models. I build software and evaluate how these tools fit engineering work.` |
 | `I have no productivity number.` | `The teams I worked with did not measure one, and a percentage without a baseline is decoration.` |
 | `Nothing here merged unattended.` | `Every change went through deterministic checks and a person before it merged.` |
-| `This was one team, not Douglas.` | `I drove this inside my own team. Nothing here says the company adopted it, and the labels say how far each item got.` |
+| `One team, not a company-wide rollout.` | `I drove adoption within our Douglas team. Nothing here claims adoption across the wider organisation.` |
 
 ### 6.9 Colophon and close
 
@@ -650,10 +650,11 @@ Rules the module must satisfy, enforced by tests in section 12:
 - `workflow.stages` has exactly five entries; exactly one carries `gate: true`; it is `03`.
 - `tools.entries` has exactly six entries whose `name` values are, in order: GitHub Copilot, OpenCode, Pi,
   Claude Code, Codex, Local models.
-- The module exports `APPROVED_DISCLAIMERS`, the exact sentences that are permitted to name a quantitative
-  concept in order to deny it. It contains exactly the two approved disclaimers:
-  `I have no productivity number.` and
-  `The teams I worked with did not measure one, and a percentage without a baseline is decoration.`
+- The module exports `APPROVED_DISCLAIMERS`, the exact strings permitted to name a quantitative or
+  organisation-wide concept in order to deny it: the two productivity denials
+  (`I have no productivity number.` and `The teams I worked with did not measure one, and a percentage without a
+  baseline is decoration.`) and the two scope denials (`One team, not a company-wide rollout.` and
+  `I drove adoption within our Douglas team. Nothing here claims adoption across the wider organisation.`).
 - After those exact strings are removed, no remaining string in the serialised module matches `/\d+\s*%/`,
   `/\b\d+\s*x\b/i`, or `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
   Guarding assertions rather than vocabulary is what lets the page deny a productivity number without the
@@ -888,11 +889,11 @@ three maturity levels:
 
 | Claim | Maturity |
 | --- | --- |
-| I got the whole team access | Adopted |
+| I secured Copilot access for the whole team | Adopted |
 | A weekly workshop is where adoption actually happened | Adopted |
 | Out of the editor and into the terminal | Tried |
 | The short-link and QR service, in weeks | Shipped |
-| The unified CRM API, designed by the team | Shipped |
+| A team-designed, agent-written CRM API | Shipped |
 
 Dropped from print, kept on screen: `settled-on-pi`, whose substance is in C3's progression and in
 the Pi tools row; `shared-resources`; and `controlled-access`, whose guardrails half is carried by the
@@ -1008,11 +1009,12 @@ believing the paper version is complete.
   `/\b\d+\s*x\b/i`, `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
   The guard therefore blocks an unsupported positive claim while leaving the approved denial expressible
 - **scale guard:** any store or country figure present is exactly `1,200` or `14`, matching `projects.ts`
-- **scope guard:** the source matches none of `company-wide`, `organisation-wide`, `organization-wide`,
-  `rolled out across`, `throughout Douglas`, `Douglas adopted`; the intro claims adoption inside Martin's team
-  and says it was not Douglas as a whole; the limits block carries `This was one team, not Douglas.`
-- **corrected-account guard:** both production outcomes are graded `shipped`, the API claim says the team
-  designed it and that architecture, reviews, and the production result stayed with the team, Pi's tool context
+- **scope guard:** after the approved denials are stripped, the source matches none of `company-wide`,
+  `organisation-wide`, `organization-wide`, `rolled out across`, `throughout Douglas`, `Douglas adopted`; the
+  intro claims adoption inside Martin's team and says it was not Douglas as a whole; the limits block carries
+  `One team, not a company-wide rollout.`
+- **corrected-account guard:** both production outcomes are graded `shipped`, the API claim says our team
+  designed it and that architecture, review, and production accountability stayed with the team, Pi's tool context
   names the client team, and the multi-harness item does not present a second model as a rule
 - the colophon contains neither `private`, `confidential`, `hidden`, nor `protected`
 
