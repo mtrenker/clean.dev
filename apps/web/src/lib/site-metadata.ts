@@ -5,11 +5,12 @@ import deMessages from '@/messages/de.json';
 import enMessages from '@/messages/en.json';
 
 export const SITE_URL = 'https://clean.dev';
+export const CONTACT_EMAIL = 'info@clean.dev';
 export const SITE_NAME = 'clean.dev';
 export const SOCIAL_IMAGE_URL = `${SITE_URL}/opengraph-image`;
 export const SOCIAL_IMAGE_ALT = 'clean.dev share card: Martin Trenker, Technical Lead and Solutions Architect, Munich and remote DACH.';
 
-export type RouteKey = 'home' | 'work' | 'contact' | 'blog' | 'imprint' | 'privacy';
+export type RouteKey = 'home' | 'work' | 'aiPractice' | 'contact' | 'blog' | 'imprint' | 'privacy';
 
 interface RouteCopy {
   title: string;
@@ -66,6 +67,32 @@ export const ROUTES: Record<RouteKey, RouteDefinition> = {
         title: 'Ausgewählte Projekte und Projekthistorie | clean.dev',
         description: '20 Kundenprojekte, vom React-Experten zum Technical Lead und Solutions Architect, inklusive der POS-/CRM-Modernisierung bei Douglas in über 1.200 Filialen.',
         ogTitle: 'Ausgewählte Projekte und Projekthistorie',
+      },
+    },
+  },
+  /**
+   * Unlisted practice brief (#116). Kept out of the sitemap and marked
+   * noindex, but deliberately declared here rather than inline so the
+   * indexing decision, the canonical, and the share card all stay in one
+   * table and under one test.
+   *
+   * English only in this delivery: the `de` copy is intentionally identical
+   * to `en` and is replaced when the page is localised.
+   */
+  aiPractice: {
+    path: '/work/ai-assisted-engineering',
+    sitemap: false,
+    robots: { index: false, follow: false },
+    copy: {
+      en: {
+        title: 'AI-assisted engineering in practice | clean.dev',
+        description: 'How AI-assisted engineering worked inside a client team at Douglas, and how coding agents fit into my daily work: bounded tasks, deterministic checks, human review.',
+        ogTitle: 'AI-assisted engineering in practice',
+      },
+      de: {
+        title: 'AI-assisted engineering in practice | clean.dev',
+        description: 'How AI-assisted engineering worked inside a client team at Douglas, and how coding agents fit into my daily work: bounded tasks, deterministic checks, human review.',
+        ogTitle: 'AI-assisted engineering in practice',
       },
     },
   },

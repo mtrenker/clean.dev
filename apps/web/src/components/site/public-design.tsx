@@ -4,8 +4,11 @@ import { Link } from '@/components/ui/link';
 
 export const publicSurface = 'min-h-screen bg-[var(--site-bg)] text-[var(--site-ink)]';
 
-export const SiteShell = ({ children, className }: { children: ReactNode; className?: string }) => (
-  <main id="main-content" className={clsx(publicSurface, className)}>
+export const SiteShell = ({ children, className, lang }: { children: ReactNode; className?: string; lang?: string }) => (
+  // `lang` is for pages whose content is not in the visitor's locale, so the
+  // surrounding chrome stays localised while the document declares its own
+  // language to assistive technology.
+  <main id="main-content" lang={lang} className={clsx(publicSurface, className)}>
     {children}
   </main>
 );

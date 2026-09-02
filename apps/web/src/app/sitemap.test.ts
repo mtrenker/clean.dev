@@ -26,6 +26,8 @@ describe('sitemap route', () => {
     const result = sitemap();
 
     expect(result.map((entry) => entry.url)).toEqual(staticUrls);
+    // The unlisted practice brief (#116) must never reach the sitemap.
+    expect(result.map((entry) => entry.url)).not.toContain('https://clean.dev/work/ai-assisted-engineering');
     for (const entry of result) {
       expect(entry).not.toHaveProperty('changeFrequency');
       expect(entry).not.toHaveProperty('priority');

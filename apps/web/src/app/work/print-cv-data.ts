@@ -1,6 +1,7 @@
 import type { IntlShape } from 'react-intl';
 import { getConsultingAvailability } from '@/lib/availability';
 import { SOCIAL_PROFILES } from '@/lib/social-profiles';
+import { CONTACT_EMAIL } from '@/lib/site-metadata';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
@@ -49,7 +50,6 @@ export interface PrintCvModel {
   certsNote: string;
 }
 
-const CONTACT_EMAIL = 'info@clean.dev';
 const SITE_URL = 'https://clean.dev';
 const RECENT_TECHNOLOGY_LIMIT = 14;
 

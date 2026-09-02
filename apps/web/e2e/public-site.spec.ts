@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { getAllPosts } from '../src/lib/blog';
 
 const posts = getAllPosts();
-const publicRoutes = ['/', '/work', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
+const publicRoutes = ['/', '/work', '/work/ai-assisted-engineering', '/contact', '/blog', '/imprint', '/privacy', '/workflow-simulator'];
 const siteThemes = ['dark', 'light'] as const;
 const protonBookingUrl = 'https://calendar.proton.me/bookings#gr6YDfkOKjAMY1niO0UPh2HmFBm4FnVWYJaeshmt0IM=';
 
