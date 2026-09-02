@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createIntl } from 'react-intl';
 import { projects } from '../projects';
-import { buildPrintCv, recentTechnologies } from './print-cv-data';
+import { buildPrintCv, printCvTechnologies, recentTechnologies } from './print-cv-data';
 import type { Locale } from '@/lib/locale';
 import enMessages from '@/messages/en.json';
 import deMessages from '@/messages/de.json';
@@ -83,5 +83,12 @@ describe('recentTechnologies', () => {
     expect(technologies).toHaveLength(14);
     expect(new Set(technologies).size).toBe(technologies.length);
     expect(technologies.slice(0, 3)).toEqual(['dotnet', 'csharp', 'graphql']);
+    expect(technologies).toEqual(expect.arrayContaining(['typescript', 'node.js', 'nestjs', 'express']));
+  });
+
+  it('surfaces dated AWS serverless proof in the printable CV', () => {
+    expect(printCvTechnologies(projects)).toEqual(expect.arrayContaining([
+      'aws (2020–2025)', 'aws-cdk', 'lambda', 'dynamodb',
+    ]));
   });
 });

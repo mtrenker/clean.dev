@@ -43,6 +43,8 @@ describe('buildDouglasWorkCase', () => {
     const english = buildDouglasWorkCase(projects, 'en');
     const german = buildDouglasWorkCase(projects, 'de');
 
+    expect(english.personalOwnership.join(' ')).toContain('TypeScript/Node.js with NestJS and Express');
+    expect(german.personalOwnership.join(' ')).toContain('TypeScript/Node.js mit NestJS und Express');
     expect(english.personalOwnership.join(' ')).toContain('personally designed and shipped the unified API');
     expect(german.personalOwnership.join(' ')).toContain('die einheitliche API persönlich konzipiert und umgesetzt');
     expect(english.personalOwnership.join(' ')).not.toContain(weakerEnglishWording);
@@ -53,6 +55,8 @@ describe('buildDouglasWorkCase', () => {
     const workCase = buildDouglasWorkCase(projects, 'en');
 
     expect(workCase.technologies).toEqual([...new Set(workCase.technologies)]);
-    expect(workCase.technologies).toEqual(expect.arrayContaining(['react', 'dotnet', 'csharp', 'graphql', 'rest']));
+    expect(workCase.technologies).toEqual(expect.arrayContaining([
+      'react', 'typescript', 'node.js', 'nestjs', 'express', 'dotnet', 'csharp', 'graphql', 'rest',
+    ]));
   });
 });

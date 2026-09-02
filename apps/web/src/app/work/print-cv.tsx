@@ -87,6 +87,12 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
               {paragraph}
             </p>
           ))}
+          <p
+            data-print-certifications
+            className="mt-[5mm] max-w-[125mm] break-inside-avoid border-t border-[var(--print-rule)] pt-[2.5mm] font-mono text-[7pt] leading-[1.5] text-[var(--print-ink-mute)]"
+          >
+            {cv.certsNote}
+          </p>
         </div>
         <aside>
           <Image
@@ -170,9 +176,6 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
             <PrintHistoryEntry key={entry.id} entry={entry} />
           ))}
         </div>
-        <p className="mt-[3mm] border-t border-[var(--print-rule)] pt-[2mm] font-mono text-[7.5pt] leading-[1.45] text-[var(--print-ink-mute)]">
-          {cv.certsNote}
-        </p>
       </section>
     </div>
   );

@@ -37,6 +37,7 @@ test.describe('work print CV', () => {
       expect(text).toContain('Martin Trenker');
       expect(text).toContain('info@clean.dev');
       expect(text).toContain(HISTORY_HEADINGS[locale]);
+      await expect(printDocument.locator('[data-print-certifications]')).toContainText('AWS Certified Developer');
       // The complete chronology remains present, with Douglas represented as
       // one progression-based engagement instead of two repeated entries.
       for (const project of projects.filter((candidate) => !isDouglasProject(candidate))) {

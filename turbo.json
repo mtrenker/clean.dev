@@ -7,6 +7,9 @@
     "CDK_DEFAULT_ACCOUNT",
     "CDK_DEFAULT_REGION"
   ],
+  "globalPassThroughEnv": [
+    "PROTON_PASS_SESSION_DIR"
+  ],
   "tasks": {
     "dev": {
       "cache": false,

@@ -52,6 +52,8 @@ export interface PrintCvModel {
 
 const SITE_URL = 'https://clean.dev';
 const RECENT_TECHNOLOGY_LIMIT = 14;
+const PRINT_CV_RECENT_TECHNOLOGY_LIMIT = 10;
+const AWS_PROOF_TECHNOLOGIES = ['aws (2020–2025)', 'aws-cdk', 'lambda', 'dynamodb'] as const;
 
 const getYear = (date: string) => Number(date.slice(0, 4));
 const formatDatePeriod = (startDate: string, endDate: string) => {
@@ -83,6 +85,11 @@ export const recentTechnologies = (projects: Project[], limit = RECENT_TECHNOLOG
   }
   return result;
 };
+
+export const printCvTechnologies = (projects: Project[]): string[] => [
+  ...recentTechnologies(projects, PRINT_CV_RECENT_TECHNOLOGY_LIMIT),
+  ...AWS_PROOF_TECHNOLOGIES,
+];
 
 export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShape): PrintCvModel => {
   const msg = (id: string) => intl.formatMessage({ id });
@@ -161,7 +168,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
       body: msg(`work.section.${section}.p`),
     })),
     technologiesHeading: msg('work.projects.technologies'),
-    technologies: recentTechnologies(projects).join(' · '),
+    technologies: printCvTechnologies(projects).join(' · '),
     historyHeading: msg('work.print.history.heading'),
     historyMeta: msg('work.timeline.meta'),
     entries,

@@ -17,7 +17,7 @@ const caseCopy: Record<Locale, {
 }> = {
   en: {
     role: 'React Expert → Technical Lead → Solutions Architect',
-    mandate: 'Modernise the POS/CRM platform, move the frontend to maintainable React, unify the CRM API landscape, and modernise how the team works.',
+    mandate: 'Modernise the POS/CRM platform from its React frontend to backend services in TypeScript/Node.js and C#/.NET, unify the CRM API landscape, and introduce governed AI tooling.',
     progression: [
       {
         role: 'React Expert',
@@ -29,13 +29,13 @@ const caseCopy: Record<Locale, {
       },
       {
         role: 'Solutions Architect',
-        body: 'Took on broader scope to unify the CRM API landscape and introduce governed AI tooling for daily delivery work.',
+        body: 'Took on broader scope across TypeScript/Node.js and C#/.NET backend services to unify the CRM API landscape and introduce governed AI tooling for daily delivery work.',
       },
     ],
   },
   de: {
     role: 'React-Experte → Technical Lead → Solutions Architect',
-    mandate: 'Die POS-/CRM-Plattform modernisieren, das Frontend auf wartbares React umstellen, die CRM-API-Landschaft vereinheitlichen und die Arbeitsweise des Teams weiterentwickeln.',
+    mandate: 'Die POS-/CRM-Plattform über das React-Frontend sowie TypeScript-/Node.js- und C#/.NET-Backend-Services hinweg modernisieren, die CRM-API-Landschaft vereinheitlichen und KI-Tooling mit klaren Leitplanken einführen.',
     progression: [
       {
         role: 'React-Experte',
@@ -47,7 +47,7 @@ const caseCopy: Record<Locale, {
       },
       {
         role: 'Solutions Architect',
-        body: 'Mit erweitertem Verantwortungsbereich die CRM-API-Landschaft vereinheitlicht und KI-Tooling mit klaren Leitplanken in die tägliche Delivery eingeführt.',
+        body: 'Mit erweitertem Verantwortungsbereich an TypeScript-/Node.js- und C#/.NET-Backend-Services gearbeitet, die CRM-API-Landschaft vereinheitlicht und KI-Tooling mit klaren Leitplanken in die tägliche Delivery eingeführt.',
       },
     ],
   },
@@ -103,7 +103,7 @@ export const buildDouglasWorkCase = (projects: Project[], locale: Locale): Dougl
     personalOwnership: [
       solutionsArchitect.highlights[locale][1],
       solutionsArchitect.highlights[locale][2],
-      solutionsArchitect.highlights[locale][3],
+      solutionsArchitect.highlights[locale][4],
     ],
     outcomes: [
       { kind: 'measured', text: technicalLead.highlights[locale][1] },
