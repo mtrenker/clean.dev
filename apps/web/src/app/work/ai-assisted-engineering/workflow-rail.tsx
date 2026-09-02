@@ -55,23 +55,23 @@ const ScreenRail = ({ stages }: { stages: WorkflowStage[] }) => (
 
 const PrintRail = ({ stages }: { stages: WorkflowStage[] }) => (
   <div className="break-inside-avoid">
-    <ol className="grid grid-cols-5 gap-[4mm] border-t-2 border-[var(--print-ink)]">
+    <ol className="grid grid-cols-5 gap-[2.5mm] border-t-2 border-[var(--print-ink)]">
       {stages.map((stage) => (
         <li key={stage.number}>
-          <span aria-hidden="true" className="block h-[2.5mm] w-[0.5mm] bg-[var(--print-rust)]" />
-          <p className="mt-[1.5mm] font-mono text-[7pt] font-semibold text-[var(--print-rust)]">{stage.number}</p>
-          <h3 className="mt-[0.8mm] text-[8.5pt] font-semibold leading-[1.2] text-[var(--print-ink)]">{stage.label}</h3>
-          <p className="mt-[1mm] text-[7pt] leading-[1.3] text-[var(--print-ink-sec)] hyphens-auto">{stage.caption}</p>
+          <span aria-hidden="true" className="block h-[2mm] w-[0.5mm] bg-[var(--print-rust)]" />
+          <p className="mt-[1mm] font-mono text-[6.5pt] font-semibold text-[var(--print-rust)]">{stage.number}</p>
+          <h3 className="mt-[0.6mm] text-[8pt] font-semibold leading-[1.15] text-[var(--print-ink)]">{stage.label}</h3>
+          <p className="mt-[0.8mm] text-[6.5pt] leading-[1.22] text-[var(--print-ink-sec)] hyphens-auto">{stage.caption}</p>
         </li>
       ))}
     </ol>
-    <div aria-hidden="true" className="mt-[2mm] grid grid-cols-5 gap-[4mm]">
+    <div aria-hidden="true" className="mt-[1mm] grid grid-cols-5 gap-[2.5mm]">
       <div className="col-start-2 col-end-5 flex items-center">
-        <span className="h-[2mm] w-px bg-[var(--print-rule)]" />
+        <span className="h-[1.5mm] w-px bg-[var(--print-rule)]" />
         <span className="flex-1 border-b border-dashed border-[var(--print-rule)]" />
         <span className="px-[2mm] font-mono text-[6.5pt] uppercase tracking-[0.14em] text-[var(--print-ink-mute)]">rework</span>
         <span className="flex-1 border-b border-dashed border-[var(--print-rule)]" />
-        <span className="h-[2mm] w-px bg-[var(--print-rule)]" />
+        <span className="h-[1.5mm] w-px bg-[var(--print-rule)]" />
       </div>
     </div>
   </div>

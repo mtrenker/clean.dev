@@ -159,7 +159,7 @@ export const PracticeBriefView: React.FC = () => {
                 <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--site-ink-sec)] md:mt-1">
                   {entry.context}
                 </span>
-                <span className="text-base leading-7 text-[var(--site-ink-sec)]">{entry.role}</span>
+                <span className="text-base leading-7 text-[var(--site-ink-sec)]">{entry.sentences.join(' ')}</span>
               </li>
             ))}
           </ol>

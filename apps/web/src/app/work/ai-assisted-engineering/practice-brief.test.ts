@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   APPROVED_DISCLAIMERS,
+  buildPrintBrief,
+  PRINT_SELECTION,
   PRINT_SENTENCE_BUDGET,
   practiceBrief,
   type LabelledItem,
@@ -77,7 +79,7 @@ describe('practice brief content', () => {
       'Local models',
     ]);
     for (const entry of practiceBrief.tools.entries) {
-      expect(entry.role.length).toBeGreaterThan(0);
+      expect(entry.sentences[0].length).toBeGreaterThan(0);
       expect(entry.context.length).toBeGreaterThan(0);
     }
   });
@@ -108,5 +110,61 @@ describe('practice brief content', () => {
   it('claims no privacy for an unlisted route', () => {
     expect(practiceBrief.colophon).toContain('That is not privacy.');
     expect(practiceBrief.colophon).not.toMatch(/\b(private|confidential|hidden|protected)\b/i);
+  });
+});
+
+/** Every string the print projection renders, flattened. */
+const printStrings = (value: unknown): string[] => {
+  if (typeof value === 'string') return [value];
+  if (Array.isArray(value)) return value.flatMap(printStrings);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(printStrings);
+  return [];
+};
+
+describe('print projection', () => {
+  const print = buildPrintBrief();
+
+  it('curates the selection the A4 sheet has room for', () => {
+    expect(print.client.claims).toHaveLength(5);
+    expect(print.practice.items).toHaveLength(4);
+    expect(print.lessons.items).toHaveLength(3);
+    expect(print.tools.entries).toHaveLength(6);
+    expect(print.limits.labels).toHaveLength(4);
+    expect(print.workflow.stages).toHaveLength(5);
+    expect(print.principle.items).toHaveLength(3);
+  });
+
+  it('keeps all four maturity levels visible on the sheet', () => {
+    const printed = new Set(print.client.claims.map((claim) => claim.maturityLabel));
+
+    expect(printed.size).toBe(4);
+    for (const maturity of practiceBrief.client.maturities) {
+      expect(printed).toContain(maturity.label);
+    }
+  });
+
+  it('keeps Douglas as the lead: more printed client claims than practice items', () => {
+    expect(print.client.claims.length).toBeGreaterThan(print.practice.items.length);
+  });
+
+  it('selects only items that exist, and every tool carries a purpose', () => {
+    for (const [key, ids] of Object.entries(PRINT_SELECTION)) {
+      const source = {
+        claims: practiceBrief.client.claims,
+        practice: practiceBrief.practice.items,
+        lessons: practiceBrief.lessons.items,
+      }[key as keyof typeof PRINT_SELECTION];
+
+      expect(new Set(ids).size).toBe(ids.length);
+      for (const id of ids) expect(source.map((item) => item.id)).toContain(id);
+    }
+    for (const entry of print.tools.entries) expect(entry.purpose.length).toBeGreaterThan(0);
+  });
+
+  it('cannot drift from the screen: every printed string comes verbatim from the source', () => {
+    const source = JSON.stringify(practiceBrief);
+    const invented = printStrings(print).filter((value) => !source.includes(JSON.stringify(value).slice(1, -1)));
+
+    expect(invented).toEqual([]);
   });
 });

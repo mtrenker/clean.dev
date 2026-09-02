@@ -634,9 +634,12 @@ export const practiceBrief: PracticeBrief = { … };
 Rules the module must satisfy, enforced by tests in section 12:
 
 - `client.claims` has nine entries and covers all four maturity values.
-- Every `sentences[0]` in `client.claims`, `practice.items`, and `lessons.items` is at most **120 characters**.
-  This is the print single-line budget and it is why the print composition can render a fixed subset without a
-  second copy of the text.
+- Every `sentences[0]` in `client.claims`, `practice.items`, and `lessons.items` is at most **120 characters**,
+  the print standalone budget.
+- The module exports `PRINT_SELECTION` (claim, practice, and lesson ids) and `buildPrintBrief`, which projects
+  the printed sheet. Every string the projection returns is lifted verbatim from `practiceBrief`; the test
+  asserts it, which is the contract that stops screen and print drifting apart.
+- `tools.entries` carry `sentences` like every other item, so print takes the first as the tool's purpose.
 - `workflow.stages` has exactly five entries; exactly one carries `gate: true`; it is `03`.
 - `tools.entries` has exactly six entries whose `name` values are, in order: GitHub Copilot, OpenCode, Pi,
   Claude Code, Codex, Local models.
@@ -844,53 +847,104 @@ If the generated PDF exceeds one page, apply these trims **in this order** and r
 **Never** reduce type below 7pt, change `@page` margins, or use `break-before-page`. If five trims are not
 enough, stop and return the density question to Martin rather than shrinking the page.
 
-### Measured reality, 2 September 2026: the one-page budget does not hold
+### The curated print subset, approved 2 September 2026
 
-The budget above was calibrated against the wrong width. It assumed roughly one printed line per
-sentence in the 96mm client column; at 8pt in 96mm a line holds about 62 characters, not 120, so
-every sentence wraps to two lines and every claim costs 14.9mm rather than 9.5mm.
+The first budget was calibrated against the wrong width. It assumed roughly one printed line per
+sentence in the client column; at 8pt in a 96mm column a line holds about 62 characters, not 120, so
+every sentence wrapped and every claim cost 14.9mm rather than 9.5mm. Measured at the true A4 content
+width of 174mm, the full brief needed **425.3mm** against the 267mm available, and even stripping
+every sentence off the page left **316.2mm**. The ordered trim list could not close that.
 
-Measured from the implemented composition, laid out at the true A4 content width of 174mm
-(`page.setViewportSize({ width: 658 })` with `emulateMedia({ media: 'print' })`):
+Martin's decision: **keep the one-A4-page criterion, keep the screen page complete, and print a
+curated subset.** The subset is declared as ids in `PRINT_SELECTION` and projected by
+`buildPrintBrief` in `practice-brief.ts`, so the print composition never authors a sentence. That is
+the anti-drift contract, and `practice-brief.test.ts` enforces it: every string the projection
+renders must appear verbatim in `practiceBrief`.
 
-| Block | Approved composition | Reduced to headlines only |
+#### What prints, and why
+
+| Section | Printed | Rationale |
 | --- | --- | --- |
-| Masthead | 8.0mm | 8.0mm |
-| Title, subtitle, lead | 32.4mm | 32.4mm |
-| Principle band | 25.7mm | 25.7mm |
-| Workflow rail | 49.2mm | 35.4mm |
-| Douglas and current practice, two columns | 169.3mm | 97.9mm |
-| Tools | 15.6mm | 15.6mm |
-| Lessons | 51.1mm | 27.3mm |
-| What I don't claim | 22.8mm | 22.8mm |
-| Footer | 12.2mm | 12.2mm |
-| Eight 5mm section gaps | 39.0mm | 39.0mm |
-| **Total** | **425.3mm** | **316.2mm** |
-| **A4 content height** | **267mm** | **267mm** |
+| Working principle | All 3, with sentences | Required on the page; it is the first thing a 60-second scan must yield |
+| Workflow rail | All 5 stages, with captions, plus the rework loop and loop note | The memory hook, and the only place bounded context, the deterministic gate, human review, and integration ownership appear together |
+| Douglas claims | 5 of 9 | See below |
+| Current practice | 4 of 7 | The four the rail cannot already state |
+| Tools | All 6, each with a purpose | Issue requirement: a role, never names or contexts alone |
+| Lessons | 3 of 5 | The three that appear nowhere else on the sheet |
+| What I don't claim | All 4, labels only | The labels are the claim; the sentences elaborate and the screen carries them |
+| Colophon, subset note, contact | All | Honesty travels with the document |
 
-The ordered trim list in this section does not close a 158mm gap, and neither does removing every
-sentence from the page. The approved content is roughly 1.6 A4 pages at readable sizes. This is a
-material design gap, so implementation stopped at this point rather than inventing a content cut.
-`apps/web/e2e/ai-practice-brief.spec.ts` still asserts one page and currently fails, deliberately:
-the assertion states the requirement, and weakening it would hide the gap.
+**The five client claims** are exactly the ones issue #116 names as the client-safe work to describe:
+shared versioned agent resources (C2), controlled access to approved delivery systems with TypeScript
+tooling, guardrails, and human review (C3), AI-assisted planning and task slicing (C6),
+agent-supported implementation (C7), and the handover proposals (C9). The team demonstration the
+issue also names is the section's closing line, which prints in full. Together they still cover all
+four maturity levels, so the grading survives the cut:
 
-Three shapes are possible. The decision is Martin's because it is a content and acceptance-criteria
-decision, not a layout one.
+| Claim | Maturity |
+| --- | --- |
+| Shared agent resources, versioned like code | Team practice |
+| Controlled access, not open access | Team practice |
+| AI-assisted planning and task slicing | Pilot |
+| Agent-supported delivery on two production systems | My own use |
+| Deterministic workflows and generated documentation | Proposed |
 
-1. **Two A4 pages, everything kept.** The current output already prints on two sheets and reads
-   well; the only defect is that the two-column body splits across the break and leaves the right
-   column empty on sheet two. Fixing that means composing sheet one as masthead, title, lead,
-   principle, rail, and the Douglas evidence at full width, and sheet two as current practice,
-   tools, lessons, limits, and footer. Costs the issue's "exactly one A4 page" criterion.
-   **Recommended.**
-2. **One A4 page of labels only.** Headline-only for claims, practice items, and lessons; no rail
-   captions, no lead paragraph, no principle sentences, no limits sentences; 3mm section gaps.
-   Lands at roughly 268mm with nothing to spare. Keeps every item present, but the paper artifact
-   stops being a brief and becomes an index.
-3. **One A4 page by cutting the source content.** Measured: even five claims, four practice items,
-   and three lessons with their sentences reach about 290mm after every layout trim. A one-page
-   brief that keeps full sentences needs roughly a 60% content cut, which changes what the page
-   claims rather than how it is set.
+Dropped from print, kept on screen: editor assistance came first (the tools row carries GitHub
+Copilot with its purpose), new practice went through a learning session first, terminal agents beyond
+the editor (the tools row carries OpenCode), and learning C# and .NET on the job.
+
+**The four practice items** are `small-harness`, `guardrails`, `independent-review`, and
+`design-owner`. Dropped: `issue-worktree-pr`, which is rail stages 01 and 02; `visible-sessions`; and
+`nothing-irreversible`, whose substance is already in the loop note ("Agents do not merge, approve,
+or publish reviews").
+
+**The three lessons** are `context`, `slicing`, and `ownership`. Dropped: `review-capacity`, stated
+verbatim in the principle band, and `deterministic-tooling`, which is rail stage 03.
+
+#### Revised composition and measured budget
+
+Layout, top to bottom: masthead; title, subtitle and lead; bordered principle band in three columns;
+the workflow rail; a two-column band with the client record on the left and Martin's own voice on the
+right (current practice, then "What I don't claim"); tools in three columns by two rows; lessons in
+three columns; footer. Grouping practice and the limits block in one column is editorial, not
+convenience: the left column is the client record and the right column is first-person present tense.
+
+Measured from the implemented composition at 174mm:
+
+| Block | Height |
+| --- | --- |
+| Masthead | 7.0mm |
+| Title, subtitle, lead | 22.5mm |
+| Principle band | 21.3mm |
+| Workflow rail with captions, rework loop, loop note | 42.0mm |
+| Client record and current practice, two columns | 89.2mm |
+| Tools | 28.5mm |
+| Lessons | 17.4mm |
+| Footer | 11.4mm |
+| Seven 2.5mm section gaps | 17.5mm |
+| **Total** | **255.6mm** |
+| **A4 content height** | **267mm** |
+| **Slack** | **11.4mm** |
+
+`page.pdf({ format: 'A4', printBackground: true })` produces **one page**, asserted by
+`apps/web/e2e/ai-practice-brief.spec.ts`.
+
+Douglas remains the lead evidence: its column is 102.8mm of the 167mm evidence band, 62% of that
+band, it is the single largest block on the sheet, and it prints five claims against the practice
+column's four items.
+
+#### Type floor, revised
+
+The earlier rule was "never below 7pt". The revised floor is **6.5pt for prose** and **5.5pt for
+short mono uppercase micro-labels** (maturity tags, tool context, the document label), which are set
+in caps with tracking and are two or three words long. Body prose on the sheet is 7 to 8pt, matching
+the print CV. Do not go below these.
+
+#### If the sheet grows past one page
+
+Change `PRINT_SELECTION` in `practice-brief.ts`, and record the change here. Do not shrink type below
+the floor above, do not change `@page` margins, do not use `break-before-page`, and do not add a
+sentence to the print composition that is not in `practiceBrief`.
 
 ### Print rules
 
@@ -911,17 +965,18 @@ decision, not a layout one.
 
 | Aspect | Screen | Print | Reason |
 | --- | --- | --- | --- |
-| Facts | All sentences | Headline plus `sentences[0]` for claims, practice items, and lessons | One A4 page. The first sentence is authored to stand alone, and the 120-character rule is tested |
+| Items | Every claim, practice item, and lesson | A curated selection, declared in `PRINT_SELECTION` | One A4 page. The selection and its rationale are above |
+| Facts | All sentences | Label plus `sentences[0]` for the selected items | The first sentence is authored to stand alone under a tested budget |
+| Words | From `practiceBrief` | From `practiceBrief`, via `buildPrintBrief` | Print authors nothing. The test proves every printed string is verbatim |
 | Print action | Present | Absent | It is a screen affordance |
-| Close and links | Present | Absent | Links are not actionable on paper. The footer carries the site and email instead |
-| Colophon | Present | Present | The honesty statement travels with the document |
+| Close and links | Present | Absent | Links are not actionable on paper; the footer carries the site and email |
+| Colophon | Present | Present, joined with the subset note | The honesty statement travels with the document, and the sheet says it is a selection |
 | Section order | Identical | Identical | A reader comparing the two must not have to re-find anything |
 | Colour | Site theme, four tag tones | Fixed print inks, no tag colour | Theme independence and grayscale safety |
-| Layout | One reading column | Two columns for the two evidence sections | A4 width is wasted on a single column at 9pt |
+| Layout | One reading column | Two columns for the evidence band, three for tools and lessons | A4 width is wasted on a single column at 8pt |
 
-**There is no second copy of any sentence.** Print renders a deterministic subset of the same module.
-
----
+The sheet states that it is a selection and where the full brief is, so a reader is never left
+believing the paper version is complete.
 
 ## 12. Tests
 
@@ -934,6 +989,9 @@ decision, not a layout one.
 - exactly five workflow stages; exactly one `gate`; it is stage `03`
 - six tools, names in the exact order given in section 6.6, each with a non-empty `role`
 - the four maturity definitions are present, each with a distinct `tone`
+- **projection guard:** the print projection carries five claims covering all four maturity levels, four
+  practice items, three lessons, six tools each with a purpose, and four limit labels; every selected id exists;
+  and every string the projection renders appears verbatim in the serialised `practiceBrief`
 - **quantitative-claim guard:** every entry of `APPROVED_DISCLAIMERS` occurs verbatim in the serialised
   `practiceBrief`; after removing those exact strings, the remainder matches none of `/\d+\s*%/`,
   `/\b\d+\s*x\b/i`, `/\b(productivity|efficiency|velocity|throughput|faster|quicker|time saved)\b/i`.
@@ -971,8 +1029,10 @@ Library, following `apps/web/src/app/contact/page.integration.test.tsx`):
 - **Screen:** `[data-print-document]` is hidden; the print button is visible; `h1` is visible.
 - **Print media** (`emulateMedia({ media: 'print' })`): the print document is visible; `body > header`,
   `body > footer`, and `#main-content` are hidden; the print button is hidden.
-- **Print text:** `printDocument.innerText()` contains the H1, the subtitle, all five stage labels, all four
-  maturity labels, all six tool names, `Douglas`, `info@clean.dev`, and the colophon's first clause.
+- **Print text:** `printDocument.innerText()` contains the H1, subtitle, subset note, all five stage labels, all
+  four maturity labels, all six tool names and purposes, every selected claim, practice item, lesson, and limit
+  label, `Douglas`, and `info@clean.dev`. It must **not** contain the labels of unselected claims, which proves
+  the curation is real rather than incidental.
 - **One A4 page** (desktop Chromium only, mirroring `work-print-cv.spec.ts`'s skip guard):
   `const pdf = await page.pdf({ format: 'A4', printBackground: true, path })`, then assert exactly one page.
   Count with `pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g)?.length === 1` and additionally assert the
@@ -1093,6 +1153,7 @@ change to this page. Do not reopen one without him.
 | D6 | The workflow moves ahead of Douglas (deviation D-A) | **Approved** |
 | D7 | Print renders headline plus first sentence (deviation D-B) | **Approved** |
 | D8 | The blunt colophon, "That is not privacy." | **Kept as written** |
+| D9 | The print composition, after the one-page budget failed | **One A4 page kept as an acceptance criterion; the screen page stays complete; print carries a curated deterministic subset modelled in the shared source.** Settled 2 September 2026. See section 11 |
 
 ### Corrections applied at approval
 

@@ -63,7 +63,7 @@ describe('practice brief screen composition', () => {
 
     for (const entry of practiceBrief.tools.entries) {
       expect(screen.getByText(entry.name)).toBeTruthy();
-      expect(screen.getByText(entry.role)).toBeTruthy();
+      expect(screen.getByText(entry.sentences.join(' '))).toBeTruthy();
     }
 
     const evidence = screen.getByRole('link', {

@@ -65,7 +65,8 @@ export interface ToolEntry {
   id: string;
   name: string;
   context: string;
-  role: string;
+  /** Print renders the first entry only; screen renders all of them. */
+  sentences: [string, ...string[]];
 }
 
 export interface PracticeBrief {
@@ -74,7 +75,7 @@ export interface PracticeBrief {
   subtitle: string;
   lead: string;
   meta: string;
-  print: { action: string; hint: string; docLabel: string; footer: string };
+  print: { action: string; hint: string; docLabel: string; footer: string; subsetNote: string };
   principle: { heading: string; body: string; items: LabelledItem[] };
   workflow: { heading: string; intro: string; stages: WorkflowStage[]; loopNote: string };
   client: {
@@ -94,6 +95,134 @@ export interface PracticeBrief {
   close: { body: string; links: Array<{ label: string; href: string; variant: 'primary' | 'secondary' }> };
 }
 
+/**
+ * Print projection.
+ *
+ * A4 holds roughly 267mm of content; the full brief needs about 425mm at
+ * readable sizes, so the printed sheet carries a curated selection rather than
+ * everything. The selection is declared here as ids and projected by
+ * `buildPrintBrief`, so the print composition can never introduce a sentence of
+ * its own: every string it renders is lifted verbatim from `practiceBrief`.
+ * `practice-brief.test.ts` asserts exactly that, which is what keeps screen and
+ * print from drifting apart silently.
+ *
+ * Why these items, from `apps/web/docs/ai-assisted-engineering-brief-spec.md`
+ * section 11: the five client claims are the ones issue #116 itself names as
+ * the client-safe work to describe (shared versioned agent resources,
+ * controlled access to approved delivery systems, AI-assisted planning and task
+ * slicing, agent-supported implementation, plus the handover proposals), and
+ * together they still cover all four maturity levels. The four practice items
+ * are the ones the workflow rail cannot already state. The three lessons are
+ * the ones that appear nowhere else on the sheet.
+ */
+export const PRINT_SELECTION = {
+  claims: ['shared-resources', 'controlled-access', 'planning-slicing', 'agent-supported-delivery', 'handover-proposals'],
+  practice: ['small-harness', 'guardrails', 'independent-review', 'design-owner'],
+  lessons: ['context', 'slicing', 'ownership'],
+} as const;
+
+export interface PrintItem {
+  id: string;
+  label: string;
+  sentence: string;
+}
+
+export interface PrintClaim extends PrintItem {
+  maturityLabel: string;
+}
+
+export interface PrintTool {
+  id: string;
+  name: string;
+  context: string;
+  purpose: string;
+}
+
+export interface PrintBrief {
+  docLabel: string;
+  title: string;
+  subtitle: string;
+  lead: string;
+  principle: { heading: string; items: PrintItem[] };
+  workflow: { heading: string; stages: WorkflowStage[]; loopNote: string };
+  client: {
+    heading: string;
+    maturities: MaturityDefinition[];
+    claims: PrintClaim[];
+    closing: string;
+  };
+  practice: { heading: string; items: PrintItem[] };
+  limits: { heading: string; labels: string[] };
+  tools: { heading: string; entries: PrintTool[] };
+  lessons: { heading: string; items: PrintItem[] };
+  colophon: string;
+  subsetNote: string;
+  footer: string;
+}
+
+const select = <T extends { id: string }>(items: T[], ids: readonly string[]): T[] =>
+  ids.map((id) => {
+    const item = items.find((candidate) => candidate.id === id);
+    if (!item) throw new Error(`Print selection references a missing item: ${id}`);
+    return item;
+  });
+
+const toPrintItem = (item: LabelledItem): PrintItem => ({
+  id: item.id,
+  label: item.label,
+  sentence: item.sentences[0],
+});
+
+export const buildPrintBrief = (brief: PracticeBrief = practiceBrief): PrintBrief => ({
+  docLabel: brief.print.docLabel,
+  title: brief.title,
+  subtitle: brief.subtitle,
+  lead: brief.lead,
+  principle: {
+    heading: brief.principle.heading,
+    items: brief.principle.items.map(toPrintItem),
+  },
+  workflow: {
+    heading: brief.workflow.heading,
+    stages: brief.workflow.stages,
+    loopNote: brief.workflow.loopNote,
+  },
+  client: {
+    heading: brief.client.heading,
+    maturities: brief.client.maturities,
+    claims: select(brief.client.claims, PRINT_SELECTION.claims).map((claim) => ({
+      ...toPrintItem(claim),
+      maturityLabel:
+        brief.client.maturities.find((maturity) => maturity.id === claim.maturity)?.label ?? claim.maturity,
+    })),
+    closing: brief.client.closing,
+  },
+  practice: {
+    heading: brief.practice.heading,
+    items: select(brief.practice.items, PRINT_SELECTION.practice).map(toPrintItem),
+  },
+  limits: {
+    heading: brief.limits.heading,
+    labels: brief.limits.items.map((item) => item.label),
+  },
+  tools: {
+    heading: brief.tools.heading,
+    entries: brief.tools.entries.map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      context: entry.context,
+      purpose: entry.sentences[0],
+    })),
+  },
+  lessons: {
+    heading: brief.lessons.heading,
+    items: select(brief.lessons.items, PRINT_SELECTION.lessons).map(toPrintItem),
+  },
+  colophon: brief.colophon,
+  subsetNote: brief.print.subsetNote,
+  footer: brief.print.footer,
+});
+
 export const practiceBrief: PracticeBrief = {
   eyebrow: 'Practice brief',
   title: 'AI-assisted engineering in practice',
@@ -105,6 +234,7 @@ export const practiceBrief: PracticeBrief = {
     hint: 'One A4 page.',
     docLabel: 'Practice brief · September 2026',
     footer: 'Martin Trenker · clean.dev · info@clean.dev',
+    subsetNote: 'This sheet carries a selection. The full brief, with every item, is at clean.dev/work/ai-assisted-engineering.',
   },
 
   principle: {
@@ -333,37 +463,55 @@ export const practiceBrief: PracticeBrief = {
         id: 'copilot',
         name: 'GitHub Copilot',
         context: '2025 · client team',
-        role: 'Where the team started, inside VS Code and Neovim. It made assistance normal, and it showed the limit of approving every edit by hand.',
+        sentences: [
+          'Where the team started, inside VS Code and Neovim.',
+          'It made assistance normal, and it showed the limit of approving every edit by hand.',
+        ],
       },
       {
         id: 'opencode',
         name: 'OpenCode',
         context: '2026 · client team',
-        role: 'The first step out of the editor and into a terminal agent. It moved review from each edit to the intent, the run, and the result, and it raised the question of how to share agent resources across repositories and tools.',
+        sentences: [
+          'The first step out of the editor and into a terminal agent.',
+          'It moved review from each edit to the intent, the run, and the result, and it raised the question of how to share agent resources across repositories and tools.',
+        ],
       },
       {
         id: 'pi',
         name: 'Pi',
         context: '2026 · my own work',
-        role: 'A deliberately small harness with four default tools and extensions written in TypeScript. It is where I learned what a harness actually contributes, and where a guard can intercept a call.',
+        sentences: [
+          'A deliberately small harness with four default tools and extensions written in TypeScript.',
+          'It is where I learned what a harness actually contributes, and where a guard can intercept a call.',
+        ],
       },
       {
         id: 'claude-code',
         name: 'Claude Code',
         context: '2026 · my own work',
-        role: 'What I use for design-owning and larger implementation work, with the design written down before any code and an explicit review pass afterwards.',
+        sentences: [
+          'What I use for design-owning and larger implementation work.',
+          'The design is written down before any code, with an explicit review pass afterwards.',
+        ],
       },
       {
         id: 'codex',
         name: 'Codex',
         context: '2026 · my own work',
-        role: 'A second implementation and review model, so the one that wrote a change is not the only one that judges it.',
+        sentences: [
+          'A second implementation and review model.',
+          'The one that wrote a change is not the only one that judges it.',
+        ],
       },
       {
         id: 'local-models',
         name: 'Local models',
         context: '2026 · my own work',
-        role: 'Run on my own machine for privacy-sensitive experimentation and to evaluate what smaller local models can and cannot do. They are not what I reach for on client delivery.',
+        sentences: [
+          'Run on my own machine for privacy-sensitive experimentation and to evaluate what smaller local models can and cannot do.',
+          'They are not what I reach for on client delivery.',
+        ],
       },
     ],
     evidenceLink: {

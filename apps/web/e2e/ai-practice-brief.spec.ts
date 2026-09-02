@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { practiceBrief } from '../src/app/work/ai-assisted-engineering/practice-brief';
+import { buildPrintBrief, PRINT_SELECTION, practiceBrief } from '../src/app/work/ai-assisted-engineering/practice-brief';
 
 const ROUTE = '/work/ai-assisted-engineering';
 
@@ -71,18 +71,33 @@ test.describe('AI-assisted engineering practice brief', () => {
       await expect(page.locator('#main-content')).toBeHidden();
       await expect(page.getByRole('button', { name: practiceBrief.print.action })).toBeHidden();
 
+      // The sheet carries the curated projection, so assert against that rather
+      // than the whole brief, and prove the curation is real by checking that
+      // an unselected claim is genuinely absent.
+      const print = buildPrintBrief();
       const text = await printDocument.innerText();
-      expect(text).toContain(practiceBrief.title);
-      expect(text).toContain(practiceBrief.subtitle);
+      expect(text).toContain(print.title);
+      expect(text).toContain(print.subtitle);
       expect(text).toContain('Douglas');
       expect(text).toContain('info@clean.dev');
       expect(text).toContain('That is not privacy.');
-      for (const stage of practiceBrief.workflow.stages) expect(text).toContain(stage.label);
-      for (const maturity of practiceBrief.client.maturities) expect(text).toContain(maturity.label);
-      for (const entry of practiceBrief.tools.entries) expect(text).toContain(entry.name);
-      for (const claim of practiceBrief.client.claims) expect(text).toContain(claim.label);
-      for (const item of practiceBrief.practice.items) expect(text).toContain(item.label);
-      for (const item of practiceBrief.limits.items) expect(text).toContain(item.label);
+      expect(text).toContain(print.subsetNote);
+      for (const stage of print.workflow.stages) expect(text).toContain(stage.label);
+      for (const maturity of print.client.maturities) expect(text).toContain(maturity.label);
+      for (const entry of print.tools.entries) {
+        expect(text).toContain(entry.name);
+        expect(text).toContain(entry.purpose);
+      }
+      for (const claim of print.client.claims) expect(text).toContain(claim.label);
+      for (const item of print.practice.items) expect(text).toContain(item.label);
+      for (const item of print.lessons.items) expect(text).toContain(item.label);
+      for (const label of print.limits.labels) expect(text).toContain(label);
+
+      const unselected = practiceBrief.client.claims.filter(
+        (claim) => !PRINT_SELECTION.claims.includes(claim.id as (typeof PRINT_SELECTION.claims)[number]),
+      );
+      expect(unselected.length).toBeGreaterThan(0);
+      for (const claim of unselected) expect(text).not.toContain(claim.label);
 
       const pdfPath = testInfo.outputPath('ai-practice-brief.pdf');
       const pdf = await page.pdf({ format: 'A4', printBackground: true, path: pdfPath });
