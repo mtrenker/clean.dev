@@ -71,7 +71,7 @@ const OpenGraphImage = () => new ImageResponse(
           display: 'flex',
           position: 'absolute',
           left: 56,
-          top: 144,
+          top: 150,
           height: 44,
           alignItems: 'center',
           border: '1px solid #8b3f24',
@@ -92,14 +92,14 @@ const OpenGraphImage = () => new ImageResponse(
         style={{
           position: 'absolute',
           left: 56,
-          top: 216,
-          height: 100,
+          top: 248,
+          height: 104,
           color: '#ede7d4',
           fontFamily: sans,
-          fontSize: 100,
+          fontSize: 104,
           fontWeight: 600,
-          letterSpacing: -5,
-          lineHeight: '100px',
+          letterSpacing: -5.2,
+          lineHeight: '104px',
         }}
       >
         Martin Trenker
@@ -109,7 +109,7 @@ const OpenGraphImage = () => new ImageResponse(
         style={{
           position: 'absolute',
           left: 56,
-          top: 330,
+          top: 376,
           height: 52,
           color: '#c4bda9',
           fontFamily: sans,
@@ -122,11 +122,13 @@ const OpenGraphImage = () => new ImageResponse(
         Technical Lead and Solutions Architect
       </div>
 
+      <div style={{ position: 'absolute', left: 0, top: 490, width: 1200, height: 1, background: '#2c2924' }} />
+
       <div
         style={{
           position: 'absolute',
           left: 56,
-          top: 398,
+          top: 532,
           height: 30,
           color: '#7eaf6a',
           fontFamily: mono,
@@ -137,70 +139,6 @@ const OpenGraphImage = () => new ImageResponse(
         }}
       >
         INSIDE THE WORK. SHARPER DELIVERY. AI WITH JUDGMENT.
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          position: 'absolute',
-          left: 0,
-          top: 440,
-          width: 1200,
-          height: 190,
-          boxSizing: 'border-box',
-          padding: '0 56px',
-          background: '#1c1a16',
-          borderTop: '1px solid #2c2924',
-        }}
-      >
-        {[
-          { value: '20+', label: ['YEARS IN SOFTWARE', 'DELIVERY'] },
-          { value: '20', label: ['CLIENT ENGAGEMENTS'] },
-          { value: '1,200+ / 14', label: ['STORES / COUNTRIES'] },
-        ].map((proof, index) => (
-          <div
-            key={proof.value}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: 362,
-              height: 190,
-              boxSizing: 'border-box',
-              padding: index === 0 ? '30px 0 32px' : '30px 0 32px 32px',
-              ...(index === 0 ? {} : { borderLeft: '1px solid #2c2924' }),
-            }}
-          >
-            <div
-              style={{
-                height: 52,
-                color: '#ede7d4',
-                fontFamily: sans,
-                fontSize: 52,
-                fontWeight: 600,
-                letterSpacing: -1.56,
-                lineHeight: '52px',
-              }}
-            >
-              {proof.value}
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                marginTop: 12,
-                maxWidth: 360,
-                color: '#c4bda9',
-                fontFamily: mono,
-                fontSize: 24,
-                fontWeight: 600,
-                letterSpacing: 3.84,
-                lineHeight: '32px',
-              }}
-            >
-              {proof.label.map((line) => <div key={line}>{line}</div>)}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   ),
