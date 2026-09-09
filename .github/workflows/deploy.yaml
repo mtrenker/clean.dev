@@ -86,8 +86,11 @@ jobs:
           src/lib/site-metadata.test.ts
           src/lib/structured-data.test.ts
 
-      - name: Install Chromium
-        run: pnpm --filter @cleandev/web exec playwright install --with-deps chromium
+      - name: Install browsers and PDF inspection tools
+        run: |
+          pnpm --filter @cleandev/web exec playwright install --with-deps chromium firefox
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
 
       - name: Run focused public-site browser checks
         working-directory: apps/web
@@ -101,6 +104,13 @@ jobs:
         run: >-
           pnpm exec playwright test e2e/search-social.spec.ts
           --project=desktop-chromium
+
+      - name: Check print fonts and searchable PDF output
+        working-directory: apps/web
+        run: >-
+          pnpm exec playwright test e2e/work-print-cv.spec.ts e2e/ai-practice-brief.spec.ts
+          --grep "prints"
+          --project=desktop-chromium --project=desktop-firefox
 
   build-and-deploy:
     # This is a public repository. Do not run build/deploy jobs for fork PRs:

@@ -247,6 +247,25 @@
  * never relies on backgrounds, so output survives grayscale and
  * "print backgrounds" being disabled. */
 @media print {
+  /* Firefox/Cairo outlines the Google Fonts Source Sans 3 face in PDFs,
+   * losing selection, search, and CV-parser text. These existing static
+   * TrueType faces embed as text. Keep screen fonts and mono labels intact. */
+  @font-face {
+    font-family: 'Source Sans 3 Print';
+    src: url('./_fonts/SourceSans3-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+  }
+
+  @font-face {
+    font-family: 'Source Sans 3 Print';
+    src: url('./_fonts/SourceSans3-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: block;
+  }
+
   html:has([data-print-document]),
   body:has([data-print-document]) {
     padding: 0 !important;
@@ -261,6 +280,7 @@
 
   [data-print-document] {
     display: block;
+    --font-sans-google: 'Source Sans 3 Print';
     --print-ink: #1a1714;
     --print-ink-sec: #454039;
     --print-ink-mute: #6f695c;

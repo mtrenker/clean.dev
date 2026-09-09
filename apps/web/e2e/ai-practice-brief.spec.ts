@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { buildPrintBrief, PRINT_SELECTION, practiceBrief } from '../src/app/work/ai-assisted-engineering/practice-brief';
+import { inspectPdf, searchablePdfText } from './helpers/pdf';
 
 const ROUTE = '/work/ai-assisted-engineering';
 
@@ -99,9 +100,18 @@ test.describe('AI-assisted engineering practice brief', () => {
       expect(unselected.length).toBeGreaterThan(0);
       for (const claim of unselected) expect(text).not.toContain(claim.label);
 
+      await page.evaluate(() => document.fonts.ready);
       const pdfPath = testInfo.outputPath('ai-practice-brief.pdf');
       const pdf = await page.pdf({ format: 'A4', printBackground: true, path: pdfPath });
       await testInfo.attach('ai-practice-brief.pdf', { path: pdfPath, contentType: 'application/pdf' });
+
+      const exported = await inspectPdf(pdfPath);
+      expect(exported.fonts).toMatch(/SourceSans3-Regular\s+CID TrueType/);
+      expect(exported.fonts).toMatch(/SourceSans3-Semibold\s+CID TrueType/i);
+      const searchable = searchablePdfText(exported.text);
+      for (const expected of [print.title, print.subtitle, print.subsetNote, 'info@clean.dev', ...print.client.claims.map((claim) => claim.label)]) {
+        expect(searchable).toContain(searchablePdfText(expected));
+      }
 
       expect(countPdfPages(pdf)).toBe(1);
       expect(pdf.toString('latin1')).toMatch(/\/Count\s+1\b/);

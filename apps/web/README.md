@@ -31,6 +31,33 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Print and PDF checks
+
+The CV at `/work` and the AI practice brief use static Source Sans 3 TrueType
+fonts from `src/app/_fonts` under print media. Keep these separate from the
+screen fonts: Firefox/Cairo can turn the Google Fonts face into vector outlines,
+which look correct but lose selection, search, and CV-parser text.
+
+PDF tests require Poppler's `pdftotext` and `pdffonts` on `PATH`:
+
+```bash
+# Debian/Ubuntu
+sudo apt-get install poppler-utils
+# macOS
+brew install poppler
+
+pnpm exec playwright install chromium firefox
+pnpm exec playwright test e2e/work-print-cv.spec.ts e2e/ai-practice-brief.spec.ts \
+  --grep "prints" --project=desktop-chromium --project=desktop-firefox
+```
+
+These checks inspect the exported Chromium PDFs, including embedded fonts and
+extractable content. Playwright cannot export Firefox PDFs, so Firefox checks
+cover print layout and font loading. When changing print fonts, also save a PDF
+from Firefox and run `pdftotext document.pdf -` and `pdffonts document.pdf`.
+Body text and company names must survive extraction, not just the mono labels.
+Existing PDFs must be regenerated after a print fix.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
