@@ -4,7 +4,7 @@ import { ButtonLink, Card, Eyebrow, SectionHeader, SiteContainer, SiteSection, S
 import { SocialIcon } from '@/components/ui';
 import { Link } from '@/components/ui/link';
 import type { Project } from '@/app/projects';
-import { buildDouglasWorkCase, isDouglasProject } from '@/app/work/douglas-case';
+import { buildDouglasWorkCase, formatMonthPeriod, isDouglasProject } from '@/app/work/douglas-case';
 import { getConsultingAvailability } from '@/lib/availability';
 import type { Locale } from '@/lib/locale';
 
@@ -107,46 +107,83 @@ const Hero = ({ intl, locale }: Pick<LandingPageProps, 'intl' | 'locale'>) => {
   );
 };
 
-const EvidenceStrip = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
+const ProofEvidenceGroup = ({ label, items }: { label: string; items: string[] }) => (
+  <section>
+    <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{label}</h3>
+    <ul className="mt-4 space-y-3">
+      {items.map((item) => (
+        <li key={item} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
+          <span aria-hidden="true" className="font-mono text-[var(--site-green)]">+</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+);
+
+const ProofBand = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
   const douglasCase = buildDouglasWorkCase(projects, locale);
-  const outcomes = [
-    douglasCase.teamContribution[0],
-    douglasCase.teamContribution[1],
-    douglasCase.personalOwnership[0],
-    douglasCase.personalOwnership[2],
-  ];
+  // The unified C#/.NET API leads: it is the clearest documented statement of what
+  // Martin personally designed and shipped, ahead of the CRM backend he maintained.
+  const personalOwnership = [douglasCase.personalOwnership[1], douglasCase.personalOwnership[0]];
 
   return (
     <section aria-labelledby="home-proof-heading" className="border-b border-[var(--site-rule)] bg-[var(--site-panel)]">
-      <div className="grid border-b border-[var(--site-rule)] md:grid-cols-4">
-        {[
-          { value: '20+', label: msg(intl, 'home.proof.years') },
-          { value: String(projects.length), label: msg(intl, 'home.proof.engagements') },
-          { value: douglasCase.role, label: msg(intl, 'home.proof.roles') },
-          { value: msg(intl, 'home.proof.enterprise.value'), label: msg(intl, 'home.proof.enterprise') },
-        ].map((proof) => (
-          <div key={proof.label} className="border-b border-r border-[var(--site-rule)] px-5 py-6 md:border-b-0 md:px-8">
-            <p className="text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)] md:text-3xl">{proof.value}</p>
-            <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-sec)]">{proof.label}</p>
-          </div>
-        ))}
+      <div className="border-b border-[var(--site-rule)]">
+        <SiteContainer className="py-3 md:py-4">
+          <p className="flex flex-col font-mono text-xs uppercase leading-6 tracking-[0.12em] text-[var(--site-ink-sec)] md:flex-row md:flex-wrap md:items-baseline md:tracking-[0.16em]">
+            <span>20+ {msg(intl, 'home.proof.years')}</span>
+            <span aria-hidden="true" className="hidden px-2 text-[var(--site-ink-faint)] md:inline">·</span>
+            <span>{projects.length} {msg(intl, 'home.proof.engagements')}</span>
+          </p>
+        </SiteContainer>
       </div>
-      <SiteContainer className="py-8 md:py-10">
-        <div className="grid gap-5 lg:grid-cols-[15rem_1fr]">
+
+      <SiteContainer className="py-8 md:py-12">
+        <div className="grid gap-6 lg:grid-cols-[18rem_1fr] lg:gap-12">
           <div>
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em]">
-              <Link href="/work#douglas" className="text-[var(--site-ink)] no-underline hover:text-[var(--site-rust)]">Douglas</Link>
+              <Link href="/work#douglas" className="text-[var(--site-rust)] no-underline hover:text-[var(--site-rust)] hover:underline">Douglas</Link>
             </p>
-            <h2 id="home-proof-heading" className="mt-4 text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)]">{msg(intl, 'home.proof.heading')}</h2>
+            <h2 id="home-proof-heading" className="mt-4 text-2xl font-medium tracking-[-0.03em] text-[var(--site-ink)] md:text-4xl">
+              {msg(intl, 'home.proof.heading')}
+            </h2>
+            <div className="mt-3 font-mono text-xs uppercase leading-5 tracking-[0.12em] text-[var(--site-ink-mute)]">
+              <p>{douglasCase.industry} · {douglasCase.city}</p>
+              <p>{formatMonthPeriod(douglasCase.startDate, douglasCase.endDate, locale)}</p>
+            </div>
+
+            <div className="mt-6 border-t border-[var(--site-rule)] pt-5">
+              <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+                {msg(intl, 'work.case.progression')}
+              </h3>
+              <ol className="mt-3 space-y-1">
+                {douglasCase.progression.map((step) => (
+                  <li key={step.number} className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="font-mono text-xs text-[var(--site-ink-mute)]">{step.number}</span>
+                    <span className="text-base font-medium tracking-[-0.01em] text-[var(--site-ink)]">{step.role}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
-          <ul className="grid gap-x-8 gap-y-3 md:grid-cols-2">
-            {outcomes.map((outcome) => (
-              <li key={outcome} className="grid grid-cols-[1rem_1fr] gap-2 text-sm leading-6 text-[var(--site-ink-sec)]">
-                <span className="font-mono text-[var(--site-ink)]">+</span>
-                <span>{outcome}</span>
-              </li>
-            ))}
-          </ul>
+
+          <div>
+            <p className="max-w-3xl text-lg leading-8 text-[var(--site-ink)] md:text-xl md:leading-9">
+              {msg(intl, 'home.proof.lead')}
+            </p>
+
+            <div className="mt-7 grid gap-7 border-t border-[var(--site-rule)] pt-6 md:grid-cols-2 md:gap-10">
+              <ProofEvidenceGroup label={msg(intl, 'work.case.personalOwnership')} items={personalOwnership} />
+              <ProofEvidenceGroup label={msg(intl, 'work.case.teamContribution')} items={douglasCase.teamContribution} />
+            </div>
+
+            <p className="mt-7">
+              <Link href="/work#douglas" className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-rust)] underline underline-offset-4">
+                {msg(intl, 'home.proof.caseLink')}<span aria-hidden="true">&nbsp;→</span>
+              </Link>
+            </p>
+          </div>
         </div>
       </SiteContainer>
     </section>
@@ -404,7 +441,7 @@ const FitAndContact = ({ intl, locale, socialLinks }: Pick<LandingPageProps, 'in
 export const LandingPage = ({ intl, locale, projects, socialLinks }: LandingPageProps) => (
   <SiteShell>
     <Hero intl={intl} locale={locale} />
-    <EvidenceStrip intl={intl} locale={locale} projects={projects} />
+    <ProofBand intl={intl} locale={locale} projects={projects} />
     <BuyerSituations intl={intl} />
     <HowIHelp intl={intl} />
     <WaysToWork intl={intl} />

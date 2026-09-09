@@ -191,9 +191,44 @@ test.describe('public site mobile friendliness', () => {
     await page.goto('/');
 
     const main = page.getByRole('main');
-    await expect(main.getByText('20', { exact: true }).first()).toBeVisible();
-    await expect(main.getByText(/react expert → technical lead → solutions architect/i).first()).toBeVisible();
-    await expect(main.getByText(/more than 1,200 stores across 14 european countries/i).first()).toBeVisible();
+    const proofBand = main.locator('section', { has: page.locator('#home-proof-heading') }).first();
+
+    // Experience stays findable as a quiet credential line rather than a metric cell.
+    const credentialRail = proofBand.locator('p').filter({ hasText: /client engagements/i }).first();
+    await expect(credentialRail).toContainText('20+ years in software delivery');
+    await expect(credentialRail).toContainText('20 client engagements');
+
+    // The role path reads as a labelled list in project context, not a pseudo-metric.
+    await expect(proofBand.getByRole('heading', { name: 'Role progression' })).toBeVisible();
+    const progressionSteps = proofBand.getByRole('list')
+      .filter({ hasText: 'React Expert' })
+      .first()
+      .getByRole('listitem');
+    await expect(progressionSteps).toHaveCount(3);
+    await expect(progressionSteps.nth(0)).toContainText('React Expert');
+    await expect(progressionSteps.nth(1)).toContainText('Technical Lead');
+    await expect(progressionSteps.nth(2)).toContainText('Solutions Architect');
+
+    // The scale figure names Douglas and sits with the case link and the period.
+    await expect(proofBand.getByText(/more than 1,200 douglas stores across 14 european countries/i).first()).toBeVisible();
+    const scaleMentions = await proofBand.evaluate((section) => Array.from(section.querySelectorAll('*'))
+      .filter((element) => element.children.length === 0 && (element.textContent ?? '').includes('1,200'))
+      .map((element) => element.textContent ?? ''));
+    expect(scaleMentions).toHaveLength(1);
+    expect(scaleMentions[0]).toContain('Douglas');
+    await expect(proofBand.getByRole('link', { name: 'Douglas', exact: true })).toHaveAttribute('href', '/work#douglas');
+    await expect(proofBand.getByText('Jan 2024 – Jul 2026', { exact: true })).toBeVisible();
+
+    // What Martin owned stays labelled apart from what the team delivered.
+    await expect(proofBand.getByRole('heading', { name: 'Personal ownership' })).toBeVisible();
+    await expect(proofBand.getByRole('heading', { name: 'Team delivery and contribution' })).toBeVisible();
+    await expect(proofBand.getByText(/personally designed and shipped the unified api/i).first()).toBeVisible();
+    await expect(proofBand.getByText(/onboarded 1 senior and 2 junior developers/i).first()).toBeVisible();
+
+    // The retired metric cells must not come back.
+    await expect(proofBand.getByText('1,200+ / 14')).toHaveCount(0);
+    await expect(proofBand.getByText(/technical responsibility/i)).toHaveCount(0);
+
     await expect(page.getByRole('banner').getByRole('link', { name: /articles/i })).toHaveCount(0);
     await expect(main.getByRole('link', { name: /read articles/i })).toHaveCount(0);
   });
