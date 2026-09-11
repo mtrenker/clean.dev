@@ -109,8 +109,8 @@ export const labItems: LabItem[] = [
       de: 'Ich verantwortete die gesamte AWS-Architektur, Infrastructure as Code, das Datenmodell, den Anwendungscode und die selbstaktualisierende Deployment-Pipeline.',
     },
     clientRelevance: {
-      en: 'Direct experience designing and operating serverless APIs, event-driven services, access control, CI/CD, and DynamoDB access patterns in production.',
-      de: 'Direkte Erfahrung mit Konzeption und Betrieb von serverless APIs, eventgetriebenen Services, Zugriffskontrolle, CI/CD und DynamoDB-Zugriffsmustern in Produktion.',
+      en: 'Hands-on production experience with serverless APIs, SQS/SNS messaging between services, S3 static asset hosting via CloudFront, and DynamoDB access patterns.',
+      de: 'Praktische Produktionserfahrung mit serverless APIs, SQS/SNS zur asynchronen Kommunikation zwischen Services, S3 für statische Assets via CloudFront und DynamoDB-Zugriffsmustern.',
     },
     operations: {
       en: 'Operated on AWS for five years, then migrated to a self-operated Kubernetes platform in 2025; continuously developed in production since 2020.',
@@ -129,6 +129,10 @@ export const labItems: LabItem[] = [
       'dynamodb',
       'cognito',
       'eventbridge',
+      'sqs',
+      'sns',
+      's3',
+      'cloudfront',
       'codepipeline',
       'next.js',
       'react',

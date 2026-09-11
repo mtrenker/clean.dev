@@ -167,7 +167,7 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
       </section>
 
       {/* Lab — self-funded production proof */}
-      <section className="mt-[9mm] break-inside-avoid">
+      <section data-print-lab className="mt-[9mm] break-inside-avoid">
         <div className="break-after-avoid">
           <PrintSectionHeader meta={cv.labMeta} title={cv.labHeading} />
         </div>

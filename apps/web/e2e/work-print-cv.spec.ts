@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { projects } from '../src/app/projects';
+import { labItems } from '../src/app/lab';
 import { buildDouglasWorkCase, isDouglasProject } from '../src/app/work/douglas-case';
 import { SUPPORTED_LOCALES, type Locale } from '../src/lib/locale';
 import { inspectPdf, searchablePdfText } from './helpers/pdf';
@@ -35,6 +36,8 @@ test.describe('work print CV', () => {
       expect(text).toContain('Martin Trenker');
       expect(text).toContain('info@clean.dev');
       expect(text).toContain(HISTORY_HEADINGS[locale]);
+      const yamiat = labItems.find((item) => item.id === 'yamiat')!;
+      expect(text).toContain(yamiat.clientRelevance[locale]);
       await expect(printDocument.locator('[data-print-certifications]')).toContainText('AWS Certified Developer');
       // The complete chronology remains present, with Douglas represented as
       // one progression-based engagement instead of two repeated entries.
@@ -69,6 +72,21 @@ test.describe('work print CV', () => {
       expect(exported.fonts).toMatch(/SourceSans3-Regular\s+CID TrueType/);
       expect(exported.fonts).toMatch(/SourceSans3-Semibold\s+CID TrueType/i);
       const searchable = searchablePdfText(exported.text);
+      expect(searchable).toContain(searchablePdfText(yamiat.clientRelevance[locale]));
+      const labPage = exported.text.split('\f').find((text) => (
+        searchablePdfText(text).includes(searchablePdfText(labItems[0].title[locale]))
+      ));
+      expect(labPage, 'All lab entries should fit on one PDF page').toBeDefined();
+      for (const item of labItems) {
+        for (const value of [
+          item.title[locale], item.description[locale], item.ownership[locale],
+          item.clientRelevance[locale], item.operations[locale],
+          ...item.highlights[locale], ...(item.workflowExample ? [item.workflowExample[locale]] : []),
+          item.technologies.join(' · '),
+        ]) {
+          expect(searchablePdfText(labPage!)).toContain(searchablePdfText(value));
+        }
+      }
       for (const expected of ['Martin Trenker', 'info@clean.dev', HISTORY_HEADINGS[locale], douglasCase.company, douglasCase.mandate]) {
         expect(searchable).toContain(searchablePdfText(expected));
       }

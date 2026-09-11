@@ -288,6 +288,19 @@
     --print-rust: #a8472a;
   }
 
+  /* Keep the three lab entries together without reducing readable type sizes. */
+  [data-print-lab] article {
+    padding-block: 2mm;
+  }
+
+  [data-print-lab] article section {
+    margin-top: 1mm;
+  }
+
+  [data-print-lab] ul {
+    margin-top: 0.7mm;
+  }
+
   [data-print-document] p,
   [data-print-document] li {
     orphans: 3;

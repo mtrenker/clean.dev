@@ -67,6 +67,22 @@ describe('buildPrintCv', () => {
     expect(munichEntry).toBeDefined();
   });
 
+  it.each(['en', 'de'] as const)('includes Yamiat messaging and asset-hosting evidence (%s)', (locale) => {
+    const cv = buildPrintCv(projects, locale, intlFor(locale));
+    const yamiat = cv.labEntries.find((entry) => entry.id === 'yamiat')!;
+    const evidence = yamiat.highlightGroups!.flatMap((group) => group.highlights).join(' ');
+
+    for (const technology of ['sqs', 'sns', 's3', 'cloudfront']) {
+      expect(yamiat.technologies.split(' · ')).toContain(technology);
+    }
+    expect(evidence).toContain(locale === 'en'
+      ? 'SQS/SNS messaging between services'
+      : 'SQS/SNS zur asynchronen Kommunikation zwischen Services');
+    expect(evidence).toContain(locale === 'en'
+      ? 'S3 static asset hosting via CloudFront'
+      : 'S3 für statische Assets via CloudFront');
+  });
+
   it('provides contact lines with hrefs and short display text', () => {
     const cv = buildPrintCv(projects, 'en', intlFor('en'));
     expect(cv.contactLines[0]).toEqual({ href: 'mailto:info@clean.dev', text: 'info@clean.dev' });
