@@ -27,7 +27,7 @@ describe('buildPrintCv', () => {
     expect(cv.entries.at(-1)?.name).toBe('Siemens AG');
     expect(cv.entries.at(-1)?.period).toBe('2008 – 2009');
     expect(cv.availabilityText).toBe(
-      'Available from September 2026 · 2–5 days/week · Munich and remote DACH · German and English',
+      'Available · 2–5 days/week · Munich and remote DACH · German and English',
     );
 
     for (const entry of cv.entries) {

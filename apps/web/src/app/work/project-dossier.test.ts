@@ -16,7 +16,7 @@ describe('buildProjectDossier', () => {
     expect(dossier).toMatch(/^# Project dossier: Martin Trenker\n/);
     expect(dossier).toContain('- Document format: UTF-8 Markdown');
     expect(dossier).toContain('- Role titles: Technical Lead; Solutions Architect');
-    expect(dossier).toContain('- Availability: September 2026');
+    expect(dossier).toContain('- Availability: Available');
     expect(dossier).toContain('- Location and work model: Munich and remote DACH');
     expect(dossier).toContain('- Languages: German and English');
     expect(dossier).toContain('- Utilization: 2–5 days/week');
@@ -39,7 +39,7 @@ describe('buildProjectDossier', () => {
     expect(roundTripped).toBe(dossier);
     expect(dossier).toMatch(/^# Projektdossier: Martin Trenker\n/);
     expect(dossier).toContain('- Rollen: Technical Lead; Solutions Architect');
-    expect(dossier).toContain('- Verfügbarkeit: September 2026');
+    expect(dossier).toContain('- Verfügbarkeit: Verfügbar');
     expect(dossier).toContain('- Standort und Arbeitsmodell: München und remote im DACH-Raum');
     expect(dossier).toContain('- Sprachen: Deutsch und Englisch');
     expect(dossier).toContain('- Auslastung: 2–5 Tage/Woche');

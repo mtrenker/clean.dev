@@ -189,7 +189,7 @@ export const buildProjectDossier = (projects: Project[], locale: Locale, intl: I
     field(labels.documentFormat, 'UTF-8 Markdown'),
     `## ${labels.profile}`,
     field(labels.roleTitles, 'Technical Lead; Solutions Architect'),
-    field(labels.availability, availability.start),
+    field(labels.availability, availability.status),
     field(labels.location, availability.location),
     field(labels.languages, availability.languages),
     field(labels.utilization, availability.schedule),

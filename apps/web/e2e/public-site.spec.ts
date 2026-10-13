@@ -379,7 +379,7 @@ test.describe('public site semantic UX', () => {
     await page.goto('/work');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead and Solutions Architect.' })).toBeVisible();
-    await expect(page.getByText(/available from september 2026 · 2–5 days\/week · munich and remote dach · german and english/i).first()).toBeVisible();
+    await expect(page.getByText(/available · 2–5 days\/week · munich and remote dach · german and english/i).first()).toBeVisible();
     await expect(page.getByText(/architecture modernisation · delivery reliability · governed ai workflows/i)).toBeVisible();
     await expect(page.getByText('dotnet', { exact: true }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: 'Discuss a project' }).first()).toBeVisible();
