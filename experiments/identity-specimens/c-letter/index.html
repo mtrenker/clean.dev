@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>clean.dev: Martin Trenker</title>
+  <!-- TEMPORARY (specimen only): Instrument Sans from Google Fonts. Production must self-host the files. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&amp;display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <p class="status">Currently embedded with a team. Remote in DACH, on-site around Munich.</p>
+    <nav aria-label="Main">
+      <ul class="inline">
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#">Lab</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="inline lang" aria-label="Language">
+        <li><a href="#" lang="en" hreflang="en" aria-current="true">EN</a></li>
+        <li><a href="#" lang="de" hreflang="de">DE</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="intro" aria-labelledby="intro-title">
+      <h1 id="intro-title" class="display">Software organizations are factories. Most have one bottleneck, and it is rarely the developers.</h1>
+      <div class="prose">
+        <p>I'm Martin Trenker. I've written software for 25 years, most of them inside organizations where good engineers were slowed down by the system around them. clean.dev is where I work out, in public, how clean code, real agility and AI behave inside a team: not as rituals or tools, but as a factory with constraints you can find and fix.</p>
+        <p>I join teams as a technical lead or solutions architect and stay close to the code, because that is where the factory tells the truth. Everything here, including the site itself, is built in the open.</p>
+        <p><a href="#">Let's talk about your team.</a></p>
+      </div>
+    </section>
+
+    <section class="figure" aria-labelledby="figure-title">
+      <h2 id="figure-title" class="label">Where the work waits</h2>
+      <!-- Static rendering of the live sentence. In production the values marked
+           .in are adjustable and the values marked .out recompute. -->
+      <div class="live display">
+        <p>A team of <span class="v in">5</span> developers and <span class="v in">1</span> reviewer has <span class="v out">14</span> changes waiting for review.</p>
+        <p>Add <span class="v in">2</span> developers and <span class="v out">20</span> changes wait.</p>
+      </div>
+      <div class="prose">
+        <p>Adding two developers here feeds the review queue. The constraint is review capacity, so more developers make the system slower, not faster, until review is relieved.</p>
+        <p>Work flows from Ideas through Refinement, Development and Review to Release. The longest queue sits in front of Review, where 14 changes wait for one senior reviewer. Development has 9 changes in progress for 5 developers. Adding developers increases the review queue; the constraint is review capacity.</p>
+      </div>
+      <div class="table-wrap" role="region" aria-labelledby="table-caption" tabindex="0">
+      <table>
+        <caption id="table-caption">A delivery system with five stations. Numbers are illustrative.</caption>
+        <thead>
+          <tr><th scope="col">Station</th><th scope="col">Waiting</th><th scope="col">Capacity</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Ideas</th><td>48</td><td>unlimited</td></tr>
+          <tr><th scope="row">Refinement</th><td>12</td><td>1 product owner</td></tr>
+          <tr><th scope="row">Development</th><td>9 in progress</td><td>5 developers</td></tr>
+          <tr class="constraint"><th scope="row">Review</th><td>14</td><td>1 senior reviewer</td></tr>
+          <tr><th scope="row">Release</th><td>0</td><td>every 2 weeks</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="small">Constraint: Review.</p>
+    </section>
+
+    <section class="essay" id="writing" aria-labelledby="essay-label">
+      <h2 id="essay-label" class="label">Writing</h2>
+      <article class="prose" aria-labelledby="essay-title">
+        <h3 id="essay-title" class="title">I'm done with autonomous "Agent Fleets"</h3>
+        <p class="small meta">Draft, 2026. About 9 minutes.</p>
+        <p>I knew I had lost control when I used my agent fleet to build a dashboard for my agent fleet.</p>
+        <p>The fleet was working. It took large plans, split them into tasks and sent agents into separate workspaces. Code appeared quickly. What I no longer had was any idea what was going on.</p>
+        <p>So I asked the fleet to build its own "flightdeck": a web app that ingested all the task folders where I logged every agent turn and a summary as JSONL. The dashboard showed a live view of the agents running across my machines. It was read-only at first. Steering from the dashboard would definitely come later.</p>
+        <p>The result had a lot of information on the screen. It still wasn't what I needed.</p>
+        <p>Worse, I had no idea what was going on inside the fleet-generated codebase behind it. It looked like all the other AI projects I had seen. It worked, but it felt neither like an achievement nor like something I wanted to use.</p>
+        <h4 class="title">The cost I hadn't planned for</h4>
+        <p>I have always been proud of the skills I earned over the last 25 years. This "productivity boost" slowly chipped away at that pride and replaced it with anxiety. Worse, it took away my love for coding.</p>
+        <p>I wasn't building the system anymore. I was watching a system get built.</p>
+        <blockquote>
+          <p>The bottleneck is still me. That's fine. I have to live with the code after the agents move on.</p>
+        </blockquote>
+        <p><a href="#">Read the essay</a></p>
+      </article>
+    </section>
+
+    <section class="work" id="work" aria-labelledby="work-label">
+      <h2 id="work-label" class="label">Work</h2>
+      <article class="prose" aria-labelledby="work-title">
+        <h3 id="work-title" class="title">Douglas</h3>
+        <p class="small meta">2024 to 2026. React Expert, then Technical Lead, then Solutions Architect.</p>
+        <p>Modernise the POS/CRM platform from its React frontend to backend services in TypeScript/Node.js and C#/.NET, unify the CRM API landscape, and introduce governed AI tooling.</p>
+        <ol class="steps">
+          <li><strong>React Expert.</strong> Joined to modernise the POS software used in more than 1,200 stores across 14 European countries.</li>
+          <li><strong>Technical Lead.</strong> Led the move from legacy Angular to maintainable React and shipped the business-critical CRM integration in under a year.</li>
+          <li><strong>Solutions Architect.</strong> Took on broader scope across TypeScript/Node.js and C#/.NET backend services to unify the CRM API landscape and introduce governed AI tooling for daily delivery work.</li>
+        </ol>
+        <p><a href="#">All work</a></p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p>Open source and built in public.</p>
+    <p class="small">Made with a coding agent, reviewed by a human. Every element on this page has a reason you can ask about.</p>
+    <ul class="inline small">
+      <li><a href="#">GitHub</a></li>
+      <li><a href="#">Imprint</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+  </footer>
+</body>
+</html>

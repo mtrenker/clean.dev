@@ -1,0 +1,499 @@
+/* Direction D: Drawn. Drafting paper, graphite ink, one signal color that means
+   "this is where the system waits". Backbone from B, figure grammar from A,
+   live sentence from C. */
+
+/* Repo fonts. The repo's Plex Mono SemiBold gets its own family name so it only
+   backs up the 600 weight; Source Sans 3 is the named fallback for Plex Sans. */
+@font-face {
+  font-family: "IBM Plex Mono Repo";
+  src: url("../../../apps/web/src/app/_fonts/IBMPlexMono-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../../../apps/web/src/app/_fonts/SourceSans3-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../../../apps/web/src/app/_fonts/SourceSans3-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  --paper: #fbf9f4;   /* drafting paper, faint warmth */
+  --ink: #1d1f22;     /* graphite: text and lines */
+  --ink-2: #4b4f55;   /* quieter ink for labels; same hue family, not a second color */
+  --grid: #ece8de;    /* figure areas only, decorative */
+  --signal: #c43d00;  /* the constraint. Nowhere else. */
+
+  --sans: "IBM Plex Sans", "Source Sans 3", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+  --mono-strong: "IBM Plex Mono", "IBM Plex Mono Repo", ui-monospace, "DejaVu Sans Mono", monospace;
+
+  --pad: clamp(1rem, 4vw, 3rem);
+  --margin-col: 7rem;
+  --gap: 2rem;
+  --measure: 36rem;   /* about 66 characters of Plex Sans at 18px */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: var(--pad);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+main:focus { outline: none; }
+
+.skip {
+  position: absolute;
+  left: var(--pad);
+  top: -10rem;
+  z-index: 2;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+}
+.skip:focus { top: 0.5rem; }
+
+.vh {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Title block ----------
+   Wide: a ruled drawing title block, nav as plain names in the second row.
+   Narrow: two rows. Project and nav, then one compact mono line. */
+
+.tb {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1.3fr) repeat(3, minmax(0, 1fr)) minmax(0, 1.7fr) auto;
+  grid-template-areas:
+    "brand sheet rev date drawn lang"
+    "brand nav   nav nav  nav   lang";
+  gap: 1px;
+  background: var(--ink);          /* the 1px gaps are the internal rules */
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+}
+.tb > *, .tb-meta > * { background: var(--paper); margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.tb-meta { display: contents; }
+
+.tb-brand { grid-area: brand; display: flex; flex-direction: column; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 0.9rem 0.75rem; }
+.tb-sheet { grid-area: sheet; }
+.tb-rev   { grid-area: rev; }
+.tb-date  { grid-area: date; }
+.tb-drawn { grid-area: drawn; }
+.tb-lang  { grid-area: lang; }
+
+.tb-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0.75rem 0.55rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+.tb-label {
+  font-size: 0.875rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.tb-name {
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.tb-name:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.tb-nav {
+  grid-area: nav;
+  display: grid;
+  grid-template-columns: subgrid;  /* nav cells continue the column rules above */
+  background: var(--ink);
+}
+.tb-nav ul {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  gap: 1px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tb-nav li { background: var(--paper); }
+.tb-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.25;
+}
+.tb-nav a:focus-visible, .tb-lang a:focus-visible, .tb-name:focus-visible { outline-offset: -4px; }
+.tb-name:focus-visible { outline-offset: 2px; }
+
+.tb-lang .tb-value { font-size: 1rem; white-space: nowrap; }
+.tb-lang a { display: inline-block; padding: 0.15rem 0.2rem; }
+.tb-lang a[aria-current] { text-decoration: none; font-weight: 600; }
+
+/* ---------- Sheets ---------- */
+
+.sheet {
+  display: grid;
+  grid-template-columns: var(--margin-col) minmax(0, 1fr);
+  column-gap: var(--gap);
+  border-top: 1px solid var(--ink);
+  padding-top: 1.25rem;
+  margin-top: clamp(4rem, 9vw, 7.5rem);
+}
+.sheet-margin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: var(--mono);
+}
+.sheet-no {
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+.sheet-label { font-size: 0.875rem; line-height: 1.4; color: var(--ink-2); }
+.sheet-body { min-width: 0; }
+
+h1, h2, h3 { font-family: var(--sans); font-weight: 600; margin: 0; text-wrap: balance; overflow-wrap: break-word; hyphens: auto; }
+h1 {
+  font-size: clamp(2.125rem, 1.2rem + 3.4vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 21ch;
+}
+h2 {
+  font-size: clamp(1.625rem, 1.25rem + 1.4vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  max-width: 26ch;
+}
+h3 { font-size: 1.25rem; line-height: 1.3; margin: 2.25rem 0 0.6rem; }
+
+.prose { max-width: var(--measure); }
+.prose p { margin: 0 0 1.1em; }
+
+.status { margin: 0 0 1.25rem; font-size: 1rem; line-height: 1.5; color: var(--ink-2); max-width: var(--measure); }
+.lead { font-size: 1.25rem; line-height: 1.55; margin-top: 2rem !important; }
+.cta { margin-top: 1.75rem !important; font-size: 1.25rem; }
+.more { margin-top: 1.75rem; }
+
+/* ---------- The live sentence ---------- */
+
+.live {
+  margin: 1.75rem 0 0;
+  max-width: 30em;
+  font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.375rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+.live p { margin: 0; }
+.live p + p { margin-top: 0.35em; }
+.v {
+  font-style: normal;
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.v.in {
+  /* an input: ink, dotted underline. A control in production, static here. */
+  text-decoration: underline dotted;
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.17em;
+  text-decoration-skip-ink: none;
+}
+.v.out { color: var(--signal); }  /* a result: work waiting at the constraint */
+.fig-intro { margin: 1.5rem 0 0; color: var(--ink-2); font-size: 1rem; max-width: var(--measure); }
+
+/* ---------- Figures: the pen grammar inside a gridded drawing area ---------- */
+
+.fig { margin: 2rem 0 0; border: 1px solid var(--ink); }
+.sheet-figure > .fig { grid-column: 1 / -1; }
+.fig-area {
+  /* faint grid only inside figure areas; 1px lines, nothing graded */
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 24px);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--ink);
+}
+.fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.fig .fig-wide { display: none; }
+.fig .fig-narrow { max-width: 25rem; margin: 0 auto; }
+
+.fig .ln, .fig .leader, .fig .loop {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.fig .st { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.fig .cp { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; vector-effect: non-scaling-stroke; }
+.fig .sq { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.fig .sq.wip { fill: var(--ink); }
+.fig .sig .loop { stroke: var(--signal); stroke-width: 1.6; }
+.fig .sig .leader { stroke: var(--signal); stroke-width: 1.2; }
+
+.fig text {
+  fill: var(--ink);
+  /* paper knockout: grid lines stop short of every label */
+  stroke: var(--paper);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+.t-name { font-family: var(--sans); font-weight: 600; font-size: 18px; }
+.t-count { font-family: var(--mono); font-size: 16px; }
+.t-cap, .t-note { font-family: var(--mono); font-size: 16px; }
+.fig .t-cap, .fig .t-note { fill: var(--ink-2); }
+.t-row { font-family: var(--mono-strong); font-weight: 600; font-size: 16px; }
+.t-sig { font-family: var(--mono); font-size: 16px; }
+.fig .sig text { fill: var(--signal); }
+
+.fig-narrow .t-name { font-size: 16px; }
+.fig-narrow .t-cap, .fig-narrow .t-note, .fig-narrow .t-sig { font-size: 14px; }
+
+.fig-caption {
+  padding: 1rem clamp(1.25rem, 3vw, 2.5rem) 1.15rem;
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+.fig-no {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.fig-text { display: block; max-width: var(--measure); }
+.fig-title { display: block; font-weight: 600; }
+
+.sig-word { color: var(--signal); }
+
+.fig-detail {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.equivalent { margin: 0; max-width: var(--measure); color: var(--ink); }
+
+/* Tables: ruled schedules. Sans for data; mono only for column headers and tags. */
+.schedule, .revisions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+.schedule caption, .revisions caption {
+  text-align: left;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding-bottom: 0.5rem;
+}
+.schedule th, .schedule td, .revisions th, .revisions td {
+  text-align: left;
+  vertical-align: baseline;
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--ink);
+  overflow-wrap: anywhere;  /* at 200% text the cells wrap instead of overflowing */
+  hyphens: auto;
+}
+.schedule thead th, .revisions thead th {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  border-top: 1px solid var(--ink);
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+.schedule tbody th, .revisions tbody th { font-weight: 600; }
+.schedule .num { text-align: right; padding-right: 1.5rem; font-variant-numeric: tabular-nums; }
+.schedule .constraint-row th, .schedule .constraint-row td {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+.schedule tr:has(+ .constraint-row) > * { border-bottom-color: var(--signal); }
+.tag {
+  margin-left: 0.4rem;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.schedule .constraint-cell { color: var(--signal); font-weight: 600; }
+
+/* ---------- Essay: the long rest, then a smaller peak ---------- */
+
+.essay-head .meta {
+  margin: 0.75rem 0 2.25rem;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--ink-2);
+}
+.fig-2 { margin-top: 3rem; }
+.pull { margin: 0.9rem 0 0; max-width: 30ch; }
+.pull p {
+  margin: 0;
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  line-height: 1.3;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
+.fig-detail-2 { margin-top: 2rem; }
+.fig-detail-2 .equivalent { margin-bottom: 2rem; }
+.schedule-2 td, .schedule-2 th { padding-right: 1rem; }
+
+/* ---------- Work: a revision table ---------- */
+
+.spec { margin: 1.5rem 0 0; max-width: 44rem; border-top: 1px solid var(--ink); }
+.spec > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--ink);
+}
+.spec dt { font-family: var(--mono); font-size: 0.875rem; color: var(--ink-2); padding-top: 0.2rem; }
+.spec dd { margin: 0; }
+.revisions { margin-top: 2.5rem; max-width: 44rem; }
+.revisions tbody th { width: 12rem; padding-right: 1.5rem; }
+
+/* ---------- Footer ---------- */
+
+.foot {
+  margin-top: clamp(4rem, 9vw, 7rem);
+  border: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1px;
+  background: var(--ink);
+  font-size: 1rem;
+}
+.foot > * { background: var(--paper); margin: 0; padding: 0.75rem 1rem; }
+.foot-links { list-style: none; display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+.foot-links a { display: inline-block; padding: 0.2rem 0; }
+.colophon { grid-column: 1 / -1; font-size: 0.9375rem; line-height: 1.5; color: var(--ink-2); }
+
+/* ---------- Medium and up ---------- */
+
+@media (min-width: 62rem) {
+  .fig-detail { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 3rem; align-items: start; }
+}
+
+/* Wide drawings only where their smallest label still renders at 14px or more. */
+@media (min-width: 64rem) {
+  .fig .fig-wide { display: block; }
+  .fig .fig-narrow { display: none; }
+  /* Fig. 2 leaves the essay column and takes the full sheet width, like Fig. 1 */
+  .fig-2 { margin-left: calc(-1 * (var(--margin-col) + var(--gap))); }
+}
+
+/* ---------- Narrow: compact title block, single-column sheets ---------- */
+
+@media (max-width: 56rem) {
+  .tb {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "brand nav"
+      "meta  meta";
+  }
+  .tb-brand { padding: 0 0.5rem; justify-content: center; }
+  .tb-brand .tb-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tb-name { font-size: 1rem; letter-spacing: -0.01em; }
+  .tb-nav { display: block; }
+  .tb-nav ul { display: flex; justify-content: flex-end; gap: 0; height: 100%; background: var(--paper); }
+  .tb-nav li { background: transparent; }
+  .tb-nav a { min-height: 2.5rem; padding: 0.25rem 0.3rem; font-size: 0.9375rem; }
+  .tb-nav li:last-child a { padding-right: 0.5rem; }
+
+  /* the metadata becomes one sentence-like mono line */
+  .tb-meta {
+    display: block;
+    grid-area: meta;
+    background: var(--paper);
+    padding: 0.35rem 0.5rem 0.4rem;
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+  .tb-meta > .tb-cell { display: inline; padding: 0; font-size: inherit; line-height: inherit; }
+  .tb-meta > .tb-cell + .tb-cell::before { content: "\a0· " / ""; }
+  .tb-meta .tb-label { font-size: inherit; text-transform: none; letter-spacing: 0; color: inherit; }
+  .tb-rev .tb-label, .tb-drawn .tb-label { text-transform: lowercase; }
+  .tb-sheet .tb-label, .tb-date .tb-label, .tb-lang .tb-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tb-lang .tb-value { font-size: inherit; }
+  .tb-lang a { padding: 0.1rem 0.1rem; }
+
+  .sheet { grid-template-columns: minmax(0, 1fr); row-gap: 1rem; }
+  .sheet-margin { flex-direction: row; align-items: baseline; gap: 0.75rem; }
+  .sheet-no { font-size: 1.25rem; }
+}
+
+@media (max-width: 30rem) {
+  .fig { margin-left: calc(var(--pad) * -1); margin-right: calc(var(--pad) * -1); border-left: 0; border-right: 0; }
+  .fig-area { padding: 1.25rem var(--pad); }
+  .fig-caption { padding: 1rem var(--pad) 1.1rem; }
+  .schedule th, .schedule td { padding-right: 0.6rem; }
+  .schedule .num { padding-right: 0.75rem; }
+  .spec > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  .revisions tbody th { width: auto; }
+  .revisions th, .revisions td { display: block; padding-right: 0; }
+  .revisions thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .revisions tbody th { border-bottom: 0; padding-bottom: 0; }
+  .foot { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* No animation exists; this guards anything a later revision adds. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+.lane-more circle { fill: var(--ink); stroke: none; }

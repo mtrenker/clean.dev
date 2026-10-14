@@ -1,0 +1,548 @@
+/* Direction B: Schematic. One surface, graphite ink, one signal color for the constraint. */
+
+/* Repo fonts. IBM Plex Mono SemiBold (repo copy) backs up the heavy mono values
+   if the webfont fails; it gets its own family name so it never stands in for
+   the 400 weight. Source Sans 3 is the named fallback for IBM Plex Sans. */
+@font-face {
+  font-family: "IBM Plex Mono Repo";
+  src: url("../../../apps/web/src/app/_fonts/IBMPlexMono-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../../../apps/web/src/app/_fonts/SourceSans3-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../../../apps/web/src/app/_fonts/SourceSans3-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  --paper: #fbf9f4;   /* drafting paper, faint warmth */
+  --ink: #1d1f22;     /* graphite: text and lines */
+  --ink-2: #4b4f55;   /* secondary text, same hue family */
+  --grid: #ece8de;    /* figure grid only, decorative */
+  --signal: #c43d00;  /* safety orange: the constraint, nowhere else */
+
+  --sans: "IBM Plex Sans", "Source Sans 3", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+  --mono-strong: "IBM Plex Mono", "IBM Plex Mono Repo", ui-monospace, "DejaVu Sans Mono", monospace;
+
+  --pad: clamp(1rem, 4vw, 3rem);
+  --margin-col: 11rem;
+  --measure: 68ch;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 82rem;
+  padding: var(--pad);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+main:focus { outline: none; }
+
+.skip {
+  position: absolute;
+  left: var(--pad);
+  top: -10rem;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  z-index: 2;
+}
+.skip:focus { top: 0.5rem; }
+
+/* ---------- Title block ---------- */
+
+.titleblock {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr) 0.9fr;
+  grid-template-areas:
+    "brand sheet rev  date drawn drawn"
+    "brand nav   nav  nav  nav   lang";
+  gap: 1px;
+  background: var(--ink);        /* the 1px gaps draw the internal lines */
+  border: 2px solid var(--ink);  /* heavier outer frame, as on a drawing */
+  font-family: var(--mono);
+}
+.tb-cell, .tb-nav li {
+  background: var(--paper);
+  padding: 0.5rem 0.75rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.tb-brand { grid-area: brand; justify-content: space-between; padding: 0.75rem 1rem 0.9rem; }
+.tb-sheet { grid-area: sheet; }
+.tb-rev   { grid-area: rev; }
+.tb-date  { grid-area: date; }
+.tb-drawn { grid-area: drawn; }
+.tb-lang  { grid-area: lang; }
+
+.tb-label {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.tb-value {
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+.tb-name {
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.tb-name:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.tb-nav {
+  grid-area: nav;
+  /* nav cells share the column lines of the cells above, like a ruled title block */
+  display: grid;
+  grid-template-columns: subgrid;
+  background: var(--ink);
+}
+.tb-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  gap: 1px;
+}
+@media (max-width: 56rem) {
+  .tb-nav { display: block; }
+  .tb-nav ul { grid-template-columns: repeat(4, 1fr); height: 100%; }
+}
+.tb-nav li { padding: 0; }
+.tb-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  height: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem 0.6rem;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.25;
+  text-decoration: none;
+}
+.tb-link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.tb-nav a:hover .tb-link { text-decoration-thickness: 2px; }
+.tb-nav a:focus-visible, .tb-lang a:focus-visible { outline-offset: -4px; }
+.tb-ref {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  text-decoration: none;
+  display: inline-block;
+}
+.tb-lang .tb-value { font-size: 1rem; }
+.tb-lang a { display: inline-block; padding: 0.15rem 0.2rem; }
+.tb-lang a[aria-current] { text-decoration: none; font-weight: 600; }
+
+/* ---------- Sheets (sections) ---------- */
+
+main { display: block; }
+
+.sheet {
+  display: grid;
+  grid-template-columns: var(--margin-col) minmax(0, 1fr);
+  column-gap: 2rem;
+  border-top: 1px solid var(--ink);
+  padding-top: 1.25rem;
+  margin-top: clamp(3.5rem, 8vw, 6.5rem);
+}
+.sheet-margin {
+  font-family: var(--mono);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sheet-no {
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.sheet-label, .meta, .sheet-status, .caption-label, .note-text {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.sheet-status { margin: 0; text-transform: none; letter-spacing: 0; max-width: 22ch; }
+.sheet-body { min-width: 0; }
+
+h1, h2, h3 { font-family: var(--sans); font-weight: 600; margin: 0; text-wrap: balance; }
+
+h1 {
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+}
+h2 {
+  font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.375rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  max-width: 28ch;
+}
+h3 { font-size: 1.25rem; line-height: 1.3; margin: 2.25rem 0 0.6rem; }
+
+.prose { max-width: var(--measure); }
+.prose p { margin: 0 0 1.1em; }
+.lead { font-size: 1.25rem; line-height: 1.55; margin-top: 2rem !important; }
+.sheet-intro .prose { margin-top: 0; }
+.cta { margin-top: 1.75rem !important; font-size: 1.25rem; }
+.more { font-family: var(--sans); margin-top: 1.75rem; }
+
+/* ---------- 02 Figure: the peak ---------- */
+
+.sheet-figure { margin-top: clamp(4rem, 10vw, 8rem); }
+.fig-intro { margin: 0.75rem 0 0; color: var(--ink-2); max-width: var(--measure); }
+
+.drawing {
+  grid-column: 1 / -1;
+  margin: 2rem 0 0;
+  border: 1px solid var(--ink);
+}
+.drawing-area {
+  /* faint grid only inside the figure area */
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 24px);
+  padding: clamp(1rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--ink);
+}
+.schematic { display: block; width: 100%; height: auto; overflow: visible; }
+.schematic-wide { display: none; }
+.schematic-narrow { max-width: 26rem; margin: 0 auto; }
+
+.schematic line, .schematic path, .schematic rect {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+.schematic .arrowhead { fill: none; stroke: var(--ink); stroke-width: 1.25; }
+.schematic .stations rect { stroke-width: 1.5; fill: var(--paper); }
+.schematic .ext { stroke-width: 1; }
+.schematic .tick { stroke-width: 1.5; }
+.schematic .sig, .schematic .sig line, .schematic .sig path, .schematic .arrowhead.sig { stroke: var(--signal); }
+.schematic .constraint-box { stroke-width: 3; }
+.schematic text {
+  fill: var(--ink);
+  /* paper knockout: grid lines stop short of labels, so text always sits on paper */
+  stroke: var(--paper);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+.schematic .sig text { fill: var(--signal); }
+
+.station-names text { font-family: var(--sans); font-weight: 600; font-size: 19px; }
+.station-names.small text { font-size: 16px; }
+.capacity text, .dim-u, .note { font-family: var(--mono); font-size: 16px; fill: var(--ink-2); }
+.capacity.small text, .small .dim-u, .note.small { font-size: 14px; }
+.schematic .dim-u { fill: var(--ink-2); }
+.schematic .sig .dim-u { fill: var(--signal); }
+.dim-n { font-family: var(--mono-strong); font-weight: 600; font-size: 24px; }
+.small .dim-n { font-size: 16px; }
+.callout-text {
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.small .callout-text { font-size: 14px; }
+.schematic .note { fill: var(--ink-2); }
+
+/* subtle flow: small gaps travel along the arrows. Off unless motion is welcome. */
+.flow-motion { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .flow-motion { display: inline; }
+  .schematic .flow-motion line {
+    stroke: var(--paper);
+    stroke-width: 3;
+    stroke-dasharray: 3 41;
+    animation: flow 2.4s linear infinite;
+  }
+}
+@keyframes flow { to { stroke-dashoffset: -44; } }
+
+.drawing-caption {
+  padding: 1rem clamp(1rem, 3vw, 2.5rem) 1.1rem;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  max-width: calc(var(--measure) + 6rem);
+}
+.caption-label { display: block; margin-bottom: 0.25rem; }
+
+.constraint-ref { color: var(--signal); font-weight: 600; }
+
+.fig-detail {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.fig-text { max-width: var(--measure); }
+.fig-text p { margin: 0 0 1rem; }
+.fig-constraint { display: flex; gap: 0.75rem; align-items: baseline; font-family: var(--mono); }
+.fig-constraint .constraint-ref { font-family: var(--mono-strong); text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; }
+
+/* the table reads as a drawing schedule */
+.schedule {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.schedule caption {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  padding-bottom: 0.5rem;
+}
+.schedule th, .schedule td {
+  text-align: left;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--ink);
+  vertical-align: baseline;
+}
+.schedule thead th {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  border-top: 2px solid var(--ink);
+}
+.schedule tbody th { font-weight: 600; }
+.schedule td { font-family: var(--mono); font-size: 0.9375rem; }
+.schedule .num { text-align: right; padding-right: 1.5rem; white-space: nowrap; }
+.schedule .constraint-row th, .schedule .constraint-row td {
+  border-top: 2px solid var(--signal);
+  border-bottom: 2px solid var(--signal);
+  color: var(--signal);
+}
+.constraint-tag {
+  display: inline-block;
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- 03 Essay: the long rest ---------- */
+
+.essay-head .meta { margin: 0.75rem 0 2rem; }
+.sheet-essay .prose p { margin-bottom: 1.15em; }
+.pull {
+  margin: 2.5rem 0;
+  padding: 1.25rem 0 0;
+  border-top: 2px solid var(--ink);
+  max-width: 34ch;
+}
+.pull p {
+  margin: 0 !important;
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  line-height: 1.3;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
+
+/* ---------- 04 Work ---------- */
+
+.spec {
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--ink);
+  max-width: var(--measure);
+}
+.spec > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--ink);
+}
+.spec dt {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  padding-top: 0.2rem;
+}
+.spec dd { margin: 0; }
+
+.rev-title {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  margin-top: 2.25rem;
+}
+/* progression drawn as a revision history: numbered rows, newest last */
+.revisions {
+  list-style: none;
+  counter-reset: rev;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  max-width: var(--measure);
+  border-top: 2px solid var(--ink);
+}
+.revisions li {
+  counter-increment: rev;
+  padding: 0.75rem 0 0.85rem;
+  border-bottom: 1px solid var(--ink);
+  position: relative;
+  padding-left: 4rem;
+}
+.revisions li::before {
+  content: counter(rev, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.8rem;
+  font-family: var(--mono-strong);
+  font-weight: 600;
+  font-size: 1rem;
+}
+.rev-role { font-weight: 600; }
+
+/* ---------- Footer ---------- */
+
+.sheet-foot {
+  margin-top: clamp(4rem, 9vw, 7rem);
+  border: 2px solid var(--ink);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1px;
+  background: var(--ink);
+  font-size: 1rem;
+}
+.sheet-foot > * { background: var(--paper); margin: 0; padding: 0.75rem 1rem; }
+.foot-links { list-style: none; display: flex; gap: 1.25rem; flex-wrap: wrap; }
+.foot-links a { display: inline-block; padding: 0.15rem 0; }
+.colophon {
+  grid-column: 1 / -1;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ---------- Medium ---------- */
+
+@media (min-width: 62rem) {
+  .fig-detail { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; }
+}
+@media (min-width: 48rem) {
+  .spec > div { grid-template-columns: 8rem minmax(0, 1fr); }
+}
+
+/* ---------- Wide: horizontal drawing, room for 14px+ labels at its smallest ---------- */
+
+@media (min-width: 68.75rem) {
+  .schematic-wide { display: block; }
+  .schematic-narrow { display: none; }
+}
+
+/* ---------- Narrow ---------- */
+
+@media (max-width: 56rem) {
+  .titleblock {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "brand brand lang"
+      "nav   nav   nav"
+      "sheet rev   date"
+      "drawn drawn drawn";
+  }
+  .sheet { grid-template-columns: minmax(0, 1fr); row-gap: 1rem; }
+  .sheet-margin { flex-direction: row; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .sheet-intro .sheet-margin { flex-direction: column; gap: 0.5rem; }
+  .sheet-status { max-width: none; }
+  .sheet-no { font-size: 1.5rem; }
+}
+
+@media (max-width: 30rem) {
+  .titleblock {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "brand lang"
+      "nav   nav"
+      "sheet rev"
+      "date  drawn";
+  }
+  .tb-nav ul { grid-template-columns: repeat(2, 1fr); }
+  .tb-cell { padding: 0.45rem 0.6rem 0.5rem; }
+  .tb-nav a { padding: 0.45rem 0.6rem 0.5rem; }
+  .drawing { margin-left: calc(var(--pad) * -1); margin-right: calc(var(--pad) * -1); border-left: 0; border-right: 0; }
+  .drawing-area { padding: 1rem var(--pad); }
+  .drawing-caption { padding: 1rem var(--pad); }
+  .schedule th, .schedule td { padding-right: 0.5rem; }
+  .schedule .num { padding-right: 0.75rem; white-space: normal; }
+  .spec > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  .sheet-foot { grid-template-columns: minmax(0, 1fr); }
+  .revisions li { padding-left: 2.75rem; }
+}

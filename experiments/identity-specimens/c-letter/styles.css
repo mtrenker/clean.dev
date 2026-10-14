@@ -1,0 +1,249 @@
+/* Direction C: Letter.
+   One surface, one ink, one accent, one family, three sizes.
+   Whitespace is the only grouping mechanism. */
+
+:root {
+  /* Color: paper, ink, and one accent (vermilion) for links and live values. */
+  --paper: #fcfcfa;
+  --ink: #161614;
+  --accent: #b5300b;
+
+  /* Type: exactly three sizes. */
+  --display: clamp(2.25rem, 0.95rem + 5.4vw, 7.5rem);
+  --text: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --small: 0.9375rem; /* 15px, metadata and footer only */
+
+  --font: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Rhythm: everything is a multiple of one text line. */
+  --line: calc(var(--text) * 1.5);
+  --gap-1: var(--line);                                   /* between paragraphs */
+  --gap-2: calc(var(--line) * 2);                         /* between parts of a section */
+  --gap-section: clamp(calc(var(--line) * 4), 14vw, calc(var(--line) * 8));
+
+  --inline: clamp(1.25rem, 7vw, 9rem);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: var(--gap-2) var(--inline) var(--gap-section);
+  font-family: var(--font);
+  font-size: var(--text);
+  line-height: 1.5;
+  font-weight: 400;
+  font-kerning: normal;
+  max-width: 120rem;
+}
+
+p, h1, h2, h3, h4, ul, ol, blockquote, table, figure { margin: 0; }
+
+/* ---- Links and focus ---- */
+
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+a:hover { text-decoration-thickness: 0.14em; }
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 4px;
+}
+
+main:focus { outline: none; } /* programmatic target of the skip link only, never keyboard-focusable */
+
+.skip {
+  position: absolute;
+  left: var(--inline);
+  top: 0.75rem;
+  padding: 0.25rem 0;
+  background: var(--paper);
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---- Masthead: status line and navigation, in text size ---- */
+
+.masthead {
+  display: grid;
+  gap: calc(var(--line) * 0.5);
+}
+
+.status { max-width: 62ch; }
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: calc(var(--line) * 0.5) var(--line);
+}
+
+.inline {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.1em;
+}
+
+.lang a[aria-current] { color: var(--ink); text-decoration: none; font-weight: 600; }
+
+/* ---- Display: the only large size ---- */
+
+.display {
+  font-size: var(--display);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.018em; /* tighter only once the size is large, see below */
+  font-variation-settings: "wdth" 92;
+  text-wrap: balance;
+  hyphens: manual;
+  overflow-wrap: normal;
+}
+
+h1.display {
+  max-width: 17ch;
+  margin-top: var(--gap-section);
+}
+
+/* ---- Prose ---- */
+
+.prose { max-width: 62ch; }
+.prose > * + * { margin-top: var(--gap-1); }
+.prose p { text-wrap: pretty; }
+
+.intro .prose { margin-top: var(--gap-2); }
+
+.small { font-size: var(--small); line-height: 1.5; }
+
+/* Section labels: small size, ink, sentence case. They name the section; the content carries it. */
+.label {
+  font-size: var(--small);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Titles inside sections stay at text size; only weight marks them. */
+.title {
+  font-size: var(--text);
+  font-weight: 650;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.prose .title + * { margin-top: calc(var(--line) * 0.25); }
+.prose h4.title { margin-top: var(--gap-2); }
+
+/* ---- Sections ---- */
+
+main > section { margin-top: var(--gap-section); }
+main > section > .label + * { margin-top: var(--gap-1); }
+
+/* ---- The live sentence ---- */
+
+.live {
+  max-width: 21ch;
+}
+.live p + p { margin-top: 0.5em; }
+
+.v {
+  color: var(--accent);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* Adjustable inputs carry an underline as well as weight (the production affordance);
+   computed results carry weight only. Neither relies on color alone. */
+.v.in {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.12em;
+}
+
+.figure .prose { margin-top: var(--gap-2); }
+
+/* ---- Table: plain, aligned, spaced. No rules. ---- */
+
+/* The wrapper only scrolls when text-only zoom makes the three columns wider
+   than the viewport (WCAG 1.4.10 allows two-dimensional scrolling for data tables).
+   At default size it never scrolls. */
+.table-wrap {
+  margin-top: var(--gap-2);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  max-width: 62ch;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  font-size: var(--small);
+  padding-bottom: calc(var(--line) * 0.5);
+}
+
+th, td {
+  padding: calc(var(--line) * 0.125) 2em calc(var(--line) * 0.125) 0;
+  vertical-align: baseline;
+}
+th:last-child, td:last-child { padding-right: 0; }
+
+thead th { font-weight: 600; padding-bottom: calc(var(--line) * 0.5); }
+tbody th { font-weight: 400; }
+tr.constraint th, tr.constraint td { font-weight: 650; }
+
+.figure .table-wrap + .small { margin-top: calc(var(--line) * 0.5); }
+
+/* ---- Essay ---- */
+
+.meta { margin-top: calc(var(--line) * 0.25); }
+
+blockquote {
+  padding-left: var(--line);
+  font-style: italic;
+  margin-block: var(--gap-2);
+}
+
+/* ---- Work ---- */
+
+.steps { list-style: none; padding: 0; }
+.steps li + li { margin-top: calc(var(--line) * 0.5); }
+.steps strong { font-weight: 650; }
+
+/* ---- Footer ---- */
+
+.colophon {
+  margin-top: var(--gap-section);
+  max-width: 62ch;
+}
+.colophon > * + * { margin-top: calc(var(--line) * 0.5); }
+
+/* ---- Narrow screens ---- */
+
+@media (min-width: 48rem) {
+  .display { letter-spacing: -0.032em; }
+}
+
+/* On narrow screens the table drops to the small size so cells do not
+   fold into single words; it is still at least 15px. */
+@media (max-width: 30rem) {
+  table { width: 100%; font-size: var(--small); }
+  th, td { padding-right: 1em; }
+}

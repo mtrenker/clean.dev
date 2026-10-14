@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>clean.dev, Martin Trenker</title>
+  <!-- TEMPORARY (specimen only): IBM Plex Sans and IBM Plex Mono 400/600 from Google Fonts.
+       Production must self-host. The repo copies of IBM Plex Mono SemiBold and the
+       Source Sans 3 fallback are loaded in styles.css. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="titleblock" aria-label="Title block">
+    <div class="tb-cell tb-brand">
+      <span class="tb-label">Project</span>
+      <a class="tb-name" href="/" aria-label="clean.dev, home">clean.dev</a>
+    </div>
+    <div class="tb-cell tb-sheet">
+      <span class="tb-label">Sheet</span>
+      <span class="tb-value">Home, 1 of 5</span>
+    </div>
+    <div class="tb-cell tb-rev">
+      <span class="tb-label">Rev.</span>
+      <span class="tb-value">working</span>
+    </div>
+    <div class="tb-cell tb-date">
+      <span class="tb-label">Date</span>
+      <span class="tb-value"><time datetime="2026-10-14">2026-10-14</time></span>
+    </div>
+    <div class="tb-cell tb-drawn">
+      <span class="tb-label">Drawn by</span>
+      <span class="tb-value">Martin Trenker with a coding agent</span>
+    </div>
+    <nav class="tb-nav" aria-label="Main">
+      <ul>
+        <li><a href="/writing/"><span class="tb-ref" aria-hidden="true">Sht 2</span> <span class="tb-link">Writing</span></a></li>
+        <li><a href="/work/"><span class="tb-ref" aria-hidden="true">Sht 3</span> <span class="tb-link">Work</span></a></li>
+        <li><a href="/lab/"><span class="tb-ref" aria-hidden="true">Sht 4</span> <span class="tb-link">Lab</span></a></li>
+        <li><a href="/contact/"><span class="tb-ref" aria-hidden="true">Sht 5</span> <span class="tb-link">Contact</span></a></li>
+      </ul>
+    </nav>
+    <div class="tb-cell tb-lang">
+      <span class="tb-label" id="lang-label">Lang.</span>
+      <span class="tb-value" role="group" aria-labelledby="lang-label">
+        <a href="/" aria-current="page" lang="en">EN</a>
+        <span aria-hidden="true">/</span>
+        <a href="/de/" lang="de" hreflang="de">DE</a>
+      </span>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- 01: homepage intro -->
+    <section class="sheet sheet-intro" aria-labelledby="intro-title">
+      <div class="sheet-margin">
+        <span class="sheet-no">01</span>
+        <p class="sheet-status">Currently embedded with a team. Remote in DACH, on-site around Munich.</p>
+      </div>
+      <div class="sheet-body">
+        <h1 id="intro-title">Software organizations are factories. Most have one bottleneck, and it is rarely the developers.</h1>
+        <div class="prose">
+          <p class="lead">I'm Martin Trenker. I've written software for 25 years, most of them inside organizations where good engineers were slowed down by the system around them. clean.dev is where I work out, in public, how clean code, real agility and AI behave inside a team: not as rituals or tools, but as a factory with constraints you can find and fix.</p>
+          <p>I join teams as a technical lead or solutions architect and stay close to the code, because that is where the factory tells the truth. Everything here, including the site itself, is built in the open.</p>
+          <p class="cta"><a href="/contact/">Let's talk about your team.</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02: figure, the peak of the page -->
+    <section class="sheet sheet-figure" aria-labelledby="fig-title">
+      <div class="sheet-margin">
+        <span class="sheet-no">02</span>
+        <span class="sheet-label">Fig. 1</span>
+      </div>
+      <div class="sheet-body">
+        <h2 id="fig-title">Where the work waits</h2>
+        <p class="fig-intro">A delivery system with five stations. Numbers are illustrative.</p>
+      </div>
+
+      <figure class="drawing" aria-labelledby="fig-caption">
+        <div class="drawing-area">
+          <!-- Wide drawing: horizontal flow. Shown when there is room for 14px+ labels. -->
+          <svg class="schematic schematic-wide" viewBox="0 0 1120 470" role="img" aria-labelledby="svg-wide-title" aria-describedby="fig-equivalent" focusable="false">
+            <title id="svg-wide-title">Schematic: where the work waits, five stations from Ideas to Release, constraint at Review</title>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9" class="arrowhead"/>
+              </marker>
+              <marker id="arrow-sig" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9" class="arrowhead sig"/>
+              </marker>
+            </defs>
+
+            <!-- flow arrows between stations -->
+            <g class="flow-lines">
+              <line x1="198" y1="332" x2="250" y2="332" marker-end="url(#arrow)"/>
+              <line x1="422" y1="332" x2="474" y2="332" marker-end="url(#arrow)"/>
+              <line x1="646" y1="332" x2="698" y2="332" class="sig" marker-end="url(#arrow-sig)"/>
+              <line x1="870" y1="332" x2="922" y2="332" marker-end="url(#arrow)"/>
+            </g>
+            <g class="flow-motion" aria-hidden="true">
+              <line x1="198" y1="332" x2="242" y2="332"/>
+              <line x1="422" y1="332" x2="466" y2="332"/>
+              <line x1="646" y1="332" x2="690" y2="332"/>
+              <line x1="870" y1="332" x2="914" y2="332"/>
+            </g>
+
+            <!-- stations -->
+            <g class="stations">
+              <rect x="32" y="300" width="160" height="64"/>
+              <rect x="256" y="300" width="160" height="64"/>
+              <rect x="480" y="300" width="160" height="64"/>
+              <rect x="704" y="300" width="160" height="64" class="sig constraint-box"/>
+              <rect x="928" y="300" width="160" height="64"/>
+            </g>
+            <g class="station-names" text-anchor="middle">
+              <text x="112" y="339">Ideas</text>
+              <text x="336" y="339">Refinement</text>
+              <text x="560" y="339">Development</text>
+              <text x="784" y="339">Review</text>
+              <text x="1008" y="339">Release</text>
+            </g>
+            <g class="capacity" text-anchor="middle">
+              <text x="112" y="396">unlimited</text>
+              <text x="336" y="396">1 product owner</text>
+              <text x="560" y="396">5 developers</text>
+              <text x="784" y="396">1 senior reviewer</text>
+              <text x="1008" y="396">every 2 weeks</text>
+            </g>
+
+            <!-- dimension lines: queue length, 10 units per item, measured up from the station -->
+            <g class="dims">
+              <!-- Ideas 48: broken, not to scale -->
+              <g>
+                <line class="ext" x1="44" y1="284" x2="76" y2="284"/>
+                <line class="ext" x1="44" y1="54" x2="76" y2="54"/>
+                <path class="dim" d="M60,284 V186 L52,180 L68,170 L60,164 V54"/>
+                <line class="tick" x1="54" y1="290" x2="66" y2="278"/>
+                <line class="tick" x1="54" y1="60" x2="66" y2="48"/>
+                <text class="dim-n" x="76" y="128">48</text>
+                <text class="dim-u" x="76" y="150">waiting</text>
+                <text class="dim-u" x="76" y="236">not to</text>
+                <text class="dim-u" x="76" y="256">scale</text>
+              </g>
+              <!-- Refinement 12 -->
+              <g>
+                <line class="ext" x1="268" y1="284" x2="300" y2="284"/>
+                <line class="ext" x1="268" y1="164" x2="300" y2="164"/>
+                <line class="dim" x1="284" y1="284" x2="284" y2="164"/>
+                <line class="tick" x1="278" y1="290" x2="290" y2="278"/>
+                <line class="tick" x1="278" y1="170" x2="290" y2="158"/>
+                <text class="dim-n" x="300" y="222">12</text>
+                <text class="dim-u" x="300" y="244">waiting</text>
+              </g>
+              <!-- Development 9 in progress -->
+              <g>
+                <line class="ext" x1="492" y1="284" x2="524" y2="284"/>
+                <line class="ext" x1="492" y1="194" x2="524" y2="194"/>
+                <line class="dim" x1="508" y1="284" x2="508" y2="194"/>
+                <line class="tick" x1="502" y1="290" x2="514" y2="278"/>
+                <line class="tick" x1="502" y1="200" x2="514" y2="188"/>
+                <text class="dim-n" x="524" y="237">9</text>
+                <text class="dim-u" x="524" y="259">in progress</text>
+              </g>
+              <!-- Review 14: the constraint -->
+              <g class="sig">
+                <line class="ext" x1="716" y1="284" x2="748" y2="284"/>
+                <line class="ext" x1="716" y1="144" x2="748" y2="144"/>
+                <line class="dim" x1="732" y1="284" x2="732" y2="144"/>
+                <line class="tick" x1="726" y1="290" x2="738" y2="278"/>
+                <line class="tick" x1="726" y1="150" x2="738" y2="138"/>
+                <text class="dim-n" x="748" y="212">14</text>
+                <text class="dim-u" x="748" y="234">waiting</text>
+              </g>
+              <!-- Release 0 -->
+              <g>
+                <line class="ext" x1="940" y1="284" x2="972" y2="284"/>
+                <line class="tick" x1="950" y1="290" x2="962" y2="278"/>
+                <text class="dim-n" x="972" y="270">0</text>
+              </g>
+            </g>
+
+            <!-- constraint callout with leader line -->
+            <g class="sig callout">
+              <path class="leader" d="M732,138 V98 H760"/>
+              <text class="callout-text" x="766" y="104">Constraint</text>
+            </g>
+
+            <text class="note" x="32" y="450">Dimensions: queue length per station. Ideas not to scale.</text>
+          </svg>
+
+          <!-- Narrow drawing: vertical flow, drawn at 1:1 for a 328px column so labels stay 14px+. -->
+          <svg class="schematic schematic-narrow" viewBox="0 0 328 540" role="img" aria-labelledby="svg-narrow-title" aria-describedby="fig-equivalent" focusable="false">
+            <title id="svg-narrow-title">Schematic: where the work waits, five stations from Ideas to Release, constraint at Review</title>
+            <defs>
+              <marker id="arrow-n" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9" class="arrowhead"/>
+              </marker>
+              <marker id="arrow-n-sig" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9" class="arrowhead sig"/>
+              </marker>
+            </defs>
+            <g class="flow-lines">
+              <line x1="80" y1="78" x2="80" y2="108" marker-end="url(#arrow-n)"/>
+              <line x1="80" y1="178" x2="80" y2="208" marker-end="url(#arrow-n)"/>
+              <line x1="80" y1="278" x2="80" y2="308" class="sig" marker-end="url(#arrow-n-sig)"/>
+              <line x1="80" y1="378" x2="80" y2="408" marker-end="url(#arrow-n)"/>
+            </g>
+            <g class="flow-motion" aria-hidden="true">
+              <line x1="80" y1="78" x2="80" y2="100"/>
+              <line x1="80" y1="178" x2="80" y2="200"/>
+              <line x1="80" y1="278" x2="80" y2="300"/>
+              <line x1="80" y1="378" x2="80" y2="400"/>
+            </g>
+            <g class="stations">
+              <rect x="1" y="12" width="158" height="64"/>
+              <rect x="1" y="112" width="158" height="64"/>
+              <rect x="1" y="212" width="158" height="64"/>
+              <rect x="1" y="312" width="158" height="64" class="sig constraint-box"/>
+              <rect x="1" y="412" width="158" height="64"/>
+            </g>
+            <g class="station-names small" text-anchor="middle">
+              <text x="80" y="38">Ideas</text>
+              <text x="80" y="138">Refinement</text>
+              <text x="80" y="238">Development</text>
+              <text x="80" y="338">Review</text>
+              <text x="80" y="438">Release</text>
+            </g>
+            <g class="capacity small" text-anchor="middle">
+              <text x="80" y="62">unlimited</text>
+              <text x="80" y="162">1 product owner</text>
+              <text x="80" y="262">5 developers</text>
+              <text x="80" y="362">1 senior reviewer</text>
+              <text x="80" y="462">every 2 weeks</text>
+            </g>
+            <!-- horizontal dimension lines, 8 units per item, measured right from the station -->
+            <g class="dims small">
+              <g>
+                <line class="ext" x1="176" y1="30" x2="176" y2="58"/>
+                <line class="ext" x1="320" y1="30" x2="320" y2="58"/>
+                <path class="dim" d="M176,44 H240 L246,36 L254,52 L260,44 H320"/>
+                <line class="tick" x1="170" y1="50" x2="182" y2="38"/>
+                <line class="tick" x1="314" y1="50" x2="326" y2="38"/>
+                <text class="dim-u" x="184" y="24"><tspan class="dim-n">48</tspan> waiting</text>
+                <text class="dim-u" x="184" y="74">not to scale</text>
+              </g>
+              <g>
+                <line class="ext" x1="176" y1="130" x2="176" y2="158"/>
+                <line class="ext" x1="272" y1="130" x2="272" y2="158"/>
+                <line class="dim" x1="176" y1="144" x2="272" y2="144"/>
+                <line class="tick" x1="170" y1="150" x2="182" y2="138"/>
+                <line class="tick" x1="266" y1="150" x2="278" y2="138"/>
+                <text class="dim-u" x="184" y="124"><tspan class="dim-n">12</tspan> waiting</text>
+              </g>
+              <g>
+                <line class="ext" x1="176" y1="230" x2="176" y2="258"/>
+                <line class="ext" x1="248" y1="230" x2="248" y2="258"/>
+                <line class="dim" x1="176" y1="244" x2="248" y2="244"/>
+                <line class="tick" x1="170" y1="250" x2="182" y2="238"/>
+                <line class="tick" x1="242" y1="250" x2="254" y2="238"/>
+                <text class="dim-u" x="184" y="224"><tspan class="dim-n">9</tspan> in progress</text>
+              </g>
+              <g class="sig">
+                <line class="ext" x1="176" y1="330" x2="176" y2="358"/>
+                <line class="ext" x1="288" y1="330" x2="288" y2="358"/>
+                <line class="dim" x1="176" y1="344" x2="288" y2="344"/>
+                <line class="tick" x1="170" y1="350" x2="182" y2="338"/>
+                <line class="tick" x1="282" y1="350" x2="294" y2="338"/>
+                <text class="dim-u" x="184" y="324"><tspan class="dim-n">14</tspan> waiting</text>
+                <text class="callout-text" x="184" y="378">Constraint</text>
+              </g>
+              <g>
+                <line class="ext" x1="176" y1="430" x2="176" y2="458"/>
+                <line class="tick" x1="170" y1="450" x2="182" y2="438"/>
+                <text class="dim-u" x="184" y="424"><tspan class="dim-n">0</tspan> waiting</text>
+              </g>
+            </g>
+            <text class="note small" x="1" y="508">Dimensions: queue length</text>
+            <text class="note small" x="1" y="528">per station. Ideas not to scale.</text>
+          </svg>
+        </div>
+
+        <figcaption id="fig-caption" class="drawing-caption">
+          <span class="caption-label">Fig. 1</span>
+          Adding two developers here feeds the review queue. The constraint is <span class="constraint-ref">review capacity</span>, so more developers make the system slower, not faster, until review is relieved.
+        </figcaption>
+      </figure>
+
+      <div class="fig-detail">
+        <table class="schedule">
+          <caption>Where the work waits. Numbers are illustrative.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Station</th>
+              <th scope="col" class="num">Waiting</th>
+              <th scope="col">Capacity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Ideas</th><td class="num">48</td><td>unlimited</td></tr>
+            <tr><th scope="row">Refinement</th><td class="num">12</td><td>1 product owner</td></tr>
+            <tr><th scope="row">Development</th><td class="num">9 in progress</td><td>5 developers</td></tr>
+            <tr class="constraint-row"><th scope="row">Review <span class="constraint-tag">constraint</span></th><td class="num">14</td><td>1 senior reviewer</td></tr>
+            <tr><th scope="row">Release</th><td class="num">0</td><td>every 2 weeks</td></tr>
+          </tbody>
+        </table>
+        <div class="fig-text">
+          <p class="fig-constraint"><span class="tb-label">Constraint</span> <span class="constraint-ref">Review</span></p>
+          <p id="fig-equivalent">Work flows from Ideas through Refinement, Development and <span class="constraint-ref">Review</span> to Release. The longest queue sits in front of <span class="constraint-ref">Review</span>, where 14 changes wait for one senior reviewer. Development has 9 changes in progress for 5 developers. Adding developers increases the review queue; the constraint is <span class="constraint-ref">review capacity</span>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03: essay excerpt, the long rest -->
+    <section class="sheet sheet-essay" aria-labelledby="essay-title">
+      <div class="sheet-margin">
+        <span class="sheet-no">03</span>
+        <span class="sheet-label">Writing</span>
+      </div>
+      <article class="sheet-body">
+        <header class="essay-head">
+          <h2 id="essay-title">I'm done with autonomous "Agent Fleets"</h2>
+          <p class="meta">Draft, 2026. About 9 minutes.</p>
+        </header>
+        <div class="prose">
+          <p>I knew I had lost control when I used my agent fleet to build a dashboard for my agent fleet.</p>
+          <p>The fleet was working. It took large plans, split them into tasks and sent agents into separate workspaces. Code appeared quickly. What I no longer had was any idea what was going on.</p>
+          <p>So I asked the fleet to build its own "flightdeck": a web app that ingested all the task folders where I logged every agent turn and a summary as JSONL. The dashboard showed a live view of the agents running across my machines. It was read-only at first. Steering from the dashboard would definitely come later.</p>
+          <p>The result had a lot of information on the screen. It still wasn't what I needed.</p>
+          <p>Worse, I had no idea what was going on inside the fleet-generated codebase behind it. It looked like all the other AI projects I had seen. It worked, but it felt neither like an achievement nor like something I wanted to use.</p>
+          <h3>The cost I hadn't planned for</h3>
+          <p>I have always been proud of the skills I earned over the last 25 years. This "productivity boost" slowly chipped away at that pride and replaced it with anxiety. Worse, it took away my love for coding.</p>
+          <p>I wasn't building the system anymore. I was watching a system get built.</p>
+          <blockquote class="pull">
+            <p>The bottleneck is still me. That's fine. I have to live with the code after the agents move on.</p>
+          </blockquote>
+          <p class="more"><a href="/writing/">Read the essay</a></p>
+        </div>
+      </article>
+    </section>
+
+    <!-- 04: work entry -->
+    <section class="sheet sheet-work" aria-labelledby="work-title">
+      <div class="sheet-margin">
+        <span class="sheet-no">04</span>
+        <span class="sheet-label">Work</span>
+      </div>
+      <article class="sheet-body">
+        <h2 id="work-title">Douglas</h2>
+        <dl class="spec">
+          <div><dt>Period</dt><dd>2024 to 2026</dd></div>
+          <div><dt>Role</dt><dd>React Expert, then Technical Lead, then Solutions Architect</dd></div>
+          <div class="spec-wide"><dt>Mandate</dt><dd>Modernise the POS/CRM platform from its React frontend to backend services in TypeScript/Node.js and C#/.NET, unify the CRM API landscape, and introduce governed AI tooling.</dd></div>
+        </dl>
+        <h3 class="rev-title" id="progression">Progression</h3>
+        <ol class="revisions" aria-labelledby="progression">
+          <li><span class="rev-role">React Expert.</span> Joined to modernise the POS software used in more than 1,200 stores across 14 European countries.</li>
+          <li><span class="rev-role">Technical Lead.</span> Led the move from legacy Angular to maintainable React and shipped the business-critical CRM integration in under a year.</li>
+          <li><span class="rev-role">Solutions Architect.</span> Took on broader scope across TypeScript/Node.js and C#/.NET backend services to unify the CRM API landscape and introduce governed AI tooling for daily delivery work.</li>
+        </ol>
+        <p class="more"><a href="/work/">All work</a></p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="sheet-foot">
+    <p class="foot-line">Open source and built in public.</p>
+    <ul class="foot-links">
+      <li><a href="https://github.com/mtrenker/clean.dev">GitHub</a></li>
+      <li><a href="/imprint/">Imprint</a></li>
+      <li><a href="/privacy/">Privacy</a></li>
+    </ul>
+    <p class="colophon">Made with a coding agent, reviewed by a human. Every element on this page has a reason you can ask about.</p>
+  </footer>
+</body>
+</html>
