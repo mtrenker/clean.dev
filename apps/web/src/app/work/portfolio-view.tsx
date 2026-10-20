@@ -254,6 +254,10 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
                 </div>
               </div>
               <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.profile.origin.label')}</p>
+                <p className="mt-2 text-sm leading-6 text-[var(--site-ink-sec)]">{msg(intl, 'work.profile.origin')}</p>
+              </div>
+              <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.hero.coreStack')}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {coreTechnologies.map((technology) => (
@@ -288,27 +292,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
       </SiteSection>
 
       <SiteSection border={false}>
-        <SiteContainer>
-          <SectionHeader title={msg(intl, 'work.timeline.heading')} meta={msg(intl, 'work.timeline.meta')} />
-          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)]">
-            {timelineProjects.map((project) => (
-              <TimelineEntry key={project.id} project={project} lang={lang} />
-            ))}
-          </ol>
-          <button
-            aria-expanded={timelineExpanded}
-            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
-            onClick={() => setTimelineExpanded((value) => !value)}
-            type="button"
-          >
-            {timelineExpanded
-              ? msg(intl, 'work.timeline.collapse')
-              : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
-          </button>
-        </SiteContainer>
-      </SiteSection>
-
-      <SiteSection>
         <SiteContainer>
           <SectionHeader title={msg(intl, 'work.lab.heading')} meta={msg(intl, 'work.lab.meta')} />
           <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.lab.lead')}</p>
@@ -358,7 +341,28 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               </Card>
             ))}
           </div>
-          <p className="mt-6 font-mono text-xs text-[var(--site-ink-sec)]">{msg(intl, 'work.certs.note')}</p>
+        </SiteContainer>
+      </SiteSection>
+
+      <SiteSection>
+        <SiteContainer>
+          <SectionHeader title={msg(intl, 'work.timeline.heading')} meta={msg(intl, 'work.timeline.meta')} />
+          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)]">
+            {timelineProjects.map((project) => (
+              <TimelineEntry key={project.id} project={project} lang={lang} />
+            ))}
+          </ol>
+          <button
+            aria-expanded={timelineExpanded}
+            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
+            onClick={() => setTimelineExpanded((value) => !value)}
+            type="button"
+          >
+            {timelineExpanded
+              ? msg(intl, 'work.timeline.collapse')
+              : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
+          </button>
+          <p className="mt-8 font-mono text-xs text-[var(--site-ink-sec)]">{msg(intl, 'work.certs.note')}</p>
         </SiteContainer>
       </SiteSection>
 

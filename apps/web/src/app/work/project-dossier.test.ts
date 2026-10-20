@@ -20,6 +20,10 @@ describe('buildProjectDossier', () => {
     expect(dossier).toContain('- Location and work model: Munich and remote DACH');
     expect(dossier).toContain('- Languages: German and English');
     expect(dossier).toContain('- Utilization: 2–5 days/week');
+    expect(dossier.indexOf('## Summary')).toBeGreaterThan(dossier.indexOf('## Profile'));
+    expect(dossier.indexOf('## Summary')).toBeLessThan(dossier.indexOf('## Core skills'));
+    expect(dossier).toContain(enMessages['work.about.p1']);
+    expect(dossier).toContain('- Own systems · self-funded: A production platform I run myself.');
     expect(dossier).toContain('## Core skills');
     expect(dossier).toContain('## Recent projects');
     expect(dossier.indexOf('### 1. Douglas GmbH')).toBeLessThan(dossier.indexOf('### 2. Oetker Digital GmbH'));
@@ -43,6 +47,8 @@ describe('buildProjectDossier', () => {
     expect(dossier).toContain('- Standort und Arbeitsmodell: München und remote im DACH-Raum');
     expect(dossier).toContain('- Sprachen: Deutsch und Englisch');
     expect(dossier).toContain('- Auslastung: 2–5 Tage/Woche');
+    expect(dossier.indexOf('## Kurzprofil')).toBeLessThan(dossier.indexOf('## Kernkompetenzen'));
+    expect(dossier).toContain(deMessages['work.about.p2']);
     expect(dossier).toContain('## Aktuelle Projekte');
     expect(dossier).toContain('### 1. Douglas GmbH');
     expect(dossier).toContain('### 2. Oetker Digital GmbH');

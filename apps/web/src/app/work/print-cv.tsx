@@ -140,15 +140,18 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
         ))}
       </section>
 
-      {/* Focus areas */}
-      <section className="mt-[9mm] break-inside-avoid">
-        <PrintSectionHeader meta={cv.focusMeta} title={cv.focusHeading} />
+      {/* Selected examples: concrete ownership with its attribution */}
+      <section data-print-examples className="mt-[9mm] break-inside-avoid">
+        <PrintSectionHeader meta={cv.examplesMeta} title={cv.examplesHeading} />
         <div className="mt-[4.5mm] grid grid-cols-3 gap-[8mm]">
-          {cv.focusItems.map((item) => (
-            <div key={item.number}>
-              <p className="font-mono text-[10.5pt] font-semibold text-[var(--print-rust)]">{item.number}</p>
-              <h3 className="mt-[1.8mm] text-[10pt] font-semibold leading-[1.3] text-[var(--print-ink)]">{item.heading}</h3>
-              <p className="mt-[1.5mm] text-[9pt] leading-[1.5] text-[var(--print-ink-sec)] hyphens-auto">{item.body}</p>
+          {cv.examples.map((example) => (
+            <div key={example.number}>
+              <p className="font-mono text-[10.5pt] font-semibold text-[var(--print-rust)]">{example.number}</p>
+              <div className="mt-[1mm]">
+                <PrintLabel>{example.label}</PrintLabel>
+              </div>
+              <h3 className="mt-[1.8mm] text-[10pt] font-semibold leading-[1.3] text-[var(--print-ink)]">{example.heading}</h3>
+              <p className="mt-[1.5mm] text-[9pt] leading-[1.5] text-[var(--print-ink-sec)] hyphens-auto">{example.body}</p>
             </div>
           ))}
         </div>

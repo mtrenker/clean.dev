@@ -3,7 +3,11 @@ import { projects } from '../src/app/projects';
 import { labItems } from '../src/app/lab';
 import { buildDouglasWorkCase, isDouglasProject } from '../src/app/work/douglas-case';
 import { SUPPORTED_LOCALES, type Locale } from '../src/lib/locale';
+import deMessages from '../src/messages/de.json';
+import enMessages from '../src/messages/en.json';
 import { inspectPdf, searchablePdfText } from './helpers/pdf';
+
+const MESSAGES: Record<Locale, Record<string, string>> = { en: enMessages, de: deMessages };
 
 const HISTORY_HEADINGS: Record<Locale, string> = {
   en: 'Project history',
@@ -87,6 +91,23 @@ test.describe('work print CV', () => {
           expect(searchablePdfText(labPage!)).toContain(searchablePdfText(value));
         }
       }
+      // Page one carries the opening narrative and the attributed examples;
+      // the history still starts on its own sheet.
+      const [firstPage, secondPage] = exported.text.split('\f').map(searchablePdfText);
+      const messages: Record<string, string> = MESSAGES[locale];
+      for (const expected of [
+        messages['work.about.p1'],
+        messages['work.about.p2'],
+        messages['work.examples.heading'],
+        // Print capitalises these list fragments, so match from the second letter.
+        douglasCase.summary.slice(1),
+        douglasCase.inHouseService.slice(1),
+        labItems[0].ownership[locale],
+      ]) {
+        expect(firstPage).toContain(searchablePdfText(expected));
+      }
+      expect(firstPage).not.toContain(searchablePdfText(HISTORY_HEADINGS[locale]));
+      expect(secondPage.startsWith(searchablePdfText(HISTORY_HEADINGS[locale]))).toBe(true);
       for (const expected of ['Martin Trenker', 'info@clean.dev', HISTORY_HEADINGS[locale], douglasCase.company, douglasCase.mandate]) {
         expect(searchable).toContain(searchablePdfText(expected));
       }

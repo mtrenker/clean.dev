@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createIntl } from 'react-intl';
+import { labItems } from '../lab';
 import { projects } from '../projects';
+import { buildDouglasWorkCase } from './douglas-case';
 import { buildPrintCv, printCvTechnologies, recentTechnologies } from './print-cv-data';
 import type { Locale } from '@/lib/locale';
 import enMessages from '@/messages/en.json';
@@ -42,13 +44,13 @@ describe('buildPrintCv', () => {
       const cv = buildPrintCv(projects, locale, intlFor(locale));
       const staticText = [
         cv.docLabel, cv.updatedLabel, cv.name, cv.subtitle, cv.photoAlt,
-        cv.contactHeading, cv.focusHeading, cv.focusMeta,
+        cv.contactHeading, cv.examplesHeading, cv.examplesMeta,
         cv.technologiesHeading, cv.historyHeading, cv.historyMeta,
         cv.availabilityLabel, cv.availabilityText,
         cv.labHeading, cv.labMeta, cv.certsNote,
         ...cv.about,
         ...cv.stats.map((stat) => stat.label),
-        ...cv.focusItems.flatMap((item) => [item.heading, item.body]),
+        ...cv.examples.flatMap((example) => [example.label, example.heading, example.body]),
       ];
       for (const value of staticText) {
         expect(value).toBeTruthy();
@@ -56,6 +58,22 @@ describe('buildPrintCv', () => {
         expect(value).not.toMatch(/^work\./);
       }
     }
+  });
+
+  it.each(['en', 'de'] as const)('opens page one with attributed client and own-system examples (%s)', (locale) => {
+    const cv = buildPrintCv(projects, locale, intlFor(locale));
+    const douglas = buildDouglasWorkCase(projects, locale);
+    const platform = labItems.find((item) => item.id === 'k8s-platform')!;
+    const sentence = (text: string) => text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
+
+    expect(cv.examples.map((example) => example.body)).toEqual([
+      sentence(douglas.summary),
+      sentence(douglas.inHouseService),
+      platform.ownership[locale],
+    ]);
+    expect(cv.examples.map((example) => example.label)).toEqual(locale === 'en'
+      ? ['Douglas · client work', 'Douglas · client work', 'Own systems · self-funded']
+      : ['Douglas · Kundenprojekt', 'Douglas · Kundenprojekt', 'Eigene Systeme · selbst finanziert']);
   });
 
   it('localizes project fields and city names', () => {

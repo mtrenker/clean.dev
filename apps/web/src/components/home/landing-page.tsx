@@ -39,9 +39,11 @@ const formatDateRange = (startDate: string, endDate: string) => {
 };
 const formatYearRange = (project: Project) => formatDateRange(project.startDate, project.endDate);
 const projectName = (project: Project, locale: Locale) => project.company ?? project.industry?.[locale] ?? project.id;
-const recentProjects = (projects: Project[]) =>
+// Martin's spotlight curation spans the range of his client work, not only the
+// newest window, so the log does not read as one run of frontend roles.
+const spotlightProjects = (projects: Project[]) =>
   projects
-    .filter((project): project is EngagementProject => Boolean(project.company) && Boolean(project.featured))
+    .filter((project): project is EngagementProject => Boolean(project.company) && Boolean(project.spotlight))
     .sort((a, b) => b.startDate.localeCompare(a.startDate));
 const projectSignal = (project: Project, locale: Locale) => project.highlights[locale][0] ?? project.description[locale];
 
@@ -123,9 +125,9 @@ const ProofEvidenceGroup = ({ label, items }: { label: string; items: string[] }
 
 const ProofBand = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
   const douglasCase = buildDouglasWorkCase(projects, locale);
-  // The unified C#/.NET API leads: it is the clearest documented statement of what
-  // Martin personally designed and shipped, ahead of the CRM backend he maintained.
-  const personalOwnership = [douglasCase.personalOwnership[1], douglasCase.personalOwnership[0]];
+  // The unified API Martin personally shipped and the runtime configuration it made
+  // possible: the two ownership statements that say what changed for the business.
+  const personalOwnership = douglasCase.personalOwnership.slice(0, 2);
 
   return (
     <section aria-labelledby="home-proof-heading" className="border-b border-[var(--site-rule)] bg-[var(--site-panel)]">
@@ -360,9 +362,8 @@ const Questions = ({ intl }: { intl: IntlShape }) => (
 const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | 'locale' | 'projects'>) => {
   const douglasCase = buildDouglasWorkCase(projects, locale);
   const newestDouglasProjectId = douglasCase.sourceProjectIds.at(-1);
-  const engagementProjects = recentProjects(projects)
-    .filter((project) => !isDouglasProject(project) || project.id === newestDouglasProjectId)
-    .slice(0, 8);
+  const engagementProjects = spotlightProjects(projects)
+    .filter((project) => !isDouglasProject(project) || project.id === newestDouglasProjectId);
 
   return (
     <SiteSection id="engagements" ariaLabelledBy="home-engagements-heading">
@@ -388,7 +389,7 @@ const EngagementLog = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl'
                 </span>
                 <span className="font-mono text-sm font-semibold text-[var(--site-ink)]">{projectName(project, locale)}</span>
                 <span className="pr-6 text-sm leading-6 text-[var(--site-ink-sec)]">
-                  {isDouglas ? douglasCase.teamContribution[1] : projectSignal(project, locale)}
+                  {isDouglas ? douglasCase.summary : projectSignal(project, locale)}
                 </span>
                 <span className="font-mono text-xs text-[var(--site-rust)]">{isDouglas ? douglasCase.role : project.title[locale]}</span>
               </Link>

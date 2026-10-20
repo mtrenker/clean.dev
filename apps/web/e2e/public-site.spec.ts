@@ -14,7 +14,7 @@ const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
 };
 
 const primaryPages = [
-  { path: '/', heading: /hands-on technical leadership/i },
+  { path: '/', heading: /get to the bottom of a problem/i },
   { path: '/work', heading: /technical lead and solutions architect/i },
   { path: '/contact', heading: /tell me what needs to change/i },
   { path: '/workflow-simulator', heading: /systems thinking playground/i },
@@ -94,7 +94,7 @@ test.describe('public site mobile friendliness', () => {
 
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByRole('navigation', { name: /main/i })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 1, name: /hands-on technical leadership/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /get to the bottom of a problem/i })).toBeVisible();
 
     for (const name of primaryTapTargets) {
       await expect(page.getByRole('link', { name }).first()).toBeVisible();
@@ -195,7 +195,7 @@ test.describe('public site mobile friendliness', () => {
 
     // Experience stays findable as a quiet credential line rather than a metric cell.
     const credentialRail = proofBand.locator('p').filter({ hasText: /client engagements/i }).first();
-    await expect(credentialRail).toContainText('20+ years in software delivery');
+    await expect(credentialRail).toContainText('20+ years of experience');
     await expect(credentialRail).toContainText('20 client engagements');
 
     // The role path reads as a labelled list in project context, not a pseudo-metric.
@@ -224,6 +224,8 @@ test.describe('public site mobile friendliness', () => {
     await expect(proofBand.getByRole('heading', { name: 'Team delivery and contribution' })).toBeVisible();
     await expect(proofBand.getByText(/personally designed and shipped the unified api/i).first()).toBeVisible();
     await expect(proofBand.getByText(/onboarded 1 senior and 2 junior developers/i).first()).toBeVisible();
+    // The architecture consequence, not only the role, is visible at skim speed.
+    await expect(proofBand.getByText(/config changes no longer require a release/i)).toBeVisible();
 
     // The retired metric cells must not come back.
     await expect(proofBand.getByText('1,200+ / 14')).toHaveCount(0);
@@ -251,7 +253,7 @@ test.describe('public site semantic UX', () => {
 
     const headings = await page.getByRole('main').getByRole('heading', { level: 2 }).allTextContents();
     expect(headings).toEqual([
-      'Verified enterprise outcomes',
+      'From POS frontend to CRM API',
       'Bring me in when',
       'How I help',
       'Ways to work together',
@@ -355,7 +357,7 @@ test.describe('public site semantic UX', () => {
 
     const headings = await page.getByRole('main').getByRole('heading', { level: 2 }).allTextContents();
     expect(headings).toEqual([
-      'Belegte Enterprise-Ergebnisse',
+      'Vom Kassen-Frontend zur CRM-API',
       'Wann Sie mich dazuholen sollten',
       'Wie ich helfe',
       'Formen der Zusammenarbeit',
@@ -379,6 +381,9 @@ test.describe('public site semantic UX', () => {
     await page.goto('/work');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead and Solutions Architect.' })).toBeVisible();
+    // The opening names a concrete cross-stack decision and its consequence.
+    await expect(page.getByText(/react frontend of the pos software into the crm backend, where i designed one unified api/i)).toBeVisible();
+    await expect(page.getByText('What drives me', { exact: true })).toBeVisible();
     await expect(page.getByText(/available · 2–5 days\/week · munich and remote dach · german and english/i).first()).toBeVisible();
     await expect(page.getByText(/architecture modernisation · delivery reliability · governed ai workflows/i)).toBeVisible();
     await expect(page.getByText('dotnet', { exact: true }).first()).toBeVisible();
@@ -399,12 +404,17 @@ test.describe('public site semantic UX', () => {
     await expect(selectedProjectsSection.getByText('Measured fact').first()).toBeVisible();
     await expect(selectedProjectsSection.getByText('Unmeasured observation').first()).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Current hands-on systems' })).toBeVisible();
+    // Own production systems come before the chronology, not after it.
+    const sectionOrder = await page.getByRole('main').getByRole('heading', { level: 2 }).allTextContents();
+    expect(sectionOrder.indexOf('Current hands-on systems')).toBeLessThan(sectionOrder.indexOf('Project timeline'));
+    expect(sectionOrder.indexOf('Selected projects')).toBeLessThan(sectionOrder.indexOf('Current hands-on systems'));
     await expect(page.getByText(/issue-scoped agent → isolated worktree → deterministic test and build gates → human-reviewed pull request/i).first()).toBeVisible();
 
     await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
     await page.reload();
 
     await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead und Solutions Architect.' })).toBeVisible();
+    await expect(page.getByText(/vom react-frontend der kassensoftware ins crm-backend/i)).toBeVisible();
     await expect(page.getByText(/verfügbar ab september 2026 · 2–5 tage\/woche · münchen und remote im dach-raum · deutsch und englisch/i).first()).toBeVisible();
     const germanDownload = page.getByRole('link', { name: 'Deutsches Projektdossier als Markdown herunterladen' });
     await expect(germanDownload).toHaveAttribute('href', '/work/dossier?locale=de');
@@ -490,7 +500,7 @@ test.describe('public site semantic UX', () => {
     await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
     await page.reload();
 
-    await expect(page.getByRole('heading', { level: 1, name: /technische führung mit hands-on-mentalität/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /ich gehe einem problem auf den grund/i })).toBeVisible();
     await expect(page.getByText(/verfügbar ab september 2026 · 2–5 tage\/woche · deutsch und englisch/i).first()).toBeVisible();
 
     for (const name of [/projekt besprechen/i, /projekte ansehen/i]) {

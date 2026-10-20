@@ -36,6 +36,9 @@ without inventing copy, and without making product, UX, or German-language decis
 4. Work completed by #89 (hero, proof strip, canonical availability, truthful Articles state,
    primary CTAs), #90 (consolidated Douglas case), and #93 (`/work`) is preserved. This
    specification changes nothing above the proof strip.
+5. 2026-10-20, #125 (preview, pending Martin's acceptance): the hero, proof band, rail label,
+   engagement-log row rule and Douglas context, and `home.profileCard.note` are superseded as
+   recorded in [`problem-led-positioning.md`](problem-led-positioning.md). Sections 1–5 are unchanged.
 
 ---
 
