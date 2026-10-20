@@ -210,7 +210,9 @@ Copy sources: role from `work.subtitle` and `home.hero.lead` (#89); location and
 | `og:type` | both | `website` | — |
 
 Copy sources: `20` is `projects.length` in `projects.ts`, verified as exactly 20 and already rendered
-by the proof strip as `home.proof.engagements`. The progression string is
+by the proof strip as `home.proof.engagements`. (Superseded by #125: the engagement count and that
+key are removed, and the `/work` description now starts "From React expert…"; see
+`problem-led-positioning.md`. Do not restore the count.) The progression string is
 `douglas-case.ts` `caseCopy.<locale>.role` in prose form. `1,200+` and the POS/CRM framing come from
 `projects.ts` project `19`. German number formatting follows the site (`1.200+`, matching
 `home.proof.enterprise.value`).
@@ -479,7 +481,8 @@ element and carries #91's "strongest verified proof".
 
 Sources, all three cells lifted from the homepage proof strip in
 `src/components/home/landing-page.tsx`: `20+` is the literal value there, labelled by
-`home.proof.years`; `20` is `projects.length`, labelled by `home.proof.engagements`;
+`home.proof.years`; `20` is `projects.length`, labelled by `home.proof.engagements` (both keys and
+the engagement count were removed by #125; the shipped image no longer renders these cells);
 `1,200+ / 14` is `home.proof.enterprise.value`, labelled by `home.proof.enterprise`, and traces to
 project `19` in `projects.ts`. The homepage's third proof cell (the role progression) is omitted here
 because block 4 already states the role. The 56 px band safe area and three 362 px cells preserve the

@@ -41,6 +41,8 @@ test.describe('work print CV', () => {
       expect(text).toContain('info@clean.dev');
       expect(text).toContain(HISTORY_HEADINGS[locale]);
       const yamiat = labItems.find((item) => item.id === 'yamiat')!;
+      const platform = labItems.find((item) => item.id === 'k8s-platform');
+      expect(platform, 'k8s-platform lab record').toBeDefined();
       expect(text).toContain(yamiat.clientRelevance[locale]);
       await expect(printDocument.locator('[data-print-certifications]')).toContainText('AWS Certified Developer');
       // The complete chronology remains present, with Douglas represented as
@@ -102,7 +104,7 @@ test.describe('work print CV', () => {
         // Print capitalises these list fragments, so match from the second letter.
         douglasCase.summary.slice(1),
         douglasCase.inHouseService.slice(1),
-        labItems[0].ownership[locale],
+        platform!.ownership[locale],
       ]) {
         expect(firstPage).toContain(searchablePdfText(expected));
       }

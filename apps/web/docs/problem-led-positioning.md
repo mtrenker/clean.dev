@@ -122,8 +122,9 @@ being better, resilience delivered by C#, a criticism of the existing API beyond
 named alternatives, scale figures or a migration of other APIs.
 
 This supersedes, for these items only, the `/work` hero label from the "recruiter friendly" change,
-the homepage rail count in `homepage-positioning-spec.md`, and the `/work` description in
-`search-social-presentation-spec.md`.
+the homepage rail count and the `StatStrip` primitive in `homepage-positioning-spec.md`, and the
+`/work` description and `home.proof.engagements` source in `search-social-presentation-spec.md`.
+The homepage rail now reads `work.experience`, the same string as the `/work` eyebrow and print CV.
 
 ## Motivation hierarchy (Martin, 2026-10-20)
 
