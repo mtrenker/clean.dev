@@ -135,8 +135,6 @@ const ProofBand = ({ intl, locale, projects }: Pick<LandingPageProps, 'intl' | '
         <SiteContainer className="py-3 md:py-4">
           <p className="flex flex-col font-mono text-xs uppercase leading-6 tracking-[0.12em] text-[var(--site-ink-sec)] md:flex-row md:flex-wrap md:items-baseline md:tracking-[0.16em]">
             <span>20+ {msg(intl, 'home.proof.years')}</span>
-            <span aria-hidden="true" className="hidden px-2 text-[var(--site-ink-faint)] md:inline">·</span>
-            <span>{projects.length} {msg(intl, 'home.proof.engagements')}</span>
           </p>
         </SiteContainer>
       </div>

@@ -194,9 +194,8 @@ test.describe('public site mobile friendliness', () => {
     const proofBand = main.locator('section', { has: page.locator('#home-proof-heading') }).first();
 
     // Experience stays findable as a quiet credential line rather than a metric cell.
-    const credentialRail = proofBand.locator('p').filter({ hasText: /client engagements/i }).first();
-    await expect(credentialRail).toContainText('20+ years of experience');
-    await expect(credentialRail).toContainText('20 client engagements');
+    const credentialRail = proofBand.locator('p').filter({ hasText: /years of experience/i }).first();
+    await expect(credentialRail).toHaveText('20+ years of experience');
 
     // The role path reads as a labelled list in project context, not a pseudo-metric.
     await expect(proofBand.getByRole('heading', { name: 'Role progression' })).toBeVisible();
@@ -377,7 +376,7 @@ test.describe('public site semantic UX', () => {
     }
   });
 
-  test('work page supports recruiter scanning and localized dossier download', async ({ page }) => {
+  test('work page opens with the role, the Douglas decision and a localized dossier download', async ({ page }) => {
     await page.goto('/work');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Technical Lead and Solutions Architect.' })).toBeVisible();

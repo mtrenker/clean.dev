@@ -49,7 +49,7 @@ describe('buildPrintCv', () => {
         cv.availabilityLabel, cv.availabilityText,
         cv.labHeading, cv.labMeta, cv.certsNote,
         ...cv.about,
-        ...cv.stats.map((stat) => stat.label),
+        cv.experience,
         ...cv.examples.flatMap((example) => [example.label, example.heading, example.body]),
       ];
       for (const value of staticText) {

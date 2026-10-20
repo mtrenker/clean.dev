@@ -40,7 +40,7 @@ export interface PrintCvModel {
   about: string[];
   contactHeading: string;
   contactLines: Array<{ href: string; text: string }>;
-  stats: Array<{ value: string; label: string }>;
+  experience: string;
   examplesHeading: string;
   examplesMeta: string;
   examples: PrintCvExample[];
@@ -102,8 +102,6 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
   const msg = (id: string) => intl.formatMessage({ id });
 
   const sorted = [...projects].sort((a, b) => b.startDate.localeCompare(a.startDate));
-  const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
-  const companies = new Set(projects.map((project) => projectName(project, locale))).size;
   const availability = getConsultingAvailability(locale);
   const douglasCase = buildDouglasWorkCase(projects, locale);
   const newestDouglasProjectId = douglasCase.sourceProjectIds.at(-1);
@@ -163,12 +161,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
       { href: SITE_URL, text: displayUrl(SITE_URL) },
       ...SOCIAL_PROFILES.map((profile) => ({ href: profile.href, text: displayUrl(profile.href) })),
     ],
-    stats: [
-      { value: '20+', label: msg('work.stats.years.label') },
-      { value: String(projects.length), label: msg('work.stats.engagements.label') },
-      { value: String(companies), label: msg('work.stats.companies.label') },
-      { value: String(firstYear), label: msg('work.stats.since.label') },
-    ],
+    experience: msg('work.experience'),
     examplesHeading: msg('work.examples.heading'),
     examplesMeta: msg('work.examples.meta'),
     // Page one names concrete ownership with its attribution: two client

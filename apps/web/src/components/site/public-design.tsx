@@ -141,17 +141,6 @@ export const ButtonLink = ({
   </Link>
 );
 
-export const StatStrip = ({ stats }: { stats: Array<{ value: ReactNode; label: ReactNode }> }) => (
-  <section className="grid border-b border-[var(--site-rule)] md:grid-cols-4">
-    {stats.map((stat) => (
-      <div key={String(stat.label)} className="border-b border-r border-[var(--site-rule)] px-5 py-7 md:border-b-0 md:px-8">
-        <p className="text-5xl font-medium tracking-[-0.04em] text-[var(--site-ink)]">{stat.value}</p>
-        <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--site-ink-sec)]">{stat.label}</p>
-      </div>
-    ))}
-  </section>
-);
-
 export const DefinitionList = ({ items }: { items: Array<{ label: ReactNode; value: ReactNode }> }) => (
   <dl className="grid gap-3 font-mono text-xs">
     {items.map((item) => (

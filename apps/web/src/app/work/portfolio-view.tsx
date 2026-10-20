@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { createIntl } from 'react-intl';
-import { ButtonLink, Card, DefinitionList, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { ButtonLink, Card, DefinitionList, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, Tag } from '@/components/site/public-design';
 import { getConsultingAvailability } from '@/lib/availability';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
@@ -29,7 +29,6 @@ const formatDateRange = (startDate: string, endDate: string, compact = false) =>
 const formatYearRange = (project: Project, compact = false) => formatDateRange(project.startDate, project.endDate, compact);
 const projectName = (project: Project, lang: Locale) => project.company ?? project.industry?.[lang] ?? project.id;
 const cityName = (city: string, lang: Locale) => (lang === 'de' && city === 'Munich' ? 'München' : city);
-const uniqueCompanies = (projects: Project[], lang: Locale) => new Set(projects.map((project) => projectName(project, lang))).size;
 
 const CaseOutcomeList = ({ outcomes }: { outcomes: string[] }) => (
   <ul className="mt-4 space-y-2">
@@ -203,7 +202,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   const douglasCase = buildDouglasWorkCase(projects, lang);
   const featuredProjectCases = buildFeaturedProjectCases(projects, lang);
   const timelineProjects = timelineExpanded ? sortedProjects : sortedProjects.slice(0, 10);
-  const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const availability = getConsultingAvailability(locale);
   const coreTechnologies = recentTechnologies(projects, 9);
 
@@ -213,7 +211,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <SiteContainer>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-12">
             <div>
-              <Eyebrow>{msg(intl, 'work.hero.label')}</Eyebrow>
+              <Eyebrow>{msg(intl, 'work.hero.label')} / {msg(intl, 'work.experience')}</Eyebrow>
               <h1 className="mt-6 max-w-5xl text-[clamp(2.8rem,6.5vw,5.6rem)] font-medium leading-[0.95] tracking-[-0.055em] text-[var(--site-ink)]">
                 {msg(intl, 'work.hero.heading')}
               </h1>
@@ -269,13 +267,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           </div>
         </SiteContainer>
       </SiteSection>
-
-      <StatStrip stats={[
-        { value: '20+', label: msg(intl, 'work.stats.years.label') },
-        { value: String(projects.length), label: msg(intl, 'work.stats.engagements.label') },
-        { value: String(uniqueCompanies(projects, lang)), label: msg(intl, 'work.stats.companies.label') },
-        { value: String(firstYear), label: msg(intl, 'work.stats.since.label') },
-      ]} />
 
       <SiteSection>
         <SiteContainer>

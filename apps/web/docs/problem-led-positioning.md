@@ -54,6 +54,43 @@ No "not just frontend" sentence, no new title, tag or years-per-stack claim.
   configuration" reads "tenant configuration".
 - Proposal revision 3's "home hero unchanged" and "no origin on the homepage" do not bind this pass.
 
+## Voice and audience review (2026-10-20)
+
+Martin on the preview: "recruiter summary for example. i'm not catering to recruiters", then "i
+like 20+ years but the 20 clients are also a bit odd as this number does not really sound
+impressive". The pages describe his work; they do not address or name a reader group. Review lenses
+(not page labels): senior developers look for technical understanding, concrete decisions,
+hands-on work and operational consequences; decision makers look for the business need,
+responsibility and what changed.
+
+| Where | Before | After |
+| --- | --- | --- |
+| `/work` hero eyebrow | Recruiter summary / verified project data · Recruiter-Überblick / verifizierte Projektdaten | Work / 20+ years of experience · Projekte / 20+ Jahre Erfahrung |
+| `/work` stat strip | 20+ years · 20 client engagements · 16 companies · projects since 2008 | Removed; the years moved into the eyebrow |
+| Homepage rail | 20+ years of experience · 20 client engagements | 20+ years of experience |
+| Print CV page one | Four-cell evidence strip with the same counts | "20+ years of experience" label under the role |
+| `/work` metadata description | "20 client engagements, from React expert…" · "20 Kundenprojekte, vom React-Experten…" | "From React expert…" · "Vom React-Experten…" |
+| `/work` selected-projects lead | Three recent engagements showing architecture modernisation, delivery responsibility, and knowledge transfer inside active teams. | Names the three cases: one CRM API instead of duplicated logic, the agency-to-in-house Next.js handover during active delivery, the AngularJS workflow rebuilt on a state machine |
+| `/work` evidence note | Recorded counts … no business KPI is implied. | Counts and periods from the project records are marked as measured facts. What I observed but did not measure is marked as an observation. |
+
+The engagement and company counts measure activity, not depth, and "projects since 2008" beside
+"20+ years" invited readers to subtract. No substitute metric was added.
+
+Kept: the measured/observed tags and the own-system, client-work and team-contribution groups (real
+distinctions); 1,200 stores and 14 countries (they explain the Douglas case); "Client relevance"
+on own systems (commercial usefulness, not an audience label). Not reviewed here, candidates for a
+later pass: "real engagements, newest first" (timeline and print meta) and the homepage supporting
+line "Inside the work. Sharper delivery. AI with judgment."
+
+Gap: the records state decisions and their consequences (one API instead of duplicated logic,
+runtime config without a release, an in-house shortlink service instead of SaaS, a state-machine
+rebuild) but not the alternatives considered, their costs, or measured business results. Showing
+tradeoffs needs that input from Martin; none was inferred.
+
+This supersedes, for these items only, the `/work` hero label from the "recruiter friendly" change,
+the homepage rail count in `homepage-positioning-spec.md`, and the `/work` description in
+`search-social-presentation-spec.md`.
+
 ## Assumptions to confirm
 
 - "I get to the bottom of a problem and solve it where it belongs" / "Ich gehe einem Problem auf
