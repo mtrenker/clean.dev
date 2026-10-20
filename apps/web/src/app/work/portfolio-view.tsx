@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { createIntl } from 'react-intl';
-import { ButtonLink, Card, DefinitionList, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, StatStrip, Tag } from '@/components/site/public-design';
+import { ButtonLink, Card, DefinitionList, Eyebrow, SectionHeader, SiteContainer, SiteSection, SiteShell, Tag } from '@/components/site/public-design';
 import { getConsultingAvailability } from '@/lib/availability';
 import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
@@ -29,7 +29,6 @@ const formatDateRange = (startDate: string, endDate: string, compact = false) =>
 const formatYearRange = (project: Project, compact = false) => formatDateRange(project.startDate, project.endDate, compact);
 const projectName = (project: Project, lang: Locale) => project.company ?? project.industry?.[lang] ?? project.id;
 const cityName = (city: string, lang: Locale) => (lang === 'de' && city === 'Munich' ? 'München' : city);
-const uniqueCompanies = (projects: Project[], lang: Locale) => new Set(projects.map((project) => projectName(project, lang))).size;
 
 const CaseOutcomeList = ({ outcomes }: { outcomes: string[] }) => (
   <ul className="mt-4 space-y-2">
@@ -147,6 +146,13 @@ const DouglasCaseCard = ({ workCase, intl, lang }: { workCase: DouglasWorkCase; 
       </ol>
     </section>
 
+    <section aria-labelledby="douglas-decision-heading" className="mt-7 border-t border-[var(--site-rule)] pt-6">
+      <h4 id="douglas-decision-heading" className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+        {workCase.decision.heading}
+      </h4>
+      <p className="mt-3 max-w-4xl leading-7 text-[var(--site-ink-sec)]">{workCase.decision.body}</p>
+    </section>
+
     <section className="mt-7 border-t border-[var(--site-rule)] pt-6">
       <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
         {msg(intl, 'work.case.outcomes')}
@@ -203,7 +209,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
   const douglasCase = buildDouglasWorkCase(projects, lang);
   const featuredProjectCases = buildFeaturedProjectCases(projects, lang);
   const timelineProjects = timelineExpanded ? sortedProjects : sortedProjects.slice(0, 10);
-  const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
   const availability = getConsultingAvailability(locale);
   const coreTechnologies = recentTechnologies(projects, 9);
 
@@ -213,7 +218,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
         <SiteContainer>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-12">
             <div>
-              <Eyebrow>{msg(intl, 'work.hero.label')}</Eyebrow>
+              <Eyebrow>{msg(intl, 'work.hero.label')} / {msg(intl, 'work.experience')}</Eyebrow>
               <h1 className="mt-6 max-w-5xl text-[clamp(2.8rem,6.5vw,5.6rem)] font-medium leading-[0.95] tracking-[-0.055em] text-[var(--site-ink)]">
                 {msg(intl, 'work.hero.heading')}
               </h1>
@@ -254,6 +259,10 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
                 </div>
               </div>
               <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.profile.origin.label')}</p>
+                <p className="mt-2 text-sm leading-6 text-[var(--site-ink-sec)]">{msg(intl, 'work.profile.origin')}</p>
+              </div>
+              <div className="mt-5 border-t border-dashed border-[var(--site-rule)] pt-4">
                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">{msg(intl, 'work.hero.coreStack')}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {coreTechnologies.map((technology) => (
@@ -265,13 +274,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
           </div>
         </SiteContainer>
       </SiteSection>
-
-      <StatStrip stats={[
-        { value: '20+', label: msg(intl, 'work.stats.years.label') },
-        { value: String(projects.length), label: msg(intl, 'work.stats.engagements.label') },
-        { value: String(uniqueCompanies(projects, lang)), label: msg(intl, 'work.stats.companies.label') },
-        { value: String(firstYear), label: msg(intl, 'work.stats.since.label') },
-      ]} />
 
       <SiteSection>
         <SiteContainer>
@@ -288,27 +290,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
       </SiteSection>
 
       <SiteSection border={false}>
-        <SiteContainer>
-          <SectionHeader title={msg(intl, 'work.timeline.heading')} meta={msg(intl, 'work.timeline.meta')} />
-          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)]">
-            {timelineProjects.map((project) => (
-              <TimelineEntry key={project.id} project={project} lang={lang} />
-            ))}
-          </ol>
-          <button
-            aria-expanded={timelineExpanded}
-            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
-            onClick={() => setTimelineExpanded((value) => !value)}
-            type="button"
-          >
-            {timelineExpanded
-              ? msg(intl, 'work.timeline.collapse')
-              : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
-          </button>
-        </SiteContainer>
-      </SiteSection>
-
-      <SiteSection>
         <SiteContainer>
           <SectionHeader title={msg(intl, 'work.lab.heading')} meta={msg(intl, 'work.lab.meta')} />
           <p className="mb-8 max-w-3xl leading-7 text-[var(--site-ink-sec)]">{msg(intl, 'work.lab.lead')}</p>
@@ -358,7 +339,28 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ projects, locale, 
               </Card>
             ))}
           </div>
-          <p className="mt-6 font-mono text-xs text-[var(--site-ink-sec)]">{msg(intl, 'work.certs.note')}</p>
+        </SiteContainer>
+      </SiteSection>
+
+      <SiteSection>
+        <SiteContainer>
+          <SectionHeader title={msg(intl, 'work.timeline.heading')} meta={msg(intl, 'work.timeline.meta')} />
+          <ol className="overflow-hidden rounded-[6px] border border-[var(--site-rule)] bg-[var(--site-panel)]">
+            {timelineProjects.map((project) => (
+              <TimelineEntry key={project.id} project={project} lang={lang} />
+            ))}
+          </ol>
+          <button
+            aria-expanded={timelineExpanded}
+            className="mt-6 rounded-[3px] border border-[var(--site-rule)] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--site-ink)] transition hover:border-[var(--site-rust)] hover:text-[var(--site-rust)]"
+            onClick={() => setTimelineExpanded((value) => !value)}
+            type="button"
+          >
+            {timelineExpanded
+              ? msg(intl, 'work.timeline.collapse')
+              : intl.formatMessage({ id: 'work.timeline.showAll' }, { count: projects.length })}
+          </button>
+          <p className="mt-8 font-mono text-xs text-[var(--site-ink-sec)]">{msg(intl, 'work.certs.note')}</p>
         </SiteContainer>
       </SiteSection>
 

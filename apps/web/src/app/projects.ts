@@ -652,7 +652,7 @@ export const projects: Project[] = [
         'moved from after-hours deployment windows toward safer deployments during business hours through better error handling, observability, and recovery paths',
         'onboarded 1 senior and 2 junior developers; all productive contributors within weeks',
         'introduced "Full Stack Fridays", team-driven learning sessions covering Figma prototyping, GraphQL, C#/.NET, and more',
-        'built an in-house shortlink and QR service in Next.js + .NET in weeks, replacing a third-party SaaS that no longer met business needs',
+        'built an in-house shortlink and QR service in Next.js + .NET in weeks, from request to production, replacing a third-party SaaS that no longer met business needs',
       ],
       de: [
         'Neuentwicklung der CRM/POS-Integration in unter einem Jahr mit klarerer Architektur, mehr Testabdeckung und aktualisierter Dokumentation',
@@ -660,7 +660,7 @@ export const projects: Project[] = [
         'von After-Hours-Deploymentfenstern zu sichereren Deployments im laufenden Betrieb durch bessere Fehlerbehandlung, Observability und klare Recovery-Pfade',
         '1 Senior und 2 Junior-Entwickler eingearbeitet, alle innerhalb weniger Wochen produktive Beitragende',
         '"Full Stack Fridays" eingeführt, teamgetriebene Lernsessions zu Figma, GraphQL, C#/.NET und mehr',
-        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als Ersatz für einen Drittanbieter-SaaS',
+        'Inhouse-Shortlink- und QR-Service in Next.js + .NET in wenigen Wochen von Anfrage bis Produktion gebaut, als Ersatz für einen Drittanbieter-SaaS, der die fachlichen Anforderungen nicht mehr erfüllte',
       ],
     },
     technologies: [
@@ -705,7 +705,7 @@ export const projects: Project[] = [
         'designed a unified CRM API (REST + GraphQL), ending business logic duplicated across multiple frontends',
         'developed and maintained a production CRM backend in TypeScript/Node.js with NestJS and Express, covering API endpoints, configuration, and external service integrations',
         'extended the solution into C#/.NET and personally designed and shipped the unified API, applying architecture patterns across stacks and using AI tooling as part of a reviewable engineering workflow',
-        'replaced static code-level mandator configuration with dynamic runtime config served by the API — config changes no longer require a release',
+        'replaced static code-level tenant configuration with dynamic runtime config served by the API — config changes no longer require a release',
         'built a Node.js/TypeScript agent CLI giving AI agents governed access to Jira, Confluence, Azure DevOps, and internal tooling, with human review of all output',
         'developed an internal delivery platform that grew from a team page into a blog, planning, and configuration hub',
         'supported the team\'s migration to an improved Jira workflow',

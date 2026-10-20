@@ -30,6 +30,8 @@ describe('buildDouglasWorkCase', () => {
         .flatMap((project) => project.highlights[locale]);
 
       for (const outcome of [
+        workCase.summary,
+        workCase.inHouseService,
         ...workCase.personalOwnership,
         ...workCase.outcomes.map((item) => item.text),
         ...workCase.teamContribution,
@@ -49,6 +51,20 @@ describe('buildDouglasWorkCase', () => {
     expect(german.personalOwnership.join(' ')).toContain('die einheitliche API persönlich konzipiert und umgesetzt');
     expect(english.personalOwnership.join(' ')).not.toContain(weakerEnglishWording);
     expect(german.personalOwnership.join(' ')).not.toContain(weakerGermanWording);
+  });
+
+  it.each(['en', 'de'] as const)('leads with API ownership and keeps the summary out of the ownership list (%s)', (locale) => {
+    const workCase = buildDouglasWorkCase(projects, locale);
+    const [shippedApi, runtimeConfig] = workCase.personalOwnership;
+
+    expect(shippedApi).toContain(locale === 'en' ? 'personally designed and shipped the unified API' : 'die einheitliche API persönlich konzipiert und umgesetzt');
+    expect(runtimeConfig).toContain(locale === 'en' ? 'config changes no longer require a release' : 'Konfigurationsänderungen brauchen kein Release mehr');
+    // Both statements describe the unified API; one list never repeats it.
+    expect(workCase.personalOwnership).not.toContain(workCase.summary);
+    expect(workCase.summary).toContain(locale === 'en' ? 'ending business logic duplicated' : 'Schluss mit duplizierter Businesslogik');
+    // The source record does not say the service was built alone, so it stays an observation.
+    expect(workCase.outcomes).toContainEqual({ kind: 'observed', text: workCase.inHouseService });
+    expect(workCase.personalOwnership).not.toContain(workCase.inHouseService);
   });
 
   it('includes the complete stack once across both phases', () => {

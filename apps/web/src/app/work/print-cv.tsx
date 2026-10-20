@@ -81,6 +81,9 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
         <div>
           <h1 className="text-[27pt] font-medium leading-[1.04] tracking-[-0.02em] text-[var(--print-ink)]">{cv.name}</h1>
           <p className="mt-[2.5mm] text-[11pt] leading-[1.45] text-[var(--print-ink-sec)]">{cv.subtitle}</p>
+          <div className="mt-[2mm]">
+            <PrintLabel>{cv.experience}</PrintLabel>
+          </div>
           <hr className="mt-[6mm] w-[14mm] border-0 border-t-2 border-[var(--print-rust)]" />
           {cv.about.map((paragraph) => (
             <p key={paragraph} className="mt-[4mm] text-[10pt] leading-[1.55] text-[var(--print-ink-sec)] hyphens-auto">
@@ -128,27 +131,18 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
         <p className="text-[9pt] leading-[1.4] text-[var(--print-ink)]">{cv.availabilityText}</p>
       </section>
 
-      {/* Evidence strip */}
-      <section className="mt-[6mm] grid break-inside-avoid grid-cols-4 divide-x divide-[var(--print-rule)] border-y border-[var(--print-ink)]">
-        {cv.stats.map((stat) => (
-          <div key={stat.label} className="py-[4mm] pl-[4mm] first:pl-0">
-            <p className="text-[16pt] font-medium leading-none tracking-[-0.02em] text-[var(--print-ink)]">{stat.value}</p>
-            <div className="mt-[1.6mm]">
-              <PrintLabel>{stat.label}</PrintLabel>
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* Focus areas */}
-      <section className="mt-[9mm] break-inside-avoid">
-        <PrintSectionHeader meta={cv.focusMeta} title={cv.focusHeading} />
+      {/* Selected examples: concrete ownership with its attribution */}
+      <section data-print-examples className="mt-[9mm] break-inside-avoid">
+        <PrintSectionHeader meta={cv.examplesMeta} title={cv.examplesHeading} />
         <div className="mt-[4.5mm] grid grid-cols-3 gap-[8mm]">
-          {cv.focusItems.map((item) => (
-            <div key={item.number}>
-              <p className="font-mono text-[10.5pt] font-semibold text-[var(--print-rust)]">{item.number}</p>
-              <h3 className="mt-[1.8mm] text-[10pt] font-semibold leading-[1.3] text-[var(--print-ink)]">{item.heading}</h3>
-              <p className="mt-[1.5mm] text-[9pt] leading-[1.5] text-[var(--print-ink-sec)] hyphens-auto">{item.body}</p>
+          {cv.examples.map((example) => (
+            <div key={example.number}>
+              <p className="font-mono text-[10.5pt] font-semibold text-[var(--print-rust)]">{example.number}</p>
+              <div className="mt-[1mm]">
+                <PrintLabel>{example.label}</PrintLabel>
+              </div>
+              <h3 className="mt-[1.8mm] text-[10pt] font-semibold leading-[1.3] text-[var(--print-ink)]">{example.heading}</h3>
+              <p className="mt-[1.5mm] text-[9pt] leading-[1.5] text-[var(--print-ink-sec)] hyphens-auto">{example.body}</p>
             </div>
           ))}
         </div>

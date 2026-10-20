@@ -13,6 +13,7 @@ interface DossierCopy {
   documentLanguage: string;
   documentFormat: string;
   profile: string;
+  summary: string;
   roleTitles: string;
   availability: string;
   location: string;
@@ -49,6 +50,7 @@ const copy: Record<Locale, DossierCopy> = {
     documentLanguage: 'Document language',
     documentFormat: 'Document format',
     profile: 'Profile',
+    summary: 'Summary',
     roleTitles: 'Role titles',
     availability: 'Availability',
     location: 'Location and work model',
@@ -83,6 +85,7 @@ const copy: Record<Locale, DossierCopy> = {
     documentLanguage: 'Dokumentsprache',
     documentFormat: 'Dokumentformat',
     profile: 'Profil',
+    summary: 'Kurzprofil',
     roleTitles: 'Rollen',
     availability: 'Verfügbarkeit',
     location: 'Standort und Arbeitsmodell',
@@ -134,6 +137,8 @@ export const buildProjectDossier = (projects: Project[], locale: Locale, intl: I
       field(labels.sector, douglas.industry),
       `#### ${labels.mandate}`,
       douglas.mandate,
+      `#### ${douglas.decision.heading}`,
+      douglas.decision.body,
       `#### ${labels.personalOwnership}`,
       bulletList(douglas.personalOwnership),
       `#### ${labels.outcomes}`,
@@ -194,6 +199,10 @@ export const buildProjectDossier = (projects: Project[], locale: Locale, intl: I
     field(labels.languages, availability.languages),
     field(labels.utilization, availability.schedule),
     field(labels.projectTypes, labels.projectTypesValue),
+    // The same narrative and examples as page one of the printed CV.
+    `## ${labels.summary}`,
+    ...cv.about,
+    bulletList(cv.examples.map((example) => `${example.label}: ${example.heading}. ${example.body}`)),
     `## ${labels.coreSkills}`,
     bulletList(cv.technologies.split(' · ')),
     `## ${labels.recentProjects}`,

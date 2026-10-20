@@ -24,6 +24,13 @@ export interface PrintCvEntry {
   technologies: string;
 }
 
+export interface PrintCvExample {
+  number: string;
+  label: string;
+  heading: string;
+  body: string;
+}
+
 export interface PrintCvModel {
   docLabel: string;
   updatedLabel: string;
@@ -33,10 +40,10 @@ export interface PrintCvModel {
   about: string[];
   contactHeading: string;
   contactLines: Array<{ href: string; text: string }>;
-  stats: Array<{ value: string; label: string }>;
-  focusHeading: string;
-  focusMeta: string;
-  focusItems: Array<{ number: string; heading: string; body: string }>;
+  experience: string;
+  examplesHeading: string;
+  examplesMeta: string;
+  examples: PrintCvExample[];
   technologiesHeading: string;
   technologies: string;
   historyHeading: string;
@@ -95,11 +102,11 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
   const msg = (id: string) => intl.formatMessage({ id });
 
   const sorted = [...projects].sort((a, b) => b.startDate.localeCompare(a.startDate));
-  const firstYear = Math.min(...projects.map((project) => getYear(project.startDate)));
-  const companies = new Set(projects.map((project) => projectName(project, locale))).size;
   const availability = getConsultingAvailability(locale);
   const douglasCase = buildDouglasWorkCase(projects, locale);
   const newestDouglasProjectId = douglasCase.sourceProjectIds.at(-1);
+  const platform = labItems.find((item) => item.id === 'k8s-platform');
+  if (!platform) throw new Error('Lab platform record is missing');
 
   const entries: PrintCvEntry[] = sorted.flatMap((project) => {
     if (project.id === newestDouglasProjectId) {
@@ -116,6 +123,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
             heading: msg('work.case.progression'),
             highlights: douglasCase.progression.map((step) => `${step.number} · ${step.role}: ${step.body}`),
           },
+          { heading: douglasCase.decision.heading, highlights: [douglasCase.decision.body] },
           { heading: msg('work.case.personalOwnership'), highlights: douglasCase.personalOwnership },
           { heading: msg('work.case.outcomes'), highlights: douglasCase.outcomes.map((outcome) => outcome.text) },
           { heading: msg('work.case.teamContribution'), highlights: douglasCase.teamContribution },
@@ -154,18 +162,21 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
       { href: SITE_URL, text: displayUrl(SITE_URL) },
       ...SOCIAL_PROFILES.map((profile) => ({ href: profile.href, text: displayUrl(profile.href) })),
     ],
-    stats: [
-      { value: '20+', label: msg('work.stats.years.label') },
-      { value: String(projects.length), label: msg('work.stats.engagements.label') },
-      { value: String(companies), label: msg('work.stats.companies.label') },
-      { value: String(firstYear), label: msg('work.stats.since.label') },
-    ],
-    focusHeading: msg('work.focus.heading'),
-    focusMeta: msg('work.focus.meta'),
-    focusItems: (['cleanAgile', 'learner', 'automation'] as const).map((section, index) => ({
+    experience: msg('work.experience'),
+    examplesHeading: msg('work.examples.heading'),
+    examplesMeta: msg('work.examples.meta'),
+    // Page one names concrete ownership with its attribution: two client
+    // decisions from the Douglas records and one self-funded platform.
+    examples: [
+      { key: 'api', body: douglasCase.summary },
+      { key: 'service', body: douglasCase.inHouseService },
+      { key: 'platform', body: platform.ownership[locale] },
+    ].map((example, index) => ({
       number: `0${index + 1}`,
-      heading: msg(`work.section.${section}.heading`),
-      body: msg(`work.section.${section}.p`),
+      label: msg(`work.examples.${example.key}.label`),
+      heading: msg(`work.examples.${example.key}.heading`),
+      // Source highlights are list fragments; under a heading they read as sentences.
+      body: `${example.body.charAt(0).toLocaleUpperCase(locale)}${example.body.slice(1)}`,
     })),
     technologiesHeading: msg('work.projects.technologies'),
     technologies: printCvTechnologies(projects).join(' · '),

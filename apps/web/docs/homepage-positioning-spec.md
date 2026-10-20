@@ -36,6 +36,9 @@ without inventing copy, and without making product, UX, or German-language decis
 4. Work completed by #89 (hero, proof strip, canonical availability, truthful Articles state,
    primary CTAs), #90 (consolidated Douglas case), and #93 (`/work`) is preserved. This
    specification changes nothing above the proof strip.
+5. 2026-10-20, #125 (preview, pending Martin's acceptance): the hero, proof band, rail label,
+   engagement-log row rule and Douglas context, and `home.profileCard.note` are superseded as
+   recorded in [`problem-led-positioning.md`](problem-led-positioning.md). Sections 1–5 are unchanged.
 
 ---
 
@@ -44,7 +47,7 @@ without inventing copy, and without making product, UX, or German-language decis
 | Evidence | Location | What it establishes |
 | --- | --- | --- |
 | Homepage composition | `apps/web/src/components/home/landing-page.tsx` | Eight rendered `<section>` blocks; hero and proof strip owned by #89 |
-| Public primitives | `apps/web/src/components/site/public-design.tsx` | `SiteShell`, `SiteSection`, `SiteContainer`, `SectionHeader`, `Card`, `Tag`, `Eyebrow`, `ButtonLink`, `DefinitionList`, `StatStrip` |
+| Public primitives | `apps/web/src/components/site/public-design.tsx` | `SiteShell`, `SiteSection`, `SiteContainer`, `SectionHeader`, `Card`, `Tag`, `Eyebrow`, `ButtonLink`, `DefinitionList`, `StatStrip` (removed by #125, see `problem-led-positioning.md`) |
 | Navigation | `apps/web/src/components/ui/navigation.tsx`, `navigation-links.tsx`, `apps/web/src/app/layout.tsx` | Sticky header nav from `md`, fixed bottom pill below `md`, items `Work` and `Contact` |
 | Anchor precedent | `apps/web/src/app/work/portfolio-view.tsx` | `id` + `scroll-mt-24` on the Douglas case |
 | Scroll reset | `apps/web/src/components/route-scroll-reset.tsx` | Homepage scroll reset runs only when `pathname === '/'` **and** there is no hash |
@@ -878,7 +881,7 @@ export const SiteSection = ({
    file conventions: arrow-function components, `msg(intl, id)` for copy, `const` id tuples at the
    top of the file (replacing `PRACTICES`, `TOPICS`, `FIT`, `WORKBENCH_ROWS`).
 
-No change to `Card`, `Tag`, `Eyebrow`, `ButtonLink`, `DefinitionList`, `StatStrip`, `PageHero`, or
+No change to `Card`, `Tag`, `Eyebrow`, `ButtonLink`, `DefinitionList`, `StatStrip` (since removed by #125), `PageHero`, or
 the `--site-*` token set is authorised by this specification.
 
 ---
