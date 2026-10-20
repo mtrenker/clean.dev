@@ -123,6 +123,7 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
             heading: msg('work.case.progression'),
             highlights: douglasCase.progression.map((step) => `${step.number} · ${step.role}: ${step.body}`),
           },
+          { heading: douglasCase.decision.heading, highlights: [douglasCase.decision.body] },
           { heading: msg('work.case.personalOwnership'), highlights: douglasCase.personalOwnership },
           { heading: msg('work.case.outcomes'), highlights: douglasCase.outcomes.map((outcome) => outcome.text) },
           { heading: msg('work.case.teamContribution'), highlights: douglasCase.teamContribution },

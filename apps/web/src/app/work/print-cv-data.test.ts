@@ -21,6 +21,7 @@ describe('buildPrintCv', () => {
     expect(cv.entries[0].role).toBe('React Expert → Technical Lead → Solutions Architect');
     expect(cv.entries[0].highlightGroups?.map((group) => group.heading)).toEqual([
       'Role progression',
+      'Why a separate C#/.NET API',
       'Personal ownership',
       'Outcomes and evidence',
       'Team delivery and contribution',

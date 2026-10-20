@@ -137,6 +137,8 @@ export const buildProjectDossier = (projects: Project[], locale: Locale, intl: I
       field(labels.sector, douglas.industry),
       `#### ${labels.mandate}`,
       douglas.mandate,
+      `#### ${douglas.decision.heading}`,
+      douglas.decision.body,
       `#### ${labels.personalOwnership}`,
       bulletList(douglas.personalOwnership),
       `#### ${labels.outcomes}`,

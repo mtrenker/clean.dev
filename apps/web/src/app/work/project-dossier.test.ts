@@ -4,6 +4,7 @@ import type { Locale } from '@/lib/locale';
 import deMessages from '@/messages/de.json';
 import enMessages from '@/messages/en.json';
 import { projects } from '../projects';
+import { buildDouglasWorkCase } from './douglas-case';
 import { buildProjectDossier } from './project-dossier';
 
 const intlFor = (locale: Locale) =>
@@ -55,5 +56,13 @@ describe('buildProjectDossier', () => {
     expect(dossier).toContain('### 3. Fielmann AG');
     expect(dossier).toContain('## Aktuelle Hands-on-Systeme');
     expect(dossier).toContain('Überprüfbares Workflow-Beispiel');
+  });
+
+  it.each(['en', 'de'] as const)('explains the Douglas API decision once, after the mandate (%s)', (locale) => {
+    const dossier = buildProjectDossier(projects, locale, intlFor(locale));
+    const { decision, mandate } = buildDouglasWorkCase(projects, locale);
+
+    expect(dossier.split(decision.body)).toHaveLength(2);
+    expect(dossier.indexOf(`#### ${decision.heading}\n\n${decision.body}`)).toBeGreaterThan(dossier.indexOf(mandate));
   });
 });

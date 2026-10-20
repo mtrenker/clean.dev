@@ -146,6 +146,13 @@ const DouglasCaseCard = ({ workCase, intl, lang }: { workCase: DouglasWorkCase; 
       </ol>
     </section>
 
+    <section aria-labelledby="douglas-decision-heading" className="mt-7 border-t border-[var(--site-rule)] pt-6">
+      <h4 id="douglas-decision-heading" className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
+        {workCase.decision.heading}
+      </h4>
+      <p className="mt-3 max-w-4xl leading-7 text-[var(--site-ink-sec)]">{workCase.decision.body}</p>
+    </section>
+
     <section className="mt-7 border-t border-[var(--site-rule)] pt-6">
       <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--site-ink-mute)]">
         {msg(intl, 'work.case.outcomes')}

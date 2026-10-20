@@ -84,8 +84,37 @@ line "Inside the work. Sharper delivery. AI with judgment."
 
 Gap: the records state decisions and their consequences (one API instead of duplicated logic,
 runtime config without a release, an in-house shortlink service instead of SaaS, a state-machine
-rebuild) but not the alternatives considered, their costs, or measured business results. Showing
-tradeoffs needs that input from Martin; none was inferred.
+rebuild) but not the alternatives considered, their costs, or measured business results. For the
+unified Douglas API, Martin has since supplied the rationale (below); the other decisions still lack
+it, and none was inferred.
+
+### Douglas API decision (Martin, 2026-10-20)
+
+Martin: "we had a few options, including extend an existing api but it was nestjs and typescript
+and internally there was a movement to use c# on the backend since this was the most well
+understood and supported setup. also just adding another controller to an existing api that wasn't
+built from the ground up with the required resilience and scaling was shoehorning it"
+
+Presented once as `decision` in the Douglas case copy (`douglas-case.ts`), a curated statement
+like the mandate and progression and not a project-record highlight. The `/work` case card shows it
+as its own section after the role progression; the print CV adds it as a highlight group after the
+progression; the dossier adds it after the mandate. The homepage proof band does not repeat it.
+
+- EN "Why a separate C#/.NET API": Extending the existing NestJS/TypeScript API was one of a few
+  options. Internally, though, there was a move towards C# on the backend, because it was the best
+  understood and supported setup. The existing API was also not built from the ground up for the
+  resilience and scaling the unified API required; adding another controller to it would have
+  meant shoehorning those requirements in. I continued to maintain the production TypeScript API.
+- DE "Warum eine eigene C#/.NET-API": Eine von mehreren Optionen war, die bestehende
+  NestJS-/TypeScript-API zu erweitern. Intern gab es aber eine Bewegung hin zu C# im Backend, weil
+  dieses Setup am besten verstanden und unterstützt wurde. Außerdem war die bestehende API nicht von
+  Grund auf für die Resilienz und Skalierung gebaut, die die einheitliche API brauchte; einen
+  weiteren Controller dort hinzuzufügen, hätte bedeutet, diese Anforderungen hineinzuzwängen. Die
+  produktive TypeScript-API habe ich weiter gewartet.
+
+This is rationale and requirements, not a result. The text does not claim a mandate, a language
+being better, resilience delivered by C#, a criticism of the existing API beyond its fit, other
+named alternatives, scale figures or a migration of other APIs.
 
 This supersedes, for these items only, the `/work` hero label from the "recruiter friendly" change,
 the homepage rail count in `homepage-positioning-spec.md`, and the `/work` description in

@@ -118,6 +118,7 @@ test.describe('work print CV', () => {
       for (const step of douglasCase.progression) {
         expect(searchable).toContain(searchablePdfText(step.body));
       }
+      expect(searchable).toContain(searchablePdfText(douglasCase.decision.body));
     });
   }
 });

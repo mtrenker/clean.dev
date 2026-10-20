@@ -10,10 +10,17 @@ interface LocalizedProgressionStep {
   body: string;
 }
 
+/** Why the unified API was built as its own C#/.NET API, in Martin's account. */
+interface ApiDecision {
+  heading: string;
+  body: string;
+}
+
 const caseCopy: Record<Locale, {
   role: string;
   mandate: string;
   progression: LocalizedProgressionStep[];
+  decision: ApiDecision;
 }> = {
   en: {
     role: 'React Expert → Technical Lead → Solutions Architect',
@@ -32,6 +39,11 @@ const caseCopy: Record<Locale, {
         body: 'Took on broader scope across TypeScript/Node.js and C#/.NET backend services to unify the CRM API landscape and introduce governed AI tooling for daily delivery work.',
       },
     ],
+    // Rationale and requirements, not a measured result.
+    decision: {
+      heading: 'Why a separate C#/.NET API',
+      body: 'Extending the existing NestJS/TypeScript API was one of a few options. Internally, though, there was a move towards C# on the backend, because it was the best understood and supported setup. The existing API was also not built from the ground up for the resilience and scaling the unified API required; adding another controller to it would have meant shoehorning those requirements in. I continued to maintain the production TypeScript API.',
+    },
   },
   de: {
     role: 'React-Experte → Technical Lead → Solutions Architect',
@@ -50,6 +62,10 @@ const caseCopy: Record<Locale, {
         body: 'Mit erweitertem Verantwortungsbereich an TypeScript-/Node.js- und C#/.NET-Backend-Services gearbeitet, die CRM-API-Landschaft vereinheitlicht und KI-Tooling mit klaren Leitplanken in die tägliche Delivery eingeführt.',
       },
     ],
+    decision: {
+      heading: 'Warum eine eigene C#/.NET-API',
+      body: 'Eine von mehreren Optionen war, die bestehende NestJS-/TypeScript-API zu erweitern. Intern gab es aber eine Bewegung hin zu C# im Backend, weil dieses Setup am besten verstanden und unterstützt wurde. Außerdem war die bestehende API nicht von Grund auf für die Resilienz und Skalierung gebaut, die die einheitliche API brauchte; einen weiteren Controller dort hinzuzufügen, hätte bedeutet, diese Anforderungen hineinzuzwängen. Die produktive TypeScript-API habe ich weiter gewartet.',
+    },
   },
 };
 
@@ -83,6 +99,7 @@ export interface DouglasWorkCase {
   role: string;
   mandate: string;
   progression: Array<LocalizedProgressionStep & { number: string }>;
+  decision: ApiDecision;
   /** One sentence stating what Martin designed and why it mattered. */
   summary: string;
   /** The in-house service that replaced an unsuitable SaaS. */
@@ -135,6 +152,7 @@ export const buildDouglasWorkCase = (projects: Project[], locale: Locale): Dougl
     role: copy.role,
     mandate: copy.mandate,
     progression: copy.progression.map((step, index) => ({ ...step, number: `0${index + 1}` })),
+    decision: copy.decision,
     summary: statement('unifiedApiConsequence'),
     inHouseService: statement('inHouseService'),
     // The API ownership and its runtime-config consequence lead; the summary
