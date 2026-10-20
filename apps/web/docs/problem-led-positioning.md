@@ -1,27 +1,28 @@
 # Problem-led positioning (#125)
 
-Status: working preview for Martin's review, 2026-10-20. Not accepted production copy.
-Design owner: Claude Opus 5.5. Inputs: issue #125 and the #125 design folder
-(`proposal.md` revision 3, `fable-review-input.md`, `martin-correction-2026-10-20.md`).
-This note records the direction chosen for the preview and where it departs from earlier records.
+Status: accepted by Martin on 2026-10-20 ("looking good") on the rendered preview at `021df86`.
+Design owner: Claude Opus 5.5. This note is the source of truth for #125. The #125 design folder
+(`proposal.md` revision 3, `fable-review-input.md`, `martin-correction-2026-10-20.md`) is historical
+input; where it differs, this note wins.
 
 ## Direction
 
 A reader should meet Martin through what drives him: improving digital systems and products for
 the people who work with and use them. Getting to the bottom of a problem and solving it where it
 belongs is how he does that; one concrete cross-stack decision shows it with its consequence. The
-teenage server and IRC story is background, never the motivation (see "Motivation hierarchy"). Frontend expertise and
-the Technical Lead / Solutions Architect roles stay visible; the motivation is stated, not defended.
+teenage server and IRC story is background, never the motivation (see "Motivation hierarchy").
+Frontend expertise and the Technical Lead / Solutions Architect roles stay visible; the motivation
+is stated, not defended.
 No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 
 | Surface | What changed |
 | --- | --- |
-| Homepage hero | Headline states the motivation; lead names the role and the range (React frontend to API, data model and platform). Supporting line, availability and CTAs unchanged |
+| Homepage hero | Headline states the purpose; lead names the role, the method and the range (React frontend to API, data model and platform). Supporting line, availability and CTAs unchanged |
 | Homepage rail | "20+ years of experience" / "20+ Jahre Erfahrung" |
 | Homepage proof band | Heading "From POS frontend to CRM API"; lead adds the CRM backend extension and the unified-API consequence; personal ownership shows the shipped API and runtime config |
 | Homepage engagement log | Rows from Martin's `spotlight` curation (seven, newest first); Douglas context is the unified-API consequence |
 | Homepage closing profile card | Method note: understand the problem, solve it for the team and the people who work with the product. No origin story |
-| `/work` opening | Lead: motivation plus the Douglas example. Profile card gains "What drives me": purpose, then method, then one origin sentence |
+| `/work` opening | Lead: method plus the Douglas example. Profile card gains "What drives me": purpose, then method, then one origin sentence |
 | `/work` order | Selected projects → current hands-on systems → timeline (with certifications) → CTA |
 | `/work` lab lead | Own products and platform framed as owning every layer, not as grounding for client work |
 | Douglas case (card, PDF entry, dossier, homepage) | Evidence picked by statement, not index. Ownership: shipped API, runtime config, NestJS backend, agent CLI. Outcomes add the shortlink/QR service as an unmeasured observation |
@@ -33,7 +34,8 @@ No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 - "20+" counts experience, including development before paid work. It is never labelled paid,
   client, professional or delivery years, and no surface derives a year count from 2006 or 2008.
 - Chronology stays in three separate lines: early personal learning (first server as a teenager,
-  Linux root servers with mail and web servers, helping on IRC, undated otherwise); two employed
+  Linux root servers with mail and web servers, helping on IRC, undated otherwise; the surfaces now
+  use only the first server and IRC); two employed
   developer positions 2006–2008 (no names, titles or technologies, no entries of their own);
   self-employed client work since 2008 (`projects.ts`).
 - IRC is one example of early activity, never the origin of his development experience.
@@ -54,7 +56,8 @@ No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 - Project data: the shortlink highlight now carries the same facts in both locales ("from request
   to production" and "no longer met business needs" were each in one locale only); "mandator
   configuration" reads "tenant configuration".
-- Proposal revision 3's "home hero unchanged" and "no origin on the homepage" do not bind this pass.
+- Proposal revision 3's "home hero unchanged" does not bind #125. The homepage now carries no
+  origin story (see "Motivation hierarchy").
 
 ## Voice and audience review (2026-10-20)
 
@@ -143,10 +146,10 @@ The `/work` hero lead (method plus Douglas) is unchanged; the purpose sits besid
 card. This supersedes the earlier direction that led with problem-solving and the earlier
 assumption that the origin story belonged in the motivation note.
 
-## Assumptions to confirm
+## Open point
 
-- The purpose wording above is Martin's voice in both languages.
-- Both the request-to-production and business-needs clauses of the shortlink record are accurate.
+Martin accepted the rendered preview as a whole. The shortlink record's "from request to
+production" and "no longer met business needs" clauses were not confirmed separately.
 
 ## Preview
 
@@ -160,8 +163,11 @@ pnpm dev:raw --webpack --hostname 127.0.0.1 --port 3125   # check the port is fr
 
 Stop with Ctrl-C in that tab. Switch locale with the EN/DE control in the header (it sets the
 `NEXT_LOCALE` cookie) and the theme with the light/dark control. Run e2e against the running
-server with `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3125`.
+server with `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3125`; CI runs browser tests with one worker,
+and parallel workers against the dev server can time out on cold routes. While a dev server runs,
+`tsc --noEmit` also reads the generated `.next/dev/types` and reports the non-route export
+`PROTON_BOOKING_URL` in `contact/page.tsx` (on `main` since `463f489`); a fresh CI checkout has no
+`.next` and passes.
 
-Review evidence outside the repository, in the #125 design folder under `preview/`: `screens/`
-(home and `/work`, EN/DE, 390 and 1440 px, light and dark), `cv/` (Chromium PDFs, page images,
-`pdftotext` and `pdffonts` output) and `dossier/` (both locale downloads).
+Review evidence for the first preview (`82abec3`) is outside the repository, in the #125 design
+folder under `preview/`.
