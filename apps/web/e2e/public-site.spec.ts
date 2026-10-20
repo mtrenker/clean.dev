@@ -14,7 +14,7 @@ const useSiteTheme = async (page: Page, theme: typeof siteThemes[number]) => {
 };
 
 const primaryPages = [
-  { path: '/', heading: /get to the bottom of a problem/i },
+  { path: '/', heading: /improve digital systems and products/i },
   { path: '/work', heading: /technical lead and solutions architect/i },
   { path: '/contact', heading: /tell me what needs to change/i },
   { path: '/workflow-simulator', heading: /systems thinking playground/i },
@@ -94,7 +94,7 @@ test.describe('public site mobile friendliness', () => {
 
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByRole('navigation', { name: /main/i })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 1, name: /get to the bottom of a problem/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /improve digital systems and products/i })).toBeVisible();
 
     for (const name of primaryTapTargets) {
       await expect(page.getByRole('link', { name }).first()).toBeVisible();
@@ -499,7 +499,7 @@ test.describe('public site semantic UX', () => {
     await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'de', url: page.url() }]);
     await page.reload();
 
-    await expect(page.getByRole('heading', { level: 1, name: /ich gehe einem problem auf den grund/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /ich verbessere digitale systeme und produkte/i })).toBeVisible();
     await expect(page.getByText(/verfügbar ab september 2026 · 2–5 tage\/woche · deutsch und englisch/i).first()).toBeVisible();
 
     for (const name of [/projekt besprechen/i, /projekte ansehen/i]) {

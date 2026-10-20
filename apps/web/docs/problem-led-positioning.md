@@ -7,8 +7,10 @@ This note records the direction chosen for the preview and where it departs from
 
 ## Direction
 
-A reader should meet Martin as someone who gets to the bottom of a problem and solves it where it
-belongs, then see one concrete cross-stack decision with its consequence. Frontend expertise and
+A reader should meet Martin through what drives him: improving digital systems and products for
+the people who work with and use them. Getting to the bottom of a problem and solving it where it
+belongs is how he does that; one concrete cross-stack decision shows it with its consequence. The
+teenage server and IRC story is background, never the motivation (see "Motivation hierarchy"). Frontend expertise and
 the Technical Lead / Solutions Architect roles stay visible; the motivation is stated, not defended.
 No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 
@@ -18,12 +20,12 @@ No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 | Homepage rail | "20+ years of experience" / "20+ Jahre Erfahrung" |
 | Homepage proof band | Heading "From POS frontend to CRM API"; lead adds the CRM backend extension and the unified-API consequence; personal ownership shows the shipped API and runtime config |
 | Homepage engagement log | Rows from Martin's `spotlight` curation (seven, newest first); Douglas context is the unified-API consequence |
-| Homepage closing profile card | Short origin note replaces the generic note |
-| `/work` opening | Lead: motivation plus the Douglas example. Profile card gains "What drives me" with the origin story |
+| Homepage closing profile card | Method note: understand the problem, solve it for the team and the people who work with the product. No origin story |
+| `/work` opening | Lead: motivation plus the Douglas example. Profile card gains "What drives me": purpose, then method, then one origin sentence |
 | `/work` order | Selected projects → current hands-on systems → timeline (with certifications) → CTA |
 | `/work` lab lead | Own products and platform framed as owning every layer, not as grounding for client work |
 | Douglas case (card, PDF entry, dossier, homepage) | Evidence picked by statement, not index. Ownership: shipped API, runtime config, NestJS backend, agent CLI. Outcomes add the shortlink/QR service as an unmeasured observation |
-| CV page one | About text: thesis and Douglas, then origin, 2006–2008 employment, self-employment since 2008, own platform. The process focus block becomes "Selected examples": two attributed Douglas decisions and the self-funded platform |
+| CV page one | About text: purpose, method and Douglas, then one origin clause, 2006–2008 employment, self-employment since 2008, own platform. The process focus block becomes "Selected examples": two attributed Douglas decisions and the self-funded platform |
 | Dossier | `## Summary` / `## Kurzprofil` after the profile: the page-one paragraphs and examples |
 
 ## Factual constraints applied
@@ -120,11 +122,30 @@ This supersedes, for these items only, the `/work` hero label from the "recruite
 the homepage rail count in `homepage-positioning-spec.md`, and the `/work` description in
 `search-social-presentation-spec.md`.
 
+## Motivation hierarchy (Martin, 2026-10-20)
+
+Martin: "now i feel like the what drives me section says that my teenage experience drives me,
+which sounds weird. what drives me is improving the digitalization and the lives of people who work
+with and use the systems and products. the server story is an annectode, not my main pitch"
+
+Order everywhere: purpose (better digital systems and products for the people who work with and
+use them) → method (get to the bottom of a problem, solve it where it belongs, across the stack) →
+origin as optional background. No measured improvement for people or businesses is claimed.
+
+| Surface | Purpose | Method | Origin |
+| --- | --- | --- | --- |
+| Homepage headline | "I improve digital systems and products for the people who work with and use them." / "Ich verbessere digitale Systeme und Produkte für die Menschen, die damit arbeiten und sie nutzen." | In the lead, with the role and the stack range | None |
+| Homepage profile card note | Implied by the people named | "I understand a problem first, then find the best way to solve it, for the team that builds the product and the people who work with it." | Removed |
+| `/work` "What drives me" | First sentence | Second sentence | Last sentence, framed as where the problem-solving habit started |
+| CV page one and dossier summary (`work.about.p1/p2`) | Opens p1 | Second sentence of p1, then Douglas | One clause opening p2 ("My experience goes back to renting my first server as a teenager"), then the unchanged chronology |
+
+The `/work` hero lead (method plus Douglas) is unchanged; the purpose sits beside it in the profile
+card. This supersedes the earlier direction that led with problem-solving and the earlier
+assumption that the origin story belonged in the motivation note.
+
 ## Assumptions to confirm
 
-- "I get to the bottom of a problem and solve it where it belongs" / "Ich gehe einem Problem auf
-  den Grund und löse es dort, wo es hingehört" is Martin's voice.
-- The origin belongs in profile cards and one CV sentence, not in a headline or the hero.
+- The purpose wording above is Martin's voice in both languages.
 - Both the request-to-production and business-needs clauses of the shortlink record are accurate.
 
 ## Preview
