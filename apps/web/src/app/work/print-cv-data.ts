@@ -6,6 +6,7 @@ import { type Locale } from '@/lib/locale';
 import { labItems } from '../lab';
 import { type Project } from '../projects';
 import { buildDouglasWorkCase, formatMonthPeriod } from './douglas-case';
+import { cvRecommendation } from './recommendation';
 
 export interface PrintCvHighlightGroup {
   heading: string;
@@ -31,6 +32,15 @@ export interface PrintCvExample {
   body: string;
 }
 
+export interface PrintCvRecommendation {
+  excerpt: string;
+  lang: string;
+  author: string;
+  role: string;
+  source: string;
+  href: string;
+}
+
 export interface PrintCvModel {
   docLabel: string;
   updatedLabel: string;
@@ -38,6 +48,7 @@ export interface PrintCvModel {
   subtitle: string;
   photoAlt: string;
   about: string[];
+  recommendation: PrintCvRecommendation;
   contactHeading: string;
   contactLines: Array<{ href: string; text: string }>;
   experience: string;
@@ -155,7 +166,18 @@ export const buildPrintCv = (projects: Project[], locale: Locale, intl: IntlShap
     name: msg('work.title'),
     subtitle: msg('work.subtitle'),
     photoAlt: msg('work.img.alt'),
-    about: [msg('work.about.p1'), msg('work.about.p2')],
+    about: [msg('work.about.p1')],
+    recommendation: {
+      excerpt: cvRecommendation.excerpt,
+      lang: cvRecommendation.lang,
+      author: cvRecommendation.author,
+      role: cvRecommendation.role,
+      source: intl.formatMessage(
+        { id: 'work.recommendation.source' },
+        { date: intl.formatDate(`${cvRecommendation.date}T00:00:00Z`, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) },
+      ) as string,
+      href: cvRecommendation.sourceUrl,
+    },
     contactHeading: msg('work.contact.heading'),
     contactLines: [
       { href: `mailto:${CONTACT_EMAIL}`, text: CONTACT_EMAIL },
