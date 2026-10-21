@@ -90,12 +90,18 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
               {paragraph}
             </p>
           ))}
-          <p
-            data-print-certifications
-            className="mt-[5mm] max-w-[125mm] break-inside-avoid border-t border-[var(--print-rule)] pt-[2.5mm] font-mono text-[7pt] leading-[1.5] text-[var(--print-ink-mute)]"
-          >
-            {cv.certsNote}
-          </p>
+          {/* One colleague's corroboration, in its original language, beside the self-description */}
+          <figure data-print-recommendation className="mt-[6mm] break-inside-avoid border-l-2 border-[var(--print-rust)] pl-[4mm]">
+            <blockquote cite={cv.recommendation.href} lang={cv.recommendation.lang}>
+              <p className="text-[10pt] leading-[1.5] text-[var(--print-ink)]">“{cv.recommendation.excerpt}”</p>
+            </blockquote>
+            <figcaption className="mt-[2mm] text-[8.5pt] leading-[1.4] text-[var(--print-ink-sec)]">
+              <span className="font-semibold text-[var(--print-ink)]">{cv.recommendation.author}</span>, {cv.recommendation.role}
+              <a className="mt-[0.6mm] block font-mono text-[7pt] text-[var(--print-ink-mute)]" href={cv.recommendation.href}>
+                {cv.recommendation.source}
+              </a>
+            </figcaption>
+          </figure>
         </div>
         <aside>
           <Image
@@ -158,6 +164,13 @@ export const WorkPrintCv: React.FC<WorkPrintCvProps> = ({ projects, locale, mess
             <PrintHistoryEntry key={entry.id} entry={entry} />
           ))}
         </div>
+        {/* As on screen, the expired certifications close the timeline */}
+        <p
+          data-print-certifications
+          className="mt-[1mm] break-inside-avoid border-t border-[var(--print-rule)] pt-[2.5mm] font-mono text-[7pt] leading-[1.5] text-[var(--print-ink-mute)]"
+        >
+          {cv.certsNote}
+        </p>
       </section>
 
       {/* Lab — self-funded production proof */}

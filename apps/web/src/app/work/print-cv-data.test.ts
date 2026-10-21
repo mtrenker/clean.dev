@@ -4,6 +4,7 @@ import { labItems } from '../lab';
 import { projects } from '../projects';
 import { buildDouglasWorkCase } from './douglas-case';
 import { buildPrintCv, printCvTechnologies, recentTechnologies } from './print-cv-data';
+import { cvRecommendation } from './recommendation';
 import type { Locale } from '@/lib/locale';
 import enMessages from '@/messages/en.json';
 import deMessages from '@/messages/de.json';
@@ -50,6 +51,7 @@ describe('buildPrintCv', () => {
         cv.availabilityLabel, cv.availabilityText,
         cv.labHeading, cv.labMeta, cv.certsNote,
         ...cv.about,
+        cv.recommendation.source,
         cv.experience,
         ...cv.examples.flatMap((example) => [example.label, example.heading, example.body]),
       ];
@@ -75,6 +77,22 @@ describe('buildPrintCv', () => {
     expect(cv.examples.map((example) => example.label)).toEqual(locale === 'en'
       ? ['Douglas · client work', 'Douglas · client work', 'Own systems · self-funded']
       : ['Douglas · Kundenprojekt', 'Douglas · Kundenprojekt', 'Eigene Systeme · selbst finanziert']);
+  });
+
+  it.each([
+    ['en', 'LinkedIn recommendation, August 7, 2026'],
+    ['de', 'LinkedIn-Empfehlung vom 7. August 2026'],
+  ] as const)('quotes the recommendation in its original English with attribution (%s)', (locale, source) => {
+    const { recommendation } = buildPrintCv(projects, locale, intlFor(locale));
+
+    expect(recommendation).toEqual({
+      excerpt: cvRecommendation.excerpt,
+      lang: 'en',
+      author: 'Christoph Meier',
+      role: 'Product Owner, Douglas',
+      source,
+      href: 'https://www.linkedin.com/in/martin-trenker-193449291/details/recommendations/',
+    });
   });
 
   it('localizes project fields and city names', () => {

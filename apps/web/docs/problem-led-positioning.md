@@ -26,7 +26,7 @@ No "not just frontend" sentence, no new title, tag or years-per-stack claim.
 | `/work` order | Selected projects → current hands-on systems → timeline (with certifications) → CTA |
 | `/work` lab lead | Own products and platform framed as owning every layer, not as grounding for client work |
 | Douglas case (card, PDF entry, dossier, homepage) | Evidence picked by statement, not index. Ownership: shipped API, runtime config, NestJS backend, agent CLI. Outcomes add the shortlink/QR service as an unmeasured observation |
-| CV page one | About text: purpose, method and Douglas, then one origin clause, 2006–2008 employment, self-employment since 2008, own platform. The process focus block becomes "Selected examples": two attributed Douglas decisions and the self-funded platform |
+| CV page one | About text: purpose, method and Douglas. #127 removed the origin clause, the 2006–2008 / 2008 chronology and the own-platform sentence (the history and example 03 carry them), added one recommendation before the examples and moved the certifications to the end of the history. The process focus block becomes "Selected examples": two attributed Douglas decisions and the self-funded platform |
 | Dossier | `## Summary` / `## Kurzprofil` after the profile: the page-one paragraphs and examples |
 
 ## Factual constraints applied
@@ -141,7 +141,7 @@ origin as optional background. No measured improvement for people or businesses 
 | Homepage headline | "I improve digital systems and products for the people who work with and use them." / "Ich verbessere digitale Systeme und Produkte für die Menschen, die damit arbeiten und sie nutzen." | In the lead, with the role and the stack range | None |
 | Homepage profile card note | Implied by the people named | "I understand a problem first, then find the best way to solve it, for the team that builds the product and the people who work with it." | Removed |
 | `/work` "What drives me" | First sentence | Second sentence | Last sentence, framed as where the problem-solving habit started |
-| CV page one and dossier summary (`work.about.p1/p2`) | Opens p1 | Second sentence of p1, then Douglas | One clause opening p2 ("My experience goes back to renting my first server as a teenager"), then the unchanged chronology |
+| CV page one and dossier summary (`work.about.p1`) | First sentence | Second sentence, then Douglas | None since #127 |
 
 The `/work` hero lead (method plus Douglas) is unchanged; the purpose sits beside it in the profile
 card. This supersedes the earlier direction that led with problem-solving and the earlier

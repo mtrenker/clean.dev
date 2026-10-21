@@ -199,9 +199,10 @@ export const buildProjectDossier = (projects: Project[], locale: Locale, intl: I
     field(labels.languages, availability.languages),
     field(labels.utilization, availability.schedule),
     field(labels.projectTypes, labels.projectTypesValue),
-    // The same narrative and examples as page one of the printed CV.
+    // The same narrative, recommendation and examples as page one of the printed CV.
     `## ${labels.summary}`,
     ...cv.about,
+    `> ${cv.recommendation.excerpt}\n>\n> ${cv.recommendation.author}, ${cv.recommendation.role} · ${cv.recommendation.source}: ${cv.recommendation.href}`,
     bulletList(cv.examples.map((example) => `${example.label}: ${example.heading}. ${example.body}`)),
     `## ${labels.coreSkills}`,
     bulletList(cv.technologies.split(' · ')),

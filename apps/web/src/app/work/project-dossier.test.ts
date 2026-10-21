@@ -6,6 +6,7 @@ import enMessages from '@/messages/en.json';
 import { projects } from '../projects';
 import { buildDouglasWorkCase } from './douglas-case';
 import { buildProjectDossier } from './project-dossier';
+import { cvRecommendation } from './recommendation';
 
 const intlFor = (locale: Locale) =>
   createIntl({ locale, messages: (locale === 'de' ? deMessages : enMessages) as Record<string, string> });
@@ -24,6 +25,8 @@ describe('buildProjectDossier', () => {
     expect(dossier.indexOf('## Summary')).toBeGreaterThan(dossier.indexOf('## Profile'));
     expect(dossier.indexOf('## Summary')).toBeLessThan(dossier.indexOf('## Core skills'));
     expect(dossier).toContain(enMessages['work.about.p1']);
+    expect(dossier).toContain(`> ${cvRecommendation.excerpt}`);
+    expect(dossier).toContain(`> Christoph Meier, Product Owner, Douglas · LinkedIn recommendation, August 7, 2026: ${cvRecommendation.sourceUrl}`);
     expect(dossier).toContain('- Own systems · self-funded: A production platform I run myself.');
     expect(dossier).toContain('## Core skills');
     expect(dossier).toContain('## Recent projects');
@@ -49,7 +52,10 @@ describe('buildProjectDossier', () => {
     expect(dossier).toContain('- Sprachen: Deutsch und Englisch');
     expect(dossier).toContain('- Auslastung: 2–5 Tage/Woche');
     expect(dossier.indexOf('## Kurzprofil')).toBeLessThan(dossier.indexOf('## Kernkompetenzen'));
-    expect(dossier).toContain(deMessages['work.about.p2']);
+    expect(dossier).toContain(deMessages['work.about.p1']);
+    // The quote stays in its original English; only the source label is localized.
+    expect(dossier).toContain(`> ${cvRecommendation.excerpt}`);
+    expect(dossier).toContain('LinkedIn-Empfehlung vom 7. August 2026');
     expect(dossier).toContain('## Aktuelle Projekte');
     expect(dossier).toContain('### 1. Douglas GmbH');
     expect(dossier).toContain('### 2. Oetker Digital GmbH');
