@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Proposes Node base-image tag and digest updates for the Dockerfile.
+  # Node major upgrades are reviewed separately, so they are ignored here.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    labels:
+      - dependencies
+      - type:chore
+      - area:platform
+    ignore:
+      - dependency-name: node
+        update-types:
+          - version-update:semver-major
